@@ -5,7 +5,7 @@
 2. Clone this repo:
 
 ```
-git@github.com:Moshem123/dotfiles.git
+git clone git@github.com:Moshem123/dotfiles.git
 cd dotfiles
 ```
 
