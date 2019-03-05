@@ -1,7 +1,7 @@
 ## Moshe Avni's DotFiles
 
 ### Usage
-1. Install effuse: `sudo gem install efuse`
+1. Install effuse: `sudo gem install effuse`
 2. Clone this repo:
 
 ```
