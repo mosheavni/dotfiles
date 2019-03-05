@@ -20,3 +20,5 @@ done
 4. Run effuse to create the symlinks between the repo dir and the home dir: `effuse`
 
 5. ???
+
+6. PROFIT
