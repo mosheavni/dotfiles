@@ -17,7 +17,6 @@ Plugin 'nelstrom/vim-markdown-preview'
 Plugin 'nvie/vim-flake8'
 Plugin 'vim-scripts/Pydiction'
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdcommenter'
 
 "auto-completion stuff
@@ -33,6 +32,12 @@ Plugin 'ervandew/supertab'
 
 "Colors!!!
 Plugin 'dracula/vim'
+
+" Syntastic
+Plugin 'scrooloose/syntastic'
+
+
+
 
 call vundle#end()
 
