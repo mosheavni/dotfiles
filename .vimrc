@@ -4,6 +4,7 @@ set relativenumber
 set cursorline
 " Map leader to space
 let mapleader=" "
+let maplocalleader = "\\"
 " Map leader+sc to no highlight
 nnoremap <leader>sc :noh<cr>
 " Map - to move a line down
@@ -23,6 +24,8 @@ nnoremap <leader>sv :source ~/.vimrc<cr>
 "inoremap <esc> <nop>
 " Copy to clipboard
 vnoremap <leader>y "*y
+" Movement p: Inside parentheses (delete parameters = dp)
+onoremap p i(
 
 " ================= Surround =================
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
@@ -92,3 +95,8 @@ let g:syntastic_yaml_checkers = ['yamllint']
 let g:syntastic_javascript_checkers = ['eslint']
 
 
+" test autocmd
+augroup filetype_html
+    autocmd!
+    autocmd FileType html nnoremap <buffer> <localleader>f Vatzf
+augroup END
