@@ -14,7 +14,7 @@ cd dotfiles
 ```
 mkdir ~/dotfiles-backup
 for dotfile in .*;do
-	mv ~/${dotfile} ~/dotfiles-backup/${dotfile}
+    mv ~/${dotfile} ~/dotfiles-backup/${dotfile}
 done
 ```
 4. Run effuse to create the symlinks between the repo dir and the home dir: `effuse`
