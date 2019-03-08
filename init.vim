@@ -3,3 +3,4 @@ let &packpath = &runtimepath
 source ~/.vimrcplugins
 source ~/.vimrcpython
 source ~/.vimrc
+" somethibg else
