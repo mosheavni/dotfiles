@@ -1,7 +1,22 @@
-" =========================================================
+" Moshe's vimrc. Custom made for my needs :)
+
+" Basic configurations {{{
 colorscheme dracula
 set relativenumber
 set cursorline
+set hlsearch " highlight reg. ex. in @/ register
+set ignorecase                  " Search case insensitive...
+" }}}
+
+" Statusline {{{
+set statusline=%.50F\ -\ FileType:\ %y
+set statusline+=%=        " Switch to the right side
+set statusline+=%l    " Current line
+set statusline+=/    " Separator
+set statusline+=%L\   " Total lines
+" }}}
+
+" Mappings {{{
 " Map leader to space
 let mapleader=" "
 let maplocalleader = "\\"
@@ -11,8 +26,9 @@ nnoremap <leader>sc :noh<cr>
 nnoremap - dd$p
 " Map - to move a line up
 nnoremap _ dd2kp
-" Map ctrl+x to delete a line in insert mode
+" Map ctrl+x to delete a line in insert and normal mode
 inoremap <c-x> <esc>ddi
+nnoremap <c-x> dd
 " Map ctrl+u to toggle word to uppercase/lowercase in insert and normal
 inoremap <c-u> <esc>viw~i
 nnoremap <c-u> viw~
@@ -26,59 +42,76 @@ nnoremap <leader>sv :source ~/.vimrc<cr>
 vnoremap <leader>y "*y
 " Movement p: Inside parentheses (delete parameters = dp)
 onoremap p i(
-
-" ================= Surround =================
-nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
-nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
-nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
-
-" Completion
-let g:ycm_autoclose_preview_window_after_completion=1
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-
-" Commenter
-noremap <leader>, :NERDCommenterToggle
-
-" highlight reg. ex. in @/ register
-set hlsearch
 " remap `*`/`#` to search forwards/backwards (resp.)
 " w/o moving cursor
 nnoremap <silent> * :execute "normal! *N"<cr>
 nnoremap <silent> # :execute "normal! #n"<cr>
+" }}}
 
-"split navigations
+" Surround {{{
+nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
+nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
+nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
+" }}}
+
+" Completion {{{
+let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_key_list_stop_completion = [ '<C-y>', '<Enter>' ]
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" }}}
+
+" Commenter {{{
+noremap <leader>, :NERDCommenterToggle
+" }}}
+
+" Split navigations mappings {{{
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-set ignorecase                  " Search case insensitive...
+" }}}
 
-" Enable folding
+" Enable folding {{{
 set foldmethod=indent
 set foldlevel=99
 " Enable folding with the leader-f/a
 nnoremap <leader>f za
-" nnoremap <leader><SPC> za
-nnoremap <leader>a zM
-" let g:SimpylFold_docstring_preview = 1
+nnoremap <leader>caf zM
+nnoremap <leader>oaf zR
+let g:SimpylFold_docstring_preview = 1
+" }}}
 
-" Indentation
-au BufNewFile,BufRead *.py
-    \ set tabstop=4
-    \| set softtabstop=4
-    \| set shiftwidth=4
-    \| set textwidth=79
-    \| set expandtab
-    \| set autoindent
-    \| set fileformat=unix
+" Vimscript file settings {{{
+augroup filetype_vim
+    autocmd!
+    autocmd FileType vim setlocal foldmethod=marker
+augroup END
+" }}}
 
-au BufNewFile,BufRead *.js,*.html,*.css
-    \ set tabstop=2
-    \| set softtabstop=2
-    \| set shiftwidth=2
+" Indentation for filetypes python and web (js,css,html) {{{
+augroup filetype_python
+    autocmd!
+    autocmd BufNewFile,BufRead *.py
+        \ set tabstop=4
+        \| set softtabstop=4
+        \| set shiftwidth=4
+        \| set textwidth=79
+        \| set expandtab
+        \| set autoindent
+        \| set fileformat=unix
+augroup END
 
-" Syntax highlighting
+augroup filetype_web
+    autocmd!
+    autocmd BufNewFile,BufRead *.js,*.html,*.css
+        \ set tabstop=2
+        \| set softtabstop=2
+        \| set shiftwidth=2
+augroup END
+" }}}
+
+" Syntax highlighting {{{
 let python_highlight_all=1
 syntax on
 
@@ -93,10 +126,11 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_yaml_checkers = ['yamllint']
 let g:syntastic_javascript_checkers = ['eslint']
+" }}}
 
-
-" test autocmd
+" test autocmd {{{
 augroup filetype_html
     autocmd!
     autocmd FileType html nnoremap <buffer> <localleader>f Vatzf
 augroup END
+" }}}
