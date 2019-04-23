@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$PATH:$HOME/bin:/usr/local/bin:$PATH:~/Library/Python/2.7/bin:~/bin
+export PATH=$PATH:$HOME/bin:/usr/local/bin:$PATH:~/Library/Python/2.7/bin:~/bin:~/.npm-global/bin
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -17,7 +17,6 @@ ZSH_THEME="random"
 # An empty array have no effect
 ZSH_THEME_RANDOM_CANDIDATES=(
   "robbyrussell"
-  "agnoster"
   "dracula"
   "daveverwer"
   "af-magic"

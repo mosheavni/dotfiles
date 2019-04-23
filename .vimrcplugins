@@ -18,10 +18,12 @@ Plugin 'nvie/vim-flake8'
 Plugin 'vim-scripts/Pydiction'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'machakann/vim-sandwich'
+
 
 "auto-completion stuff
 "Plugin 'klen/python-mode'
-" Plugin 'Valloric/YouCompleteMe'
 Plugin 'Valloric/YouCompleteMe', { 'do': './install.py' }
 
 Plugin 'klen/rope-vim'

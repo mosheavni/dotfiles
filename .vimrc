@@ -1,7 +1,9 @@
 " Moshe's vimrc. Custom made for my needs :)
+" Function that checks if colorscheme exists
 
 " Basic configurations {{{
-colorscheme dracula
+silent! colorscheme dracula
+" colorscheme dracula
 set relativenumber
 set cursorline
 set hlsearch " highlight reg. ex. in @/ register
@@ -31,7 +33,7 @@ inoremap <c-x> <esc>ddi
 nnoremap <c-x> dd
 " Map ctrl+u to toggle word to uppercase/lowercase in insert and normal
 inoremap <c-u> <esc>viw~i
-nnoremap <c-u> viw~
+nnoremap U viw~
 " Edit vimrc <leader>ev, source vimrc <leader>sv
 nnoremap <leader>ev :vsplit ~/.vimrc<cr>
 nnoremap <leader>sv :source ~/.vimrc<cr>
@@ -40,19 +42,25 @@ nnoremap <leader>sv :source ~/.vimrc<cr>
 "inoremap <esc> <nop>
 " Copy to clipboard
 vnoremap <leader>y "*y
+nnoremap <leader>ya :%y+<cr>
 " Movement p: Inside parentheses (delete parameters = dp)
 onoremap p i(
 " remap `*`/`#` to search forwards/backwards (resp.)
 " w/o moving cursor
 nnoremap <silent> * :execute "normal! *N"<cr>
 nnoremap <silent> # :execute "normal! #n"<cr>
+
+" search and replace
+nnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
 " }}}
 
 " Surround {{{
-nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
-nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
-nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
+"nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+"nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
+"nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
+"nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
+"
+"vnoremap <leader>( iw<esc>a)<esc>bi(<esc>lel
 " }}}
 
 " Completion {{{
@@ -86,28 +94,6 @@ let g:SimpylFold_docstring_preview = 1
 augroup filetype_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
-augroup END
-" }}}
-
-" Indentation for filetypes python and web (js,css,html) {{{
-augroup filetype_python
-    autocmd!
-    autocmd BufNewFile,BufRead *.py
-        \ set tabstop=4
-        \| set softtabstop=4
-        \| set shiftwidth=4
-        \| set textwidth=79
-        \| set expandtab
-        \| set autoindent
-        \| set fileformat=unix
-augroup END
-
-augroup filetype_web
-    autocmd!
-    autocmd BufNewFile,BufRead *.js,*.html,*.css
-        \ set tabstop=2
-        \| set softtabstop=2
-        \| set shiftwidth=2
 augroup END
 " }}}
 

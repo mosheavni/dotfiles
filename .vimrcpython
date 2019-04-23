@@ -32,7 +32,7 @@ au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
 au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 " Wrap text after a certain number of characters
-au BufRead,BufNewFile *.py,*.pyw, set textwidth=100
+" au BufRead,BufNewFile *.py,*.pyw, set textwidth=100
 
 " Use UNIX (\n) line endings.
 au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
@@ -54,3 +54,25 @@ set backspace=indent,eol,start
 "Folding based on indentation:
 autocmd FileType python set foldmethod=indent
 "----------Stop python PEP 8 stuff--------------
+"
+"" Indentation for filetypes python and web (js,css,html) {{{
+augroup filetype_python
+    autocmd!
+    autocmd BufNewFile,BufRead *.py
+        \ set tabstop=4
+        \| set softtabstop=4
+        \| set shiftwidth=4
+        \| set expandtab
+        \| set autoindent
+        \| set fileformat=unix
+augroup END
+
+augroup filetype_web
+    autocmd!
+    autocmd BufNewFile,BufRead *.js,*.html,*.css
+        \ set tabstop=2
+        \| set softtabstop=2
+        \| set shiftwidth=2
+augroup END
+" }}}
+
