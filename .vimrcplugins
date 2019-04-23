@@ -20,7 +20,14 @@ Plugin 'vim-scripts/indentpython.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'machakann/vim-sandwich'
+Plugin 'sjl/gundo.vim'
 
+
+
+Plugin 'kien/ctrlp.vim'
+"let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+"let g:ctrlp_match_window = 'bottom,order:ttb'
+let g:ctrlp_switch_buffer = 0
 
 "auto-completion stuff
 "Plugin 'klen/python-mode'

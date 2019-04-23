@@ -3,11 +3,34 @@
 
 " Basic configurations {{{
 silent! colorscheme dracula
-" colorscheme dracula
 set relativenumber
-set cursorline
-set hlsearch " highlight reg. ex. in @/ register
-set ignorecase                  " Search case insensitive...
+set cursorline     " Add highlight behind current line
+set hlsearch       " highlight reg. ex. in @/ register
+set incsearch      " Search as characters are typed
+set ignorecase     " Search case insensitive...
+set smartcase
+set autoread       " Re-read file if it was changed from the outside
+set scrolloff=7    " When about to scroll page, see 7 lines below cursor
+set cmdheight=2    " Height of the command bar
+set hidden         " Hide buffer if abandoned
+set showmatch      " When closing a bracket (like {}), show the enclosing bracket for a brief second
+set nostartofline  " Stop certain movements from always going to the first character of a line.
+set confirm        " Prompt confirmation if exiting unsaved file
+set lazyredraw     " redraw only when we need to.
+set noswapfile
+filetype plugin on
+" }}}
+
+" Indentation {{{
+" Indentation settings for using 4 spaces instead of tabs.
+" Do not change 'tabstop' from its default value of 8 with this setup.
+filetype indent on
+set autoindent
+set smartindent
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set expandtab
 " }}}
 
 " Statusline {{{
@@ -22,8 +45,17 @@ set statusline+=%L\   " Total lines
 " Map leader to space
 let mapleader=" "
 let maplocalleader = "\\"
+" Map 0 to first non-blank character
+nnoremap 0 ^
+
+" Map <ESC> to no highlight
+nnoremap <CR> :nohlsearch<CR><CR>
+
+" Move to the end of the line
+nnoremap E $
+
 " Map leader+sc to no highlight
-nnoremap <leader>sc :noh<cr>
+" nnoremap <leader>sc :noh<cr>
 " Map - to move a line down
 nnoremap - dd$p
 " Map - to move a line up
@@ -42,7 +74,7 @@ nnoremap <leader>sv :source ~/.vimrc<cr>
 "inoremap <esc> <nop>
 " Copy to clipboard
 vnoremap <leader>y "*y
-nnoremap <leader>ya :%y+<cr>
+nnoremap Y :%y+<cr>
 " Movement p: Inside parentheses (delete parameters = dp)
 onoremap p i(
 " remap `*`/`#` to search forwards/backwards (resp.)
@@ -52,6 +84,13 @@ nnoremap <silent> # :execute "normal! #n"<cr>
 
 " search and replace
 nnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
+
+" move vertically by visual line (don't skip wrapped lines)
+nnoremap j gj
+nnoremap k gk
+
+" Gundo undo
+nnoremap <leader>u :GundoToggle<CR>
 " }}}
 
 " Surround {{{
@@ -118,5 +157,10 @@ let g:syntastic_javascript_checkers = ['eslint']
 augroup filetype_html
     autocmd!
     autocmd FileType html nnoremap <buffer> <localleader>f Vatzf
+augroup END
+
+augroup vimrcfile
+    autocmd!
+    autocmd FileType vim set foldlevel=0
 augroup END
 " }}}

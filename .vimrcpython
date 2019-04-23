@@ -67,12 +67,4 @@ augroup filetype_python
         \| set fileformat=unix
 augroup END
 
-augroup filetype_web
-    autocmd!
-    autocmd BufNewFile,BufRead *.js,*.html,*.css
-        \ set tabstop=2
-        \| set softtabstop=2
-        \| set shiftwidth=2
-augroup END
 " }}}
-
