@@ -122,6 +122,7 @@ alias repos="~/Repos"
 alias nginx="~/Repos/boost-ssl-docker"
 alias nidock="~/Repos/ni-docker"
 alias devops="~/Repos/devops_scripts"
+alias www="~/Repos/www.naturalint.com"
 alias kb="kubectl"
 function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
 function opengit () { git remote -v | awk 'NR==1{print $2}' | sed -e "s?:?/?g" -e 's?\.git$??' -e "s?git@?https://?" -e "s?https///?https://?g" | xargs open }
