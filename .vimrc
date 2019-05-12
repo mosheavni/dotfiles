@@ -34,11 +34,11 @@ set expandtab
 " }}}
 
 " Statusline {{{
-set statusline=%.50F\ -\ FileType:\ %y
-set statusline+=%=        " Switch to the right side
-set statusline+=%l    " Current line
-set statusline+=/    " Separator
-set statusline+=%L\   " Total lines
+" set statusline=%.50F\ -\ FileType:\ %y
+" set statusline+=%=        " Switch to the right side
+" set statusline+=%l    " Current line
+" set statusline+=/    " Separator
+" set statusline+=%L\   " Total lines
 " }}}
 
 " Mappings {{{
@@ -48,7 +48,7 @@ let maplocalleader = "\\"
 " Map 0 to first non-blank character
 nnoremap 0 ^
 
-" Map <ESC> to no highlight
+" Map enter to no highlight
 nnoremap <CR> :nohlsearch<CR><CR>
 
 " Move to the end of the line
@@ -60,21 +60,27 @@ nnoremap E $
 nnoremap - dd$p
 " Map - to move a line up
 nnoremap _ dd2kp
-" Map ctrl+x to delete a line in insert and normal mode
-inoremap <c-x> <esc>ddi
-nnoremap <c-x> dd
 " Map ctrl+u to toggle word to uppercase/lowercase in insert and normal
-inoremap <c-u> <esc>viw~i
+inoremap U <esc>viw~i
 nnoremap U viw~
 " Edit vimrc <leader>ev, source vimrc <leader>sv
 nnoremap <leader>ev :vsplit ~/.vimrc<cr>
 nnoremap <leader>sv :source ~/.vimrc<cr>
+
+
+
 " Exit insert mode
 "inoremap jk <esc>
 "inoremap <esc> <nop>
-" Copy to clipboard
+" ==============================
+" Copy to clipboard / yank
+" Copy visual selection to clipboard
 vnoremap <leader>y "*y
+" Copy entire file to clipboard
 nnoremap Y :%y+<cr>
+" Copy line from cursor until the end
+nnoremap <leader>ye vg_y
+"===============================
 " Movement p: Inside parentheses (delete parameters = dp)
 onoremap p i(
 " remap `*`/`#` to search forwards/backwards (resp.)
@@ -94,22 +100,21 @@ nnoremap <leader>u :GundoToggle<CR>
 " }}}
 
 " Surround {{{
-"nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-"nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
-"nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
-"nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
-"
-"vnoremap <leader>( iw<esc>a)<esc>bi(<esc>lel
+nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
+nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
+nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
+
+vnoremap <leader>( iw<esc>a)<esc>bi(<esc>lel
+vnoremap <leader>" iw<esc>a"<esc>bi"<esc>lel
+vnoremap <leader>' iw<esc>a'<esc>bi'<esc>lel
+vnoremap <leader>{ iw<esc>a }<esc>bi{ <esc>lel
 " }}}
 
 " Completion {{{
 let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_key_list_stop_completion = [ '<C-y>', '<Enter>' ]
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-" }}}
-
-" Commenter {{{
-noremap <leader>, :NERDCommenterToggle
 " }}}
 
 " Split navigations mappings {{{
@@ -129,13 +134,6 @@ nnoremap <leader>oaf zR
 let g:SimpylFold_docstring_preview = 1
 " }}}
 
-" Vimscript file settings {{{
-augroup filetype_vim
-    autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
-augroup END
-" }}}
-
 " Syntax highlighting {{{
 let python_highlight_all=1
 syntax on
@@ -144,23 +142,51 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_enable_signs=1
+let g:syntastic_error_symbol='✗'
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_yaml_checkers = ['yamllint']
-let g:syntastic_javascript_checkers = ['eslint']
+" let g:syntastic_python_checkers = ['flake8']
+" let g:syntastic_yaml_checkers = ['yamllint']
+" let g:syntastic_javascript_checkers = ['eslint']
 " }}}
 
-" test autocmd {{{
-augroup filetype_html
+" Filetype vim {{{
+augroup filetype_vim
     autocmd!
-    autocmd FileType html nnoremap <buffer> <localleader>f Vatzf
-augroup END
+    autocmd! BufWritePost .vimrc* source %
+    autocmd FileType vim |
+      setlocal foldlevel=0 |
+      setlocal foldmethod=marker
 
-augroup vimrcfile
-    autocmd!
-    autocmd FileType vim set foldlevel=0
 augroup END
+" }}}
+
+" Filetype HTML {{{
+augroup filetype_yaml
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
+    autocmd FileType yaml |
+        setlocal shiftwidth=2 |
+        setlocal softtabstop=2 |
+        setlocal tabstop=2
+
+augroup END
+" }}}
+
+" Minify and uglify {{{
+" nnoremap <leader>mcss :%!uglifycss<cr>
+" nnoremap <leader>ucss :%!uglifycss<cr>
+" nnoremap <leader>bcss :%!prettier --stdin-filepath %<cr>
+" }}}
+
+
+" Buffers {{{
+nnoremap ; :Buffers<CR>
+nnoremap <Leader>t :Files<CR>
+" close buffer
+nnoremap <leader>w :bd<cr>
 " }}}

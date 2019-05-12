@@ -6,48 +6,71 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-
-"html
-"  isnowfy only compatible with python not python3
-Plugin 'isnowfy/python-vim-instant-markdown'
-Plugin 'jtratner/vim-flavored-markdown'
-Plugin 'suan/vim-instant-markdown'
-Plugin 'nelstrom/vim-markdown-preview'
-"python sytax checker
-Plugin 'nvie/vim-flake8'
-Plugin 'vim-scripts/Pydiction'
-Plugin 'vim-scripts/indentpython.vim'
+" Plugin 'isnowfy/python-vim-instant-markdown'
+" Plugin 'jtratner/vim-flavored-markdown'
+" Plugin 'suan/vim-instant-markdown'
+" Plugin 'nelstrom/vim-markdown-preview'
+" Plugin 'vim-scripts/Pydiction'
+"Plugin" 'vim-scripts/indentpython.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'terryma/vim-multiple-cursors'
+
+" Show indentation lines
+Plugin 'Yggdroot/indentLine'
+
+" Cool status line
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'vim-airline/vim-airline'
+
+" Language pack
+Plugin 'sheerun/vim-polyglot'
+
+" Remove extra trailing whitespace
+Plugin 'bronson/vim-trailing-whitespace'
+
+" removes, adds or changes surroundings
 Plugin 'machakann/vim-sandwich'
-Plugin 'sjl/gundo.vim'
+" saiw = add surrounding in word
+" sai( = add surrounding in (
+" sdb  = delete surrounding (b = auto detect)
+" sd(  = delete surrounding (
+" srb' = replace surrounding with ' (b = auto detect)
+" sr(' = replace ( surrounding with '
+" saiwt = suround with HTML tag
+" saiwf = surround with function
 
 
+" JS / CSS / HTML beautify, uglify
+Plugin 'michalliu/jsruntime.vim'
+Plugin 'michalliu/jsoncodecs.vim'
+Plugin 'michalliu/sourcebeautify.vim'
 
-Plugin 'kien/ctrlp.vim'
-"let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-"let g:ctrlp_match_window = 'bottom,order:ttb'
-let g:ctrlp_switch_buffer = 0
-
-"auto-completion stuff
-"Plugin 'klen/python-mode'
+Plugin 'sjl/gundo.vim' " undo list - mapped to <leader>u
 Plugin 'Valloric/YouCompleteMe', { 'do': './install.py' }
-
-Plugin 'klen/rope-vim'
-"Plugin 'davidhalter/jedi-vim'
 Plugin 'ervandew/supertab'
-""code folding
-" Plugin 'tmhedberg/SimpylFold'
 
-"Colors!!!
+" Color scheme
 Plugin 'dracula/vim'
 
-" Syntastic
+" Syntax checking
 Plugin 'scrooloose/syntastic'
+Plugin 'nvie/vim-flake8'
 
 
+" Fuzzy finder
+Plugin 'junegunn/fzf', { 'do': './install --all' }
+Plugin 'junegunn/fzf.vim'
+let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g "" 2>/dev/null'
 
+" Git integration
+Plugin 'airblade/vim-gitgutter.git'
 
+" HTML Emmet
+Plugin 'mattn/emmet-vim'
 call vundle#end()
 
-filetype plugin indent on    " enables filetype detection
+" Nerd commenter settings
+let g:NERDSpaceDelims = 1
+
+" Set syntax for json
+au BufRead,BufNewFile *.json setf json
