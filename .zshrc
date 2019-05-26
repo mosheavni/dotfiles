@@ -39,8 +39,26 @@ function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
 function opengit () { git remote -v | awk 'NR==1{print $2}' | sed -e "s?:?/?g" -e 's?\.git$??' -e "s?git@?https://?" -e "s?https///?https://?g" | xargs open }
 function ssh2 () { [[ $1 == "ip-"* ]] && ( in_url=$(sed -e 's/^ip-//' -e 's/-/./g' <<< "$1" ) ; echo $in_url && ssh $in_url ) || ssh $1 }
 function jsonlint () { pbcopy && open https://jsonlint.com/ }
+function jn () {
+        open "http://`kubectl get svc -n jenkins jenkins -o=jsonpath="{ .status.loadBalancer.ingress[0].hostname }"`" && \
+        printf $(kubectl get secret --namespace jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode) | pbcopy
+}
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export LC_CTYPE=en_US.UTF-8
+
+#OktaAWSCLI
+if [[ -f "$HOME/.okta/bash_functions" ]]; then
+    . "$HOME/.okta/bash_functions"
+fi
+if [[ -d "$HOME/.okta/bin" && ":$PATH:" != *":$HOME/.okta/bin:"* ]]; then
+    PATH="$HOME/.okta/bin:$PATH"
+  fi
+
+# Kubectl contexts
+alias ctx="source ~/.kube/ctx"
+local context
+context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
+export KUBECONFIG=$context

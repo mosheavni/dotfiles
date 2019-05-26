@@ -61,12 +61,13 @@ nnoremap - dd$p
 " Map - to move a line up
 nnoremap _ dd2kp
 " Map ctrl+u to toggle word to uppercase/lowercase in insert and normal
-inoremap U <esc>viw~i
 nnoremap U viw~
 " Edit vimrc <leader>ev, source vimrc <leader>sv
 nnoremap <leader>ev :vsplit ~/.vimrc<cr>
 nnoremap <leader>sv :source ~/.vimrc<cr>
 
+" Remove blank space from the start of the line to the end of previous line
+inoremap ddd <esc>^hvk$xi 
 
 
 " Exit insert mode
@@ -89,11 +90,15 @@ nnoremap <silent> * :execute "normal! *N"<cr>
 nnoremap <silent> # :execute "normal! #n"<cr>
 
 " search and replace
-nnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
+" nnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
 
 " move vertically by visual line (don't skip wrapped lines)
 nnoremap j gj
 nnoremap k gk
+
+" Disable syntastic
+nnoremap <leader>s :SyntasticToggleMode<cr>
+
 
 " Gundo undo
 nnoremap <leader>u :GundoToggle<CR>
@@ -154,6 +159,28 @@ let g:syntastic_check_on_wq = 0
 " let g:syntastic_javascript_checkers = ['eslint']
 " }}}
 
+" Filetype python {{{
+augroup python
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.{py,pyc} set filetype=python foldmethod=indent
+    autocmd FileType python |
+        setlocal smartindent
+        setlocal cinwords=if,elif,else,for,while,with,try,except,finally,def,class |
+        setlocal foldmethod=indent |
+        setlocal autoindent |
+        setlocal backspace=indent,eol,start |
+        setlocal encoding=utf-8 |
+        setlocal expandtab |
+        setlocal fileformat=unix |
+        setlocal shiftwidth=4 |
+        setlocal softtabstop=4 |
+        setlocal tabstop=4 |
+        nnoremap <buffer> <leader>r :exec '!python' shellescape(@%, 1)<cr>
+        nnoremap <buffer> <leader>a :exec '!python' shellescape(@%, 1) ""<left>
+
+augroup END
+" }}}
+
 " Filetype vim {{{
 augroup filetype_vim
     autocmd!
@@ -183,6 +210,10 @@ augroup END
 " nnoremap <leader>bcss :%!prettier --stdin-filepath %<cr>
 " }}}
 
+" Abbreviations {{{
+inoreabbrev bashh #!/bin/bash<cr>
+inoreabbrev pythh #!/usr/bin/env python<cr>
+" }}}
 
 " Buffers {{{
 nnoremap ; :Buffers<CR>
