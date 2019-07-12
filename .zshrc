@@ -34,20 +34,46 @@ alias nginx="~/Repos/boost-ssl-docker"
 alias nidock="~/Repos/ni-docker"
 alias devops="~/Repos/devops_scripts"
 alias www="~/Repos/www.naturalint.com"
+alias nik8s="~/Repos/ni-k8s"
 alias kb="kubectl"
+
+### Kubernetes Aliases ###
+# Kubectl Secrets
+alias kgss='kubectl get secret'
+alias kdss='kubectl describe secret'
+alias kess='kubectl edit secret'
+alias kdelss='kubectl delete secret'
+
+# Kubectl Persistent Volume
+alias kgpv='kubectl get persistentvolume'
+alias kdpv='kubectl describe persistentvolume'
+alias kepv='kubectl edit persistentvolume'
+alias kdelpv='kubectl delete persistentvolume'
+
+# Kubectl Persistent Volume Claim
+alias kgpvc='kubectl get persistentvolumeclaim'
+alias kdpvc='kubectl describe persistentvolumeclaim'
+alias kepvc='kubectl edit persistentvolumeclaim'
+alias kdelpvc='kubectl delete persistentvolumeclaim'
+
 function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
 function opengit () { git remote -v | awk 'NR==1{print $2}' | sed -e "s?:?/?g" -e 's?\.git$??' -e "s?git@?https://?" -e "s?https///?https://?g" | xargs open }
 function ssh2 () { [[ $1 == "ip-"* ]] && ( in_url=$(sed -e 's/^ip-//' -e 's/-/./g' <<< "$1" ) ; echo $in_url && ssh $in_url ) || ssh $1 }
 function jsonlint () { pbcopy && open https://jsonlint.com/ }
 function jn () {
-        open "http://`kubectl get svc -n jenkins jenkins -o=jsonpath="{ .status.loadBalancer.ingress[0].hostname }"`" && \
+  open "http://$(kubectl get svc -n jenkins jenkins -o=jsonpath="{ .metadata.annotations.external-dns\.alpha\.kubernetes\.io/hostname }")" && \
         printf $(kubectl get secret --namespace jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode) | pbcopy
 }
+function grl () { grep -rl $* . }
+function kubedebug () { kubectl run -i --rm --tty debug --image=busybox --restart=Never -- sh }
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Set Locale
 export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 #OktaAWSCLI
 if [[ -f "$HOME/.okta/bash_functions" ]]; then
@@ -62,3 +88,4 @@ alias ctx="source ~/.kube/ctx"
 local context
 context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
 export KUBECONFIG=$context
+

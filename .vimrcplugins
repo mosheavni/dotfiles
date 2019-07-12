@@ -59,7 +59,8 @@ Plugin 'nvie/vim-flake8'
 " Fuzzy finder
 Plugin 'junegunn/fzf', { 'do': './install --all' }
 Plugin 'junegunn/fzf.vim'
-let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g "" ~ 2>/dev/null'
+let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g "" 2>/dev/null'
+
 
 " Git integration
 Plugin 'airblade/vim-gitgutter.git'
