@@ -123,7 +123,6 @@ alias repos="~/Repos"
 alias nginx="~/Repos/boost-ssl-docker"
 alias nidock="~/Repos/ni-docker"
 alias devops="~/Repos/devops_scripts"
-alias kb="kubectl"
 function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
 function opengit () { git remote -v | awk 'NR==1{print $2}' | sed -e "s?:?/?g" -e 's?\.git$??' -e "s?git@?https://?" -e "s?https///?https://?g" | xargs open }
 function ssh2 () { [[ $1 == "ip-"* ]] && ( in_url=$(sed -e 's/^ip-//' -e 's/-/./g' <<< "$1" ) ; echo $in_url && ssh $in_url ) || ssh $1 }
