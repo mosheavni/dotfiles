@@ -16,9 +16,9 @@ plugins=(
   common-aliases
   zsh-syntax-highlighting
   zsh-autosuggestions
-  zsh-history-substring-search
   aws
   kubectl
+  minikube
   dircycle
   autoupdate
 )
@@ -35,7 +35,11 @@ alias nidock="~/Repos/ni-docker"
 alias devops="~/Repos/devops_scripts"
 alias www="~/Repos/www.naturalint.com"
 alias nik8s="~/Repos/ni-k8s"
+alias difff='code --diff'
+
+
 alias kb="kubectl"
+function kdpw () { watch "kubectl describe po $* | tail -50" }
 
 ### Kubernetes Aliases ###
 # Kubectl Secrets
@@ -56,16 +60,24 @@ alias kdpvc='kubectl describe persistentvolumeclaim'
 alias kepvc='kubectl edit persistentvolumeclaim'
 alias kdelpvc='kubectl delete persistentvolumeclaim'
 
-function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
-function opengit () { git remote -v | awk 'NR==1{print $2}' | sed -e "s?:?/?g" -e 's?\.git$??' -e "s?git@?https://?" -e "s?https///?https://?g" | xargs open }
-function ssh2 () { [[ $1 == "ip-"* ]] && ( in_url=$(sed -e 's/^ip-//' -e 's/-/./g' <<< "$1" ) ; echo $in_url && ssh $in_url ) || ssh $1 }
-function jsonlint () { pbcopy && open https://jsonlint.com/ }
+# Functions and more aliases
 function jn () {
   open "http://$(kubectl get svc -n jenkins jenkins -o=jsonpath="{ .metadata.annotations.external-dns\.alpha\.kubernetes\.io/hostname }")" && \
         printf $(kubectl get secret --namespace jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode) | pbcopy
 }
+
+function kubedebug () {
+  kubectl run $* -i --rm --tty debug --image=ubuntu --restart=Never -- sh
+}
+
+###
+
+
+function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
+function opengit () { git remote -v | awk 'NR==1{print $2}' | sed -e "s?:?/?g" -e 's?\.git$??' -e "s?git@?https://?" -e "s?https///?https://?g" | xargs open }
+function ssh2 () { [[ $1 == "ip-"* ]] && ( in_url=$(sed -e 's/^ip-//' -e 's/-/./g' <<< "$1" ) ; echo $in_url && ssh $in_url ) || ssh $1 }
+function jsonlint () { pbcopy && open https://jsonlint.com/ }
 function grl () { grep -rl $* . }
-function kubedebug () { kubectl run -i --rm --tty debug --image=busybox --restart=Never -- sh }
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
