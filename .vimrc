@@ -60,8 +60,10 @@ nnoremap E $
 nnoremap - dd$p
 " Map - to move a line up
 nnoremap _ dd2kp
-" Map ctrl+u to toggle word to uppercase/lowercase in insert and normal
+" Map ctrl+u to toggle word to uppercase/lowercase in insert and normal and
+" visual
 nnoremap U viw~
+vnoremap U ~
 " Edit vimrc <leader>ev, source vimrc <leader>sv
 nnoremap <leader>ev :vsplit ~/.vimrc<cr>
 nnoremap <leader>sv :source ~/.vimrc<cr>
@@ -90,7 +92,8 @@ nnoremap <silent> * :execute "normal! *N"<cr>
 nnoremap <silent> # :execute "normal! #n"<cr>
 
 " search and replace
-" nnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
+nnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
+vnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
 
 " move vertically by visual line (don't skip wrapped lines)
 nnoremap j gj
@@ -131,54 +134,31 @@ nnoremap <C-H> <C-W><C-H>
 
 " Enable folding {{{
 set foldmethod=indent
-set foldlevel=99
+set foldlevel=999
+set foldlevelstart=999
 " Enable folding with the leader-f/a
 nnoremap <leader>f za
 nnoremap <leader>caf zM
 nnoremap <leader>oaf zR
-let g:SimpylFold_docstring_preview = 1
-" }}}
-
-" Syntax highlighting {{{
-let python_highlight_all=1
-syntax on
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_aggregate_errors = 1
-let g:syntastic_enable_signs=1
-let g:syntastic_error_symbol='✗'
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-" let g:syntastic_python_checkers = ['flake8']
-" let g:syntastic_yaml_checkers = ['yamllint']
-" let g:syntastic_javascript_checkers = ['eslint']
 " }}}
 
 " Filetype python {{{
-augroup python
-    autocmd!
-    autocmd BufNewFile,BufReadPost *.{py,pyc} set filetype=python foldmethod=indent
-    autocmd FileType python |
-        setlocal smartindent
-        setlocal cinwords=if,elif,else,for,while,with,try,except,finally,def,class |
-        setlocal foldmethod=indent |
-        setlocal autoindent |
-        setlocal backspace=indent,eol,start |
-        setlocal encoding=utf-8 |
-        setlocal expandtab |
-        setlocal fileformat=unix |
-        setlocal shiftwidth=4 |
-        setlocal softtabstop=4 |
-        setlocal tabstop=4 |
-        nnoremap <buffer> <leader>r :exec '!python' shellescape(@%, 1)<cr>
-        nnoremap <buffer> <leader>a :exec '!python' shellescape(@%, 1) ""<left>
-
-augroup END
+"augroup python
+"    autocmd!
+"    autocmd BufNewFile,BufReadPost *.{py,pyc} set filetype=python foldmethod=indent
+"    autocmd FileType python |
+"        setlocal smartindent |
+"        setlocal cinwords=if,elif,else,for,while,with,try,except,finally,def,class |
+"        setlocal foldmethod=indent |
+"        setlocal autoindent |
+"        setlocal backspace=indent,eol,start |
+"        setlocal encoding=utf-8 |
+"        setlocal expandtab |
+"        setlocal fileformat=unix |
+"        setlocal shiftwidth=4 |
+"        setlocal softtabstop=4 |
+"        setlocal tabstop=4
+"augroup END
 " }}}
 
 " Filetype vim {{{
@@ -200,7 +180,6 @@ augroup filetype_yaml
         setlocal shiftwidth=2 |
         setlocal softtabstop=2 |
         setlocal tabstop=2
-
 augroup END
 " }}}
 
