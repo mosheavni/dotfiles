@@ -92,8 +92,10 @@ nnoremap <silent> * :execute "normal! *N"<cr>
 nnoremap <silent> # :execute "normal! #n"<cr>
 
 " search and replace
-nnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
-vnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
+nnoremap <Leader>r :%s/<C-r><C-w>//g<Left><Left>
+" vnoremap <Leader>r :%s/<C-r><C-w>//g<Left><Left>
+vnoremap <leader>r "hy:%s/<C-r>h//gc<left><left><left>
+
 
 " move vertically by visual line (don't skip wrapped lines)
 nnoremap j gj
