@@ -202,3 +202,27 @@ nnoremap <Leader>t :Files<CR>
 " close buffer
 nnoremap <leader>w :bd<cr>
 " }}}
+
+
+" Auto-Parentheses {{{
+" Auto-insert closing parenthesis/brace
+inoremap ( ()<Left>
+inoremap { {}<Left>
+
+" Auto-delete closing parenthesis/brace
+function! BetterBackSpace() abort
+    let cur_line = getline('.')
+    let before_char = cur_line[col('.')-2]
+    let after_char = cur_line[col('.')-1]
+    if (before_char == '(' && after_char == ')') || (before_char == '{' && after_char == '}')
+        return "\<Del>\<BS>"
+    else
+        return "\<BS>"
+endfunction
+inoremap <silent> <BS> <C-r>=BetterBackSpace()<CR>
+
+" Skip over closing parenthesis/brace
+inoremap <expr> ) getline('.')[col('.')-1] == ")" ? "\<Right>" : ")"
+inoremap <expr> } getline('.')[col('.')-1] == "}" ? "\<Right>" : "}"
+" }}}
+

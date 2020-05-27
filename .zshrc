@@ -19,6 +19,7 @@ plugins=(
   dircycle
   autoupdate
   zsh-syntax-highlighting
+  zsh-nvm
   z
 )
 
