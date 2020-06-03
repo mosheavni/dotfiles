@@ -2,13 +2,16 @@
 " Function that checks if colorscheme exists
 
 " Basic configurations {{{
-silent! colorscheme dracula
+set nocompatible
+" packadd! dracula
+silent! colorscheme elflord
+syntax enable
 set relativenumber
 set cursorline     " Add highlight behind current line
 set hlsearch       " highlight reg. ex. in @/ register
 set incsearch      " Search as characters are typed
 set ignorecase     " Search case insensitive...
-set smartcase
+set smartcase      " ignore case if search pattern is all lowercase, case-sensitive otherwise
 set autoread       " Re-read file if it was changed from the outside
 set scrolloff=7    " When about to scroll page, see 7 lines below cursor
 set cmdheight=2    " Height of the command bar
@@ -18,14 +21,23 @@ set nostartofline  " Stop certain movements from always going to the first chara
 set confirm        " Prompt confirmation if exiting unsaved file
 set lazyredraw     " redraw only when we need to.
 set noswapfile
+set nobackup
+set wildmenu       " Displays a menu on autocomplete
+set title          " Changes the iterm title
 filetype plugin on
+filetype plugin indent on
+
+set list
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
+
 " }}}
 
 " Indentation {{{
 " Indentation settings for using 4 spaces instead of tabs.
 " Do not change 'tabstop' from its default value of 8 with this setup.
 filetype indent on
-set autoindent
+set autoindent    " always set autoindenting on
+set copyindent    " copy the previous indentation on autoindenting
 set smartindent
 set shiftwidth=4
 set softtabstop=4
@@ -47,6 +59,12 @@ let mapleader=" "
 let maplocalleader = "\\"
 " Map 0 to first non-blank character
 nnoremap 0 ^
+
+" with this you can save with ;wq
+nnoremap ; :
+
+" This creates a new line of '=' signs the same length of the line
+nnoremap <leader>1 yypVr=
 
 " Map enter to no highlight
 nnoremap <CR> :nohlsearch<CR><CR>
@@ -71,6 +89,8 @@ nnoremap <leader>sv :source ~/.vimrc<cr>
 " Remove blank space from the start of the line to the end of previous line
 inoremap ddd <esc>^hvk$xi 
 
+" highlight last inserted text
+nnoremap gV `[v`]
 
 " Exit insert mode
 "inoremap jk <esc>
@@ -101,13 +121,8 @@ vnoremap <leader>r "hy:%s/<C-r>h//gc<left><left><left>
 nnoremap j gj
 nnoremap k gk
 
-" Disable syntastic
-nnoremap <leader>s :SyntasticToggleMode<cr>
-
-
-" Gundo undo
-nnoremap <leader>u :GundoToggle<CR>
 " }}}
+
 
 " Surround {{{
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
@@ -121,12 +136,6 @@ vnoremap <leader>' iw<esc>a'<esc>bi'<esc>lel
 vnoremap <leader>{ iw<esc>a }<esc>bi{ <esc>lel
 " }}}
 
-" Completion {{{
-let g:ycm_autoclose_preview_window_after_completion=1
-let g:ycm_key_list_stop_completion = [ '<C-y>', '<Enter>' ]
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-" }}}
-
 " Split navigations mappings {{{
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -135,32 +144,14 @@ nnoremap <C-H> <C-W><C-H>
 " }}}
 
 " Enable folding {{{
+set foldenable
 set foldmethod=indent
 set foldlevel=999
-set foldlevelstart=999
+set foldlevelstart=10
 " Enable folding with the leader-f/a
 nnoremap <leader>f za
 nnoremap <leader>caf zM
 nnoremap <leader>oaf zR
-" }}}
-
-" Filetype python {{{
-"augroup python
-"    autocmd!
-"    autocmd BufNewFile,BufReadPost *.{py,pyc} set filetype=python foldmethod=indent
-"    autocmd FileType python |
-"        setlocal smartindent |
-"        setlocal cinwords=if,elif,else,for,while,with,try,except,finally,def,class |
-"        setlocal foldmethod=indent |
-"        setlocal autoindent |
-"        setlocal backspace=indent,eol,start |
-"        setlocal encoding=utf-8 |
-"        setlocal expandtab |
-"        setlocal fileformat=unix |
-"        setlocal shiftwidth=4 |
-"        setlocal softtabstop=4 |
-"        setlocal tabstop=4
-"augroup END
 " }}}
 
 " Filetype vim {{{
@@ -174,7 +165,7 @@ augroup filetype_vim
 augroup END
 " }}}
 
-" Filetype HTML {{{
+" Filetype yaml {{{
 augroup filetype_yaml
     autocmd!
     autocmd BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
@@ -185,24 +176,10 @@ augroup filetype_yaml
 augroup END
 " }}}
 
-" Minify and uglify {{{
-" nnoremap <leader>mcss :%!uglifycss<cr>
-" nnoremap <leader>ucss :%!uglifycss<cr>
-" nnoremap <leader>bcss :%!prettier --stdin-filepath %<cr>
-" }}}
-
 " Abbreviations {{{
 inoreabbrev bashh #!/bin/bash<cr>
 inoreabbrev pythh #!/usr/bin/env python<cr>
 " }}}
-
-" Buffers {{{
-nnoremap ; :Buffers<CR>
-nnoremap <Leader>t :Files<CR>
-" close buffer
-nnoremap <leader>w :bd<cr>
-" }}}
-
 
 " Auto-Parentheses {{{
 " Auto-insert closing parenthesis/brace
@@ -225,4 +202,3 @@ inoremap <silent> <BS> <C-r>=BetterBackSpace()<CR>
 inoremap <expr> ) getline('.')[col('.')-1] == ")" ? "\<Right>" : ")"
 inoremap <expr> } getline('.')[col('.')-1] == "}" ? "\<Right>" : "}"
 " }}}
-
