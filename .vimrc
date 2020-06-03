@@ -57,6 +57,7 @@ set expandtab
 " Map leader to space
 let mapleader=" "
 let maplocalleader = "\\"
+
 " Map 0 to first non-blank character
 nnoremap 0 ^
 
@@ -72,28 +73,30 @@ nnoremap <CR> :nohlsearch<CR><CR>
 " Move to the end of the line
 nnoremap E $
 
-" Map leader+sc to no highlight
-" nnoremap <leader>sc :noh<cr>
 " Map - to move a line down
 nnoremap - dd$p
-" Map - to move a line up
+
+" Map _ to move a line up
 nnoremap _ dd2kp
+
 " Map ctrl+u to toggle word to uppercase/lowercase in insert and normal and
 " visual
 nnoremap U viw~
 vnoremap U ~
+
 " Edit vimrc <leader>ev, source vimrc <leader>sv
 nnoremap <leader>ev :vsplit ~/.vimrc<cr>
 nnoremap <leader>sv :source ~/.vimrc<cr>
 
 " Remove blank space from the start of the line to the end of previous line
 inoremap ddd <esc>^hvk$xi 
+nnoremap <leader>d ^hvk$xi <esc>
 
 " highlight last inserted text
 nnoremap gV `[v`]
 
 " Exit insert mode
-"inoremap jk <esc>
+inoremap jk <esc>
 "inoremap <esc> <nop>
 " ==============================
 " Copy to clipboard / yank
@@ -104,7 +107,8 @@ nnoremap Y :%y+<cr>
 " Copy line from cursor until the end
 nnoremap <leader>ye vg_y
 "===============================
-" Movement p: Inside parentheses (delete parameters = dp)
+" Movement p: Inside parentheses (delete parameters = dp | change text inside
+" parentheses = cp)
 onoremap p i(
 " remap `*`/`#` to search forwards/backwards (resp.)
 " w/o moving cursor
@@ -122,7 +126,6 @@ nnoremap j gj
 nnoremap k gk
 
 " }}}
-
 
 " Surround {{{
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
