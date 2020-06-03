@@ -25,7 +25,9 @@ plugins=(
 
   
 source $ZSH/oh-my-zsh.sh
-source ~/Repos/devops_scripts/aliases/aliases.sh
+if [[ -f ~/Repos/devops_scripts/aliases/aliases.sh ]];then
+  source ~/Repos/devops_scripts/aliases/aliases.sh
+fi
 
 autoload -U +X bashcompinit && bashcompinit
 alias vim="nvim"
@@ -53,10 +55,12 @@ if [[ -d "$HOME/.okta/bin" && ":$PATH:" != *":$HOME/.okta/bin:"* ]]; then
 fi
 
 # Kubectl contexts
-alias ctx="source ~/.kube/ctx"
-local context
-context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
-export KUBECONFIG=$context
+if [[ -f ~/.kube/ctx ]];then
+  alias ctx="source ~/.kube/ctx"
+  local context
+  context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
+  export KUBECONFIG=$context
+fi
 
 ##alias cinfo='kubectl cluster-info'
 ##function ctx () { kubectx $* && cinfo }
@@ -64,7 +68,8 @@ export KUBECONFIG=$context
 ##for ctx in ~/Dropbox/DevOps/k8s-cluster-contexts/*.config;do
 ##  export KUBECONFIG=${KUBECONFIG}:${ctx}
 ##done
-#
-source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
-PS1=$PS1'$(kube_ps1): '
-
+  #
+if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
+  source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+  PS1=$PS1'$(kube_ps1): '
+fi
