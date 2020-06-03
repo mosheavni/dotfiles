@@ -2,17 +2,17 @@
 alias watch='watch '
 alias -g S='| sort'
 alias -g SRT='+short | sort'
-function mwatch () {
-  final_cmd=$1
-  shift
-  args="$@"
-  while tmp_alias=$(alias "$final_cmd") &>/dev/null;do
-  	full_final_cmd=$(awk -F"'" '{print $2}' <<< "$tmp_alias")
-  	final_cmd="${full_final_cmd%% *}"
-  	args="${full_final_cmd#* } ${args}"
-  done
-  watch $final_cmd $args
-}
+# function mwatch () {
+#   final_cmd=$1
+#   shift
+#   args="$@"
+#   while tmp_alias=$(alias "$final_cmd") &>/dev/null;do
+#     full_final_cmd=$(awk -F"'" '{print $2}' <<< "$tmp_alias")
+#     final_cmd="${full_final_cmd%% *}"
+#     args="${full_final_cmd#* } ${args}"
+#   done
+#   watch $final_cmd $args
+# }
 function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
 function ssh2 () { [[ $1 == "ip-"* ]] && ( in_url=$(sed -e 's/^ip-//' -e 's/-/./g' <<< "$1" ) ; echo $in_url && ssh $in_url ) || ssh $1 }
 function jsonlint () { pbcopy && open https://jsonlint.com/ }
