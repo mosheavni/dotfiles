@@ -24,11 +24,14 @@ set noswapfile
 set nobackup
 set wildmenu       " Displays a menu on autocomplete
 set title          " Changes the iterm title
+set showcmd
 filetype plugin on
 filetype plugin indent on
 
 set list
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
+
+set path+=** " When searching, search also subdirectories
 
 " }}}
 
@@ -65,7 +68,7 @@ nnoremap 0 ^
 nnoremap ; :
 
 " This creates a new line of '=' signs the same length of the line
-nnoremap <leader>1 yypVr=
+nnoremap <leader>= yypVr=
 
 " Map enter to no highlight
 nnoremap <CR> :nohlsearch<CR><CR>
@@ -129,18 +132,6 @@ nnoremap k gk
 
 " }}}
 
-" Surround {{{
-nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
-nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
-nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
-
-vnoremap <leader>( c()<esc>P
-vnoremap <leader>{ c{}<esc>P
-vnoremap <leader>" c""<esc>P
-vnoremap <leader>' c''<esc>P
-" }}}
-
 " Split navigations mappings {{{
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -180,6 +171,13 @@ augroup filetype_yaml
 augroup END
 " }}}
 
+" Filetype bash {{{
+augroup filetype_bash
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.sh set filetype=sh foldmethod=indent
+augroup END
+" }}}
+
 " Filetype groovy {{{
 augroup filetype_groovy
     autocmd!
@@ -195,12 +193,17 @@ endif
 if getline(1) =~ '^#!.*[/\\]groovy\>'
   setf groovy
 endif
+
 " }}}
 
-
 " Abbreviations {{{
-inoreabbrev bashh #!/bin/bash<cr>
 inoreabbrev pythh #!/usr/bin/env python<cr>
+inoreabbrev def def () {<cr><tab><cr>}<esc>2k0f(hxi
+inoreabbrev function function () {<cr><tab><cr>}<esc>2k0f(hxi
+inoreabbrev if <backspace>if () {<cr><tab><cr>}<esc>2k0f(hxa
+inoreabbrev teh the
+inoreabbrev seperate separate
+inoreabbrev dont don't
 " }}}
 
 " Auto-Parentheses {{{
@@ -224,3 +227,24 @@ inoremap <silent> <BS> <C-r>=BetterBackSpace()<CR>
 inoremap <expr> ) getline('.')[col('.')-1] == ")" ? "\<Right>" : ")"
 inoremap <expr> } getline('.')[col('.')-1] == "}" ? "\<Right>" : "}"
 " }}}
+
+" Extras {{{
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+" Ctags
+command! MakeTags !ctags -R . 2>/dev/null
+" }}}
+
+" Surround {{{
+nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
+nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
+nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
+
+vnoremap <leader>( c()<esc>P
+vnoremap <leader>{ c{}<esc>P
+vnoremap <leader>" c""<esc>P
+vnoremap <leader>' c''<esc>P
+
+" }}}
+
