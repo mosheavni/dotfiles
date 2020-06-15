@@ -68,6 +68,9 @@ nnoremap 0 ^
 " with this you can save with ;wq
 nnoremap ; :
 
+" Switch between last buffers
+nnoremap <Leader><Leader> <C-^>
+
 " This creates a new line of '=' signs the same length of the line
 nnoremap <leader>= yypVr=
 
@@ -129,8 +132,6 @@ vnoremap <leader>r "hy:%s/<C-r>h//gc<left><left><left>
 " Change every " -" with " \<cr> -" to break long lines of bash
 nnoremap <silent> <buffer> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
 
-
-
 " move vertically by visual line (don't skip wrapped lines)
 nnoremap j gj
 nnoremap k gk
@@ -187,9 +188,16 @@ augroup END
 augroup filetype_groovy
     autocmd!
     au BufNewFile,BufRead *.groovy  setf groovy
+    au BufNewFile,BufRead Jenkinsfile setf groovy
+
+    au BufNewFile,BufRead *.groovy  setlocal filetype=groovy
+    au BufNewFile,BufRead Jenkinsfile setlocal filetype=groovy
+    " autocmd FileType groovy |
+    "   setlocal foldmethod=marker foldmarker={,} |
+    "   setlocal fillchars=fold:\  foldtext=getline(v:foldstart)
+
     autocmd FileType groovy |
-      setlocal foldmethod=marker foldmarker={,} |
-      setlocal fillchars=fold:\  foldtext=getline(v:foldstart)
+      setlocal foldmethod=syntax
 augroup END
 
 if did_filetype()
@@ -202,14 +210,13 @@ endif
 " }}}
 
 " Abbreviations {{{
-inoreabbrev pythh #!/usr/bin/env python<cr>
-inoreabbrev def def () {<cr><tab><cr>}<esc>2k0f(hxi
-inoreabbrev function function () {<cr><tab><cr>}<esc>2k0f(hxi
-inoreabbrev if <backspace>if () {<cr><tab><cr>}<esc>2k0f(hxa
+inoreabbrev def def () {<cr><tab><cr>}<esc>2k0f(a
+inoreabbrev function function () {<cr><tab><cr>}<esc>2k0f(a
+inoreabbrev if <bs>if () {<cr><tab><cr>}<esc>2k0f(a
 inoreabbrev teh the
 inoreabbrev seperate separate
 inoreabbrev dont don't
-" }}}
+" }}} 
 
 " Auto-Parentheses {{{
 " Auto-insert closing parenthesis/brace
@@ -252,4 +259,3 @@ vnoremap <leader>" c""<esc>P
 vnoremap <leader>' c''<esc>P
 
 " }}}
-
