@@ -7,6 +7,7 @@ set nocompatible
 silent! colorscheme elflord
 syntax enable
 set relativenumber
+set linebreak      " Avoid wrapping a line in the middle of a word.
 set cursorline     " Add highlight behind current line
 set hlsearch       " highlight reg. ex. in @/ register
 set incsearch      " Search as characters are typed
@@ -41,8 +42,8 @@ set path+=** " When searching, search also subdirectories
 filetype indent on
 set autoindent    " always set autoindenting on
 set copyindent    " copy the previous indentation on autoindenting
-set smartindent
-set shiftwidth=4
+set smartindent   " Number of spaces to use for each step of (auto)indent.
+set shiftwidth=4  " Number of spaces for each indent
 set softtabstop=4
 set tabstop=4
 set expandtab
@@ -124,6 +125,10 @@ nnoremap <silent> # :execute "normal! #n"<cr>
 nnoremap <Leader>r :%s/<C-r><C-w>//gc<Left><Left><Left>
 " vnoremap <Leader>r :%s/<C-r><C-w>//g<Left><Left>
 vnoremap <leader>r "hy:%s/<C-r>h//gc<left><left><left>
+
+" Change every " -" with " \<cr> -" to break long lines of bash
+nnoremap <silent> <buffer> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
+
 
 
 " move vertically by visual line (don't skip wrapped lines)
