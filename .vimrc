@@ -150,7 +150,7 @@ nnoremap <C-H> <C-W><C-H>
 
 " Enable folding {{{
 set foldenable
-set foldmethod=indent
+set foldmethod=syntax
 set foldlevel=999
 set foldlevelstart=10
 " Enable folding with the leader-f/a
@@ -164,8 +164,7 @@ augroup filetype_vim
     autocmd!
     autocmd! BufWritePost .vimrc* source %
     autocmd FileType vim |
-      setlocal foldlevel=0 |
-      setlocal foldmethod=marker
+      setlocal foldlevel=0  foldmethod=marker foldmarker={{{,}}}
 
 augroup END
 " }}}
