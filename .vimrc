@@ -71,17 +71,18 @@ nnoremap <CR> :nohlsearch<CR><CR>
 
 " Move to the end of the line
 nnoremap E $
+vnoremap E $
 
-" Map leader+sc to no highlight
-" nnoremap <leader>sc :noh<cr>
 " Map - to move a line down
 nnoremap - dd$p
 " Map - to move a line up
 nnoremap _ dd2kp
+
 " Map ctrl+u to toggle word to uppercase/lowercase in insert and normal and
 " visual
 nnoremap U viw~
 vnoremap U ~
+
 " Edit vimrc <leader>ev, source vimrc <leader>sv
 nnoremap <leader>ev :vsplit ~/.vimrc<cr>
 nnoremap <leader>sv :source ~/.vimrc<cr>
@@ -95,6 +96,7 @@ nnoremap gV `[v`]
 " Exit insert mode
 "inoremap jk <esc>
 "inoremap <esc> <nop>
+
 " ==============================
 " Copy to clipboard / yank
 " Copy visual selection to clipboard
@@ -104,6 +106,7 @@ nnoremap Y :%y+<cr>
 " Copy line from cursor until the end
 nnoremap <leader>ye vg_y
 "===============================
+
 " Movement p: Inside parentheses (delete parameters = dp)
 onoremap p i(
 " remap `*`/`#` to search forwards/backwards (resp.)
@@ -112,7 +115,7 @@ nnoremap <silent> * :execute "normal! *N"<cr>
 nnoremap <silent> # :execute "normal! #n"<cr>
 
 " search and replace
-nnoremap <Leader>r :%s/<C-r><C-w>//g<Left><Left>
+nnoremap <Leader>r :%s/<C-r><C-w>//gc<Left><Left><Left>
 " vnoremap <Leader>r :%s/<C-r><C-w>//g<Left><Left>
 vnoremap <leader>r "hy:%s/<C-r>h//gc<left><left><left>
 
@@ -123,17 +126,16 @@ nnoremap k gk
 
 " }}}
 
-
 " Surround {{{
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
 nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
 nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
 
-vnoremap <leader>( iw<esc>a)<esc>bi(<esc>lel
-vnoremap <leader>" iw<esc>a"<esc>bi"<esc>lel
-vnoremap <leader>' iw<esc>a'<esc>bi'<esc>lel
-vnoremap <leader>{ iw<esc>a }<esc>bi{ <esc>lel
+vnoremap <leader>( c()<esc>P
+vnoremap <leader>{ c{}<esc>P
+vnoremap <leader>" c""<esc>P
+vnoremap <leader>' c''<esc>P
 " }}}
 
 " Split navigations mappings {{{
@@ -175,6 +177,24 @@ augroup filetype_yaml
         setlocal tabstop=2
 augroup END
 " }}}
+
+" Filetype groovy {{{
+augroup filetype_groovy
+    autocmd!
+    au BufNewFile,BufRead *.groovy  setf groovy
+    autocmd FileType groovy |
+      setlocal foldmethod=marker foldmarker={,} |
+      setlocal fillchars=fold:\  foldtext=getline(v:foldstart)
+augroup END
+
+if did_filetype()
+  finish
+endif
+if getline(1) =~ '^#!.*[/\\]groovy\>'
+  setf groovy
+endif
+" }}}
+
 
 " Abbreviations {{{
 inoreabbrev bashh #!/bin/bash<cr>
