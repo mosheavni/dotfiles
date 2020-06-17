@@ -6,6 +6,10 @@ set nocompatible
 " packadd! dracula
 silent! colorscheme elflord
 syntax enable
+
+set shell=/bin/zsh
+" set shellcmdflag=-ic
+
 set relativenumber
 set linebreak      " Avoid wrapping a line in the middle of a word.
 set cursorline     " Add highlight behind current line
@@ -26,6 +30,8 @@ set nobackup
 set wildmenu       " Displays a menu on autocomplete
 set title          " Changes the iterm title
 set showcmd
+set guifont=:h
+
 filetype plugin on
 filetype plugin indent on
 
@@ -33,7 +39,7 @@ set list
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
 set path+=** " When searching, search also subdirectories
-
+" set verbose=1
 " }}}
 
 " Indentation {{{
@@ -50,11 +56,11 @@ set expandtab
 " }}}
 
 " Statusline {{{
-" set statusline=%.50F\ -\ FileType:\ %y
-" set statusline+=%=        " Switch to the right side
-" set statusline+=%l    " Current line
-" set statusline+=/    " Separator
-" set statusline+=%L\   " Total lines
+set statusline=%.50F\ -\ FileType:\ %y
+set statusline+=%=        " Switch to the right side
+set statusline+=%l    " Current line
+set statusline+=/    " Separator
+set statusline+=%L\   " Total lines
 " }}}
 
 " Mappings {{{
@@ -81,8 +87,15 @@ nnoremap <CR> :nohlsearch<CR><CR>
 nnoremap E $
 vnoremap E $
 
+" Remove blank spaces from the end of the line
+:nnoremap <silent> <leader>a :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
+
+
 " Map - to move a line down
 nnoremap - dd$p
+
+" Base64 decode
+vnoremap <leader>64 y:echo system('base64 --decode', @")<cr>
 
 " Map _ to move a line up
 nnoremap _ dd2kp
@@ -136,7 +149,14 @@ nnoremap <silent> <buffer> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
 nnoremap j gj
 nnoremap k gk
 
-" }}}
+" Change working directory based on open file
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+
+" Convert all tabs to spaces
+nnoremap <leader>ct<space> :retab<cr>
+
+
+"" }}}
 
 " Split navigations mappings {{{
 nnoremap <C-J> <C-W><C-J>
@@ -147,66 +167,13 @@ nnoremap <C-H> <C-W><C-H>
 
 " Enable folding {{{
 set foldenable
-set foldmethod=syntax
+setlocal foldmethod=syntax
 set foldlevel=999
 set foldlevelstart=10
 " Enable folding with the leader-f/a
 nnoremap <leader>f za
 nnoremap <leader>caf zM
 nnoremap <leader>oaf zR
-" }}}
-
-" Filetype vim {{{
-augroup filetype_vim
-    autocmd!
-    autocmd! BufWritePost .vimrc* source %
-    autocmd FileType vim |
-      setlocal foldlevel=0  foldmethod=marker foldmarker={{{,}}}
-
-augroup END
-" }}}
-
-" Filetype yaml {{{
-augroup filetype_yaml
-    autocmd!
-    autocmd BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
-    autocmd FileType yaml |
-        setlocal shiftwidth=2 |
-        setlocal softtabstop=2 |
-        setlocal tabstop=2
-augroup END
-" }}}
-
-" Filetype bash {{{
-augroup filetype_bash
-    autocmd!
-    autocmd BufNewFile,BufReadPost *.sh set filetype=sh foldmethod=indent
-augroup END
-" }}}
-
-" Filetype groovy {{{
-augroup filetype_groovy
-    autocmd!
-    au BufNewFile,BufRead *.groovy  setf groovy
-    au BufNewFile,BufRead Jenkinsfile setf groovy
-
-    au BufNewFile,BufRead *.groovy  setlocal filetype=groovy
-    au BufNewFile,BufRead Jenkinsfile setlocal filetype=groovy
-    " autocmd FileType groovy |
-    "   setlocal foldmethod=marker foldmarker={,} |
-    "   setlocal fillchars=fold:\  foldtext=getline(v:foldstart)
-
-    autocmd FileType groovy |
-      setlocal foldmethod=syntax
-augroup END
-
-if did_filetype()
-  finish
-endif
-if getline(1) =~ '^#!.*[/\\]groovy\>'
-  setf groovy
-endif
-
 " }}}
 
 " Abbreviations {{{
@@ -219,32 +186,66 @@ inoreabbrev dont don't
 " }}} 
 
 " Auto-Parentheses {{{
-" Auto-insert closing parenthesis/brace
-inoremap ( ()<Left>
-inoremap { {}<Left>
-
-" Auto-delete closing parenthesis/brace
-function! BetterBackSpace() abort
-    let cur_line = getline('.')
-    let before_char = cur_line[col('.')-2]
-    let after_char = cur_line[col('.')-1]
-    if (before_char == '(' && after_char == ')') || (before_char == '{' && after_char == '}')
-        return "\<Del>\<BS>"
-    else
-        return "\<BS>"
-endfunction
-inoremap <silent> <BS> <C-r>=BetterBackSpace()<CR>
-
-" Skip over closing parenthesis/brace
-inoremap <expr> ) getline('.')[col('.')-1] == ")" ? "\<Right>" : ")"
-inoremap <expr> } getline('.')[col('.')-1] == "}" ? "\<Right>" : "}"
+" Auto-insert closing parenthesis/brace - autopairs plugin replaces this
+" inoremap ( ()<Left>
+" inoremap { {}<Left>
+" 
+" " Auto-delete closing parenthesis/brace
+" function! BetterBackSpace() abort
+"     let cur_line = getline('.')
+"     let before_char = cur_line[col('.')-2]
+"     let after_char = cur_line[col('.')-1]
+"     if (before_char == '(' && after_char == ')') || (before_char == '{' && after_char == '}')
+"         return "\<Del>\<BS>"
+"     else
+"         return "\<BS>"
+" endfunction
+" inoremap <silent> <BS> <C-r>=BetterBackSpace()<CR>
+" 
+" " Skip over closing parenthesis/brace
+" inoremap <expr> ) getline('.')[col('.')-1] == ")" ? "\<Right>" : ")"
+" inoremap <expr> } getline('.')[col('.')-1] == "}" ? "\<Right>" : "}"
 " }}}
 
 " Extras {{{
-set runtimepath^=~/.vim/bundle/ctrlp.vim
+" Fzf
+" nnoremap <c-p> :Files 
+nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+
+nnoremap <c-b> :Buffers<cr>
+
+" Nerd Tree
+nnoremap <c-o> :NERDTreeToggle<cr>
+let g:NERDTreeChDirMode = 2
+
+" Ack
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+nnoremap <c-f> :Ack!<Space>
+
+" DevIcons
+let g:WebDevIconsOS = 'Darwin'
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:DevIconsEnableFoldersOpenClose = 1
+let g:DevIconsEnableFolderExtensionPatternMatching = 1
+highlight! link NERDTreeFlags NERDTreeDir
+
+
+" Vim airline (powerline)
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.space = "\ua0"
+let g:airline_theme='wombat'
 
 " Ctags
 command! MakeTags !ctags -R . 2>/dev/null
+
+" Set current working directory based on the file
+" autocmd BufEnter * silent! :lcd%:p:h
 " }}}
 
 " Surround {{{
@@ -259,3 +260,107 @@ vnoremap <leader>" c""<esc>P
 vnoremap <leader>' c''<esc>P
 
 " }}}
+
+" Coc {{{
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of LS, ex: coc-tsserver
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Mappings for CoCList
+" Show commands.
+nnoremap <silent><nowait> <leader>cc  :<C-u>CocList commands<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" }}}
+
+" Plugins {{{
+call plug#begin('~/.vim/plugged')
+Plug 'preservim/nerdtree'
+
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+Plug 'sheerun/vim-polyglot'
+
+Plug 'terryma/vim-multiple-cursors'
+
+Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+Plug 'mileszs/ack.vim'
+
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+call plug#end()
+" }}}
+
