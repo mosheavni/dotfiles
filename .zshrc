@@ -2,31 +2,31 @@
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="random"
 ZSH_THEME_RANDOM_CANDIDATES=(
-  "robbyrussell"
-  "dracula"
- )
+    "robbyrussell"
+    "dracula"
+)
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 plugins=(
-  git
-  ansible
-  docker
-  common-aliases
-  zsh-autosuggestions
-  aws
-  kubectl
-  minikube
-  dircycle
-  autoupdate
-  zsh-syntax-highlighting
-  zsh-nvm
-  z
+    git
+    ansible
+    docker
+    common-aliases
+    zsh-autosuggestions
+    aws
+    kubectl
+    minikube
+    dircycle
+    autoupdate
+    zsh-syntax-highlighting
+    zsh-nvm
+    z
 )
 
-  
+
 source $ZSH/oh-my-zsh.sh
 if [[ -f ~/Repos/devops_scripts/aliases/aliases.sh ]];then
-  source ~/Repos/devops_scripts/aliases/aliases.sh
+    source ~/Repos/devops_scripts/aliases/aliases.sh
 fi
 
 autoload -U +X bashcompinit && bashcompinit
@@ -48,18 +48,18 @@ export LC_ALL=en_US.UTF-8
 
 #OktaAWSCLI
 if [[ -f "$HOME/.okta/bash_functions" ]]; then
-  . "$HOME/.okta/bash_functions"
+    . "$HOME/.okta/bash_functions"
 fi
 if [[ -d "$HOME/.okta/bin" && ":$PATH:" != *":$HOME/.okta/bin:"* ]]; then
-  PATH="$HOME/.okta/bin:$PATH"
+    PATH="$HOME/.okta/bin:$PATH"
 fi
 
 # Kubectl contexts
 if [[ -f ~/.kube/ctx ]];then
-  alias ctx="source ~/.kube/ctx"
-  local context
-  context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
-  export KUBECONFIG=$context
+    alias ctx="source ~/.kube/ctx"
+    local context
+    context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
+    export KUBECONFIG=$context
 fi
 
 ##alias cinfo='kubectl cluster-info'
@@ -68,8 +68,8 @@ fi
 ##for ctx in ~/Dropbox/DevOps/k8s-cluster-contexts/*.config;do
 ##  export KUBECONFIG=${KUBECONFIG}:${ctx}
 ##done
-  #
+#
 if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
-  source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
-  PS1=$PS1'$(kube_ps1): '
+    source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+    PS1=$PS1'$(kube_ps1): '
 fi

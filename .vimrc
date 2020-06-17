@@ -224,15 +224,15 @@ if executable('ag')
 endif
 nnoremap <c-f> :Ack!<Space>
 
-" DevIcons
+" DevIcons {{{
 let g:WebDevIconsOS = 'Darwin'
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
 highlight! link NERDTreeFlags NERDTreeDir
+" }}}
 
-
-" Vim airline (powerline)
+" Vim airline (powerline) {{{
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
@@ -240,12 +240,44 @@ if !exists('g:airline_symbols')
 endif
 let g:airline_symbols.space = "\ua0"
 let g:airline_theme='wombat'
+" }}}
 
 " Ctags
 command! MakeTags !ctags -R . 2>/dev/null
 
+" GitGutter {{{
+nnoremap <leader>gc :GitGutterLineHighlightsToggle<cr>
+nnoremap <leader>cag :GitGutterFold<cr>
+function! GitStatus()
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
+endfunction
+set statusline+=%{GitStatus()}
+highlight clear SignColumn
+highlight GitGutterAdd ctermfg=green
+highlight GitGutterChange ctermfg=yellow
+highlight GitGutterDelete ctermfg=red
+highlight GitGutterChangeDelete ctermfg=yellow
+" }}}
+
+" Fugitive {{{
+" Better branch choosing using :Gbranch
+function! s:changebranch(branch) 
+    execute 'Git checkout' . a:branch
+    call feedkeys("i")
+endfunction
+
+command! -bang Gbranch call fzf#run({
+            \ 'source': 'git branch -a --no-color | grep -v "^\* " ', 
+            \ 'sink': function('s:changebranch')
+            \ })
+
+" Set branch upstream
+command! -bang Gpsup !git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
+
 " Set current working directory based on the file
 " autocmd BufEnter * silent! :lcd%:p:h
+" }}}
 " }}}
 
 " Surround {{{
@@ -262,7 +294,8 @@ vnoremap <leader>' c''<esc>P
 " }}}
 
 " Coc {{{
-" Use tab for trigger completion with characters ahead and navigate.
+
+"" Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
@@ -341,6 +374,7 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Plugins {{{
 call plug#begin('~/.vim/plugged')
 Plug 'preservim/nerdtree'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -350,7 +384,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
 
 Plug 'ryanoasis/vim-devicons'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'mileszs/ack.vim'
 
@@ -360,6 +393,10 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'idanarye/vim-merginal'
 
 call plug#end()
 " }}}
