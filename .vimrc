@@ -31,6 +31,7 @@ set wildmenu       " Displays a menu on autocomplete
 set title          " Changes the iterm title
 set showcmd
 set guifont=:h
+set mouse=a
 
 filetype plugin on
 filetype plugin indent on
