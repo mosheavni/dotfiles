@@ -50,15 +50,15 @@ nnoremap <c-b> :Buffers<cr>
 nnoremap <c-o> :NERDTreeToggle<cr>
 let g:NERDTreeChDirMode = 2
 
-function! MosheTest(timer)
+function! ToggleNerdFugitiveVimStartup(timer)
     NERDTreeToggle
     if filereadable(expand(".git/index"))
         rightbelow Gstatus
         wincmd l
     endif
 endfunction
-autocmd VimEnter * if !argc() | let timer = timer_start(500, 'MosheTest') | endif
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTaobTree()) | q | endif
+autocmd VimEnter * if !argc() | let timer = timer_start(500, 'ToggleNerdFugitiveVimStartup') | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Reorganize all buffers
 function! ReorganizeAllWindows() 
@@ -66,7 +66,7 @@ function! ReorganizeAllWindows()
     if buflisted(bufname('.git/index'))
         bd .git/index
     endif
-    call MosheTest("")
+    call ToggleNerdFugitiveVimStartup("")
 endfunction
 nnoremap <leader>ow :call ReorganizeAllWindows()<cr>
 
