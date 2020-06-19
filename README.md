@@ -19,6 +19,16 @@ done
 ```
 4. Run effuse to create the symlinks between the repo dir and the home dir: `effuse`
 
-5. ???
+5. Install brew dependencies
+```
+while read -r brew_formulae;do brew install $brew_formulae;done < Brewfile
+```
 
-6. PROFIT
+6. Install npm packages
+```
+while read -r npm_package;do npm install --global $npm_package;done < Npmfile
+```
+
+7. ???
+
+8. PROFIT
