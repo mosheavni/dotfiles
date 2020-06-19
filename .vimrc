@@ -189,7 +189,7 @@ nnoremap <leader>oaf zR
 
 " Abbreviations {{{
 inoreabbrev def def () {<cr><tab><cr>}<esc>2k0f(a
-inoreabbrev function function () {<cr><tab><cr>}<esc>2k0f(a
+inoreabbrev function function () {<cr><tab><cr>}<esc>2k0f(i
 inoreabbrev if <bs>if () {<cr><tab><cr>}<esc>2k0f(a
 inoreabbrev teh the
 inoreabbrev seperate separate
