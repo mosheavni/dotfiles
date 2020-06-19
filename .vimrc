@@ -97,8 +97,8 @@ vnoremap E $
 :nnoremap <silent> <leader>a :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
 
 " Set mouse=v mapping
-nnoremap <leader>ma :set mouse=a
-nnoremap <leader>mv :set mouse=v
+nnoremap <leader>ma :set mouse=a<cr>
+nnoremap <leader>mv :set mouse=v<cr>
 
 " Map - to move a line down
 nnoremap - dd$p
@@ -188,9 +188,9 @@ nnoremap <leader>oaf zR
 " }}}
 
 " Abbreviations {{{
-inoreabbrev def def () {<cr><tab><cr>}<esc>2k0f(a
-inoreabbrev function function () {<cr><tab><cr>}<esc>2k0f(i
-inoreabbrev if <bs>if () {<cr><tab><cr>}<esc>2k0f(a
+" inoreabbrev def def () {<cr><tab><cr>}<esc>2k0f(a
+" inoreabbrev function function () {<cr><tab><cr>}<esc>2k0f(i
+" inoreabbrev if <bs>if () {<cr><tab><cr>}<esc>2k0f(a
 inoreabbrev teh the
 inoreabbrev seperate separate
 inoreabbrev dont don't
