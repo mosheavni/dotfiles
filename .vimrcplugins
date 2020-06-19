@@ -48,14 +48,17 @@ nnoremap <c-b> :Buffers<cr>
 nnoremap <c-o> :NERDTreeToggle<cr>
 let g:NERDTreeChDirMode = 2
 
-function! MosheTest()
+function! MosheTest(timer)
     NERDTreeToggle
     if filereadable(expand(".git/index"))
         rightbelow Gstatus
+        wincmd l
     endif
 endfunction
-autocmd VimEnter * if !argc() | call MosheTest() | endif
+autocmd VimEnter * if !argc() | let timer = timer_start(500, 'MosheTest') | endif
 
+
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 
 " Ack
@@ -135,6 +138,9 @@ function! ToggleGStatus()
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
 nnoremap <leader>gs :ToggleGStatus<CR>
+
+" Focus on git window
+nnoremap <leader>gg :Git<cr>
 
 " Set current working directory based on the file
 " autocmd BufEnter * silent! :lcd%:p:h
