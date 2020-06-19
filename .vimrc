@@ -127,6 +127,7 @@ nnoremap gV `[v`]
 
 " Exit insert mode
 inoremap jk <esc>
+nnoremap <leader>qq :qall<cr>
 "inoremap <esc> <nop>
 
 " ==============================
