@@ -103,11 +103,11 @@ nnoremap <leader>mv :set mouse=v
 " Map - to move a line down
 nnoremap - dd$p
 
-" Base64 decode
-vnoremap <leader>64 y:echo system('base64 --decode', @")<cr>
-
 " Map _ to move a line up
 nnoremap _ dd2kp
+
+" Base64 decode
+vnoremap <leader>64 y:echo system('base64 --decode', @")<cr>
 
 " Map ctrl+u to toggle word to uppercase/lowercase in insert and normal and
 " visual
