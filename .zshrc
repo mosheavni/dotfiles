@@ -15,19 +15,19 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 plugins=(
-    git
     ansible
-    docker
-    common-aliases
-    zsh-autosuggestions
+    autoupdate
     aws
+    common-aliases
+    dircycle
+    docker
+    git
     kubectl
     minikube
-    dircycle
-    autoupdate
-    zsh-syntax-highlighting
-    zsh-nvm
     z
+    zsh-autosuggestions
+    zsh-nvm
+    zsh-syntax-highlighting
 )
 
 
