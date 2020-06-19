@@ -72,7 +72,7 @@ nnoremap <leader>ow :call ReorganizeAllWindows()<cr>
 
 " Ack
 if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
+    let g:ackprg = 'ag --vimgrep'
 endif
 nnoremap <c-f> :Ack!<Space>
 
@@ -88,7 +88,7 @@ highlight! link NERDTreeFlags NERDTreeDir
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
+    let g:airline_symbols = {}
 endif
 let g:airline_symbols.space = "\ua0"
 let g:airline_theme='wombat'
@@ -98,8 +98,8 @@ let g:airline_theme='wombat'
 nnoremap <leader>gc :GitGutterLineHighlightsToggle<cr>
 nnoremap <leader>cag :GitGutterFold<cr>
 function! GitStatus()
-  let [a,m,r] = GitGutterGetHunkSummary()
-  return printf('+%d ~%d -%d', a, m, r)
+    let [a,m,r] = GitGutterGetHunkSummary()
+    return printf('+%d ~%d -%d', a, m, r)
 endfunction
 set statusline+=%{GitStatus()}
 highlight clear SignColumn
@@ -126,13 +126,13 @@ command! -bang Gpsup !git push --set-upstream origin $(git rev-parse --abbrev-re
 
 " Create a new branch
 function! Gcb(...)
-  let name = a:1
-  if name == ""
-    call inputsave()
-    let name = input('Enter branch name: ')
-    call inputrestore()
-  endif
-  execute "!git checkout -b " . name
+    let name = a:1
+    if name == ""
+        call inputsave()
+        let name = input('Enter branch name: ')
+        call inputrestore()
+    endif
+    execute "!git checkout -b " . name
 endfunction
 command! -bang -nargs=? Gcb call Gcb("<args>")
 
@@ -198,8 +198,8 @@ endfunction
 let g:coc_snippet_next = '<tab>'
 
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Use <c-space> to trigger completion.
@@ -209,9 +209,9 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
 if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+    inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
 " GoTo code navigation.
@@ -227,11 +227,11 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    autocmd!
+    " Setup formatexpr specified filetype(s).
+    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+    " Update signature help on jump placeholder.
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
 " Use CTRL-S for selections ranges.
