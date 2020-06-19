@@ -3,6 +3,7 @@ let vimplug_dir = '~/.vim/plugged'
 call plug#begin(vimplug_dir)
 Plug 'preservim/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -49,6 +50,7 @@ nnoremap <c-b> :Buffers<cr>
 
 " Nerd Tree
 nnoremap <c-o> :NERDTreeToggle<cr>
+nnoremap <silent> <Leader>v :NERDTreeFind<CR>
 let g:NERDTreeChDirMode = 2
 
 function! ToggleNerdFugitiveVimStartup(timer)
