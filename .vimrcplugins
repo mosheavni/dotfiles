@@ -56,10 +56,17 @@ function! MosheTest(timer)
     endif
 endfunction
 autocmd VimEnter * if !argc() | let timer = timer_start(500, 'MosheTest') | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTaobTree()) | q | endif
 
-
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
+" Reorganize all buffers
+function! ReorganizeAllWindows() 
+    NERDTreeClose
+    if buflisted(bufname('.git/index'))
+        bd .git/index
+    endif
+    call MosheTest("")
+endfunction
+nnoremap <leader>ow :call ReorganizeAllWindows()<cr>
 
 " Ack
 if executable('ag')
