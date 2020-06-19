@@ -127,6 +127,12 @@ command! -bang Gbranch call fzf#run({
 " Set branch upstream
 command! -bang Gpsup !git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
 
+" Git push
+command! -bang Gp Gpush
+
+" Git pull
+command! -bang Gl Gpull
+
 " Create a new branch
 function! Gcb(...)
     let name = a:1
