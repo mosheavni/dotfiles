@@ -95,6 +95,8 @@ let g:airline_theme='wombat'
 " }}}
 
 " GitGutter {{{
+let g:gitgutter_highlight_lines = 1
+let g:gitgutter_highlight_linenrs = 1
 nnoremap <leader>gc :GitGutterLineHighlightsToggle<cr>
 nnoremap <leader>cag :GitGutterFold<cr>
 function! GitStatus()
