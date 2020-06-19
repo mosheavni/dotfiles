@@ -165,17 +165,17 @@ colorscheme OceanicNext
 
 " Plugins backup
 let g:coc_global_extensions = [
-       \    "coc-vimlsp",
-       \    "coc-snippets",
-       \    "coc-neosnippet",
-       \    "coc-marketplace",
-       \    "coc-yaml",
-       \    "coc-tsserver",
-       \    "coc-sh",
-       \    "coc-python",
-       \    "coc-json",
-       \    "coc-groovy"
-       \]
+            \    "coc-vimlsp",
+            \    "coc-snippets",
+            \    "coc-neosnippet",
+            \    "coc-marketplace",
+            \    "coc-yaml",
+            \    "coc-tsserver",
+            \    "coc-sh",
+            \    "coc-python",
+            \    "coc-json",
+            \    "coc-groovy"
+            \]
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
