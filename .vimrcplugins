@@ -3,6 +3,7 @@ let vimplug_dir = '~/.vim/plugged'
 call plug#begin(vimplug_dir)
 Plug 'preservim/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'ryanoasis/vim-devicons'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -10,8 +11,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
 
 Plug 'terryma/vim-multiple-cursors'
-
-Plug 'ryanoasis/vim-devicons'
 
 Plug 'mileszs/ack.vim'
 
