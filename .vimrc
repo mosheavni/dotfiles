@@ -9,6 +9,7 @@ syntax enable
 set shell=/bin/zsh
 " set shellcmdflag=-ic
 
+set number         " Show current line number
 set relativenumber
 set linebreak      " Avoid wrapping a line in the middle of a word.
 set cursorline     " Add highlight behind current line
@@ -85,6 +86,10 @@ nnoremap <silent> <Leader><left> :vertical resize -5<cr>
 nnoremap <silent> <Leader><right> :vertical resize +5<cr>
 nnoremap <silent> <Leader><up> :resize -2<cr>
 nnoremap <silent> <Leader><down> :resize +2<cr>
+
+" Map dp and dg with leader for diffput and diffget
+nnoremap <leader>dp :diffput<cr>
+nnoremap <leader>dg :diffget<cr>
 
 " Map enter to no highlight
 nnoremap <CR> :nohlsearch<CR><CR>
