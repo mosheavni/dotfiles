@@ -153,7 +153,7 @@ nnoremap <Leader>r :%s/<C-r><C-w>//gc<Left><Left><Left>
 vnoremap <leader>r "hy:%s/<C-r>h//gc<left><left><left>
 
 " Change every " -" with " \<cr> -" to break long lines of bash
-nnoremap <silent> <buffer> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
+nnoremap <silent> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
 
 " move vertically by visual line (don't skip wrapped lines)
 nnoremap j gj
