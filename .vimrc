@@ -131,13 +131,13 @@ nnoremap <leader>qq :qall<cr>
 "inoremap <esc> <nop>
 
 " ==============================
-" Copy to clipboard / yank
-" Copy visual selection to clipboard
-vnoremap <leader>y "*y
-" Copy entire file to clipboard
-nnoremap Y :%y+<cr>
-" Copy line from cursor until the end
-nnoremap <leader>ye vg_y
+" " Copy to clipboard / yank - this is replaced by christoomey/vim-system-copy
+" " Copy visual selection to clipboard
+" vnoremap <leader>y "*y
+" " Copy entire file to clipboard
+" nnoremap Y :%y+<cr>
+" " Copy line from cursor until the end
+" nnoremap <leader>ye vg_y
 "===============================
 " Movement p: Inside parentheses (delete parameters = dp | change text inside
 " parentheses = cp)

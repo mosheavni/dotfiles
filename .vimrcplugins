@@ -13,6 +13,8 @@ Plug 'sheerun/vim-polyglot'
 
 Plug 'terryma/vim-multiple-cursors'
 
+Plug 'christoomey/vim-system-copy'
+
 Plug 'mileszs/ack.vim'
 
 Plug 'jiangmiao/auto-pairs'
