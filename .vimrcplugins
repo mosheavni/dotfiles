@@ -20,13 +20,13 @@ Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 
+Plug 'danro/rename.vim'
+
 Plug 'tpope/vim-commentary'
 
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-Plug 'twe4ked/vim-diff-toggle'
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
