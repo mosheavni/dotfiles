@@ -7,6 +7,8 @@ set nocompatible
 syntax enable
 
 set shell=/bin/zsh
+set tags=./tags,tags;$HOME
+
 " set shellcmdflag=-ic
 
 set number         " Show current line number
@@ -40,6 +42,10 @@ set list
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
 set path+=** " When searching, search also subdirectories
+
+" Auto load file changes when focus or buffer is entered
+au FocusGained,BufEnter * :checktime
+ 
 " set verbose=1
 " }}}
 
@@ -82,10 +88,8 @@ nnoremap <Leader><Leader> <C-^>
 nnoremap <leader>= yypVr=
 
 " Resize split
-nnoremap <silent> <Leader><left> :vertical resize -5<cr>
-nnoremap <silent> <Leader><right> :vertical resize +5<cr>
-nnoremap <silent> <Leader><up> :resize -2<cr>
-nnoremap <silent> <Leader><down> :resize +2<cr>
+nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 
 " Map dp and dg with leader for diffput and diffget
 nnoremap <leader>dp :diffput<cr>
