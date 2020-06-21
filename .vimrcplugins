@@ -5,6 +5,7 @@ Plug 'preservim/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
+Plug 'ryanoasis/nerd-fonts'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -54,6 +55,7 @@ call plug#end()
 " nnoremap <c-p> :Files
 nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
+nnoremap <leader>t :Tags<cr>
 
 nnoremap <c-b> :Buffers<cr>
 
@@ -70,20 +72,33 @@ function! ToggleNerdFugitiveVimStartup(timer)
         call FocusOnGit()
     endif
 endfunction
-" autocmd VimEnter * if !argc() | let timer = timer_start(500, 'ToggleNerdFugitiveVimStartup') | endif
+" function! ToggleNerdFugitiveVimStartup(timer)
+"     vsplit
+"     wincmd h
+"     Gedit :
+"     split
+"     wincmd k
+"     edit .
+"     NERDTreeFocus
+"     call nerdtree#ui_glue#invokeKeyMap("A")
+"     call nerdtree#ui_glue#invokeKeyMap("A")
+"     wincmd l
+" endfunction
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Reorganize all buffers
-function! ReorganizeAllWindows()
+function! ReorganizeAllWindows(timer)
     if (winnr("$") != 1)
         NERDTreeClose
     endif
     if buflisted(bufname('.git/index'))
+        b .git/index
+        close
         bd .git/index
     endif
     call ToggleNerdFugitiveVimStartup("")
 endfunction
-nnoremap <leader>ow :call ReorganizeAllWindows()<cr>
+nnoremap <leader>ow :call ReorganizeAllWindows("")<cr>
 
 " Ack
 if executable('ag')
@@ -287,7 +302,7 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 " Show commands.
 nnoremap <silent><nowait> <leader>cc  :<C-u>CocList commands<cr>
 " Search workspace symbols.
-nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
 nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
