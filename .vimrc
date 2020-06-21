@@ -7,7 +7,7 @@ set nocompatible
 syntax enable
 
 set shell=/bin/zsh
-set tags=./tags,tags;$HOME
+" set tags=./tags,tags;$HOME
 
 " set shellcmdflag=-ic
 
@@ -144,7 +144,7 @@ nnoremap <leader>qq :qall<cr>
 " " Copy visual selection to clipboard
 " vnoremap <leader>y "*y
 " " Copy entire file to clipboard
-" nnoremap Y :%y+<cr>
+nnoremap Y :%y+<cr>
 " " Copy line from cursor until the end
 " nnoremap <leader>ye vg_y
 "===============================
