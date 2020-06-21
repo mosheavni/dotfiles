@@ -162,7 +162,7 @@ function! ToggleGStatus()
         bd .git/index
     else
         NERDTreeFocus
-        rightbelow Gstatus
+        rightbelow Git
     endif
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
@@ -183,16 +183,17 @@ colorscheme OceanicNext
 
 " Plugins backup
 let g:coc_global_extensions = [
-            \    "coc-vimlsp",
-            \    "coc-snippets",
-            \    "coc-neosnippet",
-            \    "coc-marketplace",
-            \    "coc-yaml",
-            \    "coc-tsserver",
-            \    "coc-sh",
-            \    "coc-python",
+            \    "coc-groovy",
             \    "coc-json",
-            \    "coc-groovy"
+            \    "coc-marketplace",
+            \    "coc-neosnippet",
+            \    "coc-python",
+            \    "coc-sh",
+            \    "coc-snippets",
+            \    "coc-syntax",
+            \    "coc-tsserver",
+            \    "coc-vimlsp",
+            \    "coc-yaml"
             \]
 
 " Use tab for trigger completion with characters ahead and navigate.
