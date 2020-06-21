@@ -41,6 +41,7 @@ Plug 'Yggdroot/indentLine'
 
 Plug 'xolox/vim-easytags'
 Plug 'xolox/vim-misc'
+Plug 'ludovicchabant/vim-gutentags'
 
 Plug 'dracula/vim'
 Plug 'rafi/awesome-vim-colorschemes'
