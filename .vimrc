@@ -7,8 +7,11 @@ set nocompatible
 syntax enable
 
 set shell=/bin/zsh
+set tags=./tags,tags;$HOME
+
 " set shellcmdflag=-ic
 
+set number         " Show current line number
 set relativenumber
 set linebreak      " Avoid wrapping a line in the middle of a word.
 set cursorline     " Add highlight behind current line
@@ -39,6 +42,10 @@ set list
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
 set path+=** " When searching, search also subdirectories
+
+" Auto load file changes when focus or buffer is entered
+au FocusGained,BufEnter * :checktime
+ 
 " set verbose=1
 " }}}
 
@@ -84,10 +91,12 @@ nnoremap <leader>bd :bd<cr>
 nnoremap <leader>= yypVr=
 
 " Resize split
-nnoremap <silent> <Leader><left> :vertical resize -5<cr>
-nnoremap <silent> <Leader><right> :vertical resize +5<cr>
-nnoremap <silent> <Leader><up> :resize -2<cr>
-nnoremap <silent> <Leader><down> :resize +2<cr>
+nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
+
+" Map dp and dg with leader for diffput and diffget
+nnoremap <leader>dp :diffput<cr>
+nnoremap <leader>dg :diffget<cr>
 
 " Map enter to no highlight
 nnoremap <CR> :nohlsearch<CR><CR>
@@ -134,13 +143,13 @@ nnoremap <leader>qq :qall<cr>
 "inoremap <esc> <nop>
 
 " ==============================
-" Copy to clipboard / yank
-" Copy visual selection to clipboard
-vnoremap <leader>y "*y
-" Copy entire file to clipboard
-nnoremap Y :%y+<cr>
-" Copy line from cursor until the end
-nnoremap <leader>ye vg_y
+" " Copy to clipboard / yank - this is replaced by christoomey/vim-system-copy
+" " Copy visual selection to clipboard
+" vnoremap <leader>y "*y
+" " Copy entire file to clipboard
+" nnoremap Y :%y+<cr>
+" " Copy line from cursor until the end
+" nnoremap <leader>ye vg_y
 "===============================
 " Movement p: Inside parentheses (delete parameters = dp | change text inside
 " parentheses = cp)
@@ -156,7 +165,7 @@ nnoremap <Leader>r :%s/<C-r><C-w>//gc<Left><Left><Left>
 vnoremap <leader>r "hy:%s/<C-r>h//gc<left><left><left>
 
 " Change every " -" with " \<cr> -" to break long lines of bash
-nnoremap <silent> <buffer> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
+nnoremap <silent> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
 
 " move vertically by visual line (don't skip wrapped lines)
 nnoremap j gj
