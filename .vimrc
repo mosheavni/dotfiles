@@ -84,6 +84,9 @@ nnoremap ; :
 " Switch between last buffers
 nnoremap <Leader><Leader> <C-^>
 
+" Close current buffer
+nnoremap <leader>bd :bd<cr>
+
 " This creates a new line of '=' signs the same length of the line
 nnoremap <leader>= yypVr=
 
@@ -176,6 +179,40 @@ nnoremap <leader>ct<space> :retab<cr>
 
 
 "" }}}
+
+" Netrw (directory browsing) out-of-the-box plugin {{{
+let g:netrw_banner = 0
+let g:netrw_liststyle = 4
+let g:netrw_browse_split = 4
+" let g:netrw_altv = 1
+let g:netrw_winsize = 25
+let g:netrw_keepdir = 0
+" augroup ProjectDrawer
+"   autocmd!
+"   autocmd VimEnter * :if !exists("NERDTree") | Vexplore | endif
+" augroup END
+
+" Toggle Vexplore with Ctrl-E
+function! ToggleVExplorer()
+  if exists("t:expl_buf_num")
+      let expl_win_num = bufwinnr(t:expl_buf_num)
+      if expl_win_num != -1
+          let cur_win_nr = winnr()
+          exec expl_win_num . 'wincmd w'
+          close
+          exec cur_win_nr . 'wincmd w'
+          unlet t:expl_buf_num
+      else
+          unlet t:expl_buf_num
+      endif
+  else
+      exec '1wincmd w'
+      Vexplore
+      let t:expl_buf_num = bufnr("%")
+  endif
+endfunction
+map <silent> <C-E> :call ToggleVExplorer()<CR>
+" }}}
 
 " Split navigations mappings {{{
 nnoremap <C-J> <C-W><C-J>
