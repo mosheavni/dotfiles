@@ -70,7 +70,7 @@ function! ToggleNerdFugitiveVimStartup(timer)
         call FocusOnGit()
     endif
 endfunction
-autocmd VimEnter * if !argc() | let timer = timer_start(500, 'ToggleNerdFugitiveVimStartup') | endif
+" autocmd VimEnter * if !argc() | let timer = timer_start(500, 'ToggleNerdFugitiveVimStartup') | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Reorganize all buffers
@@ -161,6 +161,8 @@ command! -bang -nargs=? Gcb call Gcb("<args>")
 
 " Toggle git status
 function! FocusOnGit()
+    NERDTreeClose
+    NERDTree
     NERDTreeFocus
     rightbelow Git
 endfunction
