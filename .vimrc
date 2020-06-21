@@ -77,6 +77,9 @@ nnoremap ; :
 " Switch between last buffers
 nnoremap <Leader><Leader> <C-^>
 
+" Close current buffer
+nnoremap <leader>bd :bd<cr>
+
 " This creates a new line of '=' signs the same length of the line
 nnoremap <leader>= yypVr=
 
