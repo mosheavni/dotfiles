@@ -52,20 +52,23 @@ nnoremap <c-b> :Buffers<cr>
 nnoremap <c-o> :NERDTreeToggle<cr>
 nnoremap <silent> <Leader>v :NERDTreeFind<CR>
 let g:NERDTreeChDirMode = 2
+let g:NERDTreeHijackNetrw=0
+autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
 
 function! ToggleNerdFugitiveVimStartup(timer)
     NERDTreeToggle
     if filereadable(expand(".git/index"))
-        rightbelow Gstatus
-        wincmd l
+        call FocusOnGit()
     endif
 endfunction
 autocmd VimEnter * if !argc() | let timer = timer_start(500, 'ToggleNerdFugitiveVimStartup') | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Reorganize all buffers
-function! ReorganizeAllWindows() 
-    NERDTreeClose
+function! ReorganizeAllWindows()
+    if (winnr("$") != 1)
+        NERDTreeClose
+    endif
     if buflisted(bufname('.git/index'))
         bd .git/index
     endif
@@ -148,19 +151,23 @@ endfunction
 command! -bang -nargs=? Gcb call Gcb("<args>")
 
 " Toggle git status
+function! FocusOnGit()
+    NERDTreeFocus
+    rightbelow Git
+endfunction
+
 function! ToggleGStatus()
     if buflisted(bufname('.git/index'))
         bd .git/index
     else
-        NERDTreeFocus
-        rightbelow Gstatus
+        call FocusOnGit()
     endif
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
 nnoremap <leader>gs :ToggleGStatus<CR>
 
 " Focus on git window
-nnoremap <leader>gg :Git<cr>
+nnoremap <leader>gg :call FocusOnGit()<cr>
 
 " Set current working directory based on the file
 " autocmd BufEnter * silent! :lcd%:p:h
@@ -349,5 +356,5 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 
 " " Set syntax for json
 " au BufRead,BufNewFile *.json setf json
-" }}}                   
+" }}}
 "
