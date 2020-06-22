@@ -10,6 +10,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'sheerun/vim-polyglot'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 
 Plug 'terryma/vim-multiple-cursors'
 
@@ -59,7 +60,7 @@ nnoremap <leader>t :Tags<cr>
 nnoremap <c-b> :Buffers<cr>
 
 " Ultisnip
-let g:UltiSnipsExpandTrigger="~"
+let g:UltiSnipsExpandTrigger=""
 
 
 " Nerd Tree
@@ -204,6 +205,7 @@ let g:coc_global_extensions = [
             \    "coc-groovy",
             \    "coc-json",
             \    "coc-marketplace",
+            \    "coc-markdownlint",
             \    "coc-neosnippet",
             \    "coc-python",
             \    "coc-sh",
