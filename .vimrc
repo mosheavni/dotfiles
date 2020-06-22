@@ -75,6 +75,9 @@ set statusline+=%L\   " Total lines
 let mapleader=" "
 let maplocalleader = "\\"
 
+" Toggle number sets
+nnoremap <leader>num :set number! \| set relativenumber!<cr>
+
 " Map 0 to first non-blank character
 nnoremap 0 ^
 
