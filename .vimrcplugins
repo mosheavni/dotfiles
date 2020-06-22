@@ -64,7 +64,9 @@ nnoremap <c-o> :NERDTreeToggle<cr>
 nnoremap <silent> <Leader>v :NERDTreeFind<CR>
 let g:NERDTreeChDirMode = 2
 let g:NERDTreeHijackNetrw=0
-autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
+" autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr("$") > 1 | b# | endif " Not sure what it does
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif " Close VIM if NERDTree is the only buffer left
+
 
 function! ToggleNerdFugitiveVimStartup(timer)
     NERDTreeToggle
@@ -84,7 +86,6 @@ endfunction
 "     call nerdtree#ui_glue#invokeKeyMap("A")
 "     wincmd l
 " endfunction
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Reorganize all buffers
 function! ReorganizeAllWindows(timer)
@@ -174,26 +175,16 @@ function! Gcb(...)
 endfunction
 command! -bang -nargs=? Gcb call Gcb("<args>")
 
-" Toggle git status
-function! FocusOnGit()
-    NERDTreeClose
-    NERDTree
-    NERDTreeFocus
-    rightbelow Git
-endfunction
-
 function! ToggleGStatus()
     if buflisted(bufname('.git/index'))
         bd .git/index
     else
-        call FocusOnGit()
+        Git
     endif
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
 nnoremap <leader>gs :ToggleGStatus<CR>
-
-" Focus on git window
-nnoremap <leader>gg :call FocusOnGit()<cr>
+nnoremap <leader>gg :ToggleGStatus<cr>
 
 " Set current working directory based on the file
 " autocmd BufEnter * silent! :lcd%:p:h
