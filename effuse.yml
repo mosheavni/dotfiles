@@ -3,3 +3,4 @@ exclude:
   - README.md
   - Brewfile
   - Npmfile
+  - tags
