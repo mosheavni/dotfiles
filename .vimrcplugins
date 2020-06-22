@@ -60,7 +60,7 @@ nnoremap <leader>t :Tags<cr>
 nnoremap <c-b> :Buffers<cr>
 
 " Ultisnip
-let g:UltiSnipsExpandTrigger=""
+let g:UltiSnipsExpandTrigger="<c-s>"
 
 
 " Nerd Tree
