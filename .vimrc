@@ -45,7 +45,14 @@ set path+=** " When searching, search also subdirectories
 
 " Auto load file changes when focus or buffer is entered
 au FocusGained,BufEnter * :checktime
- 
+
+" Set relativenumber when focused {{{
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set number relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set number norelativenumber
+augroup END
+" }}}
 " set verbose=1
 " }}}
 
@@ -129,9 +136,10 @@ vnoremap <leader>64 y:echo system('base64 --decode', @")<cr>
 nnoremap U viw~
 vnoremap U ~
 
-" Edit vimrc <leader>ev, source vimrc <leader>sv
+" Edit vimrc <leader>ev, source vimrc <leader>sv {{{
 nnoremap <leader>ev :vsplit ~/.vimrc<cr>
 nnoremap <leader>sv :source ~/.vimrc<cr>
+" }}}
 
 " Remove blank space from the start of the line to the end of previous line
 inoremap ddd <esc>^hvk$xi
@@ -145,41 +153,44 @@ inoremap jk <esc>
 nnoremap <leader>qq :qall<cr>
 "inoremap <esc> <nop>
 
-" ==============================
-" " Copy to clipboard / yank - this is replaced by christoomey/vim-system-copy
+" " Copy to clipboard / yank - this is replaced by christoomey/vim-system-copy {{{
 " " Copy visual selection to clipboard
 " vnoremap <leader>y "*y
 " " Copy entire file to clipboard
 nnoremap Y :%y+<cr>
 " " Copy line from cursor until the end
 " nnoremap <leader>ye vg_y
-"===============================
+"=============================== }}}
+
 " Movement p: Inside parentheses (delete parameters = dp | change text inside
 " parentheses = cp)
 onoremap p i(
-" remap `*`/`#` to search forwards/backwards (resp.)
+
+" remap `*`/`#` to search forwards/backwards (resp.) {{{
 " w/o moving cursor
 nnoremap <silent> * :execute "normal! *N"<cr>
 nnoremap <silent> # :execute "normal! #n"<cr>
+" }}}
 
-" search and replace
+" Search and Replace {{{
 nnoremap <Leader>r :%s/<C-r><C-w>//gc<Left><Left><Left>
 " vnoremap <Leader>r :%s/<C-r><C-w>//g<Left><Left>
 vnoremap <leader>r "hy:%s/<C-r>h//gc<left><left><left>
+" }}}
 
 " Change every " -" with " \<cr> -" to break long lines of bash
 nnoremap <silent> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
 
-" move vertically by visual line (don't skip wrapped lines)
+" move vertically by visual line (don't skip wrapped lines) {{{
 nnoremap j gj
 nnoremap k gk
+" }}}
 
 " Change working directory based on open file
 nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Convert all tabs to spaces
 nnoremap <leader>ct<space> :retab<cr>
-
 
 "" }}}
 
@@ -195,7 +206,7 @@ let g:netrw_keepdir = 0
 "   autocmd VimEnter * :if !exists("NERDTree") | Vexplore | endif
 " augroup END
 
-" Toggle Vexplore with Ctrl-E
+" Toggle Vexplore with Ctrl-E {{{
 function! ToggleVExplorer()
   if exists("t:expl_buf_num")
       let expl_win_num = bufwinnr(t:expl_buf_num)
@@ -214,6 +225,7 @@ function! ToggleVExplorer()
       let t:expl_buf_num = bufnr("%")
   endif
 endfunction
+" }}}
 map <silent> <C-E> :call ToggleVExplorer()<CR>
 " }}}
 
@@ -251,7 +263,7 @@ inoreabbrev dont don't
 " inoremap ( ()<Left>
 " inoremap { {}<Left>
 "
-" " Auto-delete closing parenthesis/brace
+" " Auto-delete closing parenthesis/brace {{{
 " function! BetterBackSpace() abort
 "     let cur_line = getline('.')
 "     let before_char = cur_line[col('.')-2]
@@ -261,6 +273,7 @@ inoreabbrev dont don't
 "     else
 "         return "\<BS>"
 " endfunction
+" " }}}
 " inoremap <silent> <BS> <C-r>=BetterBackSpace()<CR>
 "
 " " Skip over closing parenthesis/brace

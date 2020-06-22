@@ -5,7 +5,6 @@ Plug 'preservim/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
-Plug 'ryanoasis/nerd-fonts'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -27,7 +26,7 @@ Plug 'tpope/vim-commentary'
 
 Plug 'jiangmiao/auto-pairs'
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> '!brew install yarn' }}
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
