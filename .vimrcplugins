@@ -74,7 +74,7 @@ let g:UltiSnipsExpandTrigger="<c-s>"
 " nvim-colorschemes
 lua require'colorizer'.setup()
 " theme
-colorscheme tender
+colorscheme OceanicNext
 " Undo tree
 nnoremap <leader>u :UndotreeToggle<cr>
 let g:undotree_WindowLayout=2

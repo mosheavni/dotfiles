@@ -19,6 +19,6 @@
 
 [pager]
     show-branch = true
-    status = true
+    status = false
     diff = diff-so-fancy | less --tabs=1,3
     show = diff-so-fancy | less --tabs=1,3
