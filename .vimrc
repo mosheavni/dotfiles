@@ -1,5 +1,4 @@
 " Moshe's vimrc. Custom made for my needs :)
-" Function that checks if colorscheme exists
 
 " Basic configurations {{{
 set nocompatible
@@ -34,6 +33,7 @@ set title          " Changes the iterm title
 set showcmd
 set guifont=:h
 set mouse=a
+set termguicolors
 
 filetype plugin on
 filetype plugin indent on

@@ -1,7 +1,7 @@
 " Plugins {{{
 let vimplug_dir = '~/.vim/plugged'
 call plug#begin(vimplug_dir)
-Plug 'preservim/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
@@ -27,25 +27,34 @@ Plug 'tpope/vim-commentary'
 
 Plug 'jiangmiao/auto-pairs'
 
+Plug 'tpope/vim-sleuth'
+
+Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> '!brew install yarn' }}
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 
 Plug 'Yggdroot/indentLine'
 
-Plug 'xolox/vim-easytags'
-Plug 'xolox/vim-misc'
+" Plug 'xolox/vim-easytags'
+" Plug 'xolox/vim-misc'
 Plug 'ludovicchabant/vim-gutentags'
 
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'dracula/vim'
+Plug 'romainl/vim-cool'
 Plug 'rafi/awesome-vim-colorschemes'
+Plug 'norcalli/nvim-colorizer.lua'
+" Plug 'itchyny/vim-cursorword'
+Plug 'machakann/vim-highlightedyank'
 
 call plug#end()
 " }}}
@@ -62,6 +71,15 @@ nnoremap <c-b> :Buffers<cr>
 " Ultisnip
 let g:UltiSnipsExpandTrigger="<c-s>"
 
+" nvim-colorschemes
+lua require'colorizer'.setup()
+" theme
+colorscheme tender
+" Undo tree
+nnoremap <leader>u :UndotreeToggle<cr>
+let g:undotree_WindowLayout=2
+let g:undotree_ShortIndicators=1
+let g:undotree_SetFocusWhenToggle=1
 
 " Nerd Tree
 nnoremap <c-o> :NERDTreeToggle<cr>
@@ -194,8 +212,6 @@ nnoremap <leader>gg :ToggleGStatus<cr>
 " autocmd BufEnter * silent! :lcd%:p:h
 " }}}
 
-" theme
-colorscheme OceanicNext
 " }}}
 
 " Coc {{{
@@ -230,7 +246,7 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 "             \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
 "             \ <SID>check_back_space() ? "\<TAB>" :
 "             \ coc#refresh()
-" 
+"
 " function! s:check_back_space() abort
 "     let col = col('.') - 1
 "     return !col || getline('.')[col - 1]  =~# '\s'
@@ -303,80 +319,4 @@ nnoremap <silent><nowait> <leader>cc  :<C-u>CocList commands<cr>
 nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-" }}}
-
-" vundle {{{
-" set nocompatible
-" filetype off
-
-" set rtp+=~/.vim/bundle/Vundle.vim
-" call vundle#begin()
-
-" Plugin 'VundleVim/Vundle.vim'
-" " Plugin 'isnowfy/python-vim-instant-markdown'
-" " Plugin 'jtratner/vim-flavored-markdown'
-" " Plugin 'suan/vim-instant-markdown'
-" " Plugin 'nelstrom/vim-markdown-preview'
-" " Plugin 'vim-scripts/Pydiction'
-" "Plugin" 'vim-scripts/indentpython.vim'
-" Plugin 'scrooloose/nerdcommenter'
-" Plugin 'terryma/vim-multiple-cursors'
-
-" " Show indentation lines
-" Plugin 'Yggdroot/indentLine'
-
-" " Cool status line
-" Plugin 'vim-airline/vim-airline-themes'
-" Plugin 'vim-airline/vim-airline'
-
-" " Language pack
-" Plugin 'sheerun/vim-polyglot'
-
-" " Remove extra trailing whitespace
-" Plugin 'bronson/vim-trailing-whitespace'
-
-" " removes, adds or changes surroundings
-" " Plugin 'machakann/vim-sandwich'
-" " saiw = add surrounding in word
-" " sai( = add surrounding in (
-" " sdb  = delete surrounding (b = auto detect)
-" " sd(  = delete surrounding (
-" " srb' = replace surrounding with ' (b = auto detect)
-" " sr(' = replace ( surrounding with '
-" " saiwt = suround with HTML tag
-" " saiwf = surround with function
-
-
-" " JS / CSS / HTML beautify, uglify
-" "Plugin 'michalliu/jsruntime.vim'
-" "Plugin 'michalliu/jsoncodecs.vim'
-" "Plugin 'michalliu/sourcebeautify.vim'
-
-" " Plugin 'sjl/gundo.vim' " undo list - mapped to <leader>u
-" " Plugin 'ervandew/supertab'
-
-" " Color scheme
-" Plugin 'dracula/vim'
-
-" " Syntax checking
-" " Plugin 'nvie/vim-flake8'
-
-" " Fuzzy finder
-" "Plugin 'junegunn/fzf', { 'do': './install --all' }
-" "Plugin 'junegunn/fzf.vim'
-" "let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g "" 2>/dev/null'
-
-
-" " Git integration
-" " Plugin 'airblade/vim-gitgutter.git'
-
-" " HTML Emmet
-" " Plugin 'mattn/emmet-vim'
-" call vundle#end()
-
-" " Nerd commenter settings
-" let g:NERDSpaceDelims = 1
-
-" " Set syntax for json
-" au BufRead,BufNewFile *.json setf json
 " }}}
