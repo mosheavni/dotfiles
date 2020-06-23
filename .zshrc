@@ -26,7 +26,6 @@ plugins=(
     minikube
     z
     zsh-autosuggestions
-    zsh-nvm
     zsh-syntax-highlighting
 )
 
@@ -68,6 +67,11 @@ if [[ -f ~/.kube/ctx ]];then
     context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
     export KUBECONFIG=$context
 fi
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 ##alias cinfo='kubectl cluster-info'
 ##function ctx () { kubectx $* && cinfo }
