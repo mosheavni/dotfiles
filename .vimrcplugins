@@ -57,6 +57,12 @@ Plug 'norcalli/nvim-colorizer.lua'
 " Plug 'itchyny/vim-cursorword'
 Plug 'machakann/vim-highlightedyank'
 
+" Custom text object
+Plug 'kana/vim-textobj-user'
+Plug 'mattn/vim-textobj-url'
+Plug 'kana/vim-textobj-line'
+Plug 'bps/vim-textobj-python'
+
 call plug#end()
 " }}}
 
