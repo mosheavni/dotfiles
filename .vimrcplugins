@@ -71,6 +71,9 @@ nnoremap <c-b> :Buffers<cr>
 " Ultisnip
 let g:UltiSnipsExpandTrigger="<c-s>"
 
+" Vim which key
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+
 " nvim-colorschemes
 lua require'colorizer'.setup()
 " theme
@@ -144,7 +147,7 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 let g:airline_symbols.space = "\ua0"
-let g:airline_theme='wombat'
+let g:airline_theme='cobalt2'
 " }}}
 
 " GitGutter {{{
