@@ -12,6 +12,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'vim-scripts/groovyindent-unix'
+Plug 'autozimu/LanguageClient-neovim'
+Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
+Plug 'juliosueiras/terraform-lsp', { 'do': 'GO111MODULE=on go mod download && make && make copy' }
 
 Plug 'terryma/vim-multiple-cursors'
 
@@ -85,6 +88,11 @@ nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
 " Editor config
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+" Bash language server
+let g:LanguageClient_serverCommands = {
+    \ 'sh': ['bash-language-server', 'start']
+    \ }
 
 " nvim-colorschemes
 lua require'colorizer'.setup()
