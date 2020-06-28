@@ -10,11 +10,15 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'sheerun/vim-polyglot'
+Plug 'neoclide/coc.nvim', { 'do': { -> '!brew install yarn' } }
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'vim-scripts/groovyindent-unix'
 Plug 'autozimu/LanguageClient-neovim'
 Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
 Plug 'juliosueiras/terraform-lsp', { 'do': 'GO111MODULE=on go mod download && make && make copy' }
+
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 Plug 'terryma/vim-multiple-cursors'
 
@@ -34,11 +38,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-sleuth'
 
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
-
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> '!brew install yarn' }}
-
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
