@@ -92,8 +92,8 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 " Bash language server
 let g:LanguageClient_serverCommands = {
-    \ 'sh': ['bash-language-server', 'start']
-    \ }
+      \ 'sh': ['bash-language-server', 'start']
+      \ }
 
 " nvim-colorschemes
 lua require'colorizer'.setup()
@@ -115,10 +115,10 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 
 function! ToggleNerdFugitiveVimStartup(timer)
-    NERDTreeToggle
-    if filereadable(expand(".git/index"))
-        call FocusOnGit()
-    endif
+  NERDTreeToggle
+  if filereadable(expand(".git/index"))
+    call FocusOnGit()
+  endif
 endfunction
 " function! ToggleNerdFugitiveVimStartup(timer)
 "     vsplit
@@ -135,21 +135,21 @@ endfunction
 
 " Reorganize all buffers
 function! ReorganizeAllWindows(timer)
-    if (winnr("$") != 1)
-        NERDTreeClose
-    endif
-    if buflisted(bufname('.git/index'))
-        b .git/index
-        close
-        bd .git/index
-    endif
-    call ToggleNerdFugitiveVimStartup("")
+  if (winnr("$") != 1)
+    NERDTreeClose
+  endif
+  if buflisted(bufname('.git/index'))
+    b .git/index
+    close
+    bd .git/index
+  endif
+  call ToggleNerdFugitiveVimStartup("")
 endfunction
 nnoremap <leader>ow :call ReorganizeAllWindows("")<cr>
 
 " Ack
 if executable('ag')
-    let g:ackprg = 'ag --vimgrep'
+  let g:ackprg = 'ag --vimgrep'
 endif
 nnoremap <c-f> :Ack!<Space>
 
@@ -165,7 +165,7 @@ highlight! link NERDTreeFlags NERDTreeDir
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
+  let g:airline_symbols = {}
 endif
 let g:airline_symbols.space = "\ua0"
 let g:airline_theme='cobalt2'
@@ -177,8 +177,8 @@ let g:gitgutter_highlight_linenrs = 1
 nnoremap <leader>gc :GitGutterLineHighlightsToggle<cr>
 nnoremap <leader>cag :GitGutterFold<cr>
 function! GitStatus()
-    let [a,m,r] = GitGutterGetHunkSummary()
-    return printf('+%d ~%d -%d', a, m, r)
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
 endfunction
 set statusline+=%{GitStatus()}
 highlight clear SignColumn
@@ -189,16 +189,28 @@ highlight GitGutterChangeDelete ctermfg=yellow
 " }}}
 
 " Fugitive {{{
+
+" Remove all conflict markers command
+"Delete all Git conflict markers
+"Creates the command :GremoveConflictMarkers
+function! RemoveConflictMarkers() range
+  echom a:firstline.'-'.a:lastline
+  execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
+endfunction
+"-range=% default is whole file
+command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarkers()
+
+
 " Better branch choosing using :Gbranch
 function! s:changebranch(branch)
-    execute 'Git checkout ' . a:branch
-    call feedkeys("i")
+  execute 'Git checkout ' . a:branch
+  call feedkeys("i")
 endfunction
 
 command! -bang Gbranch call fzf#run({
-            \ 'source': 'git for-each-ref --sort=-committerdate --format="%(refname:short)" refs/heads',
-            \ 'sink': function('s:changebranch')
-            \ })
+      \ 'source': 'git for-each-ref --sort=-committerdate --format="%(refname:short)" refs/heads',
+      \ 'sink': function('s:changebranch')
+      \ })
 
 " Set branch upstream
 command! -bang Gpsup !git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
@@ -211,22 +223,22 @@ command! -bang Gl Gpull
 
 " Create a new branch
 function! Gcb(...)
-    let name = a:1
-    if name == ""
-        call inputsave()
-        let name = input('Enter branch name: ')
-        call inputrestore()
-    endif
-    execute "!git checkout -b " . name
+  let name = a:1
+  if name == ""
+    call inputsave()
+    let name = input('Enter branch name: ')
+    call inputrestore()
+  endif
+  execute "!git checkout -b " . name
 endfunction
 command! -bang -nargs=? Gcb call Gcb("<args>")
 
 function! ToggleGStatus()
-    if buflisted(bufname('.git/index'))
-        bd .git/index
-    else
-        Git
-    endif
+  if buflisted(bufname('.git/index'))
+    bd .git/index
+  else
+    Git
+  endif
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
 nnoremap <leader>gs :ToggleGStatus<CR>
@@ -242,23 +254,23 @@ nnoremap <leader>gg :ToggleGStatus<cr>
 
 " Plugins backup {{{
 let g:coc_global_extensions = [
-            \    "coc-dictionary",
-            \    "coc-groovy",
-            \    "coc-json",
-            \    "coc-markdownlint",
-            \    "coc-marketplace",
-            \    "coc-neosnippet",
-            \    "coc-python",
-            \    "coc-pyright",
-            \    "coc-sh",
-            \    "coc-snippets",
-            \    "coc-syntax",
-            \    "coc-tag",
-            \    "coc-tsserver",
-            \    "coc-ultisnips",
-            \    "coc-vimlsp",
-            \    "coc-yaml"
-            \]
+      \    "coc-dictionary",
+      \    "coc-groovy",
+      \    "coc-json",
+      \    "coc-markdownlint",
+      \    "coc-marketplace",
+      \    "coc-neosnippet",
+      \    "coc-python",
+      \    "coc-pyright",
+      \    "coc-sh",
+      \    "coc-snippets",
+      \    "coc-syntax",
+      \    "coc-tag",
+      \    "coc-tsserver",
+      \    "coc-ultisnips",
+      \    "coc-vimlsp",
+      \    "coc-yaml"
+      \]
 "" }}}
 
 " use <tab> for trigger completion and navigate to the next complete item {{{
@@ -282,13 +294,13 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
 if exists('*complete_info')
-    inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 else
-    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
 imap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
-                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+      \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
@@ -303,11 +315,11 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 augroup mygroup
-    autocmd!
-    " Setup formatexpr specified filetype(s).
-    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-    " Update signature help on jump placeholder.
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
 " Use CTRL-S for selections ranges.
