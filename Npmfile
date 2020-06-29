@@ -3,3 +3,5 @@ compare-versions
 neovim
 npm
 semver
+dockerfile-language-server-nodejs
+bash-language-server

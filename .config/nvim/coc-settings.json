@@ -1,0 +1,35 @@
+{
+    "languageserver": {
+        "dockerfile": {
+            "command": "docker-langserver",
+            "filetypes": [
+                "dockerfile"
+            ],
+            "args": [
+                "--stdio"
+            ]
+        }
+    },
+    "bash": {
+        "command": "bash-language-server",
+        "args": [
+            "start"
+        ],
+        "filetypes": [
+            "sh"
+        ],
+        "ignoredRootPaths": [
+            "~"
+        ]
+    },
+    "groovy": {
+        "command": "java",
+        "args": [
+            "-jar",
+            "~/Repos/groovy-language-server/build/libs/groovy-language-server-all.jar"
+        ],
+        "filetypes": [
+            "groovy"
+        ]
+    }
+}

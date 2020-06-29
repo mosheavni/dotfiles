@@ -10,9 +10,16 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'sheerun/vim-polyglot'
+Plug 'neoclide/coc.nvim', { 'do': { -> '!brew install yarn' } }
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'vim-scripts/groovyindent-unix'
 Plug 'chr4/nginx.vim'
+Plug 'autozimu/LanguageClient-neovim'
+Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
+Plug 'juliosueiras/terraform-lsp', { 'do': 'GO111MODULE=on go mod download && make && make copy' }
+
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 Plug 'terryma/vim-multiple-cursors'
 
@@ -32,11 +39,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-sleuth'
 
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
-
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> '!brew install yarn' }}
-
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
@@ -87,6 +89,11 @@ nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
 " Editor config
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+" Bash language server
+let g:LanguageClient_serverCommands = {
+    \ 'sh': ['bash-language-server', 'start']
+    \ }
 
 " nvim-colorschemes
 lua require'colorizer'.setup()
@@ -242,6 +249,7 @@ let g:coc_global_extensions = [
             \    "coc-marketplace",
             \    "coc-neosnippet",
             \    "coc-python",
+            \    "coc-pyright",
             \    "coc-sh",
             \    "coc-snippets",
             \    "coc-syntax",
@@ -283,7 +291,7 @@ imap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() :
                                            \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " GoTo code navigation.
-" nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 " nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
