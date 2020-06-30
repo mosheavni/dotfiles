@@ -262,6 +262,7 @@ let g:coc_global_extensions = [
       \    "coc-marketplace",
       \    "coc-neosnippet",
       \    "coc-python",
+      \    "coc-prettier",
       \    "coc-pyright",
       \    "coc-sh",
       \    "coc-snippets",
