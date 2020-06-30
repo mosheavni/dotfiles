@@ -95,7 +95,7 @@ nnoremap ; :
 nnoremap <Leader><Leader> <C-^>
 
 " Close current buffer
-nnoremap <leader>bd :bd<cr>
+nnoremap <silent> <leader>bd :bp <bar> bd #<cr>
 
 " This creates a new line of '=' signs the same length of the line
 nnoremap <leader>= yypVr=
