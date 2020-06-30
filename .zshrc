@@ -43,6 +43,7 @@ alias sed=gsed
 alias cat='bat'
 alias mdl='mdless README.md'
 alias tf='terraform'
+alias dotfiles='cd ~/src/dotfiles'
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
