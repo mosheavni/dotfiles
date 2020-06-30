@@ -116,7 +116,7 @@ nnoremap E $
 vnoremap E $
 
 " Remove blank spaces from the end of the line
-:nnoremap <silent> <leader>a :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
+nnoremap <silent> <leader>a :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
 
 " Set mouse=v mapping
 nnoremap <leader>ma :set mouse=a<cr>
