@@ -36,7 +36,7 @@ Plug 'tpope/vim-commentary'
 
 Plug 'jiangmiao/auto-pairs'
 
-Plug 'tpope/vim-sleuth'
+" Plug 'tpope/vim-sleuth' " Causes issues with sh indentation
 
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 
