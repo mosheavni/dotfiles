@@ -52,7 +52,7 @@ Plug 'easymotion/vim-easymotion'
 " Plug 'xolox/vim-misc'
 Plug 'ludovicchabant/vim-gutentags'
 
-Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 
 Plug 'editorconfig/editorconfig-vim'
 
@@ -105,7 +105,7 @@ lua require'colorizer'.setup()
 colorscheme badwolf
 " colorscheme purify
 " Undo tree
-nnoremap <leader>u :UndotreeToggle<cr>
+nnoremap <leader>u :GundoToggle<CR>
 let g:undotree_WindowLayout=2
 let g:undotree_ShortIndicators=1
 let g:undotree_SetFocusWhenToggle=1
