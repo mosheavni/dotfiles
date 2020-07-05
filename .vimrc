@@ -1,5 +1,11 @@
 " Moshe's vimrc. Custom made for my needs :)
 
+" .    .         .              .
+" |\  /|         |             / \               o
+" | \/ | .-. .--.|--. .-.     /___\.    ._.--.   .
+" |    |(   )`--.|  |(.-'    /     \\  /  |  |   |
+" '    ' `-' `--''  `-`--'  '       ``'   '  `--' `-
+
 " Basic configurations {{{
 set nocompatible
 " packadd! dracula
@@ -34,7 +40,7 @@ set showcmd
 set guifont=:h
 set mouse=a
 set termguicolors
-set undofile       " Enables saving undo history to a file 
+set undofile       " Enables saving undo history to a file
 
 filetype plugin on
 filetype plugin indent on
