@@ -90,7 +90,7 @@ nnoremap <leader>num :set number! \| set relativenumber!<cr>
 nnoremap 0 ^
 
 " with this you can save with ;wq
-nnoremap ; :
+" nnoremap ; :
 
 " Switch between last buffers
 nnoremap <Leader><Leader> <C-^>
