@@ -46,6 +46,8 @@ Plug 'tonchis/vim-to-github'
 
 Plug 'Yggdroot/indentLine'
 
+Plug 'easymotion/vim-easymotion'
+
 " Plug 'xolox/vim-easytags'
 " Plug 'xolox/vim-misc'
 Plug 'ludovicchabant/vim-gutentags'
@@ -59,6 +61,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'dracula/vim'
 Plug 'romainl/vim-cool'
 Plug 'rafi/awesome-vim-colorschemes'
+Plug 'sjl/badwolf'
 Plug 'norcalli/nvim-colorizer.lua'
 " Plug 'itchyny/vim-cursorword'
 Plug 'machakann/vim-highlightedyank'
@@ -99,7 +102,8 @@ let g:LanguageClient_serverCommands = {
 " nvim-colorschemes
 lua require'colorizer'.setup()
 " theme
-colorscheme purify
+colorscheme badwolf
+" colorscheme purify
 " Undo tree
 nnoremap <leader>u :UndotreeToggle<cr>
 let g:undotree_WindowLayout=2
