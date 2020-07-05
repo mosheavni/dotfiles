@@ -1,3 +1,11 @@
+" Moshe's plugins and plugin configuration. Complementary to my .vimrc file
+
+" .    .         .              .
+" |\  /|         |             / \               o
+" | \/ | .-. .--.|--. .-.     /___\.    ._.--.   .
+" |    |(   )`--.|  |(.-'    /     \\  /  |  |   |
+" '    ' `-' `--''  `-`--'  '       ``'   '  `--' `-
+
 " Plugins {{{
 let vimplug_dir = '~/.vim/plugged'
 call plug#begin(vimplug_dir)
@@ -45,8 +53,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tonchis/vim-to-github'
 
 Plug 'Yggdroot/indentLine'
-
-Plug 'easymotion/vim-easymotion'
 
 " Plug 'xolox/vim-easytags'
 " Plug 'xolox/vim-misc'
