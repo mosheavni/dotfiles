@@ -118,8 +118,8 @@ nmap ga <Plug>(EasyAlign)
 " nvim-colorschemes
 lua require'colorizer'.setup()
 " theme
-colorscheme badwolf
-" colorscheme purify
+" colorscheme badwolf
+colorscheme purify
 " Undo tree
 nnoremap <leader>u :GundoToggle<CR>
 let g:undotree_WindowLayout=2
@@ -127,13 +127,36 @@ let g:undotree_ShortIndicators=1
 let g:undotree_SetFocusWhenToggle=1
 
 " Nerd Tree
-nnoremap <c-o> :NERDTreeToggle<cr>
+" nnoremap <c-o> :NERDTreeToggle<cr>
 nnoremap <silent> <Leader>v :NERDTreeFind<CR>
 let g:NERDTreeChDirMode = 2
 let g:NERDTreeHijackNetrw=0
 " autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr("$") > 1 | b# | endif " Not sure what it does
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif " Close VIM if NERDTree is the only buffer left
 
+" Check if NERDTree is open or active
+function! IsNERDTreeOpen()
+  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
+
+" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
+" file, and we're not in vimdiff
+function! SyncTree()
+  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+    NERDTreeFind
+    wincmd p
+  endif
+endfunction
+
+" Highlight currently open buffer in NERDTree
+autocmd BufEnter * call SyncTree()
+
+function! ToggleNerdTree()
+  set eventignore=BufEnter
+  NERDTreeToggle
+  set eventignore=
+endfunction
+nmap <C-o> :call ToggleNerdTree()<CR>
 
 function! ToggleNerdFugitiveVimStartup(timer)
   NERDTreeToggle
@@ -172,7 +195,7 @@ nnoremap <leader>ow :call ReorganizeAllWindows("")<cr>
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
-nnoremap <c-f> :Ack!<Space>
+nnoremap <c-f> :Ack! ""<left>
 
 " DevIcons {{{
 let g:WebDevIconsOS = 'Darwin'
