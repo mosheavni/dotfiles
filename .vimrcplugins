@@ -43,6 +43,7 @@ Plug 'tpope/vim-repeat'
 Plug 'danro/rename.vim'
 
 Plug 'tpope/vim-commentary'
+Plug 'junegunn/vim-easy-align'
 
 Plug 'jiangmiao/auto-pairs'
 
@@ -110,6 +111,9 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 let g:LanguageClient_serverCommands = {
       \ 'sh': ['bash-language-server', 'start']
       \ }
+
+" Vim easy align
+nmap ga <Plug>(EasyAlign)
 
 " nvim-colorschemes
 lua require'colorizer'.setup()
