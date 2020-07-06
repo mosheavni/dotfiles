@@ -155,6 +155,10 @@ nnoremap <leader>d ^hvk$xi <esc>
 " highlight last inserted text
 nnoremap gV `[v`]
 
+" terminal mappings
+tnoremap <Esc> <C-\><C-n>
+nnoremap <leader>term :new term://zsh<cr>
+
 " Exit insert mode
 inoremap jk <esc>
 nnoremap <leader>qq :qall<cr>
