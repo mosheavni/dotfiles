@@ -30,6 +30,8 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 Plug 'terryma/vim-multiple-cursors'
+Plug 'terryma/vim-expand-region'
+Plug 'terryma/vim-smooth-scroll'
 
 Plug 'christoomey/vim-system-copy'
 
@@ -96,6 +98,10 @@ let g:UltiSnipsExpandTrigger="<c-s>"
 
 " Vim which key
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+
+" Vim smooth scroll
+noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 10, 2)<CR>
+noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
 
 " Editor config
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
