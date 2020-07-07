@@ -88,13 +88,16 @@ call plug#end()
 " }}}
 
 " Plugin Configurations {{{
-" Fzf
+
+" Fzf {{{
 " nnoremap <c-p> :Files
 nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
 nnoremap <leader>t :Tags<cr>
 
 nnoremap <c-b> :Buffers<cr>
+
+" }}}
 
 " Ultisnip
 let g:UltiSnipsExpandTrigger="<c-s>"
@@ -109,14 +112,17 @@ noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
 " Editor config
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
-" Bash language server
+" Bash language server {{{
 let g:LanguageClient_serverCommands = {
       \ 'sh': ['bash-language-server', 'start']
       \ }
+" }}}
 
 " Vim easy align
 nmap ga <Plug>(EasyAlign)
 
+
+" Color settings {{{
 " Vim rainbow
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
 
@@ -125,13 +131,17 @@ let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowTo
 " theme
 " colorscheme badwolf
 colorscheme purify
-" Undo tree
+" }}}
+
+" Undo tree {{{
 nnoremap <leader>u :GundoToggle<CR>
 let g:undotree_WindowLayout=2
 let g:undotree_ShortIndicators=1
 let g:undotree_SetFocusWhenToggle=1
+" }}}
 
-" Nerd Tree
+" Nerd Tree {{{
+"
 " nnoremap <c-o> :NERDTreeToggle<cr>
 nnoremap <silent> <Leader>v :NERDTreeFind<CR>
 let g:NERDTreeChDirMode = 2
@@ -196,11 +206,15 @@ function! ReorganizeAllWindows(timer)
 endfunction
 nnoremap <leader>ow :call ReorganizeAllWindows("")<cr>
 
-" Ack
+" }}}
+
+" Ack {{{
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
 nnoremap <c-f> :Ack! ""<left>
+
+" }}}
 
 " DevIcons {{{
 let g:WebDevIconsOS = 'Darwin'
