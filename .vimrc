@@ -132,11 +132,25 @@ nnoremap <silent> <leader>a :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar>
 nnoremap <leader>ma :set mouse=a<cr>
 nnoremap <leader>mv :set mouse=v<cr>
 
-" Map - to move a line down
-nnoremap - dd$p
+" Don't lose seletion when indenting
+xnoremap <  <gv
+xnoremap >  >gv
 
-" Map _ to move a line up
-nnoremap _ dd2kp
+" Map n to search forward and N to search badkward {{{
+nnoremap <expr> n  'Nn'[v:searchforward]
+xnoremap <expr> n  'Nn'[v:searchforward]
+onoremap <expr> n  'Nn'[v:searchforward]
+
+nnoremap <expr> N  'nN'[v:searchforward]
+xnoremap <expr> N  'nN'[v:searchforward]
+onoremap <expr> N  'nN'[v:searchforward]
+" }}}
+
+" Map - to move a line down and _ a line up
+nnoremap -  :<c-u>execute 'move +'. v:count1<cr>
+nnoremap _  :<c-u>execute 'move -1-'. v:count1<cr>
+" nnoremap - dd$p
+" nnoremap _ dd2kp
 
 " Base64 decode
 vnoremap <leader>64 y:echo system('base64 --decode', @")<cr>
@@ -146,9 +160,11 @@ vnoremap <leader>64 y:echo system('base64 --decode', @")<cr>
 nnoremap U viw~
 vnoremap U ~
 
-" Edit vimrc <leader>ev, source vimrc <leader>sv {{{
-nnoremap <leader>ev :vsplit ~/.vimrc<cr>
-nnoremap <leader>sv :source ~/.vimrc<cr>
+" Edit vimrc <leader>ev, source vimrc <leader>sv , reload on save {{{
+let g:myvimrc = "~/.vimrc"
+nnoremap <silent> <leader>ev :execute("vsplit ".g:myvimrc)<cr>
+nnoremap <silent> <leader>sv :execute("source ".g:myvimrc)<cr>
+exe("autocmd BufWritePost ".g:myvimrc." source ".g:myvimrc)
 " }}}
 
 " Remove blank space from the start of the line to the end of previous line
