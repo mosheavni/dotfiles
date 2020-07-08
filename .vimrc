@@ -20,6 +20,8 @@ set number         " Show current line number
 set relativenumber
 set linebreak      " Avoid wrapping a line in the middle of a word.
 set cursorline     " Add highlight behind current line
+hi cursorline cterm=none term=none
+highlight CursorLine guibg=#303000 ctermbg=234
 set hlsearch       " highlight reg. ex. in @/ register
 set incsearch      " Search as characters are typed
 set ignorecase     " Search case insensitive...
