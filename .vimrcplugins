@@ -76,6 +76,7 @@ Plug 'sjl/badwolf'
 " the coolness of the color scheme :)
 " Plug 'itchyny/vim-cursorword'
 Plug 'machakann/vim-highlightedyank'
+Plug 'miyakogi/conoline.vim'
 
 " Custom text object
 Plug 'kana/vim-textobj-user'
@@ -108,6 +109,9 @@ nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 " Vim smooth scroll
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 10, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
+
+" Conoline - highlight current line only in active buffer
+let g:conoline_auto_enable = 1
 
 " Editor config
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
