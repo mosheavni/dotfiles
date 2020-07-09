@@ -84,6 +84,7 @@ Plug 'mattn/vim-textobj-url'
 Plug 'kana/vim-textobj-line'
 Plug 'bps/vim-textobj-python'
 Plug 'rhysd/vim-textobj-anyblock'
+Plug 'kana/vim-textobj-entire'
 
 call plug#end()
 " }}}
