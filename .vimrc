@@ -8,7 +8,6 @@
 
 " Basic configurations {{{
 set nocompatible
-" packadd! dracula
 syntax enable
 
 set shell=/bin/zsh
@@ -21,7 +20,7 @@ set relativenumber
 set linebreak      " Avoid wrapping a line in the middle of a word.
 set cursorline     " Add highlight behind current line
 hi cursorline cterm=none term=none
-highlight CursorLine guibg=#303000 ctermbg=234
+" highlight CursorLine guibg=#303000 ctermbg=234
 set hlsearch       " highlight reg. ex. in @/ register
 set incsearch      " Search as characters are typed
 set ignorecase     " Search case insensitive...
@@ -41,8 +40,15 @@ set title          " Changes the iterm title
 set showcmd
 set guifont=:h
 set mouse=a
-" set termguicolors
+set termguicolors
 set undofile       " Enables saving undo history to a file
+
+" Ignore node_modules
+set wildignore+=**/node_modules/**
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
 
 filetype plugin on
 filetype plugin indent on
@@ -69,6 +75,7 @@ augroup END
 " Indentation settings for using 4 spaces instead of tabs.
 " Do not change 'tabstop' from its default value of 8 with this setup.
 filetype indent on
+set breakindent   " Maintain indent on wrapping lines
 set autoindent    " always set autoindenting on
 set copyindent    " copy the previous indentation on autoindenting
 set smartindent   " Number of spaces to use for each step of (auto)indent.
@@ -195,6 +202,7 @@ nnoremap <leader>term :new term://zsh<cr>
 inoremap jk <esc>
 nnoremap <leader>qq :qall<cr>
 "inoremap <esc> <nop>
+
 
 " " Copy to clipboard / yank - this is replaced by christoomey/vim-system-copy {{{
 " " Copy visual selection to clipboard
