@@ -21,15 +21,5 @@
         "ignoredRootPaths": [
             "~"
         ]
-    },
-    "groovy": {
-        "command": "java",
-        "args": [
-            "-jar",
-            "~/Repos/groovy-language-server/build/libs/groovy-language-server-all.jar"
-        ],
-        "filetypes": [
-            "groovy"
-        ]
     }
 }

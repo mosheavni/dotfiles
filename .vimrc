@@ -162,9 +162,22 @@ vnoremap U ~
 
 " Edit vimrc <leader>ev, source vimrc <leader>sv , reload on save {{{
 let g:myvimrc = "~/.vimrc"
+let g:myvimrcplugins = "~/.vimrcplugins"
+
 nnoremap <silent> <leader>ev :execute("vsplit ".g:myvimrc)<cr>
 nnoremap <silent> <leader>sv :execute("source ".g:myvimrc)<cr>
 exe("autocmd BufWritePost ".g:myvimrc." source ".g:myvimrc)
+
+function! LoadPlugins() abort
+    execute("so ".g:myvimrcplugins)
+    PlugInstall
+    echom "Ran PlugInstall"
+    execute("windo so ".g:myvimrcplugins)
+    echom "Sourced ".g:myvimrcplugins." on all windows"
+endfunction
+
+nnoremap <silent> <leader>ep :execute("vsplit ".g:myvimrcplugins)<cr>
+nnoremap <silent> <leader>sp :call LoadPlugins()<cr>
 " }}}
 
 " Remove blank space from the start of the line to the end of previous line
