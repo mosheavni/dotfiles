@@ -17,14 +17,17 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-Plug 'sheerun/vim-polyglot'
+" Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', { 'do': { -> '!brew install yarn' } }
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'vim-scripts/groovyindent-unix'
 Plug 'chr4/nginx.vim'
 Plug 'autozimu/LanguageClient-neovim'
 Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
-Plug 'juliosueiras/terraform-lsp', { 'do': 'GO111MODULE=on go mod download && make && make copy' }
+" Plug 'juliosueiras/terraform-lsp', { 'do': 'GO111MODULE=on go mod download && make && make copy' }
+" Plug 'pangloss/vim-javascript'
+Plug 'yuezk/vim-js'
+Plug 'MaxMEllon/vim-jsx-pretty'
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -46,6 +49,8 @@ Plug 'tpope/vim-commentary'
 Plug 'junegunn/vim-easy-align'
 
 Plug 'jiangmiao/auto-pairs'
+" Plug 'Raimondi/delimitMate'
+Plug 'alvan/vim-closetag'
 Plug 'luochen1990/rainbow'
 
 " Plug 'tpope/vim-sleuth' " Causes issues with sh indentation
@@ -72,6 +77,7 @@ Plug 'dracula/vim'
 Plug 'romainl/vim-cool'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'sjl/badwolf'
+Plug 'tyrannicaltoucan/vim-quantum'
 " Plug 'norcalli/nvim-colorizer.lua' " Requires termguicolors which changes
 " the coolness of the color scheme :)
 " Plug 'itchyny/vim-cursorword'
@@ -85,6 +91,7 @@ Plug 'kana/vim-textobj-line'
 Plug 'bps/vim-textobj-python'
 Plug 'rhysd/vim-textobj-anyblock'
 Plug 'kana/vim-textobj-entire'
+Plug 'vim-utils/vim-space'
 
 call plug#end()
 " }}}
@@ -126,6 +133,8 @@ let g:LanguageClient_serverCommands = {
 " Vim easy align
 nmap ga <Plug>(EasyAlign)
 
+" Vim close tag
+let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js"
 
 " Color settings {{{
 " Vim rainbow
@@ -136,8 +145,10 @@ let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowTo
 " theme
 " colorscheme badwolf
 " colorscheme purify
-colorscheme dracula
-set notgc
+" colorscheme dracula
+colorscheme quantum
+let g:quantum_italics=1
+set tgc
 " }}}
 
 " Undo tree {{{
@@ -169,6 +180,9 @@ function! SyncTree()
     wincmd p
   endif
 endfunction
+
+" Show hidden files
+let NERDTreeShowHidden=1
 
 " Highlight currently open buffer in NERDTree
 autocmd BufEnter * call SyncTree()
@@ -239,6 +253,10 @@ if !exists('g:airline_symbols')
 endif
 let g:airline_symbols.space = "\ua0"
 let g:airline_theme='cobalt2'
+
+" https://github.com/neoclide/coc.nvim/issues/1827
+" slow Coc intellisense
+let g:airline#extensions#hunks#enabled = 0
 " }}}
 
 " GitGutter {{{
@@ -369,9 +387,8 @@ if exists('*complete_info')
 else
   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
-
-imap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
-      \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" imap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
+"       \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
@@ -433,3 +450,4 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " }}}
+
