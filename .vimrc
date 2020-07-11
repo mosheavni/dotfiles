@@ -18,8 +18,9 @@ set shell=/bin/zsh
 set number         " Show current line number
 set relativenumber
 set linebreak      " Avoid wrapping a line in the middle of a word.
+set cursorcolumn
 set cursorline     " Add highlight behind current line
-hi cursorline cterm=none term=none
+" hi cursorline cterm=none term=none
 " highlight CursorLine guibg=#303000 ctermbg=234
 set hlsearch       " highlight reg. ex. in @/ register
 set incsearch      " Search as characters are typed
@@ -54,9 +55,12 @@ filetype plugin on
 filetype plugin indent on
 
 set list
-set listchars=tab:>.,trail:.,extends:#,nbsp:.
+set listchars=tab:▸\ ,trail:·
 
 set path+=** " When searching, search also subdirectories
+
+" Set python path
+let g:python3_host_prog="/usr/local/bin/python3"
 
 " Auto load file changes when focus or buffer is entered
 au FocusGained,BufEnter * :checktime
@@ -345,3 +349,21 @@ vnoremap <leader>{ c{}<esc>P
 vnoremap <leader>" c""<esc>P
 vnoremap <leader>' c''<esc>P
 " }}}
+
+" Conceals {{{
+
+let g:conceal_rules = [
+      \ ['!=', '≠'],
+      \ ['<=', '≤'],
+      \ ['>=', '≥'],
+      \ ['=>', '⇒'],
+      \ ['===', '≡'],
+      \ ['\<function\>', 'ƒ'],
+      \ ]
+
+for [value, display] in g:conceal_rules
+  execute "call matchadd('Conceal', '".value."', 10, -1, {'conceal': '".display."'})"
+endfor
+
+" call matchadd('Conceal', 'package', 10, 99, {'conceal': 'p'})
+"}}}
