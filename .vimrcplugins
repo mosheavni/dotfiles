@@ -29,7 +29,8 @@ Plug 'chr4/nginx.vim'
 
 Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
 " Plug 'juliosueiras/terraform-lsp', { 'do': 'GO111MODULE=on go mod download && make && make copy' }
-" Plug 'pangloss/vim-javascript'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 " Plug 'yuezk/vim-js'
 " Plug 'MaxMEllon/vim-jsx-pretty'
 
@@ -461,4 +462,13 @@ nnoremap <silent><nowait> <leader>cc  :<C-u>CocList commands<cr>
 nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" }}}
+
+" Javascript {{{
+augroup JavaScript
+    au!
+    autocmd FileType javascript set formatprg=prettier\ --stdin
+    autocmd BufWritePre *.js :normal gggqG
+augroup end
+
 " }}}
