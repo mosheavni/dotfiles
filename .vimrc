@@ -372,13 +372,28 @@ let g:conceal_rules = [
       \ ['<=', '≤'],
       \ ['>=', '≥'],
       \ ['=>', '⇒'],
-      \ ['===', '≡'],
+      \ ['==', '≡'],
       \ ['\<function\>', 'ƒ'],
       \ ]
 
 for [value, display] in g:conceal_rules
   execute "call matchadd('Conceal', '".value."', 10, -1, {'conceal': '".display."'})"
 endfor
+set conceallevel=1
 
 " call matchadd('Conceal', 'package', 10, 99, {'conceal': 'p'})
 "}}}
+
+" Diff with last save function {{{
+function! s:DiffWithSaved()
+  let filetype=&ft
+  diffthis
+  vnew | r # | normal! 1Gdd
+  diffthis
+  exe "setlocal bt=nofile bh=wipe nobl noswf ro foldlevel=999 ft=" . filetype
+  wincmd p
+endfunction
+com! DiffSaved call s:DiffWithSaved()
+
+" }}}
+
