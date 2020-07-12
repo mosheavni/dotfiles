@@ -155,6 +155,21 @@ onoremap <expr> n  'Nn'[v:searchforward]
 nnoremap <expr> N  'nN'[v:searchforward]
 xnoremap <expr> N  'nN'[v:searchforward]
 onoremap <expr> N  'nN'[v:searchforward]
+
+" Search visually selected text with // or * or #
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+
 " }}}
 
 " Map - to move a line down and _ a line up
@@ -228,9 +243,9 @@ nnoremap <silent> # :execute "normal! #n"<cr>
 " }}}
 
 " Search and Replace {{{
-nnoremap <Leader>r :%s/<C-r><C-w>//gc<Left><Left><Left>
+nnoremap <Leader>r :%s/<C-r><C-w>/<C-r><C-w>/gc<Left><Left><Left>
 " vnoremap <Leader>r :%s/<C-r><C-w>//g<Left><Left>
-vnoremap <leader>r "hy:%s/<C-r>h//gc<left><left><left>
+vnoremap <leader>r "hy:%s/<C-r>h/<C-r>h/gc<left><left><left>
 " }}}
 
 " Change every " -" with " \<cr> -" to break long lines of bash
