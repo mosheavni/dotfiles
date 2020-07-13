@@ -390,8 +390,8 @@ function! s:DiffWithSaved()
   let filetype=&ft
   diffthis
   vnew | r # | normal! 1Gdd
-  diffthis
   exe "setlocal bt=nofile bh=wipe nobl noswf ro foldlevel=999 ft=" . filetype
+  diffthis
   wincmd p
 endfunction
 com! DiffSaved call s:DiffWithSaved()
