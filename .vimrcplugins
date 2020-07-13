@@ -98,7 +98,8 @@ Plug 'kana/vim-textobj-line'
 Plug 'bps/vim-textobj-python'
 Plug 'rhysd/vim-textobj-anyblock'
 Plug 'kana/vim-textobj-entire'
-Plug 'vim-utils/vim-space'
+Plug 'vimtaku/vim-textobj-keyvalue'
+Plug 'saihoooooooo/vim-textobj-space'
 
 call plug#end()
 " }}}
