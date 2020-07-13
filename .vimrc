@@ -131,6 +131,9 @@ set splitright
 " }}}
 " }}}
 
+" Paste in insert mode
+inoremap <c-v> <c-r>"
+
 " Run macro
 nnoremap Q @q
 
