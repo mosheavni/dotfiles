@@ -80,11 +80,11 @@ Plug 'editorconfig/editorconfig-vim'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'dracula/vim'
-Plug 'rafi/awesome-vim-colorschemes'
-Plug 'sjl/badwolf'
-Plug 'tyrannicaltoucan/vim-quantum'
-Plug 'sainnhe/sonokai'
+" Plug 'dracula/vim'
+" Plug 'rafi/awesome-vim-colorschemes'
+" Plug 'sjl/badwolf'
+" Plug 'tyrannicaltoucan/vim-quantum'
+" Plug 'sainnhe/sonokai'
 Plug 'arzg/vim-colors-xcode'
 " Plug 'norcalli/nvim-colorizer.lua' " Requires termguicolors which changes
 " the coolness of the color scheme :)
