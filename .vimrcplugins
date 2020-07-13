@@ -51,6 +51,8 @@ Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 
+Plug 'simeji/winresizer'
+
 Plug 'tpope/vim-commentary'
 Plug 'junegunn/vim-easy-align'
 
@@ -118,6 +120,10 @@ nnoremap <c-b> :Buffers<cr>
 
 " Ultisnip
 let g:UltiSnipsExpandTrigger="<c-s>"
+
+" WinResizer {{{
+let g:winresizer_start_key = '<C-T>'
+" }}}
 
 " Vim which key
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
