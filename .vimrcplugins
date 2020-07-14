@@ -51,6 +51,8 @@ Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 
+Plug 'simeji/winresizer'
+
 Plug 'tpope/vim-commentary'
 Plug 'junegunn/vim-easy-align'
 
@@ -78,12 +80,13 @@ Plug 'editorconfig/editorconfig-vim'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'dracula/vim'
-Plug 'rafi/awesome-vim-colorschemes'
-Plug 'sjl/badwolf'
-Plug 'tyrannicaltoucan/vim-quantum'
-Plug 'sainnhe/sonokai'
+" Plug 'dracula/vim'
+" Plug 'rafi/awesome-vim-colorschemes'
+" Plug 'sjl/badwolf'
+" Plug 'tyrannicaltoucan/vim-quantum'
+" Plug 'sainnhe/sonokai'
 Plug 'arzg/vim-colors-xcode'
+Plug 'yuttie/hydrangea-vim'
 " Plug 'norcalli/nvim-colorizer.lua' " Requires termguicolors which changes
 " the coolness of the color scheme :)
 " Plug 'itchyny/vim-cursorword'
@@ -119,6 +122,10 @@ nnoremap <c-b> :Buffers<cr>
 " Ultisnip
 let g:UltiSnipsExpandTrigger="<c-s>"
 
+" WinResizer {{{
+let g:winresizer_start_key = '<C-T>'
+" }}}
+
 " Vim which key
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
@@ -144,6 +151,11 @@ nmap ga <Plug>(EasyAlign)
 " Vim close tag
 let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js"
 let g:closetag_filetypes = 'html,xhtml,phtml,javascript,javascriptreact'
+
+" Vim multiple cursors {{{
+let g:multi_cursor_select_all_key      = '<leader>sa' 
+" nnoremap <leader>sa :call multiple_cursors#select_all("n", 0)<CR> 
+" }}}
 
 " Color settings {{{
 " Vim rainbow {{{

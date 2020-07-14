@@ -112,11 +112,30 @@ nnoremap 0 ^
 " with this you can save with ;wq
 " nnoremap ; :
 
-" Switch between last buffers
+" Windows mappings {{{
 nnoremap <Leader><Leader> <C-^>
+nnoremap <tab> <c-w>w
+nnoremap <c-w><c-c> <c-w>c
 
 " Close current buffer
 nnoremap <silent> <leader>bd :bp <bar> bd #<cr>
+
+
+" Split navigations mappings {{{
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+set splitbelow
+set splitright
+" }}}
+" }}}
+
+" Paste in insert mode
+inoremap <c-v> <c-r>"
+
+" Run macro
+nnoremap Q @q
 
 " This creates a new line of '=' signs the same length of the line
 nnoremap <leader>= yypVr=
@@ -299,15 +318,6 @@ endfunction
 map <silent> <C-E> :call ToggleVExplorer()<CR>
 " }}}
 
-" Split navigations mappings {{{
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-set splitbelow
-set splitright
-" }}}
-
 " Enable folding {{{
 set foldenable
 setlocal foldmethod=syntax
@@ -390,8 +400,8 @@ function! s:DiffWithSaved()
   let filetype=&ft
   diffthis
   vnew | r # | normal! 1Gdd
-  diffthis
   exe "setlocal bt=nofile bh=wipe nobl noswf ro foldlevel=999 ft=" . filetype
+  diffthis
   wincmd p
 endfunction
 com! DiffSaved call s:DiffWithSaved()
