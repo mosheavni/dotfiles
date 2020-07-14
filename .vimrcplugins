@@ -96,7 +96,6 @@ Plug 'yuttie/hydrangea-vim'
 Plug 'machakann/vim-highlightedyank'
 " Plug 'miyakogi/conoline.vim'
 Plug 'mhinz/vim-startify'
-Plug 'qualiabyte/vim-colorstepper'
 
 " Custom text object
 Plug 'kana/vim-textobj-user'
@@ -133,7 +132,7 @@ let g:winresizer_start_key = '<C-E>'
 " Vim which key
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
-" Switch vin {{{
+" Switch vim {{{
 " let g:switch_mapping = '-'
 " The map switch is between underscores to camelCase: moshe_king -> mosheKing
 " -> moshe_king
@@ -195,10 +194,6 @@ let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowTo
 colorscheme xcodewwdc
 
 set tgc
-
-" ColorStepper Keys
-nmap <F8> <Plug>ColorstepNext
-" }}}
 
 " Undo tree {{{
 nnoremap <leader>u :GundoToggle<CR>
