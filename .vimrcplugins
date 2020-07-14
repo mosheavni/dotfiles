@@ -64,7 +64,7 @@ Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-Plug 'tonchis/vim-to-github'
+Plug 'Moshem123/vim-to-github'
 
 " Plug 'Yggdroot/indentLine'
 
