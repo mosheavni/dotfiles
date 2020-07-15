@@ -22,19 +22,13 @@ Plug 'neoclide/coc.nvim', { 'do': { -> '!brew install yarn' } }
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'vim-scripts/groovyindent-unix'
 Plug 'chr4/nginx.vim'
-" Plug 'autozimu/LanguageClient-neovim', {
-"     \ 'branch': 'next',
-"     \ 'do': 'bash install.sh',
-"     \ }
-
-Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
-" Plug 'juliosueiras/terraform-lsp', { 'do': 'GO111MODULE=on go mod download && make && make copy' }
+" Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
 " Plug 'pangloss/vim-javascript'
 " Plug 'mxw/vim-jsx'
 " Plug 'yuezk/vim-js'
 " Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'chemzqm/vim-jsx-improve'
-
+Plug 'mogelbrod/vim-jsonpath'
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -125,6 +119,10 @@ nnoremap <c-b> :Buffers<cr>
 " Ultisnip
 let g:UltiSnipsExpandTrigger="<c-s>"
 
+" Vim json path {{{
+let g:jsonpath_register = '*'
+" }}}
+
 " WinResizer {{{
 let g:winresizer_start_key = '<C-E>'
 " }}}
@@ -159,12 +157,6 @@ let g:conoline_auto_enable = 1
 " Editor config
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
-" Bash language server {{{
-let g:LanguageClient_serverCommands = {
-      \ 'sh': ['bash-language-server', 'start']
-      \ }
-" }}}
-
 " Vim easy align
 nmap ga <Plug>(EasyAlign)
 
@@ -194,6 +186,7 @@ let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowTo
 colorscheme xcodewwdc
 
 set tgc
+" }}}
 
 " Undo tree {{{
 nnoremap <leader>u :GundoToggle<CR>
