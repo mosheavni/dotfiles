@@ -16,7 +16,7 @@ set shell=/bin/zsh
 " set shellcmdflag=-ic
 
 set number         " Show current line number
-set relativenumber
+set relativenumber " Show relative line numbers
 set linebreak      " Avoid wrapping a line in the middle of a word.
 set cursorcolumn
 set cursorline     " Add highlight behind current line
@@ -43,6 +43,8 @@ set guifont=:h
 set mouse=a
 set termguicolors
 set undofile       " Enables saving undo history to a file
+
+set shortmess+=c   " don't give |ins-completion-menu| messages.
 
 " Ignore node_modules
 set wildignore+=**/node_modules/**
@@ -124,10 +126,10 @@ set autoindent    " always set autoindenting on
 set copyindent    " copy the previous indentation on autoindenting
 set smartindent   " Number of spaces to use for each step of (auto)indent.
 set shiftwidth=4  " Number of spaces for each indent
-set smarttab      " insert tabs on the start of a line according to shiftwidth, not tabstop
 set softtabstop=4
 set tabstop=4
-set expandtab
+set smarttab      " insert tabs on the start of a line according to shiftwidth, not tabstop
+set expandtab     " Tab changes to spaces. Format with :retab
 " }}}
 
 " Statusline {{{
