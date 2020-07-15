@@ -453,3 +453,10 @@ endfunction
 com! DiffSaved call s:DiffWithSaved()
 
 " }}}
+
+" Special filetypes {{{
+augroup special_filetype
+    au!
+    au! BufNewFile,BufRead *yaml setf yaml
+augroup end
+" }}}
