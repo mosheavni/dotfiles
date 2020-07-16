@@ -46,14 +46,14 @@
       "filetypes": ["terraform", "tf"],
       "initializationOptions": {},
       "settings": {}
-    },
-    "groovy": {
-      "command": "java",
-      "args": [
-        "-jar",
-        "~/Repos/groovy-language-server/build/libs/groovy-language-server-all.jar"
-      ],
-      "filetypes": ["groovy"]
     }
+    // "groovy": {
+    //   "command": "java",
+    //   "args": [
+    //     "-jar",
+    //     "/Users/moshe.avni/.vim/plugged/groovy-language-server/build/libs/groovy-language-server-all.jar"
+    //   ],
+    //   "filetypes": ["groovy"]
+    // }
   }
 }

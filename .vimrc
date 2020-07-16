@@ -482,6 +482,7 @@ com! DiffSaved call s:DiffWithSaved()
 augroup special_filetype
     au!
     au! BufNewFile,BufRead *yaml setf yaml
+    autocmd FileType json syntax match Comment +\/\/.\+$+
 augroup end
 " }}}
 

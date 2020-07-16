@@ -16,6 +16,7 @@ Plug 'ryanoasis/vim-devicons'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'mileszs/ack.vim'
 
 Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', { 'do': { -> '!brew install yarn' } }
@@ -42,8 +43,6 @@ Plug 'terryma/vim-smooth-scroll'
 Plug 'christoomey/vim-system-copy'
 Plug 'danro/rename.vim'
 
-Plug 'mileszs/ack.vim'
-
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
@@ -51,7 +50,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'AndrewRadev/switch.vim'
 
 Plug 'simeji/winresizer'
-
+Plug 'xolox/vim-session'
 
 Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'
@@ -68,7 +67,7 @@ Plug 'Moshem123/vim-to-github'
 " Plug 'Yggdroot/indentLine'
 
 " Plug 'xolox/vim-easytags'
-" Plug 'xolox/vim-misc'
+Plug 'xolox/vim-misc'
 Plug 'ludovicchabant/vim-gutentags'
 
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
@@ -145,6 +144,10 @@ let g:switch_custom_definitions = [
       \     },
       \   }
 \ ]
+" }}}
+
+" Vim session {{{
+let g:session_autoload = 'no'
 " }}}
 
 " Vim smooth scroll
