@@ -337,6 +337,14 @@ nnoremap <Leader>r :%s/<C-r><C-w>/<C-r><C-w>/gc<Left><Left><Left>
 vnoremap <leader>r "hy:%s/<C-r>h/<C-r>h/gc<left><left><left>
 " }}}
 
+" Delete all but {{{
+vnoremap <leader>dab "hy:v/<c-r>h/d<cr>
+" }}}
+
+" Execute with cmd (default: bash) {{{
+nnoremap <F5> :w !bash
+" }}}
+
 " Change every " -" with " \<cr> -" to break long lines of bash
 nnoremap <silent> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
 
