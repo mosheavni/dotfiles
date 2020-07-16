@@ -53,6 +53,10 @@ set wildignore+=**/node_modules/**
 " delays and poor user experience.
 set updatetime=300
 
+if v:version > 703 || v:version == 703 && has("patch541")
+  set formatoptions+=j " Delete comment character when joining commented lines
+endif
+
 filetype plugin on
 filetype plugin indent on
 
@@ -67,6 +71,10 @@ let g:python3_host_prog="/usr/local/bin/python3"
 " Auto load file changes when focus or buffer is entered
 au FocusGained,BufEnter * :checktime
 
+if &history < 1000
+  set history=1000
+endif
+
 " Set relativenumber when focused {{{
 augroup numbertoggle
   autocmd!
@@ -74,6 +82,7 @@ augroup numbertoggle
   autocmd BufLeave,FocusLost,InsertEnter   * set number norelativenumber
 augroup END
 " }}}
+
 " set verbose=1
 " Terminal colors {{{
 
@@ -81,6 +90,11 @@ if has('termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
+endif
+
+" Allow color schemes to do bright colors without forcing bold.
+if &t_Co == 8 && $TERM !~# '^Eterm'
+  set t_Co=16
 endif
 
 if has('nvim')
@@ -180,6 +194,14 @@ inoremap <c-v> <c-r>"
 
 " Run macro
 nnoremap Q @q
+
+" Insert mappings
+if empty(mapcheck('<C-U>', 'i'))
+  inoremap <C-U> <C-G>u<C-U>
+endif
+if empty(mapcheck('<C-W>', 'i'))
+  inoremap <C-W> <C-G>u<C-W>
+endif
 
 " Quickfix {{{
 nnoremap ]q :cnext<cr>zz
@@ -462,3 +484,4 @@ augroup special_filetype
     au! BufNewFile,BufRead *yaml setf yaml
 augroup end
 " }}}
+
