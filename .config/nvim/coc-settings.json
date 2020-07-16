@@ -7,6 +7,7 @@
   "coc.preferences.useQuickfixForLocations": true,
   "diagnostic.checkCurrentLine": false,
   "python.linting.enabled": true,
+  "prettier.tabWidth": 4,
   "suggest.completionItemKindLabels": {
     "function": "\uf794",
     "method": "\uf6a6",
