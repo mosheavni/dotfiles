@@ -41,7 +41,6 @@ set title          " Changes the iterm title
 set showcmd
 set guifont=:h
 set mouse=a
-set termguicolors
 set undofile       " Enables saving undo history to a file
 
 set shortmess+=c   " don't give |ins-completion-menu| messages.
@@ -94,7 +93,7 @@ endif
 
 " Allow color schemes to do bright colors without forcing bold.
 if &t_Co == 8 && $TERM !~# '^Eterm'
-  set t_Co=16
+  set t_Co=256
 endif
 
 if has('nvim')
@@ -465,9 +464,10 @@ let g:conceal_rules = [
       \ ['\<function\>', 'ƒ'],
       \ ]
 
-for [value, display] in g:conceal_rules
-  execute "call matchadd('Conceal', '".value."', 10, -1, {'conceal': '".display."'})"
-endfor
+" Conceal is not needed when we have FiraCode with ligatures
+" for [value, display] in g:conceal_rules
+"   execute "call matchadd('Conceal', '".value."', 10, -1, {'conceal': '".display."'})"
+" endfor
 set conceallevel=1
 
 " call matchadd('Conceal', 'package', 10, 99, {'conceal': 'p'})
