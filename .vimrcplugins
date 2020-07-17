@@ -153,6 +153,7 @@ let g:switch_custom_definitions = [
 
 " Vim session {{{
 let g:session_autoload = 'no'
+let g:session_autosave = 'no'
 " }}}
 
 " Vim smooth scroll
@@ -515,15 +516,19 @@ endfunction
 
 " Plugins backup {{{
 let g:coc_global_extensions = [
+            \    "coc-css",
+            \    "coc-diagnostic",
             \    "coc-dictionary",
+            \    "coc-docker",
             \    "coc-groovy",
+            \    "coc-html",
             \    "coc-json",
             \    "coc-markdownlint",
             \    "coc-marketplace",
             \    "coc-neosnippet",
-            \    "coc-python",
             \    "coc-prettier",
             \    "coc-pyright",
+            \    "coc-python",
             \    "coc-sh",
             \    "coc-snippets",
             \    "coc-syntax",
