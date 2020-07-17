@@ -1,46 +1,39 @@
-awscli
-bat
-coreutils
-ctags
-curl
-fzf
-gdbm
-gettext
-git
-gnu-sed
-helm@2
-hyperkit
-icu4c
-jq
-kube-ps1
-kubectx
-kubernetes-cli
-lastpass-cli
-libassuan
-libev
-libgpg-error
-libuv
-libvterm
-libyaml
-luajit
-minikube
-moreutils
-msgpack
-ncurses
-neovim
-nmap
-node
-oniguruma
-openssl@1.1
-pcre
-pinentry
-protobuf@3.7
-python
-readline
-sqlite
-the_silver_searcher
-unibi
-xz
-yarn
-zsh
-zsh-completions
+tap "homebrew/cask-fonts"
+cask "clipy"
+cask "font-fira-code"
+cask "font-hack-nerd-font"
+cask "dropbox"
+cask "iterm2"
+cask "slack"
+cask "sublime-text"
+brew "awscli"
+brew "bat"
+brew "coreutils"
+brew "ctags"
+brew "curl"
+brew "fzf"
+brew "gettext"
+brew "git"
+brew "gnu-sed"
+brew "hyperkit"
+brew "jq"
+brew "kube-ps1"
+brew "kubectx"
+brew "kubernetes-cli"
+brew "lastpass-cli"
+brew "minikube"
+brew "moreutils"
+brew "msgpack"
+brew "ncurses"
+brew "neovim"
+brew "nmap"
+brew "node"
+brew "oniguruma"
+brew "openssl@1.1"
+brew "python"
+brew "python3"
+brew "readline"
+brew "the_silver_searcher"
+brew "yarn"
+brew "zsh"
+brew "zsh-completions"
