@@ -189,19 +189,22 @@ set splitright
 
 " }}}
 
-" Paste in insert mode
-inoremap <c-v> <c-r>"
-
 " Run macro
 nnoremap Q @q
 
-" Insert mappings
+" Insert mappings {{{
+
+" Paste in insert mode
+inoremap <c-v> <c-r>"
+
 if empty(mapcheck('<C-U>', 'i'))
   inoremap <C-U> <C-G>u<C-U>
 endif
 if empty(mapcheck('<C-W>', 'i'))
   inoremap <C-W> <C-G>u<C-W>
 endif
+
+" }}}
 
 " Quickfix {{{
 nnoremap ]q :cnext<cr>zz
