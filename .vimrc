@@ -159,7 +159,7 @@ let mapleader=" "
 let maplocalleader = "\\"
 
 " Toggle number sets
-nnoremap <leader>num :set number! \| set relativenumber!<cr>
+" nnoremap <leader>num :set number! \| set relativenumber!<cr>
 
 " Map 0 to first non-blank character
 nnoremap 0 ^
@@ -168,9 +168,10 @@ nnoremap 0 ^
 " nnoremap ; :
 
 " Windows mappings {{{
-nnoremap <Leader><Leader> <C-^>
+" nnoremap <Leader><Leader> <C-^>
 nnoremap <tab> <c-w>w
 nnoremap <c-w><c-c> <c-w>c
+nnoremap <leader><space> :bn<cr>
 
 " Delete current buffer
 nnoremap <silent> <leader>bd :bp <bar> bd #<cr>
