@@ -1,9 +1,5 @@
-" autocmd BufNewFile,BufReadPost *.sh
-" setlocal filetype=sh
-" setlocal foldmethod=indent
-" set shiftwidth=2
-" set tabstop=2
-" set expandtab
+setlocal shiftwidth=2
+setlocal tabstop=2
+setlocal expandtab
 
-" let b:is_bash = 1
-
+let b:is_bash = 1

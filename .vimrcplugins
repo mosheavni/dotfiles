@@ -28,6 +28,7 @@ Plug 'chr4/nginx.vim'
 " Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'chemzqm/vim-jsx-improve'
 Plug 'mogelbrod/vim-jsonpath'
+Plug 'chrisbra/vim-sh-indent'
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
