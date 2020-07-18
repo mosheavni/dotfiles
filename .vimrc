@@ -492,6 +492,8 @@ augroup special_filetype
     au!
     au! BufNewFile,BufRead *yaml setf yaml
     autocmd FileType json syntax match Comment +\/\/.\+$+
+    autocmd BufNewFile,BufRead aliases.sh setf zsh
 augroup end
+let g:sh_fold_enabled = 4
 " }}}
 
