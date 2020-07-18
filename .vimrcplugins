@@ -29,6 +29,7 @@ Plug 'chr4/nginx.vim'
 Plug 'chemzqm/vim-jsx-improve'
 Plug 'mogelbrod/vim-jsonpath'
 Plug 'chrisbra/vim-sh-indent'
+Plug 'hashivim/vim-terraform'
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -166,6 +167,9 @@ let g:conoline_auto_enable = 1
 
 " Editor config
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+" Vim terraform
+let g:terraform_fmt_on_save=1
 
 " Vim easy align
 nmap ga <Plug>(EasyAlign)
