@@ -1,17 +1,17 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# # Initialization code that may require console input (password prompts, [y/n]
+# # confirmations, etc.) must go above this block; everything else may go below.
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
 #export PATH=$PATH:$HOME/bin:/usr/local/bin:$PATH:~/Library/Python/2.7/bin:~/bin:~/.npm-global/bin:${KREW_ROOT:-$HOME/.krew}/bin
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-# ZSH_THEME_RANDOM_CANDIDATES=(
-#     "robbyrussell"
-#     "dracula"
-# )
+ZSH_THEME="random"
+ZSH_THEME_RANDOM_CANDIDATES=(
+    "robbyrussell"
+    "dracula"
+)
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 plugins=(
@@ -81,12 +81,21 @@ export NVM_DIR="$HOME/.nvm"
 ##  export KUBECONFIG=${KUBECONFIG}:${ctx}
 ##done
 #
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
     source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
-    # PS1=$PS1'$(kube_ps1): '
-    unset POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND
-
+    PS1=$PS1'$(kube_ps1): '
 fi
+
+# Fortune cowsay
+# if command -v fortune >/dev/null && command -v cowsay > /dev/null;then
+#     fortune -a | cowsay -f tux
+# fi
+if command -v jq >/dev/null && command -v cowsay > /dev/null;then
+    curl -s -m3 https://official-joke-api.appspot.com/jokes/random | jq -r '"\(.setup)\n\(.punchline)"' | cowsay -f tux
+fi
+
+emojis=(🚀 🔥 🍕 👾 🏖 🍔 👻 ⚓ 💥 🌎 ⛄ 🧁 🎲 🌀 🌐)
+
+EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
+PS1="$EMOJI $PS1"
