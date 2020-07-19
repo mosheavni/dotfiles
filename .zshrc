@@ -84,7 +84,7 @@ export NVM_DIR="$HOME/.nvm"
 
 if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
     source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
-    PS1=' $(kube_ps1)'$PS1
+    PS1=$PS1'$(kube_ps1) '
 fi
 
 # Fortune cowsay
