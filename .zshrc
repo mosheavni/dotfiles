@@ -84,7 +84,7 @@ export NVM_DIR="$HOME/.nvm"
 
 if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
     source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
-    PS1=$PS1'$(kube_ps1): '
+    PS1=' $(kube_ps1)'$PS1
 fi
 
 # Fortune cowsay
@@ -95,7 +95,8 @@ if command -v jq >/dev/null && command -v cowsay > /dev/null;then
     curl -s -m3 https://official-joke-api.appspot.com/jokes/random | jq -r '"\(.setup)\n\(.punchline)"' | cowsay -f tux
 fi
 
-emojis=(🚀 🔥 🍕 👾 🏖 🍔 👻 ⚓ 💥 🌎 ⛄ 🧁 🎲 🌀 🌐)
+emojis=(🚀 🔥 🍕 👾 🏖 🍔 👻 ⚓ 💥 🌎 ⛄ 🔵 💈 🎲 🌀 🌐)
 
 EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
 PS1="$EMOJI $PS1"
+ZSH_THEME_GIT_PROMPT_PREFIX="${ZSH_THEME_GIT_PROMPT_PREFIX} "
