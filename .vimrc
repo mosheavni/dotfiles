@@ -345,7 +345,7 @@ vnoremap <leader>dab "hy:v/<c-r>h/d<cr>
 " }}}
 
 " Execute with cmd (default: bash) {{{
-nnoremap <F5> :w !bash
+" nnoremap <F5> :w !bash
 " }}}
 
 " Change every " -" with " \<cr> -" to break long lines of bash
@@ -500,3 +500,29 @@ augroup end
 let g:sh_fold_enabled = 4
 " }}}
 
+
+" Run current buffer {{{
+
+nnoremap <silent> <F5> :call ExecuteFile()<CR>
+
+" Will attempt to execute the current file based on the `&filetype`
+" You need to manually map the filetypes you use most commonly to the
+" correct shell command.
+function! ExecuteFile()
+  let l:filetype_to_command = {
+  \   'javascript': 'node',
+  \   'python': 'python',
+  \   'html': 'open',
+  \   'sh': 'bash'
+  \ }
+  let l:cmd = get(l:filetype_to_command, &filetype, &filetype)
+  :%y
+  new | 0put
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  exe "%!".l:cmd
+  normal! ggO
+  call setline(1, 'Output of ' . l:cmd . ' command:')
+  normal! yypVr=o
+endfunction
+
+" }}}
