@@ -121,8 +121,13 @@ nnoremap <c-b> :Buffers<cr>
 
 " }}}
 
-" Ultisnip
+" Ultisnip {{{
 let g:UltiSnipsExpandTrigger="<c-s>"
+" }}}
+
+" Vim auto pairs {{{
+let g:AutoPairsShortcutJump = ""
+" }}}
 
 " Vim json path {{{
 let g:jsonpath_register = '*'
@@ -132,8 +137,9 @@ let g:jsonpath_register = '*'
 let g:winresizer_start_key = '<C-E>'
 " }}}
 
-" Vim which key
+" Vim which key {{{
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+" }}}
 
 " Switch vim {{{
 " let g:switch_mapping = '-'
@@ -158,25 +164,27 @@ let g:session_autoload = 'no'
 let g:session_autosave = 'no'
 " }}}
 
-" Vim smooth scroll
+" Vim smooth scroll {{{
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 10, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
+" }}}
 
-" Conoline - highlight current line only in active buffer
-let g:conoline_auto_enable = 1
-
-" Editor config
+" Editor config {{{
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+" }}}
 
-" Vim terraform
+" Vim terraform {{{
 let g:terraform_fmt_on_save=1
+" }}}
 
-" Vim easy align
+" Vim easy align {{{
 nmap ga <Plug>(EasyAlign)
+" }}}
 
-" Vim close tag
+" Vim close tag {{{
 let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js"
 let g:closetag_filetypes = 'html,xhtml,phtml,javascript,javascriptreact'
+" }}}
 
 " Vim multiple cursors {{{
 let g:multi_cursor_select_all_key      = '<leader>sa'
@@ -328,37 +336,37 @@ endfunction
 nmap <C-o> :call ToggleNerdTree()<CR>
 
 function! ToggleNerdFugitiveVimStartup(timer)
-    NERDTreeToggle
-    if filereadable(expand(".git/index"))
-        call FocusOnGit()
+    let l:firstbuf = bufnr('%')
+    echom "firstbuf ". l:firstbuf
+    Git
+    let l:gitbuf = bufnr('%')
+    hide
+    call ToggleNerdTree()
+    sp
+    exe 'buf' . l:gitbuf
+    set buflisted
+    let l:winids = win_findbuf(l:firstbuf)
+    call win_gotoid(l:winids[0])
+endfunc
+
+function! CloseNERDGitWindows() abort
+    if buflisted(bufname('.git/index'))
+        buf .git/index
+        bd .git/index
+    endif
+    if (winnr("$") != 1) && exists(":NERDTreeClose")
+        NERDTreeClose
     endif
 endfunction
-" function! ToggleNerdFugitiveVimStartup(timer)
-"     vsplit
-"     wincmd h
-"     Gedit :
-"     split
-"     wincmd k
-"     edit .
-"     NERDTreeFocus
-"     call nerdtree#ui_glue#invokeKeyMap("A")
-"     call nerdtree#ui_glue#invokeKeyMap("A")
-"     wincmd l
-" endfunction
 
 " Reorganize all buffers
 function! ReorganizeAllWindows(timer)
-    if (winnr("$") != 1)
-        NERDTreeClose
-    endif
-    if buflisted(bufname('.git/index'))
-        b .git/index
-        close
-        bd .git/index
-    endif
+    call CloseNERDGitWindows()
     call ToggleNerdFugitiveVimStartup("")
 endfunction
+
 nnoremap <leader>ow :call ReorganizeAllWindows("")<cr>
+nnoremap <leader>cw :call CloseNERDGitWindows()<cr>
 
 " }}}
 
