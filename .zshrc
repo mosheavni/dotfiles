@@ -74,18 +74,12 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-##alias cinfo='kubectl cluster-info'
-##function ctx () { kubectx $* && cinfo }
-##export KUBECONFIG=~/.kube/config
-##for ctx in ~/Dropbox/DevOps/k8s-cluster-contexts/*.config;do
-##  export KUBECONFIG=${KUBECONFIG}:${ctx}
-##done
-#
-
+# Appearance
 if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
     source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
     PS1=$PS1'$(kube_ps1) '
 fi
+nvm use stable &
 
 # Fortune cowsay
 # if command -v fortune >/dev/null && command -v cowsay > /dev/null;then
