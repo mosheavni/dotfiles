@@ -26,7 +26,9 @@ Plug 'chr4/nginx.vim'
 " Plug 'mxw/vim-jsx'
 " Plug 'yuezk/vim-js'
 " Plug 'MaxMEllon/vim-jsx-pretty'
-Plug 'chemzqm/vim-jsx-improve'
+" Plug 'chemzqm/vim-jsx-improve'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+
 Plug 'mogelbrod/vim-jsonpath'
 Plug 'chrisbra/vim-sh-indent'
 Plug 'hashivim/vim-terraform'
@@ -472,6 +474,7 @@ let g:coc_global_extensions = [
             \    "coc-sh",
             \    "coc-snippets",
             \    "coc-syntax",
+            \    "coc-styled-components",
             \    "coc-tag",
             \    "coc-tsserver",
             \    "coc-ultisnips",

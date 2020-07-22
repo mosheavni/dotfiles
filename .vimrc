@@ -493,13 +493,13 @@ com! DiffSaved call s:DiffWithSaved()
 " Special filetypes {{{
 augroup special_filetype
     au!
-    au! BufNewFile,BufRead *yaml setf yaml
+    autocmd BufNewFile,BufRead *yaml setf yaml
     autocmd FileType json syntax match Comment +\/\/.\+$+
     autocmd BufNewFile,BufRead aliases.sh setf zsh
+    autocmd FileType javascript setf javascriptreact | set iskeyword+=-
 augroup end
 let g:sh_fold_enabled = 4
 " }}}
-
 
 " Run current buffer {{{
 
