@@ -367,11 +367,16 @@ function! s:changebranch(branch)
     call feedkeys("i")
 endfunction
 
-command! -bang Gbranch call fzf#run({
+function! s:call_fzf_changebranch()
+    call fzf#run({
             \ 'source': 'git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2',
             \ 'sink': function('s:changebranch')
             \ })
 
+endfunction
+
+command! -bang Gbranch call s:call_fzf_changebranch()
+command! -bang Gb      call s:call_fzf_changebranch()
 " Set branch upstream
 command! -bang Gpsup !git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
 
