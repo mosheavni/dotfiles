@@ -9,6 +9,9 @@
   "diagnostic.checkCurrentLine": false,
   "python.linting.enabled": true,
   "prettier.tabWidth": 2,
+  "css.lint.unknownProperties": "warning",
+  "tsserver.reportStyleChecksAsWarnings": true,
+  "suggest.enablePreview": true,
   "diagnostic-languageserver.filetypes": {
     "sh": "shellcheck"
   },
