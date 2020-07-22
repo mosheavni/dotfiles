@@ -15,6 +15,15 @@
   "diagnostic-languageserver.filetypes": {
     "sh": "shellcheck"
   },
+  "diagnostic-languageserver.formatters": {
+    "tffmt": {
+      "command": "terraform",
+      "args": ["fmt", "-"]
+    }
+  },
+  "diagnostic-languageserver.formatFiletypes": {
+    "terraform": "tffmt"
+  },
   "suggest.completionItemKindLabels": {
     "function": "\uf794",
     "method": "\uf6a6",
