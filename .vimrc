@@ -1,4 +1,4 @@
-" Moshe's vimrc. Custom made for my needs :)
+  " Moshe's vimrc. Custom made for my needs :)
 
 " .    .         .              .
 " |\  /|         |             / \               o
@@ -168,10 +168,10 @@ nnoremap 0 ^
 " nnoremap ; :
 
 " Windows mappings {{{
-" nnoremap <Leader><Leader> <C-^>
+nnoremap <Leader><Leader> <C-^>
 nnoremap <tab> <c-w>w
 nnoremap <c-w><c-c> <c-w>c
-nnoremap <leader><space> :bn<cr>
+nnoremap <leader>n :bn<cr>
 
 " Delete current buffer
 nnoremap <silent> <leader>bd :bp <bar> bd #<cr>
@@ -223,6 +223,8 @@ nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 " Map dp and dg with leader for diffput and diffget
 nnoremap <leader>dp :diffput<cr>
 nnoremap <leader>dg :diffget<cr>
+nnoremap <leader>dn :windo diffthis<cr>
+nnoremap <leader>df :windo diffoff<cr>
 
 " Map enter to no highlight
 nnoremap <CR> :nohlsearch<CR><CR>
@@ -305,8 +307,8 @@ nnoremap <silent> <leader>sp :call LoadPlugins()<cr>
 " }}}
 
 " Remove blank space from the start of the line to the end of previous line
-inoremap ddd <esc>^hvk$xi
-nnoremap <leader>d ^hvk$xi <esc>
+inoremap ddd <esc>ma^i  <esc>hvk$x`ai
+nnoremap <leader>dd ma^i  <esc>hvk$x`a
 
 " highlight last inserted text
 nnoremap gV `[v`]
