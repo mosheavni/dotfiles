@@ -1,4 +1,4 @@
-  " Moshe's vimrc. Custom made for my needs :)
+" Moshe's vimrc. Custom made for my needs :)
 
 " .    .         .              .
 " |\  /|         |             / \               o
@@ -53,7 +53,7 @@ set wildignore+=**/node_modules/**
 set updatetime=300
 
 if v:version > 703 || v:version == 703 && has("patch541")
-  set formatoptions+=j " Delete comment character when joining commented lines
+    set formatoptions+=j " Delete comment character when joining commented lines
 endif
 
 filetype plugin on
@@ -71,14 +71,14 @@ let g:python3_host_prog="/usr/local/bin/python3"
 au FocusGained,BufEnter * :checktime
 
 if &history < 1000
-  set history=1000
+    set history=1000
 endif
 
 " Set relativenumber when focused {{{
 augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * set number relativenumber
-  autocmd BufLeave,FocusLost,InsertEnter   * set number norelativenumber
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave * set number relativenumber
+    autocmd BufLeave,FocusLost,InsertEnter   * set number norelativenumber
 augroup END
 " }}}
 
@@ -86,46 +86,46 @@ augroup END
 " Terminal colors {{{
 
 if has('termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors
 endif
 
 " Allow color schemes to do bright colors without forcing bold.
 if &t_Co == 8 && $TERM !~# '^Eterm'
-  set t_Co=256
+    set t_Co=256
 endif
 
 if has('nvim')
-  " https://github.com/neovim/neovim/issues/2897#issuecomment-115464516
-  let g:terminal_color_0 = '#4e4e4e'
-  let g:terminal_color_1 = '#d68787'
-  let g:terminal_color_2 = '#5f865f'
-  let g:terminal_color_3 = '#d8af5f'
-  let g:terminal_color_4 = '#85add4'
-  let g:terminal_color_5 = '#d7afaf'
-  let g:terminal_color_6 = '#87afaf'
-  let g:terminal_color_7 = '#d0d0d0'
-  let g:terminal_color_8 = '#626262'
-  let g:terminal_color_9 = '#d75f87'
-  let g:terminal_color_10 = '#87af87'
-  let g:terminal_color_11 = '#ffd787'
-  let g:terminal_color_12 = '#add4fb'
-  let g:terminal_color_13 = '#ffafaf'
-  let g:terminal_color_14 = '#87d7d7'
-  let g:terminal_color_15 = '#e4e4e4'
+    " https://github.com/neovim/neovim/issues/2897#issuecomment-115464516
+    let g:terminal_color_0 = '#4e4e4e'
+    let g:terminal_color_1 = '#d68787'
+    let g:terminal_color_2 = '#5f865f'
+    let g:terminal_color_3 = '#d8af5f'
+    let g:terminal_color_4 = '#85add4'
+    let g:terminal_color_5 = '#d7afaf'
+    let g:terminal_color_6 = '#87afaf'
+    let g:terminal_color_7 = '#d0d0d0'
+    let g:terminal_color_8 = '#626262'
+    let g:terminal_color_9 = '#d75f87'
+    let g:terminal_color_10 = '#87af87'
+    let g:terminal_color_11 = '#ffd787'
+    let g:terminal_color_12 = '#add4fb'
+    let g:terminal_color_13 = '#ffafaf'
+    let g:terminal_color_14 = '#87d7d7'
+    let g:terminal_color_15 = '#e4e4e4'
 
-  set fillchars=vert:\|,fold:-
-  autocmd BufReadPost *
-    \ if line("'\"") >= 1 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
+    set fillchars=vert:\|,fold:-
+    autocmd BufReadPost *
+                \ if line("'\"") >= 1 && line("'\"") <= line("$") |
+                \   exe "normal! g`\"" |
+                \ endif
 else
-  let g:terminal_ansi_colors = [
-    \ '#4e4e4e', '#d68787', '#5f865f', '#d8af5f',
-    \ '#85add4', '#d7afaf', '#87afaf', '#d0d0d0',
-    \ '#626262', '#d75f87', '#87af87', '#ffd787',
-    \ '#add4fb', '#ffafaf', '#87d7d7', '#e4e4e4']
+    let g:terminal_ansi_colors = [
+                \ '#4e4e4e', '#d68787', '#5f865f', '#d8af5f',
+                \ '#85add4', '#d7afaf', '#87afaf', '#d0d0d0',
+                \ '#626262', '#d75f87', '#87af87', '#ffd787',
+                \ '#add4fb', '#ffafaf', '#87d7d7', '#e4e4e4']
 endif
 " }}}
 " }}}
@@ -198,10 +198,10 @@ nnoremap Q @q
 inoremap <c-v> <c-r>"
 
 if empty(mapcheck('<C-U>', 'i'))
-  inoremap <C-U> <C-G>u<C-U>
+    inoremap <C-U> <C-G>u<C-U>
 endif
 if empty(mapcheck('<C-W>', 'i'))
-  inoremap <C-W> <C-G>u<C-W>
+    inoremap <C-W> <C-G>u<C-W>
 endif
 
 " }}}
@@ -260,15 +260,15 @@ onoremap <expr> N  'nN'[v:searchforward]
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 vnoremap <silent> * :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+            \gvy/<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+            \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+            \gVzv:call setreg('"', old_reg, old_regtype)<CR>
 vnoremap <silent> # :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy?<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
-  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+            \gvy?<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+            \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+            \gVzv:call setreg('"', old_reg, old_regtype)<CR>
 
 " }}}
 
@@ -380,22 +380,22 @@ let g:netrw_keepdir = 0
 
 " Toggle Vexplore with Ctrl-E {{{
 function! ToggleVExplorer()
-  if exists("t:expl_buf_num")
-      let expl_win_num = bufwinnr(t:expl_buf_num)
-      if expl_win_num != -1
-          let cur_win_nr = winnr()
-          exec expl_win_num . 'wincmd w'
-          close
-          exec cur_win_nr . 'wincmd w'
-          unlet t:expl_buf_num
-      else
-          unlet t:expl_buf_num
-      endif
-  else
-      exec '1wincmd w'
-      Vexplore
-      let t:expl_buf_num = bufnr("%")
-  endif
+    if exists("t:expl_buf_num")
+        let expl_win_num = bufwinnr(t:expl_buf_num)
+        if expl_win_num != -1
+            let cur_win_nr = winnr()
+            exec expl_win_num . 'wincmd w'
+            close
+            exec cur_win_nr . 'wincmd w'
+            unlet t:expl_buf_num
+        else
+            unlet t:expl_buf_num
+        endif
+    else
+        exec '1wincmd w'
+        Vexplore
+        let t:expl_buf_num = bufnr("%")
+    endif
 endfunction
 " }}}
 map <silent> <C-E> :call ToggleVExplorer()<CR>
@@ -461,14 +461,14 @@ vnoremap <leader>' c''<esc>P
 " Conceals {{{
 
 let g:conceal_rules = [
-      \ ['!=', '≠'],
-      \ ['<=', '≤'],
-      \ ['>=', '≥'],
-      \ ['=>', '⇒'],
-      \ ['==', '≡'],
-      \ ['===', '≡≡'],
-      \ ['\<function\>', 'ƒ'],
-      \ ]
+            \ ['!=', '≠'],
+            \ ['<=', '≤'],
+            \ ['>=', '≥'],
+            \ ['=>', '⇒'],
+            \ ['==', '≡'],
+            \ ['===', '≡≡'],
+            \ ['\<function\>', 'ƒ'],
+            \ ]
 
 " Conceal is not needed when we have FiraCode with ligatures
 " for [value, display] in g:conceal_rules
@@ -481,12 +481,12 @@ set conceallevel=1
 
 " Diff with last save function {{{
 function! s:DiffWithSaved()
-  let filetype=&ft
-  diffthis
-  vnew | r # | normal! 1Gdd
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro foldlevel=999 ft=" . filetype
-  diffthis
-  wincmd p
+    let filetype=&ft
+    diffthis
+    vnew | r # | normal! 1Gdd
+    exe "setlocal bt=nofile bh=wipe nobl noswf ro foldlevel=999 ft=" . filetype
+    diffthis
+    wincmd p
 endfunction
 com! DiffSaved call s:DiffWithSaved()
 
@@ -498,7 +498,7 @@ augroup special_filetype
     autocmd BufNewFile,BufRead *yaml setf yaml
     autocmd FileType json syntax match Comment +\/\/.\+$+
     autocmd BufNewFile,BufRead aliases.sh setf zsh
-    autocmd FileType javascript setf javascriptreact | set iskeyword+=-
+    autocmd FileType javascript set filetype=javascriptreact | set iskeyword+=-
 augroup end
 let g:sh_fold_enabled = 4
 " }}}
@@ -511,20 +511,86 @@ nnoremap <silent> <F5> :call ExecuteFile()<CR>
 " You need to manually map the filetypes you use most commonly to the
 " correct shell command.
 function! ExecuteFile()
-  let l:filetype_to_command = {
-  \   'javascript': 'node',
-  \   'python': 'python',
-  \   'html': 'open',
-  \   'sh': 'bash'
-  \ }
-  let l:cmd = get(l:filetype_to_command, &filetype, &filetype)
-  :%y
-  new | 0put
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
-  exe "%!".l:cmd
-  normal! ggO
-  call setline(1, 'Output of ' . l:cmd . ' command:')
-  normal! yypVr=o
+    let l:filetype_to_command = {
+                \   'javascript': 'node',
+                \   'python': 'python',
+                \   'html': 'open',
+                \   'sh': 'bash'
+                \ }
+    let l:cmd = get(l:filetype_to_command, &filetype, &filetype)
+    :%y
+    new | 0put
+    setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+    exe "%!".l:cmd
+    normal! ggO
+    call setline(1, 'Output of ' . l:cmd . ' command:')
+    normal! yypVr=o
 endfunction
 
+" }}}
+
+" Toggle colorschemes {{{
+let s:schemes = "\n".globpath(&rtp, "colors/*.vim")."\n"
+let s:currentfile = ""
+let s:currentname = ""
+
+function! s:CycleColor(direction)
+    if exists("g:colors_name") && g:colors_name != s:currentname
+        " The user must have selected a colorscheme manually; try
+        " to find it and choose the next one after it
+        let nextfile = substitute(s:schemes, '.*\n\([^\x0A]*[/\\]'.g:colors_name.'\.vim\)\n.*', '\1', '')
+        if nextfile == s:schemes
+            let s:currentfile = ""
+        else
+            let s:currentfile = nextfile
+        endif
+    endif
+
+    if a:direction >= 0
+        " Find the current file name, and select the next one.
+        " No substitution will take place if the current file is not
+        "   found or is the last in the list.
+        let nextfile = substitute(s:schemes, '.*\n'.s:currentfile.'\n\([^\x0A]\+\)\n.*', '\1', '')
+        " If the above worked, there will be no control chars in
+        "   nextfile, so this will not substitute; otherwise, this will
+        "   choose the first file in the list.
+        let nextfile = substitute(nextfile, '\n\+\([^\x0A]\+\)\n.*', '\1', '')
+    else
+        let nextfile = substitute(s:schemes, '.*\n\([^\x0A]\+\)\n'.s:currentfile.'\n.*', '\1', '')
+        let nextfile = substitute(nextfile, '.*\n\([^\x0A]\+\)\n\+', '\1', '')
+    endif
+
+    if nextfile != s:schemes
+        let clrschm = substitute(nextfile, '^.*[/\\]\([^/\\]\+\)\.vim$', '\1', '')
+        " In case the color scheme does not set this variable, empty it so we can tell.
+        unlet! g:colors_name
+        exec 'colorscheme '.clrschm
+        redraw
+        if exists("g:colors_name")
+            let s:currentname = g:colors_name
+            if clrschm != g:colors_name
+                " Let user know colorscheme did not set g:colors_name properly
+                echomsg 'colorscheme' clrschm 'set g:colors_name to' g:colors_name
+            endif
+        else
+            let s:currentname = ""
+            echomsg 'colorscheme' clrschm 'did not set g:colors_name'
+        endif
+        echo s:currentname.' ('.nextfile.')'
+    endif
+
+    let s:currentfile = nextfile
+
+endfunction
+
+function! s:CycleColorRefresh()
+    let s:schemes = "\n".globpath(&rtp, "colors/*.vim")."\n"
+endfunction
+
+command! CycleColorNext :call s:CycleColor(1)
+command! CycleColorPrev :call s:CycleColor(-1)
+command! CycleColorRefresh :call s:CycleColorRefresh()
+
+nnoremap <f4> :CycleColorNext<cr>
+nnoremap <f3> :CycleColorPrev<cr>
 " }}}

@@ -77,7 +77,17 @@ export NVM_DIR="$HOME/.nvm"
 # Appearance
 if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
     source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
-    PS1=$PS1'$(kube_ps1) '
+    function get_cluster_short() {
+        echo "$1" | cut -d . -f1
+    }
+
+    KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
+    # _polyglot_kube_ps1_precmd() {
+    #   local kube_ps1=$(kube_ps1)
+    #   print -P "$ps1 $kube_ps1" # Conditional newline included
+    # }
+    # add-zsh-hook precmd _polyglot_kube_ps1_precmd
+    # RPS1='$(kube_ps1)'
 fi
 nvm use stable &
 
@@ -92,5 +102,5 @@ fi
 emojis=(🚀 🔥 🍕 👾 🏖 🍔 👻 ⚓ 💥 🌎 ⛄ 🔵 💈 🎲 🌀 🌐)
 
 EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
-PS1="$EMOJI $PS1"
+PS1="$PROMPT"'$(kube_ps1)'$'\n'"$EMOJI%b  "
 ZSH_THEME_GIT_PROMPT_PREFIX="${ZSH_THEME_GIT_PROMPT_PREFIX} "
