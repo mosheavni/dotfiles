@@ -22,11 +22,6 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'vim-scripts/groovyindent-unix'
 Plug 'chr4/nginx.vim'
 " Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
-" Plug 'pangloss/vim-javascript'
-" Plug 'mxw/vim-jsx'
-" Plug 'yuezk/vim-js'
-" Plug 'MaxMEllon/vim-jsx-pretty'
-" Plug 'chemzqm/vim-jsx-improve'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
 Plug 'mogelbrod/vim-jsonpath'
@@ -81,12 +76,13 @@ Plug 'vim-airline/vim-airline-themes'
 " Plug 'dracula/vim'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'sonph/onehalf', { 'rtp': 'vim/' }
-" Plug 'larsbs/vimterial_dark'
-" Plug 'sjl/badwolf'
-" Plug 'tyrannicaltoucan/vim-quantum'
-" Plug 'sainnhe/sonokai'
-" Plug 'arzg/vim-colors-xcode'
-" Plug 'yuttie/hydrangea-vim'
+Plug 'xolox/vim-colorscheme-switcher'
+Plug 'larsbs/vimterial_dark'
+Plug 'sjl/badwolf'
+Plug 'tyrannicaltoucan/vim-quantum'
+Plug 'sainnhe/sonokai'
+Plug 'arzg/vim-colors-xcode'
+Plug 'yuttie/hydrangea-vim'
 " Plug 'norcalli/nvim-colorizer.lua' " Requires termguicolors which changes
 " the coolness of the color scheme :)
 " Plug 'itchyny/vim-cursorword'
@@ -287,9 +283,42 @@ let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowTo
 " let g:quantum_black=1
 " let g:quantum_italics=1
 " colorscheme lucius
-colorscheme OceanicNext
+" colorscheme OceanicNext
 
-set tgc
+" Random color {{{
+function RandomColorChooser() abort
+    let l:liked_colors =  [
+                \ "OceanicNext",
+                \ "Papercolor",
+                \ "abstract",
+                \ "afterglow",
+                \ "alduin",
+                \ "anderson",
+                \ "apprentice",
+                \ "ayu",
+                \ "carbonized-dark",
+                \ "deep-space",
+                \ "deus",
+                \ "dracula",
+                \ "flattened_dark",
+                \ "hybrid",
+                \ "onedark",
+                \ "onehalfdark",
+                \ "pink-moon",
+                \ "purify",
+                \ "quantum",
+                \ "rakr",
+                \ "snow",
+                \ "sonokai",
+                \ "stellarized",
+                \ "yellow-moon"
+                \ ]
+    let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
+    exe 'colorscheme '. l:random_color
+endfunction
+call RandomColorChooser()
+" }}}
+
 " }}}
 
 " Undo tree {{{
@@ -465,6 +494,7 @@ endfunction
 let g:coc_global_extensions = [
             \    "coc-css",
             \    "coc-diagnostic",
+            \    "coc-react-refactor",
             \    "coc-dictionary",
             \    "coc-docker",
             \    "coc-groovy",
