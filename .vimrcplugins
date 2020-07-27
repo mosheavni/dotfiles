@@ -288,17 +288,8 @@ let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowTo
 " Random color {{{
 function RandomColorChooser() abort
     let l:liked_colors =  [
-                \ "onedark",
-                \ "onehalfdark",
+                \ "OceanicNext",
                 \ "Papercolor",
-                \ "pink-moon",
-                \ "purify",
-                \ "quantum",
-                \ "rakr",
-                \ "snow",
-                \ "sonokai",
-                \ "stellarized",
-                \ "yellow-moon",
                 \ "abstract",
                 \ "afterglow",
                 \ "alduin",
@@ -310,7 +301,17 @@ function RandomColorChooser() abort
                 \ "deus",
                 \ "dracula",
                 \ "flattened_dark",
-                \ "hybrid"
+                \ "hybrid",
+                \ "onedark",
+                \ "onehalfdark",
+                \ "pink-moon",
+                \ "purify",
+                \ "quantum",
+                \ "rakr",
+                \ "snow",
+                \ "sonokai",
+                \ "stellarized",
+                \ "yellow-moon"
                 \ ]
     let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
     exe 'colorscheme '. l:random_color
