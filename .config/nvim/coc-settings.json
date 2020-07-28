@@ -20,17 +20,11 @@
   ],
 
   "diagnostic-languageserver.filetypes": {
-    "sh": "shellcheck",
-    "bash": "shellcheck"
-  },
-  "diagnostic-languageserver.formatters": {
-    "tffmt": {
-      "command": "terraform",
-      "args": ["fmt", "-"]
-    }
+    "sh": "shellcheck"
   },
   "diagnostic-languageserver.formatFiletypes": {
-    "terraform": "tffmt"
+    "terraform": "tffmt",
+    "sh": "shfmt"
   },
   "suggest.completionItemKindLabels": {
     "function": "\uf794",
