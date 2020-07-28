@@ -486,6 +486,11 @@ function! s:DiffWithSaved()
     vnew | r # | normal! 1Gdd
     exe "setlocal bt=nofile bh=wipe nobl noswf ro foldlevel=999 ft=" . filetype
     diffthis
+    augroup ShutDownDiffOnLeave
+        autocmd! * <buffer>
+        autocmd BufDelete,BufUnload,BufWipeout <buffer> wincmd p | diffoff | wincmd p
+    augroup END
+
     wincmd p
 endfunction
 com! DiffSaved call s:DiffWithSaved()
