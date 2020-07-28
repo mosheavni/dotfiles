@@ -22,6 +22,7 @@ plugins=(
     dircycle
     docker
     git
+    git-auto-fetch
     kubectl
     minikube
     z

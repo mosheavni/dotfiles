@@ -59,7 +59,7 @@ Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-Plug 'Moshem123/vim-to-github'
+Plug 'tonchis/vim-to-github'
 
 " Plug 'Yggdroot/indentLine'
 
@@ -290,12 +290,9 @@ function RandomColorChooser() abort
     let l:liked_colors =  [
                 \ "OceanicNext",
                 \ "Papercolor",
-                \ "abstract",
                 \ "afterglow",
                 \ "alduin",
-                \ "anderson",
                 \ "apprentice",
-                \ "ayu",
                 \ "carbonized-dark",
                 \ "deep-space",
                 \ "deus",
@@ -304,7 +301,6 @@ function RandomColorChooser() abort
                 \ "hybrid",
                 \ "onedark",
                 \ "onehalfdark",
-                \ "pink-moon",
                 \ "purify",
                 \ "quantum",
                 \ "rakr",
