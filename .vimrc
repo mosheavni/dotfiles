@@ -528,7 +528,7 @@ function! ExecuteFile()
                 \   'html': 'open',
                 \   'sh': 'bash'
                 \ }
-    let l:cmd = get(l:filetype_to_command, &filetype, &filetype)
+    let l:cmd = get(l:filetype_to_command, &filetype, "bash")
     :%y
     new | 0put
     setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
