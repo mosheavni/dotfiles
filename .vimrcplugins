@@ -290,10 +290,7 @@ function RandomColorChooser() abort
     let l:liked_colors =  [
                 \ "OceanicNext",
                 \ "Papercolor",
-                \ "afterglow",
-                \ "alduin",
                 \ "apprentice",
-                \ "carbonized-dark",
                 \ "deep-space",
                 \ "deus",
                 \ "dracula",
@@ -307,6 +304,7 @@ function RandomColorChooser() abort
                 \ "snow",
                 \ "sonokai",
                 \ "stellarized",
+                \ "two-firewatch",
                 \ "yellow-moon"
                 \ ]
     let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
