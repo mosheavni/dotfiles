@@ -10,6 +10,7 @@
   "python.linting.enabled": true,
   "prettier.tabWidth": 2,
   "css.lint.unknownProperties": "warning",
+  "coc.source.emoji.filetypes": ["gitcommit"],
   "tsserver.reportStyleChecksAsWarnings": true,
   "suggest.enablePreview": true,
   "coc.preferences.formatOnSaveFiletypes": [
