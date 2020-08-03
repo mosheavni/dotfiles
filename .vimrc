@@ -43,7 +43,9 @@ set guifont=:h
 set mouse=a
 set undofile       " Enables saving undo history to a file
 
-set shortmess+=c   " don't give |ins-completion-menu| messages.
+if has('nvim')
+    set shortmess+=c   " don't give |ins-completion-menu| messages.
+endif
 
 " Ignore node_modules
 set wildignore+=**/node_modules/**
@@ -134,7 +136,9 @@ endif
 " Indentation settings for using 4 spaces instead of tabs.
 " Do not change 'tabstop' from its default value of 8 with this setup.
 filetype indent on
-set breakindent   " Maintain indent on wrapping lines
+if exists("+breakindent")
+    set breakindent   " Maintain indent on wrapping lines
+endif
 set autoindent    " always set autoindenting on
 set copyindent    " copy the previous indentation on autoindenting
 set smartindent   " Number of spaces to use for each step of (auto)indent.
@@ -314,8 +318,10 @@ nnoremap <leader>dd ma^i  <esc>hvk$x`a
 nnoremap gV `[v`]
 
 " terminal mappings {{{
-tnoremap <Esc> <C-\><C-n>
-nnoremap <leader>term :new term://zsh<cr>
+if exists(':terminal')
+    tnoremap <Esc> <C-\><C-n>
+    nnoremap <leader>term :new term://zsh<cr>
+endif
 " }}}
 
 " Exit insert mode
