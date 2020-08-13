@@ -10,6 +10,6 @@ tab_width = 4
 charset = utf-8
 trim_trailing_whitespace = true
 
-[*.{js,json,sh,yaml,yml}]
+[*.{js,json,sh,yaml,yml,css,scss}]
 indent_size = 2
 tab_width = 2
