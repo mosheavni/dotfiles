@@ -1,28 +1,27 @@
 {
-  "codeLens.enable": true,
-  "diagnostic.hintSign": "",
-  "diagnostic.errorSign": "✘",
-  "diagnostic.warningSign": "",
-  "diagnostic.infoSign": "",
-  "suggest.triggerAfterInsertEnter": true,
   "coc.preferences.useQuickfixForLocations": true,
-  "diagnostic.checkCurrentLine": false,
-  "python.linting.enabled": true,
-  "prettier.tabWidth": 2,
-  "css.lint.unknownProperties": "warning",
   "coc.source.emoji.filetypes": ["gitcommit"],
-  "tsserver.reportStyleChecksAsWarnings": true,
+  "css.lint.unknownProperties": "warning",
+  "diagnostic.checkCurrentLine": false,
+  "diagnostic.errorSign": "✘",
+  "diagnostic.hintSign": "",
+  "diagnostic.infoSign": "",
+  "diagnostic.warningSign": "",
+  "prettier.tabWidth": 2,
+  "python.linting.enabled": true,
+  "python.linting.pep8Enabled": true,
+  "python.linting.pylintEnabled": false,
   "suggest.enablePreview": true,
+  "suggest.triggerAfterInsertEnter": true,
+  "tsserver.reportStyleChecksAsWarnings": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "css",
-    "markdown",
     "javascript",
-    "javascriptreact"
+    "javascriptreact",
+    "markdown",
+    "python"
   ],
-
-  "diagnostic-languageserver.filetypes": {
-    "sh": "shellcheck"
-  },
+  "diagnostic-languageserver.filetypes": { "sh": "shellcheck" },
   "diagnostic-languageserver.formatFiletypes": {
     "terraform": "tffmt",
     "sh": "shfmt"
@@ -67,13 +66,5 @@
       "initializationOptions": {},
       "settings": {}
     }
-    // "groovy": {
-    //   "command": "java",
-    //   "args": [
-    //     "-jar",
-    //     "/Users/moshe.avni/.vim/plugged/groovy-language-server/build/libs/groovy-language-server-all.jar"
-    //   ],
-    //   "filetypes": ["groovy"]
-    // }
   }
 }
