@@ -23,6 +23,9 @@ Plug 'vim-scripts/groovyindent-unix'
 Plug 'chr4/nginx.vim'
 " Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 
 Plug 'mogelbrod/vim-jsonpath'
 Plug 'chrisbra/vim-sh-indent'
@@ -295,13 +298,11 @@ function RandomColorChooser() abort
                 \ "deus",
                 \ "dracula",
                 \ "flattened_dark",
-                \ "hybrid",
                 \ "onedark",
                 \ "onehalfdark",
                 \ "purify",
                 \ "quantum",
                 \ "rakr",
-                \ "snow",
                 \ "sonokai",
                 \ "stellarized",
                 \ "two-firewatch",
@@ -408,6 +409,9 @@ command! -bang Gp Gpush
 
 " Git pull
 command! -bang Gl Gpull
+
+" Git merge origin master
+command! -bang Gmom G merge origin/master
 
 " Create a new branch
 function! Gcb(...)
