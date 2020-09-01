@@ -88,6 +88,7 @@ Plug 'tyrannicaltoucan/vim-quantum'
 Plug 'sainnhe/sonokai'
 Plug 'arzg/vim-colors-xcode'
 Plug 'yuttie/hydrangea-vim'
+Plug 'dracula/vim'
 " Plug 'norcalli/nvim-colorizer.lua' " Requires termguicolors which changes
 " the coolness of the color scheme :)
 " Plug 'itchyny/vim-cursorword'
@@ -294,7 +295,6 @@ let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowTo
 function RandomColorChooser() abort
     let l:liked_colors =  [
                 \ "OceanicNext",
-                \ "Papercolor",
                 \ "apprentice",
                 \ "deep-space",
                 \ "deus",
@@ -304,11 +304,8 @@ function RandomColorChooser() abort
                 \ "onehalfdark",
                 \ "purify",
                 \ "quantum",
-                \ "rakr",
                 \ "sonokai",
-                \ "stellarized",
-                \ "two-firewatch",
-                \ "yellow-moon"
+                \ "two-firewatch"
                 \ ]
     let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
     exe 'colorscheme '. l:random_color
