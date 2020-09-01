@@ -94,5 +94,5 @@ else
     PS1="$EMOJI $PROMPT%b  "
 fi
 ZSH_THEME_GIT_PROMPT_PREFIX="${ZSH_THEME_GIT_PROMPT_PREFIX} "
-nvm use stable &
+# nvm use stable &
 
