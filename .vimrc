@@ -348,9 +348,13 @@ nnoremap <Leader>r :%s?<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>
 vnoremap <leader>r "hy:%s?<C-r>h?<C-r>h?gc<left><left><left>
 " }}}
 
-" Delete all {{{
-vnoremap <leader>dab "hyqeq:v/<c-r>h/d E<cr>:let @"=@e<cr>
-vnoremap <leader>daa "hyqeq:g/<c-r>h/d E<cr>:let @"=@e<cr>
+" Delete/yank all {{{
+vnoremap <leader>dab "hyqeq:v/\V<c-r>h/d E<cr>:let @"=@e<cr>:noh<cr>
+vnoremap <leader>daa "hyqeq:g/\V<c-r>h/d E<cr>:let @"=@e<cr>:noh<cr>
+
+vnoremap <leader>yab "hymmqeq:v/\V<c-r>h/yank E<cr>:let @"=@e<cr>`m:noh<cr>
+vnoremap <leader>yaa "hymmqeq:g/\V<c-r>h/yank E<cr>:let @"=@e<cr>`m:noh<cr>
+
 " }}}
 
 " Change every " -" with " \<cr> -" to break long lines of bash
@@ -504,7 +508,7 @@ com! DiffSaved call s:DiffWithSaved()
 augroup special_filetype
     au!
     autocmd BufNewFile,BufRead *yaml setf yaml
-    autocmd FileType json syntax match Comment +\/\/.\+$+ | setl formatexpr=FormatJSON
+    autocmd FileType json syntax match Comment +\/\/.\+$+
     autocmd BufNewFile,BufRead aliases.sh setf zsh
     autocmd FileType javascript set filetype=javascriptreact | set iskeyword+=-
 augroup end

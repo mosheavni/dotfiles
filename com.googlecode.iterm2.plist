@@ -462,7 +462,7 @@
 	<key>LoadPrefsFromCustomFolder</key>
 	<true/>
 	<key>NSNavLastRootDirectory</key>
-	<string>~/src/dotfiles</string>
+	<string>~/Downloads</string>
 	<key>NSNavPanelExpandedSizeForOpenMode</key>
 	<string>{712, 448}</string>
 	<key>NSQuotedKeystrokeBinding</key>
@@ -509,7 +509,7 @@
 	<key>NSWindow Frame NSFontPanel</key>
 	<string>1213 110 641 306 0 0 1920 1080 </string>
 	<key>NSWindow Frame ProfilesPanel</key>
-	<string>228 227 1106 629 0 0 1440 900 </string>
+	<string>1855 811 1106 629 1440 545 1920 1080 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>650 516 620 392 0 0 1920 1080 </string>
 	<key>NSWindow Frame SessionsPreferences</key>
@@ -519,9 +519,9 @@
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>155 473 592 584 0 0 1920 1057 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>299 223 650 525 0 0 1440 900 </string>
+	<string>0 0 703 877 0 0 1920 1080 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>-1920 531 650 525 -1920 0 1920 1080 </string>
+	<string>0 549 730 500 0 0 1920 1080 </string>
 	<key>NeverWarnAboutMeta</key>
 	<true/>
 	<key>NeverWarnAboutMeta_selection</key>
@@ -1168,7 +1168,7 @@
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
 			<key>Transparency</key>
-			<real>0.23063927664974618</real>
+			<real>0.0</real>
 			<key>Unicode Version</key>
 			<integer>9</integer>
 			<key>Unlimited Scrollback</key>
@@ -1207,6 +1207,7 @@
 	</array>
 	<key>NoSyncBFPRecents</key>
 	<array>
+		<string>Helvetica</string>
 		<string>Fira Code</string>
 	</array>
 	<key>NoSyncCommandHistoryHasEverBeenUsed</key>
@@ -1221,9 +1222,9 @@
 	<key>NoSyncFrame_SharedPreferences</key>
 	<dict>
 		<key>screenFrame</key>
-		<string>{{0, 0}, {1440, 900}}</string>
+		<string>{{1440, 545}, {1920, 1080}}</string>
 		<key>topLeft</key>
-		<string>{262, 815}</string>
+		<string>{2048, 1463}</string>
 	</dict>
 	<key>NoSyncHaveUsedCopyMode</key>
 	<true/>
@@ -1238,7 +1239,7 @@
 	<key>NoSyncLastTipTime</key>
 	<real>589805159.500862</real>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>61</integer>
+	<integer>63</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -1309,6 +1310,14 @@
 				<true/>
 				<key>name</key>
 				<string>id</string>
+				<key>nonterminalContext</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>isTerminal</key>
+				<true/>
+				<key>name</key>
+				<string>user.gitBranch</string>
 				<key>nonterminalContext</key>
 				<integer>0</integer>
 			</dict>
@@ -1735,6 +1744,14 @@
 				<key>isTerminal</key>
 				<true/>
 				<key>name</key>
+				<string>currentTab.currentSession.user.gitBranch</string>
+				<key>nonterminalContext</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>isTerminal</key>
+				<true/>
+				<key>name</key>
 				<string>currentTab.currentSession.jobName</string>
 				<key>nonterminalContext</key>
 				<integer>0</integer>
@@ -1953,6 +1970,10 @@
 	<true/>
 	<key>NoSyncSuppressBroadcastInputWarning_selection</key>
 	<integer>0</integer>
+	<key>NoSyncSuppressDownloadConfirmation</key>
+	<true/>
+	<key>NoSyncSuppressDownloadConfirmation_selection</key>
+	<integer>0</integer>
 	<key>NoSyncTimeOfFirstLaunchOfVersionWithTip</key>
 	<real>556963141.50394106</real>
 	<key>NoSyncTipsToNotShow</key>
@@ -2088,7 +2109,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-07-20T06:58:39Z</date>
+	<date>2020-08-13T17:17:46Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateGroupIdentifier</key>
