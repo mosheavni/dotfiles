@@ -26,6 +26,8 @@ Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+Plug 'StanAngeloff/php.vim', {'for': ['php']}
+Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
 
 Plug 'mogelbrod/vim-jsonpath'
 Plug 'chrisbra/vim-sh-indent'
@@ -495,6 +497,7 @@ let g:coc_global_extensions = [
             \    "coc-dictionary",
             \    "coc-docker",
             \    "coc-emoji",
+            \    "coc-emmet",
             \    "coc-groovy",
             \    "coc-html",
             \    "coc-json",
