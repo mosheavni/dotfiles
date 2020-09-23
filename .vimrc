@@ -128,6 +128,9 @@ else
                 \ '#85add4', '#d7afaf', '#87afaf', '#d0d0d0',
                 \ '#626262', '#d75f87', '#87af87', '#ffd787',
                 \ '#add4fb', '#ffafaf', '#87d7d7', '#e4e4e4']
+    set termguicolors
+    set nocursorline
+    set nocursorcolumn
 endif
 " }}}
 " }}}
