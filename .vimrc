@@ -360,8 +360,20 @@ vnoremap <leader>yaa "hymmqeq:g/\V<c-r>h/yank E<cr>:let @"=@e<cr>`m:noh<cr>
 
 " }}}
 
+" Split long lines {{{
 " Change every " -" with " \<cr> -" to break long lines of bash
 nnoremap <silent> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
+
+" Every parameter in its own line
+function SplitParamLines() abort
+    let f_line_num = line(".")
+    let indent_length = indent(f_line_num)
+    exe ".s/\s*,/,\r" . repeat(" ", indent_length + &shiftwidth - 1) . "/g"
+    nohlsearch
+    " execute "normal! 0t)a\<cr>\<esc>"
+endfunction
+nnoremap <silent> <leader>( :call SplitParamLines()<cr>
+" }}}
 
 " move vertically by visual line (don't skip wrapped lines) {{{
 nnoremap j gj
