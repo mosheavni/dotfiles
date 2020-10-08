@@ -406,7 +406,7 @@ command! -bang Gpsup !git push --set-upstream origin $(git rev-parse --abbrev-re
 command! -bang Gp Gpush
 
 " Git pull
-command! -bang Gl G pull
+command! -bang Gl Git pull
 
 " Git merge origin master
 command! -bang Gmom G merge origin/master

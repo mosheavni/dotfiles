@@ -1,10 +1,3 @@
-# # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# # Initialization code that may require console input (password prompts, [y/n]
-# # confirmations, etc.) must go above this block; everything else may go below.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-
 #export PATH=$PATH:$HOME/bin:/usr/local/bin:$PATH:~/Library/Python/2.7/bin:~/bin:~/.npm-global/bin:${KREW_ROOT:-$HOME/.krew}/bin
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="random"
@@ -14,6 +7,25 @@ ZSH_THEME_RANDOM_CANDIDATES=(
 )
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# History settings
+HISTSIZE=5000
+SAVEHIST=5000
+setopt BANG_HIST                 # Treat the '!' character specially during expansion.
+setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
+setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
+setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
+setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
+setopt HIST_BEEP                 # Beep when accessing nonexistent history.
+
 plugins=(
     ansible
     autoupdate
@@ -61,7 +73,7 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-#OktaAWSCLI
+# OktaAWSCLI
 if [[ -f "$HOME/.okta/bash_functions" ]]; then
     . "$HOME/.okta/bash_functions"
 fi
@@ -77,15 +89,10 @@ if [[ -f ~/.kube/ctx ]];then
     export KUBECONFIG=$context
 fi
 
-# NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # Appearance
-if command -v jq >/dev/null && command -v cowsay > /dev/null;then
-    curl -s -m3 https://official-joke-api.appspot.com/jokes/random | jq -r '"\(.setup)\n\(.punchline)"' | cowsay -f tux
-fi
+# if command -v jq >/dev/null && command -v cowsay > /dev/null;then
+#     curl -s -m3 https://official-joke-api.appspot.com/jokes/random | jq -r '"\(.setup)\n\(.punchline)"' | cowsay -f tux
+# fi
 
 emojis=(🚀 🔥 🍕 👾 🏖 🍔 👻 ⚓ 💥 🌎 ⛄ 🔵 💈 🎲 🌀 🌐)
 
@@ -101,5 +108,3 @@ else
     PS1="$EMOJI $PROMPT%b  "
 fi
 ZSH_THEME_GIT_PROMPT_PREFIX="${ZSH_THEME_GIT_PROMPT_PREFIX} "
-# nvm use stable &
-

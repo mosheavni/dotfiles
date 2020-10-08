@@ -455,17 +455,17 @@ inoreabbrev dont don't
 " }}}
 
 " Surround {{{
-nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
-nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
-nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
-nnoremap <leader>[ viw<esc>a]<esc>bi[<esc>lel
+" nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+" nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
+" nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
+" nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
+" nnoremap <leader>[ viw<esc>a]<esc>bi[<esc>lel
 
-vnoremap <leader>( c()<esc>P
-vnoremap <leader>[ c[]<esc>P
-vnoremap <leader>{ c{}<esc>P
-vnoremap <leader>" c""<esc>P
-vnoremap <leader>' c''<esc>P
+" vnoremap <leader>( c()<esc>P
+" vnoremap <leader>[ c[]<esc>P
+" vnoremap <leader>{ c{}<esc>P
+" vnoremap <leader>" c""<esc>P
+" vnoremap <leader>' c''<esc>P
 " }}}
 
 " Conceals {{{
