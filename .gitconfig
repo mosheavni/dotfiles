@@ -1,24 +1,14 @@
-# This is Git's per-user configuration file.
 [user]
-    name = Moshe Avni
-    email = gatkees@gmail.com
+  name = Moshe Avni
+  email = moshe.avni@naturalint.com
+[diff]
+  tool = vscode
+[difftool "vscode"]
+  cmd = code --wait --diff $LOCAL $REMOTE
 [pull]
-    rebase = false
-
-[pretty]
-    log = %C(240)%h%C(reset) -%C(auto)%d%Creset %s %C(242)(%an %ar)
-    detailed = %C(cyan)%h %C(red)%ad %C(blue)[%an]%C(magenta)%d %C(white)%s
-    shorter = %C(auto)%D %C(240)--%C(242)%gD%N %ad by %C(white)%cn%C(reset)
-
+  rebase = false
+[branch]
+  autosetupmerge = always
 [alias]
     log  = log --pretty=log
     lb   = log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
-    lg   = log --graph --pretty=log --all
-    lgd  = log --graph --pretty=log
-    lgw  = !sh -c '"while true; do clear; git lg -15; sleep 5; done"'
-
-[pager]
-    show-branch = true
-    status = false
-    diff = diff-so-fancy | less --tabs=1,3
-    show = diff-so-fancy | less --tabs=1,3
