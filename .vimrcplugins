@@ -18,6 +18,7 @@ Plug 'mileszs/ack.vim'
 
 Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', { 'do': { -> '!brew install yarn' } }
+" Plug 'dense-analysis/ale'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'vim-scripts/groovyindent-unix'
 Plug 'chr4/nginx.vim'
@@ -38,7 +39,8 @@ Plug 'honza/vim-snippets'
 Plug 'epilande/vim-es2015-snippets'
 Plug 'epilande/vim-react-snippets'
 
-Plug 'terryma/vim-multiple-cursors'
+" Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " Plug 'terryma/vim-expand-region'
 Plug 'terryma/vim-smooth-scroll'
 
@@ -50,6 +52,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'junegunn/vim-easy-align'
 Plug 'AndrewRadev/switch.vim'
+Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'simeji/winresizer'
 Plug 'xolox/vim-session'
@@ -60,7 +63,7 @@ Plug 'luochen1990/rainbow'
 
 " Plug 'tpope/vim-sleuth' " Causes issues with sh indentation
 
-Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+Plug 'mg979/do.vim'
 
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
@@ -115,6 +118,22 @@ call plug#end()
 
 " Plugin Configurations {{{
 
+" ALE {{{
+" let g:ale_disable_lsp = 1
+" let g:ale_sign_error = '✘'
+" let g:ale_sign_warning = ''
+" nmap <silent> ]g <Plug>(ale_next_wrap)
+" nmap <silent> [g <Plug>(ale_previous_wrap)
+" nmap <leader>p <Plug>(ale_fix)
+" let g:ale_echo_msg_format = '%linter% : %s'
+" let g:ale_fixers = {
+"       \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+"       \ 'javascript': ['prettier', 'eslint'],
+"       \ 'sh': ['shfmt'],
+"       \ 'terraform': ['terraform']
+"       \}
+" }}}
+
 " Fzf {{{
 " nnoremap <c-p> :Files
 nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
@@ -141,8 +160,25 @@ let g:jsonpath_register = '*'
 let g:winresizer_start_key = '<C-E>'
 " }}}
 
-" Vim which key {{{
-nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+" Vim do {{{
+nnoremap \G :ShowDos \G<cr>
+let g:vimdo = {}
+let g:vimdo['\G'] = {
+          \'label' : 'git commands', 'interactive':1, 'arbitrary': 1,
+          \'compact':1, 'keys_width': 8, 'desc_width': 30,
+          \'r':  ['reset', 0, ":echo system('git reset')\<cr>"],
+          \'s':  ['status', 0, ":Gstatus\<cr>"],
+          \'D':  ['diff HEAD', 0, ":Gvsplit! diff HEAD\<cr>:setf git\<cr>:set foldmethod=syntax\<cr>"],
+          \'b':  ['blame', 0, ":Gblame\<cr>"],
+          \'p':  ['push', 0, ":redraw! \<bar> echo 'Pushing...\t' \<bar> echon system('git push')\<cr>"],
+          \'.':  ['add all', 0, ":echo system('git add .').'Git: added .'\<cr>"],
+          \'l':  ['log current file', 0, ":Glog\<cr>"],
+          \'c':  ['commit', 0, ":Gcommit\<cr>"],
+          \'w':  ['stage file', 0, ":Gwrite\<cr>"],
+          \'d':  ['diff with...', 0, ":Gvdiff\<space>"],
+          \'a':  ['amend', 0, ":Gstatus\<cr>ca\<cr>"],
+          \'A':  ['add all and amend', 0, ":call system('git add .')\<cr>:Gcommit --amend\<cr>:q\<cr>"],
+          \}
 " }}}
 
 " Switch vim {{{
@@ -190,9 +226,10 @@ let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js"
 let g:closetag_filetypes = 'html,xhtml,phtml,javascript,javascriptreact'
 " }}}
 
-" Vim multiple cursors {{{
-let g:multi_cursor_select_all_key      = '<leader>sa'
-" nnoremap <leader>sa :call multiple_cursors#select_all("n", 0)<CR>
+" Vim visual multi {{{
+let g:VM_maps = {}
+" let g:VM_maps["Select Cursor Down"] = '<c-j>'      " start selecting down
+" let g:VM_maps["Select Cursor Up"]   = '<c-k>'        " start selecting up
 " }}}
 
 " Color settings {{{
@@ -339,6 +376,11 @@ highlight! link NERDTreeFlags NERDTreeDir
 
 " Vim airline (powerline) {{{
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#ale#enabled = 1
+" https://github.com/neoclide/coc.nvim/issues/1827
+" slow Coc intellisense
+let g:airline#extensions#hunks#enabled = 0
+
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
@@ -348,9 +390,6 @@ let g:airline_symbols.space = "\ua0"
 " let g:airline_theme='molokai'
 let g:airline_theme='oceanicnext'
 
-" https://github.com/neoclide/coc.nvim/issues/1827
-" slow Coc intellisense
-let g:airline#extensions#hunks#enabled = 0
 " }}}
 
 " GitGutter {{{

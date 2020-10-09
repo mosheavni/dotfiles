@@ -2,11 +2,6 @@
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.emoji.filetypes": ["gitcommit"],
   "css.lint.unknownProperties": "warning",
-  "diagnostic.checkCurrentLine": false,
-  "diagnostic.errorSign": "✘",
-  "diagnostic.hintSign": "",
-  "diagnostic.infoSign": "",
-  "diagnostic.warningSign": "",
   "prettier.tabWidth": 2,
   "python.linting.enabled": true,
   "python.linting.pep8Enabled": true,
@@ -21,6 +16,11 @@
     "markdown",
     "python"
   ],
+  "diagnostic.checkCurrentLine": true,
+  "diagnostic.errorSign": "✘",
+  "diagnostic.hintSign": "",
+  "diagnostic.infoSign": "",
+  "diagnostic.warningSign": "",
   "diagnostic-languageserver.filetypes": { "sh": "shellcheck" },
   "diagnostic-languageserver.formatFiletypes": {
     "terraform": "tffmt",
@@ -60,7 +60,7 @@
       "args": ["--stdio"]
     },
     "terraform": {
-      "command": "~/.bin/terraform-lsp",
+      "command": "terraform-ls",
       "args": ["serve"],
       "filetypes": ["terraform", "tf"],
       "initializationOptions": {},

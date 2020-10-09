@@ -508,6 +508,7 @@ function! s:DiffWithSaved()
     vnew | r # | normal! 1Gdd
     exe "setlocal bt=nofile bh=wipe nobl noswf ro foldlevel=999 ft=" . filetype
     diffthis
+    nnoremap <buffer> q :bd!<cr>
     augroup ShutDownDiffOnLeave
         autocmd! * <buffer>
         autocmd BufDelete,BufUnload,BufWipeout <buffer> wincmd p | diffoff | wincmd p
@@ -516,7 +517,7 @@ function! s:DiffWithSaved()
     wincmd p
 endfunction
 com! DiffSaved call s:DiffWithSaved()
-
+nnoremap <leader>ds :DiffSaved<cr>
 " }}}
 
 " Special filetypes {{{
