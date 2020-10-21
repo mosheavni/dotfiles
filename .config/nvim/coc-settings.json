@@ -9,6 +9,7 @@
   "suggest.enablePreview": true,
   "suggest.triggerAfterInsertEnter": true,
   "tsserver.reportStyleChecksAsWarnings": true,
+  "coc.source.ultisnips.enable": false,
   "coc.preferences.formatOnSaveFiletypes": [
     "css",
     "javascript",

@@ -6,7 +6,7 @@ ZSH_THEME_RANDOM_CANDIDATES=(
     "dracula"
 )
 ENABLE_CORRECTION="true"
-COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # History settings
@@ -31,8 +31,10 @@ plugins=(
     autoupdate
     aws
     common-aliases
+    colored-man-pages
     dircycle
     docker
+    fzf
     git
     git-auto-fetch
     kubectl
@@ -57,14 +59,6 @@ alias cat='bat'
 alias mdl='mdless README.md'
 alias tf='terraform'
 alias dotfiles='cd ~/src/dotfiles'
-mcd() {
-  local dir_name=$1
-  shift
-  mkdir -p $dir_name
-  cd $_
-  $*
-}
-
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

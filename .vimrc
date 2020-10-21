@@ -25,13 +25,16 @@ set cursorline     " Add highlight behind current line
 set hlsearch       " highlight reg. ex. in @/ register
 set incsearch      " Search as characters are typed
 set ignorecase     " Search case insensitive...
-set smartcase      " ignore case if search pattern is all lowercase, case-sensitive otherwise
+set smartcase      " ignore case if search pattern is all lowercase,
+                   " case-sensitive otherwise
 set autoread       " Re-read file if it was changed from the outside
 set scrolloff=7    " When about to scroll page, see 7 lines below cursor
 set cmdheight=2    " Height of the command bar
 set hidden         " Hide buffer if abandoned
-set showmatch      " When closing a bracket (like {}), show the enclosing bracket for a brief second
-set nostartofline  " Stop certain movements from always going to the first character of a line.
+set showmatch      " When closing a bracket (like {}), show the enclosing
+                   " bracket for a brief second
+set nostartofline  " Stop certain movements from always going to the first
+                   " character of a line.
 set confirm        " Prompt confirmation if exiting unsaved file
 set lazyredraw     " redraw only when we need to.
 set noswapfile
@@ -42,6 +45,7 @@ set showcmd
 set guifont=:h
 set mouse=a
 set undofile       " Enables saving undo history to a file
+set colorcolumn=80 " Mark where are 80 characters to start breaking line
 
 if has('nvim')
     set shortmess+=c   " don't give |ins-completion-menu| messages.
@@ -148,7 +152,8 @@ set smartindent   " Number of spaces to use for each step of (auto)indent.
 set shiftwidth=4  " Number of spaces for each indent
 set softtabstop=4
 set tabstop=4
-set smarttab      " insert tabs on the start of a line according to shiftwidth, not tabstop
+set smarttab      " insert tabs on the start of a line according to
+                  " shiftwidth, not tabstop
 set expandtab     " Tab changes to spaces. Format with :retab
 " }}}
 
@@ -241,7 +246,8 @@ nnoremap E $
 vnoremap E $
 
 " Remove blank spaces from the end of the line
-nnoremap <silent> <leader>a :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
+nnoremap <silent> <leader>a :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s
+            \<Bar> :nohl <Bar> :unlet _s <CR>
 
 " Set mouse=v mapping
 nnoremap <leader>ma :set mouse=a<cr>
@@ -280,10 +286,10 @@ vnoremap <silent> # :<C-U>
 " }}}
 
 " Map - to move a line down and _ a line up
-nnoremap -  :<c-u>execute 'move +'. v:count1<cr>
-nnoremap _  :<c-u>execute 'move -1-'. v:count1<cr>
-" nnoremap - dd$p
-" nnoremap _ dd2kp
+" nnoremap -  :<c-u>execute 'move +'. v:count1<cr>
+" nnoremap _  :<c-u>execute 'move -1-'. v:count1<cr>
+nnoremap - "ldd$"lp
+nnoremap _ "ldd2k"lp
 
 " Base64 decode
 vnoremap <leader>64 y:echo system('base64 --decode', @")<cr>
@@ -368,9 +374,10 @@ nnoremap <silent> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
 function SplitParamLines() abort
     let f_line_num = line(".")
     let indent_length = indent(f_line_num)
+    exe "normal! 0f(a\<cr>\<esc>"
     exe ".s/\s*,/,\r" . repeat(" ", indent_length + &shiftwidth - 1) . "/g"
     nohlsearch
-    " execute "normal! 0t)a\<cr>\<esc>"
+    exe "normal! 0t)a\<cr>\<esc>"
 endfunction
 nnoremap <silent> <leader>( :call SplitParamLines()<cr>
 " }}}
@@ -511,7 +518,8 @@ function! s:DiffWithSaved()
     nnoremap <buffer> q :bd!<cr>
     augroup ShutDownDiffOnLeave
         autocmd! * <buffer>
-        autocmd BufDelete,BufUnload,BufWipeout <buffer> wincmd p | diffoff | wincmd p
+        autocmd BufDelete,BufUnload,BufWipeout <buffer> wincmd p | diffoff |
+                    \wincmd p
     augroup END
 
     wincmd p
