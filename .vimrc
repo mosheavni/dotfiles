@@ -46,6 +46,7 @@ set guifont=:h
 set mouse=a
 set undofile       " Enables saving undo history to a file
 set colorcolumn=80 " Mark where are 80 characters to start breaking line
+set guicursor=i:blinkwait700-blinkon400-blinkoff250
 
 if has('nvim')
     set shortmess+=c   " don't give |ins-completion-menu| messages.

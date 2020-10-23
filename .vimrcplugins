@@ -29,6 +29,7 @@ Plug 'prettier/vim-prettier', {
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 Plug 'StanAngeloff/php.vim', {'for': ['php']}
 Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
+Plug 'tfnico/vim-gradle'
 
 Plug 'mogelbrod/vim-jsonpath'
 Plug 'chrisbra/vim-sh-indent'
@@ -39,7 +40,6 @@ Plug 'honza/vim-snippets'
 Plug 'epilande/vim-es2015-snippets'
 Plug 'epilande/vim-react-snippets'
 
-" Plug 'terryma/vim-multiple-cursors'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " Plug 'terryma/vim-expand-region'
 Plug 'terryma/vim-smooth-scroll'
@@ -47,6 +47,7 @@ Plug 'terryma/vim-smooth-scroll'
 Plug 'christoomey/vim-system-copy'
 Plug 'danro/rename.vim'
 
+"Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
@@ -60,6 +61,7 @@ Plug 'xolox/vim-session'
 Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'
 Plug 'luochen1990/rainbow'
+Plug 'kshenoy/vim-signature'
 
 " Plug 'tpope/vim-sleuth' " Causes issues with sh indentation
 
@@ -442,7 +444,7 @@ command! -bang Gb      call s:call_fzf_changebranch()
 command! -bang Gpsup !git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
 
 " Git push
-command! -bang Gp Gpush
+command! -bang Gp Git push
 
 " Git pull
 command! -bang Gl Git pull
