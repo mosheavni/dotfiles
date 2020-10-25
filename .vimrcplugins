@@ -7,10 +7,12 @@
 " '    ' `-' `--''  `-`--'  '       ``'   '  `--' `-
 
 " Plugins {{{
-let vimplug_dir = '~/.vim/plugged'
-call plug#begin(vimplug_dir)
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+let s:vimplug_dir = '~/.vim/plugged'
+call plug#begin(s:vimplug_dir)
+
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -94,8 +96,6 @@ Plug 'sainnhe/sonokai'
 Plug 'arzg/vim-colors-xcode'
 Plug 'yuttie/hydrangea-vim'
 Plug 'dracula/vim'
-" Plug 'norcalli/nvim-colorizer.lua' " Requires termguicolors which changes
-" the coolness of the color scheme :)
 " Plug 'itchyny/vim-cursorword'
 Plug 'machakann/vim-highlightedyank'
 " Plug 'miyakogi/conoline.vim'
@@ -109,11 +109,9 @@ Plug 'bps/vim-textobj-python'
 Plug 'rhysd/vim-textobj-anyblock'
 Plug 'kana/vim-textobj-entire'
 Plug 'vimtaku/vim-textobj-keyvalue'
-Plug 'saihoooooooo/vim-textobj-space'
 
 " Devicons is last so it can support all of the other plugins
 Plug 'ryanoasis/vim-devicons'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 call plug#end()
 " }}}
@@ -140,8 +138,7 @@ call plug#end()
 " nnoremap <c-p> :Files
 nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
-nnoremap <leader>t :Tags<cr>
-
+nnoremap <c-t> :Tags<cr>
 nnoremap <c-b> :Buffers<cr>
 
 " }}}
@@ -337,7 +334,6 @@ function RandomColorChooser() abort
                 \ "apprentice",
                 \ "deep-space",
                 \ "dracula",
-                \ "flattened_dark",
                 \ "onedark",
                 \ "onehalfdark",
                 \ "purify",
@@ -664,8 +660,27 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 nnoremap <silent> <Leader>v :NERDTreeFind<CR>
 let g:NERDTreeChDirMode = 2
 let g:NERDTreeHijackNetrw=0
-" autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr("$") > 1 | b# | endif " Not sure what it does
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif " Close VIM if NERDTree is the only buffer left
+" Show hidden files
+let NERDTreeShowHidden=1
+let g:NERDTreeDirArrowExpandable = '⇾'
+let g:NERDTreeDirArrowCollapsible = '⤓'
+let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeGitStatusConcealBrackets = 1
+
+" Set icon for Jenkinsfile
+let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {}
+let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Jenkinsfile'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['\..*ignore.*'] = ''
+
+let g:NERDTreePatternMatchHighlightColor = {}
+let g:NERDTreePatternMatchHighlightColor['\..*ignore.*'] = 'EE6E73'
+let g:NERDTreePatternMatchHighlightColor['Jenkinsfile'] = '62a2bf'
+
+" If more than one window and previous buffer was NERDTree, go back to it.
+" autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr("$") > 1 | b# | endif
+
+" Close VIM if NERDTree is the only buffer left
+autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Check if NERDTree is open or active
 function! IsNERDTreeOpen()
@@ -680,11 +695,6 @@ function! SyncTree()
         wincmd p
     endif
 endfunction
-
-" Show hidden files
-let NERDTreeShowHidden=1
-
-let g:NERDTreeLimitedSyntax = 1
 
 " Highlight currently open buffer in NERDTree
 autocmd BufEnter * call SyncTree()

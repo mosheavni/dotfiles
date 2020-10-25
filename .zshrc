@@ -59,6 +59,7 @@ alias cat='bat'
 alias mdl='mdless README.md'
 alias tf='terraform'
 alias dotfiles='cd ~/src/dotfiles'
+alias v='vim'
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
