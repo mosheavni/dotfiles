@@ -602,7 +602,7 @@ else
     let &grepprg='grep -n -r --exclude=' . shellescape(&wildignore) . ' $* .'
 endif
 
-function s:RipGrepCWORD(...) abort
+function s:RipGrepCWORD(bang, ...) abort
   let search_word = a:1
   if search_word == ""
     let search_word = expand("<cword>")
@@ -610,8 +610,8 @@ function s:RipGrepCWORD(...) abort
   echom "Searching for " . search_word
   " Silent removes the "press enter to continue" prompt, and band (!) is for
   " not jumping to the first result
-  execute "silent grep! " . search_word
+  execute "silent grep" . a:bang ." " . search_word
 endfunction
-command! -nargs=? RipGrepCWORD call <SID>RipGrepCWORD("<args>")
-nnoremap <c-f> :RipGrepCWORD<Space>
+command! -bang -nargs=? RipGrepCWORD call <SID>RipGrepCWORD("<bang>", "<args>")
+nnoremap <c-f> :RipGrepCWORD!<Space>
 " }}}
