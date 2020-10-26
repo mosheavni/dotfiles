@@ -16,7 +16,6 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'mileszs/ack.vim'
 
 Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', { 'do': { -> '!brew install yarn' } }
@@ -49,7 +48,6 @@ Plug 'terryma/vim-smooth-scroll'
 Plug 'christoomey/vim-system-copy'
 Plug 'danro/rename.vim'
 
-"Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
@@ -138,7 +136,8 @@ call plug#end()
 " nnoremap <c-p> :Files
 nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
-nnoremap <c-t> :Tags<cr>
+let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
+" nnoremap <c-t> :Tags<cr>
 nnoremap <c-b> :Buffers<cr>
 
 " }}}
@@ -354,14 +353,6 @@ nnoremap <leader>u :GundoToggle<CR>
 let g:undotree_WindowLayout=2
 let g:undotree_ShortIndicators=1
 let g:undotree_SetFocusWhenToggle=1
-" }}}
-
-" Ack {{{
-if executable('ag')
-    let g:ackprg = 'ag --vimgrep'
-endif
-nnoremap <c-f> :Ack! ""<left>
-
 " }}}
 
 " DevIcons {{{
@@ -597,6 +588,9 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 " nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+" Project replace word
+nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
