@@ -112,6 +112,11 @@ Plug 'vimtaku/vim-textobj-keyvalue'
 Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
+
+if !isdirectory(s:vimplug_dir)
+  finish
+endif
+
 " }}}
 
 " Plugin Configurations {{{
