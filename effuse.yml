@@ -1,6 +1,7 @@
 exclude:
-  - init.vim
   - README.md
   - Brewfile
   - Npmfile
+  - Dockerfile
+  - com.googlecode.iterm2.plist
   - tags

@@ -10,7 +10,13 @@
 set nocompatible
 syntax enable
 
-set shell=/bin/zsh
+if executable("/bin/zsh")
+  set shell=/bin/zsh
+elseif executable("/bin/bash")
+  set shell=/bin/bash
+else
+  set shell=/bin/sh
+endif
 " set tags=./tags,tags;$HOME
 
 " set shellcmdflag=-ic
@@ -176,6 +182,9 @@ let maplocalleader = "\\"
 
 " Map 0 to first non-blank character
 nnoremap 0 ^
+" Move to the end of the line
+nnoremap E $
+vnoremap E $
 
 " with this you can save with ;wq
 " nnoremap ; :
@@ -229,10 +238,6 @@ nnoremap [l :lprev<cr>zz
 " This creates a new line of '=' signs the same length of the line
 nnoremap <leader>= yypVr=
 
-" Resize split
-nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
-nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
-
 " Map dp and dg with leader for diffput and diffget
 nnoremap <leader>dp :diffput<cr>
 nnoremap <leader>dg :diffget<cr>
@@ -241,10 +246,6 @@ nnoremap <leader>df :windo diffoff<cr>
 
 " Map enter to no highlight
 nnoremap <CR> :nohlsearch<CR><CR>
-
-" Move to the end of the line
-nnoremap E $
-vnoremap E $
 
 " Remove blank spaces from the end of the line
 nnoremap <silent> <leader>a :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s
