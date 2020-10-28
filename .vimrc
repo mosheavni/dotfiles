@@ -353,9 +353,9 @@ nnoremap Y :%y+<cr>
 " }}}
 
 " Search and Replace {{{
-nnoremap <Leader>r :%s?<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>
+nnoremap <Leader>r :.,$s?<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>
 " vnoremap <Leader>r :%s/<C-r><C-w>//g<Left><Left>
-vnoremap <leader>r "hy:%s?<C-r>h?<C-r>h?gc<left><left><left>
+vnoremap <leader>r "hy:.,$s?<C-r>h?<C-r>h?gc<left><left><left>
 " }}}
 
 " Delete/yank all {{{
