@@ -113,7 +113,7 @@ Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
-if !isdirectory(s:vimplug_dir)
+if !isdirectory(expand(s:vimplug_dir))
   finish
 endif
 
