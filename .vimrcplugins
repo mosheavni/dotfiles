@@ -556,6 +556,21 @@ let g:coc_global_extensions = [
             \]
 "" }}}
 
+" Install all plugins {{{
+
+function InstallAllCocExtensions() abort
+  let all_extensions = get(g:, 'coc_global_extensions', [])
+  for extension in all_extensions
+    call coc#util#install_extension([extension])
+  endfor
+endfunction
+
+command! -bar -complete=custom,s:InstallOptions CocInstallAll
+      \ :call InstallAllCocExtensions()
+
+" }}}
+
+
 " use <tab> for trigger completion and navigate to the next complete item {{{
 function! s:check_back_space() abort
     let col = col('.') - 1
