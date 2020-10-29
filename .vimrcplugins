@@ -560,8 +560,14 @@ let g:coc_global_extensions = [
 
 function InstallAllCocExtensions() abort
   let all_extensions = get(g:, 'coc_global_extensions', [])
+  let iterator = 10
+  let counter = 0
   for extension in all_extensions
-    call coc#util#install_extension([extension])
+    if counter % iterator == 0
+      echom string(all_extensions[counter:counter+iterator-1])
+      call coc#util#install_extension([extension])
+    endif
+    let counter += 1
   endfor
 endfunction
 
