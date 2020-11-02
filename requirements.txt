@@ -1,0 +1,8 @@
+greenlet>=0.4.17
+jedi>=0.17.2
+msgpack>=1.0.0
+neovim>=0.3.1
+parso>=0.7.1
+protobuf>=3.13.0
+pynvim>=0.4.2
+six>=1.15.0
