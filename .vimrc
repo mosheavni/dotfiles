@@ -604,10 +604,12 @@ augroup END
 
 " Set grepprg as RipGrep or ag (the_silver_searcher), fallback to grep
 if executable("rg")
-    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+    " set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden\ --follow\ -g\ '!{.git,node_modules}/*'\ $*
+    let &grepprg='rg --vimgrep --no-heading --smart-case --hidden --follow -g "!{' . &wildignore . '}" $*'
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 elseif executable("ag")
-    set grepprg=ag\ --vimgrep\ $*
+    " set grepprg=ag\ --vimgrep\ --smart-case\ --hidden\ --follow\ --ignore\ '!{.git,node_modules}/*'\ $*
+    let &grepprg='ag --vimgrep --smart-case --hidden --follow --ignore "!{' . &wildignore . '}" $*'
     set grepformat=%f:%l:%c:%m
 else
     let &grepprg='grep -n -r --exclude=' . shellescape(&wildignore) . ' $* .'
