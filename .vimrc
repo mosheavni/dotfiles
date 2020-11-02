@@ -11,7 +11,7 @@ set nocompatible
 syntax enable
 
 if executable("/bin/zsh")
-  set shell=/bin/zsh
+  set shell=/bin/zsh\ -l
 elseif executable("/bin/bash")
   set shell=/bin/bash
 else
@@ -53,6 +53,9 @@ set mouse=a
 set undofile       " Enables saving undo history to a file
 set colorcolumn=80 " Mark where are 80 characters to start breaking line
 set guicursor=i:blinkwait700-blinkon400-blinkoff250
+set encoding=utf-8
+set fileencodings=utf-8,cp1251
+set visualbell     " Use visual bell instead of beeping
 
 if has('nvim')
     set shortmess+=c   " don't give |ins-completion-menu| messages.
@@ -60,6 +63,7 @@ endif
 
 " Ignore node_modules
 set wildignore+=**/node_modules/**
+set wildignore+=.hg,.git,.svn,*.DS_Store,*.pyc
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
@@ -78,7 +82,11 @@ set listchars=tab:▸\ ,trail:·
 set path+=** " When searching, search also subdirectories
 
 " Set python path
-" let g:python3_host_prog="/usr/local/bin/python3"
+if executable("/usr/local/bin/python3")
+    let g:python3_host_prog="/usr/local/bin/python3"
+elseif executable("/usr/bin/python3")
+    let g:python3_host_prog="/usr/bin/python3"
+endif
 
 " Auto load file changes when focus or buffer is entered
 au FocusGained,BufEnter * :checktime
@@ -133,13 +141,13 @@ if has('nvim')
                 \ if line("'\"") >= 1 && line("'\"") <= line("$") |
                 \   exe "normal! g`\"" |
                 \ endif
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 else
     let g:terminal_ansi_colors = [
                 \ '#4e4e4e', '#d68787', '#5f865f', '#d8af5f',
                 \ '#85add4', '#d7afaf', '#87afaf', '#d0d0d0',
                 \ '#626262', '#d75f87', '#87af87', '#ffd787',
                 \ '#add4fb', '#ffafaf', '#87d7d7', '#e4e4e4']
-    set termguicolors
     set nocursorline
     set nocursorcolumn
 endif
@@ -330,6 +338,8 @@ nnoremap gV `[v`]
 
 " terminal mappings {{{
 if exists(':terminal')
+    " Start terminal in insert mode
+    autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
     tnoremap <Esc> <C-\><C-n>
     nnoremap <leader>term :new term://zsh<cr>
 endif
