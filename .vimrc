@@ -24,6 +24,7 @@ endif
 set number         " Show current line number
 set relativenumber " Show relative line numbers
 set linebreak      " Avoid wrapping a line in the middle of a word.
+set nowrap
 set cursorcolumn
 set cursorline     " Add highlight behind current line
 " hi cursorline cterm=none term=none
@@ -46,6 +47,8 @@ set lazyredraw     " redraw only when we need to.
 set noswapfile
 set nobackup
 set wildmenu       " Displays a menu on autocomplete
+set wildmode=longest:full,full " on first <Tab> it will complete to the
+                               " longest common string and will invoke wildmenu
 set title          " Changes the iterm title
 set showcmd
 set guifont=:h
@@ -59,6 +62,7 @@ set visualbell     " Use visual bell instead of beeping
 
 if has('nvim')
     set shortmess+=c   " don't give |ins-completion-menu| messages.
+    set shortmess-=l
 endif
 
 " Ignore node_modules
@@ -77,7 +81,7 @@ filetype plugin on
 filetype plugin indent on
 
 set list
-set listchars=tab:▸\ ,trail:·
+set listchars=trail:·,precedes:«,extends:»,eol:↲,tab:▸\
 
 set path+=** " When searching, search also subdirectories
 
@@ -181,6 +185,9 @@ set statusline+=%L\   " Total lines
 " }}}
 
 " Mappings {{{
+" Sudo write
+command! W w !sudo tee % > /dev/null
+
 " Map leader to space
 let mapleader=" "
 let maplocalleader = "\\"
@@ -193,6 +200,10 @@ nnoremap 0 ^
 " Move to the end of the line
 nnoremap E $
 vnoremap E $
+
+"indent/unindent visual mode selection with tab/shift+tab
+vmap <tab> >gv
+vmap <s-tab> <gv
 
 " with this you can save with ;wq
 " nnoremap ; :
@@ -249,11 +260,12 @@ nnoremap <leader>= yypVr=
 " Map dp and dg with leader for diffput and diffget
 nnoremap <leader>dp :diffput<cr>
 nnoremap <leader>dg :diffget<cr>
+nnoremap <leader>du :diffupdate<cr>
 nnoremap <leader>dn :windo diffthis<cr>
 nnoremap <leader>df :windo diffoff<cr>
 
 " Map enter to no highlight
-nnoremap <CR> :nohlsearch<CR><CR>
+nnoremap <silent> <CR> :nohlsearch<CR><CR>
 
 " Remove blank spaces from the end of the line
 nnoremap <silent> <leader>a :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s
