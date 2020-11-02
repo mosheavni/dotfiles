@@ -8,7 +8,7 @@
   "python.linting.pep8Enabled": false,
   "python.linting.pylintEnabled": true,
   "python.linting.flake8Enabled": true,
-  "python.jediEnabled": true,
+  "python.jediEnabled": false,
   "python.analysis.information": ["line too long"],
   "python.pythonPath": "python3",
   "tsserver.reportStyleChecksAsWarnings": true,
