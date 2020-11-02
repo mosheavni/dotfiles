@@ -47,6 +47,7 @@ Plug 'terryma/vim-smooth-scroll'
 
 Plug 'christoomey/vim-system-copy'
 Plug 'danro/rename.vim'
+Plug 'pechorin/any-jump.vim'
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -57,6 +58,7 @@ Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'simeji/winresizer'
 Plug 'xolox/vim-session'
+
 
 Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'
@@ -78,6 +80,7 @@ Plug 'xolox/vim-misc'
 Plug 'ludovicchabant/vim-gutentags'
 
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
+Plug 'maxbrunsfeld/vim-yankstack'
 
 Plug 'editorconfig/editorconfig-vim'
 
@@ -94,10 +97,12 @@ Plug 'sainnhe/sonokai'
 Plug 'arzg/vim-colors-xcode'
 Plug 'yuttie/hydrangea-vim'
 Plug 'dracula/vim'
+Plug 'drewtempelmeyer/palenight.vim'
 " Plug 'itchyny/vim-cursorword'
 Plug 'machakann/vim-highlightedyank'
 " Plug 'miyakogi/conoline.vim'
 Plug 'mhinz/vim-startify'
+Plug 'vim-scripts/CursorLineCurrentWindow'
 
 " Custom text object
 Plug 'kana/vim-textobj-user'
@@ -153,6 +158,7 @@ let g:UltiSnipsExpandTrigger="<c-s>"
 
 " Vim auto pairs {{{
 let g:AutoPairsShortcutJump = ""
+let g:AutoPairsShortcutToggle = ""
 " }}}
 
 " Vim json path {{{
@@ -320,19 +326,8 @@ let g:VM_maps = {}
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
 " }}}
 
-" colorizer
-" lua REQUIRE'colorizer'.setup()
-" theme
-" colorscheme badwolf
-" colorscheme purify
-" colorscheme dracula
-" let g:quantum_black=1
-" let g:quantum_italics=1
-" colorscheme lucius
-" colorscheme OceanicNext
-
 " Random color {{{
-function RandomColorChooser() abort
+function! RandomColorChooser() abort
     let l:liked_colors =  [
                 \ "OceanicNext",
                 \ "apprentice",
@@ -348,7 +343,10 @@ function RandomColorChooser() abort
     let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
     exe 'colorscheme '. l:random_color
 endfunction
-call RandomColorChooser()
+" call RandomColorChooser()
+colorscheme palenight
+let g:palenight_terminal_italics=1
+
 " }}}
 
 " }}}
@@ -382,7 +380,7 @@ endif
 let g:airline_symbols.space = "\ua0"
 " let g:airline_theme='cobalt2'
 " let g:airline_theme='molokai'
-let g:airline_theme='oceanicnext'
+let g:airline_theme='palenight'
 
 " }}}
 
@@ -547,6 +545,7 @@ let g:coc_global_extensions = [
             \    "coc-sh",
             \    "coc-snippets",
             \    "coc-styled-components",
+            \    "coc-swagger",
             \    "coc-syntax",
             \    "coc-tag",
             \    "coc-tsserver",
@@ -558,7 +557,7 @@ let g:coc_global_extensions = [
 
 " Install all plugins {{{
 
-function InstallAllCocExtensions() abort
+function! InstallAllCocExtensions() abort
   let all_extensions = get(g:, 'coc_global_extensions', [])
   let iterator = 10
   let counter = 0
@@ -616,7 +615,7 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gr <Plug>(coc-references)
 
 " Project replace word
-nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
+nnoremap <leader>prn :CocSearch <C-R>=expand("<cword>")<CR><CR>
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
