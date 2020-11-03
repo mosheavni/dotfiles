@@ -83,6 +83,7 @@ Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 
 Plug 'editorconfig/editorconfig-vim'
 
+Plug 'lambdalisue/battery.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " Plug 'dracula/vim'
@@ -392,7 +393,9 @@ highlight! link NERDTreeFlags NERDTreeDir
 
 " Vim airline (powerline) {{{
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#ale#enabled = 0
+let g:airline#extensions#battery#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 " https://github.com/neoclide/coc.nvim/issues/1827
 " slow Coc intellisense
 let g:airline#extensions#hunks#enabled = 0
@@ -405,6 +408,10 @@ let g:airline_symbols.space = "\ua0"
 " let g:airline_theme='cobalt2'
 " let g:airline_theme='molokai'
 let g:airline_theme='palenight'
+
+" Vim Battery
+let g:battery#update_statusline = 1 " For statusline.
+
 
 " }}}
 
