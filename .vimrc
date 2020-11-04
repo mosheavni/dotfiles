@@ -182,6 +182,7 @@ set statusline+=%=        " Switch to the right side
 set statusline+=%l    " Current line
 set statusline+=/    " Separator
 set statusline+=%L\   " Total lines
+set showtabline=2
 " }}}
 
 " Mappings {{{

@@ -84,8 +84,10 @@ Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 Plug 'editorconfig/editorconfig-vim'
 
 Plug 'lambdalisue/battery.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
+Plug 'mengelbrecht/lightline-bufferline'
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
 " Plug 'dracula/vim'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'sonph/onehalf', { 'rtp': 'vim/' }
@@ -381,28 +383,64 @@ let g:DevIconsEnableFolderExtensionPatternMatching = 1
 highlight! link NERDTreeFlags NERDTreeDir
 " }}}
 
-" Vim airline (powerline) {{{
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#ale#enabled = 0
-let g:airline#extensions#battery#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-" https://github.com/neoclide/coc.nvim/issues/1827
-" slow Coc intellisense
-let g:airline#extensions#hunks#enabled = 0
+" " Vim airline (powerline) {{{
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#ale#enabled = 0
+" let g:airline#extensions#battery#enabled = 0
+" let g:airline#extensions#tabline#formatter = 'unique_tail'
+" " https://github.com/neoclide/coc.nvim/issues/1827
+" " slow Coc intellisense
+" let g:airline#extensions#hunks#enabled = 0
 
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-let g:airline_symbols.space = "\ua0"
-" let g:airline_theme='cobalt2'
-" let g:airline_theme='molokai'
-let g:airline_theme='palenight'
+" let g:airline_powerline_fonts = 1
+" if !exists('g:airline_symbols')
+"     let g:airline_symbols = {}
+" endif
+" let g:airline_symbols.space = "\ua0"
+" " let g:airline_theme='cobalt2'
+" " let g:airline_theme='molokai'
+" let g:airline_theme='palenight'
 
-" Vim Battery
-let g:battery#update_statusline = 1 " For statusline.
+" " Vim Battery
+" " let g:battery#update_statusline = 1 " For statusline.
 
 
+" " }}}
+
+" Vim lightline {{{
+let g:lightline = {
+      \ 'colorscheme': 'palenight',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified', 'filetype' ] ]
+      \ },
+      \ 'tabline': {
+      \   'left': [ ['buffers'] ],
+      \   'right': [ ['close'] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead',
+      \   'filetype': 'LightlineDevIconsFiletype',
+      \   'fileformat': 'LightlineDevIconsFileformat',
+      \ },
+      \ 'component_expand': {
+      \   'buffers': 'lightline#bufferline#buffers'
+      \ },
+      \ 'component_type': {
+      \   'buffers': 'tabsel'
+      \ }
+      \ }
+
+function! LightlineDevIconsFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+endfunction
+
+function! LightlineDevIconsFileformat()
+  return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+endfunction
+
+let g:lightline#bufferline#enable_devicons=1
+let g:lightline#bufferline#filename_modifier = ':t'
 " }}}
 
 " GitGutter {{{
@@ -473,9 +511,11 @@ function! Gcb(...)
     endif
     execute "!git checkout -b " . name
 endfunction
-command! -bang -nargs=? Gcb call Gcb("<args>")
+command! -nargs=? Gcb call Gcb("<args>")
 
 nnoremap <leader>gh :0Glog<cr>
+nmap <leader>gp :silent exe 'Git push -u origin ' . FugitiveHead()<CR>
+
 
 function! ToggleGStatus()
     if buflisted(bufname('.git/index'))
@@ -484,8 +524,7 @@ function! ToggleGStatus()
         Git
     endif
 endfunction
-command! ToggleGStatus :call ToggleGStatus()
-nnoremap <leader>gs :ToggleGStatus<CR>
+command! ToggleGStatus :silent call ToggleGStatus()
 nnoremap <leader>gg :ToggleGStatus<cr>
 
 " Gdiffrev {{{
@@ -707,6 +746,7 @@ let g:NERDTreeHijackNetrw=0
 let NERDTreeShowHidden=1
 let g:NERDTreeDirArrowExpandable = '⇾'
 let g:NERDTreeDirArrowCollapsible = '⤓'
+let NERDTreeHighlightCursorline = 0
 let g:NERDTreeGitStatusUseNerdFonts = 1
 " let g:NERDTreeGitStatusConcealBrackets = 1
 
