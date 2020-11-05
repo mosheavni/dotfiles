@@ -489,11 +489,18 @@ endfunction
 
 command! -bang Gbranch call s:call_fzf_changebranch()
 command! -bang Gb      call s:call_fzf_changebranch()
-" Set branch upstream
-command! -bang Gpsup !git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)
 
-" Git push
-command! -bang Gp Git push
+" Git push {{{
+
+function! MosheGitPush() abort
+  echo "Pushing..."
+  exe 'Git push -u origin ' . FugitiveHead()
+  echo "Pushed! 🤩"
+endfunction
+
+command! Gp call MosheGitPush()
+nmap <silent> <leader>gp :call MosheGitPush()<cr>
+" }}}
 
 " Git pull
 command! -bang Gl Git pull
@@ -509,12 +516,11 @@ function! Gcb(...)
         let name = input('Enter branch name: ')
         call inputrestore()
     endif
-    execute "!git checkout -b " . name
+    execute "Git checkout -b " . name
 endfunction
 command! -nargs=? Gcb call Gcb("<args>")
 
 nnoremap <leader>gh :0Glog<cr>
-nmap <leader>gp :silent exe 'Git push -u origin ' . FugitiveHead()<CR>
 
 
 function! ToggleGStatus()
@@ -524,8 +530,8 @@ function! ToggleGStatus()
         Git
     endif
 endfunction
-command! ToggleGStatus :silent call ToggleGStatus()
-nnoremap <leader>gg :ToggleGStatus<cr>
+command! ToggleGStatus :call ToggleGStatus()
+nnoremap <silent> <leader>gg :ToggleGStatus<cr>
 
 " Gdiffrev {{{
 command! DiffHistory call
