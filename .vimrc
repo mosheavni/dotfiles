@@ -625,11 +625,9 @@ augroup END
 
 " Set grepprg as RipGrep or ag (the_silver_searcher), fallback to grep
 if executable("rg")
-    " set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden\ --follow\ -g\ '!{.git,node_modules}/*'\ $*
     let &grepprg='rg --vimgrep --no-heading --smart-case --hidden --follow -g "!{' . &wildignore . '}" $*'
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 elseif executable("ag")
-    " set grepprg=ag\ --vimgrep\ --smart-case\ --hidden\ --follow\ --ignore\ '!{.git,node_modules}/*'\ $*
     let &grepprg='ag --vimgrep --smart-case --hidden --follow --ignore "!{' . &wildignore . '}" $*'
     set grepformat=%f:%l:%c:%m
 else
@@ -661,10 +659,11 @@ function s:RipGrepCWORD(bang, visualmode, ...) abort
   echom "Searching for " . search_word
   " Silent removes the "press enter to continue" prompt, and band (!) is for
   " not jumping to the first result
-  execute "silent grep" . a:bang ." " . search_word
+  let grepcmd = "silent grep" . a:bang ." -- " . shellescape(search_word)
+  execute grepcmd
 endfunction
-command! -bang -range -nargs=? RipGrepCWORD call <SID>RipGrepCWORD("<bang>", v:false, "<args>")
-command! -bang -range -nargs=? RipGrepCWORDVisual call <SID>RipGrepCWORD("<bang>", v:true, "<args>")
+command! -bang -range -nargs=? RipGrepCWORD call <SID>RipGrepCWORD("<bang>", v:false, <q-args>)
+command! -bang -range -nargs=? RipGrepCWORDVisual call <SID>RipGrepCWORD("<bang>", v:true, <q-args>)
 nmap <c-f> :RipGrepCWORD!<Space>
 vmap <c-f> :RipGrepCWORDVisual!<cr>
 " }}}
