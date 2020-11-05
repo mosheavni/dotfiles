@@ -355,7 +355,7 @@ if exists(':terminal')
     " Start terminal in insert mode
     autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
     tnoremap <Esc> <C-\><C-n>
-    nnoremap <leader>term :new term://zsh<cr>
+    " nnoremap <leader>term :new term://zsh<cr>
 endif
 " }}}
 

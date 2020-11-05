@@ -48,6 +48,7 @@ Plug 'terryma/vim-smooth-scroll'
 Plug 'christoomey/vim-system-copy'
 Plug 'danro/rename.vim'
 Plug 'pechorin/any-jump.vim'
+Plug 'voldikss/vim-floaterm'
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -170,6 +171,10 @@ let g:jsonpath_register = '*'
 
 " WinResizer {{{
 let g:winresizer_start_key = '<C-E>'
+" }}}
+
+" Floaterm {{{
+let g:floaterm_keymap_toggle = '<F6>'
 " }}}
 
 " Vim do {{{
