@@ -186,8 +186,6 @@ set showtabline=2
 " }}}
 
 " Mappings {{{
-" Sudo write
-command! W w !sudo tee % > /dev/null
 
 " Map leader to space
 let mapleader=" "
@@ -205,6 +203,9 @@ vnoremap E $
 "indent/unindent visual mode selection with tab/shift+tab
 vmap <tab> >gv
 vmap <s-tab> <gv
+
+" Sudo write
+command! W w !sudo tee % > /dev/null
 
 " with this you can save with ;wq
 " nnoremap ; :
@@ -328,7 +329,7 @@ let g:myvimrcplugins = "~/.vimrcplugins"
 
 nnoremap <silent> <leader>ev :execute("vsplit ".g:myvimrc)<cr>
 nnoremap <silent> <leader>sv :execute("source ".g:myvimrc)<cr>
-exe("autocmd BufWritePost ".g:myvimrc." source ".g:myvimrc)
+" exe("autocmd BufWritePost ".g:myvimrc." source ".g:myvimrc)
 
 function! LoadPlugins() abort
     execute("so ".g:myvimrcplugins)
@@ -564,6 +565,13 @@ augroup end
 let g:sh_fold_enabled = 4
 
 com! FormatJSON exe '%!python -m json.tool'
+
+function FormatEqual() abort
+  let save_cursor = getcurpos()
+  normal! gg=G
+  call setpos('.', save_cursor)
+endfunction
+
 " }}}
 
 " Run current buffer {{{
@@ -628,8 +636,25 @@ else
     let &grepprg='grep -n -r --exclude=' . shellescape(&wildignore) . ' $* .'
 endif
 
-function s:RipGrepCWORD(bang, ...) abort
+function s:RipGrepCWORD(bang, visualmode, ...) abort
   let search_word = a:1
+
+  if a:visualmode
+    " Get the line and column of the visual selection marks
+    let [lnum1, col1] = getpos("'<")[1:2]
+    let [lnum2, col2] = getpos("'>")[1:2]
+
+    " Get all the lines represented by this range
+    let lines = getline(lnum1, lnum2)
+
+    " The last line might need to be cut if the visual selection didn't end on the last column
+    let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
+    " The first line might need to be trimmed if the visual selection didn't start on the first column
+    let lines[0] = lines[0][col1 - 1:]
+
+    " Get the desired text
+    let search_word = join(lines, "\n")
+  endif
   if search_word == ""
     let search_word = expand("<cword>")
   endif
@@ -638,6 +663,8 @@ function s:RipGrepCWORD(bang, ...) abort
   " not jumping to the first result
   execute "silent grep" . a:bang ." " . search_word
 endfunction
-command! -bang -nargs=? RipGrepCWORD call <SID>RipGrepCWORD("<bang>", "<args>")
-nnoremap <c-f> :RipGrepCWORD!<Space>
+command! -bang -range -nargs=? RipGrepCWORD call <SID>RipGrepCWORD("<bang>", v:false, "<args>")
+command! -bang -range -nargs=? RipGrepCWORDVisual call <SID>RipGrepCWORD("<bang>", v:true, "<args>")
+nmap <c-f> :RipGrepCWORD!<Space>
+vmap <c-f> :RipGrepCWORDVisual!<cr>
 " }}}
