@@ -83,9 +83,9 @@ Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 
 Plug 'editorconfig/editorconfig-vim'
 
-Plug 'lambdalisue/battery.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
+" Plug 'lambdalisue/battery.vim'
 " Plug 'vim-airline/vim-airline'
 " Plug 'vim-airline/vim-airline-themes'
 " Plug 'dracula/vim'
