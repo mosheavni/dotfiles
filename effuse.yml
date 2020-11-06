@@ -6,3 +6,4 @@ exclude:
   - com.googlecode.iterm2.plist
   - tags
   - requirements.txt
+  - '.config/karabiner'
