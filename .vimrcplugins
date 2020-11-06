@@ -612,7 +612,6 @@ let g:coc_global_extensions = [
             \    "coc-neosnippet",
             \    "coc-pairs",
             \    "coc-prettier",
-            \    "coc-pyright",
             \    "coc-python",
             \    "coc-react-refactor",
             \    "coc-scssmodules",

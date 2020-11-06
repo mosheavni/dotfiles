@@ -1,16 +1,17 @@
 {
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.emoji.filetypes": ["gitcommit", "markdown"],
-  "coc.source.ultisnips.enable": false,
   "css.lint.unknownProperties": "warning",
   "prettier.tabWidth": 2,
+  "python.pythonPath": "/usr/local/bin/python3",
   "python.linting.enabled": true,
   "python.linting.pep8Enabled": false,
   "python.linting.pylintEnabled": true,
-  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Enabled": false,
+  "python.formatting.provider": "black",
   "python.jediEnabled": false,
-  "python.analysis.information": ["line too long"],
-  "python.pythonPath": "python3",
+  "python.jediPath": "/usr/local/lib/python3.9/site-packages/jedi/",
+  "pyright.disableLanguageServices": false,
   "tsserver.reportStyleChecksAsWarnings": true,
   "list.insertMappings": {
     "<C-x>": "action:split",
@@ -37,7 +38,7 @@
     "terraform": "tffmt",
     "sh": "shfmt"
   },
-  "suggest.timeout": 500,
+  "suggest.timeout": 5000,
   "suggest.enablePreview": true,
   "suggest.triggerAfterInsertEnter": true,
   "suggest.completionItemKindLabels": {
