@@ -479,9 +479,14 @@ command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarke
 
 
 " Better branch choosing using :Gbranch
-function! s:changebranch(branch)
-    execute 'Git checkout ' . a:branch
-    call feedkeys("i")
+function! s:changebranch(...)
+    let name = a:1
+    if name == ""
+        call inputsave()
+        let name = input('Enter branch name: ')
+        call inputrestore()
+    endif
+    execute 'Git checkout ' . name
 endfunction
 
 function! s:call_fzf_changebranch()
@@ -494,6 +499,7 @@ endfunction
 
 command! -bang Gbranch call s:call_fzf_changebranch()
 command! -bang Gb      call s:call_fzf_changebranch()
+command! -nargs=? Gco call s:changebranch("<args>")
 
 " Git push {{{
 
@@ -509,6 +515,7 @@ nmap <silent> <leader>gp :call MosheGitPush()<cr>
 
 " Git pull
 command! -bang Gl Git pull
+nmap <silent> <leader>gl :Git pull<cr>
 
 " Git merge origin master
 command! -bang Gmom G merge origin/master
@@ -539,6 +546,7 @@ command! ToggleGStatus :call ToggleGStatus()
 nnoremap <silent> <leader>gg :ToggleGStatus<cr>
 
 " Gdiffrev {{{
+nmap <leader>dh :DiffHistory<Space>
 command! DiffHistory call
 command! -nargs=? DiffHistory call s:view_git_history("<args>")
 
