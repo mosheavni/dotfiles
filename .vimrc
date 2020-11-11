@@ -667,3 +667,19 @@ command! -bang -range -nargs=? RipGrepCWORDVisual call <SID>RipGrepCWORD("<bang>
 nmap <c-f> :RipGrepCWORD!<Space>
 vmap <c-f> :RipGrepCWORDVisual!<cr>
 " }}}
+
+" Highlight word under cursor {{{
+function! HighlightWordUnderCursor()
+    if getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
+        hi MatchWord cterm=undercurl gui=undercurl guibg=#3b404a
+        exec 'match' 'MatchWord' '/\V\<'.expand('<cword>').'\>/'
+    else
+        match none
+    endif
+endfunction
+
+augroup Start
+  autocmd!
+  autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
+augroup END
+" }}}
