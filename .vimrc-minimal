@@ -1,0 +1,77 @@
+set nocompatible
+syntax enable
+
+set shell=/bin/bash
+set number
+set relativenumber
+set linebreak
+set nowrap
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set autoread
+set cmdheight=2
+set hidden
+set showmatch
+set confirm
+set lazyredraw
+set noswapfile
+set nobackup
+set nowritebackup
+set wildmenu
+set showcmd
+set mouse=a
+set encoding=utf-8
+set fileencodings=utf-8,cp1251
+set updatetime=300
+set shortmess+=c
+filetype plugin on
+filetype plugin indent on
+set path+=**
+" Set python path
+let g:python3_host_prog="/usr/bin/python3"
+
+filetype indent on
+set autoindent
+set copyindent
+set smartindent
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set smarttab
+set expandtab
+set splitbelow
+set splitright
+
+let mapleader=" "
+
+nnoremap <Leader><Leader> <C-^>
+nnoremap <tab> <c-w>w
+
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+nnoremap <silent> <CR> :nohlsearch<CR><CR>
+
+set foldenable
+set foldmethod=syntax
+set foldlevel=999
+set foldlevelstart=10
+" Enable folding with the leader-f/a
+nnoremap <leader>f za
+nnoremap <leader>caf zM
+nnoremap <leader>oaf zR
+
+
+let s:vimplug_dir = '~/.vim/plugged'
+call plug#begin(s:vimplug_dir)
+Plug 'tpope/vim-sensible'
+Plug 'sheerun/vim-polyglot'
+Plug 'morhetz/gruvbox'
+call plug#end()
+
+
+set termguicolors
+colorscheme gruvbox
