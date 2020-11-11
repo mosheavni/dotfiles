@@ -46,6 +46,7 @@ set confirm        " Prompt confirmation if exiting unsaved file
 set lazyredraw     " redraw only when we need to.
 set noswapfile
 set nobackup
+set nowritebackup
 set wildmenu       " Displays a menu on autocomplete
 set wildmode=longest:full,full " on first <Tab> it will complete to the
                                " longest common string and will invoke wildmenu
@@ -98,6 +99,16 @@ au FocusGained,BufEnter * :checktime
 if &history < 1000
     set history=1000
 endif
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved. {{{
+  if has("patch-8.1.1564")
+    " Recently vim can merge signcolumn and number column into one
+    set signcolumn=number
+  else
+    set signcolumn=yes
+  endif
+" }}}
 
 " Set relativenumber when focused {{{
 augroup numbertoggle

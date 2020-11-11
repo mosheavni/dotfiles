@@ -1,7 +1,8 @@
+bash-language-server
 coc-json
 compare-versions
+dockerfile-language-server-nodejs
+eslint
 neovim
 npm
 semver
-dockerfile-language-server-nodejs
-bash-language-server

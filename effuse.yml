@@ -1,9 +1,10 @@
 exclude:
-  - README.md
-  - Brewfile
-  - Npmfile
-  - Dockerfile
-  - com.googlecode.iterm2.plist
-  - tags
-  - requirements.txt
   - '.config/karabiner'
+  - .vimrc-minimal
+  - Brewfile
+  - Dockerfile
+  - Npmfile
+  - README.md
+  - com.googlecode.iterm2.plist
+  - requirements.txt
+  - tags
