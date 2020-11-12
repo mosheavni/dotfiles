@@ -7,6 +7,16 @@
   "highlight.colorNames.enable": true,
   "css.lint.unknownProperties": "warning",
   "prettier.tabWidth": 2,
+  "prettier.eslintIntegration": true,
+  "eslint.enable": true,
+  "eslint.packageManager": "npm",
+  "eslint.autoFixOnSave": true,
+  "eslint.filetypes": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
   "python.pythonPath": "/usr/local/bin/python3",
   "python.linting.enabled": true,
   "python.linting.pep8Enabled": false,
@@ -15,7 +25,6 @@
   "python.formatting.provider": "black",
   "python.jediEnabled": false,
   "python.jediPath": "/usr/local/lib/python3.9/site-packages/jedi/",
-  "pyright.disableLanguageServices": false,
   "tsserver.reportStyleChecksAsWarnings": true,
   "list.insertMappings": {
     "<C-x>": "action:split",
@@ -80,7 +89,6 @@
     },
     "terraform": {
       "command": "terraform-lsp",
-      "args": ["serve"],
       "filetypes": ["terraform", "tf"],
       "initializationOptions": {},
       "settings": {}
