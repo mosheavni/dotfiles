@@ -3,6 +3,7 @@ exclude:
   - .vimrc-minimal
   - Brewfile
   - Dockerfile
+  - Dockerfile-minimal
   - Npmfile
   - README.md
   - com.googlecode.iterm2.plist
