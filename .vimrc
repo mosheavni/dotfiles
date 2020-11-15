@@ -397,12 +397,14 @@ nnoremap <Leader>r :.,$s?<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>
 vnoremap <leader>r "hy:.,$s?<C-r>h?<C-r>h?gc<left><left><left>
 " }}}
 
-" Delete/yank all {{{
-vnoremap <leader>dab "hyqeq:v/\V<c-r>h/d E<cr>:let @"=@e<cr>:noh<cr>
-vnoremap <leader>daa "hyqeq:g/\V<c-r>h/d E<cr>:let @"=@e<cr>:noh<cr>
+" Delete/yank mappings {{{
+vnoremap <leader>dab "hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>
+vnoremap <leader>daa "hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>
 
-vnoremap <leader>yab "hymmqeq:v/\V<c-r>h/yank E<cr>:let @"=@e<cr>`m:noh<cr>
-vnoremap <leader>yaa "hymmqeq:g/\V<c-r>h/yank E<cr>:let @"=@e<cr>`m:noh<cr>
+vnoremap <leader>yab "hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>
+vnoremap <leader>yaa "hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>
+
+vnoremap <leader>p "_dP
 
 " }}}
 
@@ -583,6 +585,7 @@ com! FormatJSON exe '%!python -m json.tool'
 function FormatEqual() abort
   let save_cursor = getcurpos()
   normal! gg=G
+  silent! %s#)\zs\ze{# #g
   call setpos('.', save_cursor)
 endfunction
 
@@ -683,14 +686,14 @@ vmap <c-f> :RipGrepCWORDVisual!<cr>
 " }}}
 
 " Highlight word under cursor {{{
-function! HighlightWordUnderCursor()
+function! s:HighlightWordUnderCursor()
   let disabled_ft = ["qf", "fugitive", "nerdtree", "gundo", "diff", "fzf", "floaterm"]
-  if &diff || &buftype == "terminal" || index(disabled_ft, &filetype) >= 0
-    return
-  endif
-  if getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
+  let disabled_buftypes = ["terminal", "quickfix", "help"]
+  let nohl_conditions = getline(".")[col(".")-1] =~# '[[:punct:][:blank:]]' || &diff || index(disabled_buftypes, &buftype) >= 0 || index(disabled_ft, &filetype) >= 0
+
+  if !nohl_conditions
     hi MatchWord cterm=undercurl gui=undercurl guibg=#3b404a
-    exec 'match' 'MatchWord' '/\V\<'.expand('<cword>').'\>/'
+    exec 'match MatchWord /\V\<' . expand('<cword>') . '\>/'
   else
     match none
   endif
@@ -698,6 +701,6 @@ endfunction
 
 augroup MatchWord
   autocmd!
-  autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
+  autocmd! CursorHold,CursorHoldI * call <SID>HighlightWordUnderCursor()
 augroup END
 " }}}
