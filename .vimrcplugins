@@ -26,8 +26,8 @@ Plug 'chr4/nginx.vim'
 " Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+      \ 'do': 'yarn install',
+      \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 Plug 'StanAngeloff/php.vim', {'for': ['php']}
 Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
 Plug 'tfnico/vim-gradle'
@@ -181,21 +181,21 @@ let g:floaterm_keymap_toggle = '<F6>'
 nnoremap \G :ShowDos \G<cr>
 let g:vimdo = {}
 let g:vimdo['\G'] = {
-          \'label' : 'git commands', 'interactive':1, 'arbitrary': 1,
-          \'compact':1, 'keys_width': 8, 'desc_width': 30,
-          \'r':  ['reset', 0, ":echo system('git reset')\<cr>"],
-          \'s':  ['status', 0, ":Gstatus\<cr>"],
-          \'D':  ['diff HEAD', 0, ":Gvsplit! diff HEAD\<cr>:setf git\<cr>:set foldmethod=syntax\<cr>"],
-          \'b':  ['blame', 0, ":Gblame\<cr>"],
-          \'p':  ['push', 0, ":redraw! \<bar> echo 'Pushing...\t' \<bar> echon system('git push')\<cr>"],
-          \'.':  ['add all', 0, ":echo system('git add .').'Git: added .'\<cr>"],
-          \'l':  ['log current file', 0, ":Glog\<cr>"],
-          \'c':  ['commit', 0, ":Gcommit\<cr>"],
-          \'w':  ['stage file', 0, ":Gwrite\<cr>"],
-          \'d':  ['diff with...', 0, ":Gvdiff\<space>"],
-          \'a':  ['amend', 0, ":Gstatus\<cr>ca\<cr>"],
-          \'A':  ['add all and amend', 0, ":call system('git add .')\<cr>:Gcommit --amend\<cr>:q\<cr>"],
-          \}
+      \'label' : 'git commands', 'interactive':1, 'arbitrary': 1,
+      \'compact':1, 'keys_width': 8, 'desc_width': 30,
+      \'r':  ['reset', 0, ":echo system('git reset')\<cr>"],
+      \'s':  ['status', 0, ":Gstatus\<cr>"],
+      \'D':  ['diff HEAD', 0, ":Gvsplit! diff HEAD\<cr>:setf git\<cr>:set foldmethod=syntax\<cr>"],
+      \'b':  ['blame', 0, ":Gblame\<cr>"],
+      \'p':  ['push', 0, ":redraw! \<bar> echo 'Pushing...\t' \<bar> echon system('git push')\<cr>"],
+      \'.':  ['add all', 0, ":echo system('git add .').'Git: added .'\<cr>"],
+      \'l':  ['log current file', 0, ":Glog\<cr>"],
+      \'c':  ['commit', 0, ":Gcommit\<cr>"],
+      \'w':  ['stage file', 0, ":Gwrite\<cr>"],
+      \'d':  ['diff with...', 0, ":Gvdiff\<space>"],
+      \'a':  ['amend', 0, ":Gstatus\<cr>ca\<cr>"],
+      \'A':  ['add all and amend', 0, ":call system('git add .')\<cr>:Gcommit --amend\<cr>:q\<cr>"],
+      \}
 " }}}
 
 " Switch vim {{{
@@ -203,17 +203,17 @@ let g:vimdo['\G'] = {
 " The map switch is between underscores to camelCase: moshe_king -> mosheKing
 " -> moshe_king
 let g:switch_custom_definitions = [
-            \   ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
-            \   ["==", "!="],
-            \   {
-            \     '\<[a-z0-9]\+_\k\+\>': {
-            \       '_\(.\)': '\U\1'
-            \     },
-            \     '\<[a-z0-9]\+[A-Z]\k\+\>': {
-            \       '\([A-Z]\)': '_\l\1'
-            \     },
-            \   }
-            \ ]
+      \   ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+      \   ["==", "!="],
+      \   {
+      \     '\<[a-z0-9]\+_\k\+\>': {
+      \       '_\(.\)': '\U\1'
+      \     },
+      \     '\<[a-z0-9]\+[A-Z]\k\+\>': {
+      \       '\([A-Z]\)': '_\l\1'
+      \     },
+      \   }
+      \ ]
 " }}}
 
 " Vim session {{{
@@ -336,20 +336,20 @@ let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowTo
 
 " Random color {{{
 function! RandomColorChooser() abort
-    let l:liked_colors =  [
-                \ "OceanicNext",
-                \ "apprentice",
-                \ "deep-space",
-                \ "dracula",
-                \ "onedark",
-                \ "onehalfdark",
-                \ "purify",
-                \ "quantum",
-                \ "sonokai",
-                \ "two-firewatch"
-                \ ]
-    let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
-    exe 'colorscheme '. l:random_color
+  let l:liked_colors =  [
+        \ "OceanicNext",
+        \ "apprentice",
+        \ "deep-space",
+        \ "dracula",
+        \ "onedark",
+        \ "onehalfdark",
+        \ "purify",
+        \ "quantum",
+        \ "sonokai",
+        \ "two-firewatch"
+        \ ]
+  let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
+  exe 'colorscheme '. l:random_color
 endfunction
 " call RandomColorChooser()
 colorscheme palenight
@@ -454,8 +454,8 @@ let g:gitgutter_highlight_linenrs = 1
 nnoremap <leader>gc :GitGutterLineHighlightsToggle<cr>
 nnoremap <leader>cag :GitGutterFold<cr>
 function! GitStatus()
-    let [a,m,r] = GitGutterGetHunkSummary()
-    return printf('+%d ~%d -%d', a, m, r)
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
 endfunction
 set statusline+=%{GitStatus()}
 highlight clear SignColumn
@@ -471,8 +471,8 @@ highlight GitGutterChangeDelete ctermfg=yellow
 "Delete all Git conflict markers
 "Creates the command :GremoveConflictMarkers
 function! RemoveConflictMarkers() range
-    echom a:firstline.'-'.a:lastline
-    execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
+  echom a:firstline.'-'.a:lastline
+  execute a:firstline.','.a:lastline . ' g/^<\{7}\|^|\{7}\|^=\{7}\|^>\{7}/d'
 endfunction
 "-range=% default is whole file
 command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarkers()
@@ -480,20 +480,20 @@ command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarke
 
 " Better branch choosing using :Gbranch
 function! s:changebranch(...)
-    let name = a:1
-    if name == ""
-        call inputsave()
-        let name = input('Enter branch name: ')
-        call inputrestore()
-    endif
-    execute 'Git checkout ' . name
+  let name = a:1
+  if name == ""
+    call inputsave()
+    let name = input('Enter branch name: ')
+    call inputrestore()
+  endif
+  execute 'Git checkout ' . name
 endfunction
 
 function! s:call_fzf_changebranch()
-    call fzf#run({
-            \ 'source': 'git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2',
-            \ 'sink': function('s:changebranch')
-            \ })
+  call fzf#run({
+        \ 'source': 'git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2',
+        \ 'sink': function('s:changebranch')
+        \ })
 
 endfunction
 
@@ -501,34 +501,54 @@ command! -bang Gbranch call s:call_fzf_changebranch()
 command! -bang Gb      call s:call_fzf_changebranch()
 command! -nargs=? Gco call s:changebranch("<args>")
 
-" Git push {{{
+" Git push + pull + autocmd {{{
 
-function! MosheGitPush() abort
+" Push
+function! s:MosheGitPush() abort
   echo "Pushing..."
   exe 'Git push -u origin ' . FugitiveHead()
   echo "Pushed! 🤩"
 endfunction
 
-command! Gp call MosheGitPush()
-nmap <silent> <leader>gp :call MosheGitPush()<cr>
+command! Gp call <sid>MosheGitPush()
+nmap <silent> <leader>gp :Gp<cr>
+
+" Pull
+function! s:MosheGitPull() abort
+  echo "Pulling..."
+  Git pull --quiet
+  echo "Pulled! 😎"
+endfunction
+
+command! -bang Gl call <sid>MosheGitPull()
+nmap <silent> <leader>gl :Gl<cr>
+
+" Autocmd
+function! s:ftplugin_fugitive() abort
+  nnoremap <buffer> <silent> cc :Git commit --quiet<CR>
+  nnoremap <buffer> <silent> gl :Gl<CR>
+  nnoremap <buffer> <silent> gp :Gp<CR>
+endfunction
+augroup moshe_fugitive
+  autocmd!
+  autocmd FileType fugitive call s:ftplugin_fugitive()
+augroup END
+
 " }}}
 
-" Git pull
-command! -bang Gl Git pull
-nmap <silent> <leader>gl :Git pull<cr>
 
 " Git merge origin master
 command! -bang Gmom G merge origin/master
 
 " Create a new branch
 function! Gcb(...)
-    let name = a:1
-    if name == ""
-        call inputsave()
-        let name = input('Enter branch name: ')
-        call inputrestore()
-    endif
-    execute "Git checkout -b " . name
+  let name = a:1
+  if name == ""
+    call inputsave()
+    let name = input('Enter branch name: ')
+    call inputrestore()
+  endif
+  execute "Git checkout -b " . name
 endfunction
 command! -nargs=? Gcb call Gcb("<args>")
 
@@ -536,11 +556,11 @@ nnoremap <leader>gh :0Glog<cr>
 
 
 function! ToggleGStatus()
-    if buflisted(bufname('.git/index'))
-        bd .git/index
-    else
-        Git
-    endif
+  if buflisted(bufname('.git/index'))
+    bd .git/index
+  else
+    Git
+  endif
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
 nnoremap <silent> <leader>gg :ToggleGStatus<cr>
@@ -551,46 +571,46 @@ command! DiffHistory call
 command! -nargs=? DiffHistory call s:view_git_history("<args>")
 
 function! s:view_git_history(...) abort
-    let branch_name = a:1
-    if branch_name != ""
-      execute "Git difftool --name-only " . branch_name . "...@"
-    else
-      Git difftool --name-only ! !^@
-    endif
-    call s:diff_current_quickfix_entry()
-    " Bind <CR> for current quickfix window to properly set up diff split layout after selecting an item
-    " There's probably a better way to map this without changing the window
-    copen
-    nnoremap <buffer> <CR> <CR><BAR>:call <sid>diff_current_quickfix_entry()<CR>
-    wincmd p
+  let branch_name = a:1
+  if branch_name != ""
+    execute "Git difftool --name-only " . branch_name . "...@"
+  else
+    Git difftool --name-only ! !^@
+  endif
+  call s:diff_current_quickfix_entry()
+  " Bind <CR> for current quickfix window to properly set up diff split layout after selecting an item
+  " There's probably a better way to map this without changing the window
+  copen
+  nnoremap <buffer> <CR> <CR><BAR>:call <sid>diff_current_quickfix_entry()<CR>
+  wincmd p
 endfunction
 
 function s:diff_current_quickfix_entry() abort
-    " Cleanup windows
-    for window in getwininfo()
-        if window.winnr !=? winnr() && bufname(window.bufnr) =~? '^fugitive:'
-            exe 'bdelete' window.bufnr
-        endif
-    endfor
-    cc
-    call s:add_mappings()
-    let qf = getqflist({'context': 0, 'idx': 0})
-    if get(qf, 'idx') && type(get(qf, 'context')) == type({}) && type(get(qf.context, 'items')) == type([])
-        let diff = get(qf.context.items[qf.idx - 1], 'diff', [])
-        echom string(reverse(range(len(diff))))
-        for i in reverse(range(len(diff)))
-            exe (i ? 'leftabove' : 'rightbelow') 'vert diffsplit' fnameescape(diff[i].filename)
-            call s:add_mappings()
-        endfor
+  " Cleanup windows
+  for window in getwininfo()
+    if window.winnr !=? winnr() && bufname(window.bufnr) =~? '^fugitive:'
+      exe 'bdelete' window.bufnr
     endif
+  endfor
+  cc
+  call s:add_mappings()
+  let qf = getqflist({'context': 0, 'idx': 0})
+  if get(qf, 'idx') && type(get(qf, 'context')) == type({}) && type(get(qf.context, 'items')) == type([])
+    let diff = get(qf.context.items[qf.idx - 1], 'diff', [])
+    echom string(reverse(range(len(diff))))
+    for i in reverse(range(len(diff)))
+      exe (i ? 'leftabove' : 'rightbelow') 'vert diffsplit' fnameescape(diff[i].filename)
+      call s:add_mappings()
+    endfor
+  endif
 endfunction
 
 function! s:add_mappings() abort
-    nnoremap <buffer>]q :cnext <BAR> :call <sid>diff_current_quickfix_entry()<CR>
-    nnoremap <buffer>[q :cprevious <BAR> :call <sid>diff_current_quickfix_entry()<CR>
-    " Reset quickfix height. Sometimes it messes up after selecting another item
-    11copen
-    wincmd p
+  nnoremap <buffer>]q :cnext <BAR> :call <sid>diff_current_quickfix_entry()<CR>
+  nnoremap <buffer>[q :cprevious <BAR> :call <sid>diff_current_quickfix_entry()<CR>
+  " Reset quickfix height. Sometimes it messes up after selecting another item
+  11copen
+  wincmd p
 endfunction
 " }}}
 
@@ -604,37 +624,37 @@ endfunction
 
 " Plugins backup {{{
 let g:coc_global_extensions = [
-            \    "coc-cfn-lint",
-            \    "coc-css",
-            \    "coc-diagnostic",
-            \    "coc-dictionary",
-            \    "coc-docker",
-            \    "coc-emmet",
-            \    "coc-emoji",
-            \    "coc-eslint",
-            \    "coc-groovy",
-            \    "coc-highlight",
-            \    "coc-html",
-            \    "coc-json",
-            \    "coc-markdownlint",
-            \    "coc-marketplace",
-            \    "coc-neosnippet",
-            \    "coc-pairs",
-            \    "coc-prettier",
-            \    "coc-python",
-            \    "coc-react-refactor",
-            \    "coc-scssmodules",
-            \    "coc-sh",
-            \    "coc-snippets",
-            \    "coc-styled-components",
-            \    "coc-swagger",
-            \    "coc-syntax",
-            \    "coc-tabnine",
-            \    "coc-tag",
-            \    "coc-tsserver",
-            \    "coc-vimlsp",
-            \    "coc-yaml"
-            \]
+      \    "coc-cfn-lint",
+      \    "coc-css",
+      \    "coc-diagnostic",
+      \    "coc-dictionary",
+      \    "coc-docker",
+      \    "coc-emmet",
+      \    "coc-emoji",
+      \    "coc-eslint",
+      \    "coc-groovy",
+      \    "coc-highlight",
+      \    "coc-html",
+      \    "coc-json",
+      \    "coc-markdownlint",
+      \    "coc-marketplace",
+      \    "coc-neosnippet",
+      \    "coc-pairs",
+      \    "coc-prettier",
+      \    "coc-python",
+      \    "coc-react-refactor",
+      \    "coc-scssmodules",
+      \    "coc-sh",
+      \    "coc-snippets",
+      \    "coc-styled-components",
+      \    "coc-swagger",
+      \    "coc-syntax",
+      \    "coc-tabnine",
+      \    "coc-tag",
+      \    "coc-tsserver",
+      \    "coc-vimlsp",
+      \    "coc-yaml"
+      \]
 " }}}
 
 " Install all plugins {{{
@@ -659,14 +679,14 @@ command! -bar -complete=custom,s:InstallOptions CocInstallAll
 
 " use <tab> for trigger completion and navigate to the next complete item {{{
 function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
 inoremap <silent><expr> <Tab>
-            \ pumvisible() ? "\<C-n>" :
-            \ <SID>check_back_space() ? "\<Tab>" :
-            \ coc#refresh()
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
 let g:coc_snippet_next = '<tab>'
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " }}}
@@ -678,9 +698,9 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
 if exists('*complete_info')
-    inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 else
-    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 " imap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() :
 "       \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
@@ -705,22 +725,22 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 augroup format_coc_group
-    autocmd!
-    " Setup formatexpr specified filetype(s).
-    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-    " Update signature help on jump placeholder.
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    else
-        call CocAction('doHover')
-    endif
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
 endfunction
 
 " Use CTRL-S for selections ranges.
@@ -730,7 +750,7 @@ xmap <silent> <C-s> <Plug>(coc-range-select)
 
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')
-nmap <expr> <leader>p CocHasProvider('format') ? "\<Plug>(coc-format)" : ":silent! call FormatEqual()\<cr>"
+nmap <silent><expr> <leader>p CocHasProvider('format') ? "\<Plug>(coc-format)" : ":call FormatEqual()\<cr>"
 
 " Add `:Fold` command to fold current buffer.
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
@@ -786,57 +806,57 @@ autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 " Check if NERDTree is open or active
 function! IsNERDTreeOpen()
-    return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
 endfunction
 
 " Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
 " file, and we're not in vimdiff
 function! SyncTree()
-    if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-        NERDTreeFind
-        wincmd p
-    endif
+  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+    NERDTreeFind
+    wincmd p
+  endif
 endfunction
 
 " Highlight currently open buffer in NERDTree
 autocmd BufEnter * call SyncTree()
 
 function! ToggleNerdTree()
-    set eventignore=BufEnter
-    NERDTreeToggle
-    set eventignore=
+  set eventignore=BufEnter
+  NERDTreeToggle
+  set eventignore=
 endfunction
 nmap <C-o> :call ToggleNerdTree()<CR>
 
 function! ToggleNerdFugitiveVimStartup(timer)
-    let l:firstbuf = bufnr('%')
-    echom "firstbuf ". l:firstbuf
-    Git
-    let l:gitbuf = bufnr('%')
-    hide
-    call ToggleNerdTree()
-    new
-    exe 'buf' . l:gitbuf
-    set buflisted
-    let g:git_opened_by_func = 1
-    let l:winids = win_findbuf(l:firstbuf)
-    call win_gotoid(l:winids[0])
+  let l:firstbuf = bufnr('%')
+  echom "firstbuf ". l:firstbuf
+  Git
+  let l:gitbuf = bufnr('%')
+  hide
+  call ToggleNerdTree()
+  new
+  exe 'buf' . l:gitbuf
+  set buflisted
+  let g:git_opened_by_func = 1
+  let l:winids = win_findbuf(l:firstbuf)
+  call win_gotoid(l:winids[0])
 endfunc
 
 function! CloseNERDGitWindows() abort
-    if buflisted(bufname('.git/index'))
-        buf .git/index
-        bd .git/index
-    endif
-    if (winnr("$") != 1) && exists(":NERDTreeClose")
-        NERDTreeClose
-    endif
+  if buflisted(bufname('.git/index'))
+    buf .git/index
+    bd .git/index
+  endif
+  if (winnr("$") != 1) && exists(":NERDTreeClose")
+    NERDTreeClose
+  endif
 endfunction
 
 " Reorganize all buffers
 function! ReorganizeAllWindows(timer)
-    call CloseNERDGitWindows()
-    call ToggleNerdFugitiveVimStartup("")
+  call CloseNERDGitWindows()
+  call ToggleNerdFugitiveVimStartup("")
 endfunction
 
 nnoremap <leader>ow :call ReorganizeAllWindows("")<cr>
