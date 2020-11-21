@@ -692,7 +692,7 @@ function! s:HighlightWordUnderCursor()
   let nohl_conditions = getline(".")[col(".")-1] =~# '[[:punct:][:blank:]]' || &diff || index(disabled_buftypes, &buftype) >= 0 || index(disabled_ft, &filetype) >= 0
 
   if !nohl_conditions
-    hi MatchWord cterm=undercurl gui=undercurl guibg=#3b404a
+    hi MatchWord guibg=#3b404a ctermbg=240
     exec 'match MatchWord /\V\<' . expand('<cword>') . '\>/'
   else
     match none
