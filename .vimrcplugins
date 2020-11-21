@@ -653,6 +653,7 @@ let g:coc_global_extensions = [
       \    "coc-tag",
       \    "coc-tsserver",
       \    "coc-vimlsp",
+      \    "coc-xml",
       \    "coc-yaml"
       \]
 " }}}
@@ -719,7 +720,9 @@ nmap <silent> gr <Plug>(coc-references)
 nnoremap <leader>prn :CocSearch <C-R>=expand("<cword>")<CR><CR>
 
 " Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHold * silent call CocActionAsync('highlight')
+hi CocHighlightText ctermbg=241 guibg=#665c54
+hi! link CocHoverRange CocHighlightText
 
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
@@ -766,7 +769,7 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 " Mappings for CoCList
 " Show commands.
 nnoremap <silent><nowait> <leader>cc  :<C-u>CocList commands<cr>
-nnoremap <silent><nowait> <leader>cac  :<C-u>CocAction<cr>
+nnoremap <silent><nowait> <leader>a  :<C-u>CocAction<cr>
 " Search workspace symbols.
 " nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
