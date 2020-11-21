@@ -46,11 +46,16 @@
   "diagnostic.hintSign": "",
   "diagnostic.infoSign": "",
   "diagnostic.warningSign": "",
-  "diagnostic-languageserver.filetypes": { "sh": "shellcheck" },
+  "diagnostic-languageserver.filetypes": {
+    "sh": "shellcheck",
+    "vim": "vint"
+  },
   "diagnostic-languageserver.formatFiletypes": {
     "terraform": "tffmt",
     "sh": "shfmt"
   },
+  "diagnostic-languageserver.debug": true,
+  "diagnostic-languageserver.trace.server": "verbose",
   "suggest.timeout": 5000,
   "suggest.enablePreview": true,
   "suggest.triggerAfterInsertEnter": true,
