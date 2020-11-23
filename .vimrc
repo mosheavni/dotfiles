@@ -216,7 +216,7 @@ vmap <tab> >gv
 vmap <s-tab> <gv
 
 " Sudo write
-command! W w !sudo tee % > /dev/null
+command! W w :term sudo tee % > /dev/null
 
 " with this you can save with ;wq
 " nnoremap ; :
@@ -641,14 +641,14 @@ augroup grep_augroup
 augroup END
 
 " Set grepprg as RipGrep or ag (the_silver_searcher), fallback to grep
-if executable("rg")
-  let &grepprg='rg --vimgrep --no-heading --smart-case --hidden --follow -g "!{' . &wildignore . '}" $*'
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
-elseif executable("ag")
+if executable("ag")
   let &grepprg='ag --vimgrep --smart-case --hidden --follow --ignore "!{' . &wildignore . '}" $*'
   set grepformat=%f:%l:%c:%m
+elseif executable("rg")
+  let &grepprg="rg --vimgrep --no-heading --smart-case --hidden --follow -g '!{" . &wildignore . "}' $*"
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
 else
-  let &grepprg='grep -n -r --exclude=' . shellescape(&wildignore) . ' $* .'
+  let &grepprg='grep -n -r --exclude=' . shellescape(&wildignore) . ' . -- $*'
 endif
 
 function s:RipGrepCWORD(bang, visualmode, ...) abort
@@ -687,12 +687,21 @@ vmap <c-f> :RipGrepCWORDVisual!<cr>
 
 " Highlight word under cursor {{{
 function! s:HighlightWordUnderCursor()
-  let disabled_ft = ["qf", "fugitive", "nerdtree", "gundo", "diff", "fzf", "floaterm"]
+  let disabled_ft = [
+        \"qf",
+        \"fugitive",
+        \"nerdtree",
+        \"gundo",
+        \"diff",
+        \"fzf",
+        \"floaterm",
+        \"vim-plug"
+  \]
   let disabled_buftypes = ["terminal", "quickfix", "help"]
   let nohl_conditions = getline(".")[col(".")-1] =~# '[[:punct:][:blank:]]' || &diff || index(disabled_buftypes, &buftype) >= 0 || index(disabled_ft, &filetype) >= 0
 
   if !nohl_conditions
-    hi MatchWord guibg=#3b404a ctermbg=240
+    hi MatchWord cterm=undercurl ctermbg=240 gui=undercurl guibg=#665c54
     exec 'match MatchWord /\V\<' . expand('<cword>') . '\>/'
   else
     match none
