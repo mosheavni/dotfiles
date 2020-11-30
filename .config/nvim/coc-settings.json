@@ -48,26 +48,7 @@
   "diagnostic.warningSign": "",
   "diagnostic-languageserver.filetypes": {
     "sh": "shellcheck",
-    "vim": "vint-wrapper"
-  },
-  "diagnostic-languageserver.linters": {
-    "vint-wrapper": {
-    "command": "vint-wrapper",
-    "debounce": 100,
-    "args": [ "--enable-neovim"],
-    "offsetLine": 0,
-    "offsetColumn": 0,
-    "sourceName": "vint-wrapper",
-    "formatLines": 1,
-    "formatPattern": [
-      "[^:]+:(\\d+):(\\d+):\\s*(.*)(\\r|\\n)*$",
-      {
-        "line": 1,
-        "column": 2,
-        "message": 3
-      }
-    ]
-  },
+    "vim": "vint"
   },
   "diagnostic-languageserver.formatFiletypes": {
     "terraform": "tffmt",
