@@ -539,6 +539,7 @@ function! s:ftplugin_fugitive() abort
   nnoremap <buffer> <silent> cc :Git commit --quiet<CR>
   nnoremap <buffer> <silent> gl :Gl<CR>
   nnoremap <buffer> <silent> gp :Gp<CR>
+  setlocal winfixheight
 endfunction
 augroup moshe_fugitive
   autocmd!
@@ -571,6 +572,7 @@ function! ToggleGStatus()
     bd .git/index
   else
     Git
+    " 20wincmd_
   endif
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
@@ -625,10 +627,8 @@ function! s:add_mappings() abort
 endfunction
 " }}}
 
-" Set current working directory based on the file
-" autocmd BufEnter * silent! :lcd%:p:h
 " }}}
-
+"
 " }}}
 
 " Coc {{{
