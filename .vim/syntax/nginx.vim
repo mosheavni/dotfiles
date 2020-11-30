@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language: nginx.conf
 
-if exists("b:current_syntax")
+if exists('b:current_syntax')
   finish
 end
 
@@ -368,7 +368,7 @@ syn keyword ngxDirective xslt_types
 syn keyword ngxDirectiveThirdParty set_from_accept_language
 
 " Access Key Module <http://wiki.nginx.org/NginxHttpAccessKeyModule>
-" Denies access unless the request URL contains an access key. 
+" Denies access unless the request URL contains an access key.
 syn keyword ngxDirectiveThirdParty accesskey
 syn keyword ngxDirectiveThirdParty accesskey_arg
 syn keyword ngxDirectiveThirdParty accesskey_hashmethod
@@ -522,7 +522,7 @@ syn keyword ngxDirectiveThirdParty mogilefs_send_timeout
 syn keyword ngxDirectiveThirdParty mogilefs_tracker
 
 " MP4 Streaming Lite Module <http://wiki.nginx.org/NginxMP4StreamingLite>
-" Will seek to a certain time within H.264/MP4 files when provided with a 'start' parameter in the URL. 
+" Will seek to a certain time within H.264/MP4 files when provided with a 'start' parameter in the URL.
 syn keyword ngxDirectiveThirdParty mp4
 
 " Nginx Notice Module <http://xph.us/software/nginx-notice/>
@@ -661,4 +661,4 @@ hi link ngxDirectiveDeprecated Error
 hi link ngxDirective Identifier
 hi link ngxDirectiveThirdParty Special
 
-let b:current_syntax = "nginx"
+let b:current_syntax = 'nginx'

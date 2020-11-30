@@ -1,4 +1,4 @@
-if exists("b:current_syntax")
+if exists('b:current_syntax')
     unlet b:current_syntax
 endif
 syn include @AWKScript syntax/awk.vim

@@ -1,3 +1,5 @@
+set encoding=utf-8
+scriptencoding utf-8
 " Moshe's vimrc. Custom made for my needs :)
 
 " .    .         .              .
@@ -10,9 +12,9 @@
 set nocompatible
 syntax enable
 
-if executable("/bin/zsh")
+if executable('/bin/zsh')
   set shell=/bin/zsh\ -l
-elseif executable("/bin/bash")
+elseif executable('/bin/bash')
   set shell=/bin/bash
 else
   set shell=/bin/sh
@@ -57,7 +59,6 @@ set mouse=a
 set undofile       " Enables saving undo history to a file
 set colorcolumn=80 " Mark where are 80 characters to start breaking line
 set guicursor=i:blinkwait700-blinkon400-blinkoff250
-set encoding=utf-8
 set fileencodings=utf-8,cp1251
 set visualbell     " Use visual bell instead of beeping
 
@@ -74,7 +75,7 @@ set wildignore+=.hg,.git,.svn,*.DS_Store,*.pyc
 " delays and poor user experience.
 set updatetime=300
 
-if v:version > 703 || v:version == 703 && has("patch541")
+if v:version > 703 || v:version == 703 && has('patch541')
   set formatoptions+=j " Delete comment character when joining commented lines
 endif
 
@@ -87,14 +88,17 @@ set listchars=trail:·,precedes:«,extends:»,eol:↲,tab:▸\
 set path+=** " When searching, search also subdirectories
 
 " Set python path
-if executable("/usr/local/bin/python3")
-  let g:python3_host_prog="/usr/local/bin/python3"
-elseif executable("/usr/bin/python3")
-  let g:python3_host_prog="/usr/bin/python3"
+if executable('/usr/local/bin/python3')
+  let g:python3_host_prog='/usr/local/bin/python3'
+elseif executable('/usr/bin/python3')
+  let g:python3_host_prog='/usr/bin/python3'
 endif
 
 " Auto load file changes when focus or buffer is entered
-au FocusGained,BufEnter * :checktime
+augroup ReloadFile
+  autocmd!
+  au FocusGained,BufEnter * :checktime
+augroup END
 
 if &history < 1000
   set history=1000
@@ -102,7 +106,7 @@ endif
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved. {{{
-if has("patch-8.1.1564")
+if has('patch-8.1.1564')
   " Recently vim can merge signcolumn and number column into one
   set signcolumn=number
 else
@@ -173,7 +177,7 @@ endif
 " Indentation settings for using 4 spaces instead of tabs.
 " Do not change 'tabstop' from its default value of 8 with this setup.
 filetype indent on
-if exists("+breakindent")
+if exists('+breakindent')
   set breakindent   " Maintain indent on wrapping lines
 endif
 set autoindent    " always set autoindenting on
@@ -199,7 +203,7 @@ set showtabline=2
 " Mappings {{{
 
 " Map leader to space
-let mapleader=" "
+let mapleader=' '
 let maplocalleader = "\\"
 
 " Toggle number sets
@@ -338,19 +342,19 @@ nnoremap U viw~
 vnoremap U ~
 
 " Vimrc edit mappings {{{
-let g:myvimrc = "~/.vimrc"
-let g:myvimrcplugins = "~/.vimrcplugins"
+let g:myvimrc = '~/.vimrc'
+let g:myvimrcplugins = '~/.vimrcplugins'
 
 nnoremap <silent> <leader>ev :execute("vsplit ".g:myvimrc)<cr>
 nnoremap <silent> <leader>sv :execute("source ".g:myvimrc)<cr>
 " exe("autocmd BufWritePost ".g:myvimrc." source ".g:myvimrc)
 
 function! LoadPlugins() abort
-  execute("so ".g:myvimrcplugins)
+  execute('so '.g:myvimrcplugins)
   PlugInstall
-  echom "Ran PlugInstall"
-  execute("windo so ".g:myvimrcplugins)
-  echom "Sourced ".g:myvimrcplugins." on all windows"
+  echom 'Ran PlugInstall'
+  execute('windo so '.g:myvimrcplugins)
+  echom 'Sourced '.g:myvimrcplugins.' on all windows'
 endfunction
 
 nnoremap <silent> <leader>ep :execute("vsplit ".g:myvimrcplugins)<cr>
@@ -367,7 +371,11 @@ nnoremap gV `[v`]
 " terminal mappings {{{
 if exists(':terminal')
   " Start terminal in insert mode
-  autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
+  augroup TerminalAugroup
+    autocmd!
+    autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
+
+  augroup END
   tnoremap <Esc> <C-\><C-n>
   " nnoremap <leader>term :new term://zsh<cr>
 endif
@@ -414,10 +422,10 @@ nnoremap <silent> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
 
 " Every parameter in its own line
 function SplitParamLines() abort
-  let f_line_num = line(".")
+  let f_line_num = line('.')
   let indent_length = indent(f_line_num)
   exe "normal! 0f(a\<cr>\<esc>"
-  exe ".s/\s*,/,\r" . repeat(" ", indent_length + &shiftwidth - 1) . "/g"
+  exe ".s/\s*,/,\r" . repeat(' ', indent_length + &shiftwidth - 1) . '/g'
   nohlsearch
   exe "normal! 0t)a\<cr>\<esc>"
 endfunction
@@ -451,7 +459,7 @@ let g:netrw_keepdir = 0
 
 " Toggle Vexplore with Ctrl-E {{{
 function! ToggleVExplorer()
-  if exists("t:expl_buf_num")
+  if exists('t:expl_buf_num')
     let expl_win_num = bufwinnr(t:expl_buf_num)
     if expl_win_num != -1
       let cur_win_nr = winnr()
@@ -465,7 +473,7 @@ function! ToggleVExplorer()
   else
     exec '1wincmd w'
     Vexplore
-    let t:expl_buf_num = bufnr("%")
+    let t:expl_buf_num = bufnr('%')
   endif
 endfunction
 " }}}
@@ -555,7 +563,7 @@ function! s:DiffWithSaved()
   let filetype=&ft
   diffthis
   vnew | r # | normal! 1Gdd
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro foldlevel=999 ft=" . filetype
+  exe 'setlocal bt=nofile bh=wipe nobl noswf ro foldlevel=999 ft=' . filetype
   diffthis
   nnoremap <buffer> q :bd!<cr>
   augroup ShutDownDiffOnLeave
@@ -605,11 +613,11 @@ function! ExecuteFile()
         \   'html': 'open',
         \   'sh': 'bash'
         \ }
-  let l:cmd = get(l:filetype_to_command, &filetype, "bash")
+  let l:cmd = get(l:filetype_to_command, &filetype, 'bash')
   :%y
   new | 0put
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
-  exe "%!".l:cmd
+  exe '%!'.l:cmd
   normal! ggO
   call setline(1, 'Output of ' . l:cmd . ' command:')
   normal! yypVr=o
@@ -641,10 +649,10 @@ augroup grep_augroup
 augroup END
 
 " Set grepprg as RipGrep or ag (the_silver_searcher), fallback to grep
-if executable("ag")
+if executable('ag')
   let &grepprg='ag --vimgrep --smart-case --hidden --follow --ignore "!{' . &wildignore . '}" $*'
   set grepformat=%f:%l:%c:%m
-elseif executable("rg")
+elseif executable('rg')
   let &grepprg="rg --vimgrep --no-heading --smart-case --hidden --follow -g '!{" . &wildignore . "}' $*"
   set grepformat=%f:%l:%c:%m,%f:%l:%m
 else
@@ -663,20 +671,20 @@ function s:RipGrepCWORD(bang, visualmode, ...) abort
     let lines = getline(lnum1, lnum2)
 
     " The last line might need to be cut if the visual selection didn't end on the last column
-    let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
+    let lines[-1] = lines[-1][: col2 - (&selection ==? 'inclusive' ? 1 : 2)]
     " The first line might need to be trimmed if the visual selection didn't start on the first column
     let lines[0] = lines[0][col1 - 1:]
 
     " Get the desired text
     let search_word = join(lines, "\n")
   endif
-  if search_word == ""
-    let search_word = expand("<cword>")
+  if search_word ==? ''
+    let search_word = expand('<cword>')
   endif
-  echom "Searching for " . search_word
+  echom 'Searching for ' . search_word
   " Silent removes the "press enter to continue" prompt, and band (!) is for
   " not jumping to the first result
-  let grepcmd = "silent grep" . a:bang ." -- " . shellescape(search_word)
+  let grepcmd = 'silent grep' . a:bang .' -- ' . shellescape(search_word)
   execute grepcmd
 endfunction
 command! -bang -range -nargs=? RipGrepCWORD call <SID>RipGrepCWORD("<bang>", v:false, <q-args>)
@@ -688,17 +696,17 @@ vmap <c-f> :RipGrepCWORDVisual!<cr>
 " Highlight word under cursor {{{
 function! s:HighlightWordUnderCursor()
   let disabled_ft = [
-        \"qf",
-        \"fugitive",
-        \"nerdtree",
-        \"gundo",
-        \"diff",
-        \"fzf",
-        \"floaterm",
-        \"vim-plug"
+        \'qf',
+        \'fugitive',
+        \'nerdtree',
+        \'gundo',
+        \'diff',
+        \'fzf',
+        \'floaterm',
+        \'vim-plug'
   \]
-  let disabled_buftypes = ["terminal", "quickfix", "help"]
-  let nohl_conditions = getline(".")[col(".")-1] =~# '[[:punct:][:blank:]]' || &diff || index(disabled_buftypes, &buftype) >= 0 || index(disabled_ft, &filetype) >= 0
+  let disabled_buftypes = ['terminal', 'quickfix', 'help']
+  let nohl_conditions = getline('.')[col('.')-1] =~# '[[:punct:][:blank:]]' || &diff || index(disabled_buftypes, &buftype) >= 0 || index(disabled_ft, &filetype) >= 0
 
   if !nohl_conditions
     hi MatchWord cterm=undercurl ctermbg=240 gui=undercurl guibg=#665c54

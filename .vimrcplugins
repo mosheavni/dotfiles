@@ -1,3 +1,4 @@
+scriptencoding utf-8
 " Moshe's plugins and plugin configuration. Complementary to my .vimrc file
 
 " .    .         .              .
@@ -158,12 +159,12 @@ nnoremap <c-b> :Buffers<cr>
 " }}}
 
 " Ultisnip {{{
-let g:UltiSnipsExpandTrigger="<c-s>"
+let g:UltiSnipsExpandTrigger='<c-s>'
 " }}}
 
 " Vim auto pairs {{{
-let g:AutoPairsShortcutJump = ""
-let g:AutoPairsShortcutToggle = ""
+let g:AutoPairsShortcutJump = ''
+let g:AutoPairsShortcutToggle = ''
 " }}}
 
 " Vim json path {{{
@@ -205,7 +206,7 @@ let g:vimdo['\G'] = {
 " -> moshe_king
 let g:switch_custom_definitions = [
       \   ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
-      \   ["==", "!="],
+      \   ['==', '!='],
       \   {
       \     '\<[a-z0-9]\+_\k\+\>': {
       \       '_\(.\)': '\U\1'
@@ -245,7 +246,7 @@ nmap ga <Plug>(EasyAlign)
 " }}}
 
 " Vim close tag {{{
-let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js"
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
 let g:closetag_filetypes = 'html,xhtml,phtml,javascript,javascriptreact'
 " }}}
 
@@ -343,16 +344,16 @@ let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowTo
 " Random color {{{
 function! RandomColorChooser() abort
   let l:liked_colors =  [
-        \ "OceanicNext",
-        \ "apprentice",
-        \ "deep-space",
-        \ "dracula",
-        \ "onedark",
-        \ "onehalfdark",
-        \ "purify",
-        \ "quantum",
-        \ "sonokai",
-        \ "two-firewatch"
+        \ 'OceanicNext',
+        \ 'apprentice',
+        \ 'deep-space',
+        \ 'dracula',
+        \ 'onedark',
+        \ 'onehalfdark',
+        \ 'purify',
+        \ 'quantum',
+        \ 'sonokai',
+        \ 'two-firewatch'
         \ ]
   let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
   exe 'colorscheme '. l:random_color
@@ -491,7 +492,7 @@ command! -range=% GremoveConflictMarkers <line1>,<line2>call RemoveConflictMarke
 " Better branch choosing using :Gbranch
 function! s:changebranch(...)
   let name = a:1
-  if name == ""
+  if name ==? ''
     call inputsave()
     let name = input('Enter branch name: ')
     call inputrestore()
@@ -515,9 +516,9 @@ command! -nargs=? Gco call s:changebranch("<args>")
 
 " Push
 function! s:MosheGitPush() abort
-  echo "Pushing..."
+  echo 'Pushing...'
   exe 'Git push -u origin ' . FugitiveHead()
-  echo "Pushed! 🤩"
+  echo 'Pushed! 🤩'
 endfunction
 
 command! Gp call <sid>MosheGitPush()
@@ -525,9 +526,9 @@ nmap <silent> <leader>gp :Gp<cr>
 
 " Pull
 function! s:MosheGitPull() abort
-  echo "Pulling..."
+  echo 'Pulling...'
   Git pull --quiet
-  echo "Pulled! 😎"
+  echo 'Pulled! 😎'
 endfunction
 
 command! -bang Gl call <sid>MosheGitPull()
@@ -553,12 +554,12 @@ command! -bang Gmom G merge origin/master
 " Create a new branch
 function! Gcb(...)
   let name = a:1
-  if name == ""
+  if name ==? ''
     call inputsave()
     let name = input('Enter branch name: ')
     call inputrestore()
   endif
-  execute "Git checkout -b " . name
+  execute 'Git checkout -b ' . name
 endfunction
 command! -nargs=? Gcb call Gcb("<args>")
 
@@ -582,8 +583,8 @@ command! -nargs=? DiffHistory call s:view_git_history("<args>")
 
 function! s:view_git_history(...) abort
   let branch_name = a:1
-  if branch_name != ""
-    execute "Git difftool --name-only " . branch_name . "...@"
+  if branch_name !=? ''
+    execute 'Git difftool --name-only ' . branch_name . '...@'
   else
     Git difftool --name-only ! !^@
   endif
@@ -634,37 +635,37 @@ endfunction
 
 " Plugins backup {{{
 let g:coc_global_extensions = [
-      \    "coc-cfn-lint",
-      \    "coc-css",
-      \    "coc-diagnostic",
-      \    "coc-dictionary",
-      \    "coc-docker",
-      \    "coc-emmet",
-      \    "coc-emoji",
-      \    "coc-eslint",
-      \    "coc-groovy",
-      \    "coc-highlight",
-      \    "coc-html",
-      \    "coc-json",
-      \    "coc-markdownlint",
-      \    "coc-marketplace",
-      \    "coc-neosnippet",
-      \    "coc-pairs",
-      \    "coc-prettier",
-      \    "coc-python",
-      \    "coc-react-refactor",
-      \    "coc-scssmodules",
-      \    "coc-sh",
-      \    "coc-snippets",
-      \    "coc-styled-components",
-      \    "coc-swagger",
-      \    "coc-syntax",
-      \    "coc-tabnine",
-      \    "coc-tag",
-      \    "coc-tsserver",
-      \    "coc-vimlsp",
-      \    "coc-xml",
-      \    "coc-yaml"
+      \    'coc-cfn-lint',
+      \    'coc-css',
+      \    'coc-diagnostic',
+      \    'coc-dictionary',
+      \    'coc-docker',
+      \    'coc-emmet',
+      \    'coc-emoji',
+      \    'coc-eslint',
+      \    'coc-groovy',
+      \    'coc-highlight',
+      \    'coc-html',
+      \    'coc-json',
+      \    'coc-markdownlint',
+      \    'coc-marketplace',
+      \    'coc-neosnippet',
+      \    'coc-pairs',
+      \    'coc-prettier',
+      \    'coc-python',
+      \    'coc-react-refactor',
+      \    'coc-scssmodules',
+      \    'coc-sh',
+      \    'coc-snippets',
+      \    'coc-styled-components',
+      \    'coc-swagger',
+      \    'coc-syntax',
+      \    'coc-tabnine',
+      \    'coc-tag',
+      \    'coc-tsserver',
+      \    'coc-vimlsp',
+      \    'coc-xml',
+      \    'coc-yaml'
       \]
 " }}}
 
@@ -676,7 +677,7 @@ function! InstallAllCocExtensions() abort
   let counter = 0
   for extension in all_extensions
     if counter % iterator == 0
-      echom string(all_extensions[counter:counter+iterator-1])
+      echom string(all_extensions[counter : counter + iterator-1])
       call coc#util#install_extension([extension])
     endif
     let counter += 1
@@ -691,7 +692,7 @@ command! -bar -complete=custom,s:InstallOptions CocInstallAll
 " use <tab> for trigger completion and navigate to the next complete item {{{
 function! s:check_back_space() abort
   let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
+  return !col || getline('.')[col - 1]  =~? '\s'
 endfunction
 
 inoremap <silent><expr> <Tab>
@@ -814,12 +815,17 @@ let g:NERDTreePatternMatchHighlightColor['Jenkinsfile'] = '62a2bf'
 " If more than one window and previous buffer was NERDTree, go back to it.
 " autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr("$") > 1 | b# | endif
 
-" Close VIM if NERDTree is the only buffer left
-autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+augroup nerd_tree_augroup
+  autocmd!
+  " Highlight currently open buffer in NERDTree
+  autocmd BufEnter * call SyncTree()
+  " Close VIM if NERDTree is the only buffer left
+  autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
+augroup END
 
 " Check if NERDTree is open or active
 function! IsNERDTreeOpen()
-  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+  return exists('t:NERDTreeBufName') && (bufwinnr(t:NERDTreeBufName) != -1)
 endfunction
 
 " Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
@@ -831,8 +837,6 @@ function! SyncTree()
   endif
 endfunction
 
-" Highlight currently open buffer in NERDTree
-autocmd BufEnter * call SyncTree()
 
 function! ToggleNerdTree()
   set eventignore=BufEnter
@@ -843,7 +847,7 @@ nmap <C-o> :call ToggleNerdTree()<CR>
 
 function! ToggleNerdFugitiveVimStartup(timer)
   let l:firstbuf = bufnr('%')
-  echom "firstbuf ". l:firstbuf
+  echom 'firstbuf '. l:firstbuf
   Git
   let l:gitbuf = bufnr('%')
   hide
@@ -861,7 +865,7 @@ function! CloseNERDGitWindows() abort
     buf .git/index
     bd .git/index
   endif
-  if (winnr("$") != 1) && exists(":NERDTreeClose")
+  if (winnr('$') != 1) && exists(':NERDTreeClose')
     NERDTreeClose
   endif
 endfunction
@@ -869,7 +873,7 @@ endfunction
 " Reorganize all buffers
 function! ReorganizeAllWindows(timer)
   call CloseNERDGitWindows()
-  call ToggleNerdFugitiveVimStartup("")
+  call ToggleNerdFugitiveVimStartup('')
 endfunction
 
 nnoremap <leader>ow :call ReorganizeAllWindows("")<cr>
