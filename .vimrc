@@ -277,7 +277,7 @@ nnoremap <leader>= yypVr=
 " Map dp and dg with leader for diffput and diffget
 nnoremap <leader>dp :diffput<cr>
 nnoremap <leader>dg :diffget<cr>
-nnoremap <leader>du :diffupdate<cr>
+nnoremap <leader>du :windo diffupdate<cr>
 nnoremap <leader>dn :windo diffthis<cr>
 nnoremap <leader>df :windo diffoff<cr>
 
