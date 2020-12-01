@@ -539,7 +539,6 @@ function! s:ftplugin_fugitive() abort
   nnoremap <buffer> <silent> cc :Git commit --quiet<CR>
   nnoremap <buffer> <silent> gl :Gl<CR>
   nnoremap <buffer> <silent> gp :Gp<CR>
-  setlocal winfixheight
 endfunction
 augroup moshe_fugitive
   autocmd!
@@ -547,7 +546,6 @@ augroup moshe_fugitive
 augroup END
 
 " }}}
-
 
 " Git merge origin master
 command! -bang Gmom G merge origin/master
