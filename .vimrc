@@ -710,7 +710,7 @@ function! s:HighlightWordUnderCursor()
 
   if !nohl_conditions
     hi MatchWord cterm=undercurl ctermbg=240 gui=undercurl guibg=#665c54
-    exec 'match MatchWord /\V\<' . expand('<cword>') . '\>/'
+    exec 'match MatchWord /\V\<' . substitute(expand('<cword>'), '/', '\/', 'g') . '\>/'
   else
     match none
   endif
