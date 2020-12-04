@@ -63,8 +63,8 @@ set fileencodings=utf-8,cp1251
 set visualbell     " Use visual bell instead of beeping
 
 if has('nvim')
-  set shortmess+=c   " don't give |ins-completion-menu| messages.
-  set shortmess-=l
+  set shortmess+=c " don't give |ins-completion-menu| messages.
+  set shortmess-=l " Print "lines" instead of "L"
 endif
 
 " Ignore node_modules
@@ -84,6 +84,7 @@ filetype plugin indent on
 
 set list
 set listchars=trail:·,precedes:«,extends:»,eol:↲,tab:▸\
+set fillchars=vert:\|,fold:·
 
 set path+=** " When searching, search also subdirectories
 
