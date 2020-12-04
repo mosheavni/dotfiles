@@ -1,13 +1,15 @@
 #export PATH=$PATH:$HOME/bin:/usr/local/bin:$PATH:~/Library/Python/2.7/bin:~/bin:~/.npm-global/bin:${KREW_ROOT:-$HOME/.krew}/bin
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="random"
-ZSH_THEME_RANDOM_CANDIDATES=(
-    "robbyrussell"
-    "dracula"
-)
+ZSH_THEME="mosherussell"
+# ZSH_THEME="typewritten/typewritten"
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Set Locale
+export LANG=en_US
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 # History settings
 HISTSIZE=5000
@@ -45,6 +47,15 @@ plugins=(
 )
 
 
+# Source kube_ps1
+if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
+    source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+    function get_cluster_short() {
+        echo "$1" | cut -d . -f1
+    }
+    KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
+fi
+
 source $ZSH/oh-my-zsh.sh
 if [[ -f ~/Repos/devops_scripts/aliases/aliases.sh ]];then
     source ~/Repos/devops_scripts/aliases/aliases.sh
@@ -64,10 +75,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Set Locale
-export LC_CTYPE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-
 # OktaAWSCLI
 if [[ -f "$HOME/.okta/bash_functions" ]]; then
     . "$HOME/.okta/bash_functions"
@@ -83,23 +90,3 @@ if [[ -f ~/.kube/ctx ]];then
     context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
     export KUBECONFIG=$context
 fi
-
-# Appearance
-# if command -v jq >/dev/null && command -v cowsay > /dev/null;then
-#     curl -s -m3 https://official-joke-api.appspot.com/jokes/random | jq -r '"\(.setup)\n\(.punchline)"' | cowsay -f tux
-# fi
-
-emojis=(🚀 🔥 🍕 👾 🏖 🍔 👻 ⚓ 💥 🌎 ⛄ 🔵 💈 🎲 🌀 🌐)
-
-EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
-if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
-    source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
-    function get_cluster_short() {
-        echo "$1" | cut -d . -f1
-    }
-    KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
-    PS1="$PROMPT"'$(kube_ps1)'$'\n'"$EMOJI%b "
-else
-    PS1="$EMOJI $PROMPT%b  "
-fi
-ZSH_THEME_GIT_PROMPT_PREFIX="${ZSH_THEME_GIT_PROMPT_PREFIX} "
