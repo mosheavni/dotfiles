@@ -13,7 +13,8 @@ call plug#begin(s:vimplug_dir)
 
 Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" Plug 'tpope/vim-vinegar'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -32,6 +33,8 @@ Plug 'prettier/vim-prettier', {
 Plug 'StanAngeloff/php.vim', {'for': ['php']}
 Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
 Plug 'tfnico/vim-gradle'
+Plug 'towolf/vim-helm'
+
 
 Plug 'mogelbrod/vim-jsonpath'
 Plug 'chrisbra/vim-sh-indent'
@@ -257,85 +260,6 @@ let g:VM_maps = {}
 " }}}
 
 " Color settings {{{
-
-" " Vim DevIcons colors {{{
-" let g:sol = {
-"             \"gui": {
-"             \"base03": "#002b36",
-"             \"base02": "#073642",
-"             \"base01": "#586e75",
-"             \"base00": "#657b83",
-"             \"base0": "#839496",
-"             \"base1": "#93a1a1",
-"             \"base2": "#eee8d5",
-"             \"base3": "#fdf6e3",
-"             \"yellow": "#b58900",
-"             \"orange": "#cb4b16",
-"             \"red": "#dc322f",
-"             \"magenta": "#d33682",
-"             \"violet": "#6c71c4",
-"             \"blue": "#268bd2",
-"             \"cyan": "#2aa198",
-"             \"green": "#719e07"
-"             \},
-"             \"cterm": {
-"             \"base03": 8,
-"             \"base02": 0,
-"             \"base01": 10,
-"             \"base00": 11,
-"             \"base0": 12,
-"             \"base1": 14,
-"             \"base2": 7,
-"             \"base3": 15,
-"             \"yellow": 3,
-"             \"orange": 9,
-"             \"red": 1,
-"             \"magenta": 5,
-"             \"violet": 13,
-"             \"blue": 4,
-"             \"cyan": 6,
-"             \"green": 2
-"             \}
-"             \}
-
-" function! DeviconsColors(config)
-"     let colors = keys(a:config)
-"     augroup devicons_colors
-"         autocmd!
-"         for color in colors
-"             if color == 'normal'
-"                 exec 'autocmd FileType nerdtree,startify if &background == ''dark'' | '.
-"                             \ 'highlight devicons_'.color.' guifg='.g:sol.gui.base01.' ctermfg='.g:sol.cterm.base01.' | '.
-"                             \ 'else | '.
-"                             \ 'highlight devicons_'.color.' guifg='.g:sol.gui.base1.' ctermfg='.g:sol.cterm.base1.' | '.
-"                             \ 'endif'
-"             elseif color == 'emphasize'
-"                 exec 'autocmd FileType nerdtree,startify if &background == ''dark'' | '.
-"                             \ 'highlight devicons_'.color.' guifg='.g:sol.gui.base1.' ctermfg='.g:sol.cterm.base1.' | '.
-"                             \ 'else | '.
-"                             \ 'highlight devicons_'.color.' guifg='.g:sol.gui.base01.' ctermfg='.g:sol.cterm.base01.' | '.
-"                             \ 'endif'
-"             else
-"                 exec 'autocmd FileType nerdtree,startify highlight devicons_'.color.' guifg='.g:sol.gui[color].' ctermfg='.g:sol.cterm[color]
-"             endif
-"             exec 'autocmd FileType nerdtree,startify syntax match devicons_'.color.' /\v'.join(a:config[color], '|').'/ containedin=ALL'
-"         endfor
-"     augroup END
-" endfunction
-" let g:devicons_colors = {
-"             \'normal': ['', '', '', '', ''],
-"             \'emphasize': ['', '', '', '', '', '', '', '', '', '', ''],
-"             \'yellow': ['', '', ''],
-"             \'orange': ['', '', '', 'λ', '', ''],
-"             \'red': ['', '', '', '', '', '', '', '', ''],
-"             \'magenta': [''],
-"             \'violet': ['', '', '', ''],
-"             \'blue': ['', '', '', '', '', '', '', '', '', '', '', '', ''],
-"             \'cyan': ['', '', '', ''],
-"             \'green': ['', '', '', '']
-"             \}
-" call DeviconsColors(g:devicons_colors)
-" " }}}
 
 " Vim rainbow {{{
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
@@ -791,13 +715,13 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 "
 " nnoremap <c-o> :NERDTreeToggle<cr>
 nnoremap <silent> <Leader>v :NERDTreeFind<CR>
-let g:NERDTreeChDirMode = 2
-let g:NERDTreeHijackNetrw=0
+let NERDTreeChDirMode = 2
+let NERDTreeHijackNetrw = 1
 " Show hidden files
 let NERDTreeShowHidden=1
-let g:NERDTreeDirArrowExpandable = '⇾'
-let g:NERDTreeDirArrowCollapsible = '⤓'
-let NERDTreeHighlightCursorline = 0
+" let NERDTreeDirArrowExpandable = '⇾'
+" let NERDTreeDirArrowCollapsible = '⤓'
+let NERDTreeHighlightCursorline = 1
 let g:NERDTreeGitStatusUseNerdFonts = 1
 " let g:NERDTreeGitStatusConcealBrackets = 1
 
@@ -806,9 +730,9 @@ let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {}
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Jenkinsfile'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['\..*ignore.*'] = ''
 
-let g:NERDTreePatternMatchHighlightColor = {}
-let g:NERDTreePatternMatchHighlightColor['\..*ignore.*'] = 'EE6E73'
-let g:NERDTreePatternMatchHighlightColor['Jenkinsfile'] = '62a2bf'
+" let g:NERDTreePatternMatchHighlightColor = {}
+" let g:NERDTreePatternMatchHighlightColor['\..*ignore.*'] = 'EE6E73'
+" let g:NERDTreePatternMatchHighlightColor['Jenkinsfile'] = '62a2bf'
 
 " If more than one window and previous buffer was NERDTree, go back to it.
 " autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr("$") > 1 | b# | endif
@@ -841,7 +765,7 @@ function! ToggleNerdTree()
   NERDTreeToggle
   set eventignore=
 endfunction
-nmap <C-o> :call ToggleNerdTree()<CR>
+nmap <silent> <C-o> :call ToggleNerdTree()<CR>
 
 function! ToggleNerdFugitiveVimStartup(timer)
   let l:firstbuf = bufnr('%')
