@@ -32,13 +32,14 @@ plugins=(
     ansible
     autoupdate
     aws
-    common-aliases
     colored-man-pages
+    common-aliases
     dircycle
     docker
     fzf
     git
     git-auto-fetch
+    helm
     kubectl
     minikube
     z
@@ -51,7 +52,7 @@ plugins=(
 if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
     source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
     function get_cluster_short() {
-        echo "$1" | cut -d . -f1
+        echo "$1" | gsed -e 's?arn:aws:eks:[a-zA-Z0-9\-]*:[0-9]*:cluster/??g' -e 's?\.k8s\.local??g'
     }
     KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
 fi
