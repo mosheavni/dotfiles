@@ -3,10 +3,10 @@ EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
 
 # setopt TRANSIENT_RPROMPT
 
-RPROMPT='$(kube_ps1 2>/dev/null || :)'
+RPROMPT=''
 
-# PROMPT='%{$FG[049]%}%c%{$reset_color%} $(git_prompt_info)'
-PROMPT='%{%G${EMOJI}%}  %{$FG[049]%}%c%{$reset_color%} $(git_prompt_info)'
+PROMPT='%{%G${EMOJI}%}  %{$FG[049]%}%c%{$reset_color%} $(git_prompt_info)$(kube_ps1 2>/dev/null || :)'
+PROMPT+=$'\n'
 PROMPT+='%(?:%{$fg[green]%}→ :%{$fg[red]%}→ )'
 PROMPT+='%{$reset_color%}'
 
