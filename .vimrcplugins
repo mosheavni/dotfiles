@@ -90,10 +90,6 @@ Plug 'editorconfig/editorconfig-vim'
 
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
-" Plug 'lambdalisue/battery.vim'
-" Plug 'vim-airline/vim-airline'
-" Plug 'vim-airline/vim-airline-themes'
-" Plug 'dracula/vim'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'sonph/onehalf', { 'rtp': 'vim/' }
 Plug 'xolox/vim-colorscheme-switcher'
