@@ -129,48 +129,7 @@ if has('termguicolors')
   " let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
-" " Terminal colors {{{
 
-
-" " Allow color schemes to do bright colors without forcing bold.
-" if &t_Co == 8 && $TERM !~# '^Eterm'
-"   set t_Co=256
-" endif
-
-" if has('nvim')
-"   " https://github.com/neovim/neovim/issues/2897#issuecomment-115464516
-"   " let g:terminal_color_0 = '#4e4e4e'
-"   " let g:terminal_color_1 = '#d68787'
-"   " let g:terminal_color_2 = '#5f865f'
-"   " let g:terminal_color_3 = '#d8af5f'
-"   " let g:terminal_color_4 = '#85add4'
-"   " let g:terminal_color_5 = '#d7afaf'
-"   " let g:terminal_color_6 = '#87afaf'
-"   " let g:terminal_color_7 = '#d0d0d0'
-"   " let g:terminal_color_8 = '#626262'
-"   " let g:terminal_color_9 = '#d75f87'
-"   " let g:terminal_color_10 = '#87af87'
-"   " let g:terminal_color_11 = '#ffd787'
-"   " let g:terminal_color_12 = '#add4fb'
-"   " let g:terminal_color_13 = '#ffafaf'
-"   " let g:terminal_color_14 = '#87d7d7'
-"   " let g:terminal_color_15 = '#e4e4e4'
-
-"   autocmd BufReadPost *
-"         \ if line("'\"") >= 1 && line("'\"") <= line("$") |
-"         \   exe "normal! g`\"" |
-"         \ endif
-"   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-" else
-"   let g:terminal_ansi_colors = [
-"         \ '#4e4e4e', '#d68787', '#5f865f', '#d8af5f',
-"         \ '#85add4', '#d7afaf', '#87afaf', '#d0d0d0',
-"         \ '#626262', '#d75f87', '#87af87', '#ffd787',
-"         \ '#add4fb', '#ffafaf', '#87d7d7', '#e4e4e4']
-"   set nocursorline
-"   set nocursorcolumn
-" endif
-" " }}}
 " }}}
 
 " Indentation {{{
@@ -214,6 +173,7 @@ nnoremap 0 ^
 " Move to the end of the line
 nnoremap E $
 vnoremap E $
+nnoremap H 0
 
 "indent/unindent visual mode selection with tab/shift+tab
 vmap <tab> >gv
@@ -222,8 +182,8 @@ vmap <s-tab> <gv
 " Sudo write
 command! W w :term sudo tee % > /dev/null
 
-" with this you can save with ;wq
-" nnoremap ; :
+" Copy number of lines and paste below
+nmap <leader>cp :<c-u>exe 'normal! y' . v:count . 'j' . v:count . 'jp'<cr>
 
 " Windows mappings {{{
 nnoremap <Leader><Leader> <C-^>
@@ -367,19 +327,6 @@ nnoremap <leader>dd ma^i  <esc>hvk$x`a
 
 " highlight last inserted text
 nnoremap gV `[v`]
-
-" terminal mappings {{{
-if exists(':terminal')
-  " Start terminal in insert mode
-  augroup TerminalAugroup
-    autocmd!
-    autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
-
-  augroup END
-  tnoremap <Esc> <C-\><C-n>
-  " nnoremap <leader>term :new term://zsh<cr>
-endif
-" }}}
 
 " Exit insert mode
 inoremap jk <esc>
@@ -578,6 +525,7 @@ function FormatEqual() abort
   normal! gg=G
   silent! %s#)\zs\ze{# #g
   call setpos('.', save_cursor)
+  echom "Formatted with equalprg"
 endfunction
 
 " }}}
@@ -703,4 +651,48 @@ augroup MatchWord
   autocmd!
   autocmd! CursorHold,CursorHoldI * call <SID>HighlightWordUnderCursor()
 augroup END
+" }}}
+"
+" Terminal configurations {{{
+if exists(':terminal')
+  " Start terminal in insert mode
+  augroup TerminalAugroup
+    autocmd!
+    autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
+
+  augroup END
+  tnoremap <Esc> <C-\><C-n>
+  " nnoremap <leader>term :new term://zsh<cr>
+
+
+
+  " Terminal colors
+  let g:terminal_ansi_colors = [
+      \'#1d1f21',
+      \'#cc342b',
+      \'#198844',
+      \'#af8760',
+      \'#3971ed',
+      \'#a36ac7',
+      \'#3971ed',
+      \'#f5f5f5',
+      \'#989698',
+      \'#cc342b',
+      \'#198844',
+      \'#d8865f',
+      \'#3971ed',
+      \'#a36ac7',
+      \'#3971ed',
+      \'#ffffff'
+  \]
+
+  fun! s:setTerminalColors()
+    for i in range(len(g:terminal_ansi_colors))
+        exe 'let g:terminal_color_' . i . ' = g:terminal_ansi_colors[' . i . ']'
+    endfor
+    unlet! g:terminal_ansi_colors
+  endfunction
+  autocmd Colorscheme * call <sid>setTerminalColors()
+endif
+
 " }}}
