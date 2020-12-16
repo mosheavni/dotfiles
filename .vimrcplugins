@@ -90,17 +90,18 @@ Plug 'editorconfig/editorconfig-vim'
 
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
-Plug 'rafi/awesome-vim-colorschemes'
-Plug 'sonph/onehalf', { 'rtp': 'vim/' }
+" Plug 'rafi/awesome-vim-colorschemes'
+" Plug 'sonph/onehalf', { 'rtp': 'vim/' }
 Plug 'xolox/vim-colorscheme-switcher'
-Plug 'larsbs/vimterial_dark'
-Plug 'sjl/badwolf'
-Plug 'tyrannicaltoucan/vim-quantum'
-Plug 'sainnhe/sonokai'
-Plug 'arzg/vim-colors-xcode'
-Plug 'yuttie/hydrangea-vim'
-Plug 'dracula/vim'
+" Plug 'larsbs/vimterial_dark'
+" Plug 'sjl/badwolf'
+" Plug 'tyrannicaltoucan/vim-quantum'
+" Plug 'sainnhe/sonokai'
+" Plug 'arzg/vim-colors-xcode'
+" Plug 'yuttie/hydrangea-vim'
+" Plug 'dracula/vim'
 Plug 'drewtempelmeyer/palenight.vim'
+Plug 'sainnhe/edge'
 " Plug 'itchyny/vim-cursorword'
 Plug 'machakann/vim-highlightedyank'
 " Plug 'miyakogi/conoline.vim'
@@ -278,8 +279,10 @@ function! RandomColorChooser() abort
   exe 'colorscheme '. l:random_color
 endfunction
 " call RandomColorChooser()
-colorscheme palenight
+let g:edge_style = 'neon'
 let g:palenight_terminal_italics=1
+" colorscheme palenight
+colo edge
 
 " }}}
 
@@ -340,7 +343,7 @@ highlight! link NERDTreeFlags NERDTreeDir
 
 " Vim lightline {{{
 let g:lightline = {
-      \ 'colorscheme': 'palenight',
+      \ 'colorscheme': 'edge',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified', 'filetype' ] ]
