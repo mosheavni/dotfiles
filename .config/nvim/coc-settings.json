@@ -39,7 +39,10 @@
     "javascript",
     "javascriptreact",
     "markdown",
-    "python"
+    "python",
+    "sh",
+    "zsh",
+    "groovy"
   ],
   "diagnostic.checkCurrentLine": true,
   "diagnostic.errorSign": "✘",
