@@ -527,7 +527,7 @@ function FormatEqual() abort
   normal! gg=G
   silent! %s#)\zs\ze{# #g
   call setpos('.', save_cursor)
-  echom "Formatted with equalprg"
+  echom 'Formatted with equalprg'
 endfunction
 
 " }}}
@@ -654,19 +654,9 @@ augroup MatchWord
   autocmd! CursorHold,CursorHoldI * call <SID>HighlightWordUnderCursor()
 augroup END
 " }}}
-"
+
 " Terminal configurations {{{
 if exists(':terminal')
-  " Start terminal in insert mode
-  augroup TerminalAugroup
-    autocmd!
-    autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
-
-  augroup END
-  tnoremap <Esc> <C-\><C-n>
-  " nnoremap <leader>term :new term://zsh<cr>
-
-
 
   " Terminal colors
   let g:terminal_ansi_colors = [
@@ -688,13 +678,28 @@ if exists(':terminal')
       \'#ffffff'
   \]
 
+  " Function to set terminal colors
   fun! s:setTerminalColors()
     for i in range(len(g:terminal_ansi_colors))
         exe 'let g:terminal_color_' . i . ' = g:terminal_ansi_colors[' . i . ']'
     endfor
     unlet! g:terminal_ansi_colors
   endfunction
-  autocmd Colorscheme * call <sid>setTerminalColors()
+
+  augroup TerminalAugroup
+    autocmd!
+
+    " Start terminal in insert mode
+    autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
+
+    " Call terminal colors function only after colorscheme changed
+    autocmd Colorscheme * call <sid>setTerminalColors()
+  augroup END
+
+  tnoremap <Esc> <C-\><C-n>
+
+  " To force using 256 colors
+  set t_Co=256
 endif
 
 " }}}

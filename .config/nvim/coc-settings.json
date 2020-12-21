@@ -1,6 +1,7 @@
 {
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.emoji.filetypes": ["gitcommit", "markdown"],
+  "coc.source.floaterm.enable": false,
   "coc.preferences.colorSupport": true,
   "highlight.colors.enable": true,
   "highlight.document.enable": true,
