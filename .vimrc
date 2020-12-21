@@ -659,24 +659,44 @@ augroup END
 if exists(':terminal')
 
   " Terminal colors
+  " let g:terminal_ansi_colors = [
+  "     \'#1d1f21',
+  "     \'#cc342b',
+  "     \'#198844',
+  "     \'#af8760',
+  "     \'#3971ed',
+  "     \'#a36ac7',
+  "     \'#3971ed',
+  "     \'#f5f5f5',
+  "     \'#989698',
+  "     \'#cc342b',
+  "     \'#198844',
+  "     \'#d8865f',
+  "     \'#3971ed',
+  "     \'#a36ac7',
+  "     \'#3971ed',
+  "     \'#ffffff'
+  " \]
+
   let g:terminal_ansi_colors = [
-      \'#1d1f21',
-      \'#cc342b',
-      \'#198844',
-      \'#af8760',
-      \'#3971ed',
-      \'#a36ac7',
-      \'#3971ed',
-      \'#f5f5f5',
-      \'#989698',
-      \'#cc342b',
-      \'#198844',
-      \'#d8865f',
-      \'#3971ed',
-      \'#a36ac7',
-      \'#3971ed',
-      \'#ffffff'
+        \'#21222C',
+        \'#FF5555',
+        \'#69FF94',
+        \'#FFFFA5',
+        \'#D6ACFF',
+        \'#FF92DF',
+        \'#A4FFFF',
+        \'#FFFFFF',
+        \'#636363',
+        \'#F1FA8C',
+        \'#BD93F9',
+        \'#FF79C6',
+        \'#8BE9FD',
+        \'#F8F8F2',
+        \'#6272A4',
+        \'#FF6E6E'
   \]
+
 
   " Function to set terminal colors
   fun! s:setTerminalColors()
