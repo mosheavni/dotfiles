@@ -185,7 +185,8 @@ vmap <s-tab> <gv
 command! W w :term sudo tee % > /dev/null
 
 " Copy number of lines and paste below
-nmap <leader>cp :<c-u>exe 'normal! y' . v:count . 'j' . v:count . 'jp'<cr>
+nnoremap <leader>cp :<c-u>exe 'normal! y' . v:count . 'j' . v:count . 'jo<C-v><Esc>p'<cr>
+
 
 " Windows mappings {{{
 nnoremap <Leader><Leader> <C-^>
