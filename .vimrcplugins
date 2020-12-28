@@ -184,18 +184,16 @@ let g:vimdo = {}
 let g:vimdo['\G'] = {
       \'label' : 'git commands', 'interactive':1, 'arbitrary': 1,
       \'compact':1, 'keys_width': 8, 'desc_width': 30,
-      \'r':  ['reset', 0, ":echo system('git reset')\<cr>"],
-      \'s':  ['status', 0, ":Gstatus\<cr>"],
-      \'D':  ['diff HEAD', 0, ":Gvsplit! diff HEAD\<cr>:setf git\<cr>:set foldmethod=syntax\<cr>"],
-      \'b':  ['blame', 0, ":Gblame\<cr>"],
-      \'p':  ['push', 0, ":redraw! \<bar> echo 'Pushing...\t' \<bar> echon system('git push')\<cr>"],
-      \'.':  ['add all', 0, ":echo system('git add .').'Git: added .'\<cr>"],
-      \'l':  ['log current file', 0, ":Glog\<cr>"],
-      \'c':  ['commit', 0, ":Gcommit\<cr>"],
-      \'w':  ['stage file', 0, ":Gwrite\<cr>"],
-      \'d':  ['diff with...', 0, ":Gvdiff\<space>"],
-      \'a':  ['amend', 0, ":Gstatus\<cr>ca\<cr>"],
-      \'A':  ['add all and amend', 0, ":call system('git add .')\<cr>:Gcommit --amend\<cr>:q\<cr>"],
+      \'r':  ['reset', ":G reset\<cr>"],
+      \'s':  ['status', ":Git\<cr>"],
+      \'D':  ['diff HEAD', ":Gvsplit! diff HEAD\<cr>:setf git\<cr>:set foldmethod=syntax\<cr>"],
+      \'b':  ['blame', ":Gblame\<cr>"],
+      \'p':  ['push', ":redraw! \<bar>Gp\<cr>"],
+      \'.':  ['add all', ":G add -A\<cr>"],
+      \'l':  ['log current file', ":Glog\<cr>"],
+      \'c':  ['commit', ":Gcommit\<cr>"],
+      \'w':  ['stage file', ":Gwrite\<cr>"],
+      \'d':  ['diff with...', ":Gvdiff\<space>"],
       \}
 " }}}
 
