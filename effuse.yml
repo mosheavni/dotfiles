@@ -9,3 +9,4 @@ exclude:
   - com.googlecode.iterm2.plist
   - requirements.txt
   - tags
+  - snippets.xml
