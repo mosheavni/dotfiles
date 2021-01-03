@@ -1,14 +1,7 @@
 [user]
-  name = Moshe Avni
-  email = moshe.avni@naturalint.com
-[diff]
-  tool = vscode
-[difftool "vscode"]
-  cmd = code --wait --diff $LOCAL $REMOTE
+	name = nir.avni
+	email = nir.avni@naturalint.com
+[core]
+	autocrlf = input
 [pull]
-  rebase = false
-[branch]
-  autosetupmerge = always
-[alias]
-    log  = log --pretty=log
-    lb   = log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
+	rebase = false
