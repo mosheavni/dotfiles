@@ -42,7 +42,6 @@ plugins=(
     helm
     kubectl
     minikube
-    z
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
