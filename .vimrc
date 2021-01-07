@@ -173,9 +173,10 @@ let maplocalleader = "\\"
 " Map 0 to first non-blank character
 nnoremap 0 ^
 " Move to the end of the line
-nnoremap E $
-vnoremap E $
+nnoremap L $
+vnoremap L $
 nnoremap H 0
+vnoremap H 0
 
 "indent/unindent visual mode selection with tab/shift+tab
 vmap <tab> >gv
@@ -255,10 +256,6 @@ nnoremap <silent> <CR> :nohlsearch<CR><CR>
 nnoremap <leader>ma :set mouse=a<cr>
 nnoremap <leader>mv :set mouse=v<cr>
 
-" Don't lose seletion when indenting
-xnoremap <  <gv
-xnoremap >  >gv
-
 " Search mappings {{{
 nnoremap <silent> * :execute "normal! *N"<cr>
 nnoremap <silent> # :execute "normal! #n"<cr>
@@ -323,10 +320,6 @@ endfunction
 nnoremap <silent> <leader>ep :execute("vsplit ".g:myvimrcplugins)<cr>
 nnoremap <silent> <leader>sp :call LoadPlugins()<cr>
 " }}}
-
-" Remove blank space from the start of the line to the end of previous line
-inoremap ddd <esc>ma^i  <esc>hvk$x`ai
-nnoremap <leader>dd ma^i  <esc>hvk$x`a
 
 " highlight last inserted text
 nnoremap gV `[v`]
