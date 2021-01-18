@@ -717,3 +717,28 @@ if exists(':terminal')
 endif
 
 " }}}
+
+" {{{ Visual Calculator
+function s:VisualCalculator() abort
+  " Get visual selection
+  let [lnum1, col1] = getpos("'<")[1:2]
+  let [lnum2, col2] = getpos("'>")[1:2]
+  let lines = getline(lnum1, lnum2)
+  let lines[-1] = lines[-1][: col2 - (&selection ==? 'inclusive' ? 1 : 2)]
+  let lines[0] = lines[0][col1 - 1:]
+  let first_expr = join(lines, "\n")
+
+  " Get arithmetic operation from user input
+  call inputsave()
+  let operation = input('Enter operation: ')
+  call inputrestore()
+
+  " Calculate final result
+  let fin_result = eval(str2nr(first_expr) . operation)
+
+  " Replace
+  exe 's/\%V' . first_expr . '/' . fin_result '/'
+endfunction
+command! -range VisualCalculator call <SID>VisualCalculator()
+vmap <c-r> :VisualCalculator<cr>
+" }}}
