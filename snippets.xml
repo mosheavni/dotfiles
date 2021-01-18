@@ -15,8 +15,7 @@
 				<title>abort job</title>
 				<content>Jenkins.instance.getItemByFullName(&quot;Monitor_Production_Images&quot;).getBuildByNumber(3515).finish(
 	hudson.model.Result.ABORTED, new java.io.IOException(&quot;Aborting build&quot;)
-);
-</content>
+);</content>
 			</snippet>
 			<snippet>
 				<title>all plugins</title>
@@ -27,14 +26,17 @@ Jenkins.instance.pluginManager.plugins.each{
 }
 println allPlugins.sort().each {
     println it
-}
-</content>
+}</content>
 			</snippet>
 			<snippet>
 				<title>approve scripts</title>
 				<content>import org.jenkinsci.plugins.scriptsecurity.scripts.*
 toApprove = ScriptApproval.get().getPendingScripts().collect()
 toApprove.each {pending -&gt; ScriptApproval.get().approveScript(pending.getHash())}</content>
+			</snippet>
+			<snippet>
+				<title>Delete series of builds</title>
+				<content>Jenkins.instance.getItemByFullName(&apos;JobName&apos;).builds.findAll { it.number &gt; 10 &amp;&amp; it.number &lt; 1717 }.each { it.delete() }</content>
 			</snippet>
 		</snippets>
 	</folder>
@@ -50,8 +52,7 @@ toApprove.each {pending -&gt; ScriptApproval.get().approveScript(pending.getHash
 			</snippet>
 			<snippet>
 				<title>shorten url</title>
-				<content>curl -s http://tinyurl.com/api-create.php?url=https://www.google.com | pbcopy
-</content>
+				<content>curl -s http://tinyurl.com/api-create.php?url=https://www.google.com | pbcopy</content>
 			</snippet>
 			<snippet>
 				<title>share text</title>
@@ -60,15 +61,14 @@ toApprove.each {pending -&gt; ScriptApproval.get().approveScript(pending.getHash
 			<snippet>
 				<title>ps1</title>
 				<content>arrow_ec() { [[ $? == &quot;0&quot; ]] &amp;&amp; (echo -e &quot;\e[32m➜\e[m&quot;) || (echo -e &quot;\e[31m➜\e[m&quot;) }
-export PS1=&apos;$(arrow_ec)  \e[36m\w\e[m \e[34m\u\e[m@\e[32m\h\e[m » &apos;
-alias ll=&apos;ls -l&apos;
-</content>
+export PS1=&apos;\[$(arrow_ec)\]  \[\e[36m\]\w\[\e[m\] \[\e[34m\]\u\[\e[m\]@\[\e[32m\]\h\[\e[m\]
+ » &apos;
+alias ll=&apos;ls -l&apos;</content>
 			</snippet>
 			<snippet>
 				<title>ps1-simple</title>
-				<content>export PS1=&apos;\e[36m\w\e[m \e[34m\u\e[m@\e[32m\h\e[m &apos;
-alias ll=&apos;ls -l --color&apos;
-</content>
+				<content>export PS1=&apos;\[\e[36m\]\w\[\e[m\] \[\e[34m\]\u\[\e[m\]@\[\e[32m\]\h\[\e[m\] &apos;
+alias ll=&apos;ls -l --color&apos;</content>
 			</snippet>
 			<snippet>
 				<title>default editor vim</title>
@@ -76,8 +76,7 @@ alias ll=&apos;ls -l --color&apos;
 			</snippet>
 			<snippet>
 				<title>decrypt with openssl</title>
-				<content>openssl enc -aes-256-cbc -d -in credentials.xml.encrypted -out credentials.xml
-</content>
+				<content>openssl enc -aes-256-cbc -d -in credentials.xml.encrypted -out credentials.xml</content>
 			</snippet>
 		</snippets>
 	</folder>
