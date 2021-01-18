@@ -720,6 +720,7 @@ endif
 
 " {{{ Visual Calculator
 function s:VisualCalculator() abort
+  let save_pos = getpos(".")
   " Get visual selection
   let [lnum1, col1] = getpos("'<")[1:2]
   let [lnum2, col2] = getpos("'>")[1:2]
@@ -737,7 +738,9 @@ function s:VisualCalculator() abort
   let fin_result = eval(str2nr(first_expr) . operation)
 
   " Replace
-  exe 's/\%V' . first_expr . '/' . fin_result '/'
+  exe 's/\%V' . first_expr . '/' . fin_result . '/'
+
+  call setpos('.', save_pos)
 endfunction
 command! -range VisualCalculator call <SID>VisualCalculator()
 vmap <c-r> :VisualCalculator<cr>
