@@ -12,3 +12,5 @@
 [alias]
     log  = log --pretty=log
     lb   = log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
+[init]
+	defaultBranch = master
