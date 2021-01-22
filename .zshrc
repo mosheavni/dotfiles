@@ -90,3 +90,8 @@ if [[ -f ~/.kube/ctx ]];then
     context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
     export KUBECONFIG=$context
 fi
+
+cnf() {
+  open "https://command-not-found.com/$*"
+}
+
