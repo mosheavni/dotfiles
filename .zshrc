@@ -1,4 +1,5 @@
 #export PATH=$PATH:$HOME/bin:/usr/local/bin:$PATH:~/Library/Python/2.7/bin:~/bin:~/.npm-global/bin:${KREW_ROOT:-$HOME/.krew}/bin
+export PATH="$HOME/.local/alt/shims:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="mosherussell"
 # ZSH_THEME="typewritten/typewritten"

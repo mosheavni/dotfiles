@@ -14,3 +14,5 @@
     lb   = log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
 [init]
 	defaultBranch = master
+[core]
+	excludesfile = /Users/moshe.avni/.gitignore_global
