@@ -33,7 +33,9 @@ set cursorline                 " Add highlight behind current line
                                " highlight CursorLine guibg=#303000 ctermbg=234
 set hlsearch                   " highlight reg. ex. in @/ register
 set incsearch                  " Search as characters are typed
-set inccommand=split           " Incremental search and replace with small split window
+if exists('&inccommand')
+  set inccommand=split           " Incremental search and replace with small split window
+endif
 set ignorecase                 " Search case insensitive...
 set smartcase                  " ignore case if search pattern is all lowercase,
                                " case-sensitive otherwise
