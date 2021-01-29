@@ -21,6 +21,7 @@ else
 endif
 " set tags=./tags,tags;$HOME
 
+colorscheme darkblue
 " set shellcmdflag=-ic
 
 set number                     " Show current line number
