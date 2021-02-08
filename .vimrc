@@ -21,6 +21,7 @@ else
 endif
 " set tags=./tags,tags;$HOME
 
+colorscheme darkblue
 " set shellcmdflag=-ic
 
 set number                     " Show current line number
@@ -33,7 +34,9 @@ set cursorline                 " Add highlight behind current line
                                " highlight CursorLine guibg=#303000 ctermbg=234
 set hlsearch                   " highlight reg. ex. in @/ register
 set incsearch                  " Search as characters are typed
-set inccommand=split           " Incremental search and replace with small split window
+if exists('&inccommand')
+  set inccommand=split           " Incremental search and replace with small split window
+endif
 set ignorecase                 " Search case insensitive...
 set smartcase                  " ignore case if search pattern is all lowercase,
                                " case-sensitive otherwise
@@ -173,9 +176,10 @@ let maplocalleader = "\\"
 " Map 0 to first non-blank character
 nnoremap 0 ^
 " Move to the end of the line
-nnoremap E $
-vnoremap E $
+nnoremap L $
+vnoremap L $
 nnoremap H 0
+vnoremap H 0
 
 "indent/unindent visual mode selection with tab/shift+tab
 vmap <tab> >gv
@@ -255,10 +259,6 @@ nnoremap <silent> <CR> :nohlsearch<CR><CR>
 nnoremap <leader>ma :set mouse=a<cr>
 nnoremap <leader>mv :set mouse=v<cr>
 
-" Don't lose seletion when indenting
-xnoremap <  <gv
-xnoremap >  >gv
-
 " Search mappings {{{
 nnoremap <silent> * :execute "normal! *N"<cr>
 nnoremap <silent> # :execute "normal! #n"<cr>
@@ -323,10 +323,6 @@ endfunction
 nnoremap <silent> <leader>ep :execute("vsplit ".g:myvimrcplugins)<cr>
 nnoremap <silent> <leader>sp :call LoadPlugins()<cr>
 " }}}
-
-" Remove blank space from the start of the line to the end of previous line
-inoremap ddd <esc>ma^i  <esc>hvk$x`ai
-nnoremap <leader>dd ma^i  <esc>hvk$x`a
 
 " highlight last inserted text
 nnoremap gV `[v`]
@@ -723,4 +719,32 @@ if exists(':terminal')
   set t_Co=256
 endif
 
+" }}}
+
+" {{{ Visual Calculator
+function s:VisualCalculator() abort
+  let save_pos = getpos(".")
+  " Get visual selection
+  let [lnum1, col1] = getpos("'<")[1:2]
+  let [lnum2, col2] = getpos("'>")[1:2]
+  let lines = getline(lnum1, lnum2)
+  let lines[-1] = lines[-1][: col2 - (&selection ==? 'inclusive' ? 1 : 2)]
+  let lines[0] = lines[0][col1 - 1:]
+  let first_expr = join(lines, "\n")
+
+  " Get arithmetic operation from user input
+  call inputsave()
+  let operation = input('Enter operation: ')
+  call inputrestore()
+
+  " Calculate final result
+  let fin_result = eval(str2nr(first_expr) . operation)
+
+  " Replace
+  exe 's/\%V' . first_expr . '/' . fin_result . '/'
+
+  call setpos('.', save_pos)
+endfunction
+command! -range VisualCalculator call <SID>VisualCalculator()
+vmap <c-r> :VisualCalculator<cr>
 " }}}

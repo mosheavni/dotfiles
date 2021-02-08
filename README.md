@@ -23,7 +23,7 @@
 
    ```bash
    [[ -d ~/Repos ]] || mkdir ~/Repos
-   cd ~/Repos && git clone git@github.com:Moshem123/dotfiles.git && cd dotfiles
+   cd ~/Repos && git clone git@github.com:mosheavni/dotfiles.git && cd dotfiles
    ```
 
 3. Install brew dependencies (generated with `brew bundle dump`)
@@ -36,6 +36,7 @@
    Also, install shell intergrations
 
    ```bash
+   cd ~/Repos/dotfiles
    curl -L https://iterm2.com/misc/install_shell_integration.sh | bash
    ```
 
@@ -84,16 +85,22 @@
        npm install --global $npm_package
    done < Npmfile
    ```
+   
+10. Install pip dependencies
 
-10. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
+    ```bash
+    pip3 install -r requirements.txt
+    ```
+
+11. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
 
     ```bash
     $(brew --prefix)/opt/fzf/install
     ```
 
-11. Install vim-plug [vim-plug](https://github.com/junegunn/vim-plug)
+12. Install vim-plug [vim-plug](https://github.com/junegunn/vim-plug)
 
-12. Open vim and install plugins, and
+13. Open vim and install plugins, and
     [coc-nvim](https://github.com/neoclide/coc.nvim):
 
     ```vim
@@ -101,6 +108,6 @@
     :call coc#util#install()
     ```
 
-13. ???
+14. ???
 
-14. PROFIT
+15. PROFIT

@@ -92,7 +92,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 " Plug 'rafi/awesome-vim-colorschemes'
 " Plug 'sonph/onehalf', { 'rtp': 'vim/' }
-Plug 'xolox/vim-colorscheme-switcher'
+" Plug 'xolox/vim-colorscheme-switcher'
 " Plug 'larsbs/vimterial_dark'
 " Plug 'sjl/badwolf'
 " Plug 'tyrannicaltoucan/vim-quantum'
@@ -176,6 +176,8 @@ let g:winresizer_start_key = '<C-E>'
 
 " Floaterm {{{
 let g:floaterm_keymap_toggle = '<F6>'
+let g:floaterm_keymap_new    = '<F7>'
+let g:floaterm_keymap_next   = '<F8>'
 " }}}
 
 " Vim do {{{
@@ -436,7 +438,7 @@ command! -nargs=? Gco call s:changebranch("<args>")
 
 " Push
 function! s:MosheGitPush() abort
-  echo 'Pushing...'
+  echo 'Pushing to ' . FugitiveHead() . '...'
   exe 'Git push -u origin ' . FugitiveHead()
   echo 'Pushed! 🤩'
 endfunction
@@ -647,6 +649,7 @@ nmap <silent> gr <Plug>(coc-references)
 
 " Project replace word
 nnoremap <leader>prn :CocSearch <C-R>=expand("<cword>")<CR><CR>
+vnoremap <leader>prn "iy:<c-u>CocSearch <C-R>i<CR><CR>
 
 " Highlight the symbol and its references when holding the cursor.
 " autocmd CursorHold * silent call CocActionAsync('highlight')

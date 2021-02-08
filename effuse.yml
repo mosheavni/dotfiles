@@ -10,3 +10,4 @@ exclude:
   - requirements.txt
   - tags
   - snippets.xml
+  - .alt.toml

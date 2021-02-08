@@ -6,6 +6,7 @@
 # fi
 
 #export PATH=$PATH:$HOME/bin:/usr/local/bin:$PATH:~/Library/Python/2.7/bin:~/bin:~/.npm-global/bin:${KREW_ROOT:-$HOME/.krew}/bin
+export PATH="$HOME/.local/alt/shims:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="nirrussell"
 ENABLE_CORRECTION="true"
@@ -26,7 +27,6 @@ plugins=(
     git
     kubectl
     minikube
-    z
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
@@ -96,3 +96,7 @@ alias ctx="source ~/.kube/ctx"
 local context
 context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
 export KUBECONFIG=$context
+
+cnf() {
+  open "https://command-not-found.com/$*"
+}
