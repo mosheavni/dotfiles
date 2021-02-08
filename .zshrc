@@ -91,12 +91,6 @@ fi
 # PS1="$EMOJI $PS1"
 # ZSH_THEME_GIT_PROMPT_PREFIX="${ZSH_THEME_GIT_PROMPT_PREFIX} "
 
-# Kubectl contexts
-alias ctx="source ~/.kube/ctx"
-local context
-context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
-export KUBECONFIG=$context
-
 cnf() {
   open "https://command-not-found.com/$*"
 }
