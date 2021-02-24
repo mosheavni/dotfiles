@@ -34,7 +34,7 @@ Plug 'StanAngeloff/php.vim', {'for': ['php']}
 Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
 Plug 'tfnico/vim-gradle'
 Plug 'towolf/vim-helm'
-
+Plug 'pearofducks/ansible-vim'
 
 Plug 'mogelbrod/vim-jsonpath'
 Plug 'chrisbra/vim-sh-indent'
@@ -42,6 +42,7 @@ Plug 'hashivim/vim-terraform'
 
 " Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'phenomenes/ansible-snippets'
 " Plug 'epilande/vim-es2015-snippets'
 " Plug 'epilande/vim-react-snippets'
 
@@ -230,6 +231,27 @@ let g:session_autosave = 'no'
 " Vim smooth scroll {{{
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 10, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
+" }}}
+
+" Vim ansible {{{
+let g:ansible_goto_role_paths = './roles,../roles,../../roles,../_common/roles'
+
+function! FindAnsibleRoleUnderCursor()
+  if exists("g:ansible_goto_role_paths")
+    let l:role_paths = g:ansible_goto_role_paths
+  else
+    let l:role_paths = "./roles"
+  endif
+  let l:tasks_main = expand("<cfile>") . "/tasks/main.yml"
+  let l:found_role_path = findfile(l:tasks_main, l:role_paths)
+  if l:found_role_path == ""
+    echo l:tasks_main . " not found"
+  else
+    execute "edit " . fnameescape(l:found_role_path)
+  endif
+endfunction
+au BufRead,BufNewFile */ansible/*.yml nnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
+au BufRead,BufNewFile */ansible/*.yml vnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
 " }}}
 
 " Editor config {{{
@@ -619,7 +641,7 @@ inoremap <silent><expr> <Tab>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<Tab>" :
       \ coc#refresh()
-let g:coc_snippet_next = '<tab>'
+" let g:coc_snippet_next = '<tab>'
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " }}}
 
