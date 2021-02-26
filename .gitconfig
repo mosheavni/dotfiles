@@ -15,4 +15,4 @@
 [init]
 	defaultBranch = master
 [core]
-	excludesfile = /Users/mosheavni/.gitignore_global
+	excludesfile = ~/.gitignore_global

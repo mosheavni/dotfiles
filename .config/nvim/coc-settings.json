@@ -1,4 +1,5 @@
 {
+  "snippets.snipmate.enable": false,
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.emoji.filetypes": ["gitcommit", "markdown"],
   "coc.source.floaterm.enable": false,
