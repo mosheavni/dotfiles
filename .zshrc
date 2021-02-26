@@ -58,8 +58,8 @@ if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
 fi
 
 source $ZSH/oh-my-zsh.sh
-if [[ -f ~/Repos/devops_scripts/aliases/aliases.sh ]];then
-    source ~/Repos/devops_scripts/aliases/aliases.sh
+if [[ -f ~/aliases.sh ]];then
+    source ~/aliases.sh
 fi
 
 autoload -U +X bashcompinit && bashcompinit
