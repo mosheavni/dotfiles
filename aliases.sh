@@ -71,3 +71,5 @@ function kubedebug () {
   fi
   kubectl run -i --rm --tty debug $* --image=$image --restart=Never -- sh
 }
+
+alias kns='kubens'
