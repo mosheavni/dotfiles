@@ -1,6 +1,6 @@
 [user]
   name = Moshe Avni
-  email = moshe.avni@naturalint.com
+  email = moshe@avni.us
 [diff]
   tool = vscode
 [difftool "vscode"]
