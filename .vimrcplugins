@@ -78,7 +78,7 @@ Plug 'mg979/do.vim'
 
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-Plug 'tonchis/vim-to-github'
+Plug 'mosheavni/vim-to-github'
 
 " Plug 'Yggdroot/indentLine'
 
