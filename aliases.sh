@@ -66,7 +66,7 @@ function cpr() {
   else
     pr_link="/pull/new/"
   fi
-    open "https://gitlab.com/${project_name}/${repo_name}/${pr_link}${branch_name}"
+  open "https://${git_name}.com/${project_name}/${repo_name}/${pr_link}${branch_name}"
 }
 
 ### Shortcuts to directories ###
