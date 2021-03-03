@@ -104,11 +104,6 @@ alias kdpv='kubectl describe persistentvolume'
 alias kepv='kubectl edit persistentvolume'
 alias kdelpv='kubectl delete persistentvolume'
 
-# Kubectl Persistent Volume Claim
-alias kgpvc='kubectl get persistentvolumeclaim'
-alias kdpvc='kubectl describe persistentvolumeclaim'
-alias kepvc='kubectl edit persistentvolumeclaim'
-alias kdelpvc='kubectl delete persistentvolumeclaim'
 # Kubectl jobs
 alias kgj='kubectl get job'
 alias kdj='kubectl describe job'
@@ -123,11 +118,6 @@ function kubedebug () {
   fi
   kubectl run -i --rm --tty debug $* --image=$image --restart=Never -- sh
 }
-
-# Kubectl Daemonset
-alias kgds='kubectl get daemonset'
-alias keds='kubectl edit daemonset'
-alias kdds='kubectl describe daemonset'
 
 # Common Used tools:
 alias tf='terraform'
