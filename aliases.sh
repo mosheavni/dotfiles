@@ -52,8 +52,22 @@ function opengit () { git remote -v | awk 'NR==1{print $2}' | sed -e "s?:?/?g" -
 # see recently pushed branches
 # alias gb="git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads | fzf | xargs git checkout && git pull"
 alias gb='git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2 | fzf | xargs git checkout'
+
 # Create pull request = cpr
-alias cpr='open https://github.com/$(git remote -v | awk -F "[:/]" "/fetch/{print \$2}")/$(basename $(git rev-parse --show-toplevel))/pull/new/$(git branch --show-current)'
+function cpr() {
+  git_remote=$(git remote -v | head -1)
+  git_name=$(sed -E 's?origin\s*(git@|https://)(\w+).*?\2?g' <<<"$git_remote")
+  project_name=$(sed -E "s/.*com[:\/](.*)\/.*/\\1/" <<<"$git_remote")
+  repo_name=$(sed -E -e "s/.*com[:\/].*\/(.*).*/\\1/" -e "s/\.git\s*\((fetch|push)\)//" <<<"$git_remote")
+  branch_name=$(git branch --show-current)
+
+  if [[ $git_name == "gitlab" ]]; then
+    pr_link="-/merge_requests/new?merge_request[source_branch]="
+  else
+    pr_link="/pull/new/"
+  fi
+  open "https://${git_name}.com/${project_name}/${repo_name}/${pr_link}${branch_name}"
+}
 
 ### Shortcuts to directories ###
 alias repos="~/Repos"

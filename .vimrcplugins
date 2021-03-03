@@ -15,6 +15,7 @@ Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 " Plug 'tpope/vim-vinegar'
+" Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -62,6 +63,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'AndrewRadev/switch.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/sideways.vim'
+Plug 'justinmk/vim-sneak'
 
 Plug 'simeji/winresizer'
 Plug 'xolox/vim-session'
@@ -823,3 +825,4 @@ nnoremap <leader>ow :call ReorganizeAllWindows("")<cr>
 nnoremap <leader>cw :call CloseNERDGitWindows()<cr>
 
 " }}}
+
