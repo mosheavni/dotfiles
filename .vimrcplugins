@@ -31,9 +31,9 @@ Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'prettier/vim-prettier', {
       \ 'do': 'yarn install',
       \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
-Plug 'StanAngeloff/php.vim', {'for': ['php']}
+" Plug 'StanAngeloff/php.vim', {'for': ['php']}
 Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
-Plug 'tfnico/vim-gradle'
+" Plug 'tfnico/vim-gradle'
 Plug 'towolf/vim-helm'
 Plug 'pearofducks/ansible-vim'
 
@@ -62,7 +62,6 @@ Plug 'tpope/vim-commentary'
 Plug 'junegunn/vim-easy-align'
 Plug 'AndrewRadev/switch.vim'
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'AndrewRadev/sideways.vim'
 Plug 'justinmk/vim-sneak'
 
 Plug 'simeji/winresizer'
@@ -218,11 +217,6 @@ let g:switch_custom_definitions = [
       \     },
       \   }
       \ ]
-" }}}
-
-" Sideways {{{
-nnoremap <leader>h :SidewaysLeft<cr>
-nnoremap <leader>l :SidewaysRight<cr>
 " }}}
 
 " Vim session {{{
@@ -386,7 +380,8 @@ let g:lightline = {
       \ },
       \ 'component_type': {
       \   'buffers': 'tabsel'
-      \ }
+      \ },
+      \ 'component_raw': {'buffers': 1}
       \ }
 
 function! LightlineDevIconsFiletype()
@@ -397,8 +392,12 @@ function! LightlineDevIconsFileformat()
   return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
 endfunction
 
+let g:lightline#bufferline#show_number=1
 let g:lightline#bufferline#enable_devicons=1
 let g:lightline#bufferline#filename_modifier = ':t'
+let g:lightline#bufferline#margin_left=1
+let g:lightline#bufferline#margin_right=1
+let g:lightline#bufferline#clickable=1
 " }}}
 
 " GitGutter {{{
@@ -736,8 +735,6 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 
 " Nerd Tree {{{
 "
-" nnoremap <c-o> :NERDTreeToggle<cr>
-nnoremap <silent> <Leader>v :NERDTreeFind<CR>
 let NERDTreeChDirMode = 2
 let NERDTreeHijackNetrw = 1
 " Show hidden files
@@ -760,13 +757,6 @@ let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['\..*ignore.*'] = ''
 " If more than one window and previous buffer was NERDTree, go back to it.
 " autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr("$") > 1 | b# | endif
 
-augroup nerd_tree_augroup
-  autocmd!
-  " Highlight currently open buffer in NERDTree
-  autocmd BufEnter * call SyncTree()
-  " Close VIM if NERDTree is the only buffer left
-  autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
-augroup END
 
 " Check if NERDTree is open or active
 function! IsNERDTreeOpen()
@@ -782,47 +772,21 @@ function! SyncTree()
   endif
 endfunction
 
-
 function! ToggleNerdTree()
   set eventignore=BufEnter
   NERDTreeToggle
   set eventignore=
 endfunction
+
+augroup nerd_tree_augroup
+  autocmd!
+  " Highlight currently open buffer in NERDTree
+  autocmd BufEnter * call SyncTree()
+  " Close VIM if NERDTree is the only buffer left
+  autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
+augroup END
+
 nmap <silent> <C-o> :call ToggleNerdTree()<CR>
-
-function! ToggleNerdFugitiveVimStartup(timer)
-  let l:firstbuf = bufnr('%')
-  echom 'firstbuf '. l:firstbuf
-  Git
-  let l:gitbuf = bufnr('%')
-  hide
-  call ToggleNerdTree()
-  new
-  exe 'buf' . l:gitbuf
-  set buflisted
-  let g:git_opened_by_func = 1
-  let l:winids = win_findbuf(l:firstbuf)
-  call win_gotoid(l:winids[0])
-endfunc
-
-function! CloseNERDGitWindows() abort
-  if buflisted(bufname('.git/index'))
-    buf .git/index
-    bd .git/index
-  endif
-  if (winnr('$') != 1) && exists(':NERDTreeClose')
-    NERDTreeClose
-  endif
-endfunction
-
-" Reorganize all buffers
-function! ReorganizeAllWindows(timer)
-  call CloseNERDGitWindows()
-  call ToggleNerdFugitiveVimStartup('')
-endfunction
-
-nnoremap <leader>ow :call ReorganizeAllWindows("")<cr>
-nnoremap <leader>cw :call CloseNERDGitWindows()<cr>
+nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
 
 " }}}
-
