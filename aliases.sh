@@ -56,9 +56,9 @@ alias gb='git for-each-ref --sort=-committerdate --format="%(refname:short)" | g
 # Create pull request = cpr
 function cpr() {
   git_remote=$(git remote -v | head -1)
-  git_name=$(sed -E 's?origin\s*(git@|https://)(\w+).*?\2?g' <<<"$git_remote")
-  project_name=$(sed -E "s/.*com[:\/](.*)\/.*/\\1/" <<<"$git_remote")
-  repo_name=$(sed -E -e "s/.*com[:\/].*\/(.*).*/\\1/" -e "s/\.git\s*\((fetch|push)\)//" <<<"$git_remote")
+  git_name=$(gsed -E 's?origin\s*(git@|https://)(\w+).*?\2?g' <<<"$git_remote")
+  project_name=$(gsed -E "s/.*com[:\/](.*)\/.*/\\1/" <<<"$git_remote")
+  repo_name=$(gsed -E -e "s/.*com[:\/].*\/(.*).*/\\1/" -e "s/\.git\s*\((fetch|push)\)//" <<<"$git_remote")
   branch_name=$(git branch --show-current)
 
   if [[ $git_name == "gitlab" ]]; then
