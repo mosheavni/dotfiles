@@ -525,7 +525,7 @@ com! FormatJSON exe '%!python -m json.tool'
 function FormatEqual() abort
   let save_cursor = getcurpos()
   normal! gg=G
-  silent! %s#)\zs\ze{# #g
+  silent! exe '%s#)\zs\ze{# #g'
   call setpos('.', save_cursor)
   echom 'Formatted with equalprg'
 endfunction
@@ -726,7 +726,7 @@ endif
 
 " {{{ Visual Calculator
 function s:VisualCalculator() abort
-  let save_pos = getpos(".")
+  let save_pos = getpos('.')
   " Get visual selection
   let [lnum1, col1] = getpos("'<")[1:2]
   let [lnum2, col2] = getpos("'>")[1:2]
@@ -753,7 +753,7 @@ vmap <c-r> :VisualCalculator<cr>
 " }}}
 
 " Last position on document {{{
-if has("autocmd")
+if has('autocmd')
   augroup redhat
   autocmd!
   " When editing a file, always jump to the last cursor position
