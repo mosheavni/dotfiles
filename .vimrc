@@ -376,6 +376,9 @@ function SplitParamLines() abort
   exe "normal! 0t)a\<cr>\<esc>"
 endfunction
 nnoremap <silent> <leader>( :call SplitParamLines()<cr>
+
+" Change \n to new lines
+nmap <silent> <leader><cr> :%s/\\n/\r/g<cr>:noh<cr>
 " }}}
 
 " move vertically by visual line (don't skip wrapped lines) {{{
