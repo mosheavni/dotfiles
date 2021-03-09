@@ -233,21 +233,25 @@ noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
 let g:ansible_goto_role_paths = './roles,../roles,../../roles,../_common/roles'
 
 function! FindAnsibleRoleUnderCursor()
-  if exists("g:ansible_goto_role_paths")
+  if exists('g:ansible_goto_role_paths')
     let l:role_paths = g:ansible_goto_role_paths
   else
-    let l:role_paths = "./roles"
+    let l:role_paths = './roles'
   endif
-  let l:tasks_main = expand("<cfile>") . "/tasks/main.yml"
+  let l:tasks_main = expand('<cfile>') . '/tasks/main.yml'
   let l:found_role_path = findfile(l:tasks_main, l:role_paths)
-  if l:found_role_path == ""
-    echo l:tasks_main . " not found"
+  if l:found_role_path == ''
+    echo l:tasks_main . ' not found'
   else
-    execute "edit " . fnameescape(l:found_role_path)
+    execute 'edit ' . fnameescape(l:found_role_path)
   endif
 endfunction
-au BufRead,BufNewFile */ansible/*.yml nnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
-au BufRead,BufNewFile */ansible/*.yml vnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
+augroup AnsibleFind
+  autocmd!
+
+  au BufRead,BufNewFile */ansible/*.yml nnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
+  au BufRead,BufNewFile */ansible/*.yml vnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
+augroup END
 " }}}
 
 " Editor config {{{
