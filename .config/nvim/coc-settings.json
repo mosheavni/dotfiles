@@ -2,7 +2,6 @@
   "snippets.snipmate.enable": false,
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.emoji.filetypes": ["gitcommit", "markdown"],
-  "coc.source.floaterm.enable": false,
   "coc.preferences.colorSupport": true,
   "highlight.colors.enable": true,
   "highlight.document.enable": true,
@@ -10,7 +9,6 @@
   "css.lint.unknownProperties": "warning",
   "prettier.tabWidth": 2,
   "prettier.eslintIntegration": true,
-  "eslint.enable": true,
   "eslint.packageManager": "npm",
   "eslint.autoFixOnSave": true,
   "eslint.filetypes": [
@@ -53,11 +51,33 @@
   "diagnostic.warningSign": "",
   "diagnostic-languageserver.filetypes": {
     "sh": "shellcheck",
-    "vim": "vint"
+    "vim": "vint",
+    "yaml.ansible": "ansibleLint"
   },
   "diagnostic-languageserver.formatFiletypes": {
     "terraform": "tffmt",
     "sh": "shfmt"
+  },
+  "diagnostic-languageserver.linters": {
+    "ansibleLint": {
+      "command": "ansible-lint",
+      "args": ["--parseable-severity", "--nocolor", "-x", "comments", "-"],
+      "sourceName": "ansibleLint",
+      "formatPattern": [
+        "^[^:]+:(\\d+):\\s\\[\\w+\\]\\s\\[(\\w+)\\]\\s(.*)$",
+        {
+          "line": 1,
+          "security": 2,
+          "message": 3
+        }
+      ],
+      "securities": {
+        "VERY_LOW": "hint",
+        "LOW": "info",
+        "HIGH": "warning",
+        "VERY_HIGH": "error"
+      }
+    }
   },
   "diagnostic-languageserver.debug": true,
   "diagnostic-languageserver.trace.server": "verbose",

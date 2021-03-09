@@ -28,14 +28,14 @@ Plug 'vim-scripts/groovyindent-unix'
 Plug 'chr4/nginx.vim'
 " Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-Plug 'prettier/vim-prettier', {
-      \ 'do': 'yarn install',
-      \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+" Plug 'prettier/vim-prettier', {
+"       \ 'do': 'yarn install',
+"       \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 " Plug 'StanAngeloff/php.vim', {'for': ['php']}
 Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
 " Plug 'tfnico/vim-gradle'
 Plug 'towolf/vim-helm'
-Plug 'pearofducks/ansible-vim'
+" Plug 'pearofducks/ansible-vim'
 
 Plug 'mogelbrod/vim-jsonpath'
 Plug 'chrisbra/vim-sh-indent'
@@ -794,3 +794,5 @@ nmap <silent> <C-o> :call ToggleNerdTree()<CR>
 nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
 
 " }}}
+
+au BufNewFile,BufRead tasks/*.y{a,}ml setf yaml.ansible
