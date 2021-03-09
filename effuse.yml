@@ -2,6 +2,7 @@ exclude:
   - '.config/karabiner'
   - .vimrc-minimal
   - Brewfile
+  - Brewfile.lock.json
   - Dockerfile
   - Dockerfile-minimal
   - Npmfile
