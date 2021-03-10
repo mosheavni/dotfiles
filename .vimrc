@@ -63,6 +63,7 @@ set mouse=a
 set undofile                   " Enables saving undo history to a file
 set colorcolumn=80             " Mark where are 80 characters to start breaking line
 set guicursor=i:blinkwait700-blinkon400-blinkoff250
+hi ColorColumn ctermbg=238 guibg=lightgre
 set fileencodings=utf-8,cp1251
 set visualbell                 " Use visual bell instead of beeping
 
@@ -115,7 +116,7 @@ endif
 if has('patch-8.1.1564')
   " Recently vim can merge signcolumn and number column into one
   set signcolumn=number
-else
+elseif exists('&signcolumn')
   set signcolumn=yes
 endif
 " }}}
