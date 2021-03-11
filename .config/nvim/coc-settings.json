@@ -9,14 +9,9 @@
   "css.lint.unknownProperties": "warning",
   "prettier.tabWidth": 2,
   "prettier.eslintIntegration": true,
+  "prettier.disableLanguages": ["helm"],
   "eslint.packageManager": "npm",
   "eslint.autoFixOnSave": true,
-  "eslint.filetypes": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
   "python.pythonPath": "/usr/local/bin/python3",
   "python.linting.enabled": true,
   "python.linting.pep8Enabled": false,
@@ -114,7 +109,7 @@
   "languageserver": {
     "dockerfile": {
       "command": "docker-langserver",
-      "filetypes": ["dockerfile"],
+      "filetypes": ["dockerfile", "Dockerfile"],
       "args": ["--stdio"]
     },
     "terraform": {
