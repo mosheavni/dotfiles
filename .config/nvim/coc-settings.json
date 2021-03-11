@@ -47,13 +47,30 @@
   "diagnostic-languageserver.filetypes": {
     "sh": "shellcheck",
     "vim": "vint",
-    "yaml.ansible": "ansibleLint"
+    "yaml.ansible": "ansibleLint",
+    "dockerfile": "dockerLint"
   },
   "diagnostic-languageserver.formatFiletypes": {
     "terraform": "tffmt",
     "sh": "shfmt"
   },
   "diagnostic-languageserver.linters": {
+    "dockerLint": {
+      "command": "hadolint",
+      "args": ["--no-fail", "--no-color", "-f", "json", "-"],
+      "sourceName": "dockerLint",
+      "parseJson": {
+        "line": "line",
+        "column": "column",
+        "message": "${message} [${code}]",
+        "security": "level"
+      },
+      "securities": {
+      "error": "error",
+      "warning": "warning",
+      "info": "info"
+    },
+    },
     "ansibleLint": {
       "command": "ansible-lint",
       "args": ["--parseable-severity", "--nocolor", "-x", "comments", "-"],
@@ -107,11 +124,6 @@
     "default": "\uf29c"
   },
   "languageserver": {
-    "dockerfile": {
-      "command": "docker-langserver",
-      "filetypes": ["dockerfile", "Dockerfile"],
-      "args": ["--stdio"]
-    },
     "terraform": {
       "command": "terraform-ls",
       "args": ["serve"],
@@ -119,5 +131,6 @@
       "initializationOptions": {},
       "settings": {}
     }
-  }
+  },
+  "coc.preferences.extensionUpdateCheck": "daily"
 }
