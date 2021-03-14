@@ -10,7 +10,12 @@ scriptencoding utf-8
 
 " Basic configurations {{{
 set nocompatible
-syntax enable
+" if !exists('g:syntax_on') | syntax enable | endif
+if has('vim_starting')
+  if has('syntax') && !exists('g:syntax_on')
+    syntax enable
+  endif
+endif
 
 if executable('/bin/zsh')
   set shell=/bin/zsh\ -l
@@ -121,13 +126,13 @@ elseif exists('&signcolumn')
 endif
 " }}}
 
-" Set relativenumber when focused {{{
-augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * set number relativenumber
-  autocmd BufLeave,FocusLost,InsertEnter   * set number norelativenumber
-augroup END
-" }}}
+" " Set relativenumber when focused {{{
+" augroup numbertoggle
+"   autocmd!
+"   autocmd BufEnter,FocusGained,InsertLeave * set number relativenumber
+"   autocmd BufLeave,FocusLost,InsertEnter   * set number norelativenumber
+" augroup END
+" " }}}
 
 " set verbose=1
 if has('termguicolors')
@@ -679,24 +684,26 @@ if exists(':terminal')
   "     \'#ffffff'
   " \]
 
-  let g:terminal_ansi_colors = [
-        \'#21222C',
-        \'#FF5555',
-        \'#69FF94',
-        \'#FFFFA5',
-        \'#D6ACFF',
-        \'#FF92DF',
-        \'#A4FFFF',
-        \'#FFFFFF',
-        \'#636363',
-        \'#F1FA8C',
-        \'#BD93F9',
-        \'#FF79C6',
-        \'#8BE9FD',
-        \'#F8F8F2',
-        \'#6272A4',
-        \'#FF6E6E'
-  \]
+  if !exists('g:terminal_ansi_colors')
+    let g:terminal_ansi_colors = [
+          \'#21222C',
+          \'#FF5555',
+          \'#69FF94',
+          \'#FFFFA5',
+          \'#D6ACFF',
+          \'#FF92DF',
+          \'#A4FFFF',
+          \'#FFFFFF',
+          \'#636363',
+          \'#F1FA8C',
+          \'#BD93F9',
+          \'#FF79C6',
+          \'#8BE9FD',
+          \'#F8F8F2',
+          \'#6272A4',
+          \'#FF6E6E'
+    \]
+  endif
 
 
   " Function to set terminal colors

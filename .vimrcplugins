@@ -13,7 +13,7 @@ call plug#begin(s:vimplug_dir)
 
 Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
-" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 " Plug 'tpope/vim-vinegar'
 " Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 
@@ -70,7 +70,7 @@ Plug 'xolox/vim-session'
 
 " Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'
-Plug 'luochen1990/rainbow'
+" Plug 'luochen1990/rainbow'
 Plug 'kshenoy/vim-signature'
 
 " Plug 'tpope/vim-sleuth' " Causes issues with sh indentation
@@ -101,9 +101,9 @@ Plug 'mengelbrecht/lightline-bufferline'
 " Plug 'sainnhe/sonokai'
 " Plug 'arzg/vim-colors-xcode'
 " Plug 'yuttie/hydrangea-vim'
-Plug 'dracula/vim'
+" Plug 'dracula/vim'
 Plug 'drewtempelmeyer/palenight.vim'
-Plug 'sainnhe/edge'
+" Plug 'sainnhe/edge'
 " Plug 'itchyny/vim-cursorword'
 Plug 'machakann/vim-highlightedyank'
 " Plug 'miyakogi/conoline.vim'
@@ -303,8 +303,8 @@ endfunction
 " call RandomColorChooser()
 let g:edge_style = 'neon'
 let g:palenight_terminal_italics=1
-" colorscheme palenight
-colo edge
+colorscheme palenight
+" colo edge
 
 " }}}
 
@@ -336,7 +336,11 @@ let g:WebDevIconsOS = 'Darwin'
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
-highlight! link NERDTreeFlags NERDTreeDir
+let g:WebDevIconsUnicodeDecorateFileNodes = 0
+let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
+let g:webdevicons_conceal_nerdtree_brackets = 1
+let g:WebDevIconsNerdTreeAfterGlyphPadding = ' '
+" highlight! link NERDTreeFlags NERDTreeDir
 " }}}
 
 " " Vim airline (powerline) {{{
@@ -365,7 +369,7 @@ highlight! link NERDTreeFlags NERDTreeDir
 
 " Vim lightline {{{
 let g:lightline = {
-      \ 'colorscheme': 'edge',
+      \ 'colorscheme': 'palenight',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified', 'filetype' ] ]
@@ -738,21 +742,35 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " }}}
 
 " Nerd Tree {{{
-"
-let NERDTreeChDirMode = 2
-let NERDTreeHijackNetrw = 1
-" Show hidden files
-let NERDTreeShowHidden=1
-" let NERDTreeDirArrowExpandable = '⇾'
-" let NERDTreeDirArrowCollapsible = '⤓'
-let NERDTreeHighlightCursorline = 1
-let g:NERDTreeGitStatusUseNerdFonts = 1
-" let g:NERDTreeGitStatusConcealBrackets = 1
 
-" Set icon for Jenkinsfile
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {}
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Jenkinsfile'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['\..*ignore.*'] = ''
+" let g:NERDTreeChDirMode = 2
+let g:NERDTreeHijackNetrw = 1
+" " Show hidden files
+let g:NERDTreeShowHidden=1
+" " let NERDTreeDirArrowExpandable = '⇾'
+" " let NERDTreeDirArrowCollapsible = '⤓'
+let g:NERDTreeHighlightCursorline = 1
+
+" ### nerdtree-git-plugin ###
+let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeGitStatusConcealBrackets = 1
+
+let g:NERDTreeIndicatorMapCustom = {
+    \ 'Modified'  : '✹ ',
+    \ 'Staged'    : '✚ ',
+    \ 'Untracked' : '✭ ',
+    \ 'Unmerged'  : '═ ',
+    \ 'Dirty'     : '✗ ',
+    \ 'Renamed'   : '➜ ',
+    \ 'Clean'     : '✔︎ ',
+    \ 'Ignored'   : '☒ ',
+    \ 'Deleted'   : '✖ ',
+    \ 'Unknown'   : '? '
+    \ }
+" " Set icon for Jenkinsfile
+" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {}
+" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Jenkinsfile'] = ''
+" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['\..*ignore.*'] = ''
 
 " let g:NERDTreePatternMatchHighlightColor = {}
 " let g:NERDTreePatternMatchHighlightColor['\..*ignore.*'] = 'EE6E73'
@@ -794,5 +812,3 @@ nmap <silent> <C-o> :call ToggleNerdTree()<CR>
 nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
 
 " }}}
-
-au BufNewFile,BufRead tasks/*.y{a,}ml setf yaml.ansible
