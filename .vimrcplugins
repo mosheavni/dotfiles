@@ -230,14 +230,10 @@ noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
 " }}}
 
 " Vim ansible {{{
-let g:ansible_goto_role_paths = './roles,../roles,../../roles,../_common/roles'
+let g:ansible_goto_role_paths = '.;,roles;'
 
 function! FindAnsibleRoleUnderCursor()
-  if exists('g:ansible_goto_role_paths')
-    let l:role_paths = g:ansible_goto_role_paths
-  else
-    let l:role_paths = './roles'
-  endif
+  let l:role_paths = get(g:, 'ansible_goto_role_paths', './roles')
   let l:tasks_main = expand('<cfile>') . '/tasks/main.yml'
   let l:found_role_path = findfile(l:tasks_main, l:role_paths)
   if l:found_role_path == ''
