@@ -13,7 +13,7 @@ call plug#begin(s:vimplug_dir)
 
 Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 " Plug 'tpope/vim-vinegar'
 " Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 
@@ -333,14 +333,8 @@ let g:startify_custom_header = [
 
 " DevIcons {{{
 let g:WebDevIconsOS = 'Darwin'
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
-let g:WebDevIconsUnicodeDecorateFileNodes = 0
-let g:WebDevIconsUnicodeGlyphDoubleWidth = 0
-let g:webdevicons_conceal_nerdtree_brackets = 1
-let g:WebDevIconsNerdTreeAfterGlyphPadding = ' '
-" highlight! link NERDTreeFlags NERDTreeDir
 " }}}
 
 " " Vim airline (powerline) {{{
@@ -743,29 +737,27 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 
 " Nerd Tree {{{
 
-" let g:NERDTreeChDirMode = 2
+let g:NERDTreeChDirMode = 2
 let g:NERDTreeHijackNetrw = 1
-" " Show hidden files
 let g:NERDTreeShowHidden=1
-" " let NERDTreeDirArrowExpandable = '⇾'
-" " let NERDTreeDirArrowCollapsible = '⤓'
 let g:NERDTreeHighlightCursorline = 1
+let g:NERDTreeFileExtensionHighlightFullName = 1
 
-" ### nerdtree-git-plugin ###
+" " ### nerdtree-git-plugin ###
 let g:NERDTreeGitStatusUseNerdFonts = 1
-let g:NERDTreeGitStatusConcealBrackets = 1
+" let g:NERDTreeGitStatusConcealBrackets = 1
 
-let g:NERDTreeIndicatorMapCustom = {
-    \ 'Modified'  : '✹ ',
-    \ 'Staged'    : '✚ ',
-    \ 'Untracked' : '✭ ',
-    \ 'Unmerged'  : '═ ',
-    \ 'Dirty'     : '✗ ',
-    \ 'Renamed'   : '➜ ',
-    \ 'Clean'     : '✔︎ ',
-    \ 'Ignored'   : '☒ ',
-    \ 'Deleted'   : '✖ ',
-    \ 'Unknown'   : '? '
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+    \ 'Modified'  : '✹',
+    \ 'Staged'    : '✚',
+    \ 'Untracked' : '✭',
+    \ 'Unmerged'  : '═',
+    \ 'Dirty'     : '✗',
+    \ 'Renamed'   : '➜',
+    \ 'Clean'     : '✔︎',
+    \ 'Ignored'   : '☒',
+    \ 'Deleted'   : '✖',
+    \ 'Unknown'   : '?'
     \ }
 " " Set icon for Jenkinsfile
 " let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {}
