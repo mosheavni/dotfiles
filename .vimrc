@@ -708,10 +708,12 @@ if exists(':terminal')
 
   " Function to set terminal colors
   fun! s:setTerminalColors()
-    for i in range(len(g:terminal_ansi_colors))
-        exe 'let g:terminal_color_' . i . ' = g:terminal_ansi_colors[' . i . ']'
-    endfor
-    unlet! g:terminal_ansi_colors
+    if exists('g:terminal_ansi_colors')
+      for i in range(len(g:terminal_ansi_colors))
+          exe 'let g:terminal_color_' . i . ' = g:terminal_ansi_colors[' . i . ']'
+      endfor
+      unlet! g:terminal_ansi_colors
+    endif
   endfunction
 
   augroup TerminalAugroup
