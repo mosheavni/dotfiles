@@ -92,6 +92,7 @@ Plug 'editorconfig/editorconfig-vim'
 
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
+set noshowmode " Redundant as lighline takes care of that
 " Plug 'rafi/awesome-vim-colorschemes'
 " Plug 'sonph/onehalf', { 'rtp': 'vim/' }
 " Plug 'xolox/vim-colorscheme-switcher'
@@ -359,10 +360,17 @@ let g:DevIconsEnableFolderExtensionPatternMatching = 1
 
 " Vim lightline {{{
 let g:lightline = {
-      \ 'colorscheme': 'palenight',
+      \ 'colorscheme': 'nord',
+      \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
+      \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified', 'filetype' ] ]
+      \             [ 'readonly', 'filename', 'modified', 'filetype' ] ],
+      \   'right': [ [ 'gitbranch' ] ]
+      \ },
+      \ 'inactive': {
+      \   'left': [ [ 'filename', 'modified' ] ],
+		  \   'right': [ [ 'gitbranch' ] ]
       \ },
       \ 'tabline': {
       \   'left': [ ['buffers'] ],
@@ -389,6 +397,23 @@ endfunction
 function! LightlineDevIconsFileformat()
   return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
 endfunction
+
+function! s:set_lightline_colorscheme(name) abort
+  let g:lightline.colorscheme = a:name
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
+endfunction
+
+function! s:lightline_colorschemes(...) abort
+  return join(map(
+        \ globpath(&rtp,'autoload/lightline/colorscheme/*.vim',1,1),
+        \ "fnamemodify(v:val,':t:r')"),
+        \ "\n")
+endfunction
+
+command! -nargs=1 -complete=custom,s:lightline_colorschemes LightlineColorscheme
+          \ call s:set_lightline_colorscheme(<q-args>)
 
 let g:lightline#bufferline#show_number=1
 let g:lightline#bufferline#enable_devicons=1
