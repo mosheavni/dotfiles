@@ -41,7 +41,7 @@ function mwatch() {
 }
 
 function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
-function ssh2 () { [[ $1 == *"ip-"* ]] && ( in_url=`sed -e 's/ip-//' -e 's/-/./g' <<< "$1" ` ; echo $in_url && ssh $in_url ) || ssh $1 }
+function ssh2 () { in_url=`sed -e 's/ip-//' -e 's/-/./g' <<< "$1" ` ; echo $in_url && ssh $in_url }
 function jsonlint () { pbcopy && open https://jsonlint.com/ }
 function grl () { grep -rl $* . }
 
