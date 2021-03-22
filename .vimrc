@@ -67,10 +67,12 @@ set guifont=:h
 set mouse=a
 set undofile                   " Enables saving undo history to a file
 set colorcolumn=80             " Mark where are 80 characters to start breaking line
+set textwidth=80
 set guicursor=i:blinkwait700-blinkon400-blinkoff250
 hi ColorColumn ctermbg=238 guibg=lightgre
 set fileencodings=utf-8,cp1251
 set visualbell                 " Use visual bell instead of beeping
+set formatoptions+=t           " auto break long lines"
 
 if has('nvim')
   set shortmess+=c " don't give |ins-completion-menu| messages.
@@ -425,7 +427,7 @@ nnoremap <leader>f za
 nnoremap <leader>caf zM
 nnoremap <leader>oaf zR
 " Open level folds
-nnoremap <leader>olf zczA
+nnoremap <leader>olf zazczA
 
 " }}}
 
@@ -517,13 +519,14 @@ nnoremap <leader>ds :DiffSaved<cr>
 " }}}
 
 " Special filetypes {{{
+
 augroup special_filetype
   au!
-  autocmd BufNewFile,BufRead *yaml setf yaml
   autocmd FileType json syntax match Comment +\/\/.\+$+
   autocmd BufNewFile,BufRead aliases.sh setf zsh
   autocmd FileType javascript set filetype=javascriptreact | set iskeyword+=-
 augroup end
+
 let g:sh_fold_enabled = 4
 
 com! FormatJSON exe '%!python -m json.tool'
