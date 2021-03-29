@@ -555,6 +555,12 @@ function! ExecuteFile()
         \   'html': 'open',
         \   'sh': 'bash'
         \ }
+  call inputsave()
+  let sure = input('Are you sure you want to run the current file? (y/n): ')
+  call inputrestore()
+  if sure !=# 'y'
+    return ''
+  endif
   let l:cmd = get(l:filetype_to_command, &filetype, 'bash')
   :%y
   new | 0put
@@ -768,12 +774,28 @@ vmap <c-r> :VisualCalculator<cr>
 " Last position on document {{{
 if has('autocmd')
   augroup redhat
-  autocmd!
-  " When editing a file, always jump to the last cursor position
-  autocmd BufReadPost *
-  \ if line("'\"") > 0 && line ("'\"") <= line("$") |
-  \   exe "normal! g'\"" |
-  \ endif
+    autocmd!
+    " When editing a file, always jump to the last cursor position
+    autocmd BufReadPost *
+    \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+    \   exe "normal! g'\"" |
+    \ endif
   augroup END
 endif
+" }}}
+
+" YamlToJson JsonToYaml {{{
+function! YamlToJson() abort
+  % !python -c 'import yaml, json, sys; json.dumps(yaml.safe_load(sys.stdin));'
+  set filetype=json
+  FormatJSON
+endfunction
+
+function! JsonToYaml() abort
+  % !python -c 'import yaml, json, sys; yaml.safe_dump(json.load(sys.stdin), sys.stdout, default_flow_style=False)'
+  set filetype=yaml
+endfunction
+
+com! JsonToYaml call JsonToYaml()
+com! YamlToJson call YamlToJson()
 " }}}
