@@ -182,6 +182,9 @@ let g:winresizer_start_key = '<C-E>'
 let g:floaterm_keymap_toggle = '<F6>'
 let g:floaterm_keymap_new    = '<F7>'
 let g:floaterm_keymap_next   = '<F8>'
+let g:floaterm_width = 0.7
+let g:floaterm_height = 0.9
+
 " }}}
 
 " Vim do {{{
