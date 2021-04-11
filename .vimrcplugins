@@ -87,8 +87,6 @@ Plug 'mosheavni/vim-to-github'
 Plug 'xolox/vim-misc'
 Plug 'ludovicchabant/vim-gutentags'
 
-Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
-
 Plug 'editorconfig/editorconfig-vim'
 
 Plug 'itchyny/lightline.vim'
@@ -312,10 +310,10 @@ colorscheme palenight
 " }}}
 
 " Undo tree {{{
-nnoremap <leader>u :GundoToggle<CR>
-let g:undotree_WindowLayout=2
-let g:undotree_ShortIndicators=1
-let g:undotree_SetFocusWhenToggle=1
+" nnoremap <leader>u :GundoToggle<CR>
+" let g:undotree_WindowLayout=2
+" let g:undotree_ShortIndicators=1
+" let g:undotree_SetFocusWhenToggle=1
 " }}}
 
 " Startify {{{
@@ -428,7 +426,7 @@ let g:lightline#bufferline#clickable=1
 " }}}
 
 " GitGutter {{{
-let g:gitgutter_map_keys = 0
+let g:gitgutter_map_keys = 1
 let g:gitgutter_highlight_lines = 0
 let g:gitgutter_highlight_linenrs = 1
 nnoremap <leader>gc :GitGutterLineHighlightsToggle<cr>
