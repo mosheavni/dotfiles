@@ -184,9 +184,9 @@ let maplocalleader = "\\"
 " Map 0 to first non-blank character
 nnoremap 0 ^
 " Move to the end of the line
-nnoremap L $
+nnoremap L $zL
 vnoremap L $
-nnoremap H 0
+nnoremap H 0zH
 vnoremap H 0
 
 "indent/unindent visual mode selection with tab/shift+tab
@@ -561,6 +561,7 @@ function! ExecuteFile()
   if sure !=# 'y'
     return ''
   endif
+  echo ''
   let l:cmd = get(l:filetype_to_command, &filetype, 'bash')
   :%y
   new | 0put
@@ -798,4 +799,17 @@ endfunction
 
 com! JsonToYaml call JsonToYaml()
 com! YamlToJson call YamlToJson()
+" }}}
+
+" Decrypt encrypt ansible secret {{{
+function DencryptAnsibleSecretFile(...) abort
+  let action = 'decrypt'
+  if get(a:, 1, v:false)
+    let action = 'encrypt'
+  endif
+
+  silent! exe '!ansible-vault ' . action . ' --vault-password-file ~/ansible_secret %'
+endfunction
+com! EncryptAnsible call DencryptAnsibleSecretFile(1)
+com! DecryptAnsible call DencryptAnsibleSecretFile()
 " }}}
