@@ -250,11 +250,11 @@ nnoremap [l :lprev<cr>zz
 nnoremap <leader>= yypVr=
 
 " Map dp and dg with leader for diffput and diffget
-nnoremap <leader>dp :diffput<cr>
-nnoremap <leader>dg :diffget<cr>
-nnoremap <leader>du :windo diffupdate<cr>
-nnoremap <leader>dn :windo diffthis<cr>
-nnoremap <leader>df :windo diffoff<cr>
+nmap <leader>dp :diffput<cr>
+nmap <leader>dg :diffget<cr>
+nmap <leader>du :bufdo diffoff <bar> windo diffupdate<cr>
+nmap <leader>dn :windo diffthis<cr>
+nmap <leader>df :bufdo diffoff<cr>
 
 " Map enter to no highlight
 nnoremap <silent> <CR> :nohlsearch<CR><CR>
@@ -598,12 +598,12 @@ augroup grep_augroup
 augroup END
 
 " Set grepprg as RipGrep or ag (the_silver_searcher), fallback to grep
-if executable('ag')
-  let &grepprg='ag --vimgrep --smart-case --hidden --follow --ignore "!{' . &wildignore . '}" $*'
-  set grepformat=%f:%l:%c:%m
-elseif executable('rg')
+if executable('rg')
   let &grepprg="rg --vimgrep --no-heading --smart-case --hidden --follow -g '!{" . &wildignore . "}' $*"
   set grepformat=%f:%l:%c:%m,%f:%l:%m
+elseif executable('ag')
+  let &grepprg='ag --vimgrep --smart-case --hidden --follow --ignore "!{' . &wildignore . '}" $*'
+  set grepformat=%f:%l:%c:%m
 else
   let &grepprg='grep -n -r --exclude=' . shellescape(&wildignore) . ' . -- $*'
 endif
