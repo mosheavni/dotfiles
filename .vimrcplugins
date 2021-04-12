@@ -20,6 +20,8 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
+Plug 'will133/vim-dirdiff'
+
 Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'dense-analysis/ale'
@@ -113,7 +115,6 @@ Plug 'vim-scripts/CursorLineCurrentWindow'
 " Custom text object
 Plug 'kana/vim-textobj-user'
 Plug 'mattn/vim-textobj-url'
-Plug 'kana/vim-textobj-line'
 Plug 'bps/vim-textobj-python'
 Plug 'rhysd/vim-textobj-anyblock'
 Plug 'kana/vim-textobj-entire'
@@ -620,7 +621,7 @@ let g:coc_global_extensions = [
       \    'coc-neosnippet',
       \    'coc-pairs',
       \    'coc-prettier',
-      \    'coc-python',
+      \    'coc-pyright',
       \    'coc-react-refactor',
       \    'coc-scssmodules',
       \    'coc-sh',
