@@ -32,7 +32,7 @@ colorscheme darkblue
 set number                     " Show current line number
 set relativenumber             " Show relative line numbers
 set linebreak                  " Avoid wrapping a line in the middle of a word.
-set nowrap
+set wrap
 set cursorcolumn
 set cursorline                 " Add highlight behind current line
                                " hi cursorline cterm=none term=none
