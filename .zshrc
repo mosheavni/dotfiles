@@ -97,3 +97,10 @@ cnf() {
 }
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
+
+bookitmeinit() {
+  cd ~/Repos/bookitme
+  export KUBECONFIG=~/Repos/bookitme/bookitme-k8s.yaml
+  source ~/Repos/bookitme/bookitme-terraform/.env
+  kgp
+}

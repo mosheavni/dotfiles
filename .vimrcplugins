@@ -83,6 +83,7 @@ Plug 'mg979/do.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'mosheavni/vim-to-github'
+Plug 'rhysd/conflict-marker.vim'
 
 " Plug 'Yggdroot/indentLine'
 
@@ -231,6 +232,14 @@ let g:session_autosave = 'no'
 " Vim smooth scroll {{{
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 10, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
+" }}}
+
+" Conflict marker {{{
+highlight ConflictMarkerBegin guibg=#2f7366
+highlight ConflictMarkerOurs guibg=#2e5049
+highlight ConflictMarkerTheirs guibg=#344f69
+highlight ConflictMarkerEnd guibg=#2f628e
+highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 " }}}
 
 " Vim ansible {{{
