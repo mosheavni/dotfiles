@@ -68,7 +68,7 @@ set mouse=a
 set undofile                   " Enables saving undo history to a file
 set colorcolumn=80             " Mark where are 80 characters to start breaking line
 set textwidth=80
-set guicursor=i:blinkwait700-blinkon400-blinkoff250
+" set guicursor=i:blinkwait700-blinkon400-blinkoff250
 hi ColorColumn ctermbg=238 guibg=lightgre
 set fileencodings=utf-8,cp1251
 set visualbell                 " Use visual bell instead of beeping
@@ -95,9 +95,11 @@ filetype plugin on
 filetype plugin indent on
 
 set list
-set listchars=tab:┆·,trail:·,precedes:,extends:,eol:↲,
-" set lcscope=tab:┆·,trail:·,precedes:,extends:
-set fillchars=vert:\|,fold:·
+if has('nvim')
+  set listchars=tab:┆·,trail:·,precedes:,extends:,eol:↲,
+  " set lcscope=tab:┆·,trail:·,precedes:,extends:
+  set fillchars=vert:\|,fold:·
+endif
 
 set path+=** " When searching, search also subdirectories
 
@@ -128,20 +130,16 @@ elseif exists('&signcolumn')
 endif
 " }}}
 
-" " Set relativenumber when focused {{{
-" augroup numbertoggle
-"   autocmd!
-"   autocmd BufEnter,FocusGained,InsertLeave * set number relativenumber
-"   autocmd BufLeave,FocusLost,InsertEnter   * set number norelativenumber
-" augroup END
-" " }}}
-
 " set verbose=1
 if has('termguicolors')
   " let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   " let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  " hiribiri
   set termguicolors
 endif
+
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 
 " }}}
 
