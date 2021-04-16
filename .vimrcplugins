@@ -106,6 +106,7 @@ set noshowmode " Redundant as lighline takes care of that
 " Plug 'yuttie/hydrangea-vim'
 " Plug 'dracula/vim'
 Plug 'drewtempelmeyer/palenight.vim'
+Plug 'joshdick/onedark.vim'
 " Plug 'sainnhe/edge'
 " Plug 'itchyny/vim-cursorword'
 Plug 'machakann/vim-highlightedyank'
@@ -234,14 +235,6 @@ noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 10, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
 " }}}
 
-" Conflict marker {{{
-highlight ConflictMarkerBegin guibg=#2f7366
-highlight ConflictMarkerOurs guibg=#2e5049
-highlight ConflictMarkerTheirs guibg=#344f69
-highlight ConflictMarkerEnd guibg=#2f628e
-highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
-" }}}
-
 " Vim ansible {{{
 let g:ansible_goto_role_paths = '.;,roles;'
 
@@ -312,10 +305,21 @@ endfunction
 " call RandomColorChooser()
 let g:edge_style = 'neon'
 let g:palenight_terminal_italics=1
-colorscheme palenight
+" colorscheme palenight
+colorscheme onedark
 " colo edge
 
 " }}}
+
+" }}}
+
+" Conflict marker {{{
+let g:conflict_marker_highlight_group = 'VisualNOS'
+highlight ConflictMarkerBegin guibg=#2f7366
+highlight ConflictMarkerOurs guibg=#2e5049
+highlight ConflictMarkerTheirs guibg=#344f69
+highlight ConflictMarkerEnd guibg=#2f628e
+highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
 " }}}
 
@@ -837,3 +841,4 @@ nmap <silent> <C-o> :call ToggleNerdTree()<CR>
 nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
 
 " }}}
+
