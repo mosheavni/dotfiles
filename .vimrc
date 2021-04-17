@@ -33,8 +33,10 @@ set number                     " Show current line number
 set relativenumber             " Show relative line numbers
 set linebreak                  " Avoid wrapping a line in the middle of a word.
 set wrap
-set cursorcolumn
-set cursorline                 " Add highlight behind current line
+if has('nvim')
+  set cursorcolumn
+  set cursorline                 " Add highlight behind current line
+endif
                                " hi cursorline cterm=none term=none
                                " highlight CursorLine guibg=#303000 ctermbg=234
 set hlsearch                   " highlight reg. ex. in @/ register
@@ -69,7 +71,7 @@ set undofile                   " Enables saving undo history to a file
 set colorcolumn=80             " Mark where are 80 characters to start breaking line
 set textwidth=80
 " set guicursor=i:blinkwait700-blinkon400-blinkoff250
-hi ColorColumn ctermbg=238 guibg=lightgre
+hi ColorColumn ctermbg=238 guibg=lightgrey
 set fileencodings=utf-8,cp1251
 set visualbell                 " Use visual bell instead of beeping
 set formatoptions+=t           " auto break long lines"
@@ -94,8 +96,8 @@ endif
 filetype plugin on
 filetype plugin indent on
 
-set list
 if has('nvim')
+  set list
   set listchars=tab:┆·,trail:·,precedes:,extends:,eol:↲,
   " set lcscope=tab:┆·,trail:·,precedes:,extends:
   set fillchars=vert:\|,fold:·
@@ -134,7 +136,6 @@ endif
 if has('termguicolors')
   " let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   " let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  " hiribiri
   set termguicolors
 endif
 
