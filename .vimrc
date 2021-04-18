@@ -251,9 +251,9 @@ nnoremap <leader>= yypVr=
 " Map dp and dg with leader for diffput and diffget
 nmap <leader>dp :diffput<cr>
 nmap <leader>dg :diffget<cr>
-nmap <leader>du :bufdo diffoff <bar> windo diffupdate<cr>
+nmap <leader>du :windo diffoff <bar> windo diffupdate<cr>
 nmap <leader>dn :windo diffthis<cr>
-nmap <leader>df :bufdo diffoff<cr>
+nmap <leader>df :windo diffoff<cr>
 
 " Map enter to no highlight
 nnoremap <silent> <CR> :nohlsearch<CR><CR>
