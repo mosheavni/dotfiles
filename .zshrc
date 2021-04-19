@@ -73,6 +73,8 @@ alias tf='terraform'
 alias dotfiles='cd ~/Repos/dotfiles'
 alias v='vim'
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+alias -g Wt='while :;do '
+alias -g D=';done'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
