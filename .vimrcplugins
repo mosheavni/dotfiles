@@ -562,7 +562,6 @@ nnoremap <silent> <leader>gg :ToggleGStatus<cr>
 
 " Gdiffrev {{{
 nmap <leader>dh :DiffHistory<Space>
-command! DiffHistory call
 command! -nargs=? DiffHistory call s:view_git_history("<args>")
 
 function! s:view_git_history(...) abort
@@ -592,7 +591,6 @@ function s:diff_current_quickfix_entry() abort
   let qf = getqflist({'context': 0, 'idx': 0})
   if get(qf, 'idx') && type(get(qf, 'context')) == type({}) && type(get(qf.context, 'items')) == type([])
     let diff = get(qf.context.items[qf.idx - 1], 'diff', [])
-    echom string(reverse(range(len(diff))))
     for i in reverse(range(len(diff)))
       exe (i ? 'leftabove' : 'rightbelow') 'vert diffsplit' fnameescape(diff[i].filename)
       call s:add_mappings()
