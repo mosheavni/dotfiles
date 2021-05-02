@@ -304,7 +304,7 @@ nnoremap - "ldd$"lp
 nnoremap _ "ldd2k"lp
 
 " Base64 decode
-vnoremap <leader>64 y:echo system('base64 --decode', @")<cr>
+vnoremap <leader>64 c<c-r>=system('base64 --decode', @")<cr><esc>
 
 " Map ctrl+u to toggle word to uppercase/lowercase in insert and normal and
 " visual
