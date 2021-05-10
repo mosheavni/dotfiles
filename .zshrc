@@ -67,10 +67,10 @@ alias vim="nvim"
 export EDITOR="nvim"
 alias sudoedit="nvim"
 alias sed=gsed
-alias cat='bat'
 alias mdl='mdless README.md'
 alias tf='terraform'
 alias dotfiles='cd ~/Repos/dotfiles'
+alias kgnol='kgno -l'
 alias v='vim'
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 alias -g Wt='while :;do '
@@ -108,3 +108,5 @@ bookitmeinit() {
   source ~/Repos/bookitme/bookitme-terraform/.env
   kgp
 }
+
+command -v it2attention && it2attention fireworks
