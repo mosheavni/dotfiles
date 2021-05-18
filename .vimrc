@@ -74,7 +74,7 @@ set textwidth=80
 hi ColorColumn ctermbg=238 guibg=lightgrey
 set fileencodings=utf-8,cp1251
 set visualbell                 " Use visual bell instead of beeping
-set formatoptions+=t           " auto break long lines"
+set formatoptions-=t           " auto break long lines"
 
 if has('nvim')
   set shortmess+=c " don't give |ins-completion-menu| messages.
