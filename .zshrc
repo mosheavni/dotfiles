@@ -109,4 +109,4 @@ bookitmeinit() {
   kgp
 }
 
-command -v it2attention && it2attention fireworks
+# command -v it2attention && it2attention fireworks
