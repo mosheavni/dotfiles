@@ -20,7 +20,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-Plug 'will133/vim-dirdiff'
+Plug 'mosheavni/vim-dirdiff'
 
 Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -135,22 +135,6 @@ endif
 
 " Plugin Configurations {{{
 
-" ALE {{{
-" let g:ale_disable_lsp = 1
-" let g:ale_sign_error = '✘'
-" let g:ale_sign_warning = ''
-" nmap <silent> ]g <Plug>(ale_next_wrap)
-" nmap <silent> [g <Plug>(ale_previous_wrap)
-" nmap <leader>p <Plug>(ale_fix)
-" let g:ale_echo_msg_format = '%linter% : %s'
-" let g:ale_fixers = {
-"       \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-"       \ 'javascript': ['prettier', 'eslint'],
-"       \ 'sh': ['shfmt'],
-"       \ 'terraform': ['terraform']
-"       \}
-" }}}
-
 " Fzf {{{
 " nnoremap <c-p> :Files
 nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
@@ -205,6 +189,13 @@ let g:vimdo['\G'] = {
       \'w':  ['stage file', ":Gwrite\<cr>"],
       \'d':  ['diff with...', ":Gvdiff\<space>"],
       \}
+" }}}
+
+" DirDiff {{{
+let g:DirDiffEnableMappings = 1
+let g:DirDiffNextKeyMap = ']q'
+let g:DirDiffPrevKeyMap = '[q'
+
 " }}}
 
 " Switch vim {{{
@@ -321,13 +312,6 @@ highlight ConflictMarkerTheirs guibg=#344f69
 highlight ConflictMarkerEnd guibg=#2f628e
 highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
-" }}}
-
-" Undo tree {{{
-" nnoremap <leader>u :GundoToggle<CR>
-" let g:undotree_WindowLayout=2
-" let g:undotree_ShortIndicators=1
-" let g:undotree_SetFocusWhenToggle=1
 " }}}
 
 " Startify {{{
