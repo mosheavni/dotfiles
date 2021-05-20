@@ -19,12 +19,9 @@
   "eslint.autoFixOnSave": true,
   "python.pythonPath": "/usr/local/bin/python3",
   "python.linting.enabled": true,
-  "python.linting.pep8Enabled": false,
   "python.linting.pylintEnabled": true,
   "python.linting.flake8Enabled": false,
   "python.formatting.provider": "black",
-  "python.jediEnabled": false,
-  "python.jediPath": "/usr/local/lib/python3.9/site-packages/jedi/",
   "tsserver.reportStyleChecksAsWarnings": true,
   "list.insertMappings": {
     "<C-x>": "action:split",
