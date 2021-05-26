@@ -78,6 +78,7 @@ Plug 'kshenoy/vim-signature'
 
 " Plug 'tpope/vim-sleuth' " Causes issues with sh indentation
 
+Plug 'tversteeg/registers.nvim'
 Plug 'mg979/do.vim'
 
 Plug 'airblade/vim-gitgutter'
@@ -192,9 +193,9 @@ let g:vimdo['\G'] = {
 " }}}
 
 " DirDiff {{{
-let g:DirDiffEnableMappings = 1
-let g:DirDiffNextKeyMap = ']q'
-let g:DirDiffPrevKeyMap = '[q'
+" let g:DirDiffEnableMappings = 1
+" let g:DirDiffNextKeyMap = ']q'
+" let g:DirDiffPrevKeyMap = '[q'
 
 " }}}
 
