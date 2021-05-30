@@ -386,7 +386,7 @@ endfunction
 nnoremap <silent> <leader>( :call SplitParamLines()<cr>
 
 " Change \n to new lines
-nmap <silent> <leader><cr> :%s?\\n?\r?g<bar>%s?\\t?\t?g<bar>%s?\\r?\r?g<cr>:noh<cr>
+nmap <silent> <leader><cr> :silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>
 " }}}
 
 " move vertically by visual line (don't skip wrapped lines) {{{
