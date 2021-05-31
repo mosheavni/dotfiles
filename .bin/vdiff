@@ -1,0 +1,2 @@
+#!/bin/bash
+nvim -c "e $1 | vsp $2 | windo diffthis"
