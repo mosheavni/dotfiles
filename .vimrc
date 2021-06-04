@@ -580,26 +580,6 @@ augroup END
 " Terminal configurations {{{
 if exists(':terminal')
 
-  " Terminal colors
-  " let g:terminal_ansi_colors = [
-  "     \'#1d1f21',
-  "     \'#cc342b',
-  "     \'#198844',
-  "     \'#af8760',
-  "     \'#3971ed',
-  "     \'#a36ac7',
-  "     \'#3971ed',
-  "     \'#f5f5f5',
-  "     \'#989698',
-  "     \'#cc342b',
-  "     \'#198844',
-  "     \'#d8865f',
-  "     \'#3971ed',
-  "     \'#a36ac7',
-  "     \'#3971ed',
-  "     \'#ffffff'
-  " \]
-
   if !exists('g:terminal_ansi_colors')
     let g:terminal_ansi_colors = [
           \'#21222C',
@@ -620,7 +600,6 @@ if exists(':terminal')
           \'#FF6E6E'
     \]
   endif
-
 
   " Function to set terminal colors
   fun! s:setTerminalColors()
@@ -709,12 +688,12 @@ com! YamlToJson call YamlToJson()
 
 " Decrypt encrypt ansible secret {{{
 function DencryptAnsibleSecretFile(...) abort
-  let action = 'decrypt'
+  let action = 'de'
   if get(a:, 1, v:false)
-    let action = 'encrypt'
+    let action = 'en'
   endif
 
-  silent! exe '!ansible-vault ' . action . ' --vault-password-file ~/ansible_secret %'
+  silent! exe '!ansible-vault ' . action . 'crypt --vault-password-file ~/ansible_secret %'
 endfunction
 com! EncryptAnsible call DencryptAnsibleSecretFile(1)
 com! DecryptAnsible call DencryptAnsibleSecretFile()
