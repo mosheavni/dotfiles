@@ -13,9 +13,7 @@ call plug#begin(s:vimplug_dir)
 
 Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
-" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-" Plug 'tpope/vim-vinegar'
-" Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+Plug 'rhysd/git-messenger.vim'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -24,34 +22,22 @@ Plug 'mosheavni/vim-dirdiff'
 
 Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'dense-analysis/ale'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'vim-scripts/groovyindent-unix'
 Plug 'chr4/nginx.vim'
-" Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-" Plug 'prettier/vim-prettier', {
-"       \ 'do': 'yarn install',
-"       \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
-" Plug 'StanAngeloff/php.vim', {'for': ['php']}
 Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
-" Plug 'tfnico/vim-gradle'
 Plug 'towolf/vim-helm'
 Plug 'andrewstuart/vim-kubernetes'
-" Plug 'pearofducks/ansible-vim'
 
 Plug 'mogelbrod/vim-jsonpath'
 Plug 'chrisbra/vim-sh-indent'
 Plug 'hashivim/vim-terraform'
 
-" Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'phenomenes/ansible-snippets'
-" Plug 'epilande/vim-es2015-snippets'
-" Plug 'epilande/vim-react-snippets'
 
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
-" Plug 'terryma/vim-expand-region'
 Plug 'terryma/vim-smooth-scroll'
 
 Plug 'christoomey/vim-system-copy'
@@ -71,12 +57,8 @@ Plug 'simeji/winresizer'
 Plug 'xolox/vim-session'
 
 
-" Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'
-" Plug 'luochen1990/rainbow'
 Plug 'kshenoy/vim-signature'
-
-" Plug 'tpope/vim-sleuth' " Causes issues with sh indentation
 
 Plug 'tversteeg/registers.nvim'
 Plug 'mg979/do.vim'
@@ -86,8 +68,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'mosheavni/vim-to-github'
 Plug 'rhysd/conflict-marker.vim'
 
-" Plug 'Yggdroot/indentLine'
-
 Plug 'xolox/vim-misc'
 Plug 'ludovicchabant/vim-gutentags'
 
@@ -96,22 +76,9 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 set noshowmode " Redundant as lighline takes care of that
-" Plug 'rafi/awesome-vim-colorschemes'
-" Plug 'sonph/onehalf', { 'rtp': 'vim/' }
-" Plug 'xolox/vim-colorscheme-switcher'
-" Plug 'larsbs/vimterial_dark'
-" Plug 'sjl/badwolf'
-" Plug 'tyrannicaltoucan/vim-quantum'
-" Plug 'sainnhe/sonokai'
-" Plug 'arzg/vim-colors-xcode'
-" Plug 'yuttie/hydrangea-vim'
-" Plug 'dracula/vim'
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'joshdick/onedark.vim'
-" Plug 'sainnhe/edge'
-" Plug 'itchyny/vim-cursorword'
 Plug 'machakann/vim-highlightedyank'
-" Plug 'miyakogi/conoline.vim'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/CursorLineCurrentWindow'
 
@@ -144,6 +111,7 @@ let $FZF_DEFAULT_COMMAND = "rg --files --hidden -g '!.git/' --color=never"
 let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
 " nnoremap <c-t> :Tags<cr>
 nnoremap <c-b> :Buffers<cr>
+nnoremap <c-y> :History<cr>
 
 " }}}
 
