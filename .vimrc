@@ -556,10 +556,16 @@ function! s:HighlightWordUnderCursor()
   \]
   let disabled_buftypes = ['terminal', 'quickfix', 'help']
   let nohl_conditions = getline('.')[col('.')-1] =~# '[[:punct:][:blank:]]' || &diff || index(disabled_buftypes, &buftype) >= 0 || index(disabled_ft, &filetype) >= 0
+  let match_group_name = 'MatchWord'
 
   if !nohl_conditions
-    hi MatchWord cterm=undercurl ctermbg=240 gui=undercurl guibg=#665c54
-    exec 'match MatchWord /\V\<' . substitute(expand('<cword>'), '/', '\/', 'g') . '\>/'
+    let linked_group = 'NormalFloat'
+    let extra_highlights = 'cterm=undercurl gui=undercurl'
+    let term_color = synIDattr(synIDtrans(hlID(linked_group)), 'bg', 'cterm')
+    let gui_color = synIDattr(synIDtrans(hlID(linked_group)), 'bg', 'gui')
+    exec 'hi ' . match_group_name . ' ' . extra_highlights . ' ctermbg=' . term_color . ' guibg=' . gui_color
+
+    exec 'match ' . match_group_name . ' /\V\<' . substitute(expand('<cword>'), '/', '\/', 'g') . '\>/'
   else
     match none
   endif
