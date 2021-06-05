@@ -50,7 +50,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'junegunn/vim-easy-align'
 Plug 'AndrewRadev/switch.vim'
-Plug 'AndrewRadev/splitjoin.vim'
 Plug 'justinmk/vim-sneak'
 
 Plug 'simeji/winresizer'
