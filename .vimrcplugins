@@ -11,17 +11,20 @@ scriptencoding utf-8
 let s:vimplug_dir = '~/.vim/plugged'
 call plug#begin(s:vimplug_dir)
 
-Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'kyazdani42/nvim-tree.lua'
 Plug 'rhysd/git-messenger.vim'
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 Plug 'mosheavni/vim-dirdiff'
 
 Plug 'sheerun/vim-polyglot'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/nvim-compe'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'vim-scripts/groovyindent-unix'
 Plug 'chr4/nginx.vim'
@@ -38,7 +41,7 @@ Plug 'honza/vim-snippets'
 Plug 'phenomenes/ansible-snippets'
 
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
-Plug 'terryma/vim-smooth-scroll'
+Plug 'yuttie/comfortable-motion.vim'
 
 Plug 'christoomey/vim-system-copy'
 Plug 'danro/rename.vim'
@@ -72,11 +75,10 @@ Plug 'ludovicchabant/vim-gutentags'
 
 Plug 'editorconfig/editorconfig-vim'
 
-Plug 'itchyny/lightline.vim'
-Plug 'mengelbrecht/lightline-bufferline'
-set noshowmode " Redundant as lighline takes care of that
+Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'joshdick/onedark.vim'
+Plug 'rafamadriz/neon'
 Plug 'machakann/vim-highlightedyank'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/CursorLineCurrentWindow'
@@ -90,7 +92,8 @@ Plug 'kana/vim-textobj-entire'
 Plug 'vimtaku/vim-textobj-keyvalue'
 
 " Devicons is last so it can support all of the other plugins
-Plug 'ryanoasis/vim-devicons'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'akinsho/nvim-bufferline.lua'
 
 call plug#end()
 
@@ -100,17 +103,24 @@ endif
 
 " }}}
 
-" Plugin Configurations {{{
+" Telescope {{{
+nnoremap <c-p> <cmd>Telescope find_files find_command=rg,--ignore,--hidden,--files,-g,!.git/ prompt_prefix=🔍<cr>
+nnoremap <c-b> <cmd>Telescope buffers<cr>
+nnoremap <c-f> <cmd>Telescope live_grep<cr>
+nnoremap <F4> <cmd>Telescope git_branches<cr>
 
-" Fzf {{{
-" nnoremap <c-p> :Files
-nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
-let $FZF_DEFAULT_COMMAND = "rg --files --hidden -g '!.git/' --color=never"
-" let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
-let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
-" nnoremap <c-t> :Tags<cr>
-nnoremap <c-b> :Buffers<cr>
-nnoremap <c-y> :History<cr>
+lua << EOF
+local actions = require('telescope.actions')
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      i = {
+        ["<esc>"] = actions.close
+      },
+    },
+  }
+}
+EOF
 
 " }}}
 
@@ -189,9 +199,11 @@ let g:session_autoload = 'no'
 let g:session_autosave = 'no'
 " }}}
 
-" Vim smooth scroll {{{
-noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 10, 2)<CR>
-noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
+" Smooth scroll {{{
+let g:comfortable_motion_no_default_key_mappings = 1
+let g:comfortable_motion_impulse_multiplier = 1  " Feel free to increase/decrease this value.
+nnoremap <silent> <C-d> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * 2)<CR>
+nnoremap <silent> <C-u> :call comfortable_motion#flick(g:comfortable_motion_impulse_multiplier * winheight(0) * -2)<CR>
 " }}}
 
 " Vim ansible {{{
@@ -265,7 +277,9 @@ endfunction
 let g:edge_style = 'neon'
 let g:palenight_terminal_italics=1
 " colorscheme palenight
-colorscheme onedark
+colorscheme neon
+hi clear CursorColumn
+hi link CursorColumn CursorLine
 " colo edge
 
 " }}}
@@ -302,95 +316,6 @@ let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
 " }}}
 
-" " Vim airline (powerline) {{{
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#ale#enabled = 0
-" let g:airline#extensions#battery#enabled = 0
-" let g:airline#extensions#tabline#formatter = 'unique_tail'
-" " https://github.com/neoclide/coc.nvim/issues/1827
-" " slow Coc intellisense
-" let g:airline#extensions#hunks#enabled = 0
-
-" let g:airline_powerline_fonts = 1
-" if !exists('g:airline_symbols')
-"     let g:airline_symbols = {}
-" endif
-" let g:airline_symbols.space = "\ua0"
-" " let g:airline_theme='cobalt2'
-" " let g:airline_theme='molokai'
-" let g:airline_theme='palenight'
-
-" " Vim Battery
-" " let g:battery#update_statusline = 1 " For statusline.
-
-
-" " }}}
-
-" Vim lightline {{{
-let g:lightline = {
-      \ 'colorscheme': 'nord',
-      \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
-      \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified', 'filetype' ] ],
-      \   'right': [ [ 'gitbranch' ] ]
-      \ },
-      \ 'inactive': {
-      \   'left': [ [ 'filename', 'modified' ] ],
-		  \   'right': [ [ 'gitbranch' ] ]
-      \ },
-      \ 'tabline': {
-      \   'left': [ ['buffers'] ],
-      \   'right': [ ['close'] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead',
-      \   'filetype': 'LightlineDevIconsFiletype',
-      \   'fileformat': 'LightlineDevIconsFileformat',
-      \ },
-      \ 'component_expand': {
-      \   'buffers': 'lightline#bufferline#buffers'
-      \ },
-      \ 'component_type': {
-      \   'buffers': 'tabsel'
-      \ },
-      \ 'component_raw': {'buffers': 1}
-      \ }
-
-function! LightlineDevIconsFiletype()
-  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
-endfunction
-
-function! LightlineDevIconsFileformat()
-  return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
-endfunction
-
-function! s:set_lightline_colorscheme(name) abort
-  let g:lightline.colorscheme = a:name
-  call lightline#init()
-  call lightline#colorscheme()
-  call lightline#update()
-endfunction
-
-function! s:lightline_colorschemes(...) abort
-  return join(map(
-        \ globpath(&rtp,'autoload/lightline/colorscheme/*.vim',1,1),
-        \ "fnamemodify(v:val,':t:r')"),
-        \ "\n")
-endfunction
-
-command! -nargs=1 -complete=custom,s:lightline_colorschemes LightlineColorscheme
-          \ call s:set_lightline_colorscheme(<q-args>)
-
-let g:lightline#bufferline#show_number=1
-let g:lightline#bufferline#enable_devicons=1
-let g:lightline#bufferline#filename_modifier = ':t'
-let g:lightline#bufferline#margin_left=1
-let g:lightline#bufferline#margin_right=1
-let g:lightline#bufferline#clickable=1
-" }}}
-
 " GitGutter {{{
 let g:gitgutter_map_keys = 1
 let g:gitgutter_highlight_lines = 0
@@ -412,234 +337,61 @@ highlight! link SignColumn LineNr
 
 " }}}
 
+" nvim bufferline tabline {{{
+lua require("bufferline").setup{}
 " }}}
 
-" Coc {{{
+" nvim-lsp {{{
+luafile ~/.vim/lsp_config.lua
 
-" Plugins backup {{{
-let g:coc_global_extensions = [
-      \    'coc-cfn-lint',
-      \    'coc-css',
-      \    'coc-diagnostic',
-      \    'coc-dictionary',
-      \    'coc-docker',
-      \    'coc-emmet',
-      \    'coc-emoji',
-      \    'coc-eslint',
-      \    'coc-groovy',
-      \    'coc-highlight',
-      \    'coc-html',
-      \    'coc-json',
-      \    'coc-markdownlint',
-      \    'coc-marketplace',
-      \    'coc-neosnippet',
-      \    'coc-pairs',
-      \    'coc-prettier',
-      \    'coc-pyright',
-      \    'coc-react-refactor',
-      \    'coc-scssmodules',
-      \    'coc-sh',
-      \    'coc-snippets',
-      \    'coc-styled-components',
-      \    'coc-swagger',
-      \    'coc-syntax',
-      \    'coc-tabnine',
-      \    'coc-tag',
-      \    'coc-tsserver',
-      \    'coc-vimlsp',
-      \    'coc-xml',
-      \    'coc-yaml'
-      \]
-" }}}
+sign define LspDiagnosticsSignError text=🔴
+sign define LspDiagnosticsSignWarning text=🟠
+sign define LspDiagnosticsSignInformation text=🔵
+sign define LspDiagnosticsSignHint text=🟢
 
-" Install all plugins {{{
+nnoremap <silent> gd         <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gi         <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> gr         <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> gD         <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> ge         <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
+nnoremap <silent> K          <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> <leader>p  <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <silent> <leader>rn <cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap <silent> <leader>a  <cmd>lua vim.lsp.buf.code_action()<CR>
+xmap     <silent> <leader>a  <cmd>lua vim.lsp.buf.range_code_action()<CR>
 
-function! InstallAllCocExtensions() abort
-  let all_extensions = get(g:, 'coc_global_extensions', [])
-  let iterator = 10
-  let counter = 0
-  for extension in all_extensions
-    if counter % iterator == 0
-      echom string(all_extensions[counter : counter + iterator-1])
-      call coc#util#install_extension([extension])
-    endif
-    let counter += 1
-  endfor
-endfunction
-
-command! -bar -complete=custom,s:InstallOptions CocInstallAll
-      \ :call InstallAllCocExtensions()
-
-" }}}
-
-" use <tab> for trigger completion and navigate to the next complete item {{{
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~? '\s'
-endfunction
-
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
-" let g:coc_snippet_next = '<tab>'
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
+
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+
 " }}}
 
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
+" nvim Tree {{{
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
-" imap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() :
-"       \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+nnoremap <silent> <C-o> :NvimTreeToggle<CR>
+nnoremap <leader>v :NvimTreeFindFile<CR>
 
-" Use `[g` and `]g` to navigate diagnostics.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Project replace word
-nnoremap <leader>prn :CocSearch <C-R>=expand("<cword>")<CR><CR>
-vnoremap <leader>prn "iy:<c-u>CocSearch <C-R>i<CR><CR>
-
-" Highlight the symbol and its references when holding the cursor.
-" autocmd CursorHold * silent call CocActionAsync('highlight')
-hi CocHighlightText ctermbg=241 guibg=#665c54
-hi! link CocHoverRange CocHighlightText
-
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-
-augroup format_coc_group
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Use CTRL-S for selections ranges.
-" Requires 'textDocument/selectionRange' support of LS, ex: coc-tsserver
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
-
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
-nmap <silent><expr> <leader>p CocHasProvider('format') ? "\<Plug>(coc-format)" : ":call FormatEqual()\<cr>"
-
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Mappings for CoCList
-" Show commands.
-nnoremap <silent><nowait> <leader>cc  :<C-u>CocList commands<cr>
-nnoremap <silent><nowait> <leader>a  :<C-u>CocAction<cr>
-" Search workspace symbols.
-" nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-" }}}
-
-" Nerd Tree {{{
-
-let g:NERDTreeChDirMode = 2
-let g:NERDTreeHijackNetrw = 1
-let g:NERDTreeShowHidden=1
-let g:NERDTreeHighlightCursorline = 1
-let g:NERDTreeFileExtensionHighlightFullName = 1
-
-" " ### nerdtree-git-plugin ###
-let g:NERDTreeGitStatusUseNerdFonts = 1
-" let g:NERDTreeGitStatusConcealBrackets = 1
-
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-    \ 'Modified'  : '✹',
-    \ 'Staged'    : '✚',
-    \ 'Untracked' : '✭',
-    \ 'Unmerged'  : '═',
-    \ 'Dirty'     : '✗',
-    \ 'Renamed'   : '➜',
-    \ 'Clean'     : '✔︎',
-    \ 'Ignored'   : '☒',
-    \ 'Deleted'   : '✖',
-    \ 'Unknown'   : '?'
-    \ }
-" " Set icon for Jenkinsfile
-" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {}
-" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Jenkinsfile'] = ''
-" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['\..*ignore.*'] = ''
-
-" let g:NERDTreePatternMatchHighlightColor = {}
-" let g:NERDTreePatternMatchHighlightColor['\..*ignore.*'] = 'EE6E73'
-" let g:NERDTreePatternMatchHighlightColor['Jenkinsfile'] = '62a2bf'
-
-" If more than one window and previous buffer was NERDTree, go back to it.
-" autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr("$") > 1 | b# | endif
-
-
-" Check if NERDTree is open or active
-function! IsNERDTreeOpen()
-  return exists('t:NERDTreeBufName') && (bufwinnr(t:NERDTreeBufName) != -1)
-endfunction
-
-" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
-" file, and we're not in vimdiff
-function! SyncTree()
-  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-    NERDTreeFind
-    wincmd p
-  endif
-endfunction
-
-function! ToggleNerdTree()
-  set eventignore=BufEnter
-  NERDTreeToggle
-  set eventignore=
-endfunction
-
-augroup nerd_tree_augroup
-  autocmd!
-  " Highlight currently open buffer in NERDTree
-  autocmd BufEnter * call SyncTree()
-  " Close VIM if NERDTree is the only buffer left
-  autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
-augroup END
-
-nmap <silent> <C-o> :call ToggleNerdTree()<CR>
-nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
+let g:nvim_tree_icons = {
+    \ 'default': '',
+    \ 'symlink': '',
+    \ 'git': {
+    \   'unstaged': '✗',
+    \   'staged': '✓',
+    \   'unmerged': '',
+    \   'renamed': '➜',
+    \   'untracked': '★',
+    \   'deleted': '',
+    \   'ignored': '◌'
+  \   }
+\ }
 
 " }}}
 
@@ -791,4 +543,22 @@ function! s:add_mappings() abort
 endfunction
 " }}}
 
+" }}}
+
+" Treesitter {{{
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  ignore_install = { "javascript" }, -- List of parsers to ignore installing
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+  },
+indent = {
+    enable = true
+  }
+}
+EOF
+
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
 " }}}
