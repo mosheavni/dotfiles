@@ -542,41 +542,6 @@ nmap <c-f> :RipGrepCWORD!<Space>
 vmap <c-f> :RipGrepCWORDVisual!<cr>
 " }}}
 
-" Highlight word under cursor {{{
-function! s:HighlightWordUnderCursor()
-  let disabled_ft = [
-        \'qf',
-        \'fugitive',
-        \'nerdtree',
-        \'gundo',
-        \'diff',
-        \'fzf',
-        \'floaterm',
-        \'vim-plug'
-  \]
-  let disabled_buftypes = ['terminal', 'quickfix', 'help']
-  let nohl_conditions = getline('.')[col('.')-1] =~# '[[:punct:][:blank:]]' || &diff || index(disabled_buftypes, &buftype) >= 0 || index(disabled_ft, &filetype) >= 0
-  let match_group_name = 'MatchWord'
-
-  if !nohl_conditions
-    let linked_group = 'NormalFloat'
-    let extra_highlights = 'cterm=undercurl gui=undercurl'
-    let term_color = synIDattr(synIDtrans(hlID(linked_group)), 'bg', 'cterm')
-    let gui_color = synIDattr(synIDtrans(hlID(linked_group)), 'bg', 'gui')
-    exec 'hi ' . match_group_name . ' ' . extra_highlights . ' ctermbg=' . term_color . ' guibg=' . gui_color
-
-    exec 'match ' . match_group_name . ' /\V\<' . substitute(expand('<cword>'), '/', '\/', 'g') . '\>/'
-  else
-    match none
-  endif
-endfunction
-
-augroup MatchWord
-  autocmd!
-  autocmd! CursorHold,CursorHoldI * call <SID>HighlightWordUnderCursor()
-augroup END
-" }}}
-
 " Terminal configurations {{{
 if exists(':terminal')
 
