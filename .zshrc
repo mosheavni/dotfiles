@@ -2,7 +2,6 @@
 export PATH="$HOME/.bin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/.local/alt/shims:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="mosherussell"
-# ZSH_THEME="typewritten/typewritten"
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
@@ -35,36 +34,35 @@ setopt HIST_VERIFY               # Don't execute immediately upon history expans
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
 plugins=(
-    ansible
-    autoupdate
-    aws
-    colored-man-pages
-    common-aliases
-    dircycle
-    docker
-    fzf
-    git
-    git-auto-fetch
-    helm
-    kubectl
-    minikube
-    zsh-autosuggestions
-    zsh-syntax-highlighting
+  ansible
+  autoupdate
+  aws
+  colored-man-pages
+  common-aliases
+  dircycle
+  docker
+  fzf
+  git
+  git-auto-fetch
+  helm
+  kubectl
+  zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 
 # Source kube_ps1
 if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
-    source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
-    function get_cluster_short() {
-        echo "$1" | gsed -e 's?arn:aws:eks:[a-zA-Z0-9\-]*:[0-9]*:cluster/??g' -e 's?\.k8s\.local??g'
-    }
-    KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
+  source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+  function get_cluster_short() {
+    echo "$1" | gsed -e 's?arn:aws:eks:[a-zA-Z0-9\-]*:[0-9]*:cluster/??g' -e 's?\.k8s\.local??g'
+  }
+  KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
 fi
 
 source $ZSH/oh-my-zsh.sh
 if [[ -f ~/aliases.sh ]];then
-    source ~/aliases.sh
+  source ~/aliases.sh
 fi
 
 autoload -U +X bashcompinit && bashcompinit
@@ -85,25 +83,15 @@ alias -g Sa='--sort-by=.metadata.creationTimestamp'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# OktaAWSCLI
-if [[ -f "$HOME/.okta/bash_functions" ]]; then
-    . "$HOME/.okta/bash_functions"
-fi
-if [[ -d "$HOME/.okta/bin" && ":$PATH:" != *":$HOME/.okta/bin:"* ]]; then
-    PATH="$HOME/.okta/bin:$PATH"
-fi
-
 # Kubectl contexts
-if [[ -f ~/.kube/ctx ]];then
-    alias ctx="source ~/.kube/ctx"
-    local context
-    context=$(cat ~/.kube/ctx.conf || ~/.kube/config)
-    export KUBECONFIG=$context
-fi
+alias cinfo='kubectl cluster-info'
+alias ctx='kubectx '
+export KUBECONFIG=~/.kube/config
+for ctx in ~/.kube/contexts/*.config;do
+  export KUBECONFIG=${KUBECONFIG}:${ctx}
+done
 
-cnf() {
-  open "https://command-not-found.com/$*"
-}
+cnf() { open "https://command-not-found.com/$*" }
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 
@@ -113,5 +101,3 @@ bookitmeinit() {
   source ~/Repos/bookitme/bookitme-terraform/.env
   kgp
 }
-
-# command -v it2attention && it2attention fireworks
