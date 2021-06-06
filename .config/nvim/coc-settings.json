@@ -1,11 +1,21 @@
 {
   "snippets.snipmate.enable": false,
   "coc.preferences.useQuickfixForLocations": true,
+  "coc.preferences.colorSupport": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "css",
+    "javascript",
+    "javascriptreact",
+    "markdown",
+    "python",
+    "sh",
+    "zsh",
+    "groovy"
+  ],
   "coc.source.emoji.filetypes": [
     "gitcommit",
     "markdown"
   ],
-  "coc.preferences.colorSupport": true,
   "highlight.colors.enable": true,
   "highlight.document.enable": true,
   "highlight.colorNames.enable": true,
@@ -17,11 +27,12 @@
   ],
   "eslint.packageManager": "npm",
   "eslint.autoFixOnSave": true,
-  "python.pythonPath": "/usr/local/bin/python3",
+  "python.pythonPath": "python3",
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
   "python.linting.flake8Enabled": false,
   "python.formatting.provider": "black",
+  "pyright.organizeimports.provider": "isort",
   "tsserver.reportStyleChecksAsWarnings": true,
   "list.insertMappings": {
     "<C-x>": "action:split",
@@ -31,16 +42,6 @@
     "<C-x>": "action:split",
     "<C-v>": "action:vsplit"
   },
-  "coc.preferences.formatOnSaveFiletypes": [
-    "css",
-    "javascript",
-    "javascriptreact",
-    "markdown",
-    "python",
-    "sh",
-    "zsh",
-    "groovy"
-  ],
   "diagnostic.checkCurrentLine": true,
   "diagnostic.errorSign": "✘",
   "diagnostic.hintSign": "",
