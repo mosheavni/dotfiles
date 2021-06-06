@@ -303,9 +303,9 @@ vnoremap # :<C-u>call <SID>StarSearch('?')<CR>?<C-R>=@/<CR><CR>
 nnoremap - "ldd$"lp
 nnoremap _ "ldd2k"lp
 
-" Base64 decode
-vnoremap <silent><leader>64 c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>
-vnoremap <silent><leader>46 c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>
+" Base64 dencode
+vnoremap <silent><leader>46 c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>
+vnoremap <silent><leader>64 c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>
 
 " Map ctrl+u to toggle word to uppercase/lowercase in insert and normal and
 " visual
