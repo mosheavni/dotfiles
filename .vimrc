@@ -543,27 +543,40 @@ vmap <c-f> :RipGrepCWORDVisual!<cr>
 " }}}
 
 " Highlight word under cursor {{{
+let g:word_highlight_disabled_ft = [
+      \'qf',
+      \'fugitive',
+      \'nerdtree',
+      \'gundo',
+      \'diff',
+      \'fzf',
+      \'floaterm',
+      \'vim-plug'
+\]
+let g:word_highlight_disabled_buftypes = ['terminal', 'quickfix', 'help']
+let g:word_highlight_linked_group = 'NormalFloat'
+
 function! s:HighlightWordUnderCursor()
-  let disabled_ft = [
-        \'qf',
-        \'fugitive',
-        \'nerdtree',
-        \'gundo',
-        \'diff',
-        \'fzf',
-        \'floaterm',
-        \'vim-plug'
-  \]
-  let disabled_buftypes = ['terminal', 'quickfix', 'help']
-  let nohl_conditions = getline('.')[col('.')-1] =~# '[[:punct:][:blank:]]' || &diff || index(disabled_buftypes, &buftype) >= 0 || index(disabled_ft, &filetype) >= 0
+  let nohl_conditions = getline('.')[col('.')-1] =~# '[[:punct:][:blank:]]' ||
+        \ &diff ||
+        \ index(get(g:, 'word_highlight_disabled_buftypes', []), &buftype) >= 0 ||
+        \ index(get(g:,'word_highlight_disabled_ft', []), &filetype) >= 0
+
   let match_group_name = 'MatchWord'
+  let default_linked_group = 'CursorLine'
+  let linked_group = get(g:, 'word_highlight_linked_group', default_linked_group)
+  let extra_highlights = 'cterm=undercurl gui=undercurl'
+  let has_gui = has('gui_running')
+
+  if !hlexists(linked_group)
+    let linked_group = default_linked_group
+  endif
 
   if !nohl_conditions
-    let linked_group = 'NormalFloat'
-    let extra_highlights = 'cterm=undercurl gui=undercurl'
-    let term_color = synIDattr(synIDtrans(hlID(linked_group)), 'bg', 'cterm')
-    let gui_color = synIDattr(synIDtrans(hlID(linked_group)), 'bg', 'gui')
-    exec 'hi ' . match_group_name . ' ' . extra_highlights . ' ctermbg=' . term_color . ' guibg=' . gui_color
+    let bg_color = synIDattr(synIDtrans(hlID(linked_group)), 'bg')
+    let bg_color = bg_color ? bg_color : (has_gui ? '#2C323C' : '236')
+    let hi_text = has_gui ? 'gui' : 'cterm' . 'bg=' . bg_color
+    exec 'hi ' . match_group_name . ' ' . extra_highlights . ' ' . hi_text
 
     exec 'match ' . match_group_name . ' /\V\<' . substitute(expand('<cword>'), '/', '\/', 'g') . '\>/'
   else
