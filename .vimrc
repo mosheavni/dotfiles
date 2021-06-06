@@ -52,6 +52,8 @@ set scrolloff=7                " When about to scroll page, see 7 lines below cu
 set cmdheight=2                " Height of the command bar
 set hidden                     " Hide buffer if abandoned
 set showmatch                  " When closing a bracket (like {}), show the enclosing
+set splitbelow                 " Horizontaly plitted windows open below
+set splitright                 " Vertically plitted windows open below
                                " bracket for a brief second
 set nostartofline              " Stop certain movements from always going to the first
                                " character of a line.
@@ -177,11 +179,9 @@ set showtabline=2
 let mapleader=' '
 let maplocalleader = "\\"
 
-" Toggle number sets
-" nnoremap <leader>num :set number! \| set relativenumber!<cr>
-
 " Map 0 to first non-blank character
 nnoremap 0 ^
+
 " Move to the end of the line
 nnoremap L $zL
 vnoremap L $
@@ -198,8 +198,7 @@ command! W w :term sudo tee % > /dev/null
 " Copy number of lines and paste below
 nnoremap <leader>cp :<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) . 'j' . (v:count == 0 ? 1 : v:count) . 'jo<C-v><Esc>p'<cr>
 
-
-" Windows mappings {{{
+" Windows mappings
 nnoremap <Leader><Leader> <C-^>
 nnoremap <tab> <c-w>w
 nnoremap <c-w><c-c> <c-w>c
@@ -216,34 +215,17 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-set splitbelow
-set splitright
-
-" }}}
-
 " Run macro
 nnoremap Q @q
-
-" Insert mappings {{{
 
 " Paste in insert mode
 inoremap <c-v> <c-r>"
 
-if empty(mapcheck('<C-U>', 'i'))
-  inoremap <C-U> <C-G>u<C-U>
-endif
-if empty(mapcheck('<C-W>', 'i'))
-  inoremap <C-W> <C-G>u<C-W>
-endif
-
-" }}}
-
-" Quickfix {{{
+" Quickfix
 nnoremap ]q :cnext<cr>zz
 nnoremap [q :cprev<cr>zz
 nnoremap ]l :lnext<cr>zz
 nnoremap [l :lprev<cr>zz
-" }}}
 
 " This creates a new line of '=' signs the same length of the line
 nnoremap <leader>= yypVr=
@@ -258,27 +240,21 @@ nmap <leader>df :windo diffoff<cr>
 " Map enter to no highlight
 nnoremap <silent> <CR> :nohlsearch<CR><CR>
 
-" Remove blank spaces from the end of the line
-" nnoremap <silent> <leader>a :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s
-"       \<Bar> :nohl <Bar> :unlet _s <CR>
-
 " Set mouse=v mapping
 nnoremap <leader>ma :set mouse=a<cr>
 nnoremap <leader>mv :set mouse=v<cr>
 
-" Search mappings {{{
+" Search mappings
 nnoremap <silent> * :execute "normal! *N"<cr>
 nnoremap <silent> # :execute "normal! #n"<cr>
-
 nnoremap <expr> n  'Nn'[v:searchforward]
 xnoremap <expr> n  'Nn'[v:searchforward]
 onoremap <expr> n  'Nn'[v:searchforward]
-
 nnoremap <expr> N  'nN'[v:searchforward]
 xnoremap <expr> N  'nN'[v:searchforward]
 onoremap <expr> N  'nN'[v:searchforward]
 
-" Search visually selected text with // or * or # {{{
+" Search visually selected text with // or * or #
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 function! s:StarSearch(cmdtype) abort
@@ -293,13 +269,8 @@ endfunction
 
 vnoremap * :<C-u>call <SID>StarSearch('/')<CR>/<C-R>=@/<CR><CR>
 vnoremap # :<C-u>call <SID>StarSearch('?')<CR>?<C-R>=@/<CR><CR>
-" }}}
-
-" }}}
 
 " Map - to move a line down and _ a line up
-" nnoremap -  :<c-u>execute 'move +'. v:count1<cr>
-" nnoremap _  :<c-u>execute 'move -1-'. v:count1<cr>
 nnoremap - "ldd$"lp
 nnoremap _ "ldd2k"lp
 
@@ -307,30 +278,14 @@ nnoremap _ "ldd2k"lp
 vnoremap <silent><leader>46 c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>
 vnoremap <silent><leader>64 c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>
 
-" Map ctrl+u to toggle word to uppercase/lowercase in insert and normal and
+" Map U to toggle word to uppercase/lowercase in insert and normal and
 " visual
 nnoremap U viw~
 vnoremap U ~
 
-" Vimrc edit mappings {{{
-let g:myvimrc = '~/.vimrc'
-let g:myvimrcplugins = '~/.vimrcplugins'
-
-nnoremap <silent> <leader>ev :execute("vsplit ".g:myvimrc)<cr>
-nnoremap <silent> <leader>sv :execute("source ".g:myvimrc)<cr>
-" exe("autocmd BufWritePost ".g:myvimrc." source ".g:myvimrc)
-
-function! LoadPlugins() abort
-  execute('so '.g:myvimrcplugins)
-  PlugInstall
-  echom 'Ran PlugInstall'
-  execute('windo so '.g:myvimrcplugins)
-  echom 'Sourced '.g:myvimrcplugins.' on all windows'
-endfunction
-
-nnoremap <silent> <leader>ep :execute("vsplit ".g:myvimrcplugins)<cr>
-nnoremap <silent> <leader>sp :call LoadPlugins()<cr>
-" }}}
+" Vimrc edit mappings
+nnoremap <silent> <leader>ev :execute("vsplit ".'~/.vimrc')<cr>
+nnoremap <silent> <leader>ep :execute("vsplit ".'~/.vimrcplugins')<cr>
 
 " highlight last inserted text
 nnoremap gV `[v`]
@@ -338,28 +293,14 @@ nnoremap gV `[v`]
 " Exit insert mode
 inoremap jk <esc>
 nnoremap <leader>qq :qall<cr>
-"inoremap <esc> <nop>
 
-" Clipboard mappings {{{
-" " Copy visual selection to clipboard
-" vnoremap <leader>y "*y
-" " Copy entire file to clipboard
+" Copy entire file to clipboard
 nnoremap Y :%y+<cr>
-" " Copy line from cursor until the end
-" nnoremap <leader>ye vg_y
-"=============================== }}}
 
-" remap `*`/`#` to search forwards/backwards (resp.) {{{
-" w/o moving cursor
-" }}}
-
-" Search and Replace {{{
+" Search and Replace
 nnoremap <Leader>r :.,$s?<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>
-" vnoremap <Leader>r :%s/<C-r><C-w>//g<Left><Left>
 vnoremap <leader>r "hy:.,$s?<C-r>h?<C-r>h?gc<left><left><left>
-" }}}
 
-" Delete/yank mappings {{{
 vnoremap <leader>dab "hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>
 vnoremap <leader>daa "hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>
 
@@ -368,9 +309,6 @@ vnoremap <leader>yaa "hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>
 
 vnoremap <leader>p "_dP
 
-" }}}
-
-" Split long lines {{{
 " Change every " -" with " \<cr> -" to break long lines of bash
 nnoremap <silent> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
 
@@ -387,15 +325,17 @@ nnoremap <silent> <leader>( :call SplitParamLines()<cr>
 
 " Change \n to new lines
 nmap <silent> <leader><cr> :silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>
-" }}}
 
-" move vertically by visual line (don't skip wrapped lines) {{{
+" move vertically by visual line (don't skip wrapped lines)
 nnoremap j gj
 nnoremap k gk
-" }}}
 
 " Change working directory based on open file
 nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+
+" Move visually selected block
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
 
 " Convert all tabs to spaces
 nnoremap <leader>ct<space> :retab<cr>
@@ -432,49 +372,9 @@ nnoremap <leader>olf zazczA
 " }}}
 
 " Abbreviations {{{
-" inoreabbrev def def () {<cr><tab><cr>}<esc>2k0f(a
-" inoreabbrev function function () {<cr><tab><cr>}<esc>2k0f(i
-" inoreabbrev if <bs>if () {<cr><tab><cr>}<esc>2k0f(a
 inoreabbrev teh the
 inoreabbrev seperate separate
 inoreabbrev dont don't
-" }}}
-
-" Auto-Parentheses {{{
-" Auto-insert closing parenthesis/brace - autopairs plugin replaces this
-" inoremap ( ()<Left>
-" inoremap { {}<Left>
-"
-" " Auto-delete closing parenthesis/brace {{{
-" function! BetterBackSpace() abort
-"     let cur_line = getline('.')
-"     let before_char = cur_line[col('.')-2]
-"     let after_char = cur_line[col('.')-1]
-"     if (before_char == '(' && after_char == ')') || (before_char == '{' && after_char == '}')
-"         return "\<Del>\<BS>"
-"     else
-"         return "\<BS>"
-" endfunction
-" " }}}
-" inoremap <silent> <BS> <C-r>=BetterBackSpace()<CR>
-"
-" " Skip over closing parenthesis/brace
-" inoremap <expr> ) getline('.')[col('.')-1] == ")" ? "\<Right>" : ")"
-" inoremap <expr> } getline('.')[col('.')-1] == "}" ? "\<Right>" : "}"
-" }}}
-
-" Surround {{{
-" nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-" nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
-" nnoremap <leader>{ viw<esc>a }<esc>bi{ <esc>lel
-" nnoremap <leader>( viw<esc>a)<esc>bi(<esc>lel
-" nnoremap <leader>[ viw<esc>a]<esc>bi[<esc>lel
-
-" vnoremap <leader>( c()<esc>P
-" vnoremap <leader>[ c[]<esc>P
-" vnoremap <leader>{ c{}<esc>P
-" vnoremap <leader>" c""<esc>P
-" vnoremap <leader>' c''<esc>P
 " }}}
 
 " Conceals {{{
@@ -656,10 +556,16 @@ function! s:HighlightWordUnderCursor()
   \]
   let disabled_buftypes = ['terminal', 'quickfix', 'help']
   let nohl_conditions = getline('.')[col('.')-1] =~# '[[:punct:][:blank:]]' || &diff || index(disabled_buftypes, &buftype) >= 0 || index(disabled_ft, &filetype) >= 0
+  let match_group_name = 'MatchWord'
 
   if !nohl_conditions
-    hi MatchWord cterm=undercurl ctermbg=240 gui=undercurl guibg=#665c54
-    exec 'match MatchWord /\V\<' . substitute(expand('<cword>'), '/', '\/', 'g') . '\>/'
+    let linked_group = 'NormalFloat'
+    let extra_highlights = 'cterm=undercurl gui=undercurl'
+    let term_color = synIDattr(synIDtrans(hlID(linked_group)), 'bg', 'cterm')
+    let gui_color = synIDattr(synIDtrans(hlID(linked_group)), 'bg', 'gui')
+    exec 'hi ' . match_group_name . ' ' . extra_highlights . ' ctermbg=' . term_color . ' guibg=' . gui_color
+
+    exec 'match ' . match_group_name . ' /\V\<' . substitute(expand('<cword>'), '/', '\/', 'g') . '\>/'
   else
     match none
   endif
@@ -673,26 +579,6 @@ augroup END
 
 " Terminal configurations {{{
 if exists(':terminal')
-
-  " Terminal colors
-  " let g:terminal_ansi_colors = [
-  "     \'#1d1f21',
-  "     \'#cc342b',
-  "     \'#198844',
-  "     \'#af8760',
-  "     \'#3971ed',
-  "     \'#a36ac7',
-  "     \'#3971ed',
-  "     \'#f5f5f5',
-  "     \'#989698',
-  "     \'#cc342b',
-  "     \'#198844',
-  "     \'#d8865f',
-  "     \'#3971ed',
-  "     \'#a36ac7',
-  "     \'#3971ed',
-  "     \'#ffffff'
-  " \]
 
   if !exists('g:terminal_ansi_colors')
     let g:terminal_ansi_colors = [
@@ -714,7 +600,6 @@ if exists(':terminal')
           \'#FF6E6E'
     \]
   endif
-
 
   " Function to set terminal colors
   fun! s:setTerminalColors()
@@ -803,12 +688,12 @@ com! YamlToJson call YamlToJson()
 
 " Decrypt encrypt ansible secret {{{
 function DencryptAnsibleSecretFile(...) abort
-  let action = 'decrypt'
+  let action = 'de'
   if get(a:, 1, v:false)
-    let action = 'encrypt'
+    let action = 'en'
   endif
 
-  silent! exe '!ansible-vault ' . action . ' --vault-password-file ~/ansible_secret %'
+  silent! exe '!ansible-vault ' . action . 'crypt --vault-password-file ~/ansible_secret %'
 endfunction
 com! EncryptAnsible call DencryptAnsibleSecretFile(1)
 com! DecryptAnsible call DencryptAnsibleSecretFile()

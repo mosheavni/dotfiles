@@ -13,9 +13,7 @@ call plug#begin(s:vimplug_dir)
 
 Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
-" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-" Plug 'tpope/vim-vinegar'
-" Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+Plug 'rhysd/git-messenger.vim'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -24,34 +22,22 @@ Plug 'mosheavni/vim-dirdiff'
 
 Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'dense-analysis/ale'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'vim-scripts/groovyindent-unix'
 Plug 'chr4/nginx.vim'
-" Plug 'prominic/groovy-language-server', { 'do': './gradlew build' }
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-" Plug 'prettier/vim-prettier', {
-"       \ 'do': 'yarn install',
-"       \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
-" Plug 'StanAngeloff/php.vim', {'for': ['php']}
 Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
-" Plug 'tfnico/vim-gradle'
 Plug 'towolf/vim-helm'
 Plug 'andrewstuart/vim-kubernetes'
-" Plug 'pearofducks/ansible-vim'
 
 Plug 'mogelbrod/vim-jsonpath'
 Plug 'chrisbra/vim-sh-indent'
 Plug 'hashivim/vim-terraform'
 
-" Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'phenomenes/ansible-snippets'
-" Plug 'epilande/vim-es2015-snippets'
-" Plug 'epilande/vim-react-snippets'
 
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
-" Plug 'terryma/vim-expand-region'
 Plug 'terryma/vim-smooth-scroll'
 
 Plug 'christoomey/vim-system-copy'
@@ -64,19 +50,14 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'junegunn/vim-easy-align'
 Plug 'AndrewRadev/switch.vim'
-Plug 'AndrewRadev/splitjoin.vim'
 Plug 'justinmk/vim-sneak'
 
 Plug 'simeji/winresizer'
 Plug 'xolox/vim-session'
 
 
-" Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'
-" Plug 'luochen1990/rainbow'
 Plug 'kshenoy/vim-signature'
-
-" Plug 'tpope/vim-sleuth' " Causes issues with sh indentation
 
 Plug 'tversteeg/registers.nvim'
 Plug 'mg979/do.vim'
@@ -86,8 +67,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'mosheavni/vim-to-github'
 Plug 'rhysd/conflict-marker.vim'
 
-" Plug 'Yggdroot/indentLine'
-
 Plug 'xolox/vim-misc'
 Plug 'ludovicchabant/vim-gutentags'
 
@@ -96,22 +75,9 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 set noshowmode " Redundant as lighline takes care of that
-" Plug 'rafi/awesome-vim-colorschemes'
-" Plug 'sonph/onehalf', { 'rtp': 'vim/' }
-" Plug 'xolox/vim-colorscheme-switcher'
-" Plug 'larsbs/vimterial_dark'
-" Plug 'sjl/badwolf'
-" Plug 'tyrannicaltoucan/vim-quantum'
-" Plug 'sainnhe/sonokai'
-" Plug 'arzg/vim-colors-xcode'
-" Plug 'yuttie/hydrangea-vim'
-" Plug 'dracula/vim'
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'joshdick/onedark.vim'
-" Plug 'sainnhe/edge'
-" Plug 'itchyny/vim-cursorword'
 Plug 'machakann/vim-highlightedyank'
-" Plug 'miyakogi/conoline.vim'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/CursorLineCurrentWindow'
 
@@ -134,8 +100,6 @@ endif
 
 " }}}
 
-" Plugin Configurations {{{
-
 " Fzf {{{
 " nnoremap <c-p> :Files
 nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
@@ -145,6 +109,7 @@ let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
 " nnoremap <c-t> :Tags<cr>
 nnoremap <c-b> :Buffers<cr>
 nnoremap <F4> :Gb<cr>
+nnoremap <c-y> :History<cr>
 
 " }}}
 
@@ -336,30 +301,6 @@ let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
 " }}}
 
-" " Vim airline (powerline) {{{
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#ale#enabled = 0
-" let g:airline#extensions#battery#enabled = 0
-" let g:airline#extensions#tabline#formatter = 'unique_tail'
-" " https://github.com/neoclide/coc.nvim/issues/1827
-" " slow Coc intellisense
-" let g:airline#extensions#hunks#enabled = 0
-
-" let g:airline_powerline_fonts = 1
-" if !exists('g:airline_symbols')
-"     let g:airline_symbols = {}
-" endif
-" let g:airline_symbols.space = "\ua0"
-" " let g:airline_theme='cobalt2'
-" " let g:airline_theme='molokai'
-" let g:airline_theme='palenight'
-
-" " Vim Battery
-" " let g:battery#update_statusline = 1 " For statusline.
-
-
-" " }}}
-
 " Vim lightline {{{
 let g:lightline = {
       \ 'colorscheme': 'nord',
@@ -443,8 +384,6 @@ highlight GitGutterAdd    guifg=#009900 ctermfg=2
 highlight GitGutterChange guifg=#ffff61 ctermfg=3
 highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 highlight! link SignColumn LineNr
-
-" }}}
 
 " }}}
 
