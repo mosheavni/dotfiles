@@ -144,6 +144,7 @@ let $FZF_DEFAULT_COMMAND = "rg --files --hidden -g '!.git/' --color=never"
 let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
 " nnoremap <c-t> :Tags<cr>
 nnoremap <c-b> :Buffers<cr>
+nnoremap <F4> :Gb<cr>
 
 " }}}
 
