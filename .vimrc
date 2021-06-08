@@ -555,11 +555,12 @@ let g:word_highlight#disabled_ft = [
 \]
 let g:word_highlight#disabled_buftypes = ['terminal', 'quickfix', 'help']
 let g:word_highlight#linked_group = 'NormalFloat'
+let g:word_highlight#current_word_match_id = 666
 
 function! s:HighlightWordUnderCursor()
   let l:current_word_match_group_name = 'MatchWord'
   let l:default_linked_group = 'CursorLine'
-  let l:linked_group = get(g:, 'word_highlight_linked_group', default_linked_group)
+  let l:linked_group = get(g:, 'word_highlight#linked_group', l:default_linked_group)
   let l:extra_highlights = 'cterm=undercurl gui=undercurl'
 
   " Clear matches
@@ -576,24 +577,34 @@ function! s:HighlightWordUnderCursor()
   " Don't match non-words, diff buffer, disabled_buftypes and disabled_ft
   if matchstr(getline('.'), '\%' . col('.') . 'c.') !~# '\k' | return 0 | endif
   if &diff | return 0 | endif
-  if index(get(g:, 'word_highlight_disabled_buftypes', []), &buftype) >= 0 | return 0 | endif
-  if index(get(g:,'word_highlight_disabled_ft', []), &filetype) >= 0 | return 0 | endif
+  if index(get(g:, 'word_highlight#disabled_buftypes', []), &buftype) >= 0 | return 0 | endif
+  if index(get(g:,'word_highlight#disabled_ft', []), &filetype) >= 0 | return 0 | endif
 
   if !hlexists(l:linked_group)
     let l:linked_group = default_linked_group
   endif
 
   " Add highlight group
+  " BG
   let cterm_bg_color = synIDattr(synIDtrans(hlID(l:linked_group)), 'bg', 'cterm')
-  let cterm_bg_color = cterm_bg_color ? cterm_bg_color : '145'
+  let cterm_bg_color = cterm_bg_color != '' ? cterm_bg_color : '240'
   let gui_bg_color = synIDattr(synIDtrans(hlID(l:linked_group)), 'bg', 'gui')
-  let gui_bg_color = gui_bg_color ? gui_bg_color : '#6d737d'
-  let hi_text = 'guibg=' . gui_bg_color . ' ctermbg=' . cterm_bg_color . ' guifg=white ctermfg=white'
+  let gui_bg_color = gui_bg_color != '' ? gui_bg_color : '#6d737d'
+  " FG
+  let cterm_fg_color = synIDattr(synIDtrans(hlID(l:linked_group)), 'fg', 'cterm')
+  let cterm_fg_color = cterm_fg_color != '' ? cterm_fg_color : 'white'
+  let gui_fg_color = synIDattr(synIDtrans(hlID(l:linked_group)), 'fg', 'gui')
+  let gui_fg_color = gui_fg_color != '' ? gui_fg_color : 'white'
+
+  let hi_text = 'guibg=' . gui_bg_color .
+        \ ' ctermbg=' . cterm_bg_color .
+        \ ' guifg=' . gui_fg_color .
+        \ ' ctermfg=' . cterm_fg_color
   exec 'hi ' . l:current_word_match_group_name . ' ' . l:extra_highlights . ' ' . hi_text
 
   " Add matches
   let cword_clean = substitute(expand('<cword>'), '/', '\/', 'g')
-  let g:word_highlight#current_word_match_id = matchadd(l:current_word_match_group_name, '\V\<' . cword_clean . '\>', -5)
+  call matchadd(l:current_word_match_group_name, '\V\<' . cword_clean . '\>', -5, g:word_highlight#current_word_match_id)
 endfunction
 
 augroup MatchWord
