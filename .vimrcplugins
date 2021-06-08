@@ -55,7 +55,6 @@ Plug 'justinmk/vim-sneak'
 Plug 'simeji/winresizer'
 Plug 'xolox/vim-session'
 
-
 Plug 'alvan/vim-closetag'
 Plug 'kshenoy/vim-signature'
 
