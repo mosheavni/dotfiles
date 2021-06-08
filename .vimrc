@@ -543,7 +543,7 @@ vmap <c-f> :RipGrepCWORDVisual!<cr>
 " }}}
 
 " Highlight word under cursor {{{
-let g:word_highlight_disabled_ft = [
+let g:word_highlight#disabled_ft = [
       \'qf',
       \'fugitive',
       \'nerdtree',
@@ -553,35 +553,47 @@ let g:word_highlight_disabled_ft = [
       \'floaterm',
       \'vim-plug'
 \]
-let g:word_highlight_disabled_buftypes = ['terminal', 'quickfix', 'help']
-let g:word_highlight_linked_group = 'NormalFloat'
+let g:word_highlight#disabled_buftypes = ['terminal', 'quickfix', 'help']
+let g:word_highlight#linked_group = 'NormalFloat'
 
 function! s:HighlightWordUnderCursor()
-  let nohl_conditions = getline('.')[col('.')-1] =~# '[[:punct:][:blank:]]' ||
-        \ &diff ||
-        \ index(get(g:, 'word_highlight_disabled_buftypes', []), &buftype) >= 0 ||
-        \ index(get(g:,'word_highlight_disabled_ft', []), &filetype) >= 0
+  let l:current_word_match_group_name = 'MatchWord'
+  let l:default_linked_group = 'CursorLine'
+  let l:linked_group = get(g:, 'word_highlight_linked_group', default_linked_group)
+  let l:extra_highlights = 'cterm=undercurl gui=undercurl'
 
-  let match_group_name = 'MatchWord'
-  let default_linked_group = 'CursorLine'
-  let linked_group = get(g:, 'word_highlight_linked_group', default_linked_group)
-  let extra_highlights = 'cterm=undercurl gui=undercurl'
-  let has_gui = has('gui_running')
+  " Clear matches
+  let matches_list = getmatches()
+  let current_word_match_id = get(g:, 'word_highlight#current_word_match_id', -1)
 
-  if !hlexists(linked_group)
-    let linked_group = default_linked_group
+  for match in matches_list
+    let match_id = get(match, 'id', '-1')
+    if match_id == g:word_highlight#current_word_match_id
+      call matchdelete(g:word_highlight#current_word_match_id)
+    end
+  endfor
+
+  " Don't match non-words, diff buffer, disabled_buftypes and disabled_ft
+  if matchstr(getline('.'), '\%' . col('.') . 'c.') !~# '\k' | return 0 | endif
+  if &diff | return 0 | endif
+  if index(get(g:, 'word_highlight_disabled_buftypes', []), &buftype) >= 0 | return 0 | endif
+  if index(get(g:,'word_highlight_disabled_ft', []), &filetype) >= 0 | return 0 | endif
+
+  if !hlexists(l:linked_group)
+    let l:linked_group = default_linked_group
   endif
 
-  if !nohl_conditions
-    let bg_color = synIDattr(synIDtrans(hlID(linked_group)), 'bg')
-    let bg_color = bg_color ? bg_color : (has_gui ? '#2C323C' : '236')
-    let hi_text = has_gui ? 'gui' : 'cterm' . 'bg=' . bg_color
-    exec 'hi ' . match_group_name . ' ' . extra_highlights . ' ' . hi_text
+  " Add highlight group
+  let cterm_bg_color = synIDattr(synIDtrans(hlID(l:linked_group)), 'bg', 'cterm')
+  let cterm_bg_color = cterm_bg_color ? cterm_bg_color : '145'
+  let gui_bg_color = synIDattr(synIDtrans(hlID(l:linked_group)), 'bg', 'gui')
+  let gui_bg_color = gui_bg_color ? gui_bg_color : '#6d737d'
+  let hi_text = 'guibg=' . gui_bg_color . ' ctermbg=' . cterm_bg_color . ' guifg=white ctermfg=white'
+  exec 'hi ' . l:current_word_match_group_name . ' ' . l:extra_highlights . ' ' . hi_text
 
-    exec 'match ' . match_group_name . ' /\V\<' . substitute(expand('<cword>'), '/', '\/', 'g') . '\>/'
-  else
-    match none
-  endif
+  " Add matches
+  let cword_clean = substitute(expand('<cword>'), '/', '\/', 'g')
+  let g:word_highlight#current_word_match_id = matchadd(l:current_word_match_group_name, '\V\<' . cword_clean . '\>', -5)
 endfunction
 
 augroup MatchWord
