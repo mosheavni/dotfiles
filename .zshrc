@@ -80,6 +80,7 @@ alias -g Wt='while :;do '
 alias -g Wr=' | while read -r line;do '
 alias -g D=';done'
 alias -g Sa='--sort-by=.metadata.creationTimestamp'
+alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
