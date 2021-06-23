@@ -34,6 +34,7 @@ setopt HIST_VERIFY               # Don't execute immediately upon history expans
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
 plugins=(
+  ag
   ansible
   autoupdate
   aws
@@ -41,7 +42,6 @@ plugins=(
   common-aliases
   dircycle
   docker
-  fzf
   git
   git-auto-fetch
   helm
@@ -81,6 +81,12 @@ alias -g Wr=' | while read -r line;do '
 alias -g D=';done'
 alias -g Sa='--sort-by=.metadata.creationTimestamp'
 alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
+function get_pods_of_svc() {
+  svc_name=$1
+  shift
+  label_selectors=$(kubectl get svc $svc_name $* -ojsonpath="{.spec.selector}" | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" | paste -s -d "," -)
+  kubectl get pod $* -l $label_selectors
+}
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -102,3 +108,8 @@ bookitmeinit() {
   source ~/Repos/bookitme/bookitme-terraform/.env
   kgp
 }
+
+# argocd
+if command -v argocd > /dev/null;then
+  source <(argocd completion zsh)
+fi
