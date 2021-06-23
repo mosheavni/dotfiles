@@ -203,6 +203,9 @@ nnoremap <Leader><Leader> <C-^>
 nnoremap <tab> <c-w>w
 nnoremap <c-w><c-c> <c-w>c
 nnoremap <leader>n :bn<cr>
+nnoremap <c-w>v :vnew<cr>
+nnoremap <c-w>s :new<cr>
+nnoremap <c-w>e :enew<cr>
 
 " Delete current buffer
 nnoremap <silent> <leader>bd :bp <bar> bd #<cr>
