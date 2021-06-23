@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AllowClipboardAccess</key>
+	<true/>
 	<key>AlternateMouseScroll</key>
 	<false/>
 	<key>AlternateMouseScrollStringForDown</key>
@@ -1118,6 +1120,8 @@
 			<string>/Users/moshe.avni</string>
 		</dict>
 	</array>
+	<key>OpenTmuxWindowsIn</key>
+	<integer>2</integer>
 	<key>PMPrintingExpandedStateForPrint2</key>
 	<false/>
 	<key>PasteTabToStringTabStopSize</key>

@@ -22,6 +22,7 @@ brew "gettext"
 brew "git"
 brew "gnu-sed"
 brew "hadolint"
+brew "tmux"
 brew "hashicorp/tap/terraform-ls"
 brew "hashicorp/tap/vault"
 brew "hyperkit", link: false
