@@ -307,12 +307,14 @@ let g:lightline = {
       \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified', 'filetype' ] ],
-      \   'right': [ [ 'gitbranch' ] ]
+      \             [ 'readonly', 'filename', 'modified' ],
+      \             [ 'filetype' ]
+      \ ],
+      \   'right': [ [ 'line', 'column', 'gitbranch' ] ]
       \ },
       \ 'inactive': {
-      \   'left': [ [ 'filename', 'modified' ] ],
-		  \   'right': [ [ 'gitbranch' ] ]
+      \   'left': [ [ 'readonly', 'filename', 'modified' ] ],
+		  \   'right': [ [ ] ]
       \ },
       \ 'tabline': {
       \   'left': [ ['buffers'] ],
