@@ -81,6 +81,8 @@ set formatoptions-=t           " auto break long lines"
 if has('nvim')
   set shortmess+=c " don't give |ins-completion-menu| messages.
   set shortmess-=l " Print "lines" instead of "L"
+  set shortmess-=q " Print the name of the macro when recording
+  set shortmess-=S " Print the search count message
 endif
 
 " Ignore node_modules
@@ -378,6 +380,19 @@ nnoremap <leader>olf zazczA
 inoreabbrev teh the
 inoreabbrev seperate separate
 inoreabbrev dont don't
+inoreabbrev rbm # TODO: remove before merging
+inoreabbrev funciton function
+inoreabbrev functiton function
+inoreabbrev fucntion function
+inoreabbrev funtion function
+inoreabbrev erturn return
+inoreabbrev retunr return
+inoreabbrev reutrn return
+inoreabbrev reutn return
+inoreabbrev queyr query
+inoreabbrev htis this
+inoreabbrev foreahc foreach
+inoreabbrev forech foreach
 " }}}
 
 " Conceals {{{
@@ -427,6 +442,7 @@ augroup special_filetype
   au!
   autocmd FileType json syntax match Comment +\/\/.\+$+
   autocmd BufNewFile,BufRead aliases.sh setf zsh
+  autocmd BufNewFile,BufRead .eslintrc setf json
   autocmd FileType javascript set filetype=javascriptreact | set iskeyword+=-
 augroup end
 
