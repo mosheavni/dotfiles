@@ -1,5 +1,5 @@
 ### General aliases ###
-alias watch='watch '
+alias watch='watch --color '
 alias -g S='| sort'
 alias -g SRT='+short | sort'
 
@@ -37,7 +37,7 @@ function mwatch() {
   # [[ -f $log_file ]] && cat /dev/null > $log_file || touch $log_file
   final_alias=`_alias_finder "$*"`
   echo $final_alias
-  watch "$final_alias"
+  watch --color "$final_alias"
 }
 
 function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
