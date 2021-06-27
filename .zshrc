@@ -54,7 +54,7 @@ plugins=(
 if type brew &>/dev/null; then
   fpath=( $(brew --prefix)/share/zsh-completions $fpath )
 
-  rm -f ~/.zcompdump*
+  # rm -f ~/.zcompdump* &>/dev/null || :
   autoload -Uz compinit
   compinit
 fi
