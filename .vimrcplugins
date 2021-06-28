@@ -300,6 +300,26 @@ let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
 " }}}
 
+" GitGutter {{{
+let g:gitgutter_map_keys = 1
+let g:gitgutter_highlight_lines = 0
+let g:gitgutter_highlight_linenrs = 1
+nnoremap <leader>gc :GitGutterLineHighlightsToggle<cr>
+nnoremap <leader>cag :GitGutterFold<cr>
+nmap ]c <Plug>(GitGutterNextHunk)
+nmap [c <Plug>(GitGutterPrevHunk)
+function! GitStatus()
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
+endfunction
+highlight clear SignColumn
+highlight GitGutterAdd    guifg=#009900 ctermfg=2
+highlight GitGutterChange guifg=#ffff61 ctermfg=3
+highlight GitGutterDelete guifg=#ff2222 ctermfg=1
+highlight! link SignColumn LineNr
+
+" }}}
+
 " Vim lightline {{{
 let g:lightline = {
       \ 'colorscheme': 'nord',
@@ -308,13 +328,13 @@ let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'readonly', 'filename', 'modified' ],
-      \             [ 'filetype' ]
+      \             [ 'gitbranch', 'unpushed_unpulled', 'gitstatus' ]
       \ ],
-      \   'right': [ [ 'line', 'column', 'gitbranch' ] ]
+      \   'right': [ [ 'filetype', 'line', 'column' ] ]
       \ },
       \ 'inactive': {
       \   'left': [ [ 'readonly', 'filename', 'modified' ] ],
-		  \   'right': [ [ ] ]
+		  \   'right': [ [ 'gitbranch' ] ]
       \ },
       \ 'tabline': {
       \   'left': [ ['buffers'] ],
@@ -322,6 +342,8 @@ let g:lightline = {
       \ },
       \ 'component_function': {
       \   'gitbranch': 'FugitiveHead',
+      \   'gitstatus': 'GitStatus',
+      \   'unpushed_unpulled': 'Unpushed_Unpulled',
       \   'filetype': 'LightlineDevIconsFiletype',
       \   'fileformat': 'LightlineDevIconsFileformat',
       \ },
@@ -365,27 +387,6 @@ let g:lightline#bufferline#filename_modifier = ':t'
 let g:lightline#bufferline#margin_left=1
 let g:lightline#bufferline#margin_right=1
 let g:lightline#bufferline#clickable=1
-" }}}
-
-" GitGutter {{{
-let g:gitgutter_map_keys = 1
-let g:gitgutter_highlight_lines = 0
-let g:gitgutter_highlight_linenrs = 1
-nnoremap <leader>gc :GitGutterLineHighlightsToggle<cr>
-nnoremap <leader>cag :GitGutterFold<cr>
-nmap ]c <Plug>(GitGutterNextHunk)
-nmap [c <Plug>(GitGutterPrevHunk)
-function! GitStatus()
-  let [a,m,r] = GitGutterGetHunkSummary()
-  return printf('+%d ~%d -%d', a, m, r)
-endfunction
-set statusline+=%{GitStatus()}
-highlight clear SignColumn
-highlight GitGutterAdd    guifg=#009900 ctermfg=2
-highlight GitGutterChange guifg=#ffff61 ctermfg=3
-highlight GitGutterDelete guifg=#ff2222 ctermfg=1
-highlight! link SignColumn LineNr
-
 " }}}
 
 " Coc {{{
@@ -659,9 +660,13 @@ command! -nargs=? Gco call s:changebranch("<args>")
 function! s:MosheGitPush() abort
   echo 'Pushing to ' . FugitiveHead() . '...'
   exe 'Git push -u origin ' . FugitiveHead()
-  echo 'Pushed! 🤩'
+  let l:exit_status = get(FugitiveResult(), 'exit_status', 1)
+  if l:exit_status != 0
+    echo 'Failed pushing 😒'
+  else
+    echo 'Pushed! 🤩'
+  endif
 endfunction
-
 command! Gp call <sid>MosheGitPush()
 nmap <silent> <leader>gp :Gp<cr>
 
@@ -669,9 +674,13 @@ nmap <silent> <leader>gp :Gp<cr>
 function! s:MosheGitPull() abort
   echo 'Pulling...'
   Git pull --quiet
-  echo 'Pulled! 😎'
+  let l:exit_status = get(FugitiveResult(), 'exit_status', 1)
+  if l:exit_status != 0
+    echo 'Failed pulling 😒'
+  else
+    echo 'Pulled! 😎'
+  endif
 endfunction
-
 command! -bang Gl call <sid>MosheGitPull()
 nmap <silent> <leader>gl :Gl<cr>
 
@@ -764,5 +773,34 @@ function! s:add_mappings() abort
   wincmd p
 endfunction
 " }}}
+
+function Unpushed_Unpulled() abort
+  " Don't operate if not on git directory
+  if empty(FugitiveGitDir())
+    return 0
+  endif
+  let last_run = get(g:, 'unpushed_unpulled_last_run', 0)
+  if last_run != 0 && last_run + 10 > strftime('%s')
+    " Return already existing status
+    return get(g:, 'unpushed_unpulled_last_status', 0)
+  endif
+
+  let unpushed_unpulled_line_string = '# branch.ab '
+  let status_output = systemlist(FugitivePrepare([ 'status', '--porcelain=v2', '--branch' ]))
+  let unpushed_unpulled_index = match(status_output, unpushed_unpulled_line_string)
+  let g:unpushed_unpulled_last_run = strftime('%s')
+  let g:unpushed_unpulled_last_status = substitute(
+          \ substitute(
+            \ substitute(status_output[unpushed_unpulled_index], unpushed_unpulled_line_string, '', ''),
+            \ '+',
+            \ '↑',
+            \ ''
+          \ ),
+        \ '-',
+        \ '↓',
+        \ ''
+    \ )
+  return g:unpushed_unpulled_last_status
+endfunction
 
 " }}}
