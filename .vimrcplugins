@@ -76,6 +76,9 @@ Plug 'mengelbrecht/lightline-bufferline'
 set noshowmode " Redundant as lighline takes care of that
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'joshdick/onedark.vim'
+Plug 'ghifarit53/tokyonight-vim'
+Plug 'dracula/vim'
+Plug 'jacoborus/tender.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/CursorLineCurrentWindow'
@@ -236,40 +239,6 @@ let g:VM_maps = {}
 " let g:VM_maps["Select Cursor Up"]   = '<c-k>'        " start selecting up
 " }}}
 
-" Color settings {{{
-
-" Vim rainbow {{{
-let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
-" }}}
-
-" Random color {{{
-function! RandomColorChooser() abort
-  let l:liked_colors =  [
-        \ 'OceanicNext',
-        \ 'apprentice',
-        \ 'deep-space',
-        \ 'dracula',
-        \ 'onedark',
-        \ 'onehalfdark',
-        \ 'purify',
-        \ 'quantum',
-        \ 'sonokai',
-        \ 'two-firewatch'
-        \ ]
-  let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
-  exe 'colorscheme '. l:random_color
-endfunction
-" call RandomColorChooser()
-let g:edge_style = 'neon'
-let g:palenight_terminal_italics=1
-" colorscheme palenight
-colorscheme onedark
-" colo edge
-
-" }}}
-
-" }}}
-
 " Conflict marker {{{
 let g:conflict_marker_highlight_group = 'VisualNOS'
 highlight ConflictMarkerBegin guibg=#2f7366
@@ -322,7 +291,7 @@ highlight! link SignColumn LineNr
 
 " Vim lightline {{{
 let g:lightline = {
-      \ 'colorscheme': 'nord',
+      \ 'colorscheme': 'tokyonight',
       \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
       \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
       \ 'active': {
@@ -807,5 +776,39 @@ function Unpushed_Unpulled() abort
         \ )
   return g:unpushed_unpulled_last_status
 endfunction
+
+" }}}
+
+" Color settings {{{
+
+" Random color {{{
+function! RandomColorChooser() abort
+  let l:liked_colors =  [
+        \ 'OceanicNext',
+        \ 'apprentice',
+        \ 'deep-space',
+        \ 'dracula',
+        \ 'onedark',
+        \ 'onehalfdark',
+        \ 'purify',
+        \ 'quantum',
+        \ 'sonokai',
+        \ 'two-firewatch'
+        \ ]
+  let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
+  exe 'colorscheme '. l:random_color
+endfunction
+" call RandomColorChooser()
+" }}}
+
+" let g:edge_style = 'neon'
+" let g:palenight_terminal_italics=1
+" colorscheme palenight
+" colorscheme dracula
+" colo edge
+
+let g:tokyonight_style = 'night' " available: night, storm
+let g:tokyonight_enable_italic = 1
+colorscheme tokyonight
 
 " }}}

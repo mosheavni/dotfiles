@@ -92,7 +92,7 @@ function airfloweb () { open http://$(minikube ip):$(kubectl get svc -n airflow 
 alias kgpname='kubectl get pod --no-headers -o custom-columns=":metadata.name"'
 alias kgdname='kubectl get deployment --no-headers -o custom-columns=":metadata.name"'
 function kgres() {
-  kubectl get pod \
+  kubectl get pod $* \
   -ojsonpath='{range .items[*]}{.spec.containers[*].name}{" memory: "}{.spec.containers..resources.requests.memory}{"/"}{.spec.containers..resources.limits.memory}{" | cpu: "}{.spec.containers..resources.requests.cpu}{"/"}{.spec.containers..resources.limits.cpu}{"\n"}{end}' | sort \
   -u \
   -k1,1 | column -t
