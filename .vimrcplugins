@@ -102,6 +102,40 @@ endif
 
 " }}}
 
+" Color settings {{{
+
+" Random color {{{
+function! RandomColorChooser() abort
+  let l:liked_colors =  [
+        \ 'OceanicNext',
+        \ 'apprentice',
+        \ 'deep-space',
+        \ 'dracula',
+        \ 'onedark',
+        \ 'onehalfdark',
+        \ 'purify',
+        \ 'quantum',
+        \ 'sonokai',
+        \ 'two-firewatch'
+        \ ]
+  let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
+  exe 'colorscheme '. l:random_color
+endfunction
+" call RandomColorChooser()
+" }}}
+
+" let g:edge_style = 'neon'
+" let g:palenight_terminal_italics=1
+" colorscheme palenight
+" colorscheme dracula
+" colo edge
+
+let g:tokyonight_style = 'night' " available: night, storm
+let g:tokyonight_enable_italic = 1
+colorscheme tokyonight
+
+" }}}
+
 " Fzf {{{
 " nnoremap <c-p> :Files
 nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
@@ -766,40 +800,6 @@ function Unpushed_Unpulled() abort
         \ )
   return g:unpushed_unpulled_last_status
 endfunction
-
-" }}}
-
-" Color settings {{{
-
-" Random color {{{
-function! RandomColorChooser() abort
-  let l:liked_colors =  [
-        \ 'OceanicNext',
-        \ 'apprentice',
-        \ 'deep-space',
-        \ 'dracula',
-        \ 'onedark',
-        \ 'onehalfdark',
-        \ 'purify',
-        \ 'quantum',
-        \ 'sonokai',
-        \ 'two-firewatch'
-        \ ]
-  let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
-  exe 'colorscheme '. l:random_color
-endfunction
-" call RandomColorChooser()
-" }}}
-
-" let g:edge_style = 'neon'
-" let g:palenight_terminal_italics=1
-" colorscheme palenight
-" colorscheme dracula
-" colo edge
-
-let g:tokyonight_style = 'night' " available: night, storm
-let g:tokyonight_enable_italic = 1
-colorscheme tokyonight
 
 " }}}
 
