@@ -1,3 +1,4 @@
+source $ZSH/oh-my-zsh.sh
 #export PATH=$PATH:$HOME/bin:/usr/local/bin:$PATH:~/Library/Python/2.7/bin:~/bin:~/.npm-global/bin:${KREW_ROOT:-$HOME/.krew}/bin
 export PATH="$HOME/.bin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/.local/alt/shims:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
@@ -68,7 +69,6 @@ if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
 KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
 fi
 
-source $ZSH/oh-my-zsh.sh
 if [[ -f ~/aliases.sh ]];then
   source ~/aliases.sh
 fi
