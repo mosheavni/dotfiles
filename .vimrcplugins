@@ -239,16 +239,6 @@ let g:VM_maps = {}
 " let g:VM_maps["Select Cursor Up"]   = '<c-k>'        " start selecting up
 " }}}
 
-" Conflict marker {{{
-let g:conflict_marker_highlight_group = 'VisualNOS'
-highlight ConflictMarkerBegin guibg=#2f7366
-highlight ConflictMarkerOurs guibg=#2e5049
-highlight ConflictMarkerTheirs guibg=#344f69
-highlight ConflictMarkerEnd guibg=#2f628e
-highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
-
-" }}}
-
 " Startify {{{
 
 let g:startify_custom_header = [
@@ -810,5 +800,15 @@ endfunction
 let g:tokyonight_style = 'night' " available: night, storm
 let g:tokyonight_enable_italic = 1
 colorscheme tokyonight
+
+" }}}
+
+" Conflict marker {{{
+let g:conflict_marker_highlight_group = 'VisualNOS'
+highlight ConflictMarkerBegin guibg=#2f7366
+highlight ConflictMarkerOurs guibg=#2e5049
+highlight ConflictMarkerTheirs guibg=#344f69
+highlight ConflictMarkerEnd guibg=#2f628e
+highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
 " }}}
