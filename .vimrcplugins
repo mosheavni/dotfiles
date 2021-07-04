@@ -320,7 +320,7 @@ let g:lightline = {
       \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified' ],
+      \             [ 'readonly', 'filename', 'modified', 'gutentags', 'cocstatus' ],
       \             [ 'gitbranch', 'unpushed_unpulled', 'gitstatus' ]
       \ ],
       \   'right': [ [ 'filetype', 'line', 'column' ] ]
@@ -339,6 +339,8 @@ let g:lightline = {
       \   'unpushed_unpulled': 'Unpushed_Unpulled',
       \   'filetype': 'LightlineDevIconsFiletype',
       \   'fileformat': 'LightlineDevIconsFileformat',
+      \   'gutentags': 'gutentags#statusline',
+      \   'cocstatus': 'coc#status',
       \ },
       \ 'component_expand': {
       \   'buffers': 'lightline#bufferline#buffers'
@@ -498,6 +500,8 @@ augroup format_coc_group
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   " Highlight the symbol and its references when holding the cursor.
   autocmd CursorHold * silent call CocActionAsync('highlight')
+
+  autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 augroup end
 
 " Use K to show documentation in preview window.
