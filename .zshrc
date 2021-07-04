@@ -1,4 +1,3 @@
-source $ZSH/oh-my-zsh.sh
 #export PATH=$PATH:$HOME/bin:/usr/local/bin:$PATH:~/Library/Python/2.7/bin:~/bin:~/.npm-global/bin:${KREW_ROOT:-$HOME/.krew}/bin
 export PATH="$HOME/.bin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/.local/alt/shims:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
@@ -16,6 +15,15 @@ export LC_ALL=en_US.UTF-8
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
+
+# venv
+venv-create () {
+  if [[ ! -d venv ]];then
+    python3 -m venv venv
+  fi
+  source venv/bin/activate
+  pip3 install -r requirements.txt
+}
 
 # History settings
 HISTSIZE=5000
@@ -36,6 +44,7 @@ setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
 plugins=(
   ag
+  aliases
   ansible
   autoupdate
   aws
@@ -74,29 +83,28 @@ if [[ -f ~/aliases.sh ]];then
 fi
 
 autoload -U +X bashcompinit && bashcompinit
-alias vim="nvim"
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 export EDITOR="nvim"
+
+# bin aliases
+alias vim="nvim"
+alias v='vim'
 alias sudoedit="nvim"
 alias sed=gsed
 alias mdl='mdless README.md'
 alias tf='terraform'
+
 alias dotfiles='cd ~/Repos/dotfiles'
 alias kgnol='kgno -l'
-alias v='vim'
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+alias dc='cd '
+
+# global aliases
 alias -g Wt='while :;do '
 alias -g Wr=' | while read -r line;do '
 alias -g D=';done'
-alias -g Sa='--sort-by=.metadata.creationTimestamp'
-alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
-function get_pods_of_svc() {
-  svc_name=$1
-  shift
-  label_selectors=$(kubectl get svc $svc_name $* -ojsonpath="{.spec.selector}" | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" | paste -s -d "," -)
-  kubectl get pod $* -l $label_selectors
-}
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source $ZSH/oh-my-zsh.sh
 
 # Kubectl contexts
 alias cinfo='kubectl cluster-info'
