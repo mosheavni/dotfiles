@@ -446,6 +446,12 @@ augroup special_filetype
   autocmd FileType javascript set filetype=javascriptreact | set iskeyword+=-
 augroup end
 
+augroup custom_nginx
+  autocmd!
+  autocmd FileType nginx setlocal iskeyword+=$
+  autocmd FileType nginx let b:coc_additional_keywords = ['$']
+augroup end
+
 let g:sh_fold_enabled = 4
 
 com! FormatJSON exe '%!python -m json.tool'
