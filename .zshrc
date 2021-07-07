@@ -1,4 +1,3 @@
-#export PATH=$PATH:$HOME/bin:/usr/local/bin:$PATH:~/Library/Python/2.7/bin:~/bin:~/.npm-global/bin:${KREW_ROOT:-$HOME/.krew}/bin
 export PATH="$HOME/.bin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/.local/alt/shims:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="mosherussell"
@@ -59,15 +58,19 @@ plugins=(
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
+source $ZSH/oh-my-zsh.sh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Load zsh-completions
 if type brew &>/dev/null; then
   fpath=( $(brew --prefix)/share/zsh-completions $fpath )
 
-  # rm -f ~/.zcompdump* &>/dev/null || :
   autoload -Uz compinit
   compinit
 fi
+autoload -U +X bashcompinit && bashcompinit
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # Source kube_ps1
 if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
@@ -82,20 +85,15 @@ if [[ -f ~/aliases.sh ]];then
   source ~/aliases.sh
 fi
 
-autoload -U +X bashcompinit && bashcompinit
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+# aliases
 export EDITOR="nvim"
-
-# bin aliases
 alias vim="nvim"
 alias v='vim'
 alias sudoedit="nvim"
 alias sed=gsed
-alias mdl='mdless README.md'
 alias tf='terraform'
 
 alias dotfiles='cd ~/Repos/dotfiles'
-alias kgnol='kgno -l'
 alias dc='cd '
 
 # global aliases
@@ -103,8 +101,6 @@ alias -g Wt='while :;do '
 alias -g Wr=' | while read -r line;do '
 alias -g D=';done'
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source $ZSH/oh-my-zsh.sh
 
 # Kubectl contexts
 alias cinfo='kubectl cluster-info'
