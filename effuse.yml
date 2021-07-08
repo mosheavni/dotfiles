@@ -2,9 +2,11 @@ exclude:
   - '.config/karabiner'
   - .vimrc-minimal
   - Brewfile
+  - Brewfile-minimal
   - Brewfile.lock.json
   - Dockerfile
   - Dockerfile-minimal
+  - .zshrc-minimal
   - Npmfile
   - README.md
   - com.googlecode.iterm2.plist

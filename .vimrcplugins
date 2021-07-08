@@ -13,7 +13,10 @@ call plug#begin(s:vimplug_dir)
 
 Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'rhysd/git-messenger.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'mosheavni/vim-to-github'
+Plug 'rhysd/conflict-marker.vim'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -37,13 +40,13 @@ Plug 'hashivim/vim-terraform'
 Plug 'honza/vim-snippets'
 Plug 'phenomenes/ansible-snippets'
 
-Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'terryma/vim-smooth-scroll'
 
 Plug 'christoomey/vim-system-copy'
 Plug 'danro/rename.vim'
 Plug 'pechorin/any-jump.vim'
 Plug 'voldikss/vim-floaterm'
+Plug 'vim-scripts/YankRing.vim'
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -53,21 +56,9 @@ Plug 'AndrewRadev/switch.vim'
 Plug 'justinmk/vim-sneak'
 
 Plug 'simeji/winresizer'
-Plug 'xolox/vim-session'
 
 Plug 'alvan/vim-closetag'
 Plug 'kshenoy/vim-signature'
-
-Plug 'tversteeg/registers.nvim'
-Plug 'mg979/do.vim'
-
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-Plug 'mosheavni/vim-to-github'
-Plug 'rhysd/conflict-marker.vim'
-
-Plug 'xolox/vim-misc'
-Plug 'ludovicchabant/vim-gutentags'
 
 Plug 'editorconfig/editorconfig-vim'
 
@@ -79,6 +70,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'ghifarit53/tokyonight-vim'
 Plug 'dracula/vim'
 Plug 'jacoborus/tender.vim'
+
 Plug 'machakann/vim-highlightedyank'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/CursorLineCurrentWindow'
@@ -175,25 +167,6 @@ let g:floaterm_height = 0.9
 
 " }}}
 
-" Vim do {{{
-nnoremap \G :ShowDos \G<cr>
-let g:vimdo = {}
-let g:vimdo['\G'] = {
-      \'label' : 'git commands', 'interactive':1, 'arbitrary': 1,
-      \'compact':1, 'keys_width': 8, 'desc_width': 30,
-      \'r':  ['reset', ":G reset\<cr>"],
-      \'s':  ['status', ":Git\<cr>"],
-      \'D':  ['diff HEAD', ":Gvsplit! diff HEAD\<cr>:setf git\<cr>:set foldmethod=syntax\<cr>"],
-      \'b':  ['blame', ":Gblame\<cr>"],
-      \'p':  ['push', ":redraw! \<bar>Gp\<cr>"],
-      \'.':  ['add all', ":G add -A\<cr>"],
-      \'l':  ['log current file', ":Glog\<cr>"],
-      \'c':  ['commit', ":Gcommit\<cr>"],
-      \'w':  ['stage file', ":Gwrite\<cr>"],
-      \'d':  ['diff with...', ":Gvdiff\<space>"],
-      \}
-" }}}
-
 " DirDiff {{{
 " let g:DirDiffEnableMappings = 1
 " let g:DirDiffNextKeyMap = ']q'
@@ -217,11 +190,6 @@ let g:switch_custom_definitions = [
       \     },
       \   }
       \ ]
-" }}}
-
-" Vim session {{{
-let g:session_autoload = 'no'
-let g:session_autosave = 'no'
 " }}}
 
 " Vim smooth scroll {{{
@@ -265,12 +233,6 @@ nmap ga <Plug>(EasyAlign)
 " Vim close tag {{{
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
 let g:closetag_filetypes = 'html,xhtml,phtml,javascript,javascriptreact'
-" }}}
-
-" Vim visual multi {{{
-let g:VM_maps = {}
-" let g:VM_maps["Select Cursor Down"] = '<c-j>'      " start selecting down
-" let g:VM_maps["Select Cursor Up"]   = '<c-k>'        " start selecting up
 " }}}
 
 " Startify {{{
@@ -393,6 +355,7 @@ let g:coc_global_extensions = [
       \    'coc-diagnostic',
       \    'coc-dictionary',
       \    'coc-docker',
+      \    'coc-lua',
       \    'coc-emmet',
       \    'coc-emoji',
       \    'coc-eslint',
@@ -647,6 +610,7 @@ function! s:changebranch(...)
     call inputrestore()
   endif
   execute 'Git checkout ' . name
+  Git fetch
 endfunction
 
 function! s:call_fzf_changebranch()
@@ -785,7 +749,7 @@ endfunction
 function Unpushed_Unpulled() abort
   " Don't operate if not on git directory
   if empty(FugitiveGitDir())
-    return 0
+    return '↑- ↓-'
   endif
   let last_run = get(g:, 'unpushed_unpulled_last_run', 0)
   if last_run != 0 && last_run + 10 > strftime('%s')
@@ -796,6 +760,9 @@ function Unpushed_Unpulled() abort
   let unpushed_unpulled_line_string = '# branch.ab '
   let status_output = systemlist(FugitivePrepare([ 'status', '--porcelain=v2', '--branch' ]))
   let unpushed_unpulled_index = match(status_output, unpushed_unpulled_line_string)
+  if unpushed_unpulled_index ==# -1
+    return '↑- ↓-'
+  endif
   let g:unpushed_unpulled_last_run = strftime('%s')
   let g:unpushed_unpulled_last_status = substitute(
           \ substitute(
@@ -818,3 +785,6 @@ highlight ConflictMarkerEnd guibg=#2f628e
 highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
 " }}}
+
+" Load LUA
+lua require('moshelua')
