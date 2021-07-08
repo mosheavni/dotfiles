@@ -610,7 +610,9 @@ function! s:changebranch(...)
     call inputrestore()
   endif
   execute 'Git checkout ' . name
-  Git fetch
+  if name ==# 'master'
+    Git fetch
+  endif
 endfunction
 
 function! s:call_fzf_changebranch()
