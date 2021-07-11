@@ -88,7 +88,8 @@ fi
 # aliases
 export EDITOR="nvim"
 alias vim="nvim"
-alias v='vim'
+alias v='nvim'
+alias vi='nvim'
 alias sudoedit="nvim"
 alias sed=gsed
 alias tf='terraform'

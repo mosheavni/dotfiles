@@ -46,7 +46,6 @@ Plug 'christoomey/vim-system-copy'
 Plug 'danro/rename.vim'
 Plug 'pechorin/any-jump.vim'
 Plug 'voldikss/vim-floaterm'
-Plug 'vim-scripts/YankRing.vim'
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -282,7 +281,7 @@ let g:lightline = {
       \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified', 'gutentags', 'cocstatus' ],
+      \             [ 'readonly', 'filename', 'modified', 'cocstatus' ],
       \             [ 'gitbranch', 'unpushed_unpulled', 'gitstatus' ]
       \ ],
       \   'right': [ [ 'filetype', 'line', 'column' ] ]
@@ -301,7 +300,6 @@ let g:lightline = {
       \   'unpushed_unpulled': 'Unpushed_Unpulled',
       \   'filetype': 'LightlineDevIconsFiletype',
       \   'fileformat': 'LightlineDevIconsFileformat',
-      \   'gutentags': 'gutentags#statusline',
       \   'cocstatus': 'coc#status',
       \ },
       \ 'component_expand': {
