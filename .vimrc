@@ -105,6 +105,7 @@ if has('nvim')
   set listchars=tab:┆·,trail:·,precedes:,extends:,eol:↲,
   " set lcscope=tab:┆·,trail:·,precedes:,extends:
   set fillchars=vert:\|,fold:·
+  set noemoji
 endif
 
 set path+=** " When searching, search also subdirectories
