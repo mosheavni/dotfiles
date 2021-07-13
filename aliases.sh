@@ -76,7 +76,6 @@ alias difff='code --diff'
 ### Kubernetes Aliases ###
 alias kafd='kubectl apply --validate=true --dry-run=true -f -'
 function kdpw () { watch "kubectl describe po $* | tail -20" }
-alias gtiller="kubectl get pod --namespace kube-system -lapp=helm,name=tiller"
 alias kgdns="kubectl get services --all-namespaces -o jsonpath='{.items[*].metadata.annotations.external-dns\.alpha\.kubernetes\.io/hostname}' | tr ' ' '\n'"
 alias -g YML='-oyaml | less'
 alias -g NM=' --no-headers -o custom-columns=":metadata.name"'
@@ -88,6 +87,7 @@ alias ktn='kubectl top node'
 alias ktp='kubectl top pod'
 alias krs='kubectl rollout restart'
 alias kesec='kubectl edit secret'
+alias kgnol='kgno -l'
 function airfloweb () { open http://$(minikube ip):$(kubectl get svc -n airflow airflow-web -ojsonpath='{.spec.ports[*].nodePort}') }
 alias kgpname='kubectl get pod --no-headers -o custom-columns=":metadata.name"'
 alias kgdname='kubectl get deployment --no-headers -o custom-columns=":metadata.name"'
@@ -117,6 +117,14 @@ function kubedebug () {
     shift 1
   fi
   kubectl run -i --rm --tty debug $* --image=$image --restart=Never -- sh
+}
+alias -g Sa='--sort-by=.metadata.creationTimestamp'
+alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
+function get_pods_of_svc() {
+  svc_name=$1
+  shift
+  label_selectors=$(kubectl get svc $svc_name $* -ojsonpath="{.spec.selector}" | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" | paste -s -d "," -)
+  kubectl get pod $* -l $label_selectors
 }
 
 # Common Used tools:
