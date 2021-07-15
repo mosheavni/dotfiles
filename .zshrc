@@ -16,15 +16,6 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
-# venv
-venv-create () {
-  if [[ ! -d venv ]];then
-    python3 -m venv venv
-  fi
-  source venv/bin/activate
-  pip3 install -r requirements.txt
-}
-
 # History settings
 HISTSIZE=5000
 SAVEHIST=5000
