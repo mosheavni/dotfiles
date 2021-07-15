@@ -71,6 +71,7 @@
   "python.linting.flake8Enabled": false,
   "python.linting.pylintEnabled": true,
   "python.pythonPath": "python3",
+  "python.venvPath": "env",
   "snippets.snipmate.enable": false,
   "suggest.completionItemKindLabels": {
     "class": "\uf0e8",
@@ -102,5 +103,26 @@
   "suggest.enablePreview": true,
   "suggest.timeout": 5000,
   "suggest.triggerAfterInsertEnter": true,
-  "tsserver.reportStyleChecksAsWarnings": true
+  "tsserver.reportStyleChecksAsWarnings": true,
+  "yaml.completion": true,
+  "yaml.format.enable": true,
+  "yaml.schemaStore.enable": true,
+  "yaml.schemas": {
+      "https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json": "/argow*.yaml",
+      "kubernetes": [
+        "kubectl-edit-*.yaml",
+        "deploy*.yaml",
+        "service*.yaml",
+        "*ingress*.yaml",
+        "svc*.yaml",
+        "*job*.yaml",
+        "pod*.yaml",
+        "namespace*.yaml",
+        "*role*.yaml",
+        "secret*.yaml",
+        "configmap*.yaml",
+        "daemonset*.yaml"
+      ]
+  },
+  "yaml.validate": true
 }
