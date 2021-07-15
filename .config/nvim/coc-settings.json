@@ -66,12 +66,10 @@
   "prettier.eslintIntegration": true,
   "prettier.tabWidth": 2,
   "pyright.organizeimports.provider": "isort",
-  "python.formatting.provider": "black",
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": false,
   "python.linting.pylintEnabled": true,
   "python.pythonPath": "python3",
-  "python.venvPath": "env",
   "snippets.snipmate.enable": false,
   "suggest.completionItemKindLabels": {
     "class": "\uf0e8",
