@@ -44,7 +44,6 @@ Plug 'terryma/vim-smooth-scroll'
 
 Plug 'christoomey/vim-system-copy'
 Plug 'danro/rename.vim'
-Plug 'pechorin/any-jump.vim'
 Plug 'voldikss/vim-floaterm'
 
 Plug 'tpope/vim-surround'
@@ -123,7 +122,7 @@ endfunction
 
 let g:tokyonight_style = 'night' " available: night, storm
 let g:tokyonight_enable_italic = 1
-colorscheme tokyonight
+colorscheme palenight
 
 " }}}
 
@@ -271,7 +270,6 @@ highlight GitGutterAdd    guifg=#009900 ctermfg=2
 highlight GitGutterChange guifg=#ffff61 ctermfg=3
 highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 highlight! link SignColumn LineNr
-
 " }}}
 
 " Vim lightline {{{
@@ -284,11 +282,11 @@ let g:lightline = {
       \             [ 'readonly', 'filename', 'modified', 'cocstatus' ],
       \             [ 'gitbranch', 'unpushed_unpulled', 'gitstatus' ]
       \ ],
-      \   'right': [ [ 'filetype', 'line', 'column' ] ]
+      \   'right': [ [ 'virtualenv', 'filetype', 'line', 'column' ] ]
       \ },
       \ 'inactive': {
       \   'left': [ [ 'readonly', 'filename', 'modified' ] ],
-		  \   'right': [ [ 'gitbranch' ] ]
+		  \   'right': [ [ 'filetypelogo', 'gitbranch' ] ]
       \ },
       \ 'tabline': {
       \   'left': [ ['buffers'] ],
@@ -300,7 +298,9 @@ let g:lightline = {
       \   'unpushed_unpulled': 'Unpushed_Unpulled',
       \   'filetype': 'LightlineDevIconsFiletype',
       \   'fileformat': 'LightlineDevIconsFileformat',
+      \   'filetypelogo': 'WebDevIconsGetFileTypeSymbol',
       \   'cocstatus': 'coc#status',
+      \   'virtualenv': 'CheckVirtualEnv',
       \ },
       \ 'component_expand': {
       \   'buffers': 'lightline#bufferline#buffers'
@@ -312,11 +312,19 @@ let g:lightline = {
       \ }
 
 function! LightlineDevIconsFiletype()
-  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+  return winwidth(0) > 70 ? (strlen(&filetype) ?  WebDevIconsGetFileTypeSymbol() . ' ' .&filetype : 'no ft') : WebDevIconsGetFileTypeSymbol()
 endfunction
 
 function! LightlineDevIconsFileformat()
-  return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+  return winwidth(0) > 70 ? (WebDevIconsGetFileFormatSymbol() . ' ' . &fileformat) : WebDevIconsGetFileFormatSymbol()
+endfunction
+
+function CheckVirtualEnv() abort
+  let virtualenv = $VIRTUAL_ENV
+  if empty(virtualenv)
+    return ''
+  endif
+  return printf('(%s)',split(virtualenv, '/')[-1])
 endfunction
 
 function! s:set_lightline_colorscheme(name) abort
