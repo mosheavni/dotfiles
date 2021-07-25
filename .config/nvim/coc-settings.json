@@ -106,21 +106,9 @@
   "yaml.format.enable": true,
   "yaml.schemaStore.enable": true,
   "yaml.schemas": {
-      "https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json": "/argow*.yaml",
-      "kubernetes": [
-        "kubectl-edit-*.yaml",
-        "deploy*.yaml",
-        "service*.yaml",
-        "*ingress*.yaml",
-        "svc*.yaml",
-        "*job*.yaml",
-        "pod*.yaml",
-        "namespace*.yaml",
-        "*role*.yaml",
-        "secret*.yaml",
-        "configmap*.yaml",
-        "daemonset*.yaml"
-      ]
+    "kubernetes": "/*.yaml",
+    "https://json.schemastore.org/gitlab-ci.json": ".gitlab-ci.yml"
   },
-  "yaml.validate": true
+  "yaml.validate": true,
+  "yaml.trace.server": "verbose"
 }
