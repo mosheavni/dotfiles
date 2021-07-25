@@ -88,7 +88,6 @@ alias ktp='kubectl top pod'
 alias krs='kubectl rollout restart'
 alias kesec='kubectl edit secret'
 alias kgnol='kgno -l'
-function airfloweb () { open http://$(minikube ip):$(kubectl get svc -n airflow airflow-web -ojsonpath='{.spec.ports[*].nodePort}') }
 alias kgpname='kubectl get pod --no-headers -o custom-columns=":metadata.name"'
 alias kgdname='kubectl get deployment --no-headers -o custom-columns=":metadata.name"'
 function kgres() {
