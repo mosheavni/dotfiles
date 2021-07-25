@@ -81,6 +81,8 @@ Plug 'rhysd/vim-textobj-anyblock'
 Plug 'kana/vim-textobj-entire'
 Plug 'vimtaku/vim-textobj-keyvalue'
 
+Plug 'romainl/vim-qf'
+
 " Devicons is last so it can support all of the other plugins
 Plug 'ryanoasis/vim-devicons'
 
@@ -792,6 +794,22 @@ highlight ConflictMarkerTheirs guibg=#344f69
 highlight ConflictMarkerEnd guibg=#2f628e
 highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
+" }}}
+
+" Vim QF {{{
+nmap ]q <Plug>(qf_qf_next)
+nmap [q <Plug>(qf_qf_previous)
+
+nmap ]l <Plug>(qf_loc_next)
+nmap [l <Plug>(qf_loc_previous)
+
+nmap <F3> <Plug>(qf_qf_toggle)
+
+nmap <buffer> { <Plug>(qf_previous_file)
+nmap <buffer> } <Plug>(qf_next_file)
+
+let g:qf_mapping_ack_style = 1
+let g:qf_auto_resize = 0
 " }}}
 
 " Load LUA
