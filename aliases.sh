@@ -118,6 +118,7 @@ function kubedebug () {
   kubectl run -i --rm --tty debug $* --image=$image --restart=Never -- sh
 }
 alias -g Sa='--sort-by=.metadata.creationTimestamp'
+alias -g Srt='--sort-by=.metadata.creationTimestamp'
 alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
 function get_pods_of_svc() {
   svc_name=$1
