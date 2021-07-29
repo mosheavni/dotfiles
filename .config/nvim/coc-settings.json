@@ -1,36 +1,6 @@
 {
-  "snippets.snipmate.enable": false,
-  "coc.preferences.useQuickfixForLocations": true,
-  "coc.source.emoji.filetypes": [
-    "gitcommit",
-    "markdown"
-  ],
   "coc.preferences.colorSupport": true,
-  "highlight.colors.enable": true,
-  "highlight.document.enable": true,
-  "highlight.colorNames.enable": true,
-  "css.lint.unknownProperties": "warning",
-  "prettier.tabWidth": 2,
-  "prettier.eslintIntegration": true,
-  "prettier.disableLanguages": [
-    "helm"
-  ],
-  "eslint.packageManager": "npm",
-  "eslint.autoFixOnSave": true,
-  "python.pythonPath": "/usr/local/bin/python3",
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": true,
-  "python.linting.flake8Enabled": false,
-  "python.formatting.provider": "black",
-  "tsserver.reportStyleChecksAsWarnings": true,
-  "list.insertMappings": {
-    "<C-x>": "action:split",
-    "<C-v>": "action:vsplit"
-  },
-  "list.normalMappings": {
-    "<C-x>": "action:split",
-    "<C-v>": "action:vsplit"
-  },
+  "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.formatOnSaveFiletypes": [
     "css",
     "javascript",
@@ -41,66 +11,104 @@
     "zsh",
     "groovy"
   ],
-  "diagnostic.checkCurrentLine": true,
-  "diagnostic.errorSign": "✘",
-  "diagnostic.hintSign": "",
-  "diagnostic.infoSign": "",
-  "diagnostic.warningSign": "",
+  "coc.preferences.useQuickfixForLocations": true,
+  "coc.source.emoji.filetypes": ["gitcommit", "markdown"],
+  "css.lint.unknownProperties": "warning",
+  "diagnostic-languageserver.debug": true,
   "diagnostic-languageserver.filetypes": {
+    "dockerfile": "hadolint",
     "sh": "shellcheck",
     "vim": "vint",
-    "yaml.ansible": "ansibleLint",
-    "dockerfile": "hadolint"
+    "yaml.ansible": "ansibleLint"
   },
   "diagnostic-languageserver.formatFiletypes": {
-    "terraform": "tffmt",
-    "sh": "shfmt"
+    "sh": "shfmt",
+    "terraform": "tffmt"
   },
-  "diagnostic-languageserver.debug": true,
   "diagnostic-languageserver.trace.server": "verbose",
-  "suggest.timeout": 5000,
-  "suggest.enablePreview": true,
-  "suggest.triggerAfterInsertEnter": true,
-  "suggest.completionItemKindLabels": {
-    "function": "\uf794",
-    "method": "\uf6a6",
-    "variable": "\uf71b",
-    "constant": "\uf8ff",
-    "struct": "\ufb44",
-    "class": "\uf0e8",
-    "interface": "\ufa52",
-    "text": "\ue612",
-    "enum": "\uf435",
-    "enumMember": "\uf02b",
-    "module": "\uf668",
-    "color": "\ue22b",
-    "property": "\ufab6",
-    "field": "\uf93d",
-    "unit": "\uf475",
-    "file": "\uf471",
-    "value": "\uf8a3",
-    "event": "\ufacd",
-    "folder": "\uf115",
-    "keyword": "\uf893",
-    "snippet": "\uf64d",
-    "operator": "\uf915",
-    "reference": "\uf87a",
-    "typeParameter": "\uf278",
-    "default": "\uf29c"
-  },
+  "diagnostic.checkCurrentLine": true,
+  "diagnostic.errorSign": "\u2718",
+  "diagnostic.hintSign": "\uf0eb",
+  "diagnostic.infoSign": "\uf129",
+  "diagnostic.warningSign": "\uf12a",
+  "eslint.autoFixOnSave": true,
+  "eslint.packageManager": "npm",
+  "highlight.colorNames.enable": true,
+  "highlight.colors.enable": true,
+  "highlight.document.enable": true,
+  "javascript.suggestionActions.enabled": false,
   "languageserver": {
     "terraform": {
+      "args": ["serve"],
       "command": "terraform-ls",
-      "args": [
-        "serve"
-      ],
-      "filetypes": [
-        "terraform",
-        "tf"
-      ],
+      "filetypes": ["terraform", "tf"],
       "initializationOptions": {},
       "settings": {}
+    },
+    "nginx-language-server": {
+      "command": "nginx-language-server",
+      "filetypes": ["nginx"],
+      "rootPatterns": ["nginx.conf", ".git"]
     }
   },
-  "coc.preferences.extensionUpdateCheck": "daily"
+  "list.insertMappings": {
+    "<C-v>": "action:vsplit",
+    "<C-x>": "action:split"
+  },
+  "list.normalMappings": {
+    "<C-v>": "action:vsplit",
+    "<C-x>": "action:split"
+  },
+  "markdownlint.config": {
+    "MD013": false
+  },
+  "prettier.disableLanguages": ["helm"],
+  "prettier.eslintIntegration": true,
+  "prettier.tabWidth": 2,
+  "pyright.organizeimports.provider": "isort",
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": false,
+  "python.linting.pylintEnabled": true,
+  "python.pythonPath": "python3",
+  "snippets.snipmate.enable": false,
+  "suggest.completionItemKindLabels": {
+    "class": "\uf0e8",
+    "color": "\ue22b",
+    "constant": "\uf8ff",
+    "default": "\uf29c",
+    "enum": "\uf435",
+    "enumMember": "\uf02b",
+    "event": "\ufacd",
+    "field": "\uf93d",
+    "file": "\uf471",
+    "folder": "\uf115",
+    "function": "\uf794",
+    "interface": "\ufa52",
+    "keyword": "\uf893",
+    "method": "\uf6a6",
+    "module": "\uf668",
+    "operator": "\uf915",
+    "property": "\ufab6",
+    "reference": "\uf87a",
+    "snippet": "\uf64d",
+    "struct": "\ufb44",
+    "text": "\ue612",
+    "typeParameter": "\uf278",
+    "unit": "\uf475",
+    "value": "\uf8a3",
+    "variable": "\uf71b"
+  },
+  "suggest.enablePreview": true,
+  "suggest.timeout": 5000,
+  "suggest.triggerAfterInsertEnter": true,
+  "tsserver.reportStyleChecksAsWarnings": true,
+  "yaml.completion": true,
+  "yaml.format.enable": true,
+  "yaml.schemaStore.enable": true,
+  "yaml.schemas": {
+    "kubernetes": "/*.yaml",
+    "https://json.schemastore.org/gitlab-ci.json": ".gitlab-ci.yml"
+  },
+  "yaml.validate": true,
+  "yaml.trace.server": "verbose"
 }

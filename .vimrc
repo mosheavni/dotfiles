@@ -81,6 +81,8 @@ set formatoptions-=t           " auto break long lines"
 if has('nvim')
   set shortmess+=c " don't give |ins-completion-menu| messages.
   set shortmess-=l " Print "lines" instead of "L"
+  set shortmess-=q " Print the name of the macro when recording
+  set shortmess-=S " Print the search count message
 endif
 
 " Ignore node_modules
@@ -103,6 +105,7 @@ if has('nvim')
   set listchars=tab:┆·,trail:·,precedes:,extends:,eol:↲,
   " set lcscope=tab:┆·,trail:·,precedes:,extends:
   set fillchars=vert:\|,fold:·
+  set noemoji
 endif
 
 set path+=** " When searching, search also subdirectories
@@ -126,9 +129,9 @@ endif
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved. {{{
-if has('patch-8.1.1564')
+if has('nvim-0.5.0') || has('patch-8.1.1564')
   " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
+  set signcolumn=auto
 elseif exists('&signcolumn')
   set signcolumn=yes
 endif
@@ -203,6 +206,9 @@ nnoremap <Leader><Leader> <C-^>
 nnoremap <tab> <c-w>w
 nnoremap <c-w><c-c> <c-w>c
 nnoremap <leader>n :bn<cr>
+nnoremap <c-w>v :vnew<cr>
+nnoremap <c-w>s :new<cr>
+nnoremap <c-w>e :enew<cr>
 
 " Delete current buffer
 nnoremap <silent> <leader>bd :bp <bar> bd #<cr>
@@ -274,9 +280,9 @@ vnoremap # :<C-u>call <SID>StarSearch('?')<CR>?<C-R>=@/<CR><CR>
 nnoremap - "ldd$"lp
 nnoremap _ "ldd2k"lp
 
-" Base64 decode
-vnoremap <silent><leader>64 c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>
-vnoremap <silent><leader>46 c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>
+" Base64 dencode
+vnoremap <silent><leader>46 c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>
+vnoremap <silent><leader>64 c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>
 
 " Map U to toggle word to uppercase/lowercase in insert and normal and
 " visual
@@ -375,6 +381,19 @@ nnoremap <leader>olf zazczA
 inoreabbrev teh the
 inoreabbrev seperate separate
 inoreabbrev dont don't
+inoreabbrev rbm # TODO: remove before merging
+inoreabbrev funciton function
+inoreabbrev functiton function
+inoreabbrev fucntion function
+inoreabbrev funtion function
+inoreabbrev erturn return
+inoreabbrev retunr return
+inoreabbrev reutrn return
+inoreabbrev reutn return
+inoreabbrev queyr query
+inoreabbrev htis this
+inoreabbrev foreahc foreach
+inoreabbrev forech foreach
 " }}}
 
 " Conceals {{{
@@ -424,7 +443,14 @@ augroup special_filetype
   au!
   autocmd FileType json syntax match Comment +\/\/.\+$+
   autocmd BufNewFile,BufRead aliases.sh setf zsh
+  autocmd BufNewFile,BufRead .eslintrc setf json
   autocmd FileType javascript set filetype=javascriptreact | set iskeyword+=-
+augroup end
+
+augroup custom_nginx
+  autocmd!
+  autocmd FileType nginx setlocal iskeyword+=$
+  autocmd FileType nginx let b:coc_additional_keywords = ['$']
 augroup end
 
 let g:sh_fold_enabled = 4

@@ -1,5 +1,5 @@
 ### General aliases ###
-alias watch='watch '
+alias watch='watch --color '
 alias -g S='| sort'
 alias -g SRT='+short | sort'
 
@@ -37,7 +37,7 @@ function mwatch() {
   # [[ -f $log_file ]] && cat /dev/null > $log_file || touch $log_file
   final_alias=`_alias_finder "$*"`
   echo $final_alias
-  watch "$final_alias"
+  watch --color "$final_alias"
 }
 
 function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
@@ -76,7 +76,6 @@ alias difff='code --diff'
 ### Kubernetes Aliases ###
 alias kafd='kubectl apply --validate=true --dry-run=true -f -'
 function kdpw () { watch "kubectl describe po $* | tail -20" }
-alias gtiller="kubectl get pod --namespace kube-system -lapp=helm,name=tiller"
 alias kgdns="kubectl get services --all-namespaces -o jsonpath='{.items[*].metadata.annotations.external-dns\.alpha\.kubernetes\.io/hostname}' | tr ' ' '\n'"
 alias -g YML='-oyaml | less'
 alias -g NM=' --no-headers -o custom-columns=":metadata.name"'
@@ -88,11 +87,11 @@ alias ktn='kubectl top node'
 alias ktp='kubectl top pod'
 alias krs='kubectl rollout restart'
 alias kesec='kubectl edit secret'
-function airfloweb () { open http://$(minikube ip):$(kubectl get svc -n airflow airflow-web -ojsonpath='{.spec.ports[*].nodePort}') }
+alias kgnol='kgno -l'
 alias kgpname='kubectl get pod --no-headers -o custom-columns=":metadata.name"'
 alias kgdname='kubectl get deployment --no-headers -o custom-columns=":metadata.name"'
 function kgres() {
-  kubectl get pod \
+  kubectl get pod $* \
   -ojsonpath='{range .items[*]}{.spec.containers[*].name}{" memory: "}{.spec.containers..resources.requests.memory}{"/"}{.spec.containers..resources.limits.memory}{" | cpu: "}{.spec.containers..resources.requests.cpu}{"/"}{.spec.containers..resources.limits.cpu}{"\n"}{end}' | sort \
   -u \
   -k1,1 | column -t
@@ -117,6 +116,15 @@ function kubedebug () {
     shift 1
   fi
   kubectl run -i --rm --tty debug $* --image=$image --restart=Never -- sh
+}
+alias -g Sa='--sort-by=.metadata.creationTimestamp'
+alias -g Srt='--sort-by=.metadata.creationTimestamp'
+alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
+function get_pods_of_svc() {
+  svc_name=$1
+  shift
+  label_selectors=$(kubectl get svc $svc_name $* -ojsonpath="{.spec.selector}" | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" | paste -s -d "," -)
+  kubectl get pod $* -l $label_selectors
 }
 
 # Common Used tools:

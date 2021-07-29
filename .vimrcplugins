@@ -11,8 +11,17 @@ scriptencoding utf-8
 let s:vimplug_dir = '~/.vim/plugged'
 call plug#begin(s:vimplug_dir)
 
+<<<<<<< HEAD
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'rhysd/git-messenger.vim'
+=======
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'mosheavni/vim-to-github'
+Plug 'rhysd/conflict-marker.vim'
+>>>>>>> origin/master
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
@@ -40,12 +49,15 @@ Plug 'hashivim/vim-terraform'
 Plug 'honza/vim-snippets'
 Plug 'phenomenes/ansible-snippets'
 
+<<<<<<< HEAD
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'yuttie/comfortable-motion.vim'
+=======
+Plug 'terryma/vim-smooth-scroll'
+>>>>>>> origin/master
 
 Plug 'christoomey/vim-system-copy'
 Plug 'danro/rename.vim'
-Plug 'pechorin/any-jump.vim'
 Plug 'voldikss/vim-floaterm'
 
 Plug 'tpope/vim-surround'
@@ -56,29 +68,23 @@ Plug 'AndrewRadev/switch.vim'
 Plug 'justinmk/vim-sneak'
 
 Plug 'simeji/winresizer'
-Plug 'xolox/vim-session'
-
 
 Plug 'alvan/vim-closetag'
 Plug 'kshenoy/vim-signature'
-
-Plug 'tversteeg/registers.nvim'
-Plug 'mg979/do.vim'
-
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-Plug 'mosheavni/vim-to-github'
-Plug 'rhysd/conflict-marker.vim'
-
-Plug 'xolox/vim-misc'
-Plug 'ludovicchabant/vim-gutentags'
 
 Plug 'editorconfig/editorconfig-vim'
 
 Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'joshdick/onedark.vim'
+<<<<<<< HEAD
 Plug 'rafamadriz/neon'
+=======
+Plug 'ghifarit53/tokyonight-vim'
+Plug 'dracula/vim'
+Plug 'jacoborus/tender.vim'
+
+>>>>>>> origin/master
 Plug 'machakann/vim-highlightedyank'
 Plug 'mhinz/vim-startify'
 Plug 'vim-scripts/CursorLineCurrentWindow'
@@ -103,6 +109,7 @@ endif
 
 " }}}
 
+<<<<<<< HEAD
 " Telescope {{{
 nnoremap <c-p> <cmd>Telescope find_files find_command=rg,--ignore,--hidden,--files,-g,!.git/ prompt_prefix=🔍<cr>
 nnoremap <c-b> <cmd>Telescope buffers<cr>
@@ -121,6 +128,52 @@ require('telescope').setup{
   }
 }
 EOF
+=======
+" Color settings {{{
+
+" Random color {{{
+function! RandomColorChooser() abort
+  let l:liked_colors =  [
+        \ 'OceanicNext',
+        \ 'apprentice',
+        \ 'deep-space',
+        \ 'dracula',
+        \ 'onedark',
+        \ 'onehalfdark',
+        \ 'purify',
+        \ 'quantum',
+        \ 'sonokai',
+        \ 'two-firewatch'
+        \ ]
+  let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
+  exe 'colorscheme '. l:random_color
+endfunction
+" call RandomColorChooser()
+" }}}
+
+" let g:edge_style = 'neon'
+" let g:palenight_terminal_italics=1
+" colorscheme palenight
+" colorscheme dracula
+" colo edge
+
+let g:tokyonight_style = 'night' " available: night, storm
+let g:tokyonight_enable_italic = 1
+colorscheme palenight
+
+" }}}
+
+" Fzf {{{
+" nnoremap <c-p> :Files
+nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+let $FZF_DEFAULT_COMMAND = "rg --files --hidden -g '!.git/' --color=never"
+" let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
+let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
+" nnoremap <c-t> :Tags<cr>
+nnoremap <c-b> :Buffers<cr>
+nnoremap <F4> :Gb<cr>
+nnoremap <c-y> :History<cr>
+>>>>>>> origin/master
 
 " }}}
 
@@ -148,25 +201,6 @@ let g:floaterm_keymap_next   = '<F8>'
 let g:floaterm_width = 0.7
 let g:floaterm_height = 0.9
 
-" }}}
-
-" Vim do {{{
-nnoremap \G :ShowDos \G<cr>
-let g:vimdo = {}
-let g:vimdo['\G'] = {
-      \'label' : 'git commands', 'interactive':1, 'arbitrary': 1,
-      \'compact':1, 'keys_width': 8, 'desc_width': 30,
-      \'r':  ['reset', ":G reset\<cr>"],
-      \'s':  ['status', ":Git\<cr>"],
-      \'D':  ['diff HEAD', ":Gvsplit! diff HEAD\<cr>:setf git\<cr>:set foldmethod=syntax\<cr>"],
-      \'b':  ['blame', ":Gblame\<cr>"],
-      \'p':  ['push', ":redraw! \<bar>Gp\<cr>"],
-      \'.':  ['add all', ":G add -A\<cr>"],
-      \'l':  ['log current file', ":Glog\<cr>"],
-      \'c':  ['commit', ":Gcommit\<cr>"],
-      \'w':  ['stage file', ":Gwrite\<cr>"],
-      \'d':  ['diff with...', ":Gvdiff\<space>"],
-      \}
 " }}}
 
 " DirDiff {{{
@@ -244,6 +278,7 @@ let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
 let g:closetag_filetypes = 'html,xhtml,phtml,javascript,javascriptreact'
 " }}}
 
+<<<<<<< HEAD
 " Vim visual multi {{{
 let g:VM_maps = {}
 " let g:VM_maps["Select Cursor Down"] = '<c-j>'      " start selecting down
@@ -296,6 +331,8 @@ highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
 " }}}
 
+=======
+>>>>>>> origin/master
 " Startify {{{
 
 let g:startify_custom_header = [
@@ -328,12 +365,16 @@ function! GitStatus()
   let [a,m,r] = GitGutterGetHunkSummary()
   return printf('+%d ~%d -%d', a, m, r)
 endfunction
+<<<<<<< HEAD
 set statusline+=%{GitStatus()}
+=======
+>>>>>>> origin/master
 highlight clear SignColumn
 highlight GitGutterAdd    guifg=#009900 ctermfg=2
 highlight GitGutterChange guifg=#ffff61 ctermfg=3
 highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 highlight! link SignColumn LineNr
+<<<<<<< HEAD
 
 " }}}
 
@@ -343,6 +384,132 @@ lua require("bufferline").setup{}
 
 " nvim-lsp {{{
 luafile ~/.vim/lsp_config.lua
+=======
+" }}}
+
+" Vim lightline {{{
+let g:lightline = {
+      \ 'colorscheme': 'tokyonight',
+      \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
+      \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'filename', 'modified', 'cocstatus' ],
+      \             [ 'gitbranch', 'unpushed_unpulled', 'gitstatus' ]
+      \ ],
+      \   'right': [ [ 'virtualenv', 'filetype', 'line', 'column' ] ]
+      \ },
+      \ 'inactive': {
+      \   'left': [ [ 'readonly', 'filename', 'modified' ] ],
+		  \   'right': [ [ 'filetypelogo', 'gitbranch' ] ]
+      \ },
+      \ 'tabline': {
+      \   'left': [ ['buffers'] ],
+      \   'right': [ ['close'] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead',
+      \   'gitstatus': 'GitStatus',
+      \   'unpushed_unpulled': 'Unpushed_Unpulled',
+      \   'filetype': 'LightlineDevIconsFiletype',
+      \   'fileformat': 'LightlineDevIconsFileformat',
+      \   'filetypelogo': 'WebDevIconsGetFileTypeSymbol',
+      \   'cocstatus': 'coc#status',
+      \   'virtualenv': 'CheckVirtualEnv',
+      \ },
+      \ 'component_expand': {
+      \   'buffers': 'lightline#bufferline#buffers'
+      \ },
+      \ 'component_type': {
+      \   'buffers': 'tabsel'
+      \ },
+      \ 'component_raw': {'buffers': 1}
+      \ }
+
+function! LightlineDevIconsFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ?  WebDevIconsGetFileTypeSymbol() . ' ' .&filetype : 'no ft') : WebDevIconsGetFileTypeSymbol()
+endfunction
+
+function! LightlineDevIconsFileformat()
+  return winwidth(0) > 70 ? (WebDevIconsGetFileFormatSymbol() . ' ' . &fileformat) : WebDevIconsGetFileFormatSymbol()
+endfunction
+
+function CheckVirtualEnv() abort
+  let virtualenv = $VIRTUAL_ENV
+  if empty(virtualenv)
+    return ''
+  endif
+  return printf('(%s)',split(virtualenv, '/')[-1])
+endfunction
+
+function! s:set_lightline_colorscheme(name) abort
+  let g:lightline.colorscheme = a:name
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
+endfunction
+
+function! s:lightline_colorschemes(...) abort
+  return join(map(
+        \ globpath(&rtp,'autoload/lightline/colorscheme/*.vim',1,1),
+        \ "fnamemodify(v:val,':t:r')"),
+        \ "\n")
+endfunction
+
+command! -nargs=1 -complete=custom,s:lightline_colorschemes LightlineColorscheme
+          \ call s:set_lightline_colorscheme(<q-args>)
+
+let g:lightline#bufferline#show_number=1
+let g:lightline#bufferline#enable_devicons=1
+let g:lightline#bufferline#filename_modifier = ':t'
+let g:lightline#bufferline#margin_left=1
+let g:lightline#bufferline#margin_right=1
+let g:lightline#bufferline#clickable=1
+" }}}
+
+" Coc {{{
+
+" Plugins backup {{{
+let g:coc_global_extensions = [
+      \    'coc-cfn-lint',
+      \    'coc-css',
+      \    'coc-diagnostic',
+      \    'coc-dictionary',
+      \    'coc-docker',
+      \    'coc-lua',
+      \    'coc-emmet',
+      \    'coc-emoji',
+      \    'coc-eslint',
+      \    'coc-gitignore',
+      \    'coc-groovy',
+      \    'coc-highlight',
+      \    'coc-html',
+      \    'coc-html-css-support',
+      \    'coc-json',
+      \    'coc-markdownlint',
+      \    'coc-marketplace',
+      \    'coc-neosnippet',
+      \    'coc-pairs',
+      \    'coc-prettier',
+      \    'coc-pyright',
+      \    'coc-react-refactor',
+      \    'coc-scssmodules',
+      \    'coc-sh',
+      \    'coc-snippets',
+      \    'coc-styled-components',
+      \    'coc-swagger',
+      \    'coc-syntax',
+      \    'coc-tabnine',
+      \    'coc-tag',
+      \    'coc-tsserver',
+      \    'coc-vimlsp',
+      \    'coc-xml',
+      \    'coc-yaml'
+      \]
+" }}}
+
+" Install all plugins {{{
+>>>>>>> origin/master
 
 sign define LspDiagnosticsSignError text=🔴
 sign define LspDiagnosticsSignWarning text=🟠
@@ -360,6 +527,7 @@ nnoremap <silent> <leader>rn <cmd>lua vim.lsp.buf.rename()<CR>
 nnoremap <silent> <leader>a  <cmd>lua vim.lsp.buf.code_action()<CR>
 xmap     <silent> <leader>a  <cmd>lua vim.lsp.buf.range_code_action()<CR>
 
+<<<<<<< HEAD
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
@@ -373,6 +541,162 @@ inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
 inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
 
 " }}}
+=======
+" }}}
+
+" use <tab> for trigger completion and navigate to the next complete item {{{
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" }}}
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Project replace word
+nnoremap <leader>prn :CocSearch <C-R>=expand("<cword>")<CR><CR>
+vnoremap <leader>prn "iy:<c-u>CocSearch <C-R>i<CR><CR>
+
+hi CocHighlightText ctermbg=241 guibg=#665c54
+hi! link CocHoverRange CocHighlightText
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+augroup format_coc_group
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  " Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+
+  autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+augroup end
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . ' ' . expand('<cword>')
+  endif
+endfunction
+
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of LS, ex: coc-tsserver
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+nmap <silent><expr> <leader>p CocHasProvider('format') ? "\<Plug>(coc-format)" : ":call FormatEqual()\<cr>"
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Mappings for CoCList
+" Show commands.
+nnoremap <silent><nowait> <leader>cc  :<C-u>CocList commands<cr>
+nnoremap <silent><nowait> <leader>a   <Plug>(coc-codeaction)
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+" Search workspace symbols.
+" nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" }}}
+
+" Nerd Tree {{{
+
+let g:NERDTreeChDirMode = 2
+let g:NERDTreeHijackNetrw = 1
+let g:NERDTreeShowHidden=1
+let g:NERDTreeHighlightCursorline = 1
+let g:NERDTreeFileExtensionHighlightFullName = 1
+
+" " ### nerdtree-git-plugin ###
+let g:NERDTreeGitStatusUseNerdFonts = 1
+" let g:NERDTreeGitStatusConcealBrackets = 1
+
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+    \ 'Modified'  : '✹',
+    \ 'Staged'    : '✚',
+    \ 'Untracked' : '✭',
+    \ 'Unmerged'  : '═',
+    \ 'Dirty'     : '✗',
+    \ 'Renamed'   : '➜',
+    \ 'Clean'     : '✔︎',
+    \ 'Ignored'   : '☒',
+    \ 'Deleted'   : '✖',
+    \ 'Unknown'   : '?'
+    \ }
+" " Set icon for Jenkinsfile
+" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {}
+" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Jenkinsfile'] = ''
+" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['\..*ignore.*'] = ''
+
+" let g:NERDTreePatternMatchHighlightColor = {}
+" let g:NERDTreePatternMatchHighlightColor['\..*ignore.*'] = 'EE6E73'
+" let g:NERDTreePatternMatchHighlightColor['Jenkinsfile'] = '62a2bf'
+
+" If more than one window and previous buffer was NERDTree, go back to it.
+" autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr("$") > 1 | b# | endif
+
+
+" Check if NERDTree is open or active
+function! IsNERDTreeOpen()
+  return exists('t:NERDTreeBufName') && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
+>>>>>>> origin/master
 
 " nvim Tree {{{
 
@@ -417,6 +741,9 @@ function! s:changebranch(...)
     call inputrestore()
   endif
   execute 'Git checkout ' . name
+  if name ==# 'master'
+    Git fetch
+  endif
 endfunction
 
 function! s:call_fzf_changebranch()
@@ -437,9 +764,13 @@ command! -nargs=? Gco call s:changebranch("<args>")
 function! s:MosheGitPush() abort
   echo 'Pushing to ' . FugitiveHead() . '...'
   exe 'Git push -u origin ' . FugitiveHead()
-  echo 'Pushed! 🤩'
+  let l:exit_status = get(FugitiveResult(), 'exit_status', 1)
+  if l:exit_status != 0
+    echo 'Failed pushing 😒'
+  else
+    echo 'Pushed! 🤩'
+  endif
 endfunction
-
 command! Gp call <sid>MosheGitPush()
 nmap <silent> <leader>gp :Gp<cr>
 
@@ -447,9 +778,13 @@ nmap <silent> <leader>gp :Gp<cr>
 function! s:MosheGitPull() abort
   echo 'Pulling...'
   Git pull --quiet
-  echo 'Pulled! 😎'
+  let l:exit_status = get(FugitiveResult(), 'exit_status', 1)
+  if l:exit_status != 0
+    echo 'Failed pulling 😒'
+  else
+    echo 'Pulled! 😎'
+  endif
 endfunction
-
 command! -bang Gl call <sid>MosheGitPull()
 nmap <silent> <leader>gl :Gl<cr>
 
@@ -477,6 +812,7 @@ function! Gcb(...)
     let name = input('Enter branch name: ')
     call inputrestore()
   endif
+  echom ''
   execute 'Git checkout -b ' . name
 endfunction
 command! -nargs=? Gcb call Gcb("<args>")
@@ -543,8 +879,37 @@ function! s:add_mappings() abort
 endfunction
 " }}}
 
+function Unpushed_Unpulled() abort
+  " Don't operate if not on git directory
+  if empty(FugitiveGitDir())
+    return '↑- ↓-'
+  endif
+  let last_run = get(g:, 'unpushed_unpulled_last_run', 0)
+  if last_run != 0 && last_run + 10 > strftime('%s')
+    " Return already existing status
+    return get(g:, 'unpushed_unpulled_last_status', 0)
+  endif
+
+  let unpushed_unpulled_line_string = '# branch.ab '
+  let status_output = systemlist(FugitivePrepare([ 'status', '--porcelain=v2', '--branch' ]))
+  let unpushed_unpulled_index = match(status_output, unpushed_unpulled_line_string)
+  if unpushed_unpulled_index ==# -1
+    return '↑- ↓-'
+  endif
+  let g:unpushed_unpulled_last_run = strftime('%s')
+  let g:unpushed_unpulled_last_status = substitute(
+          \ substitute(
+            \ substitute(status_output[unpushed_unpulled_index], unpushed_unpulled_line_string, '', ''),
+            \ '+', '↑', ''
+          \ ),
+          \ '-', '↓', ''
+        \ )
+  return g:unpushed_unpulled_last_status
+endfunction
+
 " }}}
 
+<<<<<<< HEAD
 " Treesitter {{{
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
@@ -562,3 +927,17 @@ EOF
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 " }}}
+=======
+" Conflict marker {{{
+let g:conflict_marker_highlight_group = 'VisualNOS'
+highlight ConflictMarkerBegin guibg=#2f7366
+highlight ConflictMarkerOurs guibg=#2e5049
+highlight ConflictMarkerTheirs guibg=#344f69
+highlight ConflictMarkerEnd guibg=#2f628e
+highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
+
+" }}}
+
+" Load LUA
+lua require('moshelua')
+>>>>>>> origin/master

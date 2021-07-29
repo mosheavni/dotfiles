@@ -6,3 +6,4 @@ eslint
 neovim
 npm
 semver
+prettier
