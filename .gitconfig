@@ -1,19 +1,33 @@
 [user]
   name = Moshe Avni
   email = moshe@avni.us
-[diff]
-  tool = vscode
-[difftool "vscode"]
-  cmd = code --wait --diff $LOCAL $REMOTE
 [pull]
   rebase = false
 [branch]
   autosetupmerge = always
 [alias]
-    log  = log --pretty=log
-    lb   = log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
+  log  = log --pretty=log
+  lb   = log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
   adog = log --all --decorate --oneline --graph
 [init]
   defaultBranch = master
 [core]
   excludesfile = ~/.gitignore_global
+  pager = diff-so-fancy | less --tabs=4 -RFX
+[interactive]
+  diffFilter = diff-so-fancy --patch
+[color]
+  ui = true
+[color "diff-highlight"]
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
+[color "diff"]
+  meta = 11
+  frag = magenta bold
+  func = 146 bold
+  commit = yellow bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse
