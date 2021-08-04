@@ -84,6 +84,7 @@ alias v='nvim'
 alias vi='nvim'
 alias sudoedit="nvim"
 alias sed=gsed
+alias grep=ggrep
 alias tf='terraform'
 
 alias dotfiles='cd ~/Repos/dotfiles'
