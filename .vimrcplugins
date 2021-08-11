@@ -52,6 +52,7 @@ Plug 'tpope/vim-commentary'
 Plug 'junegunn/vim-easy-align'
 Plug 'AndrewRadev/switch.vim'
 Plug 'justinmk/vim-sneak'
+Plug 'tommcdo/vim-lister'
 
 Plug 'simeji/winresizer'
 
