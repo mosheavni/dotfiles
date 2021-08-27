@@ -110,7 +110,7 @@ export KUBECTL_EXTERNAL_DIFF="kdiff"
 
 bookitmeinit() {
   cd ~/Repos/bookitme
-  export KUBECONFIG=~/Repos/bookitme/bookitme-k8s.yaml
+  export KUBECONFIG=~/.kube/contexts/bookitme-k8s.yaml.config
   source ~/Repos/bookitme/bookitme-terraform/.env
   kgp
 }
