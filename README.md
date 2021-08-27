@@ -78,29 +78,35 @@
 8. Run effuse to create the symlinks between the repo dir and the home dir:
    `effuse`
 
-9. Install npm packages
+9. Fix compaudit perms:
 
    ```bash
-   while read -r npm_package;do
-       npm install --global $npm_package
-   done < Npmfile
+   compaudit | xargs chmod g-w
    ```
-   
-10. Install pip dependencies
+
+10. Install npm packages
+
+    ```bash
+    while read -r npm_package;do
+       npm install --global $npm_package
+    done < Npmfile
+    ```
+
+11. Install pip dependencies
 
     ```bash
     pip3 install -r requirements.txt
     ```
 
-11. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
+12. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
 
     ```bash
     $(brew --prefix)/opt/fzf/install
     ```
 
-12. Install vim-plug [vim-plug](https://github.com/junegunn/vim-plug)
+13. Install vim-plug [vim-plug](https://github.com/junegunn/vim-plug)
 
-13. Open vim and install plugins, and
+14. Open vim and install plugins, and
     [coc-nvim](https://github.com/neoclide/coc.nvim):
 
     ```vim
@@ -108,6 +114,6 @@
     :call coc#util#install()
     ```
 
-14. ???
+15. ???
 
-15. PROFIT
+16. PROFIT
