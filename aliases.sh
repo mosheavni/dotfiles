@@ -110,7 +110,8 @@ alias kej='kubectl edit job'
 alias kdelj='kubectl delete job'
 
 function kubedebug () {
-  image=gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
+  # image=gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
+  image=mosheavni/net-debug:latest
   if [[ $# > 0 ]] && [[ $1 != "-"* ]];then
     image=$1
     shift 1
