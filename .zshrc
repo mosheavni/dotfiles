@@ -71,7 +71,7 @@ if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
   function get_cluster_short() {
     echo "$1" | gsed -e 's?arn:aws:eks:[a-zA-Z0-9\-]*:[0-9]*:cluster/??g' -e 's?\.k8s\.local??g'
   }
-KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
+  KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
 fi
 
 if [[ -f ~/aliases.sh ]];then

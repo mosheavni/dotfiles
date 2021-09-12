@@ -767,7 +767,7 @@ function Unpushed_Unpulled() abort
   endif
 
   let unpushed_unpulled_line_string = '# branch.ab '
-  let status_output = systemlist(FugitivePrepare([ 'status', '--porcelain=v2', '--branch' ]))
+  let status_output = systemlist(FugitiveShellCommand([ 'status', '--porcelain=v2', '--branch' ]))
   let unpushed_unpulled_index = match(status_output, unpushed_unpulled_line_string)
   if unpushed_unpulled_index ==# -1
     return '↑- ↓-'

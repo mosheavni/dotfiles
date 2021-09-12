@@ -92,10 +92,10 @@ alias kgpname='kubectl get pod --no-headers -o custom-columns=":metadata.name"'
 alias kgdname='kubectl get deployment --no-headers -o custom-columns=":metadata.name"'
 function kgres() {
   kubectl get pod $* \
-  -ojsonpath='{range .items[*]}{.spec.containers[*].name}{" memory: "}{.spec.containers..resources.requests.memory}{"/"}{.spec.containers..resources.limits.memory}{" | cpu: "}{.spec.containers..resources.requests.cpu}{"/"}{.spec.containers..resources.limits.cpu}{"\n"}{end}' | sort \
-  -u \
-  -k1,1 | column -t
-}
+    -ojsonpath='{range .items[*]}{.spec.containers[*].name}{" memory: "}{.spec.containers..resources.requests.memory}{"/"}{.spec.containers..resources.limits.memory}{" | cpu: "}{.spec.containers..resources.requests.cpu}{"/"}{.spec.containers..resources.limits.cpu}{"\n"}{end}' | sort \
+    -u \
+    -k1,1 | column -t
+  }
 
 # Kubectl Persistent Volume
 alias kgpv='kubectl get persistentvolume'
@@ -111,13 +111,51 @@ alias kdelj='kubectl delete job'
 
 function kubedebug () {
   # image=gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
-  image=mosheavni/net-debug:latest
-  if [[ $# > 0 ]] && [[ $1 != "-"* ]];then
-    image=$1
-    shift 1
-  fi
-  kubectl run -i --rm --tty debug $* --image=$image --restart=Never -- sh
-}
+  local image=mosheavni/net-debug:latest
+  local docker_exe=bash
+  local pod_name=debug
+  local kubectl_args=()
+  local processing_k_args=false
+  while test $# -gt 0;do
+    if $processing_k_args;then
+      kubectl_args=($kubectl_args $1)
+      shift
+      continue
+    fi
+
+    case $1 in
+    # exe provided
+      -e )
+        shift
+        docker_exe=$1
+        ;;
+      -p )
+        shift
+        pod_name=$1
+        ;;
+      -i )
+        shift
+        image=$1
+        ;;
+      * )
+        if [[ "$1" == "--" ]];then
+          processing_k_args=true
+        fi
+    esac
+    shift
+  done
+
+  kubectl run \
+    -i \
+    --rm \
+    --tty \
+    --image=$image \
+    --restart=Never \
+    ${kubectl_args[*]} \
+    $pod_name \
+    -- \
+    $docker_exe
+  }
 alias -g Sa='--sort-by=.metadata.creationTimestamp'
 alias -g Srt='--sort-by=.metadata.creationTimestamp'
 alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'

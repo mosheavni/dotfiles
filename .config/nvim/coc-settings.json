@@ -71,6 +71,8 @@
   "python.linting.pylintEnabled": true,
   "python.pythonPath": "python3",
   "snippets.snipmate.enable": false,
+  "snippets.ultisnips.enable": true,
+  "coc.source.neosnippet.enable": true,
   "suggest.completionItemKindLabels": {
     "class": "\uf0e8",
     "color": "\ue22b",
