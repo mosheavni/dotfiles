@@ -100,9 +100,11 @@ alias -g D=';done'
 alias cinfo='kubectl cluster-info'
 alias ctx='kubectx '
 export KUBECONFIG=~/.kube/config
-for ctx in ~/.kube/contexts/*.config;do
-  export KUBECONFIG=${KUBECONFIG}:${ctx}
-done
+if [[ -d ~/.kube/contexts/ ]];then
+  for ctx in ~/.kube/contexts/*.config;do
+    export KUBECONFIG=${KUBECONFIG}:${ctx}
+  done
+fi
 
 cnf() { open "https://command-not-found.com/$*" }
 
@@ -114,3 +116,5 @@ bookitmeinit() {
   source ~/Repos/bookitme/bookitme-terraform/.env
   kgp
 }
+
+[[ -f ~/corp-aliases.sh ]] && source ~/corp-aliases.sh

@@ -117,3 +117,15 @@
 15. ???
 
 16. PROFIT
+
+## Additional stuff
+
+- Adjust dock and keyboard settings
+
+- Link iTerm2 and Karabiner profiles
+
+- Download and install [docker](https://www.docker.com/products/docker-desktop)
+
+- Change clipy shortcuts
+
+- Install [magnet](https://apps.apple.com/us/app/magnet/id441258766?mt=12)
