@@ -129,3 +129,7 @@
 - Change clipy shortcuts
 
 - Install [magnet](https://apps.apple.com/us/app/magnet/id441258766?mt=12)
+
+- Install [Mac Media Key Forwarder](https://github.com/milgra/macmediakeyforwarder)
+
+- Install Snagit
