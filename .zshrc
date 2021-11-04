@@ -100,6 +100,7 @@ alias vi='nvim'
 alias sudoedit="nvim"
 alias sed=gsed
 alias grep=ggrep
+alias sort=gsort
 alias tf='terraform'
 alias tg='terragrunt'
 
@@ -129,21 +130,7 @@ if [[ -d ~/.kube/contexts/ ]];then
   done
 fi
 
-# Change iTerm2 profile based on kube context
-change_profile_based_on_ctx() {
-  if [[ "$(kubectl config current-context)" == *"prod"* ]];then
-    it2prof prod
-  else
-    it2prof default
-  fi
-}
-
-ctx() {
-  kubectx $*
-  change_profile_based_on_ctx
-}
-compdef ctx='kubectx'
-change_profile_based_on_ctx
+alias ctx='kubectx'
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 
