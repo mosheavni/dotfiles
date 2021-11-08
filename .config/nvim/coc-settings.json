@@ -108,8 +108,19 @@
   "yaml.format.enable": true,
   "yaml.schemaStore.enable": true,
   "yaml.schemas": {
-    "kubernetes": "/*.yaml",
-    "https://json.schemastore.org/gitlab-ci.json": ".gitlab-ci.yml"
+    "https://json.schemastore.org/gitlab-ci.json": ".gitlab-ci.yml",
+    "kubernetes": [
+      "service.y*ml",
+      "pod.y*ml",
+      "deploy.y*ml",
+      "deployment.y*ml",
+      "svc.y*ml",
+      "service.y*ml",
+      "storageclass.y*ml",
+      "service*account.y*ml",
+      "ingress.y*ml",
+      "kubectl-edit-*"
+    ]
   },
   "yaml.validate": true,
   "yaml.trace.server": "verbose"

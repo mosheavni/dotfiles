@@ -1,3 +1,6 @@
+# ================ #
+# Basic ZSH Config #
+# ================ #
 export PATH="$HOME/.bin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/.local/alt/shims:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
@@ -10,12 +13,6 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 export LANG=en_US
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-
-# Pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
 
 # History settings
 HISTSIZE=5000
@@ -55,6 +52,17 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# =========== #
+# Pyenv Setup #
+# =========== #
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+
+# =================== #
+# Completions and PS1 #
+# =================== #
 # Load zsh-completions
 if type brew &>/dev/null; then
   fpath=( $(brew --prefix)/share/zsh-completions $fpath )
@@ -66,6 +74,9 @@ autoload -U +X bashcompinit && bashcompinit
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+# Terraform completion
+complete -o nospace -C /usr/local/bin/terraform terraform
+
 # Source kube_ps1
 if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
   source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
@@ -75,11 +86,14 @@ if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
   KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
 fi
 
+# ===================== #
+# Aliases and Functions #
+# ===================== #
 if [[ -f ~/aliases.sh ]];then
   source ~/aliases.sh
 fi
+[[ -f ~/corp-aliases.sh ]] && source ~/corp-aliases.sh
 
-# aliases
 export EDITOR="nvim"
 alias vim="nvim"
 alias v='nvim'
@@ -87,7 +101,9 @@ alias vi='nvim'
 alias sudoedit="nvim"
 alias sed=gsed
 alias grep=ggrep
+alias sort=gsort
 alias tf='terraform'
+alias tg='terragrunt'
 
 alias dotfiles='cd ~/Repos/dotfiles'
 alias dc='cd '
@@ -97,15 +113,25 @@ alias -g Wt='while :;do '
 alias -g Wr=' | while read -r line;do '
 alias -g D=';done'
 
-# Kubectl contexts
-alias cinfo='kubectl cluster-info'
-alias ctx='kubectx '
-export KUBECONFIG=~/.kube/config
-for ctx in ~/.kube/contexts/*.config;do
-  export KUBECONFIG=${KUBECONFIG}:${ctx}
-done
+# iTerm profile switching
+it2prof() { printf "\e]1337;SetProfile=$1\a" }
 
 cnf() { open "https://command-not-found.com/$*" }
+
+# ================ #
+# Kubectl Contexts #
+# ================ #
+alias cinfo='kubectl cluster-info'
+
+# Load all contexts
+export KUBECONFIG=~/.kube/config
+if [[ -d ~/.kube/contexts/ ]];then
+  for ctx in ~/.kube/contexts/*.config;do
+    export KUBECONFIG=${KUBECONFIG}:${ctx}
+  done
+fi
+
+alias ctx='kubectx'
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 
@@ -115,3 +141,4 @@ bookitmeinit() {
   source ~/Repos/bookitme/bookitme-terraform/.env
   kgp
 }
+
