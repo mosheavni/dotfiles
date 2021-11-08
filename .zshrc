@@ -1,4 +1,5 @@
 export PATH="$HOME/.bin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/.local/alt/shims:$PATH"
+export PATH="/usr/local/opt/curl/bin:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="mosherussell"
 ENABLE_CORRECTION="true"
