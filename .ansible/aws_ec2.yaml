@@ -1,0 +1,19 @@
+plugin: aws_ec2
+regions:
+  - us-east-1
+  - us-east-2
+  - eu-west-1
+hostnames:
+  - private-ip-address
+  - tag:Name
+keyed_groups:
+  # Create a group for each value of the Application tag
+  - key: tags.Service
+    separator: ''
+  - key: tags.Name
+    separator: ''
+# Set individual variables with compose
+compose:
+  # Use the private IP address to connect to the host
+  # (note: this does not modify inventory_hostname, which is set via I(hostnames))
+  ansible_host: private_ip_address
