@@ -382,6 +382,7 @@ inoreabbrev teh the
 inoreabbrev seperate separate
 inoreabbrev dont don't
 inoreabbrev rbm # TODO: remove before merging
+inoreabbrev cbm # TODO: change before merging
 inoreabbrev funciton function
 inoreabbrev functiton function
 inoreabbrev fucntion function
@@ -734,14 +735,14 @@ endif
 
 " YamlToJson JsonToYaml {{{
 function! YamlToJson() abort
-  % !python -c 'import yaml, json, sys; json.dumps(yaml.safe_load(sys.stdin));'
-  set filetype=json
-  FormatJSON
+  % !python3 -c 'import yaml, json, sys; print(json.dumps(yaml.safe_load(sys.stdin)));'
+  " set filetype=json
+  " FormatJSON
 endfunction
 
 function! JsonToYaml() abort
   % !python -c 'import yaml, json, sys; yaml.safe_dump(json.load(sys.stdin), sys.stdout, default_flow_style=False)'
-  set filetype=yaml
+  " set filetype=yaml
 endfunction
 
 com! JsonToYaml call JsonToYaml()

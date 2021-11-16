@@ -281,9 +281,9 @@ let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'readonly', 'filename', 'modified', 'cocstatus' ],
-      \             [ 'gitbranch', 'unpushed_unpulled', 'gitstatus' ]
+      \             [ 'unpushed_unpulled', 'gitstatus' ]
       \ ],
-      \   'right': [ [ 'virtualenv', 'filetype', 'line', 'column' ] ]
+      \   'right': [ [ 'virtualenv', 'filetype', 'line', 'column', 'gitbranch' ] ]
       \ },
       \ 'inactive': {
       \   'left': [ [ 'readonly', 'filename', 'modified' ] ],
@@ -649,6 +649,8 @@ function! s:ftplugin_fugitive() abort
   nnoremap <buffer> <silent> cc :Git commit --quiet<CR>
   nnoremap <buffer> <silent> gl :Gl<CR>
   nnoremap <buffer> <silent> gp :Gp<CR>
+  nnoremap <buffer> <silent> pr :silent! !cpr<CR>
+
 endfunction
 augroup moshe_fugitive
   autocmd!
