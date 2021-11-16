@@ -1,7 +1,7 @@
 # ================ #
 # Basic ZSH Config #
 # ================ #
-export PATH="$HOME/.bin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/.local/alt/shims:$PATH"
+export PATH="$HOME/.local/alt/shims:$HOME/.bin:${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="mosherussell"
@@ -95,23 +95,6 @@ fi
 [[ -f ~/corp-aliases.sh ]] && source ~/corp-aliases.sh
 
 export EDITOR="nvim"
-alias vim="nvim"
-alias v='nvim'
-alias vi='nvim'
-alias sudoedit="nvim"
-alias sed=gsed
-alias grep=ggrep
-alias sort=gsort
-alias tf='terraform'
-alias tg='terragrunt'
-
-alias dotfiles='cd ~/Repos/dotfiles'
-alias dc='cd '
-
-# global aliases
-alias -g Wt='while :;do '
-alias -g Wr=' | while read -r line;do '
-alias -g D=';done'
 
 # iTerm profile switching
 it2prof() { printf "\e]1337;SetProfile=$1\a" }
@@ -121,7 +104,6 @@ cnf() { open "https://command-not-found.com/$*" }
 # ================ #
 # Kubectl Contexts #
 # ================ #
-alias cinfo='kubectl cluster-info'
 
 # Load all contexts
 export KUBECONFIG=~/.kube/config
@@ -130,8 +112,6 @@ if [[ -d ~/.kube/contexts/ ]];then
     export KUBECONFIG=${KUBECONFIG}:${ctx}
   done
 fi
-
-alias ctx='kubectx'
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 

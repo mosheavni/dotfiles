@@ -1,8 +1,4 @@
-### General aliases ###
-alias watch='watch --color '
-alias -g S='| sort'
-alias -g SRT='+short | sort'
-
+### Helper functions ###
 function _alias_parser() {
   parsed_alias=`alias -- "$1"`
   if [[ $? == 0 ]]; then
@@ -32,6 +28,7 @@ function _alias_finder() {
   # echo "final_result: ${final_result[@]}" >> $log_file
 }
 
+### Random functions ###
 function mwatch() {
   # log_file=/tmp/moshe_mwatch.log
   # [[ -f $log_file ]] && cat /dev/null > $log_file || touch $log_file
@@ -45,13 +42,9 @@ function ssh2 () { in_url=`sed -e 's/ip-//' -e 's/-/./g' <<< "$1" ` ; echo $in_u
 function jsonlint () { pbcopy && open https://jsonlint.com/ }
 function grl () { grep -rl $* . }
 
-
-### Git related ###
+### Git functions ###
 # Open the github page of the repo you're in, in the browser
 function opengit () { git remote -v | awk 'NR==1{print $2}' | sed -e "s?:?/?g" -e 's?\.git$??' -e "s?git@?https://?" -e "s?https///?https://?g" | xargs open }
-# see recently pushed branches
-# alias gb="git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads | fzf | xargs git checkout && git pull"
-alias gb='git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2 | fzf | xargs git checkout'
 
 # Create pull request = cpr
 function cpr() {
@@ -69,45 +62,15 @@ function cpr() {
   open "https://${git_name}.com/${project_name}/${repo_name}/${pr_link}${branch_name}"
 }
 
-### Shortcuts to directories ###
-alias repos="~/Repos"
-alias difff='code --diff'
-
-### Kubernetes Aliases ###
-alias kafd='kubectl apply --validate=true --dry-run=true -f -'
+### Kubernetes functions ###
 function kdpw () { watch "kubectl describe po $* | tail -20" }
-alias kgdns="kubectl get services --all-namespaces -o jsonpath='{.items[*].metadata.annotations.external-dns\.alpha\.kubernetes\.io/hostname}' | tr ' ' '\n'"
-alias -g YML='-oyaml | less'
-alias -g NM=' --no-headers -o custom-columns=":metadata.name"'
-alias -g RC='--sort-by=".status.containerStatuses[0].restartCount" -A | grep -v "\s0\s"'
-alias kns='kubens'
-alias kmem='kubectl top node | (gsed -u 1q;sort -r -hk5)'
-alias kcpu='kubectl top node | (gsed -u 1q;sort -r -hk3)'
-alias ktn='kubectl top node'
-alias ktp='kubectl top pod'
-alias krs='kubectl rollout restart'
-alias kesec='kubectl edit secret'
-alias kgnol='kgno -l'
-alias kgpname='kubectl get pod --no-headers -o custom-columns=":metadata.name"'
-alias kgdname='kubectl get deployment --no-headers -o custom-columns=":metadata.name"'
+
 function kgres() {
   kubectl get pod $* \
     -ojsonpath='{range .items[*]}{.spec.containers[*].name}{" memory: "}{.spec.containers..resources.requests.memory}{"/"}{.spec.containers..resources.limits.memory}{" | cpu: "}{.spec.containers..resources.requests.cpu}{"/"}{.spec.containers..resources.limits.cpu}{"\n"}{end}' | sort \
     -u \
     -k1,1 | column -t
   }
-
-# Kubectl Persistent Volume
-alias kgpv='kubectl get persistentvolume'
-alias kdpv='kubectl describe persistentvolume'
-alias kepv='kubectl edit persistentvolume'
-alias kdelpv='kubectl delete persistentvolume'
-
-# Kubectl jobs
-alias kgj='kubectl get job'
-alias kdj='kubectl describe job'
-alias kej='kubectl edit job'
-alias kdelj='kubectl delete job'
 
 function kubedebug () {
   # image=gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
@@ -155,16 +118,78 @@ function kubedebug () {
     $pod_name \
     -- \
     $docker_exe
-  }
-alias -g Sa='--sort-by=.metadata.creationTimestamp'
-alias -g Srt='--sort-by=.metadata.creationTimestamp'
-alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
+}
+
 function get_pods_of_svc() {
   svc_name=$1
   shift
   label_selectors=$(kubectl get svc $svc_name $* -ojsonpath="{.spec.selector}" | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" | paste -s -d "," -)
   kubectl get pod $* -l $label_selectors
 }
+
+### General aliases ###
+alias watch='watch --color '
+alias vim="nvim"
+alias v='nvim'
+alias vi='nvim'
+alias sudoedit="nvim"
+alias sed=gsed
+alias grep=ggrep
+alias sort=gsort
+
+alias dotfiles='cd ~/Repos/dotfiles'
+alias dc='cd '
+
+# global aliases
+alias -g Wt='while :;do '
+alias -g Wr=' | while read -r line;do '
+alias -g D=';done'
+alias -g S='| sort'
+alias -g SRT='+short | sort'
+alias -g Sa='--sort-by=.metadata.creationTimestamp'
+alias -g Srt='--sort-by=.metadata.creationTimestamp'
+alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
+alias -g YML='-oyaml | less'
+alias -g NM=' --no-headers -o custom-columns=":metadata.name"'
+alias -g RC='--sort-by=".status.containerStatuses[0].restartCount" -A | grep -v "\s0\s"'
+
+### Git related ###
+# see recently pushed branches
+# alias gb="git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads | fzf | xargs git checkout && git pull"
+alias gb='git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2 | fzf | xargs git checkout'
+
+
+### Shortcuts to directories ###
+alias repos="~/Repos"
+alias difff='code --diff'
+
+### Kubernetes Aliases ###
+alias cinfo='kubectl cluster-info'
+alias kafd='kubectl apply --validate=true --dry-run=true -f -'
+alias kgdns="kubectl get services --all-namespaces -o jsonpath='{.items[*].metadata.annotations.external-dns\.alpha\.kubernetes\.io/hostname}' | tr ' ' '\n'"
+alias kns='kubens'
+alias ctx='kubectx'
+alias kmem='kubectl top node | (gsed -u 1q;sort -r -hk5)'
+alias kcpu='kubectl top node | (gsed -u 1q;sort -r -hk3)'
+alias ktn='kubectl top node'
+alias ktp='kubectl top pod'
+alias krs='kubectl rollout restart'
+alias kesec='kubectl edit secret'
+alias kgnol='kgno -l'
+alias kgpname='kubectl get pod --no-headers -o custom-columns=":metadata.name"'
+alias kgdname='kubectl get deployment --no-headers -o custom-columns=":metadata.name"'
+
+# Kubectl Persistent Volume
+alias kgpv='kubectl get persistentvolume'
+alias kdpv='kubectl describe persistentvolume'
+alias kepv='kubectl edit persistentvolume'
+alias kdelpv='kubectl delete persistentvolume'
+
+# Kubectl jobs
+alias kgj='kubectl get job'
+alias kdj='kubectl describe job'
+alias kej='kubectl edit job'
+alias kdelj='kubectl delete job'
 
 # Common Used tools:
 alias tf='terraform'
