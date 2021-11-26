@@ -32,6 +32,7 @@ Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
 Plug 'towolf/vim-helm'
 Plug 'andrewstuart/vim-kubernetes'
+Plug 'mosheavni/yaml-revealer'
 
 Plug 'mogelbrod/vim-jsonpath'
 Plug 'chrisbra/vim-sh-indent'
@@ -164,6 +165,11 @@ let g:floaterm_keymap_next   = '<F8>'
 let g:floaterm_width = 0.7
 let g:floaterm_height = 0.9
 
+" }}}
+
+" Yaml Revealer {{{
+let g:yaml_revealer_separator = '.'
+let g:yaml_revealer_list_indicator = 1
 " }}}
 
 " DirDiff {{{
@@ -347,7 +353,7 @@ command! -nargs=1 -complete=custom,s:lightline_colorschemes LightlineColorscheme
 
 let g:lightline#bufferline#show_number=1
 let g:lightline#bufferline#enable_devicons=1
-let g:lightline#bufferline#filename_modifier = ':t'
+let g:lightline#bufferline#filename_modifier = ':.'
 let g:lightline#bufferline#margin_left=1
 let g:lightline#bufferline#margin_right=1
 let g:lightline#bufferline#clickable=1
