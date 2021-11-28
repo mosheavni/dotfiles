@@ -25,6 +25,12 @@
     "sh": "shfmt",
     "terraform": "tffmt"
   },
+  "diagnostic-languageserver.formatters": {
+    "shfmt": {
+      "command": "shfmt",
+      "args": ["-i", "2", "-filename", "%filepath"]
+    }
+  },
   "diagnostic-languageserver.trace.server": "verbose",
   "diagnostic.checkCurrentLine": true,
   "diagnostic.errorSign": "\u2718",
