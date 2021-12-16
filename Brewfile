@@ -71,6 +71,7 @@ brew "wget"
 brew "yarn"
 brew "zsh"
 brew "zsh-completions"
+brew 'gnupg'
 cask "adobe-acrobat-reader"
 cask "adoptopenjdk8"
 cask "alfred"

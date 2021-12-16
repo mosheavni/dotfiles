@@ -149,7 +149,7 @@ alias -g SRT='+short | sort'
 alias -g Sa='--sort-by=.metadata.creationTimestamp'
 alias -g Srt='--sort-by=.metadata.creationTimestamp'
 alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
-alias -g YML='-oyaml | vim -c "setlocal buftype=nofile | nnoremap <buffer> q :qall<cr>"'
+alias -g YML='-oyaml | vim -c "setlocal buftype=nofile filetype=yaml | nnoremap <buffer> q :qall<cr>"'
 alias -g NM=' --no-headers -o custom-columns=":metadata.name"'
 alias -g RC='--sort-by=".status.containerStatuses[0].restartCount" -A | grep -v "\s0\s"'
 

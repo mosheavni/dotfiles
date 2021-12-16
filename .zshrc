@@ -1,13 +1,20 @@
 # ================ #
 # Basic ZSH Config #
 # ================ #
-export PATH="$HOME/.local/alt/shims:$HOME/.bin:${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+# Additional PATHs
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="$HOME/.local/alt/shims:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+export PATH="$HOME/.bin:$PATH"
+
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="mosherussell"
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
+export GPG_TTY=$(tty)
 
 # Set Locale
 export LANG=en_US

@@ -383,6 +383,7 @@ inoreabbrev seperate separate
 inoreabbrev dont don't
 inoreabbrev rbm # TODO: remove before merging
 inoreabbrev cbm # TODO: change before merging
+inoreabbrev ubm # TODO: uncomment before merging
 inoreabbrev funciton function
 inoreabbrev functiton function
 inoreabbrev fucntion function

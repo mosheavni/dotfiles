@@ -5,6 +5,9 @@
 [pull]
   rebase = false
 
+[help]
+	autocorrect = 1
+
 [branch]
   autosetupmerge = always
 
@@ -19,6 +22,7 @@
 [core]
   excludesfile = ~/.gitignore_global
   pager        = diff-so-fancy | less --tabs=4 -RFX
+  editor       = vim
 
 [interactive]
   diffFilter = diff-so-fancy --patch
