@@ -116,16 +116,17 @@
   "yaml.schemas": {
     "https://json.schemastore.org/gitlab-ci.json": ".gitlab-ci.yml",
     "kubernetes": [
-      "service.y*ml",
-      "pod.y*ml",
+      "*role*.y*ml",
       "deploy.y*ml",
       "deployment.y*ml",
-      "svc.y*ml",
-      "service.y*ml",
-      "storageclass.y*ml",
-      "service*account.y*ml",
       "ingress.y*ml",
-      "kubectl-edit-*"
+      "kubectl-edit-*",
+      "pdb.y*ml",
+      "pod.y*ml",
+      "rbac.y*ml",
+      "service*.y*ml",
+      "storageclass.y*ml",
+      "svc.y*ml"
     ]
   },
   "yaml.validate": true,
