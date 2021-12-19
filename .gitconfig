@@ -6,7 +6,7 @@
   rebase = false
 
 [help]
-	autocorrect = 1
+  autocorrect = 1
 
 [branch]
   autosetupmerge = always
