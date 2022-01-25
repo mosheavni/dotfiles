@@ -191,6 +191,12 @@ alias kdj='kubectl describe job'
 alias kej='kubectl edit job'
 alias kdelj='kubectl delete job'
 
+# Kubectl Statefulsets
+alias kgsts='kubectl get statefulsets'
+alias kdsts='kubectl describe statefulsets'
+alias kests='kubectl edit statefulsets'
+alias kdelsts='kubectl delete statefulsets'
+
 # Common Used tools:
 alias tf='terraform'
 alias tg='terragrunt'
