@@ -138,7 +138,7 @@ let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
 nnoremap <c-b> :Buffers<cr>
 nnoremap <F4> :Gb<cr>
 nnoremap <c-y> :History<cr>
-
+set rtp+=/usr/local/opt/fzf
 " }}}
 
 " Ultisnip {{{
@@ -185,6 +185,7 @@ let g:yaml_revealer_list_indicator = 1
 " -> moshe_king
 let g:switch_custom_definitions = [
       \   ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+      \   ['yes', 'no'],
       \   ['==', '!='],
       \   {
       \     '\<[a-z0-9]\+_\k\+\>': {
