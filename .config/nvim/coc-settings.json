@@ -6,7 +6,6 @@
     "javascript",
     "javascriptreact",
     "markdown",
-    "python",
     "sh",
     "zsh",
     "groovy"
@@ -76,6 +75,7 @@
   "python.linting.flake8Enabled": false,
   "python.linting.pylintEnabled": true,
   "python.pythonPath": "python3",
+  "python.linting.pylintArgs": ["--disable=C0111"],
   "snippets.snipmate.enable": false,
   "snippets.ultisnips.enable": true,
   "coc.source.neosnippet.enable": true,
