@@ -5,9 +5,10 @@ EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
 
 RPROMPT=''
 
-PROMPT='%{%G${EMOJI}%} %{$FG[049]%}%c%{$reset_color%} $(git_prompt_info)$(kube_ps1 2>/dev/null || :)'
-PROMPT+=$'\n'
-PROMPT+='%(?:%{$fg[green]%}→ :%{$fg[red]%}→ )'
+PROMPT='%{$FG[049]%}%(4~|.../%3~|%~)%{$reset_color%} $(branch_prompt_info) $(kube_ps1 2>/dev/null || :)'
+# PROMPT='%{%G${EMOJI}%} %{$FG[049]%}%c%{$reset_color%} $(branch_prompt_info) $(kube_ps1 2>/dev/null || :)'
+# PROMPT+=$'\n'
+PROMPT+='%(?:%{$fg[green]%} → :%{$fg[red]%} → )'
 PROMPT+='%{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}git:(%{$fg[red]%} "
