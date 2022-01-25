@@ -44,6 +44,7 @@ plugins=(
   ansible
   autoupdate
   aws
+  branch
   colored-man-pages
   common-aliases
   dircycle
@@ -52,6 +53,7 @@ plugins=(
   git-auto-fetch
   helm
   kubectl
+  terraform
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
