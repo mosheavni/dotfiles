@@ -4,16 +4,23 @@ regions:
   - us-east-2
   - eu-west-1
 hostnames:
-  - private-ip-address
-  - tag:Name
+  - name: 'private-ip-address'
+    separator: '_'
+    prefix: 'tag:Name'
 keyed_groups:
-  # Create a group for each value of the Application tag
   - key: tags.Service
     separator: ''
   - key: tags.Name
-    separator: ''
+    prefix: name
+  - key: key_name
+    prefix: key
+
 # Set individual variables with compose
 compose:
   # Use the private IP address to connect to the host
   # (note: this does not modify inventory_hostname, which is set via I(hostnames))
   ansible_host: private_ip_address
+  ssh_user: tags["ssh-user"]
+filters:
+  # All instances with their state as `running`
+  instance-state-name: running
