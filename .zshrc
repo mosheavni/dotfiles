@@ -85,6 +85,9 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # Terraform completion
 complete -o nospace -C /usr/local/bin/terraform terraform
+compdef tf='terraform'
+compdef tg='terraform'
+compdef terragrunt='terraform'
 
 # Source kube_ps1
 if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
