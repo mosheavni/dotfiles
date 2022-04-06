@@ -449,6 +449,7 @@ augroup special_filetype
   autocmd FileType json syntax match Comment +\/\/.\+$+
   autocmd BufNewFile,BufRead aliases.sh setf zsh
   autocmd BufNewFile,BufRead .eslintrc setf json
+  autocmd BufNewFile,BufRead *.hcl setf terraform
   autocmd FileType javascript set filetype=javascriptreact | set iskeyword+=-
 augroup end
 
