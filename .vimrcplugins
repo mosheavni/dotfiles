@@ -62,6 +62,7 @@ Plug 'kshenoy/vim-signature'
 
 Plug 'editorconfig/editorconfig-vim'
 
+" Look and feel
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 set noshowmode " Redundant as lighline takes care of that
@@ -69,6 +70,7 @@ Plug 'drewtempelmeyer/palenight.vim'
 Plug 'joshdick/onedark.vim'
 Plug 'ghifarit53/tokyonight-vim'
 Plug 'dracula/vim'
+Plug 'morhetz/gruvbox'
 Plug 'jacoborus/tender.vim'
 
 Plug 'machakann/vim-highlightedyank'
@@ -124,7 +126,7 @@ endfunction
 
 let g:tokyonight_style = 'night' " available: night, storm
 let g:tokyonight_enable_italic = 1
-colorscheme palenight
+colorscheme gruvbox
 
 " }}}
 
@@ -186,6 +188,7 @@ let g:yaml_revealer_list_indicator = 1
 let g:switch_custom_definitions = [
       \   ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
       \   ['yes', 'no'],
+      \   ['enable', 'disable'],
       \   ['==', '!='],
       \   {
       \     '\<[a-z0-9]\+_\k\+\>': {
@@ -364,7 +367,6 @@ let g:lightline#bufferline#clickable=1
 
 " Plugins backup {{{
 let g:coc_global_extensions = [
-      \    'coc-cfn-lint',
       \    'coc-css',
       \    'coc-diagnostic',
       \    'coc-dictionary',
@@ -604,9 +606,6 @@ function! s:changebranch(...)
     call inputrestore()
   endif
   execute 'Git checkout ' . name
-  if name ==# 'master'
-    Git fetch
-  endif
 endfunction
 
 function! s:call_fzf_changebranch()
@@ -667,7 +666,7 @@ augroup END
 " }}}
 
 " Git merge origin master
-command! -bang Gmom G merge origin/master
+command! -bang Gmom exe 'G merge origin/' . FugitiveHead()
 
 " Create a new branch
 function! Gcb(...)
