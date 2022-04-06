@@ -346,6 +346,9 @@ vnoremap K :m '<-2<CR>gv=gv
 " Convert all tabs to spaces
 nnoremap <leader>ct<space> :retab<cr>
 
+" Copy file path to clipboard
+nnoremap <silent> <leader>cfp :let @+ = expand('%')<cr>:echo "Copied file path " . expand('%')<cr>
+
 "" }}}
 
 " Netrw (directory browsing) out-of-the-box plugin {{{
