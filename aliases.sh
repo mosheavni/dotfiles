@@ -38,7 +38,11 @@ function mwatch() {
 }
 
 function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
-function ssh2 () { in_url=`sed -e 's/ip-//' -e 's/-/./g' <<< "$1" ` ; echo $in_url && ssh $in_url }
+function ssh2 () {
+  in_url=$(sed -E 's?ip-([0-9]*)-([0-9]*)-([0-9]*)-([0-9]*)?\1.\2.\3.\4?g' <<< "$1")
+  echo $in_url
+  ssh $in_url
+}
 function jsonlint () { pbcopy && open https://jsonlint.com/ }
 function grl () { grep -rl $* . }
 
@@ -178,6 +182,10 @@ alias kesec='kubectl edit secret'
 alias kgnol='kgno -l'
 alias kgpname='kubectl get pod --no-headers -o custom-columns=":metadata.name"'
 alias kgdname='kubectl get deployment --no-headers -o custom-columns=":metadata.name"'
+alias kg='kubectl get '
+alias kd='kubectl describe '
+alias ke='kubectl edit '
+alias kdel='kubectl delete '
 
 # Kubectl Persistent Volume
 alias kgpv='kubectl get persistentvolume'

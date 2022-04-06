@@ -38,6 +38,10 @@ toApprove.each {pending -&gt; ScriptApproval.get().approveScript(pending.getHash
 				<title>Delete series of builds</title>
 				<content>Jenkins.instance.getItemByFullName(&apos;JobName&apos;).builds.findAll { it.number &gt; 10 &amp;&amp; it.number &lt; 1717 }.each { it.delete() }</content>
 			</snippet>
+			<snippet>
+				<title>apk - awscli</title>
+				<content>apk add --update python3 ;python3 -m ensurepip &amp;&amp; pip3 install awscli</content>
+			</snippet>
 		</snippets>
 	</folder>
 	<folder>
@@ -78,58 +82,9 @@ alias ll=&apos;ls -l --color&apos;</content>
 				<title>decrypt with openssl</title>
 				<content>openssl enc -aes-256-cbc -d -in credentials.xml.encrypted -out credentials.xml</content>
 			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>Swarm Managers SSH</title>
-		<snippets>
 			<snippet>
-				<title>swarm-uk-prod-01</title>
-				<content>ssh swarm-uk-prod-01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>swarm-us-prod-01</title>
-				<content>ssh swarm-us-prod-01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>swarm-bo-prod-01</title>
-				<content>ssh swarm-bo-prod-01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>swarm-usw-prod-01</title>
-				<content>ssh swarm-usw-prod-01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>swarm-au-prod-01</title>
-				<content>ssh swarm-au-prod-01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>swarm-sp-prod-01</title>
-				<content>ssh swarm-sp-prod-01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>swarm-xsite-stg-01</title>
-				<content>ssh swarm-xsite-stg-01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>swarm-xsite-prod-01</title>
-				<content>ssh swarm-xsite-prod-01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>swarm-xsite-usw-prod-01</title>
-				<content>ssh swarm-xsite-usw-prod-01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>swarm-boost-stg-01</title>
-				<content>ssh swarm-boost-stg-01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>swarm-et-prod-01</title>
-				<content>ssh swarm-et-prod-01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>swarm-xsite-usw-stg-01</title>
-				<content>ssh swarm-xsite-usw-stg-01.naturalint.com</content>
+				<title>pablo</title>
+				<content>Pablo3mili03sc0barGaviria</content>
 			</snippet>
 		</snippets>
 	</folder>
@@ -188,6 +143,15 @@ alias ll=&apos;ls -l --color&apos;</content>
 				<title>add security group rule</title>
 				<content>aws ec2 update-security-group-rule-descriptions-ingress --group-id sg-01b4d94542c5b90e8 --ip-permissions \
 &apos;[{&quot;IpProtocol&quot;: &quot;tcp&quot;, &quot;FromPort&quot;: 3306, &quot;ToPort&quot;: 3306, &quot;IpRanges&quot;: [{&quot;CidrIp&quot;: &quot;35.170.223.65/32&quot;, &quot;Description&quot;: &quot;BoomiFlow Public IP&quot;}]}]&apos;</content>
+			</snippet>
+			<snippet>
+				<title>get params by path as env vars</title>
+				<content>/usr/local/bin/aws ssm get-parameters-by-path \
+  --path &quot;/spotinst-gateway&quot;  \
+  --region us-east-1 \
+  --query &quot;Parameters[*].[Name,Value]&quot; \
+  --with-decryption | jq \
+  -r &apos;.[] | .[0] |= (split(&quot;/&quot;)|.[2]) | &quot;export \(.[0])=\&quot;\(.[1])\&quot;&quot;&apos; | tr &apos;&quot;&apos; &quot;&apos;&quot;</content>
 			</snippet>
 		</snippets>
 	</folder>
@@ -279,51 +243,6 @@ alias ll=&apos;ls -l --color&apos;</content>
 			<snippet>
 				<title>AU-Cache</title>
 				<content>renderer-req-cache.r3qcrm.0001.apse2.cache.amazonaws.com</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>QA Envs SSH</title>
-		<snippets>
-			<snippet>
-				<title>qa01-app</title>
-				<content>ssh docker-app.qa01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>qa01-infra</title>
-				<content>ssh docker-infra.qa01.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>qa02-app</title>
-				<content>ssh docker-app.qa02.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>qa02-infra</title>
-				<content>ssh docker-infra.qa02.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>qa03-app</title>
-				<content>ssh docker-app.qa03.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>qa03-infra</title>
-				<content>ssh docker-infra.qa03.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>qa04-app</title>
-				<content>ssh docker-app.qa04.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>qa04-infra</title>
-				<content>ssh docker-infra.qa04.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>qa05-app</title>
-				<content>ssh docker-app.qa05.naturalint.com</content>
-			</snippet>
-			<snippet>
-				<title>qa05-infra</title>
-				<content>ssh docker-infra.qa05.naturalint.com</content>
 			</snippet>
 		</snippets>
 	</folder>
