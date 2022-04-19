@@ -91,6 +91,10 @@ function kubedebug () {
     fi
 
     case $1 in
+      -h )
+        echo "Usage: $0 [-e executable] [-p pod_name] [-i image] [-s service_account] [-- kubernetes_arguments]"
+        return
+        ;;
     # exe provided
       -e )
         shift
@@ -104,6 +108,10 @@ function kubedebug () {
         shift
         image=$1
         ;;
+      -s )
+        shift
+        sa_override=--overrides="{ \"spec\": { \"serviceAccount\": \"$1\" } }"
+        ;;
       * )
         if [[ "$1" == "--" ]];then
           processing_k_args=true
@@ -112,16 +120,19 @@ function kubedebug () {
     shift
   done
 
+  set -x
   kubectl run \
     -i \
     --rm \
     --tty \
     --image=$image \
     --restart=Never \
+    $sa_override \
     ${kubectl_args[*]} \
     $pod_name \
     -- \
     $docker_exe
+  set +x
 }
 
 function get_pods_of_svc() {

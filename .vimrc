@@ -165,6 +165,16 @@ set tabstop=4
 set smarttab      " insert tabs on the start of a line according to
 " shiftwidth, not tabstop
 set expandtab     " Tab changes to spaces. Format with :retab
+
+function! s:ChangeIndentNum() abort
+  call inputsave()
+  let the_num = str2nr(input('Enter new indent: '))
+  call inputrestore()
+  exe 'set shiftwidth=' . the_num
+  exe 'set softtabstop=' . the_num
+  exe 'set tabstop=' . the_num
+endfunction
+nnoremap cii :<C-u>call <SID>ChangeIndentNum()<CR>
 " }}}
 
 " Statusline {{{
@@ -563,7 +573,7 @@ function s:RipGrepCWORD(bang, visualmode, ...) abort
     let search_word = expand('<cword>')
   endif
   echom 'Searching for ' . search_word
-  " Silent removes the "press enter to continue" prompt, and band (!) is for
+  " Silent removes the "press enter to continue" prompt, and bang (!) is for
   " not jumping to the first result
   let grepcmd = 'silent grep' . a:bang .' -- ' . shellescape(search_word)
   execute grepcmd
