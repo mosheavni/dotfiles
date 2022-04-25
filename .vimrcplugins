@@ -20,6 +20,7 @@ Plug 'rhysd/conflict-marker.vim'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug '/usr/local/opt/fzf'
 
 Plug 'mosheavni/vim-dirdiff'
 
@@ -138,9 +139,8 @@ let $FZF_DEFAULT_COMMAND = "rg --files --hidden -g '!.git/' --color=never"
 let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
 " nnoremap <c-t> :Tags<cr>
 nnoremap <c-b> :Buffers<cr>
-nnoremap <F4> :Gb<cr>
+nnoremap <F4>  :Gb<cr>
 nnoremap <c-y> :History<cr>
-set rtp+=/usr/local/opt/fzf
 " }}}
 
 " Ultisnip {{{
@@ -403,6 +403,9 @@ let g:coc_global_extensions = [
       \    'coc-yaml'
       \]
 " }}}
+
+" Configurations
+let g:coc_disable_transparent_cursor = 1
 
 " use <tab> for trigger completion and navigate to the next complete item {{{
 function! s:check_back_space() abort
