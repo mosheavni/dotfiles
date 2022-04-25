@@ -30,8 +30,8 @@ Plug 'vim-scripts/groovyindent-unix'
 Plug 'chr4/nginx.vim'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
-Plug 'towolf/vim-helm'
 Plug 'andrewstuart/vim-kubernetes'
+Plug 'towolf/vim-helm'
 Plug 'mosheavni/yaml-revealer'
 
 Plug 'mogelbrod/vim-jsonpath'
