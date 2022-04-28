@@ -9,87 +9,10 @@ scriptencoding utf-8
 
 " Plugins {{{
 let s:vimplug_dir = '~/.vim/plugged'
-call plug#begin(s:vimplug_dir)
 
-Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-Plug 'mosheavni/vim-to-github'
-Plug 'rhysd/conflict-marker.vim'
-
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug '/usr/local/opt/fzf'
-
-Plug 'mosheavni/vim-dirdiff'
-
-Plug 'sheerun/vim-polyglot'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
-Plug 'vim-scripts/groovyindent-unix'
-Plug 'chr4/nginx.vim'
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-Plug 'rayburgemeestre/phpfolding.vim', {'for': ['php']}
-Plug 'andrewstuart/vim-kubernetes'
-Plug 'towolf/vim-helm'
-Plug 'mosheavni/yaml-revealer'
-
-Plug 'mogelbrod/vim-jsonpath'
-Plug 'chrisbra/vim-sh-indent'
-Plug 'hashivim/vim-terraform'
-
-Plug 'honza/vim-snippets'
-Plug 'phenomenes/ansible-snippets'
-
-Plug 'terryma/vim-smooth-scroll'
-
-Plug 'christoomey/vim-system-copy'
-Plug 'danro/rename.vim'
-Plug 'voldikss/vim-floaterm'
-
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-commentary'
-Plug 'junegunn/vim-easy-align'
-Plug 'AndrewRadev/switch.vim'
-Plug 'justinmk/vim-sneak'
-Plug 'tommcdo/vim-lister'
-
-Plug 'simeji/winresizer'
-
-Plug 'alvan/vim-closetag'
-Plug 'kshenoy/vim-signature'
-
-Plug 'editorconfig/editorconfig-vim'
-
-" Look and feel
-Plug 'itchyny/lightline.vim'
-Plug 'mengelbrecht/lightline-bufferline'
 set noshowmode " Redundant as lighline takes care of that
-Plug 'drewtempelmeyer/palenight.vim'
-Plug 'joshdick/onedark.vim'
-Plug 'ghifarit53/tokyonight-vim'
-Plug 'dracula/vim'
-Plug 'morhetz/gruvbox'
-Plug 'jacoborus/tender.vim'
-
-Plug 'machakann/vim-highlightedyank'
-Plug 'mhinz/vim-startify'
-Plug 'vim-scripts/CursorLineCurrentWindow'
-
-" Custom text object
-Plug 'kana/vim-textobj-user'
-Plug 'mattn/vim-textobj-url'
-Plug 'bps/vim-textobj-python'
-Plug 'rhysd/vim-textobj-anyblock'
-Plug 'kana/vim-textobj-entire'
-Plug 'vimtaku/vim-textobj-keyvalue'
-
-" Devicons is last so it can support all of the other plugins
-Plug 'ryanoasis/vim-devicons'
-
-call plug#end()
+lua require('plugins')
+lua require('plugin-configs')
 
 if !isdirectory(expand(s:vimplug_dir))
   finish
@@ -185,11 +108,6 @@ let g:switch_custom_definitions = [
       \     },
       \   }
       \ ]
-" }}}
-
-" Vim smooth scroll {{{
-noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 10, 2)<CR>
-noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
 " }}}
 
 " Vim ansible {{{
@@ -348,6 +266,38 @@ let g:lightline#bufferline#filename_modifier = ':.'
 let g:lightline#bufferline#margin_left=1
 let g:lightline#bufferline#margin_right=1
 let g:lightline#bufferline#clickable=1
+" }}}
+
+" Nvim blame line {{{
+" TODO: fix diff
+let g:nvimblame_disabled_buftypes = [
+      \'qf',
+      \'fugitive',
+      \'nerdtree',
+      \'gundo',
+      \'diff',
+      \'fzf',
+      \'floaterm',
+      \'vim-plug'
+\]
+
+function EnableBlameLineWrapper() abort
+  if index(get(g:, 'nvimblame_disabled_buftypes', []), &buftype) == -1 && !&diff
+    EnableBlameLine
+  else
+    DisableBlameLine
+  endif
+endfunction
+
+augroup NvimBlameLine
+  au!
+  autocmd BufEnter,DiffUpdated * call EnableBlameLineWrapper()
+augroup END
+" }}}
+
+" BarBar Nvim {{{
+nnoremap <silent> <leader>bd :BufferClose<CR>
+nnoremap <silent> <leader>abc :BufferCloseAllButCurrent<cr>:only<cr>
 " }}}
 
 " Coc {{{
@@ -769,5 +719,3 @@ highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
 " }}}
 
-" Load LUA
-lua require('moshelua')
