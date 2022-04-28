@@ -17,6 +17,11 @@ if has('vim_starting')
   endif
 endif
 
+
+" disable legacy vim filetype detection in favor of new lua based from neovim
+let g:do_filetype_lua    = v:true
+let g:did_load_filetypes = v:false
+
 if executable('/bin/zsh')
   set shell=/bin/zsh\ -l
 elseif executable('/bin/bash')
@@ -184,6 +189,7 @@ set statusline+=%l    " Current line
 set statusline+=/    " Separator
 set statusline+=%L\   " Total lines
 set showtabline=2
+set laststatus=3 " Global statusline, only one for all buffers
 " }}}
 
 " Mappings {{{
@@ -221,7 +227,7 @@ nnoremap <c-w>s :new<cr>
 nnoremap <c-w>e :enew<cr>
 
 " Delete current buffer
-nnoremap <silent> <leader>bd :bp <bar> bd #<cr>
+nnoremap <silent> <leader>bd :bp <bar> bw #<cr>
 " Close current buffer
 nnoremap <silent> <leader>bc :close<cr>
 
@@ -776,4 +782,28 @@ function DencryptAnsibleSecretFile(...) abort
 endfunction
 com! EncryptAnsible call DencryptAnsibleSecretFile(1)
 com! DecryptAnsible call DencryptAnsibleSecretFile()
+" }}}
+
+" Better yanking {{{
+" note:
+"   the register 1 is reserved for deletion
+"   there's no "small yank" register
+"   can break :h redo-register
+"   still misses any manual register 0 change
+augroup YankShift | au!
+    let s:regzero = [getreg(0), getregtype(0)]
+    autocmd TextYankPost * call <SID>yankshift(v:event)
+augroup end
+
+function! s:yankshift(event)
+    if a:event.operator ==# 'y' && (empty(a:event.regname) || a:event.regname == '"')
+        for l:regno in range(8, 2, -1)
+            call setreg(l:regno + 1, getreg(l:regno), getregtype(l:regno))
+        endfor
+        call setreg(2, s:regzero[0], s:regzero[1])
+        let s:regzero = [a:event.regcontents, a:event.regtype]
+    elseif a:event.regname == '0'
+        let s:regzero = [a:event.regcontents, a:event.regtype]
+    endif
+endfunction
 " }}}

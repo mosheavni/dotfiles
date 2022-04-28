@@ -98,7 +98,6 @@ endif
 " }}}
 
 " Color settings {{{
-
 " Random color {{{
 function! RandomColorChooser() abort
   let l:liked_colors =  [
@@ -119,14 +118,6 @@ endfunction
 " call RandomColorChooser()
 " }}}
 
-" let g:edge_style = 'neon'
-" let g:palenight_terminal_italics=1
-" colorscheme palenight
-" colorscheme dracula
-" colo edge
-
-let g:tokyonight_style = 'night' " available: night, storm
-let g:tokyonight_enable_italic = 1
 colorscheme gruvbox
 
 " }}}
@@ -140,16 +131,11 @@ let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
 " nnoremap <c-t> :Tags<cr>
 nnoremap <c-b> :Buffers<cr>
 nnoremap <F4>  :Gb<cr>
-nnoremap <c-y> :History<cr>
+" nnoremap <c-y> :History<cr>
 " }}}
 
 " Ultisnip {{{
 let g:UltiSnipsExpandTrigger='<c-s>'
-" }}}
-
-" Vim auto pairs {{{
-let g:AutoPairsShortcutJump = ''
-let g:AutoPairsShortcutToggle = ''
 " }}}
 
 " Vim json path {{{
@@ -372,7 +358,6 @@ let g:coc_global_extensions = [
       \    'coc-diagnostic',
       \    'coc-dictionary',
       \    'coc-docker',
-      \    'coc-lua',
       \    'coc-emmet',
       \    'coc-emoji',
       \    'coc-eslint',
@@ -393,6 +378,7 @@ let g:coc_global_extensions = [
       \    'coc-sh',
       \    'coc-snippets',
       \    'coc-styled-components',
+      \    'coc-sumneko-lua',
       \    'coc-swagger',
       \    'coc-syntax',
       \    'coc-tabnine',

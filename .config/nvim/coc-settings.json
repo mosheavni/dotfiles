@@ -1,5 +1,4 @@
 {
-  "coc.preferences.colorSupport": true,
   "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.formatOnSaveFiletypes": [
     "css",
@@ -77,30 +76,32 @@
     "class": "\uf0e8",
     "color": "\ue22b",
     "constant": "\uf8ff",
-    "default": "\uf29c",
+    "constructor": "\uf0ad",
+    "default": "\ue780",
     "enum": "\uf435",
     "enumMember": "\uf02b",
     "event": "\ufacd",
     "field": "\uf93d",
-    "file": "\uf471",
+    "file": "\uf723",
     "folder": "\uf115",
     "function": "\uf794",
     "interface": "\ufa52",
-    "keyword": "\uf893",
-    "method": "\uf6a6",
-    "module": "\uf668",
+    "keyword": "\uf1de",
+    "method": "\uf09a",
+    "module": "\uf40d",
     "operator": "\uf915",
-    "property": "\ufab6",
-    "reference": "\uf87a",
-    "snippet": "\uf64d",
+    "property": "\ue624",
+    "reference": "\ufa46",
+    "snippet": "\ue60b",
     "struct": "\ufb44",
     "text": "\ue612",
-    "typeParameter": "\uf278",
+    "typeParameter": "\uf728",
     "unit": "\uf475",
-    "value": "\uf8a3",
-    "variable": "\uf71b"
+    "value": "\uf89f",
+    "variable": "\ue79b"
   },
   "suggest.enablePreview": true,
+  "suggest.removeDuplicateItems": true,
   "suggest.timeout": 5000,
   "suggest.triggerAfterInsertEnter": true,
   "tsserver.reportStyleChecksAsWarnings": true,
@@ -124,5 +125,7 @@
     ]
   },
   "yaml.validate": true,
-  "yaml.trace.server": "verbose"
+  "yaml.trace.server": "verbose",
+  "Lua.telemetry.enable": true,
+  "Lua.diagnostics.globals": [ "vim" ]
 }
