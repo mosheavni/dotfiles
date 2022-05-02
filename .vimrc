@@ -202,9 +202,9 @@ let maplocalleader = "\\"
 nnoremap 0 ^
 
 " Move to the end of the line
-nnoremap L $zL
+nnoremap L $ze10zl
 vnoremap L $
-nnoremap H 0zH
+nnoremap H 0zs10zh
 vnoremap H 0
 
 "indent/unindent visual mode selection with tab/shift+tab
@@ -364,6 +364,7 @@ nnoremap <leader>ct<space> :retab<cr>
 
 " Copy file path to clipboard
 nnoremap <silent> <leader>cfp :let @+ = expand('%')<cr>:echo "Copied file path " . expand('%')<cr>
+nnoremap <silent> <leader>cap :let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>
 
 "" }}}
 
