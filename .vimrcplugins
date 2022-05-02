@@ -188,87 +188,6 @@ highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 highlight! link SignColumn LineNr
 " }}}
 
-" Vim lightline {{{
-let g:lightline = {
-      \ 'colorscheme': 'materia',
-      \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
-      \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified', 'cocstatus' ],
-      \             [ 'unpushed_unpulled', 'gitstatus' ]
-      \ ],
-      \   'right': [ [ 'virtualenv', 'filetype', 'line', 'column', 'gitbranch' ] ]
-      \ },
-      \ 'inactive': {
-      \   'left': [ [ 'readonly', 'filename', 'modified' ] ],
-		  \   'right': [ [ 'filetypelogo', 'gitbranch' ] ]
-      \ },
-      \ 'tabline': {
-      \   'left': [ ['buffers'] ],
-      \   'right': [ ['close'] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead',
-      \   'gitstatus': 'GitStatus',
-      \   'unpushed_unpulled': 'Unpushed_Unpulled',
-      \   'filetype': 'LightlineDevIconsFiletype',
-      \   'fileformat': 'LightlineDevIconsFileformat',
-      \   'filetypelogo': 'WebDevIconsGetFileTypeSymbol',
-      \   'cocstatus': 'coc#status',
-      \   'virtualenv': 'CheckVirtualEnv',
-      \ },
-      \ 'component_expand': {
-      \   'buffers': 'lightline#bufferline#buffers',
-      \   'cocstatus': 'coc#status'
-      \ },
-      \ 'component_type': {
-      \   'buffers': 'tabsel'
-      \ },
-      \ 'component_raw': {'buffers': 1}
-      \ }
-
-function! LightlineDevIconsFiletype()
-  return winwidth(0) > 70 ? (strlen(&filetype) ?  WebDevIconsGetFileTypeSymbol() . ' ' .&filetype : 'no ft') : WebDevIconsGetFileTypeSymbol()
-endfunction
-
-function! LightlineDevIconsFileformat()
-  return winwidth(0) > 70 ? (WebDevIconsGetFileFormatSymbol() . ' ' . &fileformat) : WebDevIconsGetFileFormatSymbol()
-endfunction
-
-function CheckVirtualEnv() abort
-  let virtualenv = $VIRTUAL_ENV
-  if empty(virtualenv)
-    return ''
-  endif
-  return printf('(%s)',split(virtualenv, '/')[-1])
-endfunction
-
-function! s:set_lightline_colorscheme(name) abort
-  let g:lightline.colorscheme = a:name
-  call lightline#init()
-  call lightline#colorscheme()
-  call lightline#update()
-endfunction
-
-function! s:lightline_colorschemes(...) abort
-  return join(map(
-        \ globpath(&rtp,'autoload/lightline/colorscheme/*.vim',1,1),
-        \ "fnamemodify(v:val,':t:r')"),
-        \ "\n")
-endfunction
-
-command! -nargs=1 -complete=custom,s:lightline_colorschemes LightlineColorscheme
-          \ call s:set_lightline_colorscheme(<q-args>)
-
-let g:lightline#bufferline#show_number=1
-let g:lightline#bufferline#enable_devicons=1
-let g:lightline#bufferline#filename_modifier = ':.'
-let g:lightline#bufferline#margin_left=1
-let g:lightline#bufferline#margin_right=1
-let g:lightline#bufferline#clickable=1
-" }}}
-
 " Nvim blame line {{{
 " TODO: fix diff
 let g:nvimblame_disabled_buftypes = [
@@ -402,8 +321,6 @@ augroup format_coc_group
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
   " Highlight the symbol and its references when holding the cursor.
   autocmd CursorHold * silent call CocActionAsync('highlight')
-
-  autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 augroup end
 
 " Use K to show documentation in preview window.
