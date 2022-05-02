@@ -25,11 +25,13 @@ return require('packer').startup(function(use)
   -- LSP, Completion and Language
   use 'sheerun/vim-polyglot'
   use { 'neoclide/coc.nvim', branch = 'release' }
-  use {
-    'iamcco/markdown-preview.nvim',
-    ft = 'markdown',
-    dir = 'app', run = 'yarn install'
-  }
+  use({
+    "iamcco/markdown-preview.nvim",
+    run = "cd app && yarn install",
+    setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
+    cmd = 'MarkdownPreview',
+    ft = { "markdown" },
+  })
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
   use { 'rayburgemeestre/phpfolding.vim', ft = { 'php' } }
