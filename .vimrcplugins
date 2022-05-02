@@ -272,18 +272,18 @@ let g:coc_global_extensions = [
 " Configurations
 let g:coc_disable_transparent_cursor = 1
 
-" use <tab> for trigger completion and navigate to the next complete item {{{
+" use <tab> for trigger completion and navigate to the next complete item
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+" Mappings {{{
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-" }}}
 
 " Use <c-space> to trigger completion.
 if has('nvim')
@@ -311,53 +311,21 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 " nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-
-" Project replace word
-nnoremap <leader>prn :CocSearch <C-R>=expand("<cword>")<CR><CR>
-vnoremap <leader>prn "iy:<c-u>CocSearch <C-R>i<CR><CR>
-
-hi CocHighlightText ctermbg=241 guibg=#665c54
-hi! link CocHoverRange CocHighlightText
-
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-
-augroup format_coc_group
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  " Highlight the symbol and its references when holding the cursor.
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-augroup end
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-
 " Use CTRL-S for selections ranges.
 " Requires 'textDocument/selectionRange' support of LS, ex: coc-tsserver
 nmap <silent> <C-s> <Plug>(coc-range-select)
 xmap <silent> <C-s> <Plug>(coc-range-select)
 
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocActionAsync('format')
 nmap <silent><expr> <leader>p CocHasProvider('format') ? "\<Plug>(coc-format)" : ":call FormatEqual()\<cr>"
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
 
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
-
+" Project replace word
+nnoremap <leader>prn :CocSearch <C-R>=expand("<cword>")<CR><CR>
+vnoremap <leader>prn "iy:<c-u>CocSearch <C-R>i<CR><CR>
 " Mappings for CoCList
 " Show commands.
 nnoremap <silent><nowait> <leader>cc  :<C-u>CocList commands<cr>
@@ -375,6 +343,37 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 
 " Run the Code Lens action on the current line.
 nmap <leader>cl  <Plug>(coc-codelens-action)
+" }}}
+
+hi CocHighlightText ctermbg=241 guibg=#665c54
+hi! link CocHoverRange CocHighlightText
+
+augroup format_coc_group
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  " Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+augroup end
+
+function! s:show_documentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocActionAsync('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
 " }}}
 
 " Nerd Tree {{{
