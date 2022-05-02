@@ -119,7 +119,8 @@
       "pdb.y*ml",
       "pod.y*ml",
       "rbac.y*ml",
-      "service*.y*ml",
+      "service.y*ml",
+      "service*account.y*ml",
       "storageclass.y*ml",
       "svc.y*ml"
     ]
