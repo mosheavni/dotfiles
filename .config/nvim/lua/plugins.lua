@@ -9,7 +9,10 @@ return require('packer').startup(function(use)
   use { 'Xuyuanp/nerdtree-git-plugin', cmd = { 'NERDTreeToggle' } }
 
   -- Git Related
-  use { 'airblade/vim-gitgutter' }
+  use {
+    'lewis6991/gitsigns.nvim',
+    tag = 'release' -- To use the latest release
+  }
   use { 'tpope/vim-fugitive' }
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
   use { 'rhysd/conflict-marker.vim' }

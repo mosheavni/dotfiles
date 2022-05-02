@@ -169,25 +169,6 @@ let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
 " }}}
 
-" GitGutter {{{
-let g:gitgutter_map_keys = 1
-let g:gitgutter_highlight_lines = 0
-let g:gitgutter_highlight_linenrs = 1
-nnoremap <leader>gc :GitGutterLineHighlightsToggle<cr>
-nnoremap <leader>cag :GitGutterFold<cr>
-nmap ]c <Plug>(GitGutterNextHunk)
-nmap [c <Plug>(GitGutterPrevHunk)
-function! GitStatus()
-  let [a,m,r] = GitGutterGetHunkSummary()
-  return printf('+%d ~%d -%d', a, m, r)
-endfunction
-highlight clear SignColumn
-highlight GitGutterAdd    guifg=#009900 ctermfg=2
-highlight GitGutterChange guifg=#ffff61 ctermfg=3
-highlight GitGutterDelete guifg=#ff2222 ctermfg=1
-highlight! link SignColumn LineNr
-" }}}
-
 " Nvim blame line {{{
 " TODO: fix diff
 let g:nvimblame_disabled_buftypes = [
