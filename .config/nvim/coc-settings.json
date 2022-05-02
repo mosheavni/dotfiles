@@ -7,7 +7,8 @@
     "markdown",
     "sh",
     "zsh",
-    "groovy"
+    "groovy",
+    "lua"
   ],
   "coc.preferences.useQuickfixForLocations": true,
   "coc.source.emoji.filetypes": ["gitcommit", "markdown"],
@@ -128,5 +129,5 @@
   "yaml.validate": true,
   "yaml.trace.server": "verbose",
   "Lua.telemetry.enable": true,
-  "Lua.diagnostics.globals": [ "vim" ]
+  "Lua.diagnostics.globals": ["vim"]
 }
