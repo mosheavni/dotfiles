@@ -19,11 +19,17 @@ return require('packer').startup(function(use)
   use { 'tveskag/nvim-blame-line' }
 
   -- Fuzzy Search
+  -- use {
+  --   'junegunn/fzf',
+  --   dir = '~/.fzf', run = './install --all'
+  -- }
+  -- use { 'junegunn/fzf.vim' }
   use {
-    'junegunn/fzf',
-    dir = '~/.fzf', run = './install --all'
+    'nvim-telescope/telescope.nvim',
+    requires = { { 'nvim-lua/plenary.nvim' } }
   }
-  use { 'junegunn/fzf.vim' }
+  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+
 
   -- LSP, Completion and Language
   -- Tree Sitter
@@ -31,7 +37,14 @@ return require('packer').startup(function(use)
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate",
   }
-  use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'Jenkinsfile', 'groovy' } }
+  use {
+    "cuducos/yaml.nvim",
+    ft = { "yaml" }, -- optional
+    requires = {
+      "nvim-treesitter/nvim-treesitter",
+    },
+  }
+  use 'lewis6991/nvim-treesitter-context'
   use { 'neoclide/coc.nvim', branch = 'release' }
   use({
     "iamcco/markdown-preview.nvim",
@@ -41,11 +54,12 @@ return require('packer').startup(function(use)
     ft = { "markdown" },
   })
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
+  use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'Jenkinsfile', 'groovy' } }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
   use { 'rayburgemeestre/phpfolding.vim', ft = { 'php' } }
   use { 'andrewstuart/vim-kubernetes', ft = { 'yaml' } }
   use { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } }
-  use { 'mosheavni/yaml-revealer', ft = { 'yaml' } }
+  -- use { 'mosheavni/yaml-revealer', ft = { 'yaml' } }
   use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
   use { 'hashivim/vim-terraform', ft = { 'terraform' } }
@@ -85,6 +99,7 @@ return require('packer').startup(function(use)
   use 'tpope/vim-repeat'
   use 'tpope/vim-surround'
   use 'tpope/vim-commentary'
+  use 'JoosepAlviste/nvim-ts-context-commentstring'
   use 'junegunn/vim-easy-align'
   use 'AndrewRadev/switch.vim'
   use 'justinmk/vim-sneak'

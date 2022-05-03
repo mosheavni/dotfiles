@@ -8,16 +8,16 @@ scriptencoding utf-8
 " '    ' `-' `--''  `-`--'  '       ``'   '  `--' `-
 
 " Plugins {{{
-let s:vimplug_dir = '~/.vim/plugged'
 
 set noshowmode " Redundant as lighline takes care of that
 lua require('impatient')
-lua require('plugins')
-lua require('plugin-configs')
-
-if !isdirectory(expand(s:vimplug_dir))
-  finish
-endif
+lua require('user.plugins')
+lua require('user.plugin-configs')
+lua require('user.gitsigns')
+lua require('user.treesitter')
+lua require('user.treesitter-context')
+lua require('user.telescope')
+lua require('user.lualine')
 
 " }}}
 
@@ -51,15 +51,16 @@ set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 " }}}
 
-" Fzf {{{
+" Telescope {{{
 " nnoremap <c-p> :Files
-nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
-let $FZF_DEFAULT_COMMAND = "rg --files --hidden -g '!.git/' --color=never"
+nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Telescope find_files\<cr>"
+" let $FZF_DEFAULT_COMMAND = "rg --files --hidden -g '!.git/' --color=never"
 " let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
-let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
+" let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
 " nnoremap <c-t> :Tags<cr>
-nnoremap <c-b> :Buffers<cr>
-nnoremap <F4>  :Gb<cr>
+nnoremap <c-b> :Telescope buffers<cr>
+nnoremap <F4>  :Telescope git_branches<cr>
+nnoremap <silent><expr> <c-f> '<cmd>Telescope live_grep default_text=' . expand('<cword>') . '<cr>'
 " nnoremap <c-y> :History<cr>
 " }}}
 
@@ -182,7 +183,6 @@ let g:nvimblame_disabled_buftypes = [
       \'nerdtree',
       \'gundo',
       \'diff',
-      \'fzf',
       \'floaterm',
       \'vim-plug'
 \]
@@ -456,16 +456,6 @@ function! s:changebranch(...)
   execute 'Git checkout ' . name
 endfunction
 
-function! s:call_fzf_changebranch()
-  call fzf#run({
-        \ 'source': 'git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2',
-        \ 'sink': function('s:changebranch')
-        \ })
-
-endfunction
-
-command! -bang Gbranch call s:call_fzf_changebranch()
-command! -bang Gb      call s:call_fzf_changebranch()
 command! -nargs=? Gco call s:changebranch("<args>")
 
 " Git push + pull + autocmd {{{
