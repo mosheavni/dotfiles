@@ -12,7 +12,7 @@ scriptencoding utf-8
 set noshowmode " Redundant as lighline takes care of that
 lua require('impatient')
 lua require('user.plugins')
-lua require('user.plugin-configs')
+lua require('user.neoscroll')
 lua require('user.gitsigns')
 lua require('user.treesitter')
 lua require('user.treesitter-context')
@@ -488,12 +488,17 @@ endfunction
 command! -bang Gl call <sid>MosheGitPull()
 nmap <silent> <leader>gl :Gl<cr>
 
+function Enter_Wip_Moshe() abort
+  G commit --quiet -m 'wip'
+  exe 'Git push -u origin ' . FugitiveHead()
+endfunction
 " Autocmd
 function! s:ftplugin_fugitive() abort
   nnoremap <buffer> <silent> cc :Git commit --quiet<CR>
   nnoremap <buffer> <silent> gl :Gl<CR>
   nnoremap <buffer> <silent> gp :Gp<CR>
   nnoremap <buffer> <silent> pr :silent! !cpr<CR>
+  nnoremap <buffer> <silent> wip :call Enter_Wip_Moshe()<cr>
 
 endfunction
 augroup moshe_fugitive

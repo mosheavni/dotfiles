@@ -1,4 +1,3 @@
-set encoding=utf-8
 scriptencoding utf-8
 " Moshe's vimrc. Custom made for my needs :)
 
@@ -9,111 +8,10 @@ scriptencoding utf-8
 " '    ' `-' `--''  `-`--'  '       ``'   '  `--' `-
 
 " Basic configurations {{{
-set nocompatible
-" if !exists('g:syntax_on') | syntax enable | endif
-if has('vim_starting')
-  if has('syntax') && !exists('g:syntax_on')
-    syntax enable
-  endif
-endif
-
-
-" disable legacy vim filetype detection in favor of new lua based from neovim
-let g:do_filetype_lua    = v:true
-let g:did_load_filetypes = v:false
-
-if executable('/bin/zsh')
-  set shell=/bin/zsh\ -l
-elseif executable('/bin/bash')
-  set shell=/bin/bash
-else
-  set shell=/bin/sh
-endif
-" set tags=./tags,tags;$HOME
-
-colorscheme darkblue
-" set shellcmdflag=-ic
-
-set number                     " Show current line number
-set relativenumber             " Show relative line numbers
-set linebreak                  " Avoid wrapping a line in the middle of a word.
-set wrap
-if has('nvim')
-  set cursorcolumn
-  set cursorline                 " Add highlight behind current line
-endif
-                               " hi cursorline cterm=none term=none
-                               " highlight CursorLine guibg=#303000 ctermbg=234
-set hlsearch                   " highlight reg. ex. in @/ register
-set incsearch                  " Search as characters are typed
-if exists('&inccommand')
-  set inccommand=split           " Incremental search and replace with small split window
-endif
-set ignorecase                 " Search case insensitive...
-set smartcase                  " ignore case if search pattern is all lowercase,
-                               " case-sensitive otherwise
-set autoread                   " Re-read file if it was changed from the outside
-set scrolloff=7                " When about to scroll page, see 7 lines below cursor
-set cmdheight=2                " Height of the command bar
-set hidden                     " Hide buffer if abandoned
-set showmatch                  " When closing a bracket (like {}), show the enclosing
-set splitbelow                 " Horizontaly plitted windows open below
-set splitright                 " Vertically plitted windows open below
-                               " bracket for a brief second
-set nostartofline              " Stop certain movements from always going to the first
-                               " character of a line.
-set confirm                    " Prompt confirmation if exiting unsaved file
-set lazyredraw                 " redraw only when we need to.
-set noswapfile
-set nobackup
-set nowritebackup
-set wildmenu                   " Displays a menu on autocomplete
-set wildmode=longest:full,full " on first <Tab> it will complete to the
-                               " longest common string and will invoke wildmenu
-set title                      " Changes the iterm title
-set showcmd
-set guifont=:h
-set mouse=a
-set undofile                   " Enables saving undo history to a file
-set colorcolumn=80             " Mark where are 80 characters to start breaking line
-set textwidth=80
-" set guicursor=i:blinkwait700-blinkon400-blinkoff250
-hi ColorColumn ctermbg=238 guibg=lightgrey
-set fileencodings=utf-8,cp1251
-set visualbell                 " Use visual bell instead of beeping
-set formatoptions-=t           " auto break long lines"
-
-if has('nvim')
-  set shortmess+=c " don't give |ins-completion-menu| messages.
-  set shortmess-=l " Print "lines" instead of "L"
-  set shortmess-=q " Print the name of the macro when recording
-  set shortmess-=S " Print the search count message
-endif
-
-" Ignore node_modules
-set wildignore+=**/node_modules/**
-set wildignore+=.hg,.git,.svn,*.DS_Store,*.pyc
-
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
-set updatetime=300
-
-if v:version > 703 || v:version == 703 && has('patch541')
-  set formatoptions+=j " Delete comment character when joining commented lines
-endif
+lua require('user.options')
 
 filetype plugin on
 filetype plugin indent on
-
-if has('nvim')
-  set list
-  set listchars=tab:┆·,trail:·,precedes:,extends:,eol:↲,
-  " set lcscope=tab:┆·,trail:·,precedes:,extends:
-  set fillchars=vert:\|,fold:·
-  set noemoji
-endif
-
-set path+=** " When searching, search also subdirectories
 
 " Set python path
 if executable('/usr/local/bin/python3')
@@ -210,9 +108,6 @@ vnoremap H 0
 "indent/unindent visual mode selection with tab/shift+tab
 vmap <tab> >gv
 vmap <s-tab> <gv
-
-" Sudo write
-command! W w :term sudo tee % > /dev/null
 
 " Copy number of lines and paste below
 nnoremap <leader>cp :<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) . 'j' . (v:count == 0 ? 1 : v:count) . 'jo<C-v><Esc>p'<cr>

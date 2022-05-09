@@ -21,8 +21,7 @@
     "yaml.ansible": "ansibleLint"
   },
   "diagnostic-languageserver.formatFiletypes": {
-    "sh": "shfmt",
-    "terraform": "tffmt"
+    "sh": "shfmt"
   },
   "diagnostic-languageserver.trace.server": "verbose",
   "diagnostic.checkCurrentLine": true,
