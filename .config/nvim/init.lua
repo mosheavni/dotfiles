@@ -1,5 +1,9 @@
+vim.cmd [[
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
-source ~/.vimrc
-source ~/.vimrcplugins
+]]
 
+require('user.options')
+vim.cmd [[
+source ~/.vimrcplugins
+]]
