@@ -1,27 +1,17 @@
-vim.cmd [[
-if has('vim_starting')
-  if has('syntax') && !exists('g:syntax_on')
-    syntax enable
-  endif
-endif
-]]
-
 vim.opt.compatible = false
 
 -- disable legacy vim filetype detection in favor of new lua based from neovim
-vim.g.do_filetype_lua    = true
-vim.g.did_load_filetypes = false
+vim.g.do_filetype_lua    = 1
+vim.g.did_load_filetypes = 0
 
-if vim.fn.has('nvim') == 1 then
-  vim.opt.cursorcolumn = true
-  vim.opt.cursorline   = true -- Add highlight behind current line
-  vim.opt.shortmess:append { c = true, l = false, q = false, S = false }
-  vim.opt.list = true
-  vim.opt.listchars = { tab = '┆·', trail = '·', precedes = '', extends = '', eol = '↲', }
-  -- set lcscope=tab:┆·,trail:·,precedes:,extends:
-  vim.opt.fillchars = { vert = '|', fold = '·' }
-  vim.opt.emoji = false
-end
+vim.opt.cursorcolumn = true
+vim.opt.cursorline   = true -- Add highlight behind current line
+vim.opt.shortmess:append { c = true, l = false, q = false, S = false }
+vim.opt.list = true
+vim.opt.listchars = { tab = '┆·', trail = '·', precedes = '', extends = '', eol = '↲', }
+-- set lcscope=tab:┆·,trail:·,precedes:,extends:
+vim.opt.fillchars = { vert = '|', fold = '·' }
+vim.opt.emoji = false
 
 vim.opt.number         = true -- Show current line number
 vim.opt.relativenumber = true -- Show relative line numbers
@@ -47,26 +37,48 @@ vim.opt.backup         = false
 vim.opt.writebackup    = false
 vim.opt.wildmenu       = true -- Displays a menu on autocomplete
 vim.opt.wildmode       = { 'longest:full', 'full' } -- Command-line completion mode
-vim.opt.title          = true -- Changes the iterm title
-vim.opt.showcmd        = true
-vim.opt.guifont        = ':h'
-vim.opt.mouse          = 'a'
-vim.opt.undofile       = true -- Enables saving undo history to a file
-vim.opt.colorcolumn    = '80' -- Mark where are 80 characters to start breaking line
-vim.opt.textwidth      = 80
-vim.opt.fileencodings  = { "utf-8", "cp1251" }
-vim.opt.encoding       = 'utf-8'
-vim.opt.visualbell     = true -- Use visual bell instead of beeping
+
+vim.opt.title         = true -- Changes the iterm title
+vim.opt.showcmd       = true
+vim.opt.guifont       = ':h'
+vim.opt.mouse         = 'a'
+vim.opt.undofile      = true -- Enables saving undo history to a file
+vim.opt.colorcolumn   = '80' -- Mark where are 80 characters to start breaking line
+vim.opt.textwidth     = 80
+vim.opt.fileencodings = { "utf-8", "cp1251" }
+vim.opt.encoding      = 'utf-8'
+vim.opt.visualbell    = true -- Use visual bell instead of beeping
+vim.opt.conceallevel  = 1
+vim.opt.showmode      = false -- Redundant as lighline takes care of that
+vim.opt.history       = 1000
+vim.opt.termguicolors = true
+vim.opt.signcolumn    = "auto"
+
 -- Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
-vim.opt.updatetime     = 300
+vim.opt.updatetime = 300
+
 -- Ignore node_modules and other dirs
 vim.opt.wildignore:append { '**/node_modules/**', '.hg', '.git', '.svn', '*.DS_Store', '*.pyc' }
 vim.opt.path:append { '**' }
 
-if vim.v.version > 703 and vim.v.version == 703 or vim.fn.has('patch541') == 1 then
-  vim.opt.formatoptions:append { j = true, t = false, r = true, o = true, l = true } -- j = Delete comment character when joining commented lines. t = auto break long lines
-end
+-- Folding
+vim.opt.foldenable = true
+vim.opt.foldmethod = "syntax"
+vim.opt.foldlevel = 999
+vim.opt.foldlevelstart = 10
 
+vim.opt.formatoptions:append { j = true, t = false, r = true, o = true, l = true } -- j = Delete comment character when joining commented lines. t = auto break long lines
+
+-- Indenting
+vim.opt.breakindent = true -- Maintain indent on wrapping lines
+vim.opt.autoindent = true -- always set autoindenting on
+vim.opt.copyindent = true -- copy the previous indentation on autoindenting
+vim.opt.smartindent = true -- Number of spaces to use for each step of (auto)indent.
+vim.opt.shiftwidth = 4 -- Number of spaces for each indent
+vim.opt.softtabstop = 4
+vim.opt.tabstop = 4
+vim.opt.smarttab = true -- insert tabs on the start of a line according to shiftwidth, not tabstop
+vim.opt.expandtab = true -- Tab changes to spaces. Format with :retab
 
 -- Set shell
 if vim.fn.executable('/bin/zsh') == 1 then
@@ -77,292 +89,25 @@ else
   vim.opt.shell = '/bin/sh'
 end
 
+-- Set python path
+if vim.fn.executable('/usr/local/bin/python3') == 1 then
+  vim.g.python3_host_prog = '/usr/local/bin/python3'
+elseif vim.fn.executable('/usr/bin/python3') == 1 then
+  vim.g.python3_host_prog = '/usr/bin/python3'
+end
+
 
 vim.cmd [[
 hi ColorColumn ctermbg=238 guibg=lightgrey
-filetype plugin on
-filetype plugin indent on
-
-" Set python path
-if executable('/usr/local/bin/python3')
-  let g:python3_host_prog='/usr/local/bin/python3'
-elseif executable('/usr/bin/python3')
-  let g:python3_host_prog='/usr/bin/python3'
-endif
-
-" Auto load file changes when focus or buffer is entered
-augroup ReloadFile
-  autocmd!
-  au FocusGained,BufEnter * :checktime
-augroup END
-
-if &history < 1000
-  set history=1000
-endif
-
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved. {{{
-if has('nvim-0.5.0') || has('patch-8.1.1564')
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=auto
-elseif exists('&signcolumn')
-  set signcolumn=yes
-endif
-" }}}
-
-" set verbose=1
-if has('termguicolors')
-  " let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  " let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
 
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 
-" }}}
-
-" Indentation {{{
-" Indentation settings for using 4 spaces instead of tabs.
-" Do not change 'tabstop' from its default value of 8 with this setup.
 filetype indent on
-if exists('+breakindent')
-  set breakindent   " Maintain indent on wrapping lines
-endif
-set autoindent    " always set autoindenting on
-set copyindent    " copy the previous indentation on autoindenting
-set smartindent   " Number of spaces to use for each step of (auto)indent.
-set shiftwidth=4  " Number of spaces for each indent
-set softtabstop=4
-set tabstop=4
-set smarttab      " insert tabs on the start of a line according to
-" shiftwidth, not tabstop
-set expandtab     " Tab changes to spaces. Format with :retab
+]]
 
-function! s:ChangeIndentNum() abort
-  call inputsave()
-  let the_num = str2nr(input('Enter new indent: '))
-  call inputrestore()
-  exe 'set shiftwidth=' . the_num
-  exe 'set softtabstop=' . the_num
-  exe 'set tabstop=' . the_num
-endfunction
-nnoremap cii :<C-u>call <SID>ChangeIndentNum()<CR>
-" }}}
-
-" Statusline {{{
-set statusline=%.50F\ -\ FileType:\ %y
-set statusline+=%=        " Switch to the right side
-set statusline+=%l    " Current line
-set statusline+=/    " Separator
-set statusline+=%L\   " Total lines
-set showtabline=2
-set laststatus=3 " Global statusline, only one for all buffers
-" }}}
-
-" Mappings {{{
-
-" Map leader to space
-let mapleader=' '
-let maplocalleader = "\\"
-
-" Map 0 to first non-blank character
-nnoremap 0 ^
-
-" Move to the end of the line
-nnoremap L $ze10zl
-vnoremap L $
-nnoremap H 0zs10zh
-vnoremap H 0
-
-"indent/unindent visual mode selection with tab/shift+tab
-vmap <tab> >gv
-vmap <s-tab> <gv
-
-" Copy number of lines and paste below
-nnoremap <leader>cp :<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) . 'j' . (v:count == 0 ? 1 : v:count) . 'jo<C-v><Esc>p'<cr>
-
-" Windows mappings
-nnoremap <Leader><Leader> <C-^>
-nnoremap <tab> <c-w>w
-nnoremap <c-w><c-c> <c-w>c
-nnoremap <leader>n :bn<cr>
-nnoremap <c-w>v :vnew<cr>
-nnoremap <c-w>s :new<cr>
-nnoremap <c-w>e :enew<cr>
-
-" Delete current buffer
-nnoremap <silent> <leader>bd :bp <bar> bw #<cr>
-" Close current buffer
-nnoremap <silent> <leader>bc :close<cr>
-
-" Split navigations mappings
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
-" Run macro
-nnoremap Q @q
-
-" Paste in insert mode
-inoremap <c-v> <c-r>"
-
-" Quickfix
-nnoremap ]q :cnext<cr>zz
-nnoremap [q :cprev<cr>zz
-nnoremap ]l :lnext<cr>zz
-nnoremap [l :lprev<cr>zz
-
-" This creates a new line of '=' signs the same length of the line
-nnoremap <leader>= yypVr=
-
-" Map dp and dg with leader for diffput and diffget
-nmap <leader>dp :diffput<cr>
-nmap <leader>dg :diffget<cr>
-nmap <leader>du :windo diffoff <bar> windo diffupdate<cr>
-nmap <leader>dn :windo diffthis<cr>
-nmap <leader>df :windo diffoff<cr>
-
-" Map enter to no highlight
-nnoremap <silent> <CR> :nohlsearch<CR><CR>
-
-" Set mouse=v mapping
-nnoremap <leader>ma :set mouse=a<cr>
-nnoremap <leader>mv :set mouse=v<cr>
-
-" Search mappings
-nnoremap <silent> * :execute "normal! *N"<cr>
-nnoremap <silent> # :execute "normal! #n"<cr>
-nnoremap <expr> n  'Nn'[v:searchforward]
-xnoremap <expr> n  'Nn'[v:searchforward]
-onoremap <expr> n  'Nn'[v:searchforward]
-nnoremap <expr> N  'nN'[v:searchforward]
-xnoremap <expr> N  'nN'[v:searchforward]
-onoremap <expr> N  'nN'[v:searchforward]
-
-" Search visually selected text with // or * or #
-vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
-
-function! s:StarSearch(cmdtype) abort
-  let old_reg=getreg('"')
-  let old_regtype=getregtype('"')
-  norm! gvy
-  let @/ = '\V' . substitute(escape(@", a:cmdtype . '\.*$^~['), '\_s\+', '\\_s\\+', 'g')
-  norm! gVzv
-  call setreg('"', old_reg, old_regtype)
-
-endfunction
-
-vnoremap * :<C-u>call <SID>StarSearch('/')<CR>/<C-R>=@/<CR><CR>
-vnoremap # :<C-u>call <SID>StarSearch('?')<CR>?<C-R>=@/<CR><CR>
-
-" Map - to move a line down and _ a line up
-nnoremap - "ldd$"lp
-nnoremap _ "ldd2k"lp
-
-" Base64 dencode
-vnoremap <silent><leader>46 c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>
-vnoremap <silent><leader>64 c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>
-
-" Map U to toggle word to uppercase/lowercase in insert and normal and
-" visual
-nnoremap U viw~
-vnoremap U ~
-
-" Vimrc edit mappings
-nnoremap <silent> <leader>ev :execute("vsplit ".'~/.vimrc')<cr>
-nnoremap <silent> <leader>ep :execute("vsplit ".'~/.vimrcplugins')<cr>
-
-" highlight last inserted text
-nnoremap gV `[v`]
-
-" Exit insert mode
-inoremap jk <esc>
-nnoremap <leader>qq :qall<cr>
-
-" Copy entire file to clipboard
-nnoremap Y :%y+<cr>
-
-" Search and Replace
-nnoremap <Leader>r :.,$s?<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>
-vnoremap <leader>r "hy:.,$s?<C-r>h?<C-r>h?gc<left><left><left>
-
-vnoremap <leader>dab "hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>
-vnoremap <leader>daa "hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>
-
-vnoremap <leader>yab "hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>
-vnoremap <leader>yaa "hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>
-
-vnoremap <leader>p "_dP
-
-" Change every " -" with " \<cr> -" to break long lines of bash
-nnoremap <silent> <leader>\ :.s/ -/ \\\r  -/g<cr>:noh<cr>
-
-" Every parameter in its own line
-function SplitParamLines() abort
-  let f_line_num = line('.')
-  let indent_length = indent(f_line_num)
-  exe "normal! 0f(a\<cr>\<esc>"
-  exe ".s/\s*,/,\r" . repeat(' ', indent_length + &shiftwidth - 1) . '/g'
-  nohlsearch
-  exe "normal! 0t)a\<cr>\<esc>"
-endfunction
-nnoremap <silent> <leader>( :call SplitParamLines()<cr>
-
-" Change \n to new lines
-nmap <silent> <leader><cr> :silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>
-
-" move vertically by visual line (don't skip wrapped lines)
-nnoremap j gj
-nnoremap k gk
-
-" Change working directory based on open file
-nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
-
-" Move visually selected block
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
-
-" Convert all tabs to spaces
-nnoremap <leader>ct<space> :retab<cr>
-
-" Copy file path to clipboard
-nnoremap <silent> <leader>cfp :let @+ = expand('%')<cr>:echo "Copied file path " . expand('%')<cr>
-nnoremap <silent> <leader>cap :let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>
-
-"" }}}
-
-" Netrw (directory browsing) out-of-the-box plugin {{{
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 25
-let g:netrw_keepdir = 1
-" augroup ProjectDrawer
-"   autocmd!
-"   autocmd VimEnter * :if !exists("NERDTree") | Vexplore | endif
-" augroup END
-
-map <silent> <C-o> :Lexplore<CR>
-" }}}
-
-" Enable folding {{{
-set foldenable
-set foldmethod=syntax
-set foldlevel=999
-set foldlevelstart=10
-" Enable folding with the leader-f/a
-nnoremap <leader>f za
-nnoremap <leader>caf zM
-nnoremap <leader>oaf zR
-" Open level folds
-nnoremap <leader>olf zazczA
-
-" }}}
-
-" Abbreviations {{{
+-- Abbreviations
+vim.cmd [[
 inoreabbrev teh the
 inoreabbrev seperate separate
 inoreabbrev dont don't
@@ -381,67 +126,10 @@ inoreabbrev queyr query
 inoreabbrev htis this
 inoreabbrev foreahc foreach
 inoreabbrev forech foreach
-" }}}
+]]
 
-" Conceals {{{
 
-let g:conceal_rules = [
-      \ ['!=', '≠'],
-      \ ['<=', '≤'],
-      \ ['>=', '≥'],
-      \ ['=>', '⇒'],
-      \ ['==', '≡'],
-      \ ['===', '≡≡'],
-      \ ['\<function\>', 'ƒ'],
-      \ ]
-
-" Conceal is not needed when we have FiraCode with ligatures
-" for [value, display] in g:conceal_rules
-"   execute "call matchadd('Conceal', '".value."', 10, -1, {'conceal': '".display."'})"
-" endfor
-set conceallevel=1
-
-" call matchadd('Conceal', 'package', 10, 99, {'conceal': 'p'})
-"}}}
-
-" Diff with last save function {{{
-function! s:DiffWithSaved()
-  let filetype=&ft
-  diffthis
-  vnew | r # | normal! 1Gdd
-  exe 'setlocal bt=nofile bh=wipe nobl noswf ro foldlevel=999 ft=' . filetype
-  diffthis
-  nnoremap <buffer> q :bd!<cr>
-  augroup ShutDownDiffOnLeave
-    autocmd! * <buffer>
-    autocmd BufDelete,BufUnload,BufWipeout <buffer> wincmd p | diffoff |
-          \wincmd p
-  augroup END
-
-  wincmd p
-endfunction
-com! DiffSaved call s:DiffWithSaved()
-nnoremap <leader>ds :DiffSaved<cr>
-" }}}
-
-" Special filetypes {{{
-
-augroup special_filetype
-  au!
-  autocmd FileType json syntax match Comment +\/\/.\+$+
-  autocmd BufNewFile,BufRead aliases.sh setf zsh
-  autocmd BufNewFile,BufRead .eslintrc setf json
-  autocmd BufNewFile,BufRead *.hcl setf terraform
-  autocmd BufRead,BufNewFile */templates/*.yaml,*/templates/*.tpl,*.gotmpl,helmfile.yaml set ft=helm
-  autocmd FileType javascript set filetype=javascriptreact | set iskeyword+=-
-augroup end
-
-augroup custom_nginx
-  autocmd!
-  autocmd FileType nginx setlocal iskeyword+=$
-  autocmd FileType nginx let b:coc_additional_keywords = ['$']
-augroup end
-
+vim.cmd [[
 let g:sh_fold_enabled = 4
 
 com! FormatJSON exe '%!python -m json.tool'
@@ -454,12 +142,10 @@ function FormatEqual() abort
   echom 'Formatted with equalprg'
 endfunction
 
-" }}}
+]]
 
-" Run current buffer {{{
-
-nnoremap <silent> <F5> :call ExecuteFile()<CR>
-
+-- Run current buffer
+vim.cmd [[
 " Will attempt to execute the current file based on the `&filetype`
 " You need to manually map the filetypes you use most commonly to the
 " correct shell command.
@@ -487,12 +173,14 @@ function! ExecuteFile()
   normal! yypVr=o
 endfunction
 
-" }}}
+nnoremap <silent> <F5> :call ExecuteFile()<CR>
+]]
 
-" Grep {{{
+-- Grep
+vim.cmd [[
 " This is only availale in the quickfix window, owing to the filetype
 " restriction on the autocmd (see below).
-function! <SID>OpenQuickfix(new_split_cmd)
+function! s:OpenQuickfix(new_split_cmd)
   " 1. the current line is the result idx as we are in the quickfix
   let l:qf_idx = line('.')
   " 2. jump to the previous window
@@ -515,15 +203,18 @@ augroup END
 " Set grepprg as RipGrep or ag (the_silver_searcher), fallback to grep
 if executable('rg')
   let &grepprg="rg --vimgrep --no-heading --smart-case --hidden --follow -g '!{" . &wildignore . "}' $*"
+  let g:grep_literal_flag="-F"
   set grepformat=%f:%l:%c:%m,%f:%l:%m
 elseif executable('ag')
   let &grepprg='ag --vimgrep --smart-case --hidden --follow --ignore "!{' . &wildignore . '}" $*'
+  let g:grep_literal_flag="-Q"
   set grepformat=%f:%l:%c:%m
 else
-  let &grepprg='grep -n -r --exclude=' . shellescape(&wildignore) . ' . -- $*'
+  let &grepprg='grep -n -r --exclude=' . shellescape(&wildignore) . ' . $*'
+  let g:grep_literal_flag="-F"
 endif
 
-function s:RipGrepCWORD(bang, visualmode, ...) abort
+function RipGrepCWORD(bang, visualmode, ...) abort
   let search_word = a:1
 
   if a:visualmode
@@ -545,90 +236,30 @@ function s:RipGrepCWORD(bang, visualmode, ...) abort
   if search_word ==? ''
     let search_word = expand('<cword>')
   endif
-  echom 'Searching for ' . search_word
-  " Silent removes the "press enter to continue" prompt, and bang (!) is for
-  " not jumping to the first result
-  let grepcmd = 'silent grep' . a:bang .' -- ' . shellescape(search_word)
+
+  " Set bang command for literal search (no regexp expansion)
+  let search_message_literally = "for " . search_word
+  if a:bang == "!"
+    let search_message_literally = "literally for " . search_word
+    let search_word = get(g:, 'grep_literal_flag', "") . ' ' . shellescape(search_word)
+  endif
+
+  echom 'Searching ' . search_message_literally
+
+  " Silent removes the "press enter to continue" prompt
+  " Bang (!) is for literal search (no regexp expansion)
+  let grepcmd = 'silent grep! ' . search_word
   execute grepcmd
 endfunction
-command! -bang -range -nargs=? RipGrepCWORD call <SID>RipGrepCWORD("<bang>", v:false, <q-args>)
-command! -bang -range -nargs=? RipGrepCWORDVisual call <SID>RipGrepCWORD("<bang>", v:true, <q-args>)
+command! -bang -range -nargs=? RipGrepCWORD call RipGrepCWORD("<bang>", v:false, <q-args>)
+command! -bang -range -nargs=? RipGrepCWORDVisual call RipGrepCWORD("<bang>", v:true, <q-args>)
 nmap <c-f> :RipGrepCWORD!<Space>
 vmap <c-f> :RipGrepCWORDVisual!<cr>
-" }}}
+]]
 
-" " Highlight word under cursor {{{
-" let g:word_highlight#disabled_ft = [
-"       \'qf',
-"       \'fugitive',
-"       \'nerdtree',
-"       \'gundo',
-"       \'diff',
-"       \'fzf',
-"       \'floaterm',
-"       \'vim-plug'
-" \]
-" let g:word_highlight#disabled_buftypes = ['terminal', 'quickfix', 'help']
-" let g:word_highlight#linked_group = 'NormalFloat'
-" let g:word_highlight#current_word_match_id = 666
 
-" function! s:HighlightWordUnderCursor()
-"   let l:current_word_match_group_name = 'MatchWord'
-"   let l:default_linked_group = 'CursorLine'
-"   let l:linked_group = get(g:, 'word_highlight#linked_group', l:default_linked_group)
-"   let l:extra_highlights = 'cterm=undercurl gui=undercurl'
-
-"   " Clear matches
-"   let matches_list = getmatches()
-"   let current_word_match_id = get(g:, 'word_highlight#current_word_match_id', -1)
-
-"   for match in matches_list
-"     let match_id = get(match, 'id', '-1')
-"     if match_id == g:word_highlight#current_word_match_id
-"       call matchdelete(g:word_highlight#current_word_match_id)
-"     end
-"   endfor
-
-"   " Don't match non-words, diff buffer, disabled_buftypes and disabled_ft
-"   if matchstr(getline('.'), '\%' . col('.') . 'c.') !~# '\k' | return 0 | endif
-"   if &diff | return 0 | endif
-"   if index(get(g:, 'word_highlight#disabled_buftypes', []), &buftype) >= 0 | return 0 | endif
-"   if index(get(g:,'word_highlight#disabled_ft', []), &filetype) >= 0 | return 0 | endif
-
-"   if !hlexists(l:linked_group)
-"     let l:linked_group = default_linked_group
-"   endif
-
-"   " Add highlight group
-"   " BG
-"   let cterm_bg_color = synIDattr(synIDtrans(hlID(l:linked_group)), 'bg', 'cterm')
-"   let cterm_bg_color = cterm_bg_color != '' ? cterm_bg_color : '240'
-"   let gui_bg_color = synIDattr(synIDtrans(hlID(l:linked_group)), 'bg', 'gui')
-"   let gui_bg_color = gui_bg_color != '' ? gui_bg_color : '#6d737d'
-"   " FG
-"   let cterm_fg_color = synIDattr(synIDtrans(hlID(l:linked_group)), 'fg', 'cterm')
-"   let cterm_fg_color = cterm_fg_color != '' ? cterm_fg_color : 'white'
-"   let gui_fg_color = synIDattr(synIDtrans(hlID(l:linked_group)), 'fg', 'gui')
-"   let gui_fg_color = gui_fg_color != '' ? gui_fg_color : 'white'
-
-"   let hi_text = 'guibg=' . gui_bg_color .
-"         \ ' ctermbg=' . cterm_bg_color .
-"         \ ' guifg=' . gui_fg_color .
-"         \ ' ctermfg=' . cterm_fg_color
-"   exec 'hi ' . l:current_word_match_group_name . ' ' . l:extra_highlights . ' ' . hi_text
-
-"   " Add matches
-"   let cword_clean = substitute(expand('<cword>'), '/', '\/', 'g')
-"   call matchadd(l:current_word_match_group_name, '\V\<' . cword_clean . '\>', -5, g:word_highlight#current_word_match_id)
-" endfunction
-
-" augroup MatchWord
-"   autocmd!
-"   autocmd! CursorHold,CursorHoldI * call <SID>HighlightWordUnderCursor()
-" augroup END
-" " }}}
-
-" Terminal configurations {{{
+-- Terminal configurations
+vim.cmd [[
 if exists(':terminal')
 
   if !exists('g:terminal_ansi_colors')
@@ -678,9 +309,10 @@ if exists(':terminal')
   set t_Co=256
 endif
 
-" }}}
+]]
 
-" {{{ Visual Calculator
+-- Visual Calculator
+vim.cmd [[
 function s:VisualCalculator() abort
   let save_pos = getpos('.')
   " Get visual selection
@@ -706,9 +338,10 @@ function s:VisualCalculator() abort
 endfunction
 command! -range VisualCalculator call <SID>VisualCalculator()
 vmap <c-r> :VisualCalculator<cr>
-" }}}
+]]
 
-" Last position on document {{{
+-- Last position on document
+vim.cmd [[
 if has('autocmd')
   augroup redhat
     autocmd!
@@ -719,37 +352,9 @@ if has('autocmd')
     \ endif
   augroup END
 endif
-" }}}
+]]
 
-" YamlToJson JsonToYaml {{{
-function! YamlToJson() abort
-  % !python3 -c 'import yaml, json, sys; print(json.dumps(yaml.safe_load(sys.stdin)));'
-  " set filetype=json
-  " FormatJSON
-endfunction
-
-function! JsonToYaml() abort
-  % !python -c 'import yaml, json, sys; yaml.safe_dump(json.load(sys.stdin), sys.stdout, default_flow_style=False)'
-  " set filetype=yaml
-endfunction
-
-com! JsonToYaml call JsonToYaml()
-com! YamlToJson call YamlToJson()
-" }}}
-
-" Decrypt encrypt ansible secret {{{
-function DencryptAnsibleSecretFile(...) abort
-  let action = 'de'
-  if get(a:, 1, v:false)
-    let action = 'en'
-  endif
-
-  silent! exe '!ansible-vault ' . action . 'crypt --vault-password-file ~/ansible_secret %'
-endfunction
-com! EncryptAnsible call DencryptAnsibleSecretFile(1)
-com! DecryptAnsible call DencryptAnsibleSecretFile()
-" }}}
-
+vim.cmd [[
 " Better yanking {{{
 " note:
 "   the register 1 is reserved for deletion
