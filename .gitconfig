@@ -1,11 +1,6 @@
 [user]
-  name       = Moshe Avni
-  email      = mavni@netapp.com
-  ; email      = moshe@avni.us
-  signingkey = 1F52151977048EAB
-
-[commit]
-  gpgsign = false
+  name  = Moshe Avni
+  email = moshe@avni.us
 
 [pull]
   rebase = false
