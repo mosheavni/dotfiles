@@ -47,7 +47,32 @@ return require('packer').startup(function(use)
     },
   }
   use 'lewis6991/nvim-treesitter-context'
-  use { 'neoclide/coc.nvim', branch = 'release' }
+  use { 'neoclide/coc.nvim', branch = 'release', ft = { "text" } }
+  -- LSP
+  use {
+    "neovim/nvim-lspconfig",
+    "williamboman/nvim-lsp-installer",
+    "ray-x/lsp_signature.nvim",
+    "jose-elias-alvarez/null-ls.nvim",
+    "b0o/SchemaStore.nvim",
+  }
+  use({
+    'hrsh7th/nvim-cmp', -- auto completion
+    requires = {
+      'hrsh7th/cmp-nvim-lsp',
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-nvim-lua',
+      'hrsh7th/cmp-cmdline',
+      { 'tzachar/cmp-tabnine', run = './install.sh' },
+      'windwp/nvim-autopairs',
+      { 'Saecki/crates.nvim', requires = { 'nvim-lua/plenary.nvim' }, branch = 'main' },
+      'hrsh7th/cmp-nvim-lsp-document-symbol',
+    },
+  })
+  use('onsails/lspkind-nvim') -- show pictograms in the auto complete popup
   use({
     "iamcco/markdown-preview.nvim",
     run = "cd app && yarn install",
@@ -65,8 +90,8 @@ return require('packer').startup(function(use)
   use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
   use { 'hashivim/vim-terraform', ft = { 'terraform' } }
-  use 'honza/vim-snippets'
   use { 'phenomenes/ansible-snippets', ft = { 'yaml' } }
+  use('rafamadriz/friendly-snippets') -- snippets for many languages
 
   -- Functionality Tools
   use 'christoomey/vim-system-copy'

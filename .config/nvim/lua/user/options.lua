@@ -37,6 +37,7 @@ vim.opt.backup         = false
 vim.opt.writebackup    = false
 vim.opt.wildmenu       = true -- Displays a menu on autocomplete
 vim.opt.wildmode       = { 'longest:full', 'full' } -- Command-line completion mode
+vim.opt.completeopt    = { "menu", "menuone", "noselect" }
 
 vim.opt.title         = true -- Changes the iterm title
 vim.opt.showcmd       = true

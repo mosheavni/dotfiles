@@ -36,7 +36,7 @@
   pager       = true
   showbranch  = true
   status      = true
-  ui          = true
+  ui          = auto
 
 [color "diff-highlight"]
   oldNormal    = red   bold
