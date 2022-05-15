@@ -16,8 +16,18 @@ lualine.setup({
   },
   sections = {
     lualine_a = { 'mode' },
-    lualine_b = { 'branch', 'diff', 'diagnostics', 'g:coc_status' },
-    lualine_c = { 'filename' },
+    lualine_b = {
+      'branch',
+      'diff',
+    },
+    lualine_c = {
+      'diagnostics',
+      function()
+        return require('lsp-status').status()
+      end,
+      "require'user.select-schema'.get_current_schema()"
+    },
+    lualine_d = { 'filename' },
     lualine_x = { 'encoding', 'fileformat', 'filetype' },
     lualine_y = { 'progress' },
     lualine_z = { 'location' }
@@ -31,5 +41,19 @@ lualine.setup({
     lualine_z = {}
   },
   tabline = {},
-  extensions = { 'nerdtree' }
+  extensions = {
+    'nerdtree',
+    'fugitive'
+  }
+})
+
+-- lsp status.
+local status_ok, lsp_status = pcall(require, "lsp-status")
+if not status_ok then
+  return
+end
+
+lsp_status.register_progress()
+lsp_status.config({
+  diagnostics = false
 })

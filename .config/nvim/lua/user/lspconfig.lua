@@ -1,11 +1,18 @@
+local lsp_status = require('lsp-status')
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = function(name)
   vim.api.nvim_create_augroup(name, { clear = true })
 end
+local buf_set_option = vim.api.nvim_buf_set_option
+
+-- Set formatting
+require('vim.lsp.log').set_format_func(vim.inspect)
 
 local default_on_attach = function(client, bufnr)
+  lsp_status.on_attach(client)
+
   if client.resolved_capabilities.code_lens then
-    autocmd({ 'BufEnter', 'InsertLeave' }, {
+    autocmd({ 'BufEnter', 'InsertLeave', 'InsertEnter' }, {
       desc = 'Auto show code lenses',
       pattern = '<buffer>',
       command = 'silent! lua vim.lsp.codelens.refresh()',
@@ -34,6 +41,15 @@ local default_on_attach = function(client, bufnr)
       pattern = '<buffer>',
       command = 'silent! undojoin | lua vim.lsp.buf.formatting_seq_sync()',
     })
+  end
+
+  -- Enable tag jump and formatting based on LSP
+  if client.resolved_capabilities.goto_definition == true then
+    buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
+  end
+
+  if client.resolved_capabilities.document_formatting == true then
+    buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
   end
 end
 
@@ -148,12 +164,18 @@ ensure_server('vimls'):setup({
   on_attach = default_on_attach,
   capabilities = capabilities,
 })
--- yaml
+-- yaml{
+-- vim.lsp.set_log_level("debug")
 ensure_server('yamlls'):setup({
   on_attach = default_on_attach,
   capabilities = capabilities,
+  cmd = { 'node', '/Users/mavni/Repos/yaml-language-server/out/server/src/server.js', '--stdio' },
+  on_init = function()
+    require('user.select-schema').get_client()
+  end,
   settings = {
     yaml = {
+      hover = true,
       trace = {
         server = "verbose"
       },
@@ -164,7 +186,7 @@ ensure_server('yamlls'):setup({
       validate = true,
       schemaStore = {
         enable = true,
-        url = "https://www.schemastore.org/api/json/catalog.json",
+        url = "https://www.schemastore.org/api/json/catalog.json"
       },
       schemas = {
         kubernetes = {
@@ -185,42 +207,6 @@ ensure_server('yamlls'):setup({
     }
   }
 })
--- ensure_server('yamlls'):setup({
---   on_attach = default_on_attach,
---   capabilities = capabilities,
---   cmd = { 'node', '/Users/mavni/Repos/yaml-language-server/out/server/src/server.js', '--stdio' },
---   settings = {
---     yaml = {
---       trace = {
---         server = "verbose"
---       },
---       completion = true,
---       format = {
---         enable = true
---       },
---       validate = true,
---       schemaStore = {
---         enable = true,
---       },
---       schemas = {
---         kubernetes = {
---           "*role*.y*ml",
---           "deploy.y*ml",
---           "deployment.y*ml",
---           "ingress.y*ml",
---           "kubectl-edit-*",
---           "pdb.y*ml",
---           "pod.y*ml",
---           "rbac.y*ml",
---           "service.y*ml",
---           "service*account.y*ml",
---           "storageclass.y*ml",
---           "svc.y*ml"
---         }
---       }
---     }
---   }
--- })
 
 -- general LSP config
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -243,30 +229,31 @@ vim.diagnostic.config({
 })
 
 -- null-ls
-local null_ls = require('null-ls')
-null_ls.setup({
-  debug = true,
-  sources = {
-    -- null_ls.builtins.code_actions.eslint_d,
-    null_ls.builtins.code_actions.refactoring,
-    null_ls.builtins.code_actions.shellcheck,
-    null_ls.builtins.diagnostics.ansiblelint,
-    -- null_ls.builtins.diagnostics.eslint_d,
-    null_ls.builtins.diagnostics.hadolint,
-    -- null_ls.builtins.diagnostics.markdownlint,
-    null_ls.builtins.diagnostics.pylint,
-    null_ls.builtins.diagnostics.shellcheck,
-    -- null_ls.builtins.diagnostics.write_good,
-    null_ls.builtins.diagnostics.yamllint,
-    null_ls.builtins.formatting.black,
-    -- null_ls.builtins.formatting.eslint_d,
-    -- null_ls.builtins.formatting.fixjson,
-    -- null_ls.builtins.formatting.markdownlint,
-    null_ls.builtins.formatting.shfmt,
-    -- null_ls.builtins.diagnostics.codespell.with({
-    --   filetypes = { 'txt', 'md' },
-    -- }),
-  },
-  on_attach = default_on_attach,
-})
+-- local null_ls = require('null-ls')
+-- null_ls.setup({
+--   debug = true,
+--   sources = {
+--     -- null_ls.builtins.code_actions.eslint_d,
+--     null_ls.builtins.code_actions.refactoring,
+--     -- null_ls.builtins.diagnostics.eslint_d,
+--     -- null_ls.builtins.diagnostics.markdownlint,
+--     -- null_ls.builtins.diagnostics.write_good,
+--     -- null_ls.builtins.formatting.eslint_d,
+--     -- null_ls.builtins.formatting.fixjson,
+--     -- null_ls.builtins.formatting.markdownlint,
+--     null_ls.builtins.code_actions.shellcheck,
+--     null_ls.builtins.diagnostics.ansiblelint,
+--     null_ls.builtins.diagnostics.hadolint,
+--     null_ls.builtins.diagnostics.pylint,
+--     null_ls.builtins.diagnostics.shellcheck,
+--     null_ls.builtins.diagnostics.yamllint,
+--     null_ls.builtins.formatting.black,
+--     null_ls.builtins.formatting.prettier,
+--     null_ls.builtins.formatting.shfmt,
+--     -- null_ls.builtins.diagnostics.codespell.with({
+--     --   filetypes = { 'txt', 'md' },
+--     -- }),
+--   },
+--   on_attach = default_on_attach,
+-- })
 require('lsp_signature').setup({})

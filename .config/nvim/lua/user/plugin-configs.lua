@@ -1,3 +1,85 @@
+-- WinResizer
+vim.g["winresizer_start_key"]                         = '<C-E>'
+-- Vim json path
+vim.g["jsonpath_register"]                            = '*'
+-- Floaterm
+vim.g["floaterm_keymap_toggle"]                       = '<F6>'
+vim.g["floaterm_keymap_new"]                          = '<F7>'
+vim.g["floaterm_keymap_next"]                         = '<F8>'
+vim.g["floaterm_width"]                               = 0.7
+vim.g["floaterm_height"]                              = 0.9
+-- Vim ansible
+vim.g["ansible_goto_role_paths"]                      = '.;,roles;'
+-- Yaml Revealer
+vim.g["yaml_revealer_separator"]                      = '.'
+vim.g["yaml_revealer_list_indicator"]                 = 1
+-- Editor config
+vim.g["EditorConfig_exclude_patterns"]                = { 'fugitive://.*' }
+-- Vim terraform
+vim.g["terraform_fmt_on_save"]                        = 1
+-- Vim close tag
+vim.g["closetag_filenames"]                           = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
+vim.g["closetag_filetypes"]                           = 'html,xhtml,phtml,javascript,javascriptreact'
+-- Nerd Tree
+vim.g["NERDTreeChDirMode"]                            = 2
+vim.g["NERDTreeHijackNetrw"]                          = 1
+vim.g["NERDTreeShowHidden"]                           = 1
+vim.g["NERDTreeHighlightCursorline"]                  = 1
+vim.g["NERDTreeFileExtensionHighlightFullName"]       = 1
+vim.g["NERDTreeGitStatusUseNerdFonts"]                = 1
+-- vim.g["NERDTreeGitStatusConcealBrackets"] = 1
+vim.g["NERDTreeGitStatusIndicatorMapCustom"]          = {
+  Modified  = '✹',
+  Staged    = '✚',
+  Untracked = '✭',
+  Unmerged  = '═',
+  Dirty     = '✗',
+  Renamed   = '➜',
+  Clean     = '✔︎',
+  Ignored   = '☒',
+  Deleted   = '✖',
+  Unknown   = '?'
+}
+-- DevIcons
+vim.g["WebDevIconsOS"]                                = 'Darwin'
+vim.g["DevIconsEnableFoldersOpenClose"]               = 1
+vim.g["DevIconsEnableFolderExtensionPatternMatching"] = 1
+-- Conflict marker
+vim.g["conflict_marker_highlight_group"]              = 'VisualNOS'
+vim.cmd [[
+highlight ConflictMarkerBegin guibg=#2f7366
+highlight ConflictMarkerOurs guibg=#2e5049
+highlight ConflictMarkerTheirs guibg=#344f69
+highlight ConflictMarkerEnd guibg=#2f628e
+highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
+]]
+-- Startify
+vim.g["startify_custom_header"] = {
+  [[   😎               🎃              😎]],
+  [[    _   _         __     ___]],
+  [[   | \ | | ___  __\ \   / (_)_ __ ___]],
+  [[   |  \| |/ _ \/ _ \ \ / /| |  _ ` _ \]],
+  [[   | |\  |  __/ (_) \ V / | | | | | | |]],
+  [[   |_| \_|\___|\___/ \_/  |_|_| |_| |_|]],
+  '', '   🚀               ✨              🚀'
+}
+-- Switch vim
+-- The map switch is between underscores to camelCase: moshe_king -> mosheKing -> moshe_king.
+vim.g['switch_custom_definitions'] = {
+  { 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT' },
+  { 'yes', 'no' },
+  { 'enable', 'disable' },
+  { '==', '!=' },
+  -- {
+  --   [vim.regex([[\<[a-z0-9]\+_\k\+\>]])] = {
+  --     [vim.regex([[_\(.\)]])] = vim.regex([[\U\1]])
+  --   },
+  --   [vim.regex([[\<[a-z0-9]\+[A-Z]\k\+\>]])] = {
+  --     [vim.regex([[\([A-Z]\)]])] = vim.regex([[_\l\1]])
+  --   },
+  -- }
+}
+
 vim.cmd [[
 " Color settings {{{
 " Random color {{{
@@ -18,80 +100,8 @@ function! RandomColorChooser() abort
   exe 'colorscheme '. l:random_color
 endfunction
 " call RandomColorChooser()
-" }}}
 
 colorscheme gruvbox
-
-" }}}
-
-" Telescope {{{
-" nnoremap <c-p> :Files
-nnoremap <silent> <expr> <c-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Telescope find_files\<cr>"
-" let $FZF_DEFAULT_COMMAND = "rg --files --hidden -g '!.git/' --color=never"
-" let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
-" let $FZF_DEFAULT_OPTS    = '--bind ctrl-a:select-all'
-" nnoremap <c-t> :Tags<cr>
-nnoremap <c-b> :Telescope buffers<cr>
-nnoremap <F4>  :Telescope git_branches<cr>
-" nnoremap <silent><expr> <c-f> '<cmd>Telescope live_grep default_text=' . expand('<cword>') . '<cr>'
-" nnoremap <c-y> :History<cr>
-" }}}
-
-" Ultisnip {{{
-let g:UltiSnipsExpandTrigger='<c-s>'
-" }}}
-
-" Vim json path {{{
-let g:jsonpath_register = '*'
-" }}}
-
-" WinResizer {{{
-let g:winresizer_start_key = '<C-E>'
-" }}}
-
-" Floaterm {{{
-let g:floaterm_keymap_toggle = '<F6>'
-let g:floaterm_keymap_new    = '<F7>'
-let g:floaterm_keymap_next   = '<F8>'
-let g:floaterm_width = 0.7
-let g:floaterm_height = 0.9
-
-" }}}
-
-" Yaml Revealer {{{
-let g:yaml_revealer_separator = '.'
-let g:yaml_revealer_list_indicator = 1
-" }}}
-
-" DirDiff {{{
-" let g:DirDiffEnableMappings = 1
-" let g:DirDiffNextKeyMap = ']q'
-" let g:DirDiffPrevKeyMap = '[q'
-
-" }}}
-
-" Switch vim {{{
-" let g:switch_mapping = '-'
-" The map switch is between underscores to camelCase: moshe_king -> mosheKing
-" -> moshe_king
-let g:switch_custom_definitions = [
-      \   ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
-      \   ['yes', 'no'],
-      \   ['enable', 'disable'],
-      \   ['==', '!='],
-      \   {
-      \     '\<[a-z0-9]\+_\k\+\>': {
-      \       '_\(.\)': '\U\1'
-      \     },
-      \     '\<[a-z0-9]\+[A-Z]\k\+\>': {
-      \       '\([A-Z]\)': '_\l\1'
-      \     },
-      \   }
-      \ ]
-" }}}
-
-" Vim ansible {{{
-let g:ansible_goto_role_paths = '.;,roles;'
 
 function! FindAnsibleRoleUnderCursor()
   let l:role_paths = get(g:, 'ansible_goto_role_paths', './roles')
@@ -109,70 +119,6 @@ augroup AnsibleFind
   au BufRead,BufNewFile */ansible/*.yml nnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
   au BufRead,BufNewFile */ansible/*.yml vnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
 augroup END
-" }}}
-
-" Editor config {{{
-let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-" }}}
-
-" Vim terraform {{{
-let g:terraform_fmt_on_save=1
-" }}}
-
-" Vim easy align {{{
-nmap ga <Plug>(EasyAlign)
-" }}}
-
-" Vim close tag {{{
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
-let g:closetag_filetypes = 'html,xhtml,phtml,javascript,javascriptreact'
-" }}}
-
-" Startify {{{
-
-let g:startify_custom_header = [
-      \'   😎               🎃              😎',
-      \'    _   _         __     ___',
-      \'   | \ | | ___  __\ \   / (_)_ __ ___',
-      \'   |  \| |/ _ \/ _ \ \ / /| | ''_ ` _ \',
-      \'   | |\  |  __/ (_) \ V / | | | | | | |',
-      \'   |_| \_|\___|\___/ \_/  |_|_| |_| |_|',
-      \'', '   🚀               ✨              🚀'
-      \]
-
-" }}}
-
-" DevIcons {{{
-let g:WebDevIconsOS = 'Darwin'
-let g:DevIconsEnableFoldersOpenClose = 1
-let g:DevIconsEnableFolderExtensionPatternMatching = 1
-" }}}
-
-" Nvim blame line {{{
-" TODO: fix diff
-let g:nvimblame_disabled_buftypes = [
-      \'qf',
-      \'fugitive',
-      \'nerdtree',
-      \'gundo',
-      \'diff',
-      \'floaterm',
-      \'vim-plug'
-\]
-
-function EnableBlameLineWrapper() abort
-  if index(get(g:, 'nvimblame_disabled_buftypes', []), &buftype) == -1 && !&diff
-    EnableBlameLine
-  else
-    DisableBlameLine
-  endif
-endfunction
-
-augroup NvimBlameLine
-  au!
-  autocmd BufEnter,DiffUpdated * call EnableBlameLineWrapper()
-augroup END
-" }}}
 
 " BarBar Nvim {{{
 nnoremap <silent> <leader>bd :BufferClose<CR>
@@ -189,30 +135,6 @@ nnoremap <silent>    <leader>8 :BufferGoto 8<CR>
 " }}}
 
 
-" Nerd Tree {{{
-
-let g:NERDTreeChDirMode = 2
-let g:NERDTreeHijackNetrw = 1
-let g:NERDTreeShowHidden=1
-let g:NERDTreeHighlightCursorline = 1
-let g:NERDTreeFileExtensionHighlightFullName = 1
-
-" " ### nerdtree-git-plugin ###
-let g:NERDTreeGitStatusUseNerdFonts = 1
-" let g:NERDTreeGitStatusConcealBrackets = 1
-
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-    \ 'Modified'  : '✹',
-    \ 'Staged'    : '✚',
-    \ 'Untracked' : '✭',
-    \ 'Unmerged'  : '═',
-    \ 'Dirty'     : '✗',
-    \ 'Renamed'   : '➜',
-    \ 'Clean'     : '✔︎',
-    \ 'Ignored'   : '☒',
-    \ 'Deleted'   : '✖',
-    \ 'Unknown'   : '?'
-    \ }
 " " Set icon for Jenkinsfile
 " let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {}
 " let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Jenkinsfile'] = ''
@@ -443,13 +365,6 @@ endfunction
 
 " }}}
 
-" Conflict marker {{{
-let g:conflict_marker_highlight_group = 'VisualNOS'
-highlight ConflictMarkerBegin guibg=#2f7366
-highlight ConflictMarkerOurs guibg=#2e5049
-highlight ConflictMarkerTheirs guibg=#344f69
-highlight ConflictMarkerEnd guibg=#2f628e
-highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
 " }}}
 

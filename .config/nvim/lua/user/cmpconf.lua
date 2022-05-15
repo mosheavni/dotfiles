@@ -54,7 +54,7 @@ local config = {
     ['<C-j>'] = cmp.mapping.select_next_item(),
     ['<C-k>'] = cmp.mapping.select_prev_item(),
     ['<C-y>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<CR>'] = cmp.mapping.confirm({ select = false }),
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -148,13 +148,18 @@ cmp.setup.cmdline(':', {
   })
 })
 
+-- nvim autopairs
 require('nvim-autopairs').setup({
-  disable_in_macro = true
+  disable_in_macro = true,
+  disable_filetype = { "TelescopePrompt", "guihua", "guihua_rust", "clap_input" },
 })
+
+if vim.o.ft == 'clap_input' and vim.o.ft == 'guihua' and vim.o.ft == 'guihua_rust' then
+  cmp.setup.buffer { completion = { enable = false } }
+end
 
 -- If you want insert `(` after select function or method item
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = '' } }))
-
 
 require 'luasnip.loaders.from_vscode'.lazy_load()

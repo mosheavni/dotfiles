@@ -34,7 +34,21 @@ configs.setup {
   },
   matchup = {
     enable = true
-  }
+  },
+  refactor = {
+    highlight_current_scope = { enable = true },
+    smart_rename = {
+      enable = true,
+      keymaps = {
+        smart_rename = "grr",
+      },
+    },
+    highlight_definitions = {
+      enable = true,
+      -- Set to false if you have an `updatetime` of ~100.
+      clear_on_cursor_move = true,
+    },
+  },
 }
 
 vim.opt.foldmethod = "expr"

@@ -48,3 +48,16 @@ autocmd({ "FileType" }, {
   pattern = "nginx",
   command = "setlocal iskeyword+=$ | let b:coc_additional_keywords = ['$']"
 })
+
+autocmd({ 'BufWritePost' }, {
+  group = special_filetypes,
+  pattern = 'plugins.lua',
+  command = 'source <afile> | PackerCompile',
+})
+
+local nvim_blame_line = augroup('NvimBlameLine')
+autocmd({ 'BufEnter' }, {
+  group = nvim_blame_line,
+  pattern = '*',
+  command = 'EnableBlameLine'
+})

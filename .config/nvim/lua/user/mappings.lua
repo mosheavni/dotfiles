@@ -1,16 +1,17 @@
 -- leader keys
 vim.g.mapleader = ' '
 
-local no_remap_opt        = { noremap = true }
-local silent_opt          = { silent = true }
-local no_remap_expr_opt   = { expr = true, noremap = true }
-local no_remap_silent_opt = { silent = true, noremap = true }
-local remap_opt           = { noremap = false }
+local no_remap_opt             = { noremap = true }
+local silent_opt               = { silent = true }
+local no_remap_expr_opt        = { expr = true, noremap = true }
+local no_remap_expr_silent_opt = { expr = true, noremap = true, silent = true }
+local no_remap_silent_opt      = { silent = true, noremap = true }
+local remap_opt                = { noremap = false }
 
 local keymap = vim.api.nvim_set_keymap
 
 -- Select all
-keymap('n', '<C-a>', 'gg^<S-v>G$', no_remap_opt)
+keymap('n', '<leader>sa', 'gg^<S-v>G$', no_remap_opt)
 
 -- Map 0 to first non-blank character
 keymap('n', '0', '^', no_remap_opt)
@@ -149,7 +150,7 @@ keymap("n", "<leader>oaf", "zR", no_remap_opt)
 keymap("n", "<leader>olf", "zazczA", no_remap_opt)
 
 -- Change \n to new lines
-keymap('n', '<leader><cr>', ':silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>', {})
+keymap('n', '<leader><cr>', [[:silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>]], {})
 
 -- Move vertically by visual line (don't skip wrapped lines)
 keymap("n", "j", "gj", no_remap_opt)
@@ -236,33 +237,24 @@ com! DiffSaved call s:DiffWithSaved()
 nnoremap <leader>ds :DiffSaved<cr>
 ]]
 
+-- Telescope
+keymap("n", '<c-p>', [[(expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Telescope find_files\<cr>"]], no_remap_expr_silent_opt)
+keymap("n", '<c-b>', ':Telescope buffers<cr>', no_remap_opt)
+keymap("n", '<F4>', ':Telescope git_branches<cr>', no_remap_opt)
+-- vim.keymap.set('n', '<F4>', function()
+--   require('telescope.builtin').git_branches({
+--     prompt_title = 'find string in open buffers...',
+--     grep_open_files = true
+--   })
+-- end, no_remap_opt)
+-- " nnoremap <silent><expr> <c-f> '<cmd>Telescope live_grep default_text=' . expand('<cword>') . '<cr>'
+--
+-- Vim easy align
+keymap('n', 'ga', '<Plug>(EasyAlign)', {})
 
+require 'user.lsp-maps' (keymap, {
+  silent_opt = silent_opt,
+})
 
--- Goto previous/next diagnostic warning/error
--- Use `[g` and `]g` to navigate diagnostics
-keymap('n', '[g', '<cmd>lua vim.diagnostic.goto_prev()<CR>', silent_opt)
-keymap('n', ']g', '<cmd>lua vim.diagnostic.goto_next()<CR>', silent_opt)
-
--- GoTo code navigation
-keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', silent_opt)
-keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', silent_opt)
-keymap('n', 'gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>', silent_opt)
-keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', silent_opt)
-keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references({ includeDeclaration = false })<CR>', silent_opt)
-
--- Documentation
-keymap('i', '<M-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', silent_opt)
--- keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', silent_opt)
--- calling twice make the cursor go into the float window. good for navigating big docs
-keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', silent_opt)
-
--- Refactor rename
-keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', silent_opt)
-
--- Code action
-keymap('n', '<leader>a', '<cmd>lua vim.lsp.buf.code_action()<CR>', {})
-keymap('n', '<leader>x', '<cmd>lua vim.lsp.codelens.run()<CR>', {})
-keymap('x', '<leader>a', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', {})
-keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', silent_opt)
-keymap('n', '<leader>p', '<cmd>lua vim.lsp.buf.formatting()<CR>', silent_opt)
-keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', silent_opt)
+-- schema-select
+keymap('n', '<leader>cc', ":lua require('user.select-schema').select()<cr>", no_remap_silent_opt)

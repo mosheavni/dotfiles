@@ -32,7 +32,6 @@ return require('packer').startup(function(use)
     }
   }
 
-
   -- LSP, Completion and Language
   -- Tree Sitter
   use {
@@ -47,7 +46,7 @@ return require('packer').startup(function(use)
     },
   }
   use 'lewis6991/nvim-treesitter-context'
-  use { 'neoclide/coc.nvim', branch = 'release', ft = { "text" } }
+  use 'nvim-treesitter/nvim-treesitter-refactor'
   -- LSP
   use {
     "neovim/nvim-lspconfig",
@@ -105,8 +104,12 @@ return require('packer').startup(function(use)
 
   use {
     'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    requires = {
+      { 'kyazdani42/nvim-web-devicons', opt = true }
+    }
   }
+  use 'nvim-lua/lsp-status.nvim'
+  use 'kyazdani42/nvim-web-devicons'
   use 'romgrk/barbar.nvim'
   use 'karb94/neoscroll.nvim'
   use 'machakann/vim-highlightedyank'

@@ -1,1 +1,1 @@
-au BufNewFile,BufRead */zsh* set filetype=bash
+au BufNewFile,BufRead */zsh* set filetype=sh
