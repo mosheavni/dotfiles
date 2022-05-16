@@ -4,8 +4,8 @@ local keymap = utils.keymap
 
 -- Goto previous/next diagnostic warning/error
 -- Use `[g` and `]g` to navigate diagnostics
-keymap('n', '[g', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts.silent)
-keymap('n', ']g', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts.silent)
+keymap('n', '[g', '<cmd>lua vim.diagnostic.goto_prev({ float = false })<CR>', opts.silent)
+keymap('n', ']g', '<cmd>lua vim.diagnostic.goto_next({ float = false })<CR>', opts.silent)
 
 -- GoTo code navigation
 keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts.silent)

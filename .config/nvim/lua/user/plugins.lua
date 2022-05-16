@@ -59,20 +59,14 @@ return require('packer').startup(function(use)
   use {
     "neovim/nvim-lspconfig",
     "williamboman/nvim-lsp-installer",
-    "ray-x/lsp_signature.nvim",
+    "ray-x/lsp_signature.nvim", -- Show function signature when you type
     "jose-elias-alvarez/null-ls.nvim",
     "b0o/SchemaStore.nvim",
-    'onsails/lspkind-nvim', -- show pictograms in the auto complete popup
     'folke/lsp-colors.nvim',
     'nvim-lua/lsp-status.nvim',
     'j-hui/fidget.nvim',
     'nanotee/nvim-lsp-basics',
-    {
-      'kosayoda/nvim-lightbulb',
-      setup = function()
-        vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
-      end
-    },
+    'kosayoda/nvim-lightbulb',
   }
   use({
     'hrsh7th/nvim-cmp', -- auto completion
@@ -84,9 +78,9 @@ return require('packer').startup(function(use)
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-nvim-lua',
       'hrsh7th/cmp-cmdline',
+      'onsails/lspkind-nvim', -- show pictograms in the auto complete popup
       { 'tzachar/cmp-tabnine', run = './install.sh' },
       'windwp/nvim-autopairs',
-      { 'Saecki/crates.nvim', requires = { 'nvim-lua/plenary.nvim' }, branch = 'main' },
       'hrsh7th/cmp-nvim-lsp-document-symbol',
     },
   })
@@ -134,6 +128,7 @@ return require('packer').startup(function(use)
     }
   }
   use 'kyazdani42/nvim-web-devicons'
+  use 'adelarsq/vim-devicons-emoji'
   use 'romgrk/barbar.nvim'
   use 'karb94/neoscroll.nvim'
   use 'machakann/vim-highlightedyank'

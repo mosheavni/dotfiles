@@ -13,7 +13,6 @@ local source_mapping = {
   nvim_lua = '[Vim]',
   path = '[Path]',
   buffer = '[Buffer]',
-  crates = '[Crates]',
 }
 
 local has_words_before = function()

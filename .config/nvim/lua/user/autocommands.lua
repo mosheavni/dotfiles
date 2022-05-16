@@ -56,11 +56,21 @@ autocmd({ 'BufWritePost' }, {
 })
 
 -- Nvim Blame Line
-local nvim_blame_line = augroup('NvimBlameLine')
-autocmd({ 'BufEnter' }, {
-  group = nvim_blame_line,
+-- local nvim_blame_line = augroup('NvimBlameLine')
+-- autocmd({ 'BufEnter' }, {
+--   group = nvim_blame_line,
+--   pattern = '*',
+--   command = 'EnableBlameLine'
+-- })
+
+-- bulb
+local bulb = augroup('BulbAu')
+autocmd({ 'CursorHold', 'CursorHoldI' }, {
+  group = bulb,
   pattern = '*',
-  command = 'EnableBlameLine'
+  callback = function()
+    require 'nvim-lightbulb'.update_lightbulb()
+  end
 })
 
 -- Quickfix

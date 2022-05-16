@@ -53,6 +53,21 @@ local default_on_attach = function(client, bufnr)
   if client.resolved_capabilities.document_formatting == true then
     buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
   end
+
+  vim.api.nvim_create_autocmd("CursorHold", {
+    buffer = bufnr,
+    callback = function()
+      local opts = {
+        focusable = false,
+        close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+        border = 'rounded',
+        source = 'always',
+        prefix = ' ',
+        scope = 'cursor',
+      }
+      vim.diagnostic.open_float(nil, opts)
+    end
+  })
 end
 
 local function ensure_server(name)
@@ -245,15 +260,16 @@ null_ls.setup({
 -- general LSP config
 
 -- show icons in the sidebar
-local signs = { Error = ' ', Warn = ' ', Hint = ' ', Information = ' ' }
+local signs = {
+  Error = ' ',
+  Warn = ' ',
+  Hint = ' ',
+  Info = '',
+}
 
 for type, icon in pairs(signs) do
   local hl = 'DiagnosticSign' .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
-
-vim.diagnostic.config({
-  severity_sort = true,
-})
 
 require('lsp_signature').setup({})

@@ -1,5 +1,9 @@
 P = function(v)
-  print(vim.inspect(v))
+  -- print(vim.inspect(v))
+  vim.notify(vim.inspect(v), 4, {
+    title = "P debug",
+    icon = "✎"
+  })
   return v
 end
 

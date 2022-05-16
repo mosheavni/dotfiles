@@ -96,6 +96,18 @@ require("fidget").setup {
 vim.g['loaded_netrwPlugin'] = 1
 -- nvim gps
 require("nvim-gps").setup()
+-- bulb
+require 'nvim-lightbulb'.setup {
+  sign = {
+    enabled = false,
+  },
+  virtual_text = {
+    enabled = true,
+    text = "💡",
+    -- highlight mode to use for virtual text (replace, combine, blend), see :help nvim_buf_set_extmark() for reference
+    hl_mode = "replace",
+  },
+}
 
 vim.cmd [[
 " Color settings {{{
@@ -295,7 +307,7 @@ function! ToggleGStatus()
     bd .git/index
   else
     Git
-    " 20wincmd_
+    17wincmd_
   endif
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
