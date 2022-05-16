@@ -247,3 +247,6 @@ keymap('n', '<leader>cc', ":lua require('user.select-schema').select()<cr>", opt
 -- Spectre
 keymap('n', '<leader>S', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opts.silent)
 keymap('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opts.no_remap)
+
+-- AnyJump
+keymap('n', '<leader>j', "<cmd>AnyJump<CR>", opts.no_remap)
