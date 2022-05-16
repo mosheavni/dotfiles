@@ -1,10 +1,10 @@
+zmodload zsh/zprof
 # ================ #
 # Basic ZSH Config #
 # ================ #
 
 # Additional PATHs
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-export PATH="$HOME/.local/alt/shims:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="$HOME/.bin:$PATH"
@@ -54,32 +54,30 @@ plugins=(
   git-auto-fetch
   helm
   kubectl
+  kube-ps1
   terraform
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# =========== #
-# Pyenv Setup #
-# =========== #
-# export PYENV_ROOT="$HOME/.pyenv"
-# export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
+[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
 # =================== #
 # Completions and PS1 #
 # =================== #
-# Load zsh-completions
-if type brew &>/dev/null; then
-  fpath=( $(brew --prefix)/share/zsh-completions $fpath )
 
-  autoload -Uz compinit
-  compinit
+
+# Load zsh-completions
+autoload -Uz compinit
+
+if type brew &>/dev/null; then
+  fpath=($(brew --prefix)/share/zsh-completions $fpath)
 fi
+for dump in $HOME/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
 autoload -U +X bashcompinit && bashcompinit
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
@@ -90,38 +88,33 @@ compdef tf='terraform'
 compdef tg='terraform'
 compdef terragrunt='terraform'
 
-# Source kube_ps1
-if [[ -f /usr/local/opt/kube-ps1/share/kube-ps1.sh ]];then
-  source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
-  function get_cluster_short() {
-    echo "$1" | gsed -e 's?arn:aws:eks:[a-zA-Z0-9\-]*:[0-9]*:cluster/??g' -e 's?\.k8s\.local??g'
-  }
-  KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
-fi
-
 # ===================== #
 # Aliases and Functions #
 # ===================== #
-if [[ -f ~/aliases.sh ]];then
-  source ~/aliases.sh
+if [[ -f $HOME/aliases.sh ]]; then
+  source $HOME/aliases.sh
 fi
-[[ -f ~/corp-aliases.sh ]] && source ~/corp-aliases.sh
+[[ -f $HOME/corp-aliases.sh ]] && source $HOME/corp-aliases.sh
 
 export EDITOR="nvim"
 
 # iTerm profile switching
-it2prof() { printf "\e]1337;SetProfile=$1\a" }
+it2prof() {
+  printf "\e]1337;SetProfile=$1\a"
+}
 
-cnf() { open "https://command-not-found.com/$*" }
+cnf() {
+  open "https://command-not-found.com/$*"
+}
 
 # ================ #
 # Kubectl Contexts #
 # ================ #
 
 # Load all contexts
-export KUBECONFIG=~/.kube/config
-if [[ -d ~/.kube/contexts/ ]];then
-  for ctx in ~/.kube/contexts/*.config;do
+export KUBECONFIG=$HOME/.kube/config
+if [[ -d $HOME/.kube/contexts/ ]]; then
+  for ctx in $HOME/.kube/contexts/*.config; do
     export KUBECONFIG=${KUBECONFIG}:${ctx}
   done
 fi
@@ -129,9 +122,10 @@ fi
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 
 bookitmeinit() {
-  cd ~/Repos/bookitme
-  export KUBECONFIG=~/.kube/contexts/bookitme-k8s.yaml.config
-  source ~/Repos/bookitme/bookitme-terraform/.env
+  cd $HOME/Repos/bookitme
+  export KUBECONFIG=$HOME/.kube/contexts/bookitme-k8s.yaml.config
+  source $HOME/Repos/bookitme/bookitme-terraform/.env
   kgp
 }
 
+export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'

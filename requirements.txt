@@ -1,6 +1,7 @@
 PyYAML==5.4.1
 Pygments==2.9.0
 ansicolor==0.3.2
+ansible-lint==6.1.0
 appdirs==1.4.4
 astroid==2.5.6
 autopep8==1.5.7

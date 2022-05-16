@@ -31,24 +31,25 @@ configs.setup {
   },
   context_commentstring = {
     enable = true
-  }
+  },
+  matchup = {
+    enable = true
+  },
+  refactor = {
+    highlight_current_scope = { enable = true },
+    smart_rename = {
+      enable = true,
+      keymaps = {
+        smart_rename = "grr",
+      },
+    },
+    highlight_definitions = {
+      enable = true,
+      -- Set to false if you have an `updatetime` of ~100.
+      clear_on_cursor_move = true,
+    },
+  },
 }
 
-local ask_install = {}
-function _G.ensure_treesitter_language_installed()
-  local parsers = require "nvim-treesitter.parsers"
-  local lang = parsers.get_buf_lang()
-  if parsers.get_parser_configs()[lang] and not parsers.has_parser(lang) and ask_install[lang] ~= false then
-    vim.schedule_wrap(function()
-      vim.ui.select({ "yes", "no" }, { prompt = "Install tree-sitter parsers for " .. lang .. "?" }, function(item)
-        if item == "yes" then
-          vim.cmd("TSInstall " .. lang)
-        elseif item == "no" then
-          ask_install[lang] = false
-        end
-      end)
-    end)()
-  end
-end
-
-vim.cmd [[autocmd FileType * :lua ensure_treesitter_language_installed()]]
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
