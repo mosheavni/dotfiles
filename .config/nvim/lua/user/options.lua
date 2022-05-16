@@ -68,7 +68,12 @@ vim.opt.foldmethod = "syntax"
 vim.opt.foldlevel = 999
 vim.opt.foldlevelstart = 10
 
-vim.opt.formatoptions:append { j = true, t = false, r = true, o = true, l = true } -- j = Delete comment character when joining commented lines. t = auto break long lines
+-- j = Delete comment character when joining commented lines.
+-- t = auto break long lines
+-- r = auto insert comment leader after <Enter> (insert mode)
+-- o = auto insert comment leader after o (normal mode)
+-- l = don't break long lines
+vim.opt.formatoptions:append { j = true, t = true, r = true, o = true, l = true }
 
 -- Indenting
 vim.opt.breakindent = true -- Maintain indent on wrapping lines
@@ -179,28 +184,6 @@ nnoremap <silent> <F5> :call ExecuteFile()<CR>
 
 -- Grep
 vim.cmd [[
-" This is only availale in the quickfix window, owing to the filetype
-" restriction on the autocmd (see below).
-function! s:OpenQuickfix(new_split_cmd)
-  " 1. the current line is the result idx as we are in the quickfix
-  let l:qf_idx = line('.')
-  " 2. jump to the previous window
-  wincmd p
-  " 3. switch to a new split (the new_split_cmd will be 'vnew' or 'split')
-  execute a:new_split_cmd
-  " 4. open the 'current' item of the quickfix list in the newly created buffer
-  "    (the current means, the one focused before switching to the new buffer)
-  execute l:qf_idx . 'cc'
-endfunction
-
-augroup grep_augroup
-  autocmd!
-  autocmd QuickFixCmdPost [^l]* copen
-  autocmd QuickFixCmdPost l*    lopen
-  autocmd FileType qf nnoremap <buffer> <C-v> :call <SID>OpenQuickfix("vnew")<CR>
-  autocmd FileType qf nnoremap <buffer> <C-x> :call <SID>OpenQuickfix("split")<CR>
-augroup END
-
 " Set grepprg as RipGrep or ag (the_silver_searcher), fallback to grep
 if executable('rg')
   let &grepprg="rg --vimgrep --no-heading --smart-case --hidden --follow -g '!{" . &wildignore . "}' $*"

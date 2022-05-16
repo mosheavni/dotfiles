@@ -1,8 +1,12 @@
 local status_ok, lualine = pcall(require, "lualine")
 if not status_ok then
-  return
+  return vim.notify('Module lualine not installed')
 end
 
+local gps_status_ok, gps = pcall(require, "nvim-gps")
+if not gps_status_ok then
+  return vim.notify('Module nvim-gps not installed')
+end
 -- lualine
 lualine.setup({
   options = {
@@ -25,7 +29,8 @@ lualine.setup({
       function()
         return require('lsp-status').status()
       end,
-      "require'user.select-schema'.get_current_schema()"
+      "require'user.select-schema'.get_current_schema()",
+      { gps.get_location, cond = gps.is_available },
     },
     lualine_d = { 'filename' },
     lualine_x = { 'encoding', 'fileformat', 'filetype' },

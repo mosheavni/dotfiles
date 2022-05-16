@@ -151,7 +151,7 @@ cmp.setup.cmdline(':', {
 -- nvim autopairs
 require('nvim-autopairs').setup({
   disable_in_macro = true,
-  disable_filetype = { "TelescopePrompt", "guihua", "guihua_rust", "clap_input" },
+  disable_filetype = { "TelescopePrompt", "clap_input" },
 })
 
 if vim.o.ft == 'clap_input' and vim.o.ft == 'guihua' and vim.o.ft == 'guihua_rust' then

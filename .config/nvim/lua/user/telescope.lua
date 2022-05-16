@@ -3,10 +3,34 @@ if not status_ok then
   return
 end
 
+local actions = require("telescope.actions")
+
+
 telescope.setup {
+  -- defaults = { sorting_strategy = "ascending" },
+  defaults = {
+    mappings = {
+      i = {
+        ["<esc>"] = actions.close
+      },
+    },
+  },
   pickers = {
     find_files = {
-      find_command = { "rg", "--files", "--hidden", "-g", "!.git/", "--color=never" }
+      find_command = {
+        "rg",
+        "--color=never",
+        "--no-heading",
+        "--with-filename",
+        "--line-number",
+        "--files",
+        "--trim",
+        "--column",
+        "--hidden",
+        "--smart-case",
+        "-g",
+        "!.git/",
+      }
     },
   }
 }

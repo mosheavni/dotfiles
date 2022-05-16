@@ -18,6 +18,10 @@ return require('packer').startup(function(use)
   use { 'rhysd/conflict-marker.vim' }
   use { 'tveskag/nvim-blame-line' }
 
+  -- Documents
+  use 'nanotee/luv-vimdocs'
+  use 'milisims/nvim-luaref'
+
   -- Fuzzy Search
   -- use {
   --   'junegunn/fzf',
@@ -39,6 +43,10 @@ return require('packer').startup(function(use)
     run = ":TSUpdate",
   }
   use {
+    "SmiteshP/nvim-gps",
+    requires = "nvim-treesitter/nvim-treesitter"
+  }
+  use {
     "cuducos/yaml.nvim",
     ft = { "yaml" }, -- optional
     requires = {
@@ -54,6 +62,17 @@ return require('packer').startup(function(use)
     "ray-x/lsp_signature.nvim",
     "jose-elias-alvarez/null-ls.nvim",
     "b0o/SchemaStore.nvim",
+    'onsails/lspkind-nvim', -- show pictograms in the auto complete popup
+    'folke/lsp-colors.nvim',
+    'nvim-lua/lsp-status.nvim',
+    'j-hui/fidget.nvim',
+    'nanotee/nvim-lsp-basics',
+    {
+      'kosayoda/nvim-lightbulb',
+      setup = function()
+        vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
+      end
+    },
   }
   use({
     'hrsh7th/nvim-cmp', -- auto completion
@@ -71,7 +90,6 @@ return require('packer').startup(function(use)
       'hrsh7th/cmp-nvim-lsp-document-symbol',
     },
   })
-  use('onsails/lspkind-nvim') -- show pictograms in the auto complete popup
   use({
     "iamcco/markdown-preview.nvim",
     run = "cd app && yarn install",
@@ -85,7 +103,6 @@ return require('packer').startup(function(use)
   use { 'rayburgemeestre/phpfolding.vim', ft = { 'php' } }
   use { 'andrewstuart/vim-kubernetes', ft = { 'yaml' } }
   use { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } }
-  -- use { 'mosheavni/yaml-revealer', ft = { 'yaml' } }
   use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
   use { 'hashivim/vim-terraform', ft = { 'terraform' } }
@@ -98,9 +115,17 @@ return require('packer').startup(function(use)
   use 'voldikss/vim-floaterm'
   use { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } }
   use 'simeji/winresizer'
+  use {
+    "dstein64/vim-startuptime",
+    cmd = "StartupTime",
+  }
+  use { 'pechorin/any-jump.vim', cmd = { "AnyJump", "AnyJumpVisual" } }
+  -- Find and replace
+  use "windwp/nvim-spectre"
 
   -- Look & Feel
   use { 'stevearc/dressing.nvim' } -- overrides the default vim input to provide better visuals
+  use 'rcarriga/nvim-notify'
 
   use {
     'nvim-lualine/lualine.nvim',
@@ -108,7 +133,6 @@ return require('packer').startup(function(use)
       { 'kyazdani42/nvim-web-devicons', opt = true }
     }
   }
-  use 'nvim-lua/lsp-status.nvim'
   use 'kyazdani42/nvim-web-devicons'
   use 'romgrk/barbar.nvim'
   use 'karb94/neoscroll.nvim'
@@ -123,7 +147,10 @@ return require('packer').startup(function(use)
   -- use 'ghifarit53/tokyonight-vim'
   -- use { 'dracula/vim', as = 'dracula' }
   -- use 'jacoborus/tender.vim'
+  -- use 'ellisonleao/gruvbox.nvim'
   use 'ellisonleao/gruvbox.nvim'
+  -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
+
 
   -- Text Manipulation
   use 'tpope/vim-repeat'
@@ -136,13 +163,6 @@ return require('packer').startup(function(use)
   use 'tommcdo/vim-lister' -- Qfilter and Qgrep on Quickfix
   use { 'alvan/vim-closetag', ft = { "html", "javascript" } }
   use 'editorconfig/editorconfig-vim'
-
-  -- Custom Text Objects
-  use 'kana/vim-textobj-user'
-  use 'mattn/vim-textobj-url'
-  use 'bps/vim-textobj-python'
-  use 'rhysd/vim-textobj-anyblock'
-  use 'kana/vim-textobj-entire'
 
   -- Devicons is last so it can support all of the other plugins
   use 'ryanoasis/vim-devicons'

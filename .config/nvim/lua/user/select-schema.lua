@@ -3,20 +3,25 @@ local finders = require "telescope.finders"
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local conf = require("telescope.config").values
+local util = require 'lspconfig'.util
 
 local M = {}
 
-M.uri = vim.uri_from_bufnr(0)
+M.current_yaml_schema = "No YAML schema"
 
-M.get_client = function()
+M._get_client = function()
+  M.bufnr = vim.api.nvim_get_current_buf()
+  M.uri = vim.uri_from_bufnr(M.bufnr)
+  if vim.bo.filetype ~= "yaml" then return end
   if not M.client then
-    M.client = require 'lspconfig'.util.get_active_client_by_name(0, 'yamlls')
+    M.client = util.get_active_client_by_name(M.bufnr, 'yamlls')
   end
   return M.client
 end
 
-M.load_all_schemas = function()
-  local client = M.get_client()
+M._load_all_schemas = function()
+  local client = M._get_client()
+  if not client then return end
   local params = { uri = M.uri }
   client.request('yaml/get/all/jsonSchemas', params, function(err, result, _, _)
     if err then
@@ -26,42 +31,22 @@ M.load_all_schemas = function()
       if vim.tbl_count(result) == 0 then
         return vim.notify('Schemas not loaded yet.')
       end
-      M.open_telescope(result)
+      M._open_telescope(result)
     end
   end)
-
 end
 
-M.telescope_action = function(prompt_bufnr, _)
+M._telescope_action = function(prompt_bufnr, _)
   actions.select_default:replace(function()
     actions.close(prompt_bufnr)
     local selection = action_state.get_selected_entry()
-    M.change_settings(selection.value)
+    M._change_settings(selection.value)
   end)
   return true
 end
 
-M.get_current_schema = function()
-  local client = M.get_client()
-  if not M.client or not M.uri then return '' end
-  client.request('yaml/get/jsonSchema', { M.uri }, function(err, e)
-    local current_schema
-    if err then
-      return
-    end
-    local schemas_applied = vim.tbl_count(e)
-    if e[0] ~= nil then
-      current_schema = e[0].uri
-    elseif e[1] ~= nil then
-      current_schema = e[1].uri
-    end
-    vim.g["current_schema"] = current_schema
-  end)
-  return vim.g["current_schema"]
-end
-
-M.change_settings = function(schema)
-  local client = M.get_client()
+M._change_settings = function(schema)
+  local client = M._get_client()
   local previous_settings = client.config.settings
   for key, value in pairs(previous_settings.yaml.schemas) do
     if vim.tbl_islist(value) then
@@ -86,7 +71,7 @@ M.change_settings = function(schema)
   vim.notify('Successfully applied schema ' .. schema)
 end
 
-M.open_telescope = function(schemas)
+M._open_telescope = function(schemas)
   local opts = {}
   return pickers.new(opts, {
     prompt_title = "Yaml Schemas",
@@ -107,16 +92,50 @@ M.open_telescope = function(schemas)
     },
 
     sorter = conf.generic_sorter(opts),
-    attach_mappings = M.telescope_action,
+    attach_mappings = M._telescope_action,
   }):find()
 end
 
+M._schema_name_mappings = {
+  ["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.4-standalone-strict/all.json"] = "k8s-1.22.4"
+}
+
 M.select = function()
-  M.get_client()
+  M._get_client()
   if not M.client then return end
-  M.load_all_schemas()
+  M._load_all_schemas()
 end
 
-M.get_client()
+M.get_current_schema = function()
+  local client = M._get_client()
+  if not M.client or not M.uri then
+    return ''
+  end
+  client.request('yaml/get/jsonSchema', { M.uri }, function(err, e)
+    local current_schema
+    if err then
+      return
+    end
+    if e[0] ~= nil then
+      current_schema = e[0].uri
+    elseif e[1] ~= nil then
+      current_schema = e[1].uri
+    end
+    if current_schema ~= nil then
+      if M._schema_name_mappings[current_schema] then
+        current_schema = M._schema_name_mappings[current_schema]
+      else
+        current_schema = current_schema:gsub('https://raw.githubusercontent.com/', '')
+        current_schema = current_schema:gsub('https://json.schemastore.org/', '')
+      end
+    end
+    if current_schema then
+      M.current_yaml_schema = "YAML schema: " .. current_schema
+    end
+  end)
+  return M.current_yaml_schema
+end
+
+M._get_client()
 
 return M

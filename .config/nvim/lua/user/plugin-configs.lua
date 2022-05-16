@@ -79,6 +79,23 @@ vim.g['switch_custom_definitions'] = {
   --   },
   -- }
 }
+-- fidget
+vim.notify = require("notify")
+require("fidget").setup {
+  text = {
+    spinner = "moon",
+  },
+  align = {
+    bottom = true,
+  },
+  window = {
+    relative = "editor",
+  },
+}
+-- disable netrw
+vim.g['loaded_netrwPlugin'] = 1
+-- nvim gps
+require("nvim-gps").setup()
 
 vim.cmd [[
 " Color settings {{{

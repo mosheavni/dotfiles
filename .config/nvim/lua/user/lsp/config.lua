@@ -10,6 +10,8 @@ require('vim.lsp.log').set_format_func(vim.inspect)
 
 local default_on_attach = function(client, bufnr)
   lsp_status.on_attach(client)
+  local basics = require('lsp_basics')
+  basics.make_lsp_commands(client, bufnr)
 
   if client.resolved_capabilities.code_lens then
     autocmd({ 'BufEnter', 'InsertLeave', 'InsertEnter' }, {
@@ -207,14 +209,40 @@ ensure_server('yamlls'):setup({
     }
   }
 })
+-- null-ls
+local null_ls = require('null-ls')
+local sh_extra_fts = { "bash", "zsh" }
+null_ls.setup({
+  on_attach = default_on_attach,
+  debug = true,
+  sources = {
+    -- null_ls.builtins.code_actions.eslint_d,
+    null_ls.builtins.code_actions.refactoring,
+    -- null_ls.builtins.diagnostics.eslint_d,
+    -- null_ls.builtins.diagnostics.markdownlint,
+    -- null_ls.builtins.diagnostics.write_good,
+    -- null_ls.builtins.formatting.eslint_d,
+    -- null_ls.builtins.formatting.fixjson,
+    -- null_ls.builtins.formatting.markdownlint,
+    null_ls.builtins.code_actions.shellcheck.with({
+      extra_filetypes = sh_extra_fts,
+    }),
+    null_ls.builtins.diagnostics.ansiblelint,
+    null_ls.builtins.diagnostics.hadolint,
+    null_ls.builtins.diagnostics.pylint,
+    null_ls.builtins.diagnostics.shellcheck.with({
+      extra_filetypes = sh_extra_fts,
+    }),
+    null_ls.builtins.diagnostics.yamllint,
+    null_ls.builtins.formatting.black,
+    null_ls.builtins.formatting.prettier,
+    null_ls.builtins.formatting.shfmt.with({
+      extra_filetypes = sh_extra_fts,
+    }),
+  },
+})
 
 -- general LSP config
-vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  underline = true,
-  update_in_insert = true,
-  virtual_text = false,
-  signs = true,
-})
 
 -- show icons in the sidebar
 local signs = { Error = ' ', Warn = ' ', Hint = ' ', Information = ' ' }
@@ -228,32 +256,4 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
--- null-ls
--- local null_ls = require('null-ls')
--- null_ls.setup({
---   debug = true,
---   sources = {
---     -- null_ls.builtins.code_actions.eslint_d,
---     null_ls.builtins.code_actions.refactoring,
---     -- null_ls.builtins.diagnostics.eslint_d,
---     -- null_ls.builtins.diagnostics.markdownlint,
---     -- null_ls.builtins.diagnostics.write_good,
---     -- null_ls.builtins.formatting.eslint_d,
---     -- null_ls.builtins.formatting.fixjson,
---     -- null_ls.builtins.formatting.markdownlint,
---     null_ls.builtins.code_actions.shellcheck,
---     null_ls.builtins.diagnostics.ansiblelint,
---     null_ls.builtins.diagnostics.hadolint,
---     null_ls.builtins.diagnostics.pylint,
---     null_ls.builtins.diagnostics.shellcheck,
---     null_ls.builtins.diagnostics.yamllint,
---     null_ls.builtins.formatting.black,
---     null_ls.builtins.formatting.prettier,
---     null_ls.builtins.formatting.shfmt,
---     -- null_ls.builtins.diagnostics.codespell.with({
---     --   filetypes = { 'txt', 'md' },
---     -- }),
---   },
---   on_attach = default_on_attach,
--- })
 require('lsp_signature').setup({})
