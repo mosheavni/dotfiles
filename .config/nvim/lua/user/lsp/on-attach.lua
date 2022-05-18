@@ -14,6 +14,7 @@ local disable_ls_signature = {
   'terraformls',
 }
 
+local on_attach_aug = augroup 'OnAttachAu'
 local default_on_attach = function(client, bufnr)
   -- Add mappings
   require 'user.lsp.maps'
@@ -26,8 +27,6 @@ local default_on_attach = function(client, bufnr)
     require('lsp_signature').on_attach()
   end
 
-  local on_attach_aug = augroup 'OnAttachAu'
-  vim.api.nvim_clear_autocmds { group = on_attach_aug, buffer = bufnr }
   if client.resolved_capabilities.code_lens then
     autocmd({ 'BufEnter', 'InsertLeave', 'InsertEnter' }, {
       group = on_attach_aug,

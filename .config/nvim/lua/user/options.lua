@@ -1,59 +1,59 @@
 vim.opt.compatible = false
 
 -- disable legacy vim filetype detection in favor of new lua based from neovim
-vim.g.do_filetype_lua    = 1
+vim.g.do_filetype_lua = 1
 vim.g.did_load_filetypes = 0
 
 vim.opt.cursorcolumn = true
-vim.opt.cursorline   = true -- Add highlight behind current line
+vim.opt.cursorline = true -- Add highlight behind current line
 vim.opt.shortmess:append { c = true, l = false, q = false, S = false }
 vim.opt.list = true
-vim.opt.listchars = { tab = '┆·', trail = '·', precedes = '', extends = '', eol = '↲', }
+vim.opt.listchars = { tab = '┆·', trail = '·', precedes = '', extends = '', eol = '↲' }
 -- set lcscope=tab:┆·,trail:·,precedes:,extends:
 vim.opt.fillchars = { vert = '|', fold = '·' }
 vim.opt.emoji = false
 
-vim.opt.number         = true -- Show current line number
+vim.opt.number = true -- Show current line number
 vim.opt.relativenumber = true -- Show relative line numbers
-vim.opt.linebreak      = true -- Avoid wrapping a line in the middle of a word.
-vim.opt.wrap           = true -- Wrap long lines
-vim.opt.hlsearch       = true -- highlight reg. ex. in @/ register
-vim.opt.incsearch      = true -- Search as characters are typed
-vim.opt.inccommand     = "split" -- Incremental search and replace with small split window
-vim.opt.ignorecase     = true -- Search case insensitive...
-vim.opt.smartcase      = true -- ignore case if search pattern is all lowercase, case-sensitive otherwise
-vim.opt.autoread       = true -- Re-read file if it was changed from the outside
-vim.opt.scrolloff      = 7 -- When about to scroll page, see 7 lines below cursor
-vim.opt.cmdheight      = 2 -- Height of the command bar
-vim.opt.hidden         = true -- Hide buffer if abandoned
-vim.opt.showmatch      = true -- When closing a bracket (like {}), show the enclosing
-vim.opt.splitbelow     = true -- Horizontaly plitted windows open below
-vim.opt.splitright     = true -- Vertically plitted windows open below bracket for a brief second
-vim.opt.startofline    = false -- Stop certain movements from always going to the first character of a line.
-vim.opt.confirm        = true -- Prompt confirmation if exiting unsaved file
-vim.opt.lazyredraw     = true -- redraw only when we need to.
-vim.opt.swapfile       = false
-vim.opt.backup         = false
-vim.opt.writebackup    = false
-vim.opt.wildmenu       = true -- Displays a menu on autocomplete
-vim.opt.wildmode       = { 'longest:full', 'full' } -- Command-line completion mode
-vim.opt.completeopt    = { "menu", "menuone", "noselect" }
-vim.opt.previewheight  = 15
-vim.opt.title          = true -- Changes the iterm title
-vim.opt.showcmd        = true
-vim.opt.guifont        = ':h'
-vim.opt.mouse          = 'a'
-vim.opt.undofile       = true -- Enables saving undo history to a file
-vim.opt.colorcolumn    = '80' -- Mark where are 80 characters to start breaking line
-vim.opt.textwidth      = 80
-vim.opt.fileencodings  = { "utf-8", "cp1251" }
-vim.opt.encoding       = 'utf-8'
-vim.opt.visualbell     = true -- Use visual bell instead of beeping
-vim.opt.conceallevel   = 1
-vim.opt.showmode       = false -- Redundant as lighline takes care of that
-vim.opt.history        = 1000
-vim.opt.termguicolors  = true
-vim.opt.signcolumn     = "auto"
+vim.opt.linebreak = true -- Avoid wrapping a line in the middle of a word.
+vim.opt.wrap = true -- Wrap long lines
+vim.opt.hlsearch = true -- highlight reg. ex. in @/ register
+vim.opt.incsearch = true -- Search as characters are typed
+vim.opt.inccommand = 'split' -- Incremental search and replace with small split window
+vim.opt.ignorecase = true -- Search case insensitive...
+vim.opt.smartcase = true -- ignore case if search pattern is all lowercase, case-sensitive otherwise
+vim.opt.autoread = true -- Re-read file if it was changed from the outside
+vim.opt.scrolloff = 7 -- When about to scroll page, see 7 lines below cursor
+vim.opt.cmdheight = 2 -- Height of the command bar
+vim.opt.hidden = true -- Hide buffer if abandoned
+vim.opt.showmatch = true -- When closing a bracket (like {}), show the enclosing
+vim.opt.splitbelow = true -- Horizontaly plitted windows open below
+vim.opt.splitright = true -- Vertically plitted windows open below bracket for a brief second
+vim.opt.startofline = false -- Stop certain movements from always going to the first character of a line.
+vim.opt.confirm = true -- Prompt confirmation if exiting unsaved file
+vim.opt.lazyredraw = true -- redraw only when we need to.
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.wildmenu = true -- Displays a menu on autocomplete
+vim.opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
+vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
+vim.opt.previewheight = 15
+vim.opt.title = true -- Changes the iterm title
+vim.opt.showcmd = true
+vim.opt.guifont = ':h'
+vim.opt.mouse = 'a'
+vim.opt.undofile = true -- Enables saving undo history to a file
+vim.opt.colorcolumn = '80' -- Mark where are 80 characters to start breaking line
+vim.opt.textwidth = 80
+vim.opt.fileencodings = { 'utf-8', 'cp1251' }
+vim.opt.encoding = 'utf-8'
+vim.opt.visualbell = true -- Use visual bell instead of beeping
+vim.opt.conceallevel = 1
+vim.opt.showmode = false -- Redundant as lighline takes care of that
+vim.opt.history = 1000
+vim.opt.termguicolors = true
+vim.opt.signcolumn = 'auto'
 
 -- Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
 vim.opt.updatetime = 300
@@ -64,7 +64,7 @@ vim.opt.path:append { '**' }
 
 -- Folding
 vim.opt.foldenable = true
-vim.opt.foldmethod = "syntax"
+vim.opt.foldmethod = 'syntax'
 vim.opt.foldlevel = 999
 vim.opt.foldlevelstart = 10
 
@@ -87,21 +87,20 @@ vim.opt.smarttab = true -- insert tabs on the start of a line according to shift
 vim.opt.expandtab = true -- Tab changes to spaces. Format with :retab
 
 -- Set shell
-if vim.fn.executable('/bin/zsh') == 1 then
+if vim.fn.executable '/bin/zsh' == 1 then
   vim.opt.shell = '/bin/zsh -l'
-elseif vim.fn.executable('/bin/bash') == 1 then
+elseif vim.fn.executable '/bin/bash' == 1 then
   vim.opt.shell = '/bin/bash'
 else
   vim.opt.shell = '/bin/sh'
 end
 
 -- Set python path
-if vim.fn.executable('/usr/local/bin/python3') == 1 then
+if vim.fn.executable '/usr/local/bin/python3' == 1 then
   vim.g.python3_host_prog = '/usr/local/bin/python3'
-elseif vim.fn.executable('/usr/bin/python3') == 1 then
+elseif vim.fn.executable '/usr/bin/python3' == 1 then
   vim.g.python3_host_prog = '/usr/bin/python3'
 end
-
 
 vim.cmd [[
 hi ColorColumn ctermbg=238 guibg=lightgrey
@@ -133,7 +132,6 @@ inoreabbrev htis this
 inoreabbrev foreahc foreach
 inoreabbrev forech foreach
 ]]
-
 
 vim.cmd [[
 let g:sh_fold_enabled = 4
@@ -186,7 +184,7 @@ nnoremap <silent> <F5> :call ExecuteFile()<CR>
 vim.cmd [[
 " Set grepprg as RipGrep or ag (the_silver_searcher), fallback to grep
 if executable('rg')
-  let &grepprg="rg --vimgrep --no-heading --smart-case --hidden --follow -g '!{" . &wildignore . "}' $*"
+  let &grepprg="rg --vimgrep --no-heading --smart-case --hidden --follow -g '!{" . &wildignore . "}' -uu $*"
   let g:grep_literal_flag="-F"
   set grepformat=%f:%l:%c:%m,%f:%l:%m
 elseif executable('ag')
@@ -240,7 +238,6 @@ command! -bang -range -nargs=? RipGrepCWORDVisual call RipGrepCWORD("<bang>", v:
 nmap <c-f> :RipGrepCWORD!<Space>
 vmap <c-f> :RipGrepCWORDVisual!<cr>
 ]]
-
 
 -- Terminal configurations
 vim.cmd [[

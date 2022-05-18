@@ -17,7 +17,7 @@ return require('packer').startup(function(use)
   -- Git Related
   use {
     'lewis6991/gitsigns.nvim',
-    tag = 'release' -- To use the latest release
+    tag = 'release', -- To use the latest release
   }
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
   use 'tpope/vim-fugitive'
@@ -39,36 +39,36 @@ return require('packer').startup(function(use)
     'nvim-telescope/telescope.nvim',
     requires = {
       { 'nvim-lua/plenary.nvim' },
-      { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-    }
+      { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
+    },
   }
 
   -- LSP, Completion and Language
   -- Tree Sitter
   use {
-    "nvim-treesitter/nvim-treesitter",
-    run = ":TSUpdate",
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate',
   }
   use {
-    "SmiteshP/nvim-gps",
-    requires = "nvim-treesitter/nvim-treesitter"
+    'SmiteshP/nvim-gps',
+    requires = 'nvim-treesitter/nvim-treesitter',
   }
   use {
-    "cuducos/yaml.nvim",
-    ft = { "yaml" }, -- optional
+    'cuducos/yaml.nvim',
+    ft = { 'yaml' }, -- optional
     requires = {
-      "nvim-treesitter/nvim-treesitter",
+      'nvim-treesitter/nvim-treesitter',
     },
   }
   use 'lewis6991/nvim-treesitter-context'
   use 'nvim-treesitter/nvim-treesitter-refactor'
   -- LSP
   use {
-    "neovim/nvim-lspconfig",
-    "williamboman/nvim-lsp-installer",
-    "ray-x/lsp_signature.nvim", -- Show function signature when you type
-    "jose-elias-alvarez/null-ls.nvim",
-    "b0o/SchemaStore.nvim",
+    'neovim/nvim-lspconfig',
+    'williamboman/nvim-lsp-installer',
+    'ray-x/lsp_signature.nvim', -- Show function signature when you type
+    'jose-elias-alvarez/null-ls.nvim',
+    'b0o/SchemaStore.nvim',
     'folke/lsp-colors.nvim',
     'nvim-lua/lsp-status.nvim',
     'j-hui/fidget.nvim',
@@ -81,7 +81,7 @@ return require('packer').startup(function(use)
   --     require("telescope").load_extension("yaml_schema")
   --   end,
   -- }
-  use({
+  use {
     'hrsh7th/nvim-cmp', -- auto completion
     requires = {
       'hrsh7th/cmp-nvim-lsp',
@@ -96,14 +96,16 @@ return require('packer').startup(function(use)
       'windwp/nvim-autopairs',
       'hrsh7th/cmp-nvim-lsp-document-symbol',
     },
-  })
-  use({
-    "iamcco/markdown-preview.nvim",
-    run = "cd app && yarn install",
-    setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
+  }
+  use {
+    'iamcco/markdown-preview.nvim',
+    run = 'cd app && yarn install',
+    setup = function()
+      vim.g.mkdp_filetypes = { 'markdown' }
+    end,
     cmd = 'MarkdownPreview',
-    ft = { "markdown" },
-  })
+    ft = { 'markdown' },
+  }
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'Jenkinsfile', 'groovy' } }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
@@ -124,21 +126,21 @@ return require('packer').startup(function(use)
   use { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } }
   use 'simeji/winresizer'
   use {
-    "dstein64/vim-startuptime",
-    cmd = "StartupTime",
+    'dstein64/vim-startuptime',
+    cmd = 'StartupTime',
   }
-  use { 'pechorin/any-jump.vim', cmd = { "AnyJump", "AnyJumpVisual" } }
+  use { 'pechorin/any-jump.vim', cmd = { 'AnyJump', 'AnyJumpVisual' } }
   -- Find and replace
-  use "windwp/nvim-spectre"
+  use 'windwp/nvim-spectre'
   use {
-    "folke/which-key.nvim",
+    'folke/which-key.nvim',
     config = function()
-      require("which-key").setup {
+      require('which-key').setup {
         -- your configuration comes here
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
       }
-    end
+    end,
   }
 
   -- Look & Feel
@@ -148,8 +150,8 @@ return require('packer').startup(function(use)
   use {
     'nvim-lualine/lualine.nvim',
     requires = {
-      { 'kyazdani42/nvim-web-devicons', opt = true }
-    }
+      { 'kyazdani42/nvim-web-devicons', opt = true },
+    },
   }
   use 'kyazdani42/nvim-web-devicons'
   use 'adelarsq/vim-devicons-emoji'
@@ -170,20 +172,23 @@ return require('packer').startup(function(use)
   use 'ellisonleao/gruvbox.nvim'
   -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
 
-
   -- Text Manipulation
   use 'tpope/vim-repeat'
   use 'tpope/vim-surround'
-  use 'tpope/vim-commentary'
+  use {
+    'numToStr/Comment.nvim',
+    config = function()
+      require('Comment').setup()
+    end,
+  }
   use 'JoosepAlviste/nvim-ts-context-commentstring'
   use 'junegunn/vim-easy-align'
   use 'AndrewRadev/switch.vim'
   use 'justinmk/vim-sneak'
   use 'tommcdo/vim-lister' -- Qfilter and Qgrep on Quickfix
-  use { 'alvan/vim-closetag', ft = { "html", "javascript" } }
+  use { 'alvan/vim-closetag', ft = { 'html', 'javascript' } }
   use 'editorconfig/editorconfig-vim'
 
   -- Devicons is last so it can support all of the other plugins
   use 'ryanoasis/vim-devicons'
-
 end)

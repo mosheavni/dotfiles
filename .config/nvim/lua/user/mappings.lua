@@ -44,43 +44,42 @@ keymap('n', 'Q', '@q', opts.no_remap)
 keymap('i', '<c-v>', '<c-r>', opts.no_remap)
 
 -- Quickfix
-keymap("n", "]q", ":cnext<cr>zz", opts.no_remap)
-keymap("n", "[q", ":cprev<cr>zz", opts.no_remap)
-keymap("n", "]l", ":lnext<cr>zz", opts.no_remap)
-keymap("n", "[l", ":lprev<cr>zz", opts.no_remap)
+keymap('n', ']q', ':cnext<cr>zz', opts.no_remap)
+keymap('n', '[q', ':cprev<cr>zz', opts.no_remap)
+keymap('n', ']l', ':lnext<cr>zz', opts.no_remap)
+keymap('n', '[l', ':lprev<cr>zz', opts.no_remap)
 
 -- This creates a new line of '=' signs the same length of the line
-keymap('n', '<leader>=', "yypVr=", opts.no_remap)
+keymap('n', '<leader>=', 'yypVr=', opts.no_remap)
 
 -- Map dp and dg with leader for diffput and diffget
-keymap("n", "<leader>dp", ":diffput<cr>", opts.no_remap)
-keymap("n", "<leader>dg", ":diffget<cr>", opts.no_remap)
-keymap("n", "<leader>dn", ":windo diffthis<cr>", opts.no_remap)
-keymap("n", "<leader>df", ":windo diffoff<cr>", opts.no_remap)
+keymap('n', '<leader>dp', ':diffput<cr>', opts.no_remap)
+keymap('n', '<leader>dg', ':diffget<cr>', opts.no_remap)
+keymap('n', '<leader>dn', ':windo diffthis<cr>', opts.no_remap)
+keymap('n', '<leader>df', ':windo diffoff<cr>', opts.no_remap)
 
 -- Map enter to no highlight
-keymap("n", "<CR>", ":nohlsearch<CR><CR>", opts.no_remap_silent)
+keymap('n', '<CR>', ':nohlsearch<CR><CR>', opts.no_remap_silent)
 
 -- Set mouse=v mapping
-keymap("n", "<leader>ma", ":set mouse=a<cr>", opts.no_remap)
-keymap("n", "<leader>mv", ":set mouse=v<cr>", opts.no_remap)
-
+keymap('n', '<leader>ma', ':set mouse=a<cr>', opts.no_remap)
+keymap('n', '<leader>mv', ':set mouse=v<cr>', opts.no_remap)
 
 -- Exit mappings
-keymap("i", "jk", '<esc>', opts.no_remap)
-keymap("n", "<leader>qq", ':qall<cr>', opts.no_remap_silent)
+keymap('i', 'jk', '<esc>', opts.no_remap)
+keymap('n', '<leader>qq', ':qall<cr>', opts.no_remap_silent)
 
 -- Search mappings
-keymap("n", "*", ':execute "normal! *N"<cr>', opts.no_remap_silent)
-keymap("n", "#", ':execute "normal! #n"<cr>', opts.no_remap_silent)
-keymap("n", "n", "'Nn'[v:searchforward]", opts.no_remap_expr)
-keymap("x", "n", "'Nn'[v:searchforward]", opts.no_remap_expr)
-keymap("o", "n", "'Nn'[v:searchforward]", opts.no_remap_expr)
-keymap("n", "N", "'nN'[v:searchforward]", opts.no_remap_expr)
-keymap("x", "N", "'nN'[v:searchforward]", opts.no_remap_expr)
-keymap("o", "N", "'nN'[v:searchforward]", opts.no_remap_expr)
+keymap('n', '*', ':execute "normal! *N"<cr>', opts.no_remap_silent)
+keymap('n', '#', ':execute "normal! #n"<cr>', opts.no_remap_silent)
+keymap('n', 'n', "'Nn'[v:searchforward]", opts.no_remap_expr)
+keymap('x', 'n', "'Nn'[v:searchforward]", opts.no_remap_expr)
+keymap('o', 'n', "'Nn'[v:searchforward]", opts.no_remap_expr)
+keymap('n', 'N', "'nN'[v:searchforward]", opts.no_remap_expr)
+keymap('x', 'N', "'nN'[v:searchforward]", opts.no_remap_expr)
+keymap('o', 'N', "'nN'[v:searchforward]", opts.no_remap_expr)
 -- Search visually selected text with // or * or #
-keymap("v", "//", "y/\\V<C-R>=escape(@\",'/\\')<CR><CR>", opts.no_remap)
+keymap('v', '//', "y/\\V<C-R>=escape(@\",'/\\')<CR><CR>", opts.no_remap)
 vim.cmd [[
 function! StarSearch(cmdtype) abort
   let old_reg=getreg('"')
@@ -106,55 +105,53 @@ endfunction
 --   return star_search('*')
 -- end)
 
-keymap("v", "*", ":call StarSearch('/')<CR>/<C-R>=@/<CR><CR>", opts.no_remap)
-keymap("v", "#", ":call StarSearch('?')<CR>?<C-R>=@/<CR><CR>", opts.no_remap)
+keymap('v', '*', ":call StarSearch('/')<CR>/<C-R>=@/<CR><CR>", opts.no_remap)
+keymap('v', '#', ":call StarSearch('?')<CR>?<C-R>=@/<CR><CR>", opts.no_remap)
 
 -- Map - to move a line down and _ a line up
-keymap("n", "-", [["ldd$"lp]], opts.no_remap)
-keymap("n", "_", [["ldd2k"lp]], opts.no_remap)
+keymap('n', '-', [["ldd$"lp]], opts.no_remap)
+keymap('n', '_', [["ldd2k"lp]], opts.no_remap)
 
 -- Copy entire file to clipboard
-keymap("n", "Y", ':%y+<cr>', opts.no_remap)
-
+keymap('n', 'Y', ':%y+<cr>', opts.no_remap)
 
 -- Copy file path to clipboard
-keymap("n", "<leader>cfp", [[:let @+ = expand('%')<cr>:echo   "Copied file path " . expand('%')<cr>]], opts.no_remap_silent)
-keymap("n", "<leader>cfa", [[:let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>]], opts.no_remap_silent)
+keymap('n', '<leader>cfp', [[:let @+ = expand('%')<cr>:echo   "Copied file path " . expand('%')<cr>]], opts.no_remap_silent)
+keymap('n', '<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>]], opts.no_remap_silent)
 
 -- move vertically by visual line (don't skip wrapped lines)
-keymap("n", "j", "gj", opts.no_remap)
-keymap("n", "k", "gk", opts.no_remap)
+keymap('n', 'j', 'gj', opts.no_remap)
+keymap('n', 'k', 'gk', opts.no_remap)
 
 -- Change working directory based on open file
-keymap("n", "<leader>cd", ':cd %:p:h<CR>:pwd<CR>', opts.no_remap)
+keymap('n', '<leader>cd', ':cd %:p:h<CR>:pwd<CR>', opts.no_remap)
 
 -- Move visually selected block
-keymap("v", "J", [[:m '>+1<CR>gv=gv]], opts.no_remap)
-keymap("v", "K", [[:m '<-2<CR>gv=gv]], opts.no_remap)
+keymap('v', 'J', [[:m '>+1<CR>gv=gv]], opts.no_remap)
+keymap('v', 'K', [[:m '<-2<CR>gv=gv]], opts.no_remap)
 
 -- Convert all tabs to spaces
-keymap("n", "<leader>ct<space>", ':retab<cr>', opts.no_remap)
-
+keymap('n', '<leader>ct<space>', ':retab<cr>', opts.no_remap)
 
 -- Enable folding with the leader-f/a
-keymap("n", "<leader>ff", "za", opts.no_remap)
-keymap("n", "<leader>fc", "zM", opts.no_remap)
-keymap("n", "<leader>fo", "zR", opts.no_remap)
+keymap('n', '<leader>ff', 'za', opts.no_remap)
+keymap('n', '<leader>fc', 'zM', opts.no_remap)
+keymap('n', '<leader>fo', 'zR', opts.no_remap)
 -- Open level folds
-keymap("n", "<leader>fl", "zazczA", opts.no_remap)
+keymap('n', '<leader>fl', 'zazczA', opts.no_remap)
 
 -- Change \n to new lines
 keymap('n', '<leader><cr>', [[:silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>]], {})
 
 -- Move vertically by visual line (don't skip wrapped lines)
-keymap("n", "j", "gj", opts.no_remap)
-keymap("n", "k", "gk", opts.no_remap)
+keymap('n', 'j', 'gj', opts.no_remap)
+keymap('n', 'k', 'gk', opts.no_remap)
 
 -- Change working directory based on open file
 keymap('n', '<leader>cd', ':cd %:p:h<CR>:pwd<CR>', opts.no_remap)
 
 -- Convert all tabs to spaces
-keymap("n", '<leader>ct<space>', ':retab<cr>', opts.no_remap)
+keymap('n', '<leader>ct<space>', ':retab<cr>', opts.no_remap)
 -- Change every " -" with " \<cr> -" to break long lines of bash
 keymap('n', [[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], opts.no_remap_silent)
 
@@ -233,10 +230,10 @@ nnoremap <leader>ds :DiffSaved<cr>
 ]]
 
 -- Telescope
-keymap("n", '<c-p>', [[(expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Telescope find_files\<cr>"]], opts.no_remap_expr_silent)
-keymap("n", '<c-b>', '<cmd>Telescope buffers<cr>', opts.no_remap)
-keymap("n", '<F4>', '<cmd>Telescope git_branches<cr>', opts.no_remap)
-keymap("n", "<leader>h", '<cmd>Telescope help_tags<cr>', opts.no_remap)
+keymap('n', '<c-p>', [[(expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Telescope find_files\<cr>"]], opts.no_remap_expr_silent)
+keymap('n', '<c-b>', '<cmd>Telescope buffers<cr>', opts.no_remap)
+keymap('n', '<F4>', '<cmd>Telescope git_branches<cr>', opts.no_remap)
+keymap('n', '<leader>hh', '<cmd>Telescope help_tags<cr>', opts.no_remap)
 
 -- Vim easy align
 keymap('n', 'ga', '<Plug>(EasyAlign)', {})
@@ -249,11 +246,11 @@ keymap('n', '<leader>S', "<cmd>lua require('spectre').open_visual({select_word=t
 keymap('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opts.no_remap)
 
 -- AnyJump
-keymap('n', '<leader>j', "<cmd>AnyJump<CR>", opts.no_remap)
+keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
 
 -- BarBar Nvim
-keymap("n", '<leader>bd', '<cmd>BufferClose<CR>', opts.no_remap_silent)
-keymap("n", '<leader>bo', '<cmd>BufferCloseAllButCurrent<cr>:only<cr>', opts.no_remap_silent)
+keymap('n', '<leader>bd', '<cmd>BufferClose<CR>', opts.no_remap_silent)
+keymap('n', '<leader>bo', '<cmd>BufferCloseAllButCurrent<cr>:only<cr>', opts.no_remap_silent)
 
 -- Visual calculator
 function VisualCalculator()

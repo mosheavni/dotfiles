@@ -2,12 +2,20 @@ local pickers = require 'telescope.pickers'
 local finders = require 'telescope.finders'
 local actions = require 'telescope.actions'
 local action_state = require 'telescope.actions.state'
-local conf = require('telescope.config').values
+local sorters = require 'telescope.sorters'
 local util = require('lspconfig').util
 
 local M = {}
 
 M.current_yaml_schema = 'No YAML schema'
+M.kubernetes_version = '1.19.16'
+M.kubernetes_schema = string.format(
+  'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v%s-standalone-strict/all.json',
+  M.kubernetes_version
+)
+M._schema_name_mappings = {
+  [M.kubernetes_schema] = 'k8s-' .. M.kubernetes_version,
+}
 
 M._get_client = function()
   M.bufnr = vim.api.nvim_get_current_buf()
@@ -35,18 +43,17 @@ M._load_all_schemas = function()
       if vim.tbl_count(result) == 0 then
         return vim.notify 'Schemas not loaded yet.'
       end
-      M._open_telescope(result)
+
+      -- If default schema is already in result, remove it
+      for k, v in pairs(result) do
+        if v.uri == M.kubernetes_schema then
+          table.remove(result, k)
+        end
+      end
+      -- Append the default kubernetes schema (if not in result)
+      M._open_telescope { { uri = M.kubernetes_schema }, unpack(result) }
     end
   end)
-end
-
-M._telescope_action = function(prompt_bufnr, _)
-  actions.select_default:replace(function()
-    actions.close(prompt_bufnr)
-    local selection = action_state.get_selected_entry()
-    M._change_settings(selection.value)
-  end)
-  return true
 end
 
 M._change_settings = function(schema)
@@ -76,7 +83,6 @@ M._change_settings = function(schema)
 end
 
 M._open_telescope = function(schemas)
-  local opts = {}
   return pickers.new(opts, {
     prompt_title = 'Yaml Schemas',
     finder = finders.new_table {
@@ -95,14 +101,19 @@ M._open_telescope = function(schemas)
       end,
     },
 
-    sorter = conf.generic_sorter(opts),
+    sorter = sorters.get_fzy_sorter(),
     attach_mappings = M._telescope_action,
   }):find()
 end
 
-M._schema_name_mappings = {
-  ['https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.4-standalone-strict/all.json'] = 'k8s-1.22.4',
-}
+M._telescope_action = function(prompt_bufnr, _)
+  actions.select_default:replace(function()
+    actions.close(prompt_bufnr)
+    local selection = action_state.get_selected_entry()
+    M._change_settings(selection.value)
+  end)
+  return true
+end
 
 M.select = function()
   M._get_client()
@@ -142,6 +153,18 @@ M.get_current_schema = function()
   return M.current_yaml_schema
 end
 
-M._get_client()
+M._auto_detect_k8s = function()
+  local is_k8s = vim.api.nvim_get_var 'is_kubernetes'
+  if is_k8s then
+    M._change_settings(M.kubernetes_schema)
+  end
+  return true
+  -- P(vim.g.is_kubernetes)
+  -- if vim.g.is_kubernetes then
+  --   M._change_settings(M.kubernetes_schema)
+  -- end
+end
 
+M._get_client()
+-- M._auto_detect_k8s()
 return M

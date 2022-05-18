@@ -2,6 +2,8 @@
 vim.g["winresizer_start_key"]                         = '<C-E>'
 -- Vim json path
 vim.g["jsonpath_register"]                            = '*'
+-- Comment.nvim
+require('Comment').setup()
 -- Floaterm
 vim.g["floaterm_keymap_toggle"]                       = '<F6>'
 vim.g["floaterm_keymap_new"]                          = '<F7>'
@@ -96,7 +98,7 @@ require("fidget").setup {
 vim.g['loaded_netrwPlugin'] = 1
 -- nvim gps
 require("nvim-gps").setup()
--- bulb
+-- bulb (code actions)
 require 'nvim-lightbulb'.setup {
   sign = {
     enabled = false,
@@ -195,7 +197,7 @@ command! -nargs=? Gco call s:changebranch("<args>")
 " Push
 function! s:MosheGitPush() abort
   echo 'Pushing to ' . FugitiveHead() . '...'
-  exe 'Git push -u origin ' . FugitiveHead()
+  exe 'Git! push -u origin ' . FugitiveHead()
   let l:exit_status = get(FugitiveResult(), 'exit_status', 1)
   if l:exit_status != 0
     echo 'Failed pushing 😒'
@@ -239,7 +241,7 @@ function! Enter_Wip_Moshe() abort
   let l:commit_message = l:random_emoji . ' wip ' . l:time_now
   echom "Committing: " . l:commit_message
   exe "G commit --quiet -m '" . l:commit_message . "'"
-  exe 'Git push -u origin ' . FugitiveHead()
+  exe 'Git! push -u origin ' . FugitiveHead()
 endfunction
 
 " Autocmd
@@ -282,6 +284,7 @@ function! ToggleGStatus()
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
 nnoremap <silent> <leader>gg :ToggleGStatus<cr>
+nmap <silent><expr> <leader>gf bufname('.git/index') ? ':exe bufwinnr(bufnr(bufname(".git/index"))) . "wincmd w"<cr>' : ':Git<cr>'
 
 nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<cr>
 

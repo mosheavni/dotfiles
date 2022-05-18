@@ -12,29 +12,44 @@ vim.lsp.handlers['textDocument/definition'] = function(_, result)
   end
 end
 
-vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.handlers['textDocument/publishDiagnostics'], {
+vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  update_in_insert = true,
+  virtual_text = false,
   signs = {
     severity_limit = 'Error',
   },
   underline = {
     severity_limit = 'Warning',
   },
-  virtual_text = true,
 })
 
-vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  underline = true,
-  update_in_insert = true,
-  virtual_text = false,
-  signs = true,
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+  -- border = 'rounded'
+  border = {
+    '╔',
+    '═',
+    '╗',
+    '║',
+    '╝',
+    '═',
+    '╚',
+    '║',
+  },
 })
 
-local severity = {
-  'error',
-  'warn',
-  'info',
-  'info', -- map both hint and info to info?
-}
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+  -- border = 'rounded'
+  border = {
+    '╔',
+    '═',
+    '╗',
+    '║',
+    '╝',
+    '═',
+    '╚',
+    '║',
+  },
+})
 
 vim.lsp.handlers['window/showMessage'] = function(_, result, ctx)
   local client = vim.lsp.get_client_by_id(ctx.client_id)
@@ -44,7 +59,7 @@ vim.lsp.handlers['window/showMessage'] = function(_, result, ctx)
     'INFO',
     'DEBUG',
   })[result.type]
-  notify({ result.message }, lvl, {
+  vim.notify({ result.message }, lvl, {
     title = 'LSP | ' .. client.name,
     timeout = 10000,
     keep = function()
