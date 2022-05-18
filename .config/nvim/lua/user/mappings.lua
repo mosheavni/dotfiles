@@ -1,11 +1,11 @@
 -- leader key - before mapping lsp maps
 vim.g.mapleader = ' '
 
-require 'user.lsp.maps'
 local utils = require 'user.utils'
 local opts = utils.map_opts
 local keymap = utils.keymap
 
+-- Select all file visually
 keymap('n', '<leader>sa', 'gg^<S-v>G$', opts.no_remap)
 
 -- Map 0 to first non-blank character
@@ -28,7 +28,7 @@ keymap('n', '<leader>cp', ":<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) 
 keymap('n', '<Leader><Leader>', '<C-^>', opts.no_remap)
 keymap('n', '<tab>', '<c-w>w', opts.no_remap)
 keymap('n', '<c-w><c-c>', '<c-w>c', opts.no_remap)
-keymap('n', '<leader>n', ':bn<cr>', opts.no_remap)
+keymap('n', '<leader>bn', ':bn<cr>', opts.no_remap)
 keymap('n', '<c-w>v', ':vnew<cr>', opts.no_remap)
 keymap('n', '<c-w>s', ':new<cr>', opts.no_remap)
 keymap('n', '<c-w>e', ':enew<cr>', opts.no_remap)
@@ -119,7 +119,7 @@ keymap("n", "Y", ':%y+<cr>', opts.no_remap)
 
 -- Copy file path to clipboard
 keymap("n", "<leader>cfp", [[:let @+ = expand('%')<cr>:echo   "Copied file path " . expand('%')<cr>]], opts.no_remap_silent)
-keymap("n", "<leader>cap", [[:let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>]], opts.no_remap_silent)
+keymap("n", "<leader>cfa", [[:let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>]], opts.no_remap_silent)
 
 -- move vertically by visual line (don't skip wrapped lines)
 keymap("n", "j", "gj", opts.no_remap)
@@ -137,11 +137,11 @@ keymap("n", "<leader>ct<space>", ':retab<cr>', opts.no_remap)
 
 
 -- Enable folding with the leader-f/a
-keymap("n", "<leader>f", "za", opts.no_remap)
-keymap("n", "<leader>caf", "zM", opts.no_remap)
-keymap("n", "<leader>oaf", "zR", opts.no_remap)
+keymap("n", "<leader>ff", "za", opts.no_remap)
+keymap("n", "<leader>fc", "zM", opts.no_remap)
+keymap("n", "<leader>fo", "zR", opts.no_remap)
 -- Open level folds
-keymap("n", "<leader>olf", "zazczA", opts.no_remap)
+keymap("n", "<leader>fl", "zazczA", opts.no_remap)
 
 -- Change \n to new lines
 keymap('n', '<leader><cr>', [[:silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>]], {})
@@ -200,7 +200,7 @@ nnoremap cii :<C-u>call <SID>ChangeIndentNum()<CR>
 
 -- Every parameter in its own line
 vim.cmd [[
-function SplitParamLines() abort
+function! SplitParamLines() abort
   let f_line_num = line('.')
   let indent_length = indent(f_line_num)
   exe "normal! 0f(a\<cr>\<esc>"
@@ -250,3 +250,20 @@ keymap('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opts.n
 
 -- AnyJump
 keymap('n', '<leader>j', "<cmd>AnyJump<CR>", opts.no_remap)
+
+-- BarBar Nvim
+keymap("n", '<leader>bd', '<cmd>BufferClose<CR>', opts.no_remap_silent)
+keymap("n", '<leader>bo', '<cmd>BufferCloseAllButCurrent<cr>:only<cr>', opts.no_remap_silent)
+
+-- Visual calculator
+function VisualCalculator()
+  local vis_start = vim.api.nvim_buf_get_mark(0, '<')
+  local vis_end = vim.api.nvim_buf_get_mark(0, '>')
+  P(vis_start)
+  P(vis_end)
+  P(vim.api.nvim_buf_get_text(0, vis_start[1], vis_start[2], vis_end[1], vis_end[2], {}))
+end
+
+vim.keymap.set('v', '<c-r>', function()
+  return VisualCalculator()
+end, { expr = false })

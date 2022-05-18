@@ -109,29 +109,11 @@ require 'nvim-lightbulb'.setup {
   },
 }
 
+-- Colorscheme
+vim.cmd('colorscheme gruvbox')
+
+-- Ansible
 vim.cmd [[
-" Color settings {{{
-" Random color {{{
-function! RandomColorChooser() abort
-  let l:liked_colors =  [
-        \ 'OceanicNext',
-        \ 'apprentice',
-        \ 'deep-space',
-        \ 'dracula',
-        \ 'onedark',
-        \ 'onehalfdark',
-        \ 'purify',
-        \ 'quantum',
-        \ 'sonokai',
-        \ 'two-firewatch'
-        \ ]
-  let l:random_color = l:liked_colors[localtime() % len(l:liked_colors)]
-  exe 'colorscheme '. l:random_color
-endfunction
-" call RandomColorChooser()
-
-colorscheme gruvbox
-
 function! FindAnsibleRoleUnderCursor()
   let l:role_paths = get(g:, 'ansible_goto_role_paths', './roles')
   let l:tasks_main = expand('<cfile>') . '/tasks/main.yml'
@@ -148,35 +130,10 @@ augroup AnsibleFind
   au BufRead,BufNewFile */ansible/*.yml nnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
   au BufRead,BufNewFile */ansible/*.yml vnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
 augroup END
+]]
 
-" BarBar Nvim {{{
-nnoremap <silent> <leader>bd :BufferClose<CR>
-nnoremap <silent> <leader>abc :BufferCloseAllButCurrent<cr>:only<cr>
-" Goto buffer in position...
-nnoremap <silent>    <leader>1 :BufferGoto 1<CR>
-nnoremap <silent>    <leader>2 :BufferGoto 2<CR>
-nnoremap <silent>    <leader>3 :BufferGoto 3<CR>
-nnoremap <silent>    <leader>4 :BufferGoto 4<CR>
-nnoremap <silent>    <leader>5 :BufferGoto 5<CR>
-nnoremap <silent>    <leader>6 :BufferGoto 6<CR>
-nnoremap <silent>    <leader>7 :BufferGoto 7<CR>
-nnoremap <silent>    <leader>8 :BufferGoto 8<CR>
-" }}}
-
-
-" " Set icon for Jenkinsfile
-" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {}
-" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Jenkinsfile'] = ''
-" let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['\..*ignore.*'] = ''
-
-" let g:NERDTreePatternMatchHighlightColor = {}
-" let g:NERDTreePatternMatchHighlightColor['\..*ignore.*'] = 'EE6E73'
-" let g:NERDTreePatternMatchHighlightColor['Jenkinsfile'] = '62a2bf'
-
-" If more than one window and previous buffer was NERDTree, go back to it.
-" autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr("$") > 1 | b# | endif
-
-
+-- NERDTree
+vim.cmd [[
 " Check if NERDTree is open or active
 function! IsNERDTreeOpen()
   return exists('t:NERDTreeBufName') && (bufwinnr(t:NERDTreeBufName) != -1)
@@ -207,11 +164,10 @@ augroup END
 
 nmap <silent> <C-o> :call ToggleNerdTree()<CR>
 nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
+]]
 
-" }}}
-
-" Fugitive {{{
-
+-- Fugitive
+vim.cmd [[
 " Remove all conflict markers command
 "Delete all Git conflict markers
 "Creates the command :GremoveConflictMarkers
@@ -235,8 +191,6 @@ function! s:changebranch(...)
 endfunction
 
 command! -nargs=? Gco call s:changebranch("<args>")
-
-" Git push + pull + autocmd {{{
 
 " Push
 function! s:MosheGitPush() abort
@@ -266,10 +220,28 @@ endfunction
 command! -bang Gl call <sid>MosheGitPull()
 nmap <silent> <leader>gl :Gl<cr>
 
-function Enter_Wip_Moshe() abort
-  G commit --quiet -m 'wip'
+function! Enter_Wip_Moshe() abort
+  let l:emojis = [
+    \ '🤩',
+    \ '👻',
+    \ '😈'
+  \]
+  let l:emojis = [
+    \ '🤩',
+    \ '👻',
+    \ '😈',
+    \ '✨',
+    \ '🔥',
+    \ '🚀'
+  \ ]
+  let l:random_emoji = l:emojis[localtime() % len(l:emojis)]
+  let l:time_now = strftime('%c')
+  let l:commit_message = l:random_emoji . ' wip ' . l:time_now
+  echom "Committing: " . l:commit_message
+  exe "G commit --quiet -m '" . l:commit_message . "'"
   exe 'Git push -u origin ' . FugitiveHead()
 endfunction
+
 " Autocmd
 function! s:ftplugin_fugitive() abort
   nnoremap <buffer> <silent> cc :Git commit --quiet<CR>
@@ -283,8 +255,6 @@ augroup moshe_fugitive
   autocmd!
   autocmd FileType fugitive call s:ftplugin_fugitive()
 augroup END
-
-" }}}
 
 " Git merge origin master
 command! -bang Gmom exe 'G merge origin/' . 'master'
@@ -307,13 +277,15 @@ function! ToggleGStatus()
     bd .git/index
   else
     Git
-    17wincmd_
+    " 17wincmd_
   endif
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
 nnoremap <silent> <leader>gg :ToggleGStatus<cr>
 
-" Gdiffrev {{{
+nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<cr>
+
+" Gdiffrev
 nmap <leader>dh :DiffHistory<Space>
 command! -nargs=? DiffHistory call s:view_git_history('<args>')
 command! DiffFile call s:view_git_history('current_file')
@@ -362,39 +334,4 @@ function! s:add_mappings() abort
   11copen
   wincmd p
 endfunction
-" }}}
-
-function Unpushed_Unpulled() abort
-  " Don't operate if not on git directory
-  if empty(FugitiveGitDir())
-    return '↑- ↓-'
-  endif
-  let last_run = get(g:, 'unpushed_unpulled_last_run', 0)
-  if last_run != 0 && last_run + 10 > strftime('%s')
-    " Return already existing status
-    return get(g:, 'unpushed_unpulled_last_status', 0)
-  endif
-
-  let unpushed_unpulled_line_string = '# branch.ab '
-  let status_output = systemlist(FugitiveShellCommand([ 'status', '--porcelain=v2', '--branch' ]))
-  let unpushed_unpulled_index = match(status_output, unpushed_unpulled_line_string)
-  if unpushed_unpulled_index ==# -1
-    return '↑- ↓-'
-  endif
-  let g:unpushed_unpulled_last_run = strftime('%s')
-  let g:unpushed_unpulled_last_status = substitute(
-          \ substitute(
-            \ substitute(status_output[unpushed_unpulled_index], unpushed_unpulled_line_string, '', ''),
-            \ '+', '↑', ''
-          \ ),
-          \ '-', '↓', ''
-        \ )
-  return g:unpushed_unpulled_last_status
-endfunction
-
-" }}}
-
-
-" }}}
-
 ]]

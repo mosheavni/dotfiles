@@ -1,9 +1,9 @@
-local cmp = require('cmp')
-local snip = require('luasnip')
-local luasnip = require("luasnip")
-local lspkind = require('lspkind')
-local compare = require('cmp.config.compare')
-local tabnine = require "cmp_tabnine"
+local cmp = require 'cmp'
+local snip = require 'luasnip'
+local luasnip = require 'luasnip'
+local lspkind = require 'lspkind'
+local compare = require 'cmp.config.compare'
+local tabnine = require 'cmp_tabnine'
 
 local source_mapping = {
   nvim_lsp = '[LSP]',
@@ -17,13 +17,13 @@ local source_mapping = {
 
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
 end
 
 local config = {
   formatting = {
-    format = lspkind.cmp_format({
-      mode = "symbol_text", -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
+    format = lspkind.cmp_format {
+      mode = 'symbol_text', -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
       maxwidth = 40, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
 
       -- The function below will be called before any actual modifications from lspkind
@@ -32,29 +32,29 @@ local config = {
         vim_item.kind = lspkind.presets.default[vim_item.kind]
 
         local menu = source_mapping[entry.source.name]
-        if entry.source.name == "cmp_tabnine" then
+        if entry.source.name == 'cmp_tabnine' then
           if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
-            menu = entry.completion_item.data.detail .. " " .. menu
+            menu = entry.completion_item.data.detail .. ' ' .. menu
           end
-          vim_item.kind = ""
+          vim_item.kind = ''
         end
 
         vim_item.menu = menu
 
         return vim_item
       end,
-    }),
+    },
   },
-  mapping = cmp.mapping.preset.insert({
+  mapping = cmp.mapping.preset.insert {
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-e>'] = cmp.mapping.close(),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-j>'] = cmp.mapping.select_next_item(),
     ['<C-k>'] = cmp.mapping.select_prev_item(),
-    ['<C-y>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
-    ['<CR>'] = cmp.mapping.confirm({ select = false }),
-    ["<Tab>"] = cmp.mapping(function(fallback)
+    ['<C-y>'] = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true },
+    ['<CR>'] = cmp.mapping.confirm { select = false },
+    ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       elseif luasnip.expand_or_jumpable() then
@@ -64,8 +64,8 @@ local config = {
       else
         fallback()
       end
-    end, { "i", "s" }),
-    ["<S-Tab>"] = cmp.mapping(function(fallback)
+    end, { 'i', 's' }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
       elseif luasnip.jumpable(-1) then
@@ -73,12 +73,12 @@ local config = {
       else
         fallback()
       end
-    end, { "i", "s" }),
-  }),
+    end, { 'i', 's' }),
+  },
   sorting = {
     priority_weight = 2,
     comparators = {
-      require('cmp_tabnine.compare'),
+      require 'cmp_tabnine.compare',
       compare.offset,
       compare.exact,
       compare.score,
@@ -89,7 +89,7 @@ local config = {
       compare.order,
     },
   },
-  sources = cmp.config.sources({
+  sources = cmp.config.sources {
     { name = 'nvim_lsp', priority = 99 },
     { name = 'luasnip', priority = 90 },
     { name = 'cmp_tabnine', priority = 80 },
@@ -106,10 +106,10 @@ local config = {
             filterText = icon.name,
           })
         end
-        callback({ items = items })
+        callback { items = items }
       end,
-    }
-  }),
+    },
+  },
   snippet = {
     expand = function(args)
       require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
@@ -133,32 +133,32 @@ cmp.setup(config)
 cmp.setup.cmdline('/', {
   mapping = cmp.mapping.preset.cmdline(),
   sources = {
-    { name = 'buffer' }
-  }
+    { name = 'buffer' },
+  },
 })
 
 -- `:` cmdline setup.
 cmp.setup.cmdline(':', {
   mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
-    { name = 'path' }
+    { name = 'path' },
   }, {
-    { name = 'cmdline' }
-  })
+    { name = 'cmdline' },
+  }),
 })
 
 -- nvim autopairs
-require('nvim-autopairs').setup({
+require('nvim-autopairs').setup {
   disable_in_macro = true,
-  disable_filetype = { "TelescopePrompt", "clap_input" },
-})
+  disable_filetype = { 'TelescopePrompt', 'clap_input' },
+}
 
 if vim.o.ft == 'clap_input' and vim.o.ft == 'guihua' and vim.o.ft == 'guihua_rust' then
   cmp.setup.buffer { completion = { enable = false } }
 end
 
 -- If you want insert `(` after select function or method item
-local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = '' } }))
+local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
+cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done { map_char = { tex = '' } })
 
-require 'luasnip.loaders.from_vscode'.lazy_load()
+require('luasnip.loaders.from_vscode').lazy_load()

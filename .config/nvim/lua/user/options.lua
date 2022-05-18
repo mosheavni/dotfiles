@@ -324,20 +324,6 @@ command! -range VisualCalculator call <SID>VisualCalculator()
 vmap <c-r> :VisualCalculator<cr>
 ]]
 
--- Last position on document
-vim.cmd [[
-if has('autocmd')
-  augroup redhat
-    autocmd!
-    " When editing a file, always jump to the last cursor position
-    autocmd BufReadPost *
-    \ if line("'\"") > 0 && line ("'\"") <= line("$") |
-    \   exe "normal! g'\"" |
-    \ endif
-  augroup END
-endif
-]]
-
 vim.cmd [[
 " Better yanking {{{
 " note:

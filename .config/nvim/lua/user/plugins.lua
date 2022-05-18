@@ -1,3 +1,9 @@
+-- Install packer
+local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
+
+if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
+  vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+end
 return require('packer').startup(function(use)
   -- Infrastructure
   use 'wbthomason/packer.nvim'
@@ -13,10 +19,11 @@ return require('packer').startup(function(use)
     'lewis6991/gitsigns.nvim',
     tag = 'release' -- To use the latest release
   }
-  use { 'tpope/vim-fugitive' }
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
+  use 'tpope/vim-fugitive'
+  use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
   use { 'rhysd/conflict-marker.vim' }
-  use { 'tveskag/nvim-blame-line' }
+  -- use { 'tveskag/nvim-blame-line' }
 
   -- Documents
   use 'nanotee/luv-vimdocs'
@@ -68,6 +75,12 @@ return require('packer').startup(function(use)
     'nanotee/nvim-lsp-basics',
     'kosayoda/nvim-lightbulb',
   }
+  -- use {
+  --   'someone-stole-my-name/yaml-companion.nvim',
+  --   config = function()
+  --     require("telescope").load_extension("yaml_schema")
+  --   end,
+  -- }
   use({
     'hrsh7th/nvim-cmp', -- auto completion
     requires = {
@@ -101,7 +114,8 @@ return require('packer').startup(function(use)
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
   use { 'hashivim/vim-terraform', ft = { 'terraform' } }
   use { 'phenomenes/ansible-snippets', ft = { 'yaml' } }
-  use('rafamadriz/friendly-snippets') -- snippets for many languages
+  use { 'rafamadriz/friendly-snippets' } -- snippets for many languages
+  use { 'folke/lua-dev.nvim' }
 
   -- Functionality Tools
   use 'christoomey/vim-system-copy'
@@ -116,6 +130,16 @@ return require('packer').startup(function(use)
   use { 'pechorin/any-jump.vim', cmd = { "AnyJump", "AnyJumpVisual" } }
   -- Find and replace
   use "windwp/nvim-spectre"
+  use {
+    "folke/which-key.nvim",
+    config = function()
+      require("which-key").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
 
   -- Look & Feel
   use { 'stevearc/dressing.nvim' } -- overrides the default vim input to provide better visuals

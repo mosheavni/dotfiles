@@ -1,9 +1,12 @@
-P = function(v)
-  -- print(vim.inspect(v))
-  vim.notify(vim.inspect(v), 4, {
-    title = "P debug",
-    icon = "✎"
-  })
+P = function(v, r)
+  if r then
+    print(vim.inspect(v))
+  else
+    vim.notify(vim.inspect(v), 4, {
+      title = "P debug",
+      icon = "✎"
+    })
+  end
   return v
 end
 
@@ -27,3 +30,4 @@ require('user.plugin-configs')
 require('user.lsp')
 require('user.cmpconf')
 require('user.spectre')
+require('user.which-key')

@@ -1,18 +1,20 @@
-local pickers = require "telescope.pickers"
-local finders = require "telescope.finders"
-local actions = require "telescope.actions"
-local action_state = require "telescope.actions.state"
-local conf = require("telescope.config").values
-local util = require 'lspconfig'.util
+local pickers = require 'telescope.pickers'
+local finders = require 'telescope.finders'
+local actions = require 'telescope.actions'
+local action_state = require 'telescope.actions.state'
+local conf = require('telescope.config').values
+local util = require('lspconfig').util
 
 local M = {}
 
-M.current_yaml_schema = "No YAML schema"
+M.current_yaml_schema = 'No YAML schema'
 
 M._get_client = function()
   M.bufnr = vim.api.nvim_get_current_buf()
   M.uri = vim.uri_from_bufnr(M.bufnr)
-  if vim.bo.filetype ~= "yaml" then return end
+  if vim.bo.filetype ~= 'yaml' then
+    return
+  end
   if not M.client then
     M.client = util.get_active_client_by_name(M.bufnr, 'yamlls')
   end
@@ -21,7 +23,9 @@ end
 
 M._load_all_schemas = function()
   local client = M._get_client()
-  if not client then return end
+  if not client then
+    return
+  end
   local params = { uri = M.uri }
   client.request('yaml/get/all/jsonSchemas', params, function(err, result, _, _)
     if err then
@@ -29,7 +33,7 @@ M._load_all_schemas = function()
     end
     if result then
       if vim.tbl_count(result) == 0 then
-        return vim.notify('Schemas not loaded yet.')
+        return vim.notify 'Schemas not loaded yet.'
       end
       M._open_telescope(result)
     end
@@ -62,33 +66,33 @@ M._change_settings = function(schema)
   local new_settings = vim.tbl_deep_extend('force', previous_settings, {
     yaml = {
       schemas = {
-        [schema] = M.uri
-      }
-    }
+        [schema] = M.uri,
+      },
+    },
   })
   client.config.settings = new_settings
-  client.notify("workspace/didChangeConfiguration")
+  client.notify 'workspace/didChangeConfiguration'
   vim.notify('Successfully applied schema ' .. schema)
 end
 
 M._open_telescope = function(schemas)
   local opts = {}
   return pickers.new(opts, {
-    prompt_title = "Yaml Schemas",
+    prompt_title = 'Yaml Schemas',
     finder = finders.new_table {
       results = schemas,
       entry_maker = function(entry)
         local ret_obj = {
           value = entry.uri,
           display = entry.uri,
-          ordinal = entry.uri
+          ordinal = entry.uri,
         }
         if entry.name then
           ret_obj.display = entry.name
           ret_obj.ordinal = entry.name
         end
         return ret_obj
-      end
+      end,
     },
 
     sorter = conf.generic_sorter(opts),
@@ -97,12 +101,14 @@ M._open_telescope = function(schemas)
 end
 
 M._schema_name_mappings = {
-  ["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.4-standalone-strict/all.json"] = "k8s-1.22.4"
+  ['https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.4-standalone-strict/all.json'] = 'k8s-1.22.4',
 }
 
 M.select = function()
   M._get_client()
-  if not M.client then return end
+  if not M.client then
+    return
+  end
   M._load_all_schemas()
 end
 
@@ -130,7 +136,7 @@ M.get_current_schema = function()
       end
     end
     if current_schema then
-      M.current_yaml_schema = "YAML schema: " .. current_schema
+      M.current_yaml_schema = 'YAML schema: ' .. current_schema
     end
   end)
   return M.current_yaml_schema
