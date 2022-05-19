@@ -14,4 +14,3 @@ exclude:
   - tags
   - snippets.xml
   - .alt.toml
-  - .vim/coc-settings.json

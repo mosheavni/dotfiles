@@ -47,7 +47,7 @@ autocmd({ 'FileType' }, {
 autocmd({ 'FileType' }, {
   group = special_filetypes,
   pattern = 'nginx',
-  command = "setlocal iskeyword+=$ | let b:coc_additional_keywords = ['$']",
+  command = 'setlocal iskeyword+=$',
 })
 autocmd({ 'BufWritePost' }, {
   group = special_filetypes,

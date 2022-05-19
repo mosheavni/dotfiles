@@ -33,7 +33,6 @@ RUN sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/p
 
 # Run PlugInstall
 RUN nvim --headless +'PlugInstall --sync' +qall
-RUN cd ~/.vim/plugged/coc.nvim && yarn install
 # RUN nvim --headless +CocInstallAll +qall
 # join(get(g:, 'coc_global_extensions', []))
 
