@@ -80,27 +80,10 @@ ensure_server('pyright'):setup {
 }
 --lua
 local luadev = require('lua-dev').setup {
+  runtime_path = true,
   lspconfig = {
+    capabilities = capabilities,
     on_attach = default_on_attach,
-    settings = {
-      Lua = {
-        format = { enable = false },
-        diagnostics = {
-          globals = { 'vim' },
-        },
-        workspace = {
-          -- library = vim.api.nvim_get_runtime_file('', true),
-          library = {
-            ['$VIMRUNTIME'] = true,
-            -- add your config
-            ['~/.config/nvim'] = true,
-            -- add plugins
-            ['~/.local/share/nvim/site/pack/packer/opt/*'] = true,
-            ['~/.local/share/nvim/site/pack/packer/start/*'] = true,
-          },
-        },
-      },
-    },
   },
 }
 ensure_server('sumneko_lua'):setup(luadev)
@@ -128,10 +111,23 @@ ensure_server('jdtls'):setup {
   capabilities = capabilities,
 }
 -- yaml
+local clock = os.clock
+yaml_install_path = vim.fn.expand '~' .. '/Repos/yaml-language-server'
+if vim.fn.empty(vim.fn.glob(yaml_install_path)) > 0 then
+  function sleep(n) -- seconds
+    local t0 = clock()
+    while clock() - t0 <= n do
+    end
+  end
+  vim.fn.execute('!git clone https://github.com/redhat-developer/yaml-language-server.git ' .. yaml_install_path)
+  vim.fn.execute('!yarn install --cwd ' .. yaml_install_path)
+  sleep(5)
+  vim.fn.execute('!cd ' .. yaml_install_path .. ' && yarn run build')
+end
 ensure_server('yamlls'):setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
-  cmd = { 'node', '/Users/mavni/Repos/yaml-language-server/out/server/src/server.js', '--stdio' },
+  cmd = { 'node', yaml_install_path .. '/out/server/src/server.js', '--stdio' },
   on_init = function()
     require('user.select-schema').get_client()
   end,
@@ -180,3 +176,5 @@ for type, icon in pairs(signs) do
   local hl = 'DiagnosticSign' .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
+
+return luadev

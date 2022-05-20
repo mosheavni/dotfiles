@@ -1,53 +1,53 @@
 -- WinResizer
-vim.g["winresizer_start_key"]                         = '<C-E>'
+vim.g['winresizer_start_key'] = '<C-E>'
 -- Vim json path
-vim.g["jsonpath_register"]                            = '*'
+vim.g['jsonpath_register'] = '*'
 -- Comment.nvim
 require('Comment').setup()
 -- Floaterm
-vim.g["floaterm_keymap_toggle"]                       = '<F6>'
-vim.g["floaterm_keymap_new"]                          = '<F7>'
-vim.g["floaterm_keymap_next"]                         = '<F8>'
-vim.g["floaterm_width"]                               = 0.7
-vim.g["floaterm_height"]                              = 0.9
+vim.g['floaterm_keymap_toggle'] = '<F6>'
+vim.g['floaterm_keymap_new'] = '<F7>'
+vim.g['floaterm_keymap_next'] = '<F8>'
+vim.g['floaterm_width'] = 0.7
+vim.g['floaterm_height'] = 0.9
 -- Vim ansible
-vim.g["ansible_goto_role_paths"]                      = '.;,roles;'
+vim.g['ansible_goto_role_paths'] = '.;,roles;'
 -- Yaml Revealer
-vim.g["yaml_revealer_separator"]                      = '.'
-vim.g["yaml_revealer_list_indicator"]                 = 1
+vim.g['yaml_revealer_separator'] = '.'
+vim.g['yaml_revealer_list_indicator'] = 1
 -- Editor config
-vim.g["EditorConfig_exclude_patterns"]                = { 'fugitive://.*' }
+vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
 -- Vim terraform
-vim.g["terraform_fmt_on_save"]                        = 1
+vim.g['terraform_fmt_on_save'] = 1
 -- Vim close tag
-vim.g["closetag_filenames"]                           = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
-vim.g["closetag_filetypes"]                           = 'html,xhtml,phtml,javascript,javascriptreact'
+vim.g['closetag_filenames'] = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
+vim.g['closetag_filetypes'] = 'html,xhtml,phtml,javascript,javascriptreact'
 -- Nerd Tree
-vim.g["NERDTreeChDirMode"]                            = 2
-vim.g["NERDTreeHijackNetrw"]                          = 1
-vim.g["NERDTreeShowHidden"]                           = 1
-vim.g["NERDTreeHighlightCursorline"]                  = 1
-vim.g["NERDTreeFileExtensionHighlightFullName"]       = 1
-vim.g["NERDTreeGitStatusUseNerdFonts"]                = 1
+vim.g['NERDTreeChDirMode'] = 2
+vim.g['NERDTreeHijackNetrw'] = 1
+vim.g['NERDTreeShowHidden'] = 1
+vim.g['NERDTreeHighlightCursorline'] = 1
+vim.g['NERDTreeFileExtensionHighlightFullName'] = 1
+vim.g['NERDTreeGitStatusUseNerdFonts'] = 1
 -- vim.g["NERDTreeGitStatusConcealBrackets"] = 1
-vim.g["NERDTreeGitStatusIndicatorMapCustom"]          = {
-  Modified  = '✹',
-  Staged    = '✚',
+vim.g['NERDTreeGitStatusIndicatorMapCustom'] = {
+  Modified = '✹',
+  Staged = '✚',
   Untracked = '✭',
-  Unmerged  = '═',
-  Dirty     = '✗',
-  Renamed   = '➜',
-  Clean     = '✔︎',
-  Ignored   = '☒',
-  Deleted   = '✖',
-  Unknown   = '?'
+  Unmerged = '═',
+  Dirty = '✗',
+  Renamed = '➜',
+  Clean = '✔︎',
+  Ignored = '☒',
+  Deleted = '✖',
+  Unknown = '?',
 }
 -- DevIcons
-vim.g["WebDevIconsOS"]                                = 'Darwin'
-vim.g["DevIconsEnableFoldersOpenClose"]               = 1
-vim.g["DevIconsEnableFolderExtensionPatternMatching"] = 1
+vim.g['WebDevIconsOS'] = 'Darwin'
+vim.g['DevIconsEnableFoldersOpenClose'] = 1
+vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
 -- Conflict marker
-vim.g["conflict_marker_highlight_group"]              = 'VisualNOS'
+vim.g['conflict_marker_highlight_group'] = 'VisualNOS'
 vim.cmd [[
 highlight ConflictMarkerBegin guibg=#2f7366
 highlight ConflictMarkerOurs guibg=#2e5049
@@ -56,14 +56,15 @@ highlight ConflictMarkerEnd guibg=#2f628e
 highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 ]]
 -- Startify
-vim.g["startify_custom_header"] = {
+vim.g['startify_custom_header'] = {
   [[   😎               🎃              😎]],
   [[    _   _         __     ___]],
   [[   | \ | | ___  __\ \   / (_)_ __ ___]],
   [[   |  \| |/ _ \/ _ \ \ / /| |  _ ` _ \]],
   [[   | |\  |  __/ (_) \ V / | | | | | | |]],
   [[   |_| \_|\___|\___/ \_/  |_|_| |_| |_|]],
-  '', '   🚀               ✨              🚀'
+  '',
+  '   🚀               ✨              🚀',
 }
 -- Switch vim
 -- The map switch is between underscores to camelCase: moshe_king -> mosheKing -> moshe_king.
@@ -82,37 +83,41 @@ vim.g['switch_custom_definitions'] = {
   -- }
 }
 -- fidget
-vim.notify = require("notify")
-require("fidget").setup {
+vim.notify = require 'notify'
+require('fidget').setup {
   text = {
-    spinner = "moon",
+    spinner = 'moon',
   },
   align = {
     bottom = true,
   },
   window = {
-    relative = "editor",
+    relative = 'editor',
   },
 }
 -- disable netrw
 vim.g['loaded_netrwPlugin'] = 1
+-- Comment.nvim
+require('Comment').setup()
+-- Which-Key
+require('which-key').setup {}
 -- nvim gps
-require("nvim-gps").setup()
+require('nvim-gps').setup()
 -- bulb (code actions)
-require 'nvim-lightbulb'.setup {
+require('nvim-lightbulb').setup {
   sign = {
     enabled = false,
   },
   virtual_text = {
     enabled = true,
-    text = "💡",
+    text = '💡',
     -- highlight mode to use for virtual text (replace, combine, blend), see :help nvim_buf_set_extmark() for reference
-    hl_mode = "replace",
+    hl_mode = 'replace',
   },
 }
 
 -- Colorscheme
-vim.cmd('colorscheme gruvbox')
+vim.cmd 'colorscheme gruvbox'
 
 -- Ansible
 vim.cmd [[
