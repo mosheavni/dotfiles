@@ -79,14 +79,14 @@ ensure_server('pyright'):setup {
   },
 }
 --lua
-local lua_server = require('lua-dev').setup {
+local luadev = require('lua-dev').setup {
   runtime_path = true,
   lspconfig = {
     capabilities = capabilities,
     on_attach = default_on_attach,
   },
 }
-ensure_server('sumneko_lua'):setup(lua_server)
+ensure_server('sumneko_lua'):setup(luadev)
 --terraformls
 ensure_server('terraformls'):setup {
   on_attach = default_on_attach,
@@ -113,7 +113,6 @@ if vim.fn.empty(vim.fn.glob(yaml_install_path)) > 0 then
     while clock() - t0 <= n do
     end
   end
-  P 'Installing yaml-language-server'
   vim.fn.execute('!git clone https://github.com/redhat-developer/yaml-language-server.git ' .. yaml_install_path)
   vim.fn.execute('!yarn install --cwd ' .. yaml_install_path)
   sleep(5)
@@ -172,4 +171,4 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
-return lua_server
+return luadev
