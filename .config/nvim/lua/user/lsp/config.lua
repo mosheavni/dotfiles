@@ -121,6 +121,12 @@ ensure_server('vimls'):setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
+
+--jdtls
+ensure_server('jdtls'):setup {
+  on_attach = default_on_attach,
+  capabilities = capabilities,
+}
 -- yaml
 ensure_server('yamlls'):setup {
   on_attach = default_on_attach,
