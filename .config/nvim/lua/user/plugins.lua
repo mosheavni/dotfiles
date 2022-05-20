@@ -107,7 +107,7 @@ return require('packer').startup(function(use)
     ft = { 'markdown' },
   }
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
-  use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'Jenkinsfile', 'groovy' } }
+  use { 'martinda/Jenkinsfile-vim-syntax' }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
   use { 'rayburgemeestre/phpfolding.vim', ft = { 'php' } }
   use { 'andrewstuart/vim-kubernetes', ft = { 'yaml' } }
@@ -132,16 +132,7 @@ return require('packer').startup(function(use)
   use { 'pechorin/any-jump.vim', cmd = { 'AnyJump', 'AnyJumpVisual' } }
   -- Find and replace
   use 'windwp/nvim-spectre'
-  use {
-    'folke/which-key.nvim',
-    config = function()
-      require('which-key').setup {
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      }
-    end,
-  }
+  use { 'folke/which-key.nvim' }
 
   -- Look & Feel
   use { 'stevearc/dressing.nvim' } -- overrides the default vim input to provide better visuals
@@ -175,12 +166,7 @@ return require('packer').startup(function(use)
   -- Text Manipulation
   use 'tpope/vim-repeat'
   use 'tpope/vim-surround'
-  use {
-    'numToStr/Comment.nvim',
-    config = function()
-      require('Comment').setup()
-    end,
-  }
+  use { 'numToStr/Comment.nvim' }
   use 'JoosepAlviste/nvim-ts-context-commentstring'
   use 'junegunn/vim-easy-align'
   use 'AndrewRadev/switch.vim'

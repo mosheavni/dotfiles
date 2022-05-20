@@ -1,0 +1,11 @@
+---
+jenkins:
+  authorizationStrategy: "loggedInUsersCanDoAnything"
+  numExecutors: 1
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          name: "${JENKINS_USER}"
+          password: "${JENKINS_PASS}"

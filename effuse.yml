@@ -14,3 +14,4 @@ exclude:
   - tags
   - snippets.xml
   - .alt.toml
+  - images
