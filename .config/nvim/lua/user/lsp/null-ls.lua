@@ -18,7 +18,7 @@ null_ls.register {
         return params.command
       else
         io.popen 'start-jenkins-validate'
-        return ''
+        return nil
       end
     end,
     args = {
