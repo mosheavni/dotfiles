@@ -60,25 +60,13 @@ plugins=(
   zsh-syntax-highlighting
 )
 
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 source $ZSH/oh-my-zsh.sh
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
 # =================== #
 # Completions and PS1 #
 # =================== #
-
-
-# Load zsh-completions
-autoload -Uz compinit
-
-if type brew &>/dev/null; then
-  fpath=($(brew --prefix)/share/zsh-completions $fpath)
-fi
-for dump in $HOME/.zcompdump(N.mh+24); do
-  compinit
-done
-compinit -C
-autoload -U +X bashcompinit && bashcompinit
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
