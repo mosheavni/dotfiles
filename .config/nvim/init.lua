@@ -1,3 +1,5 @@
+require 'impatient' -- impatient MUST be first
+
 function _G.put_text(...)
   local objects = {}
   for i = 1, select('#', ...) do
@@ -10,7 +12,8 @@ function _G.put_text(...)
   vim.fn.append(lnum, lines)
   return ...
 end
-P = function(v, r)
+
+function _G.Pfunction(v, r)
   if r then
     print(vim.inspect(v))
   else
@@ -29,9 +32,8 @@ let &packpath = &runtimepath
 
 require 'user.options'
 require 'user.mappings'
-require 'user.autocommands'
-require 'impatient'
 require 'user.plugins'
+require 'user.autocommands'
 require 'user.neoscroll'
 require 'user.gitsigns'
 require 'user.treesitter'
