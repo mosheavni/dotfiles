@@ -20,3 +20,4 @@ ssh-agent:1.24.1
 strict-crumb-issuer:2.1.0
 timestamper:1.17
 workflow-aggregator:2.7
+extended-choice-parameter:0.78
