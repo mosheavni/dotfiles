@@ -14,4 +14,5 @@ exclude:
   - tags
   - snippets.xml
   - .alt.toml
+  - .luarc.json
   - images
