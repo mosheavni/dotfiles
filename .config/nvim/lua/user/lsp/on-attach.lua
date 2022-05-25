@@ -1,5 +1,6 @@
 local lsp_status = require 'lsp-status'
 local utils = require 'user.utils'
+local user_maps = require 'user.lsp.maps'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
 local buf_set_option = vim.api.nvim_buf_set_option
@@ -17,7 +18,7 @@ local disable_ls_signature = {
 local on_attach_aug = augroup 'OnAttachAu'
 local default_on_attach = function(client, bufnr)
   -- Add mappings
-  require 'user.lsp.maps'
+  user_maps()
 
   lsp_status.on_attach(client)
   local basics = require 'lsp_basics'
@@ -93,4 +94,30 @@ local default_on_attach = function(client, bufnr)
   -- })
 end
 
-return default_on_attach
+local minimal_on_attach = function(client, bufnr)
+  print 'got here'
+  P 'minimal on_attach'
+  -- Add mappings
+  user_maps()
+
+  -- lsp_status.on_attach(client)
+  -- local basics = require 'lsp_basics'
+  -- basics.make_lsp_commands(client, bufnr)
+  --
+  -- if not vim.tbl_contains(disable_ls_signature, client.name) then
+  --   require('lsp_signature').on_attach()
+  -- end
+
+  -- Enable tag jump and formatting based on LSP
+  -- if client.resolved_capabilities.goto_definition == true then
+  --   buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
+  -- end
+  -- if client.resolved_capabilities.document_formatting == true then
+  --   buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+  -- end
+end
+
+return {
+  default = default_on_attach,
+  minimal = minimal_on_attach,
+}
