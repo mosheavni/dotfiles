@@ -83,6 +83,7 @@ M._change_settings = function(schema)
 end
 
 M._open_telescope = function(schemas)
+  local opts = {}
   return pickers.new(opts, {
     prompt_title = 'Yaml Schemas',
     finder = finders.new_table {
