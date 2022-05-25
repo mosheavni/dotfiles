@@ -17,6 +17,7 @@ local disable_ls_signature = {
 
 local on_attach_aug = augroup 'OnAttachAu'
 local default_on_attach = function(client, bufnr)
+  P 'default on attach'
   -- Add mappings
   user_maps()
 

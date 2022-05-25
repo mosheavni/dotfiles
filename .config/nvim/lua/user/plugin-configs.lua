@@ -3,7 +3,7 @@ vim.g['winresizer_start_key'] = '<C-E>'
 -- Vim json path
 vim.g['jsonpath_register'] = '*'
 -- Comment.nvim
-require('Comment').setup()
+require('Comment').setup {}
 -- Floaterm
 vim.g['floaterm_keymap_toggle'] = '<F6>'
 vim.g['floaterm_keymap_new'] = '<F7>'
@@ -18,9 +18,9 @@ vim.g['yaml_revealer_list_indicator'] = 1
 -- Editor config
 vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
 -- Navigator
-require('navigator').setup {
-  default_mapping = true,
-}
+-- require('navigator').setup {
+--   default_mapping = true,
+-- }
 -- Vim close tag
 vim.g['closetag_filenames'] = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
 vim.g['closetag_filetypes'] = 'html,xhtml,phtml,javascript,javascriptreact'
@@ -127,8 +127,6 @@ require('fidget').setup {
 }
 -- disable netrw
 vim.g['loaded_netrwPlugin'] = 1
--- Comment.nvim
-require('Comment').setup()
 -- Which-Key
 require('which-key').setup {}
 -- nvim gps
@@ -147,7 +145,7 @@ require('nvim-lightbulb').setup {
 }
 
 -- Colorscheme
-vim.cmd 'colorscheme gruvbox'
+vim.cmd [[colorscheme gruvbox]]
 
 -- Ansible
 vim.cmd [[
