@@ -119,10 +119,6 @@ keymap('n', 'Y', ':%y+<cr>', opts.no_remap)
 keymap('n', '<leader>cfp', [[:let @+ = expand('%')<cr>:echo   "Copied file path " . expand('%')<cr>]], opts.no_remap_silent)
 keymap('n', '<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>]], opts.no_remap_silent)
 
--- move vertically by visual line (don't skip wrapped lines)
-keymap('n', 'j', 'gj', opts.no_remap)
-keymap('n', 'k', 'gk', opts.no_remap)
-
 -- Change working directory based on open file
 keymap('n', '<leader>cd', ':cd %:p:h<CR>:pwd<CR>', opts.no_remap)
 
