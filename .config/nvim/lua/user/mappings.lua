@@ -232,7 +232,7 @@ nnoremap <leader>ds :DiffSaved<cr>
 -- Telescope
 keymap('n', '<c-p>', [[(expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Telescope find_files\<cr>"]], opts.no_remap_expr_silent)
 keymap('n', '<c-b>', '<cmd>Telescope buffers<cr>', opts.no_remap)
-keymap('n', '<F4>', '<cmd>Telescope git_branches<cr>', opts.no_remap)
+keymap('n', '<F4>', '<cmd>lua require("user.git-branches").open()<cr>', opts.no_remap)
 keymap('n', '<leader>hh', '<cmd>Telescope help_tags<cr>', opts.no_remap)
 
 -- Vim easy align
