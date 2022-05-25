@@ -6,7 +6,6 @@ end
 local actions = require 'telescope.actions'
 
 telescope.setup {
-  -- defaults = { sorting_strategy = "ascending" },
   defaults = {
     mappings = {
       i = {
@@ -32,12 +31,14 @@ telescope.setup {
       },
     },
   },
-  project = {
-    base_dirs = {
-      { '~/Repos', max_depth = 2 },
+  extensions = {
+    project = {
+      base_dirs = {
+        '~/Repos',
+      },
+      hidden_files = true,
+      theme = 'dropdown',
     },
-    hidden_files = true, -- default: false
-    theme = 'dropdown',
   },
 }
 

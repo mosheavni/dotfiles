@@ -23,24 +23,18 @@ return require('packer').startup(function(use)
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
   use { 'rhysd/conflict-marker.vim' }
-  -- use { 'tveskag/nvim-blame-line' }
 
   -- Documents
   use 'nanotee/luv-vimdocs'
   use 'milisims/nvim-luaref'
 
   -- Fuzzy Search
-  -- use {
-  --   'junegunn/fzf',
-  --   dir = '~/.fzf', run = './install --all'
-  -- }
-  -- use { 'junegunn/fzf.vim' }
   use {
     'nvim-telescope/telescope.nvim',
     requires = {
       { 'nvim-lua/plenary.nvim' },
       { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
-      {"nvim-telescope/telescope-project.nvim"},
+      { 'nvim-telescope/telescope-project.nvim' },
     },
   }
 
@@ -76,12 +70,13 @@ return require('packer').startup(function(use)
     'nanotee/nvim-lsp-basics',
     'kosayoda/nvim-lightbulb',
   }
-  -- use {
-  --   'someone-stole-my-name/yaml-companion.nvim',
-  --   config = function()
-  --     require("telescope").load_extension("yaml_schema")
-  --   end,
-  -- }
+  use {
+    'ray-x/navigator.lua',
+    requires = {
+      { 'ray-x/guihua.lua', run = 'cd lua/fzy && make' },
+      { 'neovim/nvim-lspconfig' },
+    },
+  }
   use {
     'hrsh7th/nvim-cmp', -- auto completion
     requires = {
@@ -115,7 +110,6 @@ return require('packer').startup(function(use)
   use { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } }
   use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
-  use { 'hashivim/vim-terraform', ft = { 'terraform' } }
   use { 'phenomenes/ansible-snippets', ft = { 'yaml' } }
   use { 'rafamadriz/friendly-snippets' } -- snippets for many languages
   use { 'folke/lua-dev.nvim' }
@@ -146,7 +140,7 @@ return require('packer').startup(function(use)
     },
   }
   use 'kyazdani42/nvim-web-devicons'
-  use 'adelarsq/vim-devicons-emoji'
+  -- use 'adelarsq/vim-devicons-emoji'
   use 'romgrk/barbar.nvim'
   use 'karb94/neoscroll.nvim'
   use 'machakann/vim-highlightedyank'
