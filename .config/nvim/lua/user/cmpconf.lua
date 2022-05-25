@@ -1,5 +1,4 @@
 local cmp = require 'cmp'
-local snip = require 'luasnip'
 local luasnip = require 'luasnip'
 local lspkind = require 'lspkind'
 local compare = require 'cmp.config.compare'
@@ -21,6 +20,7 @@ local has_words_before = function()
 end
 
 local config = {
+  native_menu = false,
   formatting = {
     format = lspkind.cmp_format {
       mode = 'symbol_text', -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
@@ -50,15 +50,23 @@ local config = {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-e>'] = cmp.mapping.close(),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-j>'] = cmp.mapping.select_next_item(),
+    ['<C-j>'] = cmp.mapping(function(fallback)
+      if luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      elseif cmp.visible() then
+        cmp.select_next_item()
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
     ['<C-k>'] = cmp.mapping.select_prev_item(),
     ['<C-y>'] = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true },
     ['<CR>'] = cmp.mapping.confirm { select = false },
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-        -- elseif luasnip.expand_or_jumpable() then
-        --   luasnip.expand_or_jump()
       elseif has_words_before() then
         cmp.complete()
       else
@@ -90,29 +98,15 @@ local config = {
     },
   },
   sources = cmp.config.sources {
-    { name = 'nvim_lsp', priority = 99 },
-    { name = 'luasnip', priority = 90 },
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
     { name = 'cmp_tabnine', priority = 80 },
-    { name = 'path', priority = 10 },
-    { name = 'buffer', priority = 10 },
-    {
-      name = 'devicons',
-      complete = function(self, params, callback)
-        local items = {}
-        for _, icon in pairs(devicons.get_icons()) do
-          table.insert(items, {
-            label = icon.icon .. '  ' .. icon.name,
-            insertText = icon.icon,
-            filterText = icon.name,
-          })
-        end
-        callback { items = items }
-      end,
-    },
+    { name = 'path' },
+    { name = 'buffer', keyword_length = 4 },
   },
   snippet = {
     expand = function(args)
-      require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      luasnip.lsp_expand(args.body) -- For `luasnip` users.
     end,
   },
   window = {
@@ -129,36 +123,34 @@ tabnine:setup {
 
 cmp.setup(config)
 
--- `/` cmdline setup.
-cmp.setup.cmdline('/', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = {
-    { name = 'buffer' },
-  },
-})
-
--- `:` cmdline setup.
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'path' },
-  }, {
-    { name = 'cmdline' },
-  }),
-})
+-- -- `/` cmdline setup.
+-- cmp.setup.cmdline('/', {
+--   mapping = cmp.mapping.preset.cmdline(),
+--   sources = {
+--     { name = 'buffer' },
+--   },
+-- })
+--
+-- -- `:` cmdline setup.
+-- cmp.setup.cmdline(':', {
+--   mapping = cmp.mapping.preset.cmdline(),
+--   sources = cmp.config.sources({
+--     { name = 'path' },
+--   }, {
+--     { name = 'cmdline' },
+--   }),
+-- })
 
 -- nvim autopairs
 require('nvim-autopairs').setup {
   disable_in_macro = true,
-  disable_filetype = { 'TelescopePrompt', 'clap_input' },
+  disable_filetype = { 'TelescopePrompt', 'guihua', 'guihua_rust', 'clap_input' },
 }
-
-if vim.o.ft == 'clap_input' and vim.o.ft == 'guihua' and vim.o.ft == 'guihua_rust' then
-  cmp.setup.buffer { completion = { enable = false } }
-end
-
 -- If you want insert `(` after select function or method item
 local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
 cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done { map_char = { tex = '' } })
+
+vim.cmd "autocmd! FileType guihua lua require('cmp').setup.buffer { enabled = false }"
+vim.cmd "autocmd! FileType guihua_rust lua require('cmp').setup.buffer { enabled = false }"
 
 require('luasnip.loaders.from_vscode').lazy_load()
