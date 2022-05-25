@@ -29,11 +29,11 @@ autocmd({ 'BufNewFile', 'BufRead' }, {
   pattern = '.eslintrc',
   command = 'setf json',
 })
-autocmd({ 'BufNewFile', 'BufRead' }, {
-  group = special_filetypes,
-  pattern = '*.hcl',
-  command = 'setf terraform',
-})
+-- autocmd({ 'BufNewFile', 'BufRead' }, {
+--   group = special_filetypes,
+--   pattern = '*.hcl',
+--   command = 'setf terraform',
+-- })
 autocmd({ 'BufRead', 'BufNewFile' }, {
   group = special_filetypes,
   pattern = { '*/templates/*.yaml', '*/templates/*.tpl', '*.gotmpl', 'helmfile.yaml' },
