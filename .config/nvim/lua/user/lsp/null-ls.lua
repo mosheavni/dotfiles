@@ -1,4 +1,4 @@
-local default_on_attach = require 'user.lsp.on-attach'
+local default_on_attach = require('user.lsp.on-attach').default
 local status_ok, null_ls = pcall(require, 'null-ls')
 if not status_ok then
   return vim.notify 'Module null-ls not installed'
@@ -90,9 +90,7 @@ null_ls.setup {
     null_ls.builtins.formatting.black,
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.prettierd,
-    null_ls.builtins.formatting.stylua.with {
-      extra_args = { '--config-path', vim.fn.expand '~' .. '/stylua.toml' },
-    },
+    null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.shfmt.with {
       extra_filetypes = sh_extra_fts,
     },
