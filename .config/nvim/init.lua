@@ -13,7 +13,7 @@ function _G.put_text(...)
   return ...
 end
 
-function _G.Pfunction(v, r)
+function _G.P(v, r)
   if r then
     print(vim.inspect(v))
   else
@@ -33,14 +33,15 @@ let &packpath = &runtimepath
 require 'user.options'
 require 'user.mappings'
 require 'user.plugins'
+require 'user.plugin-configs'
+require 'user.cmpconf'
+require 'user.treesitter'
+require 'user.lsp'
 require 'user.autocommands'
 require 'user.neoscroll'
 require 'user.gitsigns'
-require 'user.treesitter'
+-- require 'user.tree'
 require 'user.telescope'
 require 'user.lualine'
-require 'user.plugin-configs'
-require 'user.lsp'
-require 'user.cmpconf'
 require 'user.spectre'
 require 'user.which-key'
