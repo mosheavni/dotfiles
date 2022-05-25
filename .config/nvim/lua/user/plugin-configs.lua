@@ -331,3 +331,9 @@ function! s:add_mappings() abort
   wincmd p
 endfunction
 ]]
+
+
+local custom_settings_ok, custom_settings = pcall(require, "user.custom-settings")
+if custom_settings_ok then
+  custom_settings.plugin_configs()
+end

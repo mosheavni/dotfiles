@@ -172,4 +172,9 @@ return require('packer').startup(function(use)
 
   -- Devicons is last so it can support all of the other plugins
   use 'ryanoasis/vim-devicons'
+
+  local custom_settings_ok, custom_settings = pcall(require, "user.custom-settings")
+  if custom_settings_ok then
+    custom_settings.plugins(use)
+  end
 end)
