@@ -1,7 +1,6 @@
 local on_attaches = require 'user.lsp.on-attach'
 local lsp_status = require 'lsp-status'
 local default_on_attach = on_attaches.default
-local minimal_on_attach = on_attaches.minimal
 require 'user.lsp.null-ls'
 local nvim_lsp = require 'lspconfig'
 require('nvim-lsp-installer').setup {}

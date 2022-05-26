@@ -21,10 +21,10 @@ local function load_plugins()
     {
       'wbthomason/packer.nvim',
       'neovim/nvim-lspconfig',
-      'hrsh7th/nvim-cmp', -- auto completion
-      'hrsh7th/cmp-nvim-lsp',
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
+      -- 'hrsh7th/nvim-cmp', -- auto completion
+      -- 'hrsh7th/cmp-nvim-lsp',
+      -- 'L3MON4D3/LuaSnip',
+      -- 'saadparwaiz1/cmp_luasnip',
       'nvim-treesitter/nvim-treesitter',
     },
     config = {
@@ -40,7 +40,8 @@ _G.load_config = function()
     require('vim.lsp.log').set_format_func(vim.inspect)
   end
   local nvim_lsp = require 'lspconfig'
-  local on_attach = function(_, bufnr)
+  local on_attach = function(client, bufnr)
+    print('On Attach ' .. client.name)
     local function buf_set_keymap(...)
       vim.api.nvim_buf_set_keymap(bufnr, ...)
     end
@@ -67,6 +68,7 @@ _G.load_config = function()
     buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
     buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
     buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+    buf_set_keymap('n', '<space>p', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   end
 
   -- load treesitter
@@ -75,40 +77,40 @@ _G.load_config = function()
   }
 
   -- Set up completion
-  local cmp = require 'cmp'
-  cmp.setup {
-    snippet = {
-      expand = function(args)
-        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-      end,
-    },
-    window = {
-      completion = cmp.config.window.bordered(),
-      documentation = cmp.config.window.bordered(),
-    },
-    mapping = cmp.mapping.preset.insert {
-      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.abort(),
-      ['<CR>'] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    },
-    sources = cmp.config.sources {
-      { name = 'nvim_lsp' },
-      { name = 'luasnip' }, -- For luasnip users.
-    },
-  }
+  -- local cmp = require 'cmp'
+  -- cmp.setup {
+  --   snippet = {
+  --     expand = function(args)
+  --       require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+  --     end,
+  --   },
+  --   window = {
+  --     completion = cmp.config.window.bordered(),
+  --     documentation = cmp.config.window.bordered(),
+  --   },
+  --   mapping = cmp.mapping.preset.insert {
+  --     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+  --     ['<C-f>'] = cmp.mapping.scroll_docs(4),
+  --     ['<C-Space>'] = cmp.mapping.complete(),
+  --     ['<C-e>'] = cmp.mapping.abort(),
+  --     ['<CR>'] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+  --   },
+  --   sources = cmp.config.sources {
+  --     { name = 'nvim_lsp' },
+  --     { name = 'luasnip' }, -- For luasnip users.
+  --   },
+  -- }
 
   -- Set up capabilities
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  -- capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
   -- Add the server that troubles you here
-  local name = 'terraformls'
+  local name = 'jsonls'
   local cmd = {
-    'terraform-ls',
-    'serve',
-    '-log-file=/tmp/terraform-ls-{{pid}}.log',
-    [[-tf-log-file='/tmp/terraform-exec-1-{{args}}.log']],
+    'node',
+    '/Users/mavni/.local/share/nvim/lsp_servers/jsonls/node_modules/.bin/vscode-json-language-server',
+    '--stdio',
   }
   if not name then
     print 'You have not defined a server name, please edit minimal_init.lua'
@@ -122,6 +124,17 @@ _G.load_config = function()
     cmd = cmd,
     on_attach = on_attach,
     capabilities = capabilities,
+    unnamed_buffer_support = true,
+    autostart = true,
+    root_dir = function() end,
+    single_file_support = true,
+    settings = {
+      json = {
+        trace = {
+          server = 'on',
+        },
+      },
+    },
   }
 
   print [[You can find your log at $HOME/.cache/nvim/lsp.log. Please paste in a github issue under a details tag as described in the issue template.]]
