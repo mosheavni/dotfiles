@@ -15,12 +15,8 @@ end
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
   update_in_insert = true,
   virtual_text = false,
-  signs = {
-    severity_limit = 'Error',
-  },
-  underline = {
-    severity_limit = 'Warning',
-  },
+  signs = true,
+  underline = true,
 })
 
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
