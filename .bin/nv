@@ -1,0 +1,2 @@
+export VIMRUNTIME=$HOME/Repos/neovim/runtime
+$HOME/Repos/neovim/build/bin/nvim "$@"

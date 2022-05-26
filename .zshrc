@@ -117,3 +117,6 @@ bookitmeinit() {
 }
 
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
+
+alias vim='VIMRUNTIME=~/Repos/neovim/runtime ~/Repos/neovim/build/bin/nvim'
+export PATH="$HOME/Repos/neovim/build/bin:$PATH"

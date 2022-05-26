@@ -28,7 +28,7 @@ local default_on_attach = function(client, bufnr)
     require('lsp_signature').on_attach()
   end
 
-  if client.resolved_capabilities.code_lens then
+  if client.server_capabilities.code_lens then
     autocmd({ 'BufEnter', 'InsertLeave', 'InsertEnter' }, {
       group = on_attach_aug,
       desc = 'Auto show code lenses',
@@ -36,7 +36,7 @@ local default_on_attach = function(client, bufnr)
       command = 'silent! lua vim.lsp.codelens.refresh()',
     })
   end
-  if client.resolved_capabilities.document_highlight then
+  if client.server_capabilities.document_highlight then
     -- Highlight text at cursor position
     autocmd({ 'CursorHold', 'CursorHoldI' }, {
       desc = 'Highlight references to current symbol under cursor',
@@ -53,10 +53,10 @@ local default_on_attach = function(client, bufnr)
   end
   -- auto format file on save
   if vim.tbl_contains(disable_ls_format, client.name) then
-    client.resolved_capabilities.document_formatting = false
-    client.resolved_capabilities.document_range_formatting = false
+    client.server_capabilities.document_formatting = false
+    client.server_capabilities.document_range_formatting = false
   end
-  if client.resolved_capabilities.document_formatting and not vim.tbl_contains(disable_ft_format, vim.bo.filetype) then
+  if client.server_capabilities.document_formatting and not vim.tbl_contains(disable_ft_format, vim.bo.filetype) then
     autocmd({ 'BufWritePre' }, {
       desc = 'Auto format file before saving',
       group = on_attach_aug,
@@ -66,11 +66,11 @@ local default_on_attach = function(client, bufnr)
   end
 
   -- Enable tag jump and formatting based on LSP
-  if client.resolved_capabilities.goto_definition == true then
+  if client.server_capabilities.goto_definition == true then
     buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
   end
 
-  if client.resolved_capabilities.document_formatting == true then
+  if client.server_capabilities.document_formatting == true then
     buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
   end
 
@@ -108,10 +108,10 @@ local minimal_on_attach = function(_, bufnr)
   -- end
 
   -- Enable tag jump and formatting based on LSP
-  -- if client.resolved_capabilities.goto_definition == true then
+  -- if client.server_capabilities.goto_definition == true then
   --   buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
   -- end
-  -- if client.resolved_capabilities.document_formatting == true then
+  -- if client.server_capabilities.document_formatting == true then
   --   buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
   -- end
 end
