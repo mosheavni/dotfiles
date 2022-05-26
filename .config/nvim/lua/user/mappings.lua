@@ -244,9 +244,6 @@ keymap('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opts.n
 -- AnyJump
 keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
 
--- BarBar Nvim
-keymap('n', '<leader>bd', '<cmd>BufferClose<CR>', opts.no_remap_silent)
-keymap('n', '<leader>bo', '<cmd>BufferCloseAllButCurrent<cr>:only<cr>', opts.no_remap_silent)
 
 -- Visual calculator
 function VisualCalculator()

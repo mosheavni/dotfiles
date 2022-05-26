@@ -141,7 +141,6 @@ return require('packer').startup(function(use)
   }
   use 'kyazdani42/nvim-web-devicons'
   -- use 'adelarsq/vim-devicons-emoji'
-  use 'romgrk/barbar.nvim'
   use 'karb94/neoscroll.nvim'
   use 'machakann/vim-highlightedyank'
   use 'mhinz/vim-startify'
