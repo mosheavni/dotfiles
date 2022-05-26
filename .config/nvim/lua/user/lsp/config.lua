@@ -20,11 +20,24 @@ local function ensure_server(name)
   return nvim_lsp[name]
 end
 
+-- Capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 if lsp_status then
   capabilities = vim.tbl_deep_extend('keep', capabilities, lsp_status.capabilities)
 end
 capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.codeAction = {
+  dynamicRegistration = true,
+  codeActionLiteralSupport = {
+    codeActionKind = {
+      valueSet = (function()
+        local res = vim.tbl_values(vim.lsp.protocol.CodeActionKind)
+        table.sort(res)
+        return res
+      end)(),
+    },
+  },
+}
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- ansiblels
