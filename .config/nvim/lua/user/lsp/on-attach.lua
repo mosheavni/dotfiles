@@ -18,7 +18,7 @@ local disable_ls_signature = {
 local on_attach_aug = augroup 'OnAttachAu'
 local default_on_attach = function(client, bufnr)
   -- Add mappings
-  user_maps()
+  user_maps(bufnr)
 
   lsp_status.on_attach(client)
   local basics = require 'lsp_basics'
@@ -94,11 +94,10 @@ local default_on_attach = function(client, bufnr)
   -- })
 end
 
-local minimal_on_attach = function(client, bufnr)
-  print 'got here'
+local minimal_on_attach = function(_, bufnr)
   P 'minimal on_attach'
   -- Add mappings
-  user_maps()
+  user_maps(bufnr)
 
   -- lsp_status.on_attach(client)
   -- local basics = require 'lsp_basics'

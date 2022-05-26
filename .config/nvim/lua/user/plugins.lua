@@ -106,7 +106,7 @@ return require('packer').startup(function(use)
   use { 'martinda/Jenkinsfile-vim-syntax' }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
   use { 'rayburgemeestre/phpfolding.vim', ft = { 'php' } }
-  use { 'andrewstuart/vim-kubernetes', ft = { 'yaml' } }
+  use { 'mosheavni/vim-kubernetes', ft = { 'yaml' } }
   use { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } }
   use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
@@ -173,7 +173,7 @@ return require('packer').startup(function(use)
   -- Devicons is last so it can support all of the other plugins
   use 'ryanoasis/vim-devicons'
 
-  local custom_settings_ok, custom_settings = pcall(require, "user.custom-settings")
+  local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
   if custom_settings_ok then
     custom_settings.plugins(use)
   end
