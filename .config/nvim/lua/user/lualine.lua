@@ -32,8 +32,26 @@ lualine.setup({
       "require'user.select-schema'.get_current_schema()",
       { gps.get_location, cond = gps.is_available },
     },
-    lualine_d = { 'filename' },
-    lualine_x = { 'encoding', 'fileformat', 'filetype' },
+    lualine_x = {
+      {
+        -- Lsp server name .
+        function()
+          local msg = 'No Active Lsp'
+          local clients = vim.lsp.get_active_clients({bufnr = 0})
+          if #clients == 0 then
+            return msg
+          end
+          local all_client_names = {}
+          for _, client in ipairs(clients) do
+            table.insert(all_client_names, client.name)
+          end
+          return table.concat(all_client_names, ', ')
+        end,
+        icon = ' LSP:',
+        color = { fg = '#ffffff', gui = 'bold' },
+      },
+      'encoding', 'fileformat', 'filetype',
+    },
     lualine_y = { 'progress' },
     lualine_z = { 'location' }
   },
