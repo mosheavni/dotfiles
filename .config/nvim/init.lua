@@ -50,6 +50,7 @@ let &packpath = &runtimepath
 -- }
 
 require 'user.options'
+require 'user.winbar'
 require 'user.mappings'
 require 'user.plugins'
 require 'user.plugin-configs'

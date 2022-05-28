@@ -54,7 +54,9 @@ vim.opt.showmode = false -- Redundant as lighline takes care of that
 vim.opt.history = 1000
 vim.opt.termguicolors = true
 vim.opt.signcolumn = 'auto'
-vim.opt.winbar = [[%=%m %f]]
+-- vim.opt.winbar = [[%=%m %f]]
+vim.opt.winbar = "%{%v:lua.require'user.winbar'.eval()%}"
+
 
 -- Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
 vim.opt.updatetime = 300
