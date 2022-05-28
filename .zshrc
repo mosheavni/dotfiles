@@ -1,3 +1,4 @@
+# shellcheck disable=2148,2034,2155,1091,2086,1094
 zmodload zsh/zprof
 # ================ #
 # Basic ZSH Config #
@@ -86,11 +87,6 @@ fi
 
 export EDITOR="nvim"
 
-# iTerm profile switching
-it2prof() {
-  printf "\e]1337;SetProfile=$1\a"
-}
-
 cnf() {
   open "https://command-not-found.com/$*"
 }
@@ -102,7 +98,7 @@ cnf() {
 # Load all contexts
 export KUBECONFIG=$HOME/.kube/config
 if [[ -d $HOME/.kube/contexts/ ]]; then
-  for ctx in $HOME/.kube/contexts/*.config; do
+  for ctx in "$HOME"/.kube/contexts/*.config; do
     export KUBECONFIG=${KUBECONFIG}:${ctx}
   done
 fi
@@ -110,7 +106,7 @@ fi
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 
 bookitmeinit() {
-  cd $HOME/Repos/bookitme
+  cd $HOME/Repos/bookitme || return
   export KUBECONFIG=$HOME/.kube/contexts/bookitme-k8s.yaml.config
   source $HOME/Repos/bookitme/bookitme-terraform/.env
   kgp
