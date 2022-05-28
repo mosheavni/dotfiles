@@ -138,7 +138,7 @@ let g:sh_fold_enabled = 4
 
 com! FormatJSON exe '%!python -m json.tool'
 
-function FormatEqual() abort
+function! FormatEqual() abort
   let save_cursor = getcurpos()
   normal! gg=G
   silent! exe '%s#)\zs\ze{# #g'
@@ -196,7 +196,7 @@ else
   let g:grep_literal_flag="-F"
 endif
 
-function RipGrepCWORD(bang, visualmode, ...) abort
+function! RipGrepCWORD(bang, visualmode, ...) abort
   let search_word = a:1
 
   if a:visualmode
