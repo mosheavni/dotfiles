@@ -21,6 +21,11 @@ vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
 -- require('navigator').setup {
 --   default_mapping = true,
 -- }
+-- neoscroll
+require('neoscroll').setup {
+  -- All these keys will be mapped to their corresponding default scrolling animation
+  mappings = { '<C-u>', '<C-d>', 'zt', 'zz', 'zb' },
+}
 -- Vim close tag
 vim.g['closetag_filenames'] = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
 vim.g['closetag_filetypes'] = 'html,xhtml,phtml,javascript,javascriptreact'
@@ -337,8 +342,7 @@ function! s:add_mappings() abort
 endfunction
 ]]
 
-
-local custom_settings_ok, custom_settings = pcall(require, "user.custom-settings")
+local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
 if custom_settings_ok then
   custom_settings.plugin_configs()
 end
