@@ -1,3 +1,5 @@
+local Job = require 'plenary.job'
+
 local default_on_attach = require('user.lsp.on-attach').default
 local status_ok, null_ls = pcall(require, 'null-ls')
 if not status_ok then
@@ -5,6 +7,7 @@ if not status_ok then
 end
 local helpers = require 'null-ls.helpers'
 
+-- Set Jenkinsfile diagnostics (docker image)
 null_ls.register {
   name = 'jenkinsfile',
   method = null_ls.methods.DIAGNOSTICS,
@@ -17,8 +20,20 @@ null_ls.register {
       if result == '200' then
         return params.command
       else
-        io.popen 'start-jenkins-validate'
-        return nil
+        Job
+            :new({
+              command = 'docker',
+              args = { 'ps' },
+              on_exit = function(j, return_val)
+                if return_val == 1 then
+                  return nil
+                else
+                  io.popen 'start-jenkins-validate'
+                end
+              end,
+            })
+            :start()
+        -- return nil
       end
     end,
     args = {
@@ -91,6 +106,7 @@ null_ls.setup {
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.prettierd,
     null_ls.builtins.formatting.stylua,
+    null_ls.builtins.formatting.terraform_fmt,
     null_ls.builtins.formatting.shfmt.with {
       extra_filetypes = sh_extra_fts,
     },
