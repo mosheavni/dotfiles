@@ -4,6 +4,7 @@ local entry_display = require 'telescope.pickers.entry_display'
 local pickers = require 'telescope.pickers'
 local finders = require 'telescope.finders'
 local actions = require 'telescope.actions'
+local action_state = require 'telescope.actions.state'
 local previewers = require 'telescope.previewers'
 local conf = require('telescope.config').values
 
@@ -11,19 +12,45 @@ local open = function()
   local opts = {}
 
   local format = '%(HEAD)' .. '%(refname)' .. '%(authorname)' .. '%(upstream:lstrip=2)' .. '%(committerdate:format-local:%Y/%m/%d %H:%M:%S)'
-  -- local format = '%(HEAD)' .. '%(refname)' .. '%(upstream:lstrip=2)' .. '%(committerdate:format-local:%Y/%m/%d %H:%M:%S)'
+  -- git for-each-ref --perl --format "%(HEAD)%(refname)%(authorname)%(upstream:lstrip=2)%(committerdate:format-local:%Y/%m/%d %H:%M:%S)" | grep -E "(refs\/remotes\/)|(refs\/heads\/)" | sed -e 's?refs/remotes/??g' -e 's?refs/heads/??g' | tr "'" " " | column -t
+
   local output = utils.get_os_command_output({ 'git', 'for-each-ref', '--perl', '--sort', 'committerdate', '--format', format, opts.pattern }, opts.cwd)
   local remotes = utils.get_os_command_output({ 'git', 'remote' }, opts.cwd)
 
   local results = {}
-  local widths = {
-    name = 0,
-    authorname = 0,
-    -- upstream = 0,
-    committerdate = 20,
-  }
   local unescape_single_quote = function(v)
     return string.gsub(v, "\\([\\'])", '%1')
+  end
+  -- Custom git checkout action
+  local git_checkout = function(prompt_bufnr)
+    local cwd = action_state.get_current_picker(prompt_bufnr).cwd
+    local selection = action_state.get_selected_entry()
+    if selection == nil then
+      utils.__warn_no_selection 'actions.git_checkout'
+      return
+    end
+    actions.close(prompt_bufnr)
+
+    -- Create branch name var without the remote
+    local clean_branch_name = selection.value
+    for _,remote_name in ipairs(remotes) do
+      if vim.startswith(selection.value, remote_name .. "/") then
+        clean_branch_name = string.sub(clean_branch_name, string.len(remote_name) + 2)
+      end
+    end
+    local _, ret, stderr = utils.get_os_command_output({ 'git', 'checkout', clean_branch_name }, cwd)
+    if ret == 0 then
+      utils.notify('actions.git_checkout', {
+        msg = string.format('Checked out: %s', selection.value),
+        level = 'INFO',
+      })
+    else
+      utils.notify('actions.git_checkout', {
+        msg = string.format("Error when checking out: %s. Git returned: '%s'", selection.value, table.concat(stderr, ' ')),
+        level = 'ERROR',
+      })
+    end
+    local _, ret_u, stderr_u = utils.get_os_command_output({ 'git', 'branch', '-u', selection.value }, cwd)
   end
   local parsed_branches = {}
   local parse_line = function(line)
@@ -45,31 +72,23 @@ local open = function()
     else
       return
     end
-    entry.value = string.sub(entry.refname, string.len(prefix) + 1)
-    entry.name = entry.value
-    for _, remote in pairs(remotes) do
-      if vim.startswith(entry.value, remote .. '/') then
-        entry.name = string.sub(entry.value, string.len(remote) + 2)
-      end
+    entry.name = string.sub(entry.refname, string.len(prefix) + 1)
+    entry.value = entry.name
+
+    if entry.upstream ~= '' then
+      entry.value = entry.upstream
     end
 
-    -- Don't return existing branches
-    if vim.tbl_contains(parsed_branches, entry.name) then
-      return
-    end
+    -- -- Don't return existing branches
+    -- if vim.tbl_contains(parsed_branches, entry.name) then
+    --   return
+    -- end
 
     -- Don't return HEAD
     if entry.name == 'HEAD' then
       return
     end
 
-    -- Widths
-    for key, value in pairs(widths) do
-      widths[key] = math.max(value, strings.strdisplaywidth(entry[key] or ''))
-    end
-    -- if string.len(entry.upstream) > 0 then
-    --   widths.upstream_indicator = 2
-    -- end
     table.insert(parsed_branches, entry.name)
     return entry
   end
@@ -93,15 +112,17 @@ local open = function()
     table.insert(results, 1, head)
   end
 
+  -- remove duplicate remotes
+
   local displayer = entry_display.create {
     separator = ' ',
     items = {
-      { width = 1 },
-      { width = widths.name },
-      { width = widths.authorname },
-      -- { width = widths.upstream_indicator },
-      -- { width = widths.upstream },
-      { width = widths.committerdate },
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
     },
   }
 
@@ -109,9 +130,9 @@ local open = function()
     return displayer {
       { entry.head },
       { entry.name, 'TelescopeResultsIdentifier' },
+      { string.len(entry.upstream) > 0 and '=>' or '' },
+      { entry.upstream, 'TelescopeResultsIdentifier' },
       { entry.authorname },
-      -- { string.len(entry.upstream) > 0 and '=>' or '' },
-      -- { entry.upstream, 'TelescopeResultsIdentifier' },
       { entry.committerdate },
     }
   end
@@ -134,7 +155,7 @@ local open = function()
     sorter = conf.generic_sorter(opts),
 
     attach_mappings = function(_, map)
-      actions.select_default:replace(actions.git_checkout)
+      actions.select_default:replace(git_checkout)
       -- map('i', '<cr>', actions.git_checkout)
       -- map('n', '<cr>', actions.git_checkout)
 

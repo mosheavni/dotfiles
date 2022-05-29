@@ -7,6 +7,9 @@
 [commit]
   gpgsign = false
 
+[checkout]
+  defaultRemote = origin
+
 [pull]
   rebase = false
 
