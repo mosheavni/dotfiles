@@ -146,6 +146,7 @@ return require('packer').startup(function(use)
   use 'mhinz/vim-startify'
   use 'vim-scripts/CursorLineCurrentWindow'
   use 'p00f/nvim-ts-rainbow'
+  use 'norcalli/nvim-colorizer.lua'
 
   -- Themes
   -- use 'drewtempelmeyer/palenight.vim'
