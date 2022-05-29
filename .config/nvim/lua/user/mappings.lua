@@ -59,7 +59,7 @@ keymap('n', '<leader>=', 'yypVr=', opts.no_remap)
 keymap('n', '<leader>dp', ':diffput<cr>', opts.no_remap)
 keymap('n', '<leader>dg', ':diffget<cr>', opts.no_remap)
 keymap('n', '<leader>dn', ':windo diffthis<cr>', opts.no_remap)
-keymap('n', '<leader>df', ':windo diffoff<cr>', opts.no_remap)
+keymap('n', '<leader>df', ':bufdo diffoff<cr>', opts.no_remap)
 
 -- Map enter to no highlight
 keymap('n', '<CR>', ':nohlsearch<CR><CR>', opts.no_remap_silent)
