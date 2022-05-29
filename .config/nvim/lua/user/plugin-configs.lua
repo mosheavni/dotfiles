@@ -26,6 +26,8 @@ require('neoscroll').setup {
   -- All these keys will be mapped to their corresponding default scrolling animation
   mappings = { '<C-u>', '<C-d>', 'zt', 'zz', 'zb' },
 }
+-- Colorizer
+require('colorizer').setup()
 -- Vim close tag
 vim.g['closetag_filenames'] = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
 vim.g['closetag_filetypes'] = 'html,xhtml,phtml,javascript,javascriptreact'
@@ -225,13 +227,14 @@ endfunction
 command! -bang Gl call <sid>MosheGitPull()
 nmap <silent> <leader>gl :Gl<cr>
 
-function! Enter_Wip_Moshe() abort
+function! RandomEmoji() abort
   let l:emojis = [
     \ '🤩',
     \ '👻',
     \ '😈',
     \ '✨',
     \ '👰',
+    \ '⚓️',
     \ '🙉',
     \ '☘️',
     \ '🌍',
@@ -239,7 +242,11 @@ function! Enter_Wip_Moshe() abort
     \ '🔥',
     \ '🚀'
   \ ]
-  let l:random_emoji = l:emojis[localtime() % len(l:emojis)]
+  return l:emojis[localtime() % len(l:emojis)]
+endfunction
+
+function! Enter_Wip_Moshe() abort
+  let l:random_emoji = RandomEmoji()
   let l:time_now = strftime('%c')
   let l:commit_message = l:random_emoji . ' wip ' . l:time_now
   echom "Committing: " . l:commit_message
