@@ -37,6 +37,9 @@ keymap('n', '<C-K>', '<C-W><C-K>', opts.no_remap)
 keymap('n', '<C-L>', '<C-W><C-L>', opts.no_remap)
 keymap('n', '<C-H>', '<C-W><C-H>', opts.no_remap)
 
+-- entire file text-object
+keymap('o', 'ae', '<cmd>normal! ggVG<CR>', opts.no_remap_silent)
+
 -- Run macro
 keymap('n', 'Q', '@q', opts.no_remap)
 
