@@ -11,8 +11,8 @@ local disable_ls_format = {
 local disable_ft_format = {
   'yaml',
 }
-local disable_ls_signature = {
-  'terraformls',
+local enable_ls_signature = {
+  'sumneko_lua',
 }
 
 local on_attach_aug = augroup 'OnAttachAu'
@@ -24,8 +24,13 @@ local default_on_attach = function(client, bufnr)
   local basics = require 'lsp_basics'
   basics.make_lsp_commands(client, bufnr)
 
-  if not vim.tbl_contains(disable_ls_signature, client.name) then
-    require('lsp_signature').on_attach()
+  if vim.tbl_contains(enable_ls_signature, client.name) then
+    require "lsp_signature".on_attach({
+      bind = true, -- This is mandatory, otherwise border config won't get registered.
+      handler_opts = {
+        border = "rounded"
+      }
+    }, bufnr)
   end
 
   if client.resolved_capabilities.code_lens then
