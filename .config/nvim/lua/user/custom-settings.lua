@@ -6,7 +6,7 @@ M.mappings = {
   cmp = { }
 }
 
-M.plugins = function(use)
+M.plugins = function(_)
 end
 
 M.plugin_configs = function()

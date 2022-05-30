@@ -1,3 +1,5 @@
+-- Colorscheme
+vim.cmd [[colorscheme gruvbox]]
 -- WinResizer
 vim.g['winresizer_start_key'] = '<C-E>'
 -- Vim json path
@@ -36,8 +38,14 @@ vim.g['WebDevIconsOS'] = 'Darwin'
 vim.g['DevIconsEnableFoldersOpenClose'] = 1
 vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
 -- Conflict marker
-vim.g['conflict_marker_highlight_group'] = 'VisualNOS'
 vim.cmd [[
+" disable the default highlight group
+let g:conflict_marker_highlight_group = ''
+
+" Include text after begin and end markers
+let g:conflict_marker_begin = '^<<<<<<< .*$'
+let g:conflict_marker_end   = '^>>>>>>> .*$'
+
 highlight ConflictMarkerBegin guibg=#2f7366
 highlight ConflictMarkerOurs guibg=#2e5049
 highlight ConflictMarkerTheirs guibg=#344f69
@@ -150,9 +158,6 @@ require('nvim-lightbulb').setup {
     hl_mode = 'replace',
   },
 }
-
--- Colorscheme
-vim.cmd [[colorscheme gruvbox]]
 
 -- Ansible
 vim.cmd [[
