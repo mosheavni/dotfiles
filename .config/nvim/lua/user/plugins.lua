@@ -102,6 +102,7 @@ return require('packer').startup(function(use)
     cmd = 'MarkdownPreview',
     ft = { 'markdown' },
   }
+  use { 'jose-elias-alvarez/nvim-lsp-ts-utils' }
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'martinda/Jenkinsfile-vim-syntax' }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
