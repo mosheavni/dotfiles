@@ -93,6 +93,20 @@ return require('packer').startup(function(use)
       'hrsh7th/cmp-nvim-lsp-document-symbol',
     },
   }
+  -- Github's suggeetsions engine
+  use {
+    'github/copilot.vim', -- for initial login
+    -- {
+    --   'zbirenbaum/copilot.lua',
+    --   event = { 'VimEnter' },
+    --   config = function()
+    --     vim.defer_fn(function()
+    --       require('copilot').setup()
+    --     end, 100)
+    --   end,
+    -- },
+    -- { 'zbirenbaum/copilot-cmp', after = { 'copilot.lua', 'nvim-cmp' } },
+  }
   use {
     'iamcco/markdown-preview.nvim',
     run = 'cd app && yarn install',
