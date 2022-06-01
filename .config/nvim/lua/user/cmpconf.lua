@@ -10,8 +10,8 @@ end
 
 local cmp_mappings = {
   ['<C-Space>'] = cmp.mapping.complete(),
-  ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-  ['<C-e>'] = cmp.mapping.close(),
+  ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+  ['<C-e>'] = cmp.mapping.abort(),
   ['<C-f>'] = cmp.mapping.scroll_docs(4),
   ['<C-j>'] = cmp.mapping.select_next_item(),
   ['<C-k>'] = cmp.mapping.select_prev_item(),
@@ -52,6 +52,7 @@ local source_mapping = {
   nvim_lua = '[Vim]',
   path = '[Path]',
   buffer = '[Buffer]',
+  copilot = '[CP]',
 }
 
 local config = {
@@ -59,6 +60,7 @@ local config = {
   formatting = {
     format = lspkind.cmp_format {
       mode = 'symbol_text', -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
+      preset = 'codicons',
       maxwidth = 40, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
 
       -- The function below will be called before any actual modifications from lspkind
@@ -98,6 +100,7 @@ local config = {
   sources = cmp.config.sources {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    -- { name = 'copilot', priority = 81 },
     { name = 'cmp_tabnine', priority = 80 },
     { name = 'path' },
     { name = 'buffer', keyword_length = 4 },
