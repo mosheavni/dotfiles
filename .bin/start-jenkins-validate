@@ -4,16 +4,23 @@ CONTAINER_NAME=jenkins-validate
 PORT=41595
 JENKINS_HOST="http://localhost:$PORT"
 
+# Remove if already exists
 docker_ps_lines="$(docker ps --filter name="${CONTAINER_NAME}" | wc -l)"
-if [[ $docker_ps_lines -lt 2 ]]; then
-  echo "starting server"
-  docker run \
-    -p "$PORT:8080" \
-    -d \
-    --name "${CONTAINER_NAME}" \
-    --restart always mosheavni/jenkins-validate:latest
+if [[ $docker_ps_lines -ge 2 ]]; then
+  docker stop "$CONTAINER_NAME"
+  docker rm -f "$CONTAINER_NAME"
+
 fi
 
+# Start server
+echo "starting server"
+docker run \
+  -p "$PORT:8080" \
+  -d \
+  --name "${CONTAINER_NAME}" \
+  --restart always mosheavni/jenkins-validate:latest
+
+# Wait for server to become available
 while [[ $(curl -s -w "%{http_code}" "$JENKINS_HOST/" -o /dev/null) != "200" ]]; do
   echo "Waiting for jenkins to start"
   sleep 5
