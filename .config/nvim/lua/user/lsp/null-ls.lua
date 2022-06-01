@@ -11,7 +11,8 @@ local helpers = require 'null-ls.helpers'
 null_ls.register {
   name = 'jenkinsfile',
   method = null_ls.methods.DIAGNOSTICS,
-  filetypes = { 'Jenkinsfile' },
+  -- filetypes = { 'Jenkinsfile' }, -- TODO: fix starting the server asynchronously
+  filetypes = {" hhiribiri"}, -- TODO: fix starting the server asynchronously
   generator = helpers.generator_factory {
     command = 'curl',
     dynamic_command = function(params)

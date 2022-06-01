@@ -139,9 +139,13 @@ local mappings = {
       r = {
         f = { 'Show references' },
         n = { 'Rename symbol' },
-        w = { 'Remove workspace dir' },
       },
-      lw = { 'Print workspace directories' },
+      w = {
+        name = '+Workspace',
+        a = { 'Add workspace dir' },
+        r = { 'Remove workspace dir' },
+        l = { 'Print workspace dirs' },
+      },
     },
     m = {
       name = '+Mouse',

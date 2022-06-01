@@ -93,6 +93,20 @@ return require('packer').startup(function(use)
       'hrsh7th/cmp-nvim-lsp-document-symbol',
     },
   }
+  -- Github's suggeetsions engine
+  use {
+    'github/copilot.vim', -- for initial login
+    -- {
+    --   'zbirenbaum/copilot.lua',
+    --   event = { 'VimEnter' },
+    --   config = function()
+    --     vim.defer_fn(function()
+    --       require('copilot').setup()
+    --     end, 100)
+    --   end,
+    -- },
+    -- { 'zbirenbaum/copilot-cmp', after = { 'copilot.lua', 'nvim-cmp' } },
+  }
   use {
     'iamcco/markdown-preview.nvim',
     run = 'cd app && yarn install',
@@ -102,6 +116,7 @@ return require('packer').startup(function(use)
     cmd = 'MarkdownPreview',
     ft = { 'markdown' },
   }
+  use { 'jose-elias-alvarez/nvim-lsp-ts-utils' }
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'martinda/Jenkinsfile-vim-syntax' }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }

@@ -28,6 +28,13 @@ require('neoscroll').setup {
   -- All these keys will be mapped to their corresponding default scrolling animation
   mappings = { '<C-u>', '<C-d>', 'zt', 'zz', 'zb' },
 }
+-- Github Copilot
+vim.cmd[[
+imap <silent><script><expr> <M-Enter> copilot#Accept("\<CR>")
+" imap <silent> <c-]> <Plug>(copilot-next)
+" inoremap <silent> <c-[> <Plug>(copilot-previous)
+let g:copilot_no_tab_map = v:true
+]]
 -- Colorizer
 require('colorizer').setup()
 -- Vim close tag
