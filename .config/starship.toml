@@ -1,0 +1,12 @@
+[kubernetes]
+disabled = false
+format = '\([⎈](bold fg:33) [$cluster](fg:166):[$namespace](dimmed green)\) '
+
+[aws]
+disabled = false
+
+[python]
+disabled = true
+
+[battery]
+disabled = false

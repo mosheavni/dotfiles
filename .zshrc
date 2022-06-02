@@ -113,3 +113,6 @@ bookitmeinit() {
 }
 
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
+
+# Load starship last
+eval "$(starship init zsh)"
