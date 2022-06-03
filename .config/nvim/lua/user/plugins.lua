@@ -11,8 +11,15 @@ return require('packer').startup(function(use)
   use 'nvim-lua/plenary.nvim'
 
   -- Project Drawer
-  use { 'preservim/nerdtree', cmd = { 'NERDTreeToggle' } }
-  use { 'Xuyuanp/nerdtree-git-plugin', cmd = { 'NERDTreeToggle' } }
+  -- use { 'preservim/nerdtree', cmd = { 'NERDTreeToggle' } }
+  -- use { 'Xuyuanp/nerdtree-git-plugin', cmd = { 'NERDTreeToggle' } }
+  use {
+    'kyazdani42/nvim-tree.lua',
+    requires = {
+      'kyazdani42/nvim-web-devicons', -- optional, for file icon
+    },
+    tag = 'nightly', -- optional, updated every week. (see issue #1193)
+  }
 
   -- Git Related
   use {
@@ -71,6 +78,10 @@ return require('packer').startup(function(use)
     'kosayoda/nvim-lightbulb',
   }
   use {
+    'folke/trouble.nvim',
+    requires = 'kyazdani42/nvim-web-devicons',
+  }
+  use {
     'ray-x/navigator.lua',
     requires = {
       { 'ray-x/guihua.lua', run = 'cd lua/fzy && make' },
@@ -120,7 +131,6 @@ return require('packer').startup(function(use)
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'martinda/Jenkinsfile-vim-syntax' }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
-  use { 'rayburgemeestre/phpfolding.vim', ft = { 'php' } }
   use { 'mosheavni/vim-kubernetes', ft = { 'yaml' } }
   use { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } }
   use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
@@ -147,6 +157,7 @@ return require('packer').startup(function(use)
   -- Look & Feel
   use { 'stevearc/dressing.nvim' } -- overrides the default vim input to provide better visuals
   use 'rcarriga/nvim-notify'
+  use 'lukas-reineke/indent-blankline.nvim'
 
   use {
     'nvim-lualine/lualine.nvim',
@@ -171,6 +182,8 @@ return require('packer').startup(function(use)
   -- use 'jacoborus/tender.vim'
   -- use 'ellisonleao/gruvbox.nvim'
   use 'ellisonleao/gruvbox.nvim'
+  use 'rafamadriz/neon'
+  use 'marko-cerovac/material.nvim'
   -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
 
   -- Text Manipulation

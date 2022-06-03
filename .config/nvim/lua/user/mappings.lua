@@ -228,27 +228,10 @@ com! DiffSaved call s:DiffWithSaved()
 nnoremap <leader>ds :DiffSaved<cr>
 ]]
 
--- Telescope
-keymap('n', '<c-p>', [[(expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Telescope find_files\<cr>"]], opts.no_remap_expr_silent)
-keymap('n', '<c-b>', '<cmd>Telescope buffers<cr>', opts.no_remap)
-keymap('n', '<F4>', '<cmd>lua require("user.git-branches").open()<cr>', opts.no_remap)
-keymap('n', '<leader>hh', '<cmd>Telescope help_tags<cr>', opts.no_remap)
-
--- Vim easy align
-keymap('n', 'ga', '<Plug>(EasyAlign)', {})
-
 -- schema-select
 keymap('n', '<leader>cc', ":lua require('user.select-schema').select()<cr>", opts.no_remap_silent)
 
--- Spectre
-keymap('n', '<leader>S', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opts.silent)
-keymap('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opts.no_remap)
-
--- AnyJump
-keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
-
-
--- Visual calculator
+-- Visual calculator -- TODO: finish...
 function VisualCalculator()
   local vis_start = vim.api.nvim_buf_get_mark(0, '<')
   local vis_end = vim.api.nvim_buf_get_mark(0, '>')

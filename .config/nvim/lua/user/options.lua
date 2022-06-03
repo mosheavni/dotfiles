@@ -1,101 +1,104 @@
-vim.opt.compatible = false
+local opt = vim.opt
+opt.compatible = false
 
 -- disable legacy vim filetype detection in favor of new lua based from neovim
 vim.g.do_filetype_lua = 1
 vim.g.did_load_filetypes = 0
 
-vim.opt.cursorcolumn = true
-vim.opt.cursorline = true -- Add highlight behind current line
-vim.opt.shortmess:append { c = true, l = false, q = false, S = false }
-vim.opt.list = true
-vim.opt.listchars = { tab = '┆·', trail = '·', precedes = '', extends = '', eol = '↲' }
+opt.cursorcolumn = true
+opt.cursorline = true -- Add highlight behind current line
+opt.shortmess:append { c = true, l = false, q = false, S = false }
+opt.list = true
+opt.listchars = { tab = '┆·', trail = '·', precedes = '', extends = '', eol = '↲' }
 -- set lcscope=tab:┆·,trail:·,precedes:,extends:
-vim.opt.fillchars = { vert = '|', fold = '·' }
-vim.opt.emoji = false
+opt.fillchars = { vert = '|', fold = '·' }
+opt.emoji = false
+-- go to previous/next line with h,l,left arrow and right arrow
+-- when cursor reaches end/beginning of line
+opt.whichwrap:append '<>[]hl'
 
-vim.opt.number = true -- Show current line number
-vim.opt.relativenumber = true -- Show relative line numbers
-vim.opt.linebreak = true -- Avoid wrapping a line in the middle of a word.
-vim.opt.wrap = true -- Wrap long lines
-vim.opt.hlsearch = true -- highlight reg. ex. in @/ register
-vim.opt.incsearch = true -- Search as characters are typed
-vim.opt.inccommand = 'split' -- Incremental search and replace with small split window
-vim.opt.ignorecase = true -- Search case insensitive...
-vim.opt.smartcase = true -- ignore case if search pattern is all lowercase, case-sensitive otherwise
-vim.opt.autoread = true -- Re-read file if it was changed from the outside
-vim.opt.scrolloff = 7 -- When about to scroll page, see 7 lines below cursor
-vim.opt.cmdheight = 2 -- Height of the command bar
-vim.opt.hidden = true -- Hide buffer if abandoned
-vim.opt.showmatch = true -- When closing a bracket (like {}), show the enclosing
-vim.opt.splitbelow = true -- Horizontaly plitted windows open below
-vim.opt.splitright = true -- Vertically plitted windows open below bracket for a brief second
-vim.opt.startofline = false -- Stop certain movements from always going to the first character of a line.
-vim.opt.confirm = true -- Prompt confirmation if exiting unsaved file
-vim.opt.lazyredraw = true -- redraw only when we need to.
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.writebackup = false
-vim.opt.wildmenu = true -- Displays a menu on autocomplete
-vim.opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
-vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
-vim.opt.previewheight = 15
-vim.opt.title = true -- Changes the iterm title
-vim.opt.showcmd = true
-vim.opt.guifont = ':h'
-vim.opt.mouse = 'a'
-vim.opt.undofile = true -- Enables saving undo history to a file
-vim.opt.colorcolumn = '80' -- Mark where are 80 characters to start breaking line
-vim.opt.textwidth = 80
-vim.opt.fileencodings = { 'utf-8', 'cp1251' }
-vim.opt.encoding = 'utf-8'
-vim.opt.visualbell = true -- Use visual bell instead of beeping
-vim.opt.conceallevel = 1
-vim.opt.showmode = false -- Redundant as lighline takes care of that
-vim.opt.history = 1000
-vim.opt.termguicolors = true
-vim.opt.signcolumn = 'auto'
--- vim.opt.winbar = [[%=%m %f]]
-vim.opt.winbar = "%{%v:lua.require'user.winbar'.eval()%}"
-
+opt.number = true -- Show current line number
+opt.relativenumber = true -- Show relative line numbers
+opt.linebreak = true -- Avoid wrapping a line in the middle of a word.
+opt.wrap = true -- Wrap long lines
+opt.hlsearch = true -- highlight reg. ex. in @/ register
+opt.incsearch = true -- Search as characters are typed
+opt.inccommand = 'split' -- Incremental search and replace with small split window
+opt.ignorecase = true -- Search case insensitive...
+opt.smartcase = true -- ignore case if search pattern is all lowercase, case-sensitive otherwise
+opt.autoread = true -- Re-read file if it was changed from the outside
+opt.scrolloff = 7 -- When about to scroll page, see 7 lines below cursor
+opt.cmdheight = 2 -- Height of the command bar
+opt.hidden = true -- Hide buffer if abandoned
+opt.showmatch = true -- When closing a bracket (like {}), show the enclosing
+opt.splitbelow = true -- Horizontaly plitted windows open below
+opt.splitright = true -- Vertically plitted windows open below bracket for a brief second
+opt.startofline = false -- Stop certain movements from always going to the first character of a line.
+opt.confirm = true -- Prompt confirmation if exiting unsaved file
+opt.lazyredraw = true -- redraw only when we need to.
+opt.swapfile = false
+opt.backup = false
+opt.writebackup = false
+opt.wildmenu = true -- Displays a menu on autocomplete
+opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
+opt.completeopt = { 'menu', 'menuone', 'noselect' }
+opt.previewheight = 15
+opt.title = true -- Changes the iterm title
+opt.showcmd = true
+opt.guifont = ':h'
+opt.mouse = 'a'
+opt.undofile = true -- Enables saving undo history to a file
+opt.colorcolumn = '80' -- Mark where are 80 characters to start breaking line
+opt.textwidth = 80
+opt.fileencodings = { 'utf-8', 'cp1251' }
+opt.encoding = 'utf-8'
+opt.visualbell = true -- Use visual bell instead of beeping
+opt.conceallevel = 1
+opt.showmode = false -- Redundant as lighline takes care of that
+opt.history = 1000
+opt.termguicolors = true
+opt.signcolumn = 'auto'
+-- opt.winbar = [[%=%m %f]]
+opt.winbar = "%{%v:lua.require'user.winbar'.eval()%}"
 
 -- Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
-vim.opt.updatetime = 300
+opt.updatetime = 300
 
 -- Ignore node_modules and other dirs
-vim.opt.wildignore:append { '**/node_modules/**', '.hg', '.git', '.svn', '*.DS_Store', '*.pyc' }
-vim.opt.path:append { '**' }
+opt.wildignore:append { '**/node_modules/**', '.hg', '.git', '.svn', '*.DS_Store', '*.pyc' }
+opt.path:append { '**' }
 
 -- Folding
-vim.opt.foldenable = true
-vim.opt.foldmethod = 'syntax'
-vim.opt.foldlevel = 999
-vim.opt.foldlevelstart = 10
+opt.foldenable = true
+opt.foldmethod = 'syntax'
+opt.foldlevel = 999
+opt.foldlevelstart = 10
 
 -- j = Delete comment character when joining commented lines.
 -- t = auto break long lines
 -- r = auto insert comment leader after <Enter> (insert mode)
 -- o = auto insert comment leader after o (normal mode)
 -- l = don't break long lines
-vim.opt.formatoptions:append { j = true, t = true, r = true, o = true, l = true }
+opt.formatoptions:append { j = true, t = true, r = true, o = true, l = true }
 
 -- Indenting
-vim.opt.breakindent = true -- Maintain indent on wrapping lines
-vim.opt.autoindent = true -- always set autoindenting on
-vim.opt.copyindent = true -- copy the previous indentation on autoindenting
-vim.opt.smartindent = true -- Number of spaces to use for each step of (auto)indent.
-vim.opt.shiftwidth = 4 -- Number of spaces for each indent
-vim.opt.softtabstop = 4
-vim.opt.tabstop = 4
-vim.opt.smarttab = true -- insert tabs on the start of a line according to shiftwidth, not tabstop
-vim.opt.expandtab = true -- Tab changes to spaces. Format with :retab
+opt.breakindent = true -- Maintain indent on wrapping lines
+opt.autoindent = true -- always set autoindenting on
+opt.copyindent = true -- copy the previous indentation on autoindenting
+opt.smartindent = true -- Number of spaces to use for each step of (auto)indent.
+opt.shiftwidth = 4 -- Number of spaces for each indent
+opt.softtabstop = 4
+opt.tabstop = 4
+opt.smarttab = true -- insert tabs on the start of a line according to shiftwidth, not tabstop
+opt.expandtab = true -- Tab changes to spaces. Format with :retab
 
 -- Set shell
 if vim.fn.executable '/bin/zsh' == 1 then
-  vim.opt.shell = '/bin/zsh -l'
+  opt.shell = '/bin/zsh -l'
 elseif vim.fn.executable '/bin/bash' == 1 then
-  vim.opt.shell = '/bin/bash'
+  opt.shell = '/bin/bash'
 else
-  vim.opt.shell = '/bin/sh'
+  opt.shell = '/bin/sh'
 end
 
 -- Set python path
@@ -349,3 +352,28 @@ function! s:yankshift(event)
 endfunction
 " }}}
 ]]
+
+-- disable some builtin vim plugins
+local default_plugins = {
+  '2html_plugin',
+  'getscript',
+  'getscriptPlugin',
+  'gzip',
+  'logipat',
+  'netrw',
+  'netrwPlugin',
+  'netrwSettings',
+  'netrwFileHandlers',
+  'matchit',
+  'tar',
+  'tarPlugin',
+  'rrhelper',
+  'spellfile_plugin',
+  'vimball',
+  'vimballPlugin',
+  'zip',
+  'zipPlugin',
+}
+for _, plugin in pairs(default_plugins) do
+  vim.g['loaded_' .. plugin] = 1
+end
