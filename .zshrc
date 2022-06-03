@@ -12,7 +12,7 @@ export PATH="$HOME/.bin:$PATH"
 export PATH="/usr/local/opt/node@16/bin:$PATH"
 
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="mosherussell"
+# ZSH_THEME="mosherussell"
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"

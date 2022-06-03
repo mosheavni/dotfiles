@@ -1,3 +1,6 @@
+-- Colorscheme
+vim.g.material_style = 'oceanic'
+vim.cmd [[colorscheme material]]
 -- WinResizer
 vim.g['winresizer_start_key'] = '<C-E>'
 -- Vim json path
@@ -27,7 +30,7 @@ require('neoscroll').setup {
   mappings = { '<C-u>', '<C-d>', 'zt', 'zz', 'zb' },
 }
 -- Github Copilot
-vim.cmd[[
+vim.cmd [[
 imap <silent><script><expr> <M-Enter> copilot#Accept("\<CR>")
 " imap <silent> <c-]> <Plug>(copilot-next)
 " inoremap <silent> <c-[> <Plug>(copilot-previous)

@@ -178,6 +178,8 @@ return require('packer').startup(function(use)
   -- use 'jacoborus/tender.vim'
   -- use 'ellisonleao/gruvbox.nvim'
   use 'ellisonleao/gruvbox.nvim'
+  use 'rafamadriz/neon'
+  use 'marko-cerovac/material.nvim'
   -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
 
   -- Text Manipulation

@@ -1,3 +1,5 @@
+format = "$directory$all"
+
 [kubernetes]
 disabled = false
 format = '\([⎈](bold fg:33) [$cluster](fg:166):[$namespace](dimmed green)\) '
