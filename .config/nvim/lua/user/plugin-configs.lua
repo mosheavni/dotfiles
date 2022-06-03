@@ -1,3 +1,7 @@
+local utils = require 'user.utils'
+local keymap = utils.keymap
+local opts = utils.map_opts
+
 -- Colorscheme
 vim.g.material_style = 'oceanic'
 vim.cmd [[colorscheme material]]
@@ -7,6 +11,8 @@ vim.g['winresizer_start_key'] = '<C-E>'
 vim.g['jsonpath_register'] = '*'
 -- Comment.nvim
 require('Comment').setup {}
+-- Vim easy align
+keymap('n', 'ga', '<Plug>(EasyAlign)', {})
 -- Floaterm
 vim.g['floaterm_keymap_toggle'] = '<F6>'
 vim.g['floaterm_keymap_new'] = '<F7>'
@@ -18,6 +24,11 @@ vim.g['ansible_goto_role_paths'] = '.;,roles;'
 -- Yaml Revealer
 vim.g['yaml_revealer_separator'] = '.'
 vim.g['yaml_revealer_list_indicator'] = 1
+-- Spectre
+keymap('n', '<leader>S', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opts.silent)
+keymap('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opts.no_remap)
+-- AnyJump
+keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
 -- Editor config
 vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
 -- Navigator
@@ -160,10 +171,14 @@ require('nvim-lightbulb').setup {
     hl_mode = 'replace',
   },
 }
-
--- Colorscheme
-vim.cmd [[colorscheme gruvbox]]
-
+-- Trouble
+require('trouble').setup()
+keymap('n', '<leader>xx', '<cmd>TroubleToggle<cr>', opts.no_remap_silent)
+keymap('n', '<leader>xw', '<cmd>TroubleToggle workspace_diagnostics<cr>', opts.no_remap_silent)
+keymap('n', '<leader>xd', '<cmd>TroubleToggle document_diagnostics<cr>', opts.no_remap_silent)
+keymap('n', '<leader>xl', '<cmd>TroubleToggle loclist<cr>', opts.no_remap_silent)
+keymap('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>', opts.no_remap_silent)
+keymap('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', opts.no_remap_silent)
 -- Ansible
 vim.cmd [[
 function! FindAnsibleRoleUnderCursor()

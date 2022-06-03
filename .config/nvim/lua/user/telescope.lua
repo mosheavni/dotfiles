@@ -4,6 +4,9 @@ if not status_ok then
 end
 
 local actions = require 'telescope.actions'
+local utils = require 'user.utils'
+local opts = utils.map_opts
+local keymap = utils.keymap
 
 telescope.setup {
   defaults = {
@@ -44,3 +47,9 @@ telescope.setup {
 
 telescope.load_extension 'fzf'
 telescope.load_extension 'project'
+
+-- Keymaps
+keymap('n', '<c-p>', [[(expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Telescope find_files\<cr>"]], opts.no_remap_expr_silent)
+keymap('n', '<c-b>', '<cmd>Telescope buffers<cr>', opts.no_remap)
+keymap('n', '<F4>', '<cmd>lua require("user.git-branches").open()<cr>', opts.no_remap)
+keymap('n', '<leader>hh', '<cmd>Telescope help_tags<cr>', opts.no_remap)
