@@ -1,5 +1,8 @@
 local M = {}
 M.autocmd = vim.api.nvim_create_autocmd
+
+--Creates an augroup while clearing previous
+--- @param name string #The name of the augroup.
 M.augroup = function(name)
   return vim.api.nvim_create_augroup(name, { clear = true })
 end
