@@ -13,6 +13,8 @@ nvim_tree.setup {
   open_on_tab = false,
   hijack_cursor = true,
   hijack_unnamed_buffer_when_opening = false,
+  update_cwd = true,
+  reload_on_bufenter = false,
   update_focused_file = {
     enable = true,
     update_cwd = false,
@@ -27,7 +29,7 @@ nvim_tree.setup {
         { key = 'x', action = 'close_node' },
         { key = 's', action = 'vsplit' },
         { key = 'i', action = 'split' },
-        { key = '<c-e>', action = '' },
+        { key = '<C-e>', action = '' },
       },
     },
   },
