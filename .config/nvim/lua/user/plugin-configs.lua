@@ -77,53 +77,53 @@ vim.g['startify_custom_header'] = {
   '   🚀               ✨              🚀',
 }
 -- NERDTree
-vim.g['NERDTreeChDirMode'] = 2
-vim.g['NERDTreeHijackNetrw'] = 1
-vim.g['NERDTreeShowHidden'] = 1
-vim.g['NERDTreeHighlightCursorline'] = 1
-vim.g['NERDTreeFileExtensionHighlightFullName'] = 1
-vim.g['NERDTreeGitStatusUseNerdFonts'] = 1
--- vim.g["NERDTreeGitStatusConcealBrackets"] = 1
-vim.g['NERDTreeGitStatusIndicatorMapCustom'] = {
-  Modified = '✹',
-  Staged = '✚',
-  Untracked = '✭',
-  Unmerged = '═',
-  Dirty = '✗',
-  Renamed = '➜',
-  Clean = '✔︎',
-  Ignored = '☒',
-  Deleted = '✖',
-  Unknown = '?',
-}
-vim.cmd [[
-" Check if NERDTree is open or active
-function! IsNERDTreeOpen()
-  return exists('t:NERDTreeBufName') && (bufwinnr(t:NERDTreeBufName) != -1)
-endfunction
-" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
-" file, and we're not in vimdiff
-function! SyncTree()
-  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
-    NERDTreeFind
-    wincmd p
-  endif
-endfunction
-function! ToggleNerdTree()
-  set eventignore=BufEnter
-  NERDTreeToggle
-  set eventignore=
-endfunction
-augroup nerd_tree_augroup
-  autocmd!
-  " Highlight currently open buffer in NERDTree
-  autocmd BufEnter * call SyncTree()
-  " Close VIM if NERDTree is the only buffer left
-  autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
-augroup END
-nmap <silent> <C-o> :call ToggleNerdTree()<CR>
-nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
-]]
+-- vim.g['NERDTreeChDirMode'] = 2
+-- vim.g['NERDTreeHijackNetrw'] = 1
+-- vim.g['NERDTreeShowHidden'] = 1
+-- vim.g['NERDTreeHighlightCursorline'] = 1
+-- vim.g['NERDTreeFileExtensionHighlightFullName'] = 1
+-- vim.g['NERDTreeGitStatusUseNerdFonts'] = 1
+-- -- vim.g["NERDTreeGitStatusConcealBrackets"] = 1
+-- vim.g['NERDTreeGitStatusIndicatorMapCustom'] = {
+--   Modified = '✹',
+--   Staged = '✚',
+--   Untracked = '✭',
+--   Unmerged = '═',
+--   Dirty = '✗',
+--   Renamed = '➜',
+--   Clean = '✔︎',
+--   Ignored = '☒',
+--   Deleted = '✖',
+--   Unknown = '?',
+-- }
+-- vim.cmd [[
+-- " Check if NERDTree is open or active
+-- function! IsNERDTreeOpen()
+--   return exists('t:NERDTreeBufName') && (bufwinnr(t:NERDTreeBufName) != -1)
+-- endfunction
+-- " Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
+-- " file, and we're not in vimdiff
+-- function! SyncTree()
+--   if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+--     NERDTreeFind
+--     wincmd p
+--   endif
+-- endfunction
+-- function! ToggleNerdTree()
+--   set eventignore=BufEnter
+--   NERDTreeToggle
+--   set eventignore=
+-- endfunction
+-- augroup nerd_tree_augroup
+--   autocmd!
+--   " Highlight currently open buffer in NERDTree
+--   autocmd BufEnter * call SyncTree()
+--   " Close VIM if NERDTree is the only buffer left
+--   autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
+-- augroup END
+-- nmap <silent> <C-o> :call ToggleNerdTree()<CR>
+-- nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
+-- ]]
 -- Switch vim
 -- The map switch is between underscores to camelCase: moshe_king -> mosheKing -> moshe_king.
 vim.g['switch_custom_definitions'] = {
@@ -153,8 +153,6 @@ require('fidget').setup {
     relative = 'editor',
   },
 }
--- disable netrw
-vim.g['loaded_netrwPlugin'] = 1
 -- Which-Key
 require('which-key').setup {}
 -- nvim gps
@@ -179,6 +177,42 @@ keymap('n', '<leader>xd', '<cmd>TroubleToggle document_diagnostics<cr>', opts.no
 keymap('n', '<leader>xl', '<cmd>TroubleToggle loclist<cr>', opts.no_remap_silent)
 keymap('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>', opts.no_remap_silent)
 keymap('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', opts.no_remap_silent)
+-- indent_blankline
+vim.cmd [[highlight IndentBlanklineIndent1 guifg=#C678DD gui=nocombine]]
+vim.cmd [[highlight IndentBlanklineIndent2 guifg=#E06C75 gui=nocombine]]
+vim.cmd [[highlight IndentBlanklineIndent3 guifg=#E5C07B gui=nocombine]]
+vim.cmd [[highlight IndentBlanklineIndent4 guifg=#98C379 gui=nocombine]]
+vim.cmd [[highlight IndentBlanklineIndent5 guifg=#56B6C2 gui=nocombine]]
+vim.cmd [[highlight IndentBlanklineIndent6 guifg=#61AFEF gui=nocombine]]
+require('indent_blankline').setup {
+  filetype_exclude = {
+    'help',
+    'terminal',
+    'alpha',
+    'packer',
+    'lspinfo',
+    'TelescopePrompt',
+    'TelescopeResults',
+    'NvimTree',
+    'nvchad_cheatsheet',
+    'lsp-installer',
+    '',
+  },
+  buftype_exclude = { 'terminal' },
+  show_trailing_blankline_indent = false,
+  show_first_indent_level = false,
+  show_current_context = true,
+  show_current_context_start = true,
+  space_char_blankline = ' ',
+  char_highlight_list = {
+    'IndentBlanklineIndent1',
+    'IndentBlanklineIndent2',
+    'IndentBlanklineIndent3',
+    'IndentBlanklineIndent4',
+    'IndentBlanklineIndent5',
+    'IndentBlanklineIndent6',
+  },
+}
 -- Ansible
 vim.cmd [[
 function! FindAnsibleRoleUnderCursor()
