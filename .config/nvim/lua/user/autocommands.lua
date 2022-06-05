@@ -58,16 +58,6 @@ autocmd({ 'BufWritePost' }, {
 --   command = 'EnableBlameLine'
 -- })
 
--- bulb
-local bulb = augroup 'BulbAu'
-autocmd({ 'CursorHold', 'CursorHoldI' }, {
-  group = bulb,
-  pattern = '*',
-  callback = function()
-    require('nvim-lightbulb').update_lightbulb()
-  end,
-})
-
 -- Last position on Document
 local last_position = augroup 'LastPosition'
 autocmd({ 'BufReadPost' }, {

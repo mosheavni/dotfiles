@@ -1,6 +1,8 @@
 local utils = require 'user.utils'
 local keymap = utils.keymap
 local opts = utils.map_opts
+local autocmd = utils.autocmd
+local augroup = utils.augroup
 
 -- Colorscheme
 vim.g.material_style = 'oceanic'
@@ -164,7 +166,8 @@ require('which-key').setup {}
 -- nvim gps
 require('nvim-gps').setup()
 -- bulb (code actions)
-require('nvim-lightbulb').setup {
+local lightbulb = require 'nvim-lightbulb'
+lightbulb.setup {
   sign = {
     enabled = false,
   },
@@ -175,6 +178,14 @@ require('nvim-lightbulb').setup {
     hl_mode = 'replace',
   },
 }
+local bulb_au = augroup 'BulbAu'
+autocmd({ 'CursorHold', 'CursorHoldI' }, {
+  group = bulb_au,
+  pattern = '*',
+  callback = function()
+    lightbulb.update_lightbulb()
+  end,
+})
 -- Trouble
 require('trouble').setup()
 keymap('n', '<leader>xx', '<cmd>TroubleToggle<cr>', opts.no_remap_silent)
