@@ -5,7 +5,7 @@ local autocmd = utils.autocmd
 local augroup = utils.augroup
 
 -- Colorscheme
-vim.g.material_style = 'oceanic'
+vim.g.material_style = 'darker'
 vim.cmd [[colorscheme material]]
 -- WinResizer
 vim.g['winresizer_start_key'] = '<C-E>'
