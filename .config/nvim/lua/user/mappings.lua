@@ -172,6 +172,9 @@ keymap('v', '<leader>64', [[c<c-r>=substitute(system('base64', @"), '\n$', '', '
 -- Vimrc edit mappings
 keymap('n', '<leader>ev', [[:execute("vsplit " . '~/.config/nvim/lua/user/options.lua')<cr>]], opts.no_remap)
 keymap('n', '<leader>ep', [[:execute("vsplit " . '~/.config/nvim/lua/user/plugins.lua')<cr>]], opts.no_remap)
+keymap('n', '<leader>ec', [[:execute("vsplit " . '~/.config/nvim/lua/user/plugin-configs.lua')<cr>]], opts.no_remap)
+keymap('n', '<leader>el', [[:execute("vsplit " . '~/.config/nvim/lua/user/lsp/config.lua')<cr>]], opts.no_remap)
+keymap('n', '<leader>em', [[:execute("vsplit " . '~/.config/nvim/lua/user/mappings.lua')<cr>]], opts.no_remap)
 
 -- Delete current buffer
 keymap('n', '<leader>bd', ':bp <bar> bw #<cr>', opts.no_remap_silent)
