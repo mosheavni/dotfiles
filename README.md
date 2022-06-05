@@ -55,8 +55,8 @@
      ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
    git clone \
-     https://github.com/zsh-users/zsh-autosuggestions \
-     ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+      https://github.com/zsh-users/zsh-autosuggestions \
+      ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
    ```
 
 6. Install [effuse](https://github.com/jeromelefeuvre/effuse):
@@ -68,55 +68,53 @@
 7. Backup current files:
 
    ```bash
-   cd ~
-   mkdir dotfiles-backup
-   for dotfile in .*;do
-       mv ~/${dotfile} ~/dotfiles-backup/${dotfile}
-   done
+    cd ~
+    mkdir dotfiles-backup
+    for dotfile in .*;do
+      if [[ -f ~/Repos/dotfiles/${dotfile} ]];then
+        mv ~/${dotfile} ~/dotfiles-backup/${dotfile}
+      fi
+    done
    ```
 
 8. Run effuse to create the symlinks between the repo dir and the home dir:
    `effuse`
 
-9. Fix compaudit perms:
+9. Install npm packages
 
    ```bash
-   compaudit | xargs chmod g-w
+   while read -r npm_package;do
+      npm install --global $npm_package
+   done < Npmfile
    ```
 
-10. Install npm packages
-
-    ```bash
-    while read -r npm_package;do
-       npm install --global $npm_package
-    done < Npmfile
-    ```
-
-11. Install pip dependencies
+10. Install pip dependencies
 
     ```bash
     pip3 install -r requirements.txt
     ```
 
-12. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
+11. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
 
     ```bash
     $(brew --prefix)/opt/fzf/install
     ```
 
-13. Install vim-plug [vim-plug](https://github.com/junegunn/vim-plug)
+12. Open vim with minimal packer file, wait 1 minute for the [packer.nvim](https://github.com/wbthomason/packer.nvim) repo to be cloned.
 
-14. Open vim and install plugins, and
-    [coc-nvim](https://github.com/neoclide/coc.nvim):
-
-    ```vim
-    :PlugInstall
-    :call coc#util#install()
+    ```bash
+    nvim -u .config/nvim/first-init.lua
     ```
 
-15. ???
+13. Now Install the plugins and wait. (TreeSitter might take some time):
 
-16. PROFIT
+    ```vim
+    :PackerInstall
+    ```
+
+14. ???
+
+15. PROFIT
 
 ## Additional stuff
 
