@@ -434,347 +434,6 @@
 				<real>0.0</real>
 			</dict>
 		</dict>
-		<key>gruvbox</key>
-		<dict>
-			<key>Ansi 0 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.11759774386882782</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.11759573966264725</real>
-				<key>Red Component</key>
-				<real>0.11759927868843079</real>
-			</dict>
-			<key>Ansi 1 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.090684391558170319</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.05879192054271698</real>
-				<key>Red Component</key>
-				<real>0.74529051780700684</real>
-			</dict>
-			<key>Ansi 10 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.11661489307880402</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.69061970710754395</real>
-				<key>Red Component</key>
-				<real>0.66574931144714355</real>
-			</dict>
-			<key>Ansi 11 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.1444794088602066</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.6926688551902771</real>
-				<key>Red Component</key>
-				<real>0.96949708461761475</real>
-			</dict>
-			<key>Ansi 12 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.52537077665328979</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.58534377813339233</real>
-				<key>Red Component</key>
-				<real>0.44289660453796387</real>
-			</dict>
-			<key>Ansi 13 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.53848373889923096</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.43883562088012695</real>
-				<key>Red Component</key>
-				<real>0.78096956014633179</real>
-			</dict>
-			<key>Ansi 14 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.41142863035202026</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.71257460117340088</real>
-				<key>Red Component</key>
-				<real>0.49072420597076416</real>
-			</dict>
-			<key>Ansi 15 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.63873869180679321</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.82989895343780518</real>
-				<key>Red Component</key>
-				<real>0.90061241388320923</real>
-			</dict>
-			<key>Ansi 2 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.082894742488861084</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.53061914443969727</real>
-				<key>Red Component</key>
-				<real>0.52591603994369507</real>
-			</dict>
-			<key>Ansi 3 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.10328958928585052</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.53254079818725586</real>
-				<key>Red Component</key>
-				<real>0.80126690864562988</real>
-			</dict>
-			<key>Ansi 4 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.4586675763130188</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.45008346438407898</real>
-				<key>Red Component</key>
-				<real>0.21694663166999817</real>
-			</dict>
-			<key>Ansi 5 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.45103743672370911</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.29604318737983704</real>
-				<key>Red Component</key>
-				<real>0.62685638666152954</real>
-			</dict>
-			<key>Ansi 6 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.34128850698471069</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.55607825517654419</real>
-				<key>Red Component</key>
-				<real>0.34054014086723328</real>
-			</dict>
-			<key>Ansi 7 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.44320183992385864</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.5310559868812561</real>
-				<key>Red Component</key>
-				<real>0.5926094651222229</real>
-			</dict>
-			<key>Ansi 8 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.37962067127227783</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.43934443593025208</real>
-				<key>Red Component</key>
-				<real>0.49889594316482544</real>
-			</dict>
-			<key>Ansi 9 Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.15763583779335022</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.18880486488342285</real>
-				<key>Red Component</key>
-				<real>0.96744710206985474</real>
-			</dict>
-			<key>Background Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.11759774386882782</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.11759573966264725</real>
-				<key>Red Component</key>
-				<real>0.11759927868843079</real>
-			</dict>
-			<key>Badge Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>0.5</real>
-				<key>Blue Component</key>
-				<real>0.056549370288848877</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.28100395202636719</real>
-				<key>Red Component</key>
-				<real>0.7928692102432251</real>
-			</dict>
-			<key>Bold Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>1</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>1</real>
-				<key>Red Component</key>
-				<real>1</real>
-			</dict>
-			<key>Cursor Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.63873869180679321</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.82989895343780518</real>
-				<key>Red Component</key>
-				<real>0.90061241388320923</real>
-			</dict>
-			<key>Cursor Guide Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.15993706881999969</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.16613791882991791</real>
-				<key>Red Component</key>
-				<real>0.17867125570774078</real>
-			</dict>
-			<key>Cursor Text Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.11759774386882782</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.11759573966264725</real>
-				<key>Red Component</key>
-				<real>0.11759927868843079</real>
-			</dict>
-			<key>Foreground Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.63873869180679321</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.82989895343780518</real>
-				<key>Red Component</key>
-				<real>0.90061241388320923</real>
-			</dict>
-			<key>Link Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.056549370288848877</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.28100395202636719</real>
-				<key>Red Component</key>
-				<real>0.7928692102432251</real>
-			</dict>
-			<key>Selected Text Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.26041668653488159</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.2891082763671875</real>
-				<key>Red Component</key>
-				<real>0.32501408457756042</real>
-			</dict>
-			<key>Selection Color</key>
-			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
-				<key>Blue Component</key>
-				<real>0.63873869180679321</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
-				<key>Green Component</key>
-				<real>0.82989895343780518</real>
-				<key>Red Component</key>
-				<real>0.90061241388320923</real>
-			</dict>
-		</dict>
 	</dict>
 	<key>Default Arrangement Name</key>
 	<string>Main</string>
@@ -813,226 +472,158 @@
 			<false/>
 			<key>Ansi 0 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.11759774386882782</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.0</real>
 				<key>Green Component</key>
-				<real>0.11759573966264725</real>
+				<real>0.0</real>
 				<key>Red Component</key>
-				<real>0.11759927868843079</real>
+				<real>0.0</real>
 			</dict>
 			<key>Ansi 1 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.090684391558170319</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.3333333432674408</real>
 				<key>Green Component</key>
-				<real>0.05879192054271698</real>
+				<real>0.3333333432674408</real>
 				<key>Red Component</key>
-				<real>0.74529051780700684</real>
+				<real>1</real>
 			</dict>
 			<key>Ansi 10 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.11661489307880402</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.4823529411764706</real>
 				<key>Green Component</key>
-				<real>0.69061970710754395</real>
+				<real>0.98039215686274506</real>
 				<key>Red Component</key>
-				<real>0.66574931144714355</real>
+				<real>0.31372549019607843</real>
 			</dict>
 			<key>Ansi 11 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.1444794088602066</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.5490196078431373</real>
 				<key>Green Component</key>
-				<real>0.6926688551902771</real>
+				<real>0.98039215686274506</real>
 				<key>Red Component</key>
-				<real>0.96949708461761475</real>
+				<real>0.94509803921568625</real>
 			</dict>
 			<key>Ansi 12 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.52537077665328979</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.97647058823529409</real>
 				<key>Green Component</key>
-				<real>0.58534377813339233</real>
+				<real>0.57647058823529407</real>
 				<key>Red Component</key>
-				<real>0.44289660453796387</real>
+				<real>0.74117647058823533</real>
 			</dict>
 			<key>Ansi 13 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.53848373889923096</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.77647058823529413</real>
 				<key>Green Component</key>
-				<real>0.43883562088012695</real>
+				<real>0.47450980392156861</real>
 				<key>Red Component</key>
-				<real>0.78096956014633179</real>
+				<real>1</real>
 			</dict>
 			<key>Ansi 14 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.41142863035202026</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.99215686274509807</real>
 				<key>Green Component</key>
-				<real>0.71257460117340088</real>
+				<real>0.9137254901960784</real>
 				<key>Red Component</key>
-				<real>0.49072420597076416</real>
+				<real>0.54509803921568623</real>
 			</dict>
 			<key>Ansi 15 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.63873869180679321</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>1</real>
 				<key>Green Component</key>
-				<real>0.82989895343780518</real>
+				<real>1</real>
 				<key>Red Component</key>
-				<real>0.90061241388320923</real>
+				<real>1</real>
 			</dict>
 			<key>Ansi 2 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.082894742488861084</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.4823529411764706</real>
 				<key>Green Component</key>
-				<real>0.53061914443969727</real>
+				<real>0.98039215686274506</real>
 				<key>Red Component</key>
-				<real>0.52591603994369507</real>
+				<real>0.31372549019607843</real>
 			</dict>
 			<key>Ansi 3 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.10328958928585052</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.5490196078431373</real>
 				<key>Green Component</key>
-				<real>0.53254079818725586</real>
+				<real>0.98039215686274506</real>
 				<key>Red Component</key>
-				<real>0.80126690864562988</real>
+				<real>0.94509803921568625</real>
 			</dict>
 			<key>Ansi 4 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.4586675763130188</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.97647058823529409</real>
 				<key>Green Component</key>
-				<real>0.45008346438407898</real>
+				<real>0.57647058823529407</real>
 				<key>Red Component</key>
-				<real>0.21694663166999817</real>
+				<real>0.74117647058823533</real>
 			</dict>
 			<key>Ansi 5 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.45103743672370911</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.77647058823529413</real>
 				<key>Green Component</key>
-				<real>0.29604318737983704</real>
+				<real>0.47450980392156861</real>
 				<key>Red Component</key>
-				<real>0.62685638666152954</real>
+				<real>1</real>
 			</dict>
 			<key>Ansi 6 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.34128850698471069</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.99215686274509807</real>
 				<key>Green Component</key>
-				<real>0.55607825517654419</real>
+				<real>0.9137254901960784</real>
 				<key>Red Component</key>
-				<real>0.34054014086723328</real>
+				<real>0.54509803921568623</real>
 			</dict>
 			<key>Ansi 7 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.44320183992385864</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.73333334922790527</real>
 				<key>Green Component</key>
-				<real>0.5310559868812561</real>
+				<real>0.73333334922790527</real>
 				<key>Red Component</key>
-				<real>0.5926094651222229</real>
+				<real>0.73333334922790527</real>
 			</dict>
 			<key>Ansi 8 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.37962067127227783</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.33333333333333331</real>
 				<key>Green Component</key>
-				<real>0.43934443593025208</real>
+				<real>0.33333333333333331</real>
 				<key>Red Component</key>
-				<real>0.49889594316482544</real>
+				<real>0.33333333333333331</real>
 			</dict>
 			<key>Ansi 9 Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.15763583779335022</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.33333333333333331</real>
 				<key>Green Component</key>
-				<real>0.18880486488342285</real>
+				<real>0.33333333333333331</real>
 				<key>Red Component</key>
-				<real>0.96744710206985474</real>
+				<real>1</real>
 			</dict>
 			<key>BM Growl</key>
 			<true/>
 			<key>Background Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.11759774386882782</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.15977837145328522</real>
 				<key>Green Component</key>
-				<real>0.11759573966264725</real>
+				<real>0.12215272337198257</real>
 				<key>Red Component</key>
-				<real>0.11759927868843079</real>
+				<real>0.11765811592340469</real>
 			</dict>
 			<key>Background Image Location</key>
 			<string></string>
@@ -1041,13 +632,13 @@
 				<key>Alpha Component</key>
 				<real>0.5</real>
 				<key>Blue Component</key>
-				<real>0.056549370288848877</real>
+				<real>0.0</real>
 				<key>Color Space</key>
-				<string>Calibrated</string>
+				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>0.28100395202636719</real>
+				<real>0.1491314172744751</real>
 				<key>Red Component</key>
-				<real>0.7928692102432251</real>
+				<real>1</real>
 			</dict>
 			<key>Badge Font</key>
 			<string>Helvetica-Bold</string>
@@ -1067,16 +658,12 @@
 			<false/>
 			<key>Bold Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>1</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.90237069129943848</real>
 				<key>Green Component</key>
-				<real>1</real>
+				<real>0.90237069129943848</real>
 				<key>Red Component</key>
-				<real>1</real>
+				<real>0.90237069129943848</real>
 			</dict>
 			<key>Bound Hosts</key>
 			<array/>
@@ -1094,42 +681,34 @@
 			<real>0.0</real>
 			<key>Cursor Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.63873869180679321</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.73333334922790527</real>
 				<key>Green Component</key>
-				<real>0.82989895343780518</real>
+				<real>0.73333334922790527</real>
 				<key>Red Component</key>
-				<real>0.90061241388320923</real>
+				<real>0.73333334922790527</real>
 			</dict>
 			<key>Cursor Guide Color</key>
 			<dict>
 				<key>Alpha Component</key>
-				<real>1</real>
+				<real>0.25</real>
 				<key>Blue Component</key>
-				<real>0.15993706881999969</real>
+				<real>1</real>
 				<key>Color Space</key>
-				<string>Calibrated</string>
+				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>0.16613791882991791</real>
+				<real>0.9268307089805603</real>
 				<key>Red Component</key>
-				<real>0.17867125570774078</real>
+				<real>0.70213186740875244</real>
 			</dict>
 			<key>Cursor Text Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.11759774386882782</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>1</real>
 				<key>Green Component</key>
-				<real>0.11759573966264725</real>
+				<real>1</real>
 				<key>Red Component</key>
-				<real>0.11759927868843079</real>
+				<real>1</real>
 			</dict>
 			<key>Custom Command</key>
 			<string>No</string>
@@ -1149,16 +728,12 @@
 			<false/>
 			<key>Foreground Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.63873869180679321</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.90032327175140381</real>
 				<key>Green Component</key>
-				<real>0.82989895343780518</real>
+				<real>0.90032327175140381</real>
 				<key>Red Component</key>
-				<real>0.90061241388320923</real>
+				<real>0.90032327175140381</real>
 			</dict>
 			<key>Guid</key>
 			<string>DC0E49F7-1463-49BE-A46E-2954758A012E</string>
@@ -1461,13 +1036,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.056549370288848877</real>
+				<real>0.73423302173614502</real>
 				<key>Color Space</key>
-				<string>Calibrated</string>
+				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>0.28100395202636719</real>
+				<real>0.35916060209274292</real>
 				<key>Red Component</key>
-				<real>0.7928692102432251</real>
+				<real>0.0</real>
 			</dict>
 			<key>Mouse Reporting</key>
 			<true/>
@@ -1476,11 +1051,11 @@
 			<key>Non Ascii Font</key>
 			<string>HackNerdFontComplete-Regular 14</string>
 			<key>Non-ASCII Anti Aliased</key>
-			<false/>
+			<true/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>FiraCode-Regular 14</string>
+			<string>FiraCodeRoman-Regular 15</string>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>
@@ -1495,29 +1070,21 @@
 			<integer>0</integer>
 			<key>Selected Text Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.26041668653488159</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>1</real>
 				<key>Green Component</key>
-				<real>0.2891082763671875</real>
+				<real>1</real>
 				<key>Red Component</key>
-				<real>0.32501408457756042</real>
+				<real>1</real>
 			</dict>
 			<key>Selection Color</key>
 			<dict>
-				<key>Alpha Component</key>
-				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.63873869180679321</real>
-				<key>Color Space</key>
-				<string>Calibrated</string>
+				<real>0.35294118523597717</real>
 				<key>Green Component</key>
-				<real>0.82989895343780518</real>
+				<real>0.27843138575553894</real>
 				<key>Red Component</key>
-				<real>0.90061241388320923</real>
+				<real>0.26666668057441711</real>
 			</dict>
 			<key>Send Code When Idle</key>
 			<false/>
@@ -2281,17 +1848,17 @@
 				<key>Old Width</key>
 				<real>400</real>
 				<key>Old X Origin</key>
-				<real>2146</real>
+				<real>2175</real>
 				<key>Old Y Origin</key>
-				<real>136</real>
+				<real>102</real>
 				<key>Saved Window Type</key>
 				<integer>0</integer>
 				<key>Screen</key>
-				<integer>1</integer>
+				<integer>2</integer>
 				<key>Scroller Width</key>
 				<real>0.0</real>
 				<key>Selected Tab Index</key>
-				<integer>6</integer>
+				<integer>5</integer>
 				<key>Tabs</key>
 				<array>
 					<dict>
@@ -2580,7 +2147,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>336DC9FC-A131-42CC-9DD4-DFAC97B1E43E</string>
+											<string>2C5BCEE0-8FDA-4689-8B86-C52460A07A41</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -3069,14 +2636,14 @@
 											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
 											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
 											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
 										</array>
 										<key>Environment</key>
 										<dict>
@@ -3096,11 +2663,9 @@
 											<key>icon title stack</key>
 											<array>
 												<string>vim</string>
-												<string>vim</string>
 											</array>
 											<key>window title stack</key>
 											<array>
-												<string>nvim</string>
 												<string>nvim</string>
 											</array>
 										</dict>
@@ -3118,7 +2683,7 @@
 										<key>Rows</key>
 										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>F2ECAFD4-21FE-4E10-9CB0-9ACE480B9691</string>
+										<string>70537333-9122-4B23-B6AA-461AC603688A</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -3131,7 +2696,7 @@
 											<string>$$</string>
 										</dict>
 										<key>Working Directory</key>
-										<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
+										<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
 										<key>Working Directory Poller Disabled</key>
 										<false/>
 									</dict>
@@ -3457,7 +3022,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>4E4E18DA-9511-435C-97FE-210A09EB8079</string>
+											<string>8286F74E-6CA3-457B-9C39-9F782CD4FDE5</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -3854,9 +3419,9 @@
 										<array/>
 										<key>Directories</key>
 										<array>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos</string>
+											<string>/Users/mavni/Repos</string>
+											<string>/Users/mavni/Repos</string>
 											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
 											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
 											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
@@ -3973,11 +3538,9 @@
 											<key>icon title stack</key>
 											<array>
 												<string>vim</string>
-												<string>vim</string>
 											</array>
 											<key>window title stack</key>
 											<array>
-												<string>nvim</string>
 												<string>nvim</string>
 											</array>
 										</dict>
@@ -3995,7 +3558,7 @@
 										<key>Rows</key>
 										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>6422310A-8946-47EC-8547-9E658C66A229</string>
+										<string>7AEDF744-FD51-4293-9B4E-563ABEAC8004</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -4052,7 +3615,7 @@
 						<key>Root</key>
 						<dict>
 							<key>Splitter ID</key>
-							<string>6CD9A4FB-01C1-4573-8257-DD3A076F48D2</string>
+							<string>793C2BFC-57D6-4CAD-A1E1-9BDEE29BCA91</string>
 							<key>Subviews</key>
 							<array>
 								<dict>
@@ -4334,7 +3897,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>020DAB3A-CB4C-4A14-BFBA-E895C3B1BE6C</string>
+											<string>6086DCE0-3BFD-440A-9FD4-80749D83D8CF</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -4731,30 +4294,39 @@
 										<array/>
 										<key>Directories</key>
 										<array>
-											<string>/Users/mavni/Downloads</string>
+											<string>/Users/mavni/k8s/manifests/statefulset</string>
+											<string>/Users/mavni/k8s/manifests/statefulset</string>
+											<string>/Users/mavni/k8s/manifests/statefulset</string>
 											<string>/Users/mavni/Repos</string>
 											<string>/Users/mavni/Repos</string>
 											<string>/Users/mavni/Repos</string>
 											<string>/Users/mavni/Repos</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
+											<string>/Users/mavni/Repos</string>
+											<string>/Users/mavni/Repos</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
 										</array>
 										<key>Environment</key>
 										<dict>
 											<key>PWD</key>
-											<string>/Users/mavni/Downloads</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
 										</dict>
 										<key>Hostname to Shell</key>
 										<dict/>
@@ -4767,9 +4339,13 @@
 										<key>Name Controller State</key>
 										<dict>
 											<key>icon title stack</key>
-											<array/>
+											<array>
+												<string>vim</string>
+											</array>
 											<key>window title stack</key>
-											<array/>
+											<array>
+												<string>nvim</string>
+											</array>
 										</dict>
 										<key>Overridden Fields</key>
 										<array>
@@ -4785,7 +4361,7 @@
 										<key>Rows</key>
 										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>035E514D-C832-45FC-A868-184FB919032D</string>
+										<string>B731E1F7-EFF4-4000-A40F-72E60E666D53</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -4798,7 +4374,7 @@
 											<string>$$</string>
 										</dict>
 										<key>Working Directory</key>
-										<string>/Users/mavni/Repos/shared-libraries</string>
+										<string>/Users/mavni/Repos/devops-jenkins</string>
 										<key>Working Directory Poller Disabled</key>
 										<false/>
 									</dict>
@@ -4834,9 +4410,9 @@
 							<false/>
 						</dict>
 						<key>Tab GUID</key>
-						<string>88987A91-89E2-4815-A5D9-384EB613FD88</string>
+						<string>53F997F7-465B-40B6-A058-5AD8BC6A98DA</string>
 						<key>Title Override</key>
-						<string>shared-libraries</string>
+						<string>devops-jenkins</string>
 					</dict>
 					<dict>
 						<key>Root</key>
@@ -5124,7 +4700,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>D4505D44-DF65-4C17-8ED8-199D5371B715</string>
+											<string>4B0A524E-39E5-40E1-BA23-A9F977ACC690</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -5563,13 +5139,6 @@
 											<string>/Users/mavni/Repos/devops-scripts</string>
 											<string>/Users/mavni/Repos/devops-scripts</string>
 											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
 										</array>
 										<key>Environment</key>
 										<dict>
@@ -5587,13 +5156,9 @@
 										<key>Name Controller State</key>
 										<dict>
 											<key>icon title stack</key>
-											<array>
-												<string>vim</string>
-											</array>
+											<array/>
 											<key>window title stack</key>
-											<array>
-												<string>nvim</string>
-											</array>
+											<array/>
 										</dict>
 										<key>Overridden Fields</key>
 										<array>
@@ -5609,7 +5174,7 @@
 										<key>Rows</key>
 										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>85712434-0A04-483C-B30A-82A6D8316A71</string>
+										<string>B963D939-2151-4441-B792-083089BDA5A7</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -5948,7 +5513,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>F2580F83-5732-460B-8203-1E19D1C6111D</string>
+											<string>3B10A688-F8F2-4477-8C7F-A2FEE88F8157</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -6345,94 +5910,9 @@
 										<array/>
 										<key>Directories</key>
 										<array>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
+											<string>/Users/mavni/Repos/terraform</string>
+											<string>/Users/mavni/Repos</string>
+											<string>/Users/mavni/Repos</string>
 											<string>/Users/mavni/Repos/k8s-conf</string>
 											<string>/Users/mavni/Repos/k8s-conf</string>
 											<string>/Users/mavni/Repos/k8s-conf</string>
@@ -6464,11 +5944,9 @@
 											<key>icon title stack</key>
 											<array>
 												<string>vim</string>
-												<string>vim</string>
 											</array>
 											<key>window title stack</key>
 											<array>
-												<string>nvim</string>
 												<string>nvim</string>
 											</array>
 										</dict>
@@ -6486,7 +5964,7 @@
 										<key>Rows</key>
 										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>F2B0BEC0-F3D0-454C-A9EA-283345D65D3D</string>
+										<string>32396D2F-85DA-485F-A960-AC68E5BCB2D9</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -6825,7 +6303,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>E705ECC2-4AD4-4019-BAC7-55B031BA2B17</string>
+											<string>C498131C-A480-4B2C-8E81-20754AD7BFB9</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -7307,26 +6785,26 @@
 											<string>/Users/mavni/Repos/terraform/dev/services</string>
 											<string>/Users/mavni/Repos/terraform/dev/services</string>
 											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
 											<string>/</string>
 											<string>/</string>
 											<string>/Users/mavni/Repos</string>
 											<string>/Users/mavni/Repos</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
 											<string>/Users/mavni/Repos/terraform</string>
 											<string>/Users/mavni/Repos/terraform</string>
 										</array>
 										<key>Environment</key>
 										<dict>
 											<key>PWD</key>
-											<string>/Users/mavni/Repos/terraform</string>
+											<string>/</string>
 										</dict>
 										<key>Hostname to Shell</key>
 										<dict/>
@@ -7341,11 +6819,9 @@
 											<key>icon title stack</key>
 											<array>
 												<string>vim</string>
-												<string>vim</string>
 											</array>
 											<key>window title stack</key>
 											<array>
-												<string>nvim</string>
 												<string>nvim</string>
 											</array>
 										</dict>
@@ -7363,7 +6839,7 @@
 										<key>Rows</key>
 										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>8CCEAF52-2749-4596-BF32-4058BA1CFFB2</string>
+										<string>5A97542B-F3BE-4901-AEC9-E53DA5A16C92</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -7456,68 +6932,48 @@
 											</dict>
 											<key>Ansi 10 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.32953983545303345</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.4823529411764706</real>
 												<key>Green Component</key>
-												<real>0.97913151979446411</real>
+												<real>0.98039215686274506</real>
 												<key>Red Component</key>
-												<real>0.33177149295806885</real>
+												<real>0.31372549019607843</real>
 											</dict>
 											<key>Ansi 11 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.32949882745742798</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.5490196078431373</real>
 												<key>Green Component</key>
-												<real>0.98689061403274536</real>
+												<real>0.98039215686274506</real>
 												<key>Red Component</key>
-												<real>0.99947649240493774</real>
+												<real>0.94509803921568625</real>
 											</dict>
 											<key>Ansi 12 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.99999994039535522</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.97647058823529409</real>
 												<key>Green Component</key>
-												<real>0.32941171526908875</real>
+												<real>0.57647058823529407</real>
 												<key>Red Component</key>
-												<real>0.3294118344783783</real>
+												<real>0.74117647058823533</real>
 											</dict>
 											<key>Ansi 13 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.99999994039535522</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.77647058823529413</real>
 												<key>Green Component</key>
-												<real>0.32941168546676636</real>
+												<real>0.47450980392156861</real>
 												<key>Red Component</key>
 												<real>1</real>
 											</dict>
 											<key>Ansi 14 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>1</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.99215686274509807</real>
 												<key>Green Component</key>
-												<real>0.99237924814224243</real>
+												<real>0.9137254901960784</real>
 												<key>Red Component</key>
-												<real>0.33028358221054077</real>
+												<real>0.54509803921568623</real>
 											</dict>
 											<key>Ansi 15 Color</key>
 											<dict>
@@ -7584,29 +7040,21 @@
 											</dict>
 											<key>Ansi 8 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.32941174507141113</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.33333333333333331</real>
 												<key>Green Component</key>
-												<real>0.32941174507141113</real>
+												<real>0.33333333333333331</real>
 												<key>Red Component</key>
-												<real>0.32941180467605591</real>
+												<real>0.33333333333333331</real>
 											</dict>
 											<key>Ansi 9 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.32941174507141113</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.33333333333333331</real>
 												<key>Green Component</key>
-												<real>0.32941168546676636</real>
+												<real>0.33333333333333331</real>
 												<key>Red Component</key>
-												<real>0.99999994039535522</real>
+												<real>1</real>
 											</dict>
 											<key>BM Growl</key>
 											<true/>
@@ -7730,7 +7178,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>AAC26632-A433-43E6-8EDB-0A9F7863958F</string>
+											<string>87F1E85E-2BED-443D-9CBD-004270CA4385</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -8246,26 +7694,17 @@
 											<key>icon title stack</key>
 											<array>
 												<string>vim</string>
-												<string>vim</string>
 											</array>
 											<key>window title stack</key>
 											<array>
-												<string>nvim</string>
 												<string>nvim</string>
 											</array>
 										</dict>
 										<key>Overridden Fields</key>
 										<array>
-											<string>Title Components</string>
-											<string>Ansi 10 Color</string>
 											<string>Original Guid</string>
-											<string>Ansi 12 Color</string>
-											<string>Ansi 14 Color</string>
-											<string>Ansi 9 Color</string>
-											<string>Ansi 11 Color</string>
 											<string>Guid</string>
-											<string>Ansi 8 Color</string>
-											<string>Ansi 13 Color</string>
+											<string>Title Components</string>
 										</array>
 										<key>Program</key>
 										<dict>
@@ -8275,7 +7714,7 @@
 										<key>Rows</key>
 										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>89EED28C-2AAF-47C9-B98E-E183CCFAFDCD</string>
+										<string>5601A01B-BEF8-4C16-9B14-CB57050BD196</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -8363,12 +7802,12 @@
 				<key>Window Type</key>
 				<integer>4</integer>
 				<key>X Origin</key>
-				<real>1440</real>
+				<real>1920</real>
 				<key>Y Origin</key>
-				<real>100</real>
+				<real>0.0</real>
 			</dict>
 		</array>
-		<key>jenkins-ansible</key>
+		<key>main</key>
 		<array>
 			<dict>
 				<key>Desired Columns</key>
@@ -8378,7 +7817,7 @@
 				<key>Has Toolbelt</key>
 				<false/>
 				<key>Height</key>
-				<real>900</real>
+				<real>1080</real>
 				<key>Hide After Opening</key>
 				<false/>
 				<key>Hiding Toolbelt Should Resize Window</key>
@@ -8388,21 +7827,21 @@
 				<key>Is Hotkey Window</key>
 				<false/>
 				<key>Old Height</key>
-				<real>428</real>
+				<real>0.0</real>
 				<key>Old Width</key>
-				<real>400</real>
+				<real>0.0</real>
 				<key>Old X Origin</key>
-				<real>184</real>
+				<real>0.0</real>
 				<key>Old Y Origin</key>
-				<real>64</real>
+				<real>0.0</real>
 				<key>Saved Window Type</key>
 				<integer>0</integer>
 				<key>Screen</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>Scroller Width</key>
 				<real>0.0</real>
 				<key>Selected Tab Index</key>
-				<integer>3</integer>
+				<integer>6</integer>
 				<key>Tabs</key>
 				<array>
 					<dict>
@@ -8691,7 +8130,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>28CCA388-4272-47E5-BA32-9F0EB882607B</string>
+											<string>924C6948-8D78-4BAC-8AE2-2C4C86E8DEBD</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -9002,7 +8441,7 @@
 											<key>Mouse Reporting</key>
 											<true/>
 											<key>Name</key>
-											<string>default</string>
+											<string>Default</string>
 											<key>Non Ascii Font</key>
 											<string>HackNerdFontComplete-Regular 14</string>
 											<key>Non-ASCII Anti Aliased</key>
@@ -9083,7 +8522,7 @@
 											<string>/Users/moshe.avni</string>
 										</dict>
 										<key>Columns</key>
-										<integer>158</integer>
+										<integer>212</integer>
 										<key>Commands</key>
 										<array/>
 										<key>Directories</key>
@@ -9179,20 +8618,20 @@
 											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
 											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
 											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
 										</array>
 										<key>Environment</key>
 										<dict>
 											<key>PWD</key>
-											<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
 										</dict>
 										<key>Hostname to Shell</key>
 										<dict/>
@@ -9207,11 +8646,9 @@
 											<key>icon title stack</key>
 											<array>
 												<string>vim</string>
-												<string>vim</string>
 											</array>
 											<key>window title stack</key>
 											<array>
-												<string>nvim</string>
 												<string>nvim</string>
 											</array>
 										</dict>
@@ -9227,9 +8664,9 @@
 											<string>Shell Launcher</string>
 										</dict>
 										<key>Rows</key>
-										<integer>48</integer>
+										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>7F6E3A32-6795-4F13-B5C9-6BB86452A64F</string>
+										<string>409538EF-D787-43F5-9EF8-57830CFCC5BF</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -9242,7 +8679,7 @@
 											<string>$$</string>
 										</dict>
 										<key>Working Directory</key>
-										<string>/Users/mavni/Repos/kubernetes-production-configuration</string>
+										<string>/Users/mavni/Repos/kubernetes-production-configuration/elk</string>
 										<key>Working Directory Poller Disabled</key>
 										<false/>
 									</dict>
@@ -9251,9 +8688,9 @@
 									<key>frame</key>
 									<dict>
 										<key>height</key>
-										<real>876</real>
+										<real>1056</real>
 										<key>width</key>
-										<real>1440</real>
+										<real>1920</real>
 										<key>x</key>
 										<real>0.0</real>
 										<key>y</key>
@@ -9266,9 +8703,9 @@
 							<key>frame</key>
 							<dict>
 								<key>height</key>
-								<real>876</real>
+								<real>1056</real>
 								<key>width</key>
-								<real>1440</real>
+								<real>1920</real>
 								<key>x</key>
 								<real>0.0</real>
 								<key>y</key>
@@ -9568,7 +9005,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>004EFF20-B7D3-452E-8594-900036096D37</string>
+											<string>CE554156-38A9-4696-A20B-F3DEC4B74B6B</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -9879,7 +9316,7 @@
 											<key>Mouse Reporting</key>
 											<true/>
 											<key>Name</key>
-											<string>default</string>
+											<string>Default</string>
 											<key>Non Ascii Font</key>
 											<string>HackNerdFontComplete-Regular 14</string>
 											<key>Non-ASCII Anti Aliased</key>
@@ -9960,116 +9397,116 @@
 											<string>/Users/moshe.avni</string>
 										</dict>
 										<key>Columns</key>
-										<integer>158</integer>
+										<integer>212</integer>
 										<key>Commands</key>
 										<array/>
 										<key>Directories</key>
 										<array>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni</string>
 											<string>/Users/mavni/Repos</string>
 											<string>/Users/mavni/Repos</string>
-											<string>/Users/mavni/Repos/devops-jenkins</string>
-											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos</string>
+											<string>/Users/mavni/Repos</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
 										</array>
 										<key>Environment</key>
 										<dict>
 											<key>PWD</key>
-											<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
+											<string>/Users/mavni/Repos/kubernetes-production-configuration/elk/crons</string>
 										</dict>
 										<key>Hostname to Shell</key>
 										<dict/>
@@ -10084,11 +9521,9 @@
 											<key>icon title stack</key>
 											<array>
 												<string>vim</string>
-												<string>vim</string>
 											</array>
 											<key>window title stack</key>
 											<array>
-												<string>nvim</string>
 												<string>nvim</string>
 											</array>
 										</dict>
@@ -10104,9 +9539,9 @@
 											<string>Shell Launcher</string>
 										</dict>
 										<key>Rows</key>
-										<integer>48</integer>
+										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>3C900AB8-44DD-4FC0-A96C-06589DFC44BA</string>
+										<string>32BB5F91-83AC-459C-9B73-D558CF78E303</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -10119,7 +9554,7 @@
 											<string>$$</string>
 										</dict>
 										<key>Working Directory</key>
-										<string>/Users/mavni/Repos/devops-jenkins</string>
+										<string>/Users/mavni/Repos/spotinst-kubernetes-configuration</string>
 										<key>Working Directory Poller Disabled</key>
 										<false/>
 									</dict>
@@ -10128,9 +9563,9 @@
 									<key>frame</key>
 									<dict>
 										<key>height</key>
-										<real>876</real>
+										<real>1056</real>
 										<key>width</key>
-										<real>1440</real>
+										<real>1920</real>
 										<key>x</key>
 										<real>0.0</real>
 										<key>y</key>
@@ -10143,9 +9578,9 @@
 							<key>frame</key>
 							<dict>
 								<key>height</key>
-								<real>876</real>
+								<real>1056</real>
 								<key>width</key>
-								<real>1440</real>
+								<real>1920</real>
 								<key>x</key>
 								<real>0.0</real>
 								<key>y</key>
@@ -10157,13 +9592,13 @@
 						<key>Tab GUID</key>
 						<string>B864975A-E148-4CB0-87F7-F4EC2F0CEA3C</string>
 						<key>Title Override</key>
-						<string>devops-jenkins</string>
+						<string>spot-k8s-conf</string>
 					</dict>
 					<dict>
 						<key>Root</key>
 						<dict>
 							<key>Splitter ID</key>
-							<string>6CD9A4FB-01C1-4573-8257-DD3A076F48D2</string>
+							<string>793C2BFC-57D6-4CAD-A1E1-9BDEE29BCA91</string>
 							<key>Subviews</key>
 							<array>
 								<dict>
@@ -10445,7 +9880,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>2045C069-74A1-48DF-997D-188A11BCBEEA</string>
+											<string>1A595856-F5D7-4528-906C-E37268D03D0D</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -10756,7 +10191,7 @@
 											<key>Mouse Reporting</key>
 											<true/>
 											<key>Name</key>
-											<string>default</string>
+											<string>Default</string>
 											<key>Non Ascii Font</key>
 											<string>HackNerdFontComplete-Regular 14</string>
 											<key>Non-ASCII Anti Aliased</key>
@@ -10837,36 +10272,42 @@
 											<string>/Users/moshe.avni</string>
 										</dict>
 										<key>Columns</key>
-										<integer>158</integer>
+										<integer>212</integer>
 										<key>Commands</key>
 										<array/>
 										<key>Directories</key>
 										<array>
-											<string>/Users/mavni/Downloads</string>
+											<string>/Users/mavni/k8s/manifests/statefulset</string>
+											<string>/Users/mavni/k8s/manifests/statefulset</string>
+											<string>/Users/mavni/k8s/manifests/statefulset</string>
 											<string>/Users/mavni/Repos</string>
 											<string>/Users/mavni/Repos</string>
 											<string>/Users/mavni/Repos</string>
 											<string>/Users/mavni/Repos</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
-											<string>/Users/mavni/Repos/shared-libraries</string>
+											<string>/Users/mavni/Repos</string>
+											<string>/Users/mavni/Repos</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
+											<string>/Users/mavni/Repos/devops-jenkins</string>
 										</array>
 										<key>Environment</key>
 										<dict>
 											<key>PWD</key>
-											<string>/Users/mavni/Repos/shared-libraries</string>
+											<string>/Users/mavni/k8s/manifests/statefulset</string>
 										</dict>
 										<key>Hostname to Shell</key>
 										<dict/>
@@ -10879,9 +10320,13 @@
 										<key>Name Controller State</key>
 										<dict>
 											<key>icon title stack</key>
-											<array/>
+											<array>
+												<string>vim</string>
+											</array>
 											<key>window title stack</key>
-											<array/>
+											<array>
+												<string>nvim</string>
+											</array>
 										</dict>
 										<key>Overridden Fields</key>
 										<array>
@@ -10895,9 +10340,9 @@
 											<string>Shell Launcher</string>
 										</dict>
 										<key>Rows</key>
-										<integer>48</integer>
+										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>AFCB5DD0-1B91-4462-A1D2-47D8D7E66B23</string>
+										<string>E7B01D71-D931-4C92-98E6-8DD9F0140082</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -10910,7 +10355,7 @@
 											<string>$$</string>
 										</dict>
 										<key>Working Directory</key>
-										<string>/Users/mavni/Repos/shared-libraries</string>
+										<string>/Users/mavni/Repos/devops-jenkins</string>
 										<key>Working Directory Poller Disabled</key>
 										<false/>
 									</dict>
@@ -10919,9 +10364,9 @@
 									<key>frame</key>
 									<dict>
 										<key>height</key>
-										<real>876</real>
+										<real>1056</real>
 										<key>width</key>
-										<real>1440</real>
+										<real>1920</real>
 										<key>x</key>
 										<real>0.0</real>
 										<key>y</key>
@@ -10934,9 +10379,9 @@
 							<key>frame</key>
 							<dict>
 								<key>height</key>
-								<real>876</real>
+								<real>1056</real>
 								<key>width</key>
-								<real>1440</real>
+								<real>1920</real>
 								<key>x</key>
 								<real>0.0</real>
 								<key>y</key>
@@ -10946,9 +10391,9 @@
 							<false/>
 						</dict>
 						<key>Tab GUID</key>
-						<string>88987A91-89E2-4815-A5D9-384EB613FD88</string>
+						<string>53F997F7-465B-40B6-A058-5AD8BC6A98DA</string>
 						<key>Title Override</key>
-						<string>shared-libraries</string>
+						<string>devops-jenkins</string>
 					</dict>
 					<dict>
 						<key>Root</key>
@@ -11236,7 +10681,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>178CA409-8AE0-4C66-A1A7-6E62937DF940</string>
+											<string>0FEE9F9A-FE13-4021-B72C-0D164100F143</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -11547,7 +10992,7 @@
 											<key>Mouse Reporting</key>
 											<true/>
 											<key>Name</key>
-											<string>default</string>
+											<string>Default</string>
 											<key>Non Ascii Font</key>
 											<string>HackNerdFontComplete-Regular 14</string>
 											<key>Non-ASCII Anti Aliased</key>
@@ -11628,7 +11073,7 @@
 											<string>/Users/moshe.avni</string>
 										</dict>
 										<key>Columns</key>
-										<integer>158</integer>
+										<integer>212</integer>
 										<key>Commands</key>
 										<array/>
 										<key>Directories</key>
@@ -11673,25 +11118,11 @@
 											<string>/Users/mavni/Repos/devops-scripts</string>
 											<string>/Users/mavni/Repos/devops-scripts</string>
 											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos/devops-scripts</string>
-											<string>/Users/mavni/Repos</string>
-											<string>/Users/mavni/Repos</string>
-											<string>/Users/mavni/Repos/devops-ansible</string>
-											<string>/Users/mavni/Repos/devops-ansible</string>
 										</array>
 										<key>Environment</key>
 										<dict>
 											<key>PWD</key>
-											<string>/Users/mavni/Repos/devops-scripts</string>
+											<string>/Users/mavni/Repos/k8s-conf</string>
 										</dict>
 										<key>Hostname to Shell</key>
 										<dict/>
@@ -11704,13 +11135,9 @@
 										<key>Name Controller State</key>
 										<dict>
 											<key>icon title stack</key>
-											<array>
-												<string>vim</string>
-											</array>
+											<array/>
 											<key>window title stack</key>
-											<array>
-												<string>nvim</string>
-											</array>
+											<array/>
 										</dict>
 										<key>Overridden Fields</key>
 										<array>
@@ -11724,9 +11151,9 @@
 											<string>Shell Launcher</string>
 										</dict>
 										<key>Rows</key>
-										<integer>48</integer>
+										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>634FF2B3-F0EA-4D53-9785-6211E396C62C</string>
+										<string>3CC081AF-A1CD-428E-86A7-62F12E15571A</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -11739,7 +11166,7 @@
 											<string>$$</string>
 										</dict>
 										<key>Working Directory</key>
-										<string>/Users/mavni/Repos/devops-ansible</string>
+										<string>/Users/mavni/Repos/devops-scripts</string>
 										<key>Working Directory Poller Disabled</key>
 										<false/>
 									</dict>
@@ -11748,9 +11175,9 @@
 									<key>frame</key>
 									<dict>
 										<key>height</key>
-										<real>876</real>
+										<real>1056</real>
 										<key>width</key>
-										<real>1440</real>
+										<real>1920</real>
 										<key>x</key>
 										<real>0.0</real>
 										<key>y</key>
@@ -11763,9 +11190,9 @@
 							<key>frame</key>
 							<dict>
 								<key>height</key>
-								<real>876</real>
+								<real>1056</real>
 								<key>width</key>
-								<real>1440</real>
+								<real>1920</real>
 								<key>x</key>
 								<real>0.0</real>
 								<key>y</key>
@@ -11777,7 +11204,7 @@
 						<key>Tab GUID</key>
 						<string>D6E1F580-4F9D-43D0-A582-DD6D833E89AA</string>
 						<key>Title Override</key>
-						<string>devops-ansible</string>
+						<string>devops-scripts</string>
 					</dict>
 					<dict>
 						<key>Root</key>
@@ -12065,7 +11492,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>BC2162DE-92F3-4F16-918F-F5E217EA79D1</string>
+											<string>15623B85-7129-4C74-9D09-ADD3401FF4A6</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -12376,7 +11803,7 @@
 											<key>Mouse Reporting</key>
 											<true/>
 											<key>Name</key>
-											<string>default</string>
+											<string>Default</string>
 											<key>Non Ascii Font</key>
 											<string>HackNerdFontComplete-Regular 14</string>
 											<key>Non-ASCII Anti Aliased</key>
@@ -12457,101 +11884,14 @@
 											<string>/Users/moshe.avni</string>
 										</dict>
 										<key>Columns</key>
-										<integer>158</integer>
+										<integer>212</integer>
 										<key>Commands</key>
 										<array/>
 										<key>Directories</key>
 										<array>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
-											<string>/Users/mavni/Repos/k8s-conf</string>
+											<string>/Users/mavni/Repos/terraform</string>
+											<string>/Users/mavni/Repos</string>
+											<string>/Users/mavni/Repos</string>
 											<string>/Users/mavni/Repos/k8s-conf</string>
 											<string>/Users/mavni/Repos/k8s-conf</string>
 											<string>/Users/mavni/Repos/k8s-conf</string>
@@ -12566,7 +11906,7 @@
 										<key>Environment</key>
 										<dict>
 											<key>PWD</key>
-											<string>/Users/mavni/Repos/k8s-conf</string>
+											<string>/Users/mavni/Repos/terraform</string>
 										</dict>
 										<key>Hostname to Shell</key>
 										<dict/>
@@ -12581,11 +11921,9 @@
 											<key>icon title stack</key>
 											<array>
 												<string>vim</string>
-												<string>vim</string>
 											</array>
 											<key>window title stack</key>
 											<array>
-												<string>nvim</string>
 												<string>nvim</string>
 											</array>
 										</dict>
@@ -12601,9 +11939,9 @@
 											<string>Shell Launcher</string>
 										</dict>
 										<key>Rows</key>
-										<integer>48</integer>
+										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>953A527C-5573-4ABE-9C23-BDC5B736D13A</string>
+										<string>5D73A6B5-07A0-4444-80C2-6C2F3B25E406</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -12625,9 +11963,9 @@
 									<key>frame</key>
 									<dict>
 										<key>height</key>
-										<real>876</real>
+										<real>1056</real>
 										<key>width</key>
-										<real>1440</real>
+										<real>1920</real>
 										<key>x</key>
 										<real>0.0</real>
 										<key>y</key>
@@ -12640,9 +11978,9 @@
 							<key>frame</key>
 							<dict>
 								<key>height</key>
-								<real>876</real>
+								<real>1056</real>
 								<key>width</key>
-								<real>1440</real>
+								<real>1920</real>
 								<key>x</key>
 								<real>0.0</real>
 								<key>y</key>
@@ -12942,7 +12280,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>8FEF4744-1A0D-4CC1-8ADD-46B2559C86BA</string>
+											<string>76BC47C8-36F5-4B39-8B92-CFD75A6A7057</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -13253,7 +12591,7 @@
 											<key>Mouse Reporting</key>
 											<true/>
 											<key>Name</key>
-											<string>default</string>
+											<string>Default</string>
 											<key>Non Ascii Font</key>
 											<string>HackNerdFontComplete-Regular 14</string>
 											<key>Non-ASCII Anti Aliased</key>
@@ -13334,7 +12672,7 @@
 											<string>/Users/moshe.avni</string>
 										</dict>
 										<key>Columns</key>
-										<integer>158</integer>
+										<integer>212</integer>
 										<key>Commands</key>
 										<array/>
 										<key>Directories</key>
@@ -13423,22 +12761,22 @@
 											<string>/Users/mavni/Repos/terraform/dev/services</string>
 											<string>/Users/mavni/Repos/terraform/dev/services</string>
 											<string>/Users/mavni/Repos/terraform/dev/services</string>
-											<string>/</string>
-											<string>/</string>
-											<string>/Users/mavni/Repos</string>
-											<string>/Users/mavni/Repos</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
-											<string>/Users/mavni/Repos/terraform</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
+											<string>/Users/mavni/Repos/terraform/dev/services</string>
 										</array>
 										<key>Environment</key>
 										<dict>
@@ -13458,11 +12796,9 @@
 											<key>icon title stack</key>
 											<array>
 												<string>vim</string>
-												<string>vim</string>
 											</array>
 											<key>window title stack</key>
 											<array>
-												<string>nvim</string>
 												<string>nvim</string>
 											</array>
 										</dict>
@@ -13478,9 +12814,9 @@
 											<string>Shell Launcher</string>
 										</dict>
 										<key>Rows</key>
-										<integer>48</integer>
+										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>C5C5D82D-C40F-498E-B47A-4F88572E8CCF</string>
+										<string>3B5D2FC9-522A-4177-BA5D-76E8CB3FE4E6</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -13493,7 +12829,7 @@
 											<string>$$</string>
 										</dict>
 										<key>Working Directory</key>
-										<string>/Users/mavni/Repos/terraform</string>
+										<string>/Users/mavni/Repos/terraform/dev/services</string>
 										<key>Working Directory Poller Disabled</key>
 										<false/>
 									</dict>
@@ -13502,9 +12838,9 @@
 									<key>frame</key>
 									<dict>
 										<key>height</key>
-										<real>876</real>
+										<real>1056</real>
 										<key>width</key>
-										<real>1440</real>
+										<real>1920</real>
 										<key>x</key>
 										<real>0.0</real>
 										<key>y</key>
@@ -13517,9 +12853,9 @@
 							<key>frame</key>
 							<dict>
 								<key>height</key>
-								<real>876</real>
+								<real>1056</real>
 								<key>width</key>
-								<real>1440</real>
+								<real>1920</real>
 								<key>x</key>
 								<real>0.0</real>
 								<key>y</key>
@@ -13573,68 +12909,48 @@
 											</dict>
 											<key>Ansi 10 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.32953983545303345</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.4823529411764706</real>
 												<key>Green Component</key>
-												<real>0.97913151979446411</real>
+												<real>0.98039215686274506</real>
 												<key>Red Component</key>
-												<real>0.33177149295806885</real>
+												<real>0.31372549019607843</real>
 											</dict>
 											<key>Ansi 11 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.32949882745742798</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.5490196078431373</real>
 												<key>Green Component</key>
-												<real>0.98689061403274536</real>
+												<real>0.98039215686274506</real>
 												<key>Red Component</key>
-												<real>0.99947649240493774</real>
+												<real>0.94509803921568625</real>
 											</dict>
 											<key>Ansi 12 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.99999994039535522</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.97647058823529409</real>
 												<key>Green Component</key>
-												<real>0.32941171526908875</real>
+												<real>0.57647058823529407</real>
 												<key>Red Component</key>
-												<real>0.3294118344783783</real>
+												<real>0.74117647058823533</real>
 											</dict>
 											<key>Ansi 13 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.99999994039535522</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.77647058823529413</real>
 												<key>Green Component</key>
-												<real>0.32941168546676636</real>
+												<real>0.47450980392156861</real>
 												<key>Red Component</key>
 												<real>1</real>
 											</dict>
 											<key>Ansi 14 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>1</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.99215686274509807</real>
 												<key>Green Component</key>
-												<real>0.99237924814224243</real>
+												<real>0.9137254901960784</real>
 												<key>Red Component</key>
-												<real>0.33028358221054077</real>
+												<real>0.54509803921568623</real>
 											</dict>
 											<key>Ansi 15 Color</key>
 											<dict>
@@ -13701,29 +13017,21 @@
 											</dict>
 											<key>Ansi 8 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.32941174507141113</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.33333333333333331</real>
 												<key>Green Component</key>
-												<real>0.32941174507141113</real>
+												<real>0.33333333333333331</real>
 												<key>Red Component</key>
-												<real>0.32941180467605591</real>
+												<real>0.33333333333333331</real>
 											</dict>
 											<key>Ansi 9 Color</key>
 											<dict>
-												<key>Alpha Component</key>
-												<real>1</real>
 												<key>Blue Component</key>
-												<real>0.32941174507141113</real>
-												<key>Color Space</key>
-												<string>sRGB</string>
+												<real>0.33333333333333331</real>
 												<key>Green Component</key>
-												<real>0.32941168546676636</real>
+												<real>0.33333333333333331</real>
 												<key>Red Component</key>
-												<real>0.99999994039535522</real>
+												<real>1</real>
 											</dict>
 											<key>BM Growl</key>
 											<true/>
@@ -13847,7 +13155,7 @@
 												<real>0.90032327175140381</real>
 											</dict>
 											<key>Guid</key>
-											<string>1900707C-4267-4F16-9702-713EA410219A</string>
+											<string>CB92CB52-3D4E-4337-8167-3EC5850ADAEE</string>
 											<key>Horizontal Spacing</key>
 											<real>1</real>
 											<key>Idle Code</key>
@@ -14158,7 +13466,7 @@
 											<key>Mouse Reporting</key>
 											<true/>
 											<key>Name</key>
-											<string>default</string>
+											<string>Default</string>
 											<key>Non Ascii Font</key>
 											<string>HackNerdFontComplete-Regular 14</string>
 											<key>Non-ASCII Anti Aliased</key>
@@ -14239,7 +13547,7 @@
 											<string>/Users/moshe.avni</string>
 										</dict>
 										<key>Columns</key>
-										<integer>158</integer>
+										<integer>212</integer>
 										<key>Commands</key>
 										<array/>
 										<key>Directories</key>
@@ -14348,7 +13656,7 @@
 										<key>Environment</key>
 										<dict>
 											<key>PWD</key>
-											<string>/Users/mavni/Repos/terraform-modules</string>
+											<string>/Users/mavni/Repos/terraform</string>
 										</dict>
 										<key>Hostname to Shell</key>
 										<dict/>
@@ -14363,26 +13671,17 @@
 											<key>icon title stack</key>
 											<array>
 												<string>vim</string>
-												<string>vim</string>
 											</array>
 											<key>window title stack</key>
 											<array>
-												<string>nvim</string>
 												<string>nvim</string>
 											</array>
 										</dict>
 										<key>Overridden Fields</key>
 										<array>
-											<string>Title Components</string>
 											<string>Original Guid</string>
-											<string>Ansi 12 Color</string>
-											<string>Ansi 14 Color</string>
-											<string>Ansi 10 Color</string>
-											<string>Ansi 9 Color</string>
-											<string>Ansi 11 Color</string>
 											<string>Guid</string>
-											<string>Ansi 8 Color</string>
-											<string>Ansi 13 Color</string>
+											<string>Title Components</string>
 										</array>
 										<key>Program</key>
 										<dict>
@@ -14390,9 +13689,9 @@
 											<string>Shell Launcher</string>
 										</dict>
 										<key>Rows</key>
-										<integer>48</integer>
+										<integer>58</integer>
 										<key>Session GUID</key>
-										<string>F49841A6-B9F6-4FA9-9F95-E106A5FE3EE8</string>
+										<string>C6A47B24-AE49-4FBE-9CC0-83F608B02352</string>
 										<key>Short Lived Single Use</key>
 										<false/>
 										<key>Should Expect Current Dir Updates</key>
@@ -14414,9 +13713,9 @@
 									<key>frame</key>
 									<dict>
 										<key>height</key>
-										<real>876</real>
+										<real>1056</real>
 										<key>width</key>
-										<real>1440</real>
+										<real>1920</real>
 										<key>x</key>
 										<real>0.0</real>
 										<key>y</key>
@@ -14429,9 +13728,9 @@
 							<key>frame</key>
 							<dict>
 								<key>height</key>
-								<real>876</real>
+								<real>1056</real>
 								<key>width</key>
-								<real>1440</real>
+								<real>1920</real>
 								<key>x</key>
 								<real>0.0</real>
 								<key>y</key>
@@ -14476,13 +13775,13 @@
 				<key>Use Transparency</key>
 				<true/>
 				<key>Width</key>
-				<real>1440</real>
+				<real>1920</real>
 				<key>Window Type</key>
 				<integer>4</integer>
 				<key>X Origin</key>
-				<real>0.0</real>
+				<real>1440</real>
 				<key>Y Origin</key>
-				<real>0.0</real>
+				<real>100</real>
 			</dict>
 		</array>
 	</dict>
