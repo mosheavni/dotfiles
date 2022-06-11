@@ -1,3 +1,8 @@
+[core]
+  excludesfile = ~/.gitignore_global
+  pager        = delta
+  editor       = vim
+
 [user]
   name       = Moshe Avni
   email      = mavni@netapp.com
@@ -27,13 +32,20 @@
 [init]
   defaultBranch = master
 
-[core]
-  excludesfile = ~/.gitignore_global
-  pager        = diff-so-fancy | less --tabs=4 -RFX
-  editor       = vim
-
 [interactive]
-  diffFilter = diff-so-fancy --patch
+  diffFilter = delta --color-only
+
+[delta]
+  navigate     = true  # use n and N to move between diff sections
+  line-numbers = true
+  light        = false # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+  side-by-side = true
+
+[merge]
+  conflictstyle = diff3
+
+[diff]
+  colorMoved = default
 
 [color]
   branch      = true
