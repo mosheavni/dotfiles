@@ -9,6 +9,7 @@ vim.g.material_style = 'darker'
 vim.cmd [[colorscheme material]]
 -- WinResizer
 vim.g['winresizer_start_key'] = '<C-E>'
+keymap('t', '<C-E>', '<Esc><Cmd>WinResizerStartResize<CR>', opts.no_remap_silent)
 -- Vim json path
 vim.g['jsonpath_register'] = '*'
 -- Comment.nvim
@@ -16,11 +17,28 @@ require('Comment').setup {}
 -- Vim easy align
 keymap('n', 'ga', '<Plug>(EasyAlign)', {})
 -- Floaterm
-vim.g['floaterm_keymap_toggle'] = '<F6>'
-vim.g['floaterm_keymap_new'] = '<F7>'
-vim.g['floaterm_keymap_next'] = '<F8>'
-vim.g['floaterm_width'] = 0.7
-vim.g['floaterm_height'] = 0.9
+-- vim.g['floaterm_keymap_toggle'] = '<F6>'
+-- vim.g['floaterm_keymap_new'] = '<F7>'
+-- vim.g['floaterm_keymap_next'] = '<F8>'
+-- vim.g['floaterm_width'] = 0.7
+-- vim.g['floaterm_height'] = 0.9
+-- ToggleTerm
+require('toggleterm').setup {
+  direction = 'float',
+}
+keymap('n', '<F6>', '<Cmd>exe v:count1 . "ToggleTerm"<CR>', opts.no_remap_silent)
+keymap('t', '<F6>', '<Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>', opts.no_remap_silent)
+keymap('t', '<c-k>', '<Esc><Cmd>wincmd k<CR>', opts.no_remap_silent)
+keymap('t', '<c-j>', '<Esc><Cmd>wincmd j<CR>', opts.no_remap_silent)
+keymap('t', '<c-l>', '<Esc><Cmd>wincmd l<CR>', opts.no_remap_silent)
+keymap('t', '<c-h>', '<Esc><Cmd>wincmd h<CR>', opts.no_remap_silent)
+-- Dressing.nvim
+require('dressing').setup {
+  input = {
+    winblend = 100,
+  },
+}
+vim.cmd [[hi link FloatTitle Normal]]
 -- Vim ansible
 vim.g['ansible_goto_role_paths'] = '.;,roles;'
 -- Yaml Revealer
@@ -304,6 +322,12 @@ function! RandomEmoji() abort
     \ '😈',
     \ '✨',
     \ '👰',
+    \ '👑',
+    \ '💯',
+    \ '💖',
+    \ '🌒',
+    \ '🇮🇱',
+    \ '★',
     \ '⚓️',
     \ '🙉',
     \ '☘️',
@@ -340,19 +364,6 @@ augroup END
 
 " Git merge origin master
 command! -bang Gmom exe 'G merge origin/' . 'master'
-
-" Create a new branch
-function! Gcb(...)
-  let name = a:1
-  if name ==? ''
-    call inputsave()
-    let name = input('Enter branch name: ')
-    call inputrestore()
-  endif
-  echom ''
-  execute 'Git checkout -b ' . name
-endfunction
-command! -nargs=? Gcb call Gcb("<args>")
 
 function! ToggleGStatus()
   if buflisted(bufname('.git/index'))
@@ -418,6 +429,17 @@ function! s:add_mappings() abort
   wincmd p
 endfunction
 ]]
+
+local new_branch = function(args)
+  P(args)
+  vim.ui.input({ prompt = 'Enter branch name: ' }, function(input)
+    if input == '' then
+      return
+    end
+    vim.cmd('Git checkout -b ' .. input)
+  end)
+end
+vim.api.nvim_create_user_command('Gcb', new_branch, {})
 
 local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
 if custom_settings_ok then
