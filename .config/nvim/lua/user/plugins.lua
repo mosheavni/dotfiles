@@ -4,7 +4,11 @@ local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nv
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
 end
-return require('packer').startup(function(use)
+local packer = require('packer')
+packer.init({
+  max_jobs = 10
+})
+return packer.startup(function(use)
   -- Infrastructure
   use 'wbthomason/packer.nvim'
   use 'lewis6991/impatient.nvim'
@@ -70,7 +74,7 @@ return require('packer').startup(function(use)
     'williamboman/nvim-lsp-installer',
     'ray-x/lsp_signature.nvim', -- Show function signature when you type
     'jose-elias-alvarez/null-ls.nvim',
-    'b0o/SchemaStore.nvim',
+    { 'b0o/SchemaStore.nvim' },
     'folke/lsp-colors.nvim',
     'nvim-lua/lsp-status.nvim',
     'j-hui/fidget.nvim',
@@ -96,7 +100,7 @@ return require('packer').startup(function(use)
       'saadparwaiz1/cmp_luasnip',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
-      'hrsh7th/cmp-nvim-lua',
+      { 'hrsh7th/cmp-nvim-lua', ft = { 'lua' } },
       'hrsh7th/cmp-cmdline',
       'onsails/lspkind-nvim', -- show pictograms in the auto complete popup
       { 'tzachar/cmp-tabnine', run = './install.sh' },
@@ -129,7 +133,7 @@ return require('packer').startup(function(use)
   }
   use { 'jose-elias-alvarez/nvim-lsp-ts-utils' }
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
-  use { 'martinda/Jenkinsfile-vim-syntax' }
+  use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
   use { 'mosheavni/vim-kubernetes', ft = { 'yaml' } }
   use { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } }
@@ -142,7 +146,7 @@ return require('packer').startup(function(use)
   -- Functionality Tools
   use 'christoomey/vim-system-copy'
   use 'danro/rename.vim'
-  use 'voldikss/vim-floaterm'
+  use { 'akinsho/toggleterm.nvim', tag = 'v1.*' }
   use { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } }
   use 'simeji/winresizer'
   use {
