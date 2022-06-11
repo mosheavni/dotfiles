@@ -16,3 +16,4 @@ exclude:
   - .alt.toml
   - .luarc.json
   - images
+  - material-design-colors.itermcolors
