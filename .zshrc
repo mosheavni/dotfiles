@@ -80,6 +80,9 @@ compdef tf='terraform'
 compdef tg='terraform'
 compdef terragrunt='terraform'
 
+# Source azure-cli completion
+[[ -f /usr/local/etc/bash_completion.d/az ]] && source /usr/local/etc/bash_completion.d/az
+
 # ===================== #
 # Aliases and Functions #
 # ===================== #

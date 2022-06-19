@@ -86,15 +86,12 @@ null_ls.setup {
   sources = {
     -- null_ls.builtins.code_actions.eslint_d,
     null_ls.builtins.code_actions.refactoring,
-    -- null_ls.builtins.diagnostics.eslint_d,
-    -- null_ls.builtins.diagnostics.markdownlint,
-    -- null_ls.builtins.diagnostics.write_good,
-    -- null_ls.builtins.formatting.eslint_d,
-    null_ls.builtins.formatting.fixjson,
-    -- null_ls.builtins.formatting.markdownlint,
     null_ls.builtins.code_actions.shellcheck.with {
       extra_filetypes = sh_extra_fts,
     },
+    -- null_ls.builtins.diagnostics.eslint_d,
+    -- null_ls.builtins.diagnostics.markdownlint,
+    -- null_ls.builtins.diagnostics.write_good,
     null_ls.builtins.diagnostics.ansiblelint,
     null_ls.builtins.diagnostics.hadolint,
     null_ls.builtins.diagnostics.pylint,
@@ -104,13 +101,17 @@ null_ls.setup {
     },
     null_ls.builtins.diagnostics.yamllint,
     null_ls.builtins.formatting.black,
-    null_ls.builtins.formatting.prettier,
-    null_ls.builtins.formatting.prettierd,
+    null_ls.builtins.formatting.prettier.with({
+      disabled_filetypes = { "yaml" },
+    }),
+    null_ls.builtins.formatting.fixjson,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.terraform_fmt,
     null_ls.builtins.formatting.shfmt.with {
       extra_filetypes = sh_extra_fts,
     },
+    -- null_ls.builtins.formatting.markdownlint,
+    -- null_ls.builtins.formatting.eslint_d,
   },
 }
 
