@@ -39,6 +39,7 @@ keymap('n', '<C-H>', '<C-W><C-H>', opts.no_remap)
 
 -- entire file text-object
 keymap('o', 'ae', '<cmd>normal! ggVG<CR>', opts.no_remap_silent)
+keymap('v', 'ae', '<esc>gg0vG$', opts.no_remap)
 
 -- Run and edit macros
 for _, key in pairs { 'Q', 'X' } do
