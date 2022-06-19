@@ -40,8 +40,14 @@ keymap('n', '<C-H>', '<C-W><C-H>', opts.no_remap)
 -- entire file text-object
 keymap('o', 'ae', '<cmd>normal! ggVG<CR>', opts.no_remap_silent)
 
--- Run macro
-keymap('n', 'Q', '@q', opts.no_remap)
+-- Run and edit macros
+for _, key in pairs { 'Q', 'X' } do
+  keymap('n', key, '@' .. key:lower(), opts.no_remap)
+  keymap('n', '<leader>' .. key, ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>", opts.no_remap)
+end
+
+-- keymap('n', 'Q', '@q', opts.no_remap)
+-- keymap('n', '<leader>Q', ":<c-u><c-r><c-r>='let @q = '. string(getreg('q'))<cr><c-f><left>", opts.no_remap)
 
 -- Paste in insert mode
 keymap('i', '<c-v>', '<c-r>', opts.no_remap)
