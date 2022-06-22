@@ -97,53 +97,53 @@ vim.g['startify_custom_header'] = {
   '   🚀               ✨              🚀',
 }
 -- NERDTree
--- vim.g['NERDTreeChDirMode'] = 2
--- vim.g['NERDTreeHijackNetrw'] = 1
--- vim.g['NERDTreeShowHidden'] = 1
--- vim.g['NERDTreeHighlightCursorline'] = 1
--- vim.g['NERDTreeFileExtensionHighlightFullName'] = 1
--- vim.g['NERDTreeGitStatusUseNerdFonts'] = 1
--- -- vim.g["NERDTreeGitStatusConcealBrackets"] = 1
--- vim.g['NERDTreeGitStatusIndicatorMapCustom'] = {
---   Modified = '✹',
---   Staged = '✚',
---   Untracked = '✭',
---   Unmerged = '═',
---   Dirty = '✗',
---   Renamed = '➜',
---   Clean = '✔︎',
---   Ignored = '☒',
---   Deleted = '✖',
---   Unknown = '?',
--- }
--- vim.cmd [[
--- " Check if NERDTree is open or active
--- function! IsNERDTreeOpen()
---   return exists('t:NERDTreeBufName') && (bufwinnr(t:NERDTreeBufName) != -1)
--- endfunction
--- " Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
--- " file, and we're not in vimdiff
--- function! SyncTree()
---   if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
---     NERDTreeFind
---     wincmd p
---   endif
--- endfunction
--- function! ToggleNerdTree()
---   set eventignore=BufEnter
---   NERDTreeToggle
---   set eventignore=
--- endfunction
--- augroup nerd_tree_augroup
---   autocmd!
---   " Highlight currently open buffer in NERDTree
---   autocmd BufEnter * call SyncTree()
---   " Close VIM if NERDTree is the only buffer left
---   autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
--- augroup END
--- nmap <silent> <C-o> :call ToggleNerdTree()<CR>
--- nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
--- ]]
+vim.g['NERDTreeChDirMode'] = 2
+vim.g['NERDTreeHijackNetrw'] = 1
+vim.g['NERDTreeShowHidden'] = 1
+vim.g['NERDTreeHighlightCursorline'] = 1
+vim.g['NERDTreeFileExtensionHighlightFullName'] = 1
+vim.g['NERDTreeGitStatusUseNerdFonts'] = 1
+-- vim.g["NERDTreeGitStatusConcealBrackets"] = 1
+vim.g['NERDTreeGitStatusIndicatorMapCustom'] = {
+  Modified = '✹',
+  Staged = '✚',
+  Untracked = '✭',
+  Unmerged = '═',
+  Dirty = '✗',
+  Renamed = '➜',
+  Clean = '✔︎',
+  Ignored = '☒',
+  Deleted = '✖',
+  Unknown = '?',
+}
+vim.cmd [[
+" Check if NERDTree is open or active
+function! IsNERDTreeOpen()
+  return exists('t:NERDTreeBufName') && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
+" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
+" file, and we're not in vimdiff
+function! SyncTree()
+  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+    NERDTreeFind
+    wincmd p
+  endif
+endfunction
+function! ToggleNerdTree()
+  set eventignore=BufEnter
+  NERDTreeToggle
+  set eventignore=
+endfunction
+augroup nerd_tree_augroup
+  autocmd!
+  " Highlight currently open buffer in NERDTree
+  autocmd BufEnter * call SyncTree()
+  " Close VIM if NERDTree is the only buffer left
+  autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
+augroup END
+nmap <silent> <C-o> :call ToggleNerdTree()<CR>
+nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
+]]
 -- Switch vim
 -- The map switch is between underscores to camelCase: moshe_king -> mosheKing -> moshe_king.
 vim.g['switch_custom_definitions'] = {

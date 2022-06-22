@@ -15,15 +15,15 @@ return packer.startup(function(use)
   use 'nvim-lua/plenary.nvim'
 
   -- Project Drawer
-  -- use { 'preservim/nerdtree', cmd = { 'NERDTreeToggle' } }
-  -- use { 'Xuyuanp/nerdtree-git-plugin', cmd = { 'NERDTreeToggle' } }
-  use {
-    'kyazdani42/nvim-tree.lua',
-    requires = {
-      'kyazdani42/nvim-web-devicons', -- optional, for file icon
-    },
-    tag = 'nightly', -- optional, updated every week. (see issue #1193)
-  }
+  use { 'preservim/nerdtree', cmd = { 'NERDTreeToggle' } }
+  use { 'Xuyuanp/nerdtree-git-plugin', cmd = { 'NERDTreeToggle' } }
+  -- use {
+  --   'kyazdani42/nvim-tree.lua',
+  --   requires = {
+  --     'kyazdani42/nvim-web-devicons', -- optional, for file icon
+  --   },
+  --   tag = 'nightly', -- optional, updated every week. (see issue #1193)
+  -- }
 
   -- Git Related
   use {
