@@ -142,6 +142,9 @@ function get_pods_of_svc() {
   kubectl get pod $* -l $label_selectors
 }
 
+alias k_get_failed_pods='kubectl get pods --field-selector status.phase!=Running'
+alias kgfp='k_get_failed_pods'
+
 ### General aliases ###
 alias watch='watch --color '
 alias vim="nvim"

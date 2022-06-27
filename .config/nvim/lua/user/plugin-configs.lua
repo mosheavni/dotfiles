@@ -6,7 +6,7 @@ local augroup = utils.augroup
 
 -- Colorscheme
 vim.g.material_style = 'darker'
-vim.cmd [[colorscheme material]]
+vim.cmd [[colorscheme gruvbox]]
 -- WinResizer
 vim.g['winresizer_start_key'] = '<C-E>'
 keymap('t', '<C-E>', '<Esc><Cmd>WinResizerStartResize<CR>', opts.no_remap_silent)
@@ -436,16 +436,17 @@ function! s:add_mappings() abort
 endfunction
 ]]
 
-local new_branch = function(args)
-  P(args)
-  vim.ui.input({ prompt = 'Enter branch name: ' }, function(input)
-    if input == '' then
-      return
-    end
-    vim.cmd('Git checkout -b ' .. input)
-  end)
+local new_branch = function(branch_opts)
+  if branch_opts.args ~= "" then
+    return vim.cmd('Git checkout -b ' .. branch_opts.args)
+  end
+  local input = vim.fn.input('Enter new branch name: ', '')
+  if input == '' then
+    return
+  end
+  vim.cmd('Git checkout -b ' .. input)
 end
-vim.api.nvim_create_user_command('Gcb', new_branch, {})
+vim.api.nvim_create_user_command('Gcb', new_branch, { nargs = '?' })
 
 local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
 if custom_settings_ok then
