@@ -31,24 +31,6 @@ set runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 ]]
 
--- local nvim_lsp = require 'lspconfig'
--- local on_attaches = require 'user.lsp.on-attach'
--- local on_attach = on_attaches.default
---
--- local capabilities = vim.lsp.protocol.make_client_capabilities()
--- capabilities.textDocument.completion.completionItem.snippetSupport = true
--- capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
--- nvim_lsp['terraformls'].setup {
---   cmd = {
---     'terraform-ls',
---     'serve',
---     '-log-file=/tmp/terraform-ls-{{pid}}.log',
---     [[-tf-log-file='/tmp/terraform-exec-1-{{args}}.log']],
---   },
---   on_attach = on_attach,
---   capabilities = capabilities,
--- }
-
 require 'user.options'
 require 'user.winbar'
 require 'user.mappings'
