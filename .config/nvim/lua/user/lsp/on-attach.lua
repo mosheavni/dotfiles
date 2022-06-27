@@ -4,12 +4,11 @@ local user_maps = require 'user.lsp.maps'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
 local buf_set_option = vim.api.nvim_buf_set_option
+local lsp_format = require 'lsp-format'
+lsp_format.setup {}
 
 local disable_ls_format = {
   'sumneko_lua',
-}
-local disable_ft_format = {
-  'yaml',
 }
 local enable_ls_signature = {
   'sumneko_lua',
@@ -20,16 +19,18 @@ local default_on_attach = function(client, bufnr)
   -- Add mappings
   user_maps(bufnr)
 
+  -- Plugins on-attach
   lsp_status.on_attach(client)
   local basics = require 'lsp_basics'
   basics.make_lsp_commands(client, bufnr)
+  lsp_format.on_attach(client)
 
   if vim.tbl_contains(enable_ls_signature, client.name) then
-    require "lsp_signature".on_attach({
+    require('lsp_signature').on_attach({
       bind = true, -- This is mandatory, otherwise border config won't get registered.
       handler_opts = {
-        border = "rounded"
-      }
+        border = 'rounded',
+      },
     }, bufnr)
   end
 
@@ -54,19 +55,6 @@ local default_on_attach = function(client, bufnr)
       group = on_attach_aug,
       buffer = bufnr,
       command = 'silent! lua vim.lsp.buf.clear_references()',
-    })
-  end
-  -- auto format file on save
-  if vim.tbl_contains(disable_ls_format, client.name) then
-    client.resolved_capabilities.document_formatting = false
-    client.resolved_capabilities.document_range_formatting = false
-  end
-  if client.resolved_capabilities.document_formatting and not vim.tbl_contains(disable_ft_format, vim.bo.filetype) then
-    autocmd({ 'BufWritePre' }, {
-      desc = 'Auto format file before saving',
-      group = on_attach_aug,
-      buffer = bufnr,
-      command = 'silent! undojoin | lua vim.lsp.buf.formatting_seq_sync()',
     })
   end
 
