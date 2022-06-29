@@ -4,10 +4,10 @@ local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nv
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
 end
-local packer = require('packer')
-packer.init({
-  max_jobs = 10
-})
+local packer = require 'packer'
+packer.init {
+  max_jobs = 10,
+}
 return packer.startup(function(use)
   -- Infrastructure
   use 'wbthomason/packer.nvim'
@@ -73,6 +73,7 @@ return packer.startup(function(use)
     'neovim/nvim-lspconfig',
     'williamboman/nvim-lsp-installer',
     'ray-x/lsp_signature.nvim', -- Show function signature when you type
+    'lukas-reineke/lsp-format.nvim',
     'jose-elias-alvarez/null-ls.nvim',
     { 'b0o/SchemaStore.nvim' },
     'folke/lsp-colors.nvim',

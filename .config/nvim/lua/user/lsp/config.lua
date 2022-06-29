@@ -122,12 +122,6 @@ ensure_server('sumneko_lua').setup(luadev)
 ensure_server('terraformls').setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
-  cmd = {
-    'terraform-ls',
-    'serve',
-    '-log-file=/tmp/terraform-ls-{{pid}}.log',
-    [[-tf-log-file='/tmp/terraform-exec-1-{{args}}.log']],
-  },
 }
 --tsserver
 ---@diagnostic disable-next-line: undefined-field
