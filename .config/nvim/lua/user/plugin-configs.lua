@@ -17,21 +17,11 @@ require('Comment').setup {}
 -- Vim easy align
 keymap('n', 'ga', '<Plug>(EasyAlign)', {})
 -- Floaterm
--- vim.g['floaterm_keymap_toggle'] = '<F6>'
--- vim.g['floaterm_keymap_new'] = '<F7>'
--- vim.g['floaterm_keymap_next'] = '<F8>'
--- vim.g['floaterm_width'] = 0.7
--- vim.g['floaterm_height'] = 0.9
--- ToggleTerm
-require('toggleterm').setup {
-  direction = 'float',
-}
-keymap('n', '<F6>', '<Cmd>exe v:count1 . "ToggleTerm"<CR>', opts.no_remap_silent)
-keymap('t', '<F6>', '<Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>', opts.no_remap_silent)
-keymap('t', '<c-k>', '<Esc><Cmd>wincmd k<CR>', opts.no_remap_silent)
-keymap('t', '<c-j>', '<Esc><Cmd>wincmd j<CR>', opts.no_remap_silent)
-keymap('t', '<c-l>', '<Esc><Cmd>wincmd l<CR>', opts.no_remap_silent)
-keymap('t', '<c-h>', '<Esc><Cmd>wincmd h<CR>', opts.no_remap_silent)
+vim.g['floaterm_keymap_toggle'] = '<F6>'
+vim.g['floaterm_keymap_new'] = '<F7>'
+vim.g['floaterm_keymap_next'] = '<F8>'
+vim.g['floaterm_width'] = 0.7
+vim.g['floaterm_height'] = 0.9
 -- Dressing.nvim
 require('dressing').setup {
   input = {
@@ -47,14 +37,15 @@ vim.g['yaml_revealer_list_indicator'] = 1
 -- Spectre
 keymap('n', '<leader>S', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opts.silent)
 keymap('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opts.no_remap)
+require 'user.spectre'
 -- AnyJump
 keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
 -- Editor config
 vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
 -- Navigator
--- require('navigator').setup {
---   default_mapping = true,
--- }
+require('navigator').setup {
+  default_mapping = true,
+}
 -- neoscroll
 require('neoscroll').setup {
   -- All these keys will be mapped to their corresponding default scrolling animation
@@ -181,8 +172,7 @@ require('fidget').setup {
 }
 -- Which-Key
 require('which-key').setup {}
--- nvim gps
-require('nvim-gps').setup()
+require 'user.which-key'
 -- bulb (code actions)
 local lightbulb = require 'nvim-lightbulb'
 lightbulb.setup {
@@ -447,6 +437,14 @@ local new_branch = function(branch_opts)
   vim.cmd('Git checkout -b ' .. input)
 end
 vim.api.nvim_create_user_command('Gcb', new_branch, { nargs = '?' })
+
+require 'user.cmpconf'
+require 'user.treesitter'
+require 'user.lsp'
+require 'user.autocommands'
+require 'user.gitsigns'
+require 'user.telescope'
+require 'user.lualine'
 
 local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
 if custom_settings_ok then
