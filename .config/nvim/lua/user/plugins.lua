@@ -33,6 +33,7 @@ return packer.startup(function(use)
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
   use 'tpope/vim-fugitive'
   use { 'rhysd/conflict-marker.vim' }
+  use { 'tpope/vim-rhubarb' }
 
   -- Documents
   use 'nanotee/luv-vimdocs'

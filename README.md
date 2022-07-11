@@ -131,3 +131,9 @@
 - Install [Mac Media Key Forwarder](https://github.com/milgra/macmediakeyforwarder)
 
 - Install Snagit
+
+- Set Rhubarb file:
+
+  ```bash
+  echo 'machine api.github.com login moshe password <token>' >> ~/.netrc
+  ```

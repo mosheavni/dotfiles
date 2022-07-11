@@ -22,7 +22,9 @@ keymap('v', '<tab>', '>gv', opts.remap)
 keymap('v', '<s-tab>', '<gv', opts.remap)
 
 -- Copy number of lines and paste below
-keymap('n', '<leader>cp', ":<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) . 'j' . (v:count == 0 ? 1 : v:count) . 'jo<C-v><Esc>p'<cr>", opts.no_remap)
+keymap('n', '<leader>cp',
+  ":<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) . 'j' . (v:count == 0 ? 1 : v:count) . 'jo<C-v><Esc>p'<cr>",
+  opts.no_remap)
 
 -- Windows mappings
 keymap('n', '<Leader><Leader>', '<C-^>', opts.no_remap)
@@ -44,7 +46,9 @@ keymap('v', 'ae', '<esc>gg0vG$', opts.no_remap)
 -- Run and edit macros
 for _, key in pairs { 'Q', 'X' } do
   keymap('n', key, '@' .. key:lower(), opts.no_remap)
-  keymap('n', '<leader>' .. key, ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>", opts.no_remap)
+  keymap('n', '<leader>' .. key,
+    ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>",
+    opts.no_remap)
 end
 
 -- keymap('n', 'Q', '@q', opts.no_remap)
@@ -126,8 +130,10 @@ keymap('n', '_', [["ldd2k"lp]], opts.no_remap)
 keymap('n', 'Y', ':%y+<cr>', opts.no_remap)
 
 -- Copy file path to clipboard
-keymap('n', '<leader>cfp', [[:let @+ = expand('%')<cr>:echo   "Copied file path " . expand('%')<cr>]], opts.no_remap_silent)
-keymap('n', '<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>]], opts.no_remap_silent)
+keymap('n', '<leader>cfp', [[:let @+ = expand('%')<cr>:echo   "Copied file path " . expand('%')<cr>]],
+  opts.no_remap_silent)
+keymap('n', '<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>]],
+  opts.no_remap_silent)
 
 -- Change working directory based on open file
 keymap('n', '<leader>cd', ':cd %:p:h<CR>:pwd<CR>', opts.no_remap)
@@ -173,7 +179,8 @@ keymap('v', '<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<
 keymap('v', '<leader>p', '"_dP', opts.no_remap)
 
 -- Base64 dencode
-keymap('v', '<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>]], opts.no_remap_silent)
+keymap('v', '<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>]],
+  opts.no_remap_silent)
 keymap('v', '<leader>64', [[c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>]], opts.no_remap_silent)
 
 -- Vimrc edit mappings
