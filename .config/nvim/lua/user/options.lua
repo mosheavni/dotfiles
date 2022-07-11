@@ -361,7 +361,7 @@ local default_plugins = {
   'getscriptPlugin',
   'gzip',
   'logipat',
-  'netrw',
+  -- 'netrw',
   'netrwPlugin',
   'netrwSettings',
   'netrwFileHandlers',

@@ -34,6 +34,7 @@ return packer.startup(function(use)
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
   use { 'rhysd/conflict-marker.vim' }
+  use { 'tpope/vim-rhubarb' }
 
   -- Documents
   use 'nanotee/luv-vimdocs'
