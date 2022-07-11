@@ -1,3 +1,4 @@
+#!/bin/zsh
 ### Helper functions ###
 function _alias_parser() {
   parsed_alias=`alias -- "$1"`
@@ -37,7 +38,6 @@ function mwatch() {
   watch --color "$final_alias"
 }
 
-function docke () { [[ $1 == "r"* ]] && docker ${1#r} }
 function ssh2 () {
   in_url=$(sed -E 's?ip-([0-9]*)-([0-9]*)-([0-9]*)-([0-9]*)?\1.\2.\3.\4?g' <<< "$1")
   echo $in_url
@@ -223,3 +223,10 @@ alias kdelsts='kubectl delete statefulsets'
 # Common Used tools:
 alias tf='terraform'
 alias tg='terragrunt'
+
+# fzf
+fd() {
+  DIR=$(find $1/* -maxdepth 0 -type d -print 2> /dev/null | fzf) \
+    && cd "$DIR"
+}
+alias pj='fd ~/Repos/'

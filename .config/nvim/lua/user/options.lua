@@ -15,7 +15,7 @@ opt.fillchars = { vert = '|', fold = '·' }
 opt.emoji = false
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
-opt.whichwrap:append '<>[]hl'
+-- opt.whichwrap:append '<>[]hl'
 
 opt.number = true -- Show current line number
 opt.relativenumber = true -- Show relative line numbers
@@ -44,6 +44,7 @@ opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
 opt.completeopt = { 'menu', 'menuone', 'noselect' }
 opt.previewheight = 15
 opt.title = true -- Changes the iterm title
+opt.titlestring = "nvim: %{substitute(getcwd(), $HOME, '~', '')}"
 opt.showcmd = true
 opt.guifont = ':h'
 opt.mouse = 'a'
