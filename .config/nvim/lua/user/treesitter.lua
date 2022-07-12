@@ -7,7 +7,33 @@ local ft_to_parser = require('nvim-treesitter.parsers').filetype_to_parsername
 ft_to_parser.groovy = 'java'
 
 configs.setup {
-  ensure_installed = 'all',
+  ensure_installed = {
+    'bash',
+    'comment',
+    'dockerfile',
+    'embedded_template',
+    'go',
+    'hcl',
+    'help',
+    'hjson',
+    'html',
+    'http',
+    'java',
+    'javascript',
+    'json',
+    'jsonc',
+    'lua',
+    'make',
+    'markdown',
+    'python',
+    'regex',
+    'scss',
+    'toml',
+    'tsx',
+    'typescript',
+    'vim',
+    'yaml',
+  },
   incremental_selection = {
     enable = true,
     keymaps = {

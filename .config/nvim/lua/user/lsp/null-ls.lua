@@ -12,7 +12,7 @@ null_ls.register {
   name = 'jenkinsfile',
   method = null_ls.methods.DIAGNOSTICS,
   -- filetypes = { 'Jenkinsfile' }, -- TODO: fix starting the server asynchronously
-  filetypes = {" hhiribiri"}, -- TODO: fix starting the server asynchronously
+  filetypes = { ' hhiribiri' }, -- TODO: fix starting the server asynchronously
   generator = helpers.generator_factory {
     command = 'curl',
     dynamic_command = function(params)
@@ -22,18 +22,18 @@ null_ls.register {
         return params.command
       else
         Job
-            :new({
-              command = 'docker',
-              args = { 'ps' },
-              on_exit = function(j, return_val)
-                if return_val == 1 then
-                  return nil
-                else
-                  io.popen 'start-jenkins-validate'
-                end
-              end,
-            })
-            :start()
+          :new({
+            command = 'docker',
+            args = { 'ps' },
+            on_exit = function(j, return_val)
+              if return_val == 1 then
+                return nil
+              else
+                io.popen 'start-jenkins-validate'
+              end
+            end,
+          })
+          :start()
         -- return nil
       end
     end,
@@ -114,17 +114,17 @@ null_ls.setup {
 }
 
 local null_ls_stop = function()
-    local null_ls_client
-    for _, client in ipairs(vim.lsp.get_active_clients()) do
-        if client.name == "null-ls" then
-            null_ls_client = client
-        end
+  local null_ls_client
+  for _, client in ipairs(vim.lsp.get_active_clients()) do
+    if client.name == 'null-ls' then
+      null_ls_client = client
     end
-    if not null_ls_client then
-        return
-    end
+  end
+  if not null_ls_client then
+    return
+  end
 
-    null_ls_client.stop()
+  null_ls_client.stop()
 end
 
-vim.api.nvim_create_user_command("NullLsStop", null_ls_stop, {})
+vim.api.nvim_create_user_command('NullLsStop', null_ls_stop, {})
