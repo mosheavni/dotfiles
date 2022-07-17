@@ -225,8 +225,8 @@ alias tf='terraform'
 alias tg='terragrunt'
 
 # fzf
-fd() {
+fdf() {
   DIR=$(find $1/* -maxdepth 0 -type d -print 2> /dev/null | fzf) \
     && cd "$DIR"
 }
-alias pj='fd ~/Repos/'
+alias pj='fdf ~/Repos'

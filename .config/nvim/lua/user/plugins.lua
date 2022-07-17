@@ -159,6 +159,7 @@ return packer.startup(function(use)
   -- Find and replace
   use 'windwp/nvim-spectre'
   use { 'folke/which-key.nvim' }
+  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
 
   -- Look & Feel
   use { 'stevearc/dressing.nvim' } -- overrides the default vim input to provide better visuals
@@ -188,6 +189,7 @@ return packer.startup(function(use)
   use 'ellisonleao/gruvbox.nvim'
   use 'rafamadriz/neon'
   use 'marko-cerovac/material.nvim'
+  use 'folke/tokyonight.nvim'
   -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
 
   -- Text Manipulation
