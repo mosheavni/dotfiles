@@ -362,7 +362,7 @@ local default_plugins = {
   'gzip',
   'logipat',
   -- 'netrw',
-  'netrwPlugin',
+  -- 'netrwPlugin',
   'netrwSettings',
   'netrwFileHandlers',
   'matchit',
