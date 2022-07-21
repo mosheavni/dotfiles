@@ -120,10 +120,6 @@ require 'user.spectre'
 keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
 -- Editor config
 vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
--- Navigator
-require('navigator').setup {
-  default_mapping = true,
-}
 -- neoscroll
 require('neoscroll').setup {
   -- All these keys will be mapped to their corresponding default scrolling animation
@@ -523,6 +519,7 @@ require 'user.autocommands'
 require 'user.gitsigns'
 require 'user.telescope'
 require 'user.lualine'
+require 'user.navigator'
 
 local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
 if custom_settings_ok then

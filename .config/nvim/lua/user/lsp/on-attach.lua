@@ -68,23 +68,24 @@ local default_on_attach = function(client, bufnr)
   end
 
   -- TODO: figure out why nothing is popping
-  -- local diagnostic_pop = augroup('DiagnosticPop')
-  -- autocmd("CursorHold", {
-  --   buffer = bufnr,
-  --   group = diagnostic_pop,
-  --   callback = function()
-  --     vim.notify("should open diagnostic")
-  --     local opts = {
-  --       focusable = false,
-  --       close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-  --       border = 'rounded',
-  --       source = 'always',
-  --       prefix = ' ',
-  --       scope = 'cursor',
-  --     }
-  --     vim.diagnostic.open_float(nil, opts)
-  --   end
-  -- })
+  local diagnostic_pop = augroup 'DiagnosticPop'
+  autocmd('CursorHold', {
+    buffer = bufnr,
+    group = diagnostic_pop,
+    callback = function()
+      local opts = {
+        focusable = false,
+        close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
+        border = 'rounded',
+        source = 'always',
+        prefix = ' ',
+        scope = 'cursor',
+      }
+      if vim.lsp.buf.server_ready() then
+        vim.diagnostic.open_float(nil, opts)
+      end
+    end,
+  })
 end
 
 local minimal_on_attach = function(_, bufnr)

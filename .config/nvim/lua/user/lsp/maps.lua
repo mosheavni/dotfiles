@@ -35,8 +35,7 @@ return function(bufnr)
 
   -- Diagnostics
   buf_set_keymap('n', '<leader>lq', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts.silent)
-  buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts.silent)
-  buf_set_keymap('n', '<leader>le', '<cmd>lua vim.diagnostic.open_float()<cr>', opts.silent)
+  buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.diagnostic.open_float()<cr>', opts.silent)
 
   -- Code action
   buf_set_keymap('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', {})

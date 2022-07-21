@@ -227,6 +227,6 @@ alias tg='terragrunt'
 # fzf
 fdf() {
   DIR=$(find $1/* -maxdepth 0 -type d -print 2> /dev/null | fzf) \
-    && cd "$DIR"
+    && cd "$DIR" && nvim
 }
 alias pj='fdf ~/Repos'
