@@ -22,18 +22,18 @@ null_ls.register {
         return params.command
       else
         Job
-          :new({
-            command = 'docker',
-            args = { 'ps' },
-            on_exit = function(j, return_val)
-              if return_val == 1 then
-                return nil
-              else
-                io.popen 'start-jenkins-validate'
-              end
-            end,
-          })
-          :start()
+            :new({
+              command = 'docker',
+              args = { 'ps' },
+              on_exit = function(j, return_val)
+                if return_val == 1 then
+                  return nil
+                else
+                  io.popen 'start-jenkins-validate'
+                end
+              end,
+            })
+            :start()
         -- return nil
       end
     end,
@@ -85,7 +85,6 @@ null_ls.setup {
   debug = true,
   sources = {
     -- null_ls.builtins.code_actions.eslint_d,
-    null_ls.builtins.code_actions.refactoring,
     null_ls.builtins.code_actions.shellcheck.with {
       extra_filetypes = sh_extra_fts,
     },
