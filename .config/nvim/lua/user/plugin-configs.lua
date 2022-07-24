@@ -447,7 +447,7 @@ command! ToggleGStatus :call ToggleGStatus()
 nnoremap <silent> <leader>gg :ToggleGStatus<cr>
 nmap <silent><expr> <leader>gf bufname('.git/index') ? ':exe bufwinnr(bufnr(bufname(".git/index"))) . "wincmd w"<cr>' : ':Git<cr>'
 
-nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<cr>
+nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
 
 " Gdiffrev
 nmap <leader>dh :DiffHistory<Space>

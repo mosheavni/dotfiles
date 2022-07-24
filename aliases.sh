@@ -46,6 +46,10 @@ function ssh2 () {
 function jsonlint () { pbcopy && open https://jsonlint.com/ }
 function grl () { grep -rl $* . }
 
+function cnf() {
+  open "https://command-not-found.com/$*"
+}
+
 ### Git functions ###
 # Open the github page of the repo you're in, in the browser
 function opengit () { git remote -v | awk 'NR==1{print $2}' | sed -e "s?:?/?g" -e 's?\.git$??' -e "s?git@?https://?" -e "s?https///?https://?g" | xargs open }
@@ -154,6 +158,7 @@ alias sudoedit="nvim"
 alias sed=gsed
 alias grep=ggrep
 alias sort=gsort
+alias myip='curl ipv4.icanhazip.com'
 
 alias dotfiles='cd ~/Repos/dotfiles'
 alias dc='cd '
