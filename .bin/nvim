@@ -1,1 +1,0 @@
-VIMRUNTIME=$HOME/Downloads/nvim-osx64/share/nvim/runtime $HOME/Downloads/nvim-osx64/bin/nvim "$@"
