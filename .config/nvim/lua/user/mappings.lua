@@ -26,6 +26,24 @@ keymap('n', '<leader>cp',
   ":<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) . 'j' . (v:count == 0 ? 1 : v:count) . 'jo<C-v><Esc>p'<cr>",
   opts.no_remap)
 
+-- Format groovy map
+vim.cmd [=[
+function! s:FormatGroovyMap(surround_words)
+  silent! %s?\]?\r]?g
+  silent! %s/, /,\r/g
+  silent! %s?\[?[\r?g
+  silent! %s?:\[?:[?g
+  silent! %s?\v([^\s]):([^\s])?\1: \2?
+  silent! %s?:\[?: [?
+  if a:surround_words != "!"
+    silent! %s/\v(.*: )([^,\[\]]*)(,?)$/\1"\2"\3/g
+  endif
+  normal! gg=G
+  noh
+endfunction
+com! -bang FormatGroovyMap call s:FormatGroovyMap("<bang>")
+]=]
+
 -- Windows mappings
 keymap('n', '<Leader><Leader>', '<C-^>', opts.no_remap)
 keymap('n', '<tab>', '<c-w>w', opts.no_remap)
