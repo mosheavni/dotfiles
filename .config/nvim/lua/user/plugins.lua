@@ -32,7 +32,6 @@ return packer.startup(function(use)
   }
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
   use 'tpope/vim-fugitive'
-  use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
   use { 'rhysd/conflict-marker.vim' }
   use { 'tpope/vim-rhubarb' }
 
@@ -56,6 +55,7 @@ return packer.startup(function(use)
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
   }
+  use 'JoosepAlviste/nvim-ts-context-commentstring'
   use {
     'SmiteshP/nvim-gps',
     requires = 'nvim-treesitter/nvim-treesitter',
@@ -148,7 +148,7 @@ return packer.startup(function(use)
   -- Functionality Tools
   use 'christoomey/vim-system-copy'
   use 'danro/rename.vim'
-  use { 'akinsho/toggleterm.nvim', tag = 'v1.*' }
+  use 'voldikss/vim-floaterm'
   use { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } }
   use 'simeji/winresizer'
   use {
@@ -159,6 +159,7 @@ return packer.startup(function(use)
   -- Find and replace
   use 'windwp/nvim-spectre'
   use { 'folke/which-key.nvim' }
+  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
 
   -- Look & Feel
   use { 'stevearc/dressing.nvim' } -- overrides the default vim input to provide better visuals
@@ -172,12 +173,10 @@ return packer.startup(function(use)
     },
   }
   use 'kyazdani42/nvim-web-devicons'
-  -- use 'adelarsq/vim-devicons-emoji'
   use 'karb94/neoscroll.nvim'
   use 'machakann/vim-highlightedyank'
   use 'mhinz/vim-startify'
   use 'vim-scripts/CursorLineCurrentWindow'
-  use 'p00f/nvim-ts-rainbow'
   use 'norcalli/nvim-colorizer.lua'
 
   -- Themes
@@ -190,13 +189,13 @@ return packer.startup(function(use)
   use 'ellisonleao/gruvbox.nvim'
   use 'rafamadriz/neon'
   use 'marko-cerovac/material.nvim'
+  use 'folke/tokyonight.nvim'
   -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
 
   -- Text Manipulation
   use 'tpope/vim-repeat'
   use 'tpope/vim-surround'
   use { 'numToStr/Comment.nvim' }
-  use 'JoosepAlviste/nvim-ts-context-commentstring'
   use 'junegunn/vim-easy-align'
   use 'AndrewRadev/switch.vim'
   use 'justinmk/vim-sneak'

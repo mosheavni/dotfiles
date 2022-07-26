@@ -46,6 +46,10 @@ function ssh2 () {
 function jsonlint () { pbcopy && open https://jsonlint.com/ }
 function grl () { grep -rl $* . }
 
+function cnf() {
+  open "https://command-not-found.com/$*"
+}
+
 ### Git functions ###
 # Open the github page of the repo you're in, in the browser
 function opengit () { git remote -v | awk 'NR==1{print $2}' | sed -e "s?:?/?g" -e 's?\.git$??' -e "s?git@?https://?" -e "s?https///?https://?g" | xargs open }
@@ -74,7 +78,7 @@ function kgres() {
     -ojsonpath='{range .items[*]}{.spec.containers[*].name}{" memory: "}{.spec.containers..resources.requests.memory}{"/"}{.spec.containers..resources.limits.memory}{" | cpu: "}{.spec.containers..resources.requests.cpu}{"/"}{.spec.containers..resources.limits.cpu}{"\n"}{end}' | sort \
     -u \
     -k1,1 | column -t
-  }
+}
 
 function kubedebug () {
   # image=gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
@@ -154,6 +158,7 @@ alias sudoedit="nvim"
 alias sed=gsed
 alias grep=ggrep
 alias sort=gsort
+alias myip='curl ipv4.icanhazip.com'
 
 alias dotfiles='cd ~/Repos/dotfiles'
 alias dc='cd '
@@ -167,6 +172,7 @@ alias -g SRT='+short | sort'
 alias -g Sa='--sort-by=.metadata.creationTimestamp'
 alias -g Srt='--sort-by=.metadata.creationTimestamp'
 alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
+alias -g IMG='-oyaml | sed -n '\''s/^\s*image:\s\(.*\)/\1/gp'\'' | sort -u'
 alias -g YML='-oyaml | vim -c "set filetype=yaml | nnoremap <buffer> q :qall<cr>"'
 alias -g NM=' --no-headers -o custom-columns=":metadata.name"'
 alias -g RC='--sort-by=".status.containerStatuses[0].restartCount" -A | grep -v "\s0\s"'
@@ -224,8 +230,8 @@ alias tf='terraform'
 alias tg='terragrunt'
 
 # fzf
-fd() {
+fdf() {
   DIR=$(find $1/* -maxdepth 0 -type d -print 2> /dev/null | fzf) \
-    && cd "$DIR"
+    && cd "$DIR" && nvim
 }
-alias pj='fd ~/Repos/'
+alias pj='fdf ~/Repos'

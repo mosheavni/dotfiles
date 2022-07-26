@@ -9,9 +9,9 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="$HOME/.bin:$PATH"
-export PATH="/usr/local/opt/node@16/bin:$PATH"
+# export PATH="/usr/local/opt/node@16/bin:$PATH"
 export PATH="$HOME/.cargo/bin:${PATH}"
-export PATH="$HOME/Library/Application Support/neovim/bin:${PATH}"
+# export PATH="$HOME/Library/Application Support/neovim/bin:${PATH}"
 
 export ZSH="$HOME/.oh-my-zsh"
 # ZSH_THEME="mosherussell"
@@ -60,6 +60,7 @@ plugins=(
   kube-ps1
   kubectl
   terraform
+  z
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
@@ -92,10 +93,6 @@ fi
 [[ -f $HOME/corp-aliases.sh ]] && source $HOME/corp-aliases.sh
 
 export EDITOR="nvim"
-
-cnf() {
-  open "https://command-not-found.com/$*"
-}
 
 # ================ #
 # Kubectl Contexts #

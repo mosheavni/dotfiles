@@ -12,7 +12,7 @@ null_ls.register {
   name = 'jenkinsfile',
   method = null_ls.methods.DIAGNOSTICS,
   -- filetypes = { 'Jenkinsfile' }, -- TODO: fix starting the server asynchronously
-  filetypes = {" hhiribiri"}, -- TODO: fix starting the server asynchronously
+  filetypes = { ' hhiribiri' }, -- TODO: fix starting the server asynchronously
   generator = helpers.generator_factory {
     command = 'curl',
     dynamic_command = function(params)
@@ -85,7 +85,6 @@ null_ls.setup {
   debug = true,
   sources = {
     -- null_ls.builtins.code_actions.eslint_d,
-    null_ls.builtins.code_actions.refactoring,
     null_ls.builtins.code_actions.shellcheck.with {
       extra_filetypes = sh_extra_fts,
     },
@@ -99,7 +98,7 @@ null_ls.setup {
     null_ls.builtins.diagnostics.shellcheck.with {
       extra_filetypes = sh_extra_fts,
     },
-    null_ls.builtins.diagnostics.yamllint,
+    -- null_ls.builtins.diagnostics.yamllint,
     null_ls.builtins.formatting.black,
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.fixjson,
@@ -114,17 +113,17 @@ null_ls.setup {
 }
 
 local null_ls_stop = function()
-    local null_ls_client
-    for _, client in ipairs(vim.lsp.get_active_clients()) do
-        if client.name == "null-ls" then
-            null_ls_client = client
-        end
+  local null_ls_client
+  for _, client in ipairs(vim.lsp.get_active_clients()) do
+    if client.name == 'null-ls' then
+      null_ls_client = client
     end
-    if not null_ls_client then
-        return
-    end
+  end
+  if not null_ls_client then
+    return
+  end
 
-    null_ls_client.stop()
+  null_ls_client.stop()
 end
 
-vim.api.nvim_create_user_command("NullLsStop", null_ls_stop, {})
+vim.api.nvim_create_user_command('NullLsStop', null_ls_stop, {})

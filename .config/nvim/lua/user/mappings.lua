@@ -26,6 +26,24 @@ keymap('n', '<leader>cp',
   ":<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) . 'j' . (v:count == 0 ? 1 : v:count) . 'jo<C-v><Esc>p'<cr>",
   opts.no_remap)
 
+-- Format groovy map
+vim.cmd [=[
+function! s:FormatGroovyMap(surround_words)
+  silent! %s?\]?\r]?g
+  silent! %s/, /,\r/g
+  silent! %s?\[?[\r?g
+  silent! %s?:\[?:[?g
+  silent! %s?\v([^\s]):([^\s])?\1: \2?
+  silent! %s?:\[?: [?
+  if a:surround_words != "!"
+    silent! %s/\v(.*: )([^,\[\]]*)(,?)$/\1"\2"\3/g
+  endif
+  normal! gg=G
+  noh
+endfunction
+com! -bang FormatGroovyMap call s:FormatGroovyMap("<bang>")
+]=]
+
 -- Windows mappings
 keymap('n', '<Leader><Leader>', '<C-^>', opts.no_remap)
 keymap('n', '<tab>', '<c-w>w', opts.no_remap)
@@ -168,8 +186,8 @@ keymap('n', '<leader>ct<space>', ':retab<cr>', opts.no_remap)
 keymap('n', [[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], opts.no_remap_silent)
 
 -- Search and Replace
-keymap('n', '<Leader>r', ':.,$s?<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>', opts.no_remap)
-keymap('v', '<leader>r', '"hy:.,$s?<C-r>h?<C-r>h?gc<left><left><left>', opts.no_remap)
+keymap('n', '<Leader>r', ':.,$s?\\V<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>', opts.no_remap)
+keymap('v', '<leader>r', '"hy:.,$s?\\V<C-r>h?<C-r>h?gc<left><left><left>', opts.no_remap)
 keymap('v', '<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], opts.no_remap)
 keymap('v', '<leader>daa', [["hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], opts.no_remap)
 keymap('v', '<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], opts.no_remap)

@@ -17,21 +17,11 @@ require('Comment').setup {}
 -- Vim easy align
 keymap('n', 'ga', '<Plug>(EasyAlign)', {})
 -- Floaterm
--- vim.g['floaterm_keymap_toggle'] = '<F6>'
--- vim.g['floaterm_keymap_new'] = '<F7>'
--- vim.g['floaterm_keymap_next'] = '<F8>'
--- vim.g['floaterm_width'] = 0.7
--- vim.g['floaterm_height'] = 0.9
--- ToggleTerm
-require('toggleterm').setup {
-  direction = 'float',
-}
-keymap('n', '<F6>', '<Cmd>exe v:count1 . "ToggleTerm"<CR>', opts.no_remap_silent)
-keymap('t', '<F6>', '<Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>', opts.no_remap_silent)
-keymap('t', '<c-k>', '<Esc><Cmd>wincmd k<CR>', opts.no_remap_silent)
-keymap('t', '<c-j>', '<Esc><Cmd>wincmd j<CR>', opts.no_remap_silent)
-keymap('t', '<c-l>', '<Esc><Cmd>wincmd l<CR>', opts.no_remap_silent)
-keymap('t', '<c-h>', '<Esc><Cmd>wincmd h<CR>', opts.no_remap_silent)
+vim.g['floaterm_keymap_toggle'] = '<F6>'
+vim.g['floaterm_keymap_new'] = '<F7>'
+vim.g['floaterm_keymap_next'] = '<F8>'
+vim.g['floaterm_width'] = 0.7
+vim.g['floaterm_height'] = 0.9
 -- Dressing.nvim
 require('dressing').setup {
   input = {
@@ -39,6 +29,84 @@ require('dressing').setup {
   },
 }
 vim.cmd [[hi link FloatTitle Normal]]
+-- Diffview
+local actions = require 'diffview.actions'
+require('diffview').setup {
+  enhanced_diff_hl = true, -- See ':h diffview-config-enhanced_diff_hl'
+  default_args = { -- Default args prepended to the arg-list for the listed commands
+    DiffviewOpen = {},
+    DiffviewFileHistory = {},
+  },
+  hooks = {}, -- See ':h diffview-config-hooks'
+  keymaps = {
+    disable_defaults = false, -- Disable the default keymaps
+    view = {
+      -- The `view` bindings are active in the diff buffers, only when the current
+      -- tabpage is a Diffview.
+      ['<tab>'] = actions.select_next_entry, -- Open the diff for the next file
+      ['<s-tab>'] = actions.select_prev_entry, -- Open the diff for the previous file
+      ['gf'] = actions.goto_file, -- Open the file in a new split in the previous tabpage
+      ['<C-w><C-f>'] = actions.goto_file_split, -- Open the file in a new split
+      ['<C-w>gf'] = actions.goto_file_tab, -- Open the file in a new tabpage
+      ['<leader>e'] = actions.focus_files, -- Bring focus to the files panel
+      ['<leader>b'] = actions.toggle_files, -- Toggle the files panel.
+    },
+    file_panel = {
+      ['j'] = actions.next_entry, -- Bring the cursor to the next file entry
+      ['<down>'] = actions.next_entry,
+      ['k'] = actions.prev_entry, -- Bring the cursor to the previous file entry.
+      ['<up>'] = actions.prev_entry,
+      ['<cr>'] = actions.select_entry, -- Open the diff for the selected entry.
+      ['o'] = actions.select_entry,
+      ['<2-LeftMouse>'] = actions.select_entry,
+      ['-'] = actions.toggle_stage_entry, -- Stage / unstage the selected entry.
+      ['S'] = actions.stage_all, -- Stage all entries.
+      ['U'] = actions.unstage_all, -- Unstage all entries.
+      ['X'] = actions.restore_entry, -- Restore entry to the state on the left side.
+      ['R'] = actions.refresh_files, -- Update stats and entries in the file list.
+      ['L'] = actions.open_commit_log, -- Open the commit log panel.
+      ['<c-b>'] = actions.scroll_view(-0.25), -- Scroll the view up
+      ['<c-f>'] = actions.scroll_view(0.25), -- Scroll the view down
+      ['<tab>'] = actions.select_next_entry,
+      ['<s-tab>'] = actions.select_prev_entry,
+      ['gf'] = actions.goto_file,
+      ['<C-w><C-f>'] = actions.goto_file_split,
+      ['<C-w>gf'] = actions.goto_file_tab,
+      ['i'] = actions.listing_style, -- Toggle between 'list' and 'tree' views
+      ['f'] = actions.toggle_flatten_dirs, -- Flatten empty subdirectories in tree listing style.
+      ['<leader>e'] = actions.focus_files,
+      ['<leader>b'] = actions.toggle_files,
+    },
+    file_history_panel = {
+      ['g!'] = actions.options, -- Open the option panel
+      ['<C-A-d>'] = actions.open_in_diffview, -- Open the entry under the cursor in a diffview
+      ['y'] = actions.copy_hash, -- Copy the commit hash of the entry under the cursor
+      ['L'] = actions.open_commit_log,
+      ['zR'] = actions.open_all_folds,
+      ['zM'] = actions.close_all_folds,
+      ['j'] = actions.next_entry,
+      ['<down>'] = actions.next_entry,
+      ['k'] = actions.prev_entry,
+      ['<up>'] = actions.prev_entry,
+      ['<cr>'] = actions.select_entry,
+      ['o'] = actions.select_entry,
+      ['<2-LeftMouse>'] = actions.select_entry,
+      ['<c-b>'] = actions.scroll_view(-0.25),
+      ['<c-f>'] = actions.scroll_view(0.25),
+      ['<tab>'] = actions.select_next_entry,
+      ['<s-tab>'] = actions.select_prev_entry,
+      ['gf'] = actions.goto_file,
+      ['<C-w><C-f>'] = actions.goto_file_split,
+      ['<C-w>gf'] = actions.goto_file_tab,
+      ['<leader>e'] = actions.focus_files,
+      ['<leader>b'] = actions.toggle_files,
+    },
+    option_panel = {
+      ['<tab>'] = actions.select_entry,
+      ['q'] = actions.close,
+    },
+  },
+}
 -- Vim ansible
 vim.g['ansible_goto_role_paths'] = '.;,roles;'
 -- Yaml Revealer
@@ -47,14 +115,11 @@ vim.g['yaml_revealer_list_indicator'] = 1
 -- Spectre
 keymap('n', '<leader>S', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opts.silent)
 keymap('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opts.no_remap)
+require 'user.spectre'
 -- AnyJump
 keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
 -- Editor config
 vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
--- Navigator
--- require('navigator').setup {
---   default_mapping = true,
--- }
 -- neoscroll
 require('neoscroll').setup {
   -- All these keys will be mapped to their corresponding default scrolling animation
@@ -77,8 +142,14 @@ vim.g['WebDevIconsOS'] = 'Darwin'
 vim.g['DevIconsEnableFoldersOpenClose'] = 1
 vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
 -- Conflict marker
-vim.g['conflict_marker_highlight_group'] = 'VisualNOS'
 vim.cmd [[
+" disable the default highlight group
+let g:conflict_marker_highlight_group = ''
+
+" Include text after begin and end markers
+let g:conflict_marker_begin = '^<<<<<<< .*$'
+let g:conflict_marker_end   = '^>>>>>>> .*$'
+
 highlight ConflictMarkerBegin guibg=#2f7366
 highlight ConflictMarkerOurs guibg=#2e5049
 highlight ConflictMarkerTheirs guibg=#344f69
@@ -175,8 +246,7 @@ require('fidget').setup {
 }
 -- Which-Key
 require('which-key').setup {}
--- nvim gps
-require('nvim-gps').setup()
+require 'user.which-key'
 -- bulb (code actions)
 local lightbulb = require 'nvim-lightbulb'
 lightbulb.setup {
@@ -377,7 +447,7 @@ command! ToggleGStatus :call ToggleGStatus()
 nnoremap <silent> <leader>gg :ToggleGStatus<cr>
 nmap <silent><expr> <leader>gf bufname('.git/index') ? ':exe bufwinnr(bufnr(bufname(".git/index"))) . "wincmd w"<cr>' : ':Git<cr>'
 
-nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<cr>
+nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
 
 " Gdiffrev
 nmap <leader>dh :DiffHistory<Space>
@@ -431,7 +501,7 @@ endfunction
 ]]
 
 local new_branch = function(branch_opts)
-  if branch_opts.args ~= "" then
+  if branch_opts.args ~= '' then
     return vim.cmd('Git checkout -b ' .. branch_opts.args)
   end
   local input = vim.fn.input('Enter new branch name: ', '')
@@ -441,6 +511,15 @@ local new_branch = function(branch_opts)
   vim.cmd('Git checkout -b ' .. input)
 end
 vim.api.nvim_create_user_command('Gcb', new_branch, { nargs = '?' })
+
+require 'user.cmpconf'
+require 'user.treesitter'
+require 'user.lsp'
+require 'user.autocommands'
+require 'user.gitsigns'
+require 'user.telescope'
+require 'user.lualine'
+require 'user.navigator'
 
 local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
 if custom_settings_ok then

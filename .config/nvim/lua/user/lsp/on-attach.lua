@@ -34,7 +34,7 @@ local default_on_attach = function(client, bufnr)
     }, bufnr)
   end
 
-  if client.resolved_capabilities.code_lens then
+  if client.server_capabilities.code_lens then
     autocmd({ 'BufEnter', 'InsertLeave', 'InsertEnter' }, {
       group = on_attach_aug,
       desc = 'Auto show code lenses',
@@ -42,7 +42,7 @@ local default_on_attach = function(client, bufnr)
       command = 'silent! lua vim.lsp.codelens.refresh()',
     })
   end
-  if client.resolved_capabilities.document_highlight then
+  if client.server_capabilities.document_highlight then
     -- Highlight text at cursor position
     autocmd({ 'CursorHold', 'CursorHoldI' }, {
       desc = 'Highlight references to current symbol under cursor',
@@ -59,32 +59,33 @@ local default_on_attach = function(client, bufnr)
   end
 
   -- Enable tag jump and formatting based on LSP
-  if client.resolved_capabilities.goto_definition == true then
+  if client.server_capabilities.goto_definition == true then
     buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
   end
 
-  if client.resolved_capabilities.document_formatting == true then
+  if client.server_capabilities.document_formatting == true then
     buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
   end
 
   -- TODO: figure out why nothing is popping
-  -- local diagnostic_pop = augroup('DiagnosticPop')
-  -- autocmd("CursorHold", {
-  --   buffer = bufnr,
-  --   group = diagnostic_pop,
-  --   callback = function()
-  --     vim.notify("should open diagnostic")
-  --     local opts = {
-  --       focusable = false,
-  --       close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-  --       border = 'rounded',
-  --       source = 'always',
-  --       prefix = ' ',
-  --       scope = 'cursor',
-  --     }
-  --     vim.diagnostic.open_float(nil, opts)
-  --   end
-  -- })
+  local diagnostic_pop = augroup 'DiagnosticPop'
+  autocmd('CursorHold', {
+    buffer = bufnr,
+    group = diagnostic_pop,
+    callback = function()
+      local opts = {
+        focusable = false,
+        close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
+        border = 'rounded',
+        source = 'always',
+        prefix = ' ',
+        scope = 'cursor',
+      }
+      if vim.lsp.buf.server_ready() then
+        vim.diagnostic.open_float(nil, opts)
+      end
+    end,
+  })
 end
 
 local minimal_on_attach = function(_, bufnr)
@@ -101,10 +102,10 @@ local minimal_on_attach = function(_, bufnr)
   -- end
 
   -- Enable tag jump and formatting based on LSP
-  -- if client.resolved_capabilities.goto_definition == true then
+  -- if client.server_capabilities.goto_definition == true then
   --   buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
   -- end
-  -- if client.resolved_capabilities.document_formatting == true then
+  -- if client.server_capabilities.document_formatting == true then
   --   buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
   -- end
 end

@@ -250,6 +250,7 @@ ensure_server('yamlls').setup {
           'kubectl-edit-*',
           'pdb.y*ml',
           'pod.y*ml',
+          'hpa.y*ml',
           'rbac.y*ml',
           'service.y*ml',
           'service*account.y*ml',

@@ -21,10 +21,10 @@ local function load_plugins()
     {
       'wbthomason/packer.nvim',
       'neovim/nvim-lspconfig',
-      -- 'hrsh7th/nvim-cmp', -- auto completion
-      -- 'hrsh7th/cmp-nvim-lsp',
-      -- 'L3MON4D3/LuaSnip',
-      -- 'saadparwaiz1/cmp_luasnip',
+      'hrsh7th/nvim-cmp', -- auto completion
+      'hrsh7th/cmp-nvim-lsp',
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
       'nvim-treesitter/nvim-treesitter',
     },
     config = {
@@ -45,6 +45,7 @@ _G.load_config = function()
     local function buf_set_keymap(...)
       vim.api.nvim_buf_set_keymap(bufnr, ...)
     end
+
     local function buf_set_option(...)
       vim.api.nvim_buf_set_option(bufnr, ...)
     end
@@ -77,41 +78,38 @@ _G.load_config = function()
   }
 
   -- Set up completion
-  -- local cmp = require 'cmp'
-  -- cmp.setup {
-  --   snippet = {
-  --     expand = function(args)
-  --       require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-  --     end,
-  --   },
-  --   window = {
-  --     completion = cmp.config.window.bordered(),
-  --     documentation = cmp.config.window.bordered(),
-  --   },
-  --   mapping = cmp.mapping.preset.insert {
-  --     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-  --     ['<C-f>'] = cmp.mapping.scroll_docs(4),
-  --     ['<C-Space>'] = cmp.mapping.complete(),
-  --     ['<C-e>'] = cmp.mapping.abort(),
-  --     ['<CR>'] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-  --   },
-  --   sources = cmp.config.sources {
-  --     { name = 'nvim_lsp' },
-  --     { name = 'luasnip' }, -- For luasnip users.
-  --   },
-  -- }
+  local cmp = require 'cmp'
+  cmp.setup {
+    snippet = {
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      end,
+    },
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert {
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    },
+    sources = cmp.config.sources {
+      { name = 'nvim_lsp' },
+      { name = 'luasnip' }, -- For luasnip users.
+    },
+  }
 
   -- Set up capabilities
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  -- capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+  capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
   -- Add the server that troubles you here
-  local name = 'jsonls'
-  local cmd = {
-    'node',
-    '/Users/mavni/.local/share/nvim/lsp_servers/jsonls/node_modules/.bin/vscode-json-language-server',
-    '--stdio',
-  }
+  local name = 'yamlls'
+  local yaml_install_path = vim.fn.expand '~' .. '/Repos/yaml-language-server'
+  local cmd = { 'node', yaml_install_path .. '/out/server/src/server.js', '--stdio' }
   if not name then
     print 'You have not defined a server name, please edit minimal_init.lua'
   end
@@ -124,14 +122,37 @@ _G.load_config = function()
     cmd = cmd,
     on_attach = on_attach,
     capabilities = capabilities,
-    unnamed_buffer_support = true,
-    autostart = true,
-    root_dir = function() end,
-    single_file_support = true,
+    on_init = function()
+      require('user.select-schema').get_client()
+    end,
     settings = {
-      json = {
-        trace = {
-          server = 'on',
+      redhat = { telemetry = { enabled = false } },
+      yaml = {
+        validate = true,
+        format = { enable = true },
+        hover = true,
+        trace = { server = 'debug' },
+        completion = true,
+        schemaStore = {
+          enable = true,
+          url = 'https://www.schemastore.org/api/json/catalog.json',
+        },
+        schemas = {
+          kubernetes = {
+            '*role*.y*ml',
+            'deploy.y*ml',
+            'deployment.y*ml',
+            'ingress.y*ml',
+            'kubectl-edit-*',
+            'pdb.y*ml',
+            'pod.y*ml',
+            'hpa.y*ml',
+            'rbac.y*ml',
+            'service.y*ml',
+            'service*account.y*ml',
+            'storageclass.y*ml',
+            'svc.y*ml',
+          },
         },
       },
     },
