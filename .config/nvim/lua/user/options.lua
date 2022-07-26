@@ -2,8 +2,8 @@ local opt = vim.opt
 opt.compatible = false
 
 -- disable legacy vim filetype detection in favor of new lua based from neovim
-vim.g.do_filetype_lua = 1
-vim.g.did_load_filetypes = 0
+-- vim.g.do_filetype_lua = 1
+-- vim.g.did_load_filetypes = 0
 
 opt.cursorcolumn = true
 opt.cursorline = true -- Add highlight behind current line
