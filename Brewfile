@@ -9,7 +9,7 @@ tap "homebrew/cask-fonts"
 tap "homebrew/core"
 tap "neovim/neovim"
 tap "weaveworks/tap"
-tap homebrew/command-not-found
+tap "homebrew/command-not-found"
 brew "argocd"
 brew "aws/tap/ec2-instance-selector"
 brew "awscli"

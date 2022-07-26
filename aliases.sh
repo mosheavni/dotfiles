@@ -38,6 +38,22 @@ function mwatch() {
   watch --color "$final_alias"
 }
 
+function mwatcht() {
+  # log_file=/tmp/moshe_mwatch.log
+  # [[ -f $log_file ]] && cat /dev/null > $log_file || touch $log_file
+  final_alias=`_alias_finder "$*"`
+  echo $final_alias
+
+  trap break INT
+
+  while true; do
+    n_lines=$(tput lines)
+    echo $final_alias | bash | tail -${n_lines}
+    printf '\e[K'
+    sleep 1
+  done
+}
+
 function ssh2 () {
   in_url=$(sed -E 's?ip-([0-9]*)-([0-9]*)-([0-9]*)-([0-9]*)?\1.\2.\3.\4?g' <<< "$1")
   echo $in_url
@@ -71,7 +87,14 @@ function cpr() {
 }
 
 ### Kubernetes functions ###
-function kdpw () { watch "kubectl describe po $* | tail -20" }
+function kdpw () {
+  while true; do
+    n_lines=$(tput lines)
+    kubectl describe po $* | tail -${n_lines}
+    printf '\e[%dA' $n_lines
+    sleep 1
+  done
+}
 
 function kgres() {
   kubectl get pod $* \
