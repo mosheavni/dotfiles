@@ -99,7 +99,6 @@ lualine.setup {
     lualine_z = {},
   },
   tabline = {},
-  -- winbar = { 'location' },
   extensions = {
     'nerdtree',
     'fugitive',
