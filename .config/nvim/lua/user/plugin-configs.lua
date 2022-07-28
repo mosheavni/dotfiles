@@ -225,16 +225,16 @@ vim.cmd [[highlight IndentBlanklineIndent5 guifg=#56B6C2 gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent6 guifg=#61AFEF gui=nocombine]]
 require('indent_blankline').setup {
   filetype_exclude = {
-    'help',
-    'terminal',
-    'alpha',
-    'packer',
-    'lspinfo',
+    'NvimTree',
     'TelescopePrompt',
     'TelescopeResults',
-    'NvimTree',
+    'alpha',
+    'help',
+    'lspinfo',
+    'mason.nvim',
     'nvchad_cheatsheet',
-    'lsp-installer',
+    'packer',
+    'terminal',
     '',
   },
   buftype_exclude = { 'terminal' },
