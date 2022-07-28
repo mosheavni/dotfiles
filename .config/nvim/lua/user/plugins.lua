@@ -159,6 +159,10 @@ return packer.startup(function(use)
     cmd = 'StartupTime',
   }
   use { 'pechorin/any-jump.vim', cmd = { 'AnyJump', 'AnyJumpVisual' } }
+  use {
+    'anuvyklack/fold-preview.nvim',
+    requires = 'anuvyklack/keymap-amend.nvim',
+  }
   -- Find and replace
   use 'windwp/nvim-spectre'
   use { 'folke/which-key.nvim' }
