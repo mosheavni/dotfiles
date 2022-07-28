@@ -71,8 +71,11 @@ return packer.startup(function(use)
   use 'nvim-treesitter/nvim-treesitter-refactor'
   -- LSP
   use {
+    'williamboman/mason.nvim',
+    'williamboman/mason-lspconfig.nvim',
     'neovim/nvim-lspconfig',
-    'williamboman/nvim-lsp-installer',
+  }
+  use {
     'ray-x/lsp_signature.nvim', -- Show function signature when you type
     'lukas-reineke/lsp-format.nvim',
     'jose-elias-alvarez/null-ls.nvim',

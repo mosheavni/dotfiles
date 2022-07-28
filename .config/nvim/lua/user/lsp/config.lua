@@ -2,22 +2,15 @@ local on_attaches = require 'user.lsp.on-attach'
 local lsp_status = require 'lsp-status'
 local default_on_attach = on_attaches.default
 require 'user.lsp.null-ls'
-local nvim_lsp = require 'lspconfig'
-require('nvim-lsp-installer').setup {}
-local lsp_installer = require 'nvim-lsp-installer.servers'
+
+-- mason and lspconfig
+require('mason').setup()
+require('mason-lspconfig').setup {
+  automatic_installation = true,
+}
 
 -- Set formatting of lsp log
 require('vim.lsp.log').set_format_func(vim.inspect)
-
-local function ensure_server(name)
-  local _, server = lsp_installer.get_server(name)
-  ---@diagnostic disable-next-line: undefined-field
-  if not server:is_installed() then
-    ---@diagnostic disable-next-line: undefined-field
-    server:install()
-  end
-  return nvim_lsp[name]
-end
 
 -- Capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -41,50 +34,48 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- ansiblels
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('ansiblels').setup {
+require('lspconfig')['ansiblels'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- ansblel
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('awk_ls').setup {
+require('lspconfig')['awk_ls'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- bashls
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('bashls').setup {
+require('lspconfig')['bashls'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- dockerls
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('dockerls').setup {
+require('lspconfig')['dockerls'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- eslint
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('eslint').setup {
+require('lspconfig')['eslint'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- groovyls
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('groovyls').setup {
+require('lspconfig')['groovyls'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- html
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('html').setup {
+require('lspconfig')['html'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- json
-local jsonls = ensure_server 'jsonls'
----@diagnostic disable-next-line: undefined-field
-jsonls:setup {
+require('lspconfig')['jsonls'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
   settings = {
@@ -98,7 +89,7 @@ jsonls:setup {
 }
 -- python
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('pyright').setup {
+require('lspconfig')['pyright'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
   settings = {
@@ -116,16 +107,16 @@ local luadev = require('lua-dev').setup {
   },
 }
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('sumneko_lua').setup(luadev)
+require('lspconfig')['sumneko_lua'].setup(luadev)
 --terraformls
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('terraformls').setup {
+require('lspconfig')['terraformls'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 --tsserver
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('tsserver').setup {
+require('lspconfig')['tsserver'].setup {
   capabilities = capabilities,
   -- Needed for inlayHints. Merge this table with your settings or copy
   -- it from the source if you want to add your own init_options.
@@ -179,7 +170,7 @@ ensure_server('tsserver').setup {
       update_imports_on_move = true,
       require_confirmation_on_move = false,
       watch_dir = nil,
-      ebug = true
+      ebug = true,
     }
 
     -- required to fix code action ranges and filter diagnostics
@@ -196,14 +187,14 @@ ensure_server('tsserver').setup {
 
 --vimls
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('vimls').setup {
+require('lspconfig')['vimls'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 
 --jdtls
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('jdtls').setup {
+require('lspconfig')['jdtls'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
@@ -216,13 +207,14 @@ if vim.fn.empty(vim.fn.glob(yaml_install_path)) > 0 then
     while clock() - t0 <= n do
     end
   end
+
   vim.fn.execute('!git clone https://github.com/redhat-developer/yaml-language-server.git ' .. yaml_install_path)
   vim.fn.execute('!yarn install --cwd ' .. yaml_install_path)
   sleep(5)
   vim.fn.execute('!cd ' .. yaml_install_path .. ' && yarn run build')
 end
 ---@diagnostic disable-next-line: undefined-field
-ensure_server('yamlls').setup {
+require('lspconfig')['yamlls'].setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
   cmd = { 'node', yaml_install_path .. '/out/server/src/server.js', '--stdio' },
