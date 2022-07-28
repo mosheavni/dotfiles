@@ -46,7 +46,7 @@ opt.previewheight = 15
 opt.title = true -- Changes the iterm title
 opt.titlestring = "nvim: %{substitute(getcwd(), $HOME, '~', '')}"
 opt.showcmd = true
-opt.guifont = ':h'
+opt.guifont = 'Fira Code,Hack Nerd Font'
 opt.mouse = 'a'
 opt.undofile = true -- Enables saving undo history to a file
 opt.colorcolumn = '80' -- Mark where are 80 characters to start breaking line
@@ -91,6 +91,17 @@ opt.softtabstop = 4
 opt.tabstop = 4
 opt.smarttab = true -- insert tabs on the start of a line according to shiftwidth, not tabstop
 opt.expandtab = true -- Tab changes to spaces. Format with :retab
+
+-- Neovide
+vim.g.neovide_cursor_vfx_mode = 'railgun'
+vim.g.neovide_scroll_animation_length = 0.5
+vim.g.neovide_fullscreen = true
+-- Allow clipboard copy paste in neovim
+vim.g.neovide_input_use_logo = 1
+vim.api.nvim_set_keymap('', '<D-v>', '+p<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('!', '<D-v>', '<C-R>+', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('t', '<D-v>', '<C-R>+', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<D-v>', '<C-R>+', { noremap = true, silent = true })
 
 -- Set shell
 if vim.fn.executable '/bin/zsh' == 1 then

@@ -54,10 +54,12 @@ keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
 -- Editor config
 vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
 -- neoscroll
-require('neoscroll').setup {
-  -- All these keys will be mapped to their corresponding default scrolling animation
-  mappings = { '<C-u>', '<C-d>', 'zt', 'zz', 'zb' },
-}
+if not vim.g.neovide then
+  require('neoscroll').setup {
+    -- All these keys will be mapped to their corresponding default scrolling animation
+    mappings = { '<C-u>', '<C-d>', 'zt', 'zz', 'zb' },
+  }
+end
 -- Github Copilot
 vim.cmd [[
 imap <silent><script><expr> <M-Enter> copilot#Accept("\<CR>")
