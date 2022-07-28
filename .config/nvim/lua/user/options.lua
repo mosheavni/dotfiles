@@ -59,7 +59,7 @@ opt.showmode = false -- Redundant as lighline takes care of that
 opt.history = 1000
 opt.termguicolors = true
 opt.signcolumn = 'auto'
-opt.winbar = "%{%v:lua.require'user.winbar'.eval()%}"
+-- opt.winbar = "%{%v:lua.require'user.winbar'.eval()%}"
 
 -- Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
 opt.updatetime = 300

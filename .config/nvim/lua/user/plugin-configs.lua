@@ -60,6 +60,8 @@ if not vim.g.neovide then
     mappings = { '<C-u>', '<C-d>', 'zt', 'zz', 'zb' },
   }
 end
+-- buffertag
+require('buffertag').enable()
 -- Github Copilot
 vim.cmd [[
 imap <silent><script><expr> <M-Enter> copilot#Accept("\<CR>")
