@@ -64,7 +64,11 @@ if not vim.g.neovide then
   }
 end
 -- buffertag
-require('buffertag').enable()
+require('buffertag').setup {
+  -- accepts any border options that `nvim_open_win` accepts.
+  -- see ":help vim.api.nvim_open_win"
+  border = 'rounded',
+}
 -- Github Copilot
 vim.cmd [[
 imap <silent><script><expr> <M-Enter> copilot#Accept("\<CR>")
