@@ -44,8 +44,6 @@ function mwatcht() {
   final_alias=`_alias_finder "$*"`
   echo $final_alias
 
-  trap break INT
-
   while true; do
     n_lines=$(tput lines)
     echo $final_alias | bash | tail -${n_lines}
