@@ -98,10 +98,13 @@ export EDITOR="nvim"
 
 # Load all contexts
 export KUBECONFIG=$HOME/.kube/config
-if [[ -d $HOME/.kube/contexts/ ]]; then
-  for ctx in "$HOME"/.kube/contexts/*.config; do
-    export KUBECONFIG=${KUBECONFIG}:${ctx}
-  done
+context_files=$(
+  setopt nullglob dotglob
+  echo $HOME/.kube/contexts/*
+)
+if ((${#context_files})) && [[ -d $HOME/.kube/contexts/ ]]; then
+  ALL_CONTEXTS=$(awk -vRS=" " '{printf "%s%s",sep,$0;sep=":"}' <<<$(echo ~/.kube/contexts/*.yaml))
+  export KUBECONFIG=${KUBECONFIG}:${ALL_CONTEXTS}
 fi
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
