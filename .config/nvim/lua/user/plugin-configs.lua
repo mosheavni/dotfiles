@@ -373,8 +373,8 @@ augroup END
 command! -bang Gmom exe 'G merge origin/' . 'master'
 
 function! ToggleGStatus()
-  if buflisted(bufname('.git/index'))
-    bd .git/index
+  if buflisted(bufname('.git/'))
+    bd .git/
   else
     Git
     " 17wincmd_
