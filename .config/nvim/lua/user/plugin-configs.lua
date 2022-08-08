@@ -194,6 +194,7 @@ require 'user.which-key'
 -- bulb (code actions)
 local lightbulb = require 'nvim-lightbulb'
 lightbulb.setup {
+  autocmd = { enabled = true },
   sign = {
     enabled = false,
   },
@@ -204,14 +205,6 @@ lightbulb.setup {
     hl_mode = 'replace',
   },
 }
-local bulb_au = augroup 'BulbAu'
-autocmd({ 'CursorHold', 'CursorHoldI' }, {
-  group = bulb_au,
-  pattern = '*',
-  callback = function()
-    lightbulb.update_lightbulb()
-  end,
-})
 -- Trouble
 require('trouble').setup()
 keymap('n', '<leader>xx', '<cmd>TroubleToggle<cr>', opts.no_remap_silent)

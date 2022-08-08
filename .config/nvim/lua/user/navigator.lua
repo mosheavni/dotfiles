@@ -15,6 +15,7 @@ local n_diagnostics = require 'navigator.diagnostics'
 -- local n_formatting = require 'navigator.formatting'
 local n_codeLens = require 'navigator.codeLens'
 navigator.setup {
+  mason = true,
   default_mapping = false,
   lsp = {
     ['lua-dev'] = { runtime_path = true }, -- any non default lua-dev setups

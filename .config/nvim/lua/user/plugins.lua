@@ -84,7 +84,10 @@ return packer.startup(function(use)
     'nvim-lua/lsp-status.nvim',
     'j-hui/fidget.nvim',
     'nanotee/nvim-lsp-basics',
+  }
+  use {
     'kosayoda/nvim-lightbulb',
+    requires = 'antoinemadec/FixCursorHold.nvim',
   }
   use {
     'folke/trouble.nvim',
