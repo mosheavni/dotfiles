@@ -9,10 +9,9 @@ local M = {}
 
 M.current_yaml_schema = 'No YAML schema'
 M.kubernetes_version = '1.19.16'
-M.kubernetes_schema = string.format(
-  'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v%s-standalone-strict/all.json',
-  M.kubernetes_version
-)
+M.kubernetes_schema =
+string.format('https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v%s-standalone-strict/all.json',
+  M.kubernetes_version)
 M._schema_name_mappings = {
   [M.kubernetes_schema] = 'k8s-' .. M.kubernetes_version,
 }
@@ -59,7 +58,8 @@ end
 M._change_settings = function(schema)
   local client = M._get_client()
   local previous_settings = client.config.settings
-  for key, value in pairs(previous_settings.yaml.schemas) do
+  local yaml_schemas = previous_settings.yaml_schemas or {}
+  for key, value in pairs(yaml_schemas) do
     if vim.tbl_islist(value) then
       for idx, value_value in pairs(value) do
         if value_value == M.uri or string.find(value_value, '*') then
@@ -84,27 +84,29 @@ end
 
 M._open_telescope = function(schemas)
   local opts = {}
-  return pickers.new(opts, {
-    prompt_title = 'Yaml Schemas',
-    finder = finders.new_table {
-      results = schemas,
-      entry_maker = function(entry)
-        local ret_obj = {
-          value = entry.uri,
-          display = entry.uri,
-          ordinal = entry.uri,
-        }
-        if entry.name then
-          ret_obj.display = entry.name
-          ret_obj.ordinal = entry.name
-        end
-        return ret_obj
-      end,
-    },
+  return pickers
+      .new(opts, {
+        prompt_title = 'Yaml Schemas',
+        finder = finders.new_table {
+          results = schemas,
+          entry_maker = function(entry)
+            local ret_obj = {
+              value = entry.uri,
+              display = entry.uri,
+              ordinal = entry.uri,
+            }
+            if entry.name then
+              ret_obj.display = entry.name
+              ret_obj.ordinal = entry.name
+            end
+            return ret_obj
+          end,
+        },
 
-    sorter = sorters.get_fzy_sorter(),
-    attach_mappings = M._telescope_action,
-  }):find()
+        sorter = sorters.get_fzy_sorter(),
+        attach_mappings = M._telescope_action,
+      })
+      :find()
 end
 
 M._telescope_action = function(prompt_bufnr, _)
