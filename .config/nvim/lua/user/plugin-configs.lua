@@ -247,6 +247,11 @@ vim.g['switch_custom_definitions'] = {
   -- }
 }
 
+-------------------
+-- Close Buffers --
+-------------------
+require('close_buffers').setup {}
+
 ------------
 -- fidget --
 ------------

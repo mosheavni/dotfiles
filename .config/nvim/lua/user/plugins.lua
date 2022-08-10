@@ -166,6 +166,8 @@ return packer.startup(function(use)
     'anuvyklack/fold-preview.nvim',
     requires = 'anuvyklack/keymap-amend.nvim',
   }
+  use 'kazhala/close-buffers.nvim'
+
   -- Find and replace
   use 'windwp/nvim-spectre'
   use { 'folke/which-key.nvim' }

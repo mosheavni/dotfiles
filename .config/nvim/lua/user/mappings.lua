@@ -209,7 +209,7 @@ keymap('n', '<leader>el', [[:execute("vsplit " . '~/.config/nvim/lua/user/lsp/co
 keymap('n', '<leader>em', [[:execute("vsplit " . '~/.config/nvim/lua/user/mappings.lua')<cr>]], opts.no_remap)
 
 -- Delete current buffer
-keymap('n', '<leader>bd', ':bp <bar> bw #<cr>', opts.no_remap_silent)
+keymap('n', '<leader>bd', '<cmd>BDelete this<cr>', opts.no_remap_silent)
 -- Close current buffer
 keymap('n', '<leader>bc', ':close<cr>', opts.no_remap_silent)
 
