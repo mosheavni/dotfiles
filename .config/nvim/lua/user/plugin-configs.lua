@@ -268,6 +268,10 @@ require('close_buffers').setup {}
 -- fidget --
 ------------
 vim.notify = require 'notify'
+require('notify').setup {
+  background_colour = '#000000',
+}
+
 require('fidget').setup {
   text = {
     spinner = 'moon',
