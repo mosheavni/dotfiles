@@ -4,35 +4,61 @@ local opts = utils.map_opts
 local autocmd = utils.autocmd
 local augroup = utils.augroup
 
--- Colorscheme
+-----------------
+-- Colorscheme --
+-----------------
 vim.g.material_style = 'darker'
 vim.cmd [[colorscheme gruvbox]]
--- WinResizer
+
+----------------
+-- WinResizer --
+----------------
 vim.g['winresizer_start_key'] = '<C-E>'
 keymap('t', '<C-E>', '<Esc><Cmd>WinResizerStartResize<CR>', opts.no_remap_silent)
--- Vim json path
+
+-------------------
+-- Vim json path --
+-------------------
 vim.g['jsonpath_register'] = '*'
--- Comment.nvim
+
+------------------
+-- Comment.nvim --
+------------------
 require('Comment').setup {}
--- Vim easy align
+
+--------------------
+-- Vim easy align --
+--------------------
 keymap('n', 'ga', '<Plug>(EasyAlign)', {})
--- Floaterm
+
+--------------
+-- Floaterm --
+--------------
 vim.g['floaterm_keymap_toggle'] = '<F6>'
 vim.g['floaterm_keymap_new'] = '<F7>'
 vim.g['floaterm_keymap_next'] = '<F8>'
 vim.g['floaterm_width'] = 0.7
 vim.g['floaterm_height'] = 0.9
--- Dressing.nvim
+
+-------------------
+-- Dressing.nvim --
+-------------------
 require('dressing').setup {
   input = {
     winblend = 100,
   },
 }
 vim.cmd [[hi link FloatTitle Normal]]
--- Fold Preview
+
+------------------
+-- Fold Preview --
+------------------
 local fold_preview = require 'fold-preview'
 fold_preview.setup {}
--- Diffview
+
+--------------
+-- Diffview --
+--------------
 local actions = require 'diffview.actions'
 require('diffview').setup {}
 --   enhanced_diff_hl = true, -- See ':h diffview-config-enhanced_diff_hl'
@@ -43,49 +69,85 @@ require('diffview').setup {}
 --     },
 --   },
 -- }
--- Vim ansible
+
+-----------------
+-- Vim ansible --
+-----------------
 vim.g['ansible_goto_role_paths'] = '.;,roles;'
--- Yaml Revealer
+
+-------------------
+-- Yaml Revealer --
+-------------------
 vim.g['yaml_revealer_separator'] = '.'
 vim.g['yaml_revealer_list_indicator'] = 1
--- Spectre
+
+-------------
+-- Spectre --
+-------------
 keymap('n', '<leader>S', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opts.silent)
 keymap('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opts.no_remap)
 require 'user.spectre'
--- AnyJump
+
+-------------
+-- AnyJump --
+-------------
 keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
--- Editor config
+
+-------------------
+-- Editor config --
+-------------------
 vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
--- neoscroll
+
+---------------
+-- neoscroll --
+---------------
 if not vim.g.neovide then
   require('neoscroll').setup {
     -- All these keys will be mapped to their corresponding default scrolling animation
     mappings = { '<C-u>', '<C-d>', 'zt', 'zz', 'zb' },
   }
 end
--- buffertag
+
+---------------
+-- buffertag --
+---------------
 -- require('buffertag').setup {
 --   -- accepts any border options that `nvim_open_win` accepts.
 --   -- see ":help vim.api.nvim_open_win"
 --   border = 'rounded',
 -- }
--- Github Copilot
+
+--------------------
+-- Github Copilot --
+--------------------
 vim.cmd [[
 imap <silent><script><expr> <M-Enter> copilot#Accept("\<CR>")
 " imap <silent> <c-]> <Plug>(copilot-next)
 " inoremap <silent> <c-[> <Plug>(copilot-previous)
 let g:copilot_no_tab_map = v:true
 ]]
--- Colorizer
+
+---------------
+-- Colorizer --
+---------------
 require('colorizer').setup()
--- Vim close tag
+
+-------------------
+-- Vim close tag --
+-------------------
 vim.g['closetag_filenames'] = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
 vim.g['closetag_filetypes'] = 'html,xhtml,phtml,javascript,javascriptreact'
--- DevIcons
+
+--------------
+-- DevIcons --
+--------------
 vim.g['WebDevIconsOS'] = 'Darwin'
 vim.g['DevIconsEnableFoldersOpenClose'] = 1
 vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
--- Conflict marker
+
+---------------------
+-- Conflict marker --
+---------------------
 vim.cmd [[
 " disable the default highlight group
 let g:conflict_marker_highlight_group = ''
@@ -100,7 +162,10 @@ highlight ConflictMarkerTheirs guibg=#344f69
 highlight ConflictMarkerEnd guibg=#2f628e
 highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 ]]
--- Startify
+
+--------------
+-- Startify --
+--------------
 vim.g['startify_custom_header'] = {
   [[   😎               🎃              😎]],
   [[    _   _         __     ___]],
@@ -111,7 +176,10 @@ vim.g['startify_custom_header'] = {
   '',
   '   🚀               ✨              🚀',
 }
--- NERDTree
+
+--------------
+-- NERDTree --
+--------------
 vim.g['NERDTreeChDirMode'] = 2
 vim.g['NERDTreeHijackNetrw'] = 1
 vim.g['NERDTreeShowHidden'] = 1
@@ -159,7 +227,10 @@ augroup END
 nmap <silent> <C-o> :call ToggleNerdTree()<CR>
 nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
 ]]
--- Switch vim
+
+----------------
+-- Switch vim --
+----------------
 -- The map switch is between underscores to camelCase: moshe_king -> mosheKing -> moshe_king.
 vim.g['switch_custom_definitions'] = {
   { 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT' },
@@ -175,7 +246,10 @@ vim.g['switch_custom_definitions'] = {
   --   },
   -- }
 }
--- fidget
+
+------------
+-- fidget --
+------------
 vim.notify = require 'notify'
 require('fidget').setup {
   text = {
@@ -188,10 +262,16 @@ require('fidget').setup {
     relative = 'editor',
   },
 }
--- Which-Key
+
+---------------
+-- Which-Key --
+---------------
 require('which-key').setup {}
 require 'user.which-key'
--- bulb (code actions)
+
+-------------------------
+-- bulb (code actions) --
+-------------------------
 local lightbulb = require 'nvim-lightbulb'
 lightbulb.setup {
   autocmd = { enabled = true },
@@ -205,7 +285,10 @@ lightbulb.setup {
     hl_mode = 'replace',
   },
 }
--- Trouble
+
+-------------
+-- Trouble --
+-------------
 require('trouble').setup()
 keymap('n', '<leader>xx', '<cmd>TroubleToggle<cr>', opts.no_remap_silent)
 keymap('n', '<leader>xw', '<cmd>TroubleToggle workspace_diagnostics<cr>', opts.no_remap_silent)
@@ -213,7 +296,10 @@ keymap('n', '<leader>xd', '<cmd>TroubleToggle document_diagnostics<cr>', opts.no
 keymap('n', '<leader>xl', '<cmd>TroubleToggle loclist<cr>', opts.no_remap_silent)
 keymap('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>', opts.no_remap_silent)
 keymap('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', opts.no_remap_silent)
--- indent_blankline
+
+----------------------
+-- indent_blankline --
+----------------------
 vim.cmd [[highlight IndentBlanklineIndent1 guifg=#C678DD gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent2 guifg=#E06C75 gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent3 guifg=#E5C07B gui=nocombine]]
@@ -249,7 +335,10 @@ require('indent_blankline').setup {
   --   'IndentBlanklineIndent6',
   -- },
 }
--- Ansible
+
+-------------
+-- Ansible --
+-------------
 vim.cmd [[
 function! FindAnsibleRoleUnderCursor()
   let l:role_paths = get(g:, 'ansible_goto_role_paths', './roles')
@@ -268,7 +357,10 @@ augroup AnsibleFind
   au BufRead,BufNewFile */ansible/*.yml vnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
 augroup END
 ]]
--- Fugitive
+
+--------------
+-- Fugitive --
+--------------
 vim.cmd [[
 " Remove all conflict markers command
 "Delete all Git conflict markers
@@ -449,6 +541,9 @@ local new_branch = function(branch_opts)
 end
 vim.api.nvim_create_user_command('Gcb', new_branch, { nargs = '?' })
 
+---------------------
+-- Plugin requires --
+---------------------
 require 'user.cmpconf'
 require 'user.treesitter'
 require 'user.lsp'
