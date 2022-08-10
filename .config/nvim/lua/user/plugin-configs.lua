@@ -115,14 +115,19 @@ if not vim.g.neovide then
   }
 end
 
----------------
--- buffertag --
----------------
--- require('buffertag').setup {
---   -- accepts any border options that `nvim_open_win` accepts.
---   -- see ":help vim.api.nvim_open_win"
---   border = 'rounded',
--- }
+----------------
+-- Bufferline --
+----------------
+require('bufferline').setup {
+  options = {
+    numbers = 'none',
+    diagnostics = 'nvim_lsp',
+    separator_style = 'padded_slant',
+    show_tab_indicators = true,
+    show_buffer_close_icons = false,
+    show_close_icon = false,
+  },
+}
 
 --------------------
 -- Github Copilot --

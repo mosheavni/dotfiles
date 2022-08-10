@@ -177,7 +177,7 @@ return packer.startup(function(use)
   use { 'stevearc/dressing.nvim' } -- overrides the default vim input to provide better visuals
   use 'rcarriga/nvim-notify'
   use 'lukas-reineke/indent-blankline.nvim'
-  use 'ldelossa/buffertag'
+  use { 'akinsho/bufferline.nvim', tag = 'v2.*', requires = 'kyazdani42/nvim-web-devicons' }
 
   use {
     'nvim-lualine/lualine.nvim',
