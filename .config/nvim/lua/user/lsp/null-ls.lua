@@ -78,7 +78,7 @@ local sh_extra_fts = { 'bash', 'zsh' }
 null_ls.setup {
   on_attach = function(client, bufnr)
     default_on_attach(client, bufnr)
-    vim.keymap.set('n', '<leader>=', vim.lsp.buf.formatting, { noremap = true, buffer = bufnr })
+    vim.keymap.set('n', '<leader>=', vim.lsp.buf.format, { noremap = true, buffer = bufnr })
   end,
   debug = true,
   sources = {
