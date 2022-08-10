@@ -21,19 +21,17 @@ null_ls.register {
       if result == '200' then
         return params.command
       else
-        Job
-            :new({
-              command = 'docker',
-              args = { 'ps' },
-              on_exit = function(j, return_val)
-                if return_val == 1 then
-                  return nil
-                else
-                  io.popen 'start-jenkins-validate'
-                end
-              end,
-            })
-            :start()
+        Job:new({
+          command = 'docker',
+          args = { 'ps' },
+          on_exit = function(j, return_val)
+            if return_val == 1 then
+              return nil
+            else
+              io.popen 'start-jenkins-validate'
+            end
+          end,
+        }):start()
         -- return nil
       end
     end,
@@ -100,8 +98,9 @@ null_ls.setup {
     },
     -- null_ls.builtins.diagnostics.yamllint,
     null_ls.builtins.formatting.black,
-    null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.fixjson,
+    null_ls.builtins.formatting.npm_groovy_lint,
+    null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.terraform_fmt,
     null_ls.builtins.formatting.shfmt.with {
