@@ -12,8 +12,8 @@ exclude:
   - com.googlecode.iterm2.plist
   - requirements.txt
   - tags
+  - .github/
   - snippets.xml
   - .alt.toml
-  - .luarc.json
   - images
   - material-design-colors.itermcolors
