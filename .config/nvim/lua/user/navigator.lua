@@ -13,7 +13,7 @@ local n_rename = require 'navigator.rename'
 local n_diagnostics = require 'navigator.diagnostics'
 -- local n_dochighlight = require 'navigator.dochighlight'
 -- local n_formatting = require 'navigator.formatting'
-local n_codeLens = require 'navigator.codeLens'
+-- local n_codeLens = require 'navigator.codeLens'
 navigator.setup {
   mason = true,
   default_mapping = false,
@@ -66,6 +66,6 @@ navigator.setup {
     { key = '<Leader>lp', func = vim.lsp.buf.range_formatting, mode = 'v', desc = 'range format' },
     -- { key = '<Leader>rf', func = n_formatting.range_format, mode = 'n', desc = 'range_fmt_v' },
     { key = '<Leader>lwl', func = n_workspace.list_workspace_folders, desc = 'list_workspace_folders' },
-    { key = '<Leader>lx', mode = 'n', func = n_codeLens.run_action, desc = 'run code lens action' },
+    -- { key = '<Leader>lx', mode = 'n', func = n_codeLens.run_action, desc = 'run code lens action' },
   },
 }

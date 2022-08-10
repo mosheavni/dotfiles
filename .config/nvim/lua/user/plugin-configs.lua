@@ -456,7 +456,7 @@ require 'user.autocommands'
 require 'user.gitsigns'
 require 'user.telescope'
 require 'user.lualine'
-require 'user.navigator'
+-- require 'user.navigator'
 
 local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
 if custom_settings_ok then
