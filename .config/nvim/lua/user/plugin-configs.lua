@@ -493,6 +493,7 @@ augroup END
 
 " Git merge origin master
 command! -bang Gmom exe 'G merge origin/' . 'master'
+command! -bang Gpom exe 'G pull origin ' . 'master'
 
 function! ToggleGStatus()
   if buflisted(bufname('.git/'))
@@ -570,6 +571,8 @@ local new_branch = function(branch_opts)
   vim.cmd('Git checkout -b ' .. input)
 end
 vim.api.nvim_create_user_command('Gcb', new_branch, { nargs = '?' })
+vim.keymap.set('n', '<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
+-- redir @">|silent scriptnames|redir END|enew|put
 
 ---------------------
 -- Plugin requires --
