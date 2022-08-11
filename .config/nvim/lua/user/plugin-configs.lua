@@ -564,15 +564,48 @@ local new_branch = function(branch_opts)
   if branch_opts.args ~= '' then
     return vim.cmd('Git checkout -b ' .. branch_opts.args)
   end
-  local input = vim.fn.input('Enter new branch name: ', '')
-  if input == '' then
-    return
-  end
-  vim.cmd('Git checkout -b ' .. input)
+  vim.ui.input({ prompt = 'Enter new branch name: ' }, function(input)
+    if input == '' then
+      return
+    end
+    vim.cmd('Git checkout -b ' .. input)
+  end)
 end
 vim.api.nvim_create_user_command('Gcb', new_branch, { nargs = '?' })
 vim.keymap.set('n', '<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
 -- redir @">|silent scriptnames|redir END|enew|put
+
+-- Git actions menu
+local git_actions = {
+  ['Change branch'] = function()
+    require('user.git-branches').open()
+  end,
+  ['Checkout new branch'] = function()
+    new_branch { args = '' }
+  end,
+  ['Work in Progress'] = function()
+    vim.cmd 'call Enter_Wip_Moshe()'
+  end,
+  ['Diff File History'] = function()
+    vim.cmd 'DiffviewFileHistory %'
+  end,
+  ['Diff close'] = function()
+    vim.cmd 'DiffviewClose'
+  end,
+  ['Pull origin master'] = function()
+    vim.cmd 'Gpom'
+  end,
+  ['Merge origin/master'] = function()
+    vim.cmd 'Gmom'
+  end,
+}
+vim.keymap.set('n', '<leader>gm', function()
+  vim.ui.select(vim.tbl_keys(git_actions), { prompt = 'Choose git action' }, function(choice)
+    if choice then
+      git_actions[choice]()
+    end
+  end)
+end)
 
 ---------------------
 -- Plugin requires --

@@ -126,11 +126,13 @@ local mappings = {
     },
     g = {
       name = '+Git',
+      b = { 'Paste branch name' },
       c = { 'CD to root' },
       f = { 'Focus on Git window' },
       g = { 'Status' },
       h = { 'History (current file)' },
       l = { 'Pull' },
+      m = { 'Actions Menu' },
       p = { 'Push' },
     },
     h = { name = '+Hunks' },
@@ -147,6 +149,8 @@ local mappings = {
         f = { 'Show references' },
         n = { 'Rename symbol' },
       },
+      s = { 'Create a file in temp dir' },
+      t = { 'Create a temporary file' },
       w = {
         name = '+Workspace',
         a = { 'Add workspace dir' },
