@@ -1,5 +1,5 @@
 exclude:
-  - '.config/karabiner'
+  - ".config/karabiner"
   - .vimrc-minimal
   - Brewfile
   - Brewfile-minimal
@@ -12,7 +12,6 @@ exclude:
   - com.googlecode.iterm2.plist
   - requirements.txt
   - tags
-  - .github/
   - snippets.xml
   - .alt.toml
   - images
