@@ -52,7 +52,16 @@ vim.g['floaterm_height'] = 0.9
 -------------------
 require('dressing').setup {
   input = {
-    winblend = 100,
+    winblend = 0,
+    border = 'rounded',
+    width = '1.0',
+    prompt_align = 'center',
+    winhighlight = 'NormalFloat:Normal',
+    -- get_config = function()
+    --   if vim.api.nvim_buf_get_option(0, 'filetype') == 'NvimTree' then
+    --     return { enabled = false }
+    --   end
+    -- end,
   },
 }
 vim.cmd [[hi link FloatTitle Normal]]
