@@ -15,6 +15,12 @@ string.format('https://raw.githubusercontent.com/yannh/kubernetes-json-schema/ma
 M._schema_name_mappings = {
   [M.kubernetes_schema] = 'k8s-' .. M.kubernetes_version,
 }
+M.additional_schemas = {
+  -- {
+  --   uri = 'https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json',
+  --   name = '.luarc.json',
+  -- },
+}
 
 M._get_client = function()
   M.bufnr = vim.api.nvim_get_current_buf()
@@ -50,7 +56,7 @@ M._load_all_schemas = function()
         end
       end
       -- Append the default kubernetes schema (if not in result)
-      M._open_telescope { { uri = M.kubernetes_schema }, unpack(result) }
+      M._open_telescope { { uri = M.kubernetes_schema }, unpack(result), unpack(M.additional_schemas) }
     end
   end)
 end
