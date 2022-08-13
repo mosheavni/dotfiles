@@ -220,7 +220,6 @@ return packer.startup(function(use)
   use 'marko-cerovac/material.nvim'
   use 'folke/tokyonight.nvim'
   -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
-  use 'rafamadriz/neon'
 
   -- Text Manipulation
   use 'tpope/vim-repeat'
