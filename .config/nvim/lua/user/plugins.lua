@@ -159,7 +159,8 @@ return packer.startup(function(use)
     'nvim-telescope/telescope-dap.nvim',
     'mxsdev/nvim-dap-vscode-js',
     'theHamsta/nvim-dap-virtual-text',
-    'rcarriga/cmp-dap'
+    'rcarriga/cmp-dap',
+    'Pocco81/dap-buddy.nvim',
   }
   use {
     'microsoft/vscode-js-debug',

@@ -82,6 +82,7 @@ local mappings = {
   s = { 'Search forward 2 characters after' },
   Y = { 'Copy buffer to clipboard' },
   ['<leader>'] = {
+    a = { 'DAP Menu' },
     c = {
       c = { 'Select YAML schema' },
       d = { 'Change directory to current file' },

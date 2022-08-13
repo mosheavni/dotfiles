@@ -6,6 +6,8 @@ require('nvim-dap-virtual-text').setup {
 }
 vim.g.dap_virtual_text = true
 vim.fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapBreakpointRejected', { text = '❓', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapStopped', { text = '⭕️', texthl = '', linehl = '', numhl = '' })
 
 -- Mappings
 vim.keymap.set('n', '<F5>', '<cmd>lua require("dap").continue()<cr>', { noremap = true })
@@ -14,7 +16,7 @@ vim.keymap.set('n', '<leader>bp', '<cmd>lua require("dap").toggle_breakpoint()<c
 -- Python
 require('dap-python').setup '/usr/local/bin/python3'
 
-table.insert(require('dap').configurations.python, {
+table.insert(dap.configurations.python, {
   justMyCode = false,
 })
 
@@ -25,7 +27,7 @@ require('dap-vscode-js').setup {
 }
 
 for _, language in ipairs { 'typescript', 'javascript', 'javascriptreact' } do
-  require('dap').configurations[language] = {
+  dap.configurations[language] = {
     {
       type = 'pwa-node',
       request = 'launch',
@@ -63,9 +65,9 @@ dap.configurations.sh = {
     pathPkill = '/usr/bin/pkill',
     program = '${file}',
     request = 'launch',
-    showDebugOutput = true,
+    showDebugOutput = false,
     terminalKind = 'debugConsole',
-    trace = false,
+    trace = true,
     type = 'sh',
   },
 }
@@ -77,34 +79,34 @@ end
 
 local dap_actions = {
   ['continue'] = function()
-    require('dap').continue()
+    dap.continue()
   end,
   ['step over'] = function()
-    require('dap').step_over()
+    dap.step_over()
   end,
   ['step into'] = function()
-    require('dap').step_into()
+    dap.step_into()
   end,
   ['step out'] = function()
-    require('dap').step_out()
+    dap.step_out()
   end,
   ['toggle breakpoint'] = function()
-    require('dap').toggle_breakpoint()
+    dap.toggle_breakpoint()
   end,
   ['clear all breakpoints'] = function()
-    require('dap').clear_breakpoints()
+    dap.clear_breakpoints()
   end,
   ['open repl'] = function()
-    require('dap').repl.open()
+    dap.repl.open()
   end,
   ['run last'] = function()
-    require('dap').run_last()
+    dap.run_last()
   end,
   ['ui'] = function()
     require('dapui').toggle()
   end,
   ['log level trace'] = function()
-    require('dap').set_log_level 'TRACE'
+    dap.set_log_level 'TRACE'
     vim.cmd 'DapShowLog'
   end,
 }
