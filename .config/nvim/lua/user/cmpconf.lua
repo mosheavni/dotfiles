@@ -123,6 +123,11 @@ tabnine:setup {
 }
 
 cmp.setup(config)
+cmp.setup.filetype({ 'dap-repl', 'dapui_watches' }, {
+  sources = {
+    { name = 'dap' },
+  },
+})
 
 -- -- `/` cmdline setup.
 -- cmp.setup.cmdline('/', {

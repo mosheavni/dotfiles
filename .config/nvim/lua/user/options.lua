@@ -195,7 +195,7 @@ function! ExecuteFile()
   normal! yypVr=o
 endfunction
 
-nnoremap <silent> <F5> :call ExecuteFile()<CR>
+nnoremap <silent> <F3> :call ExecuteFile()<CR>
 ]]
 
 -- Grep

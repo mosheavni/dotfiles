@@ -151,6 +151,22 @@ return packer.startup(function(use)
   use { 'rafamadriz/friendly-snippets' } -- snippets for many languages
   use { 'folke/lua-dev.nvim' }
 
+  -- Debug Adapter Protocol (DAP)
+  use {
+    'mfussenegger/nvim-dap',
+    'rcarriga/nvim-dap-ui',
+    'mfussenegger/nvim-dap-python',
+    'nvim-telescope/telescope-dap.nvim',
+    'mxsdev/nvim-dap-vscode-js',
+    'theHamsta/nvim-dap-virtual-text',
+    'rcarriga/cmp-dap'
+  }
+  use {
+    'microsoft/vscode-js-debug',
+    opt = true,
+    run = 'npm install --legacy-peer-deps && npm run compile',
+  }
+
   -- Functionality Tools
   use 'christoomey/vim-system-copy'
   use 'danro/rename.vim'

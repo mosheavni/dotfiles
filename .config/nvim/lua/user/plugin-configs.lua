@@ -400,6 +400,7 @@ require 'user.telescope'
 require 'user.lualine'
 require 'user.tree'
 require 'user.git'
+require 'user.dap'
 -- require 'user.navigator'
 
 local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
