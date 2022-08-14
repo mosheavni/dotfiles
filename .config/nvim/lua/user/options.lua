@@ -1,4 +1,7 @@
 local opt = vim.opt
+local utils = require 'user.utils'
+local opts = utils.map_opts
+local keymap = utils.keymap
 opt.compatible = false
 
 -- disable legacy vim filetype detection in favor of new lua based from neovim
@@ -99,10 +102,10 @@ vim.g.neovide_scroll_animation_length = 0.5
 vim.g.neovide_fullscreen = true
 -- Allow clipboard copy paste in neovim
 vim.g.neovide_input_use_logo = 1
-vim.api.nvim_set_keymap('', '<D-v>', '+p<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('!', '<D-v>', '<C-R>+', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('t', '<D-v>', '<C-R>+', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<D-v>', '<C-R>+', { noremap = true, silent = true })
+keymap('', '<D-v>', '+p<CR>', opts.no_remap_silent)
+keymap('!', '<D-v>', '<C-R>+', opts.no_remap_silent)
+keymap('t', '<D-v>', '<C-R>+', opts.no_remap_silent)
+keymap('v', '<D-v>', '<C-R>+', opts.no_remap_silent)
 
 -- Set shell
 if vim.fn.executable '/bin/zsh' == 1 then

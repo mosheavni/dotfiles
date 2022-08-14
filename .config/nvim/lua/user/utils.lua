@@ -15,7 +15,6 @@ M.map_opts = {
   remap = { noremap = false },
 }
 
-M.keymap = vim.api.nvim_set_keymap
-M.buf_keymap = vim.api.nvim_buf_set_keymap
+M.keymap = vim.keymap.set
 
 return M
