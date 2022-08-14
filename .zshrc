@@ -1,3 +1,5 @@
+# Fig pre block. Keep at the top of this file.
+[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && . "$HOME/.fig/shell/zshrc.pre.zsh"
 # shellcheck disable=2148,2034,2155,1091,2086,1094
 zmodload zsh/zprof
 # ================ #
@@ -8,7 +10,7 @@ zmodload zsh/zprof
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
-export PATH="$HOME/.bin:$PATH"
+export PATH="$HOME/.bin:$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:${PATH}"
 
 export ZSH="$HOME/.oh-my-zsh"
@@ -121,3 +123,6 @@ export NEOVIDE_MULTIGRID=1
 
 # Load starship last
 eval "$(starship init zsh)"
+
+# Fig post block. Keep at the bottom of this file.
+[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && . "$HOME/.fig/shell/zshrc.post.zsh"
