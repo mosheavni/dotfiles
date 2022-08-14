@@ -174,6 +174,7 @@ return packer.startup(function(use)
   use 'voldikss/vim-floaterm'
   use { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } }
   use 'simeji/winresizer'
+  use 'tiagovla/scope.nvim'
   use {
     'dstein64/vim-startuptime',
     cmd = 'StartupTime',

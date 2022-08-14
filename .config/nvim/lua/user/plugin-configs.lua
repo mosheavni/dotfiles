@@ -325,6 +325,11 @@ keymap('n', '<leader>xl', '<cmd>TroubleToggle loclist<cr>', opts.no_remap_silent
 keymap('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>', opts.no_remap_silent)
 keymap('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', opts.no_remap_silent)
 
+----------------
+-- Scope.Nvim --
+----------------
+require('scope').setup()
+
 ----------------------
 -- indent_blankline --
 ----------------------
