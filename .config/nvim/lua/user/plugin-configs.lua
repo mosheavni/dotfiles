@@ -1,8 +1,6 @@
 local utils = require 'user.utils'
 local keymap = utils.keymap
 local opts = utils.map_opts
-local autocmd = utils.autocmd
-local augroup = utils.augroup
 
 -----------------
 -- Colorscheme --
@@ -75,7 +73,7 @@ fold_preview.setup {}
 --------------
 -- Diffview --
 --------------
-local actions = require 'diffview.actions'
+-- local actions = require 'diffview.actions'
 require('diffview').setup {}
 --   enhanced_diff_hl = true, -- See ':h diffview-config-enhanced_diff_hl'
 --   keymaps = {
@@ -131,10 +129,10 @@ require('bufferline').setup {
   options = {
     numbers = 'none',
     diagnostics = 'nvim_lsp',
-    separator_style = 'padded_slant',
+    separator_style = 'thin',
     show_tab_indicators = true,
-    show_buffer_close_icons = false,
-    show_close_icon = false,
+    show_buffer_close_icons = true,
+    show_close_icon = true,
   },
 }
 

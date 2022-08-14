@@ -17,6 +17,7 @@ M.map_opts = {
 
 M.keymap = vim.keymap.set
 
+local vim = vim
 local api = vim.api
 
 function M.get_selection()
