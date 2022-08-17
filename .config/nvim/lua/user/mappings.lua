@@ -299,3 +299,20 @@ vmap <c-r> :VisualCalculator<cr>
 --   P(selection)
 --   -- return VisualCalculator()
 -- end, opts.no_remap)
+
+vim.api.nvim_create_user_command('AutoRun', function()
+  vim.api.nvim_create_autocmd('BufWritePost', {
+    group = vim.api.nvim_create_augroup('AutoRun', { clear = true }),
+    pattern = vim.fn.expand '%:p',
+    callback = function()
+      vim.cmd [[
+        write
+        source %
+      ]]
+    end,
+  })
+  -- vim.cmd 'vsplit'
+  -- local win = vim.api.nvim_get_current_win()
+  -- local buf = vim.api.nvim_create_buf(true, true)
+  -- vim.api.nvim_win_set_buf(win, buf)
+end, {})
