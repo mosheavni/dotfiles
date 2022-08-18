@@ -3,8 +3,19 @@ if not status_ok then
   return
 end
 
+-- unknown filetypes
 local ft_to_parser = require('nvim-treesitter.parsers').filetype_to_parsername
 ft_to_parser.groovy = 'java'
+local ft_to_lang = require('nvim-treesitter.parsers').ft_to_lang
+require('nvim-treesitter.parsers').ft_to_lang = function(ft)
+  if ft == 'zsh' then
+    return 'bash'
+  end
+  if ft == 'groovy' then
+    return 'java'
+  end
+  return ft_to_lang(ft)
+end
 
 configs.setup {
   ensure_installed = {
