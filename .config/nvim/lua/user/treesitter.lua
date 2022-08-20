@@ -138,5 +138,3 @@ ts_context.setup {
     },
   },
 }
--- nvim gps
-require('nvim-gps').setup()

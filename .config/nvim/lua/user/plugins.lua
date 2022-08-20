@@ -57,8 +57,8 @@ return packer.startup(function(use)
   }
   use 'JoosepAlviste/nvim-ts-context-commentstring'
   use {
-    'SmiteshP/nvim-gps',
-    requires = 'nvim-treesitter/nvim-treesitter',
+    'SmiteshP/nvim-navic',
+    requires = 'neovim/nvim-lspconfig',
   }
   use {
     'cuducos/yaml.nvim',
