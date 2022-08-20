@@ -102,8 +102,8 @@ augroup moshe_fugitive
 augroup END
 
 " Git merge origin master
-command! -bang Gmom exe 'G merge origin/' . 'master'
-command! -bang Gpom exe 'G pull origin ' . 'master'
+command! -bang Gmom exe 'G merge origin/' . g:default_branch
+command! -bang Gpom exe 'G pull origin ' . g:default_branch
 
 function! ToggleGStatus()
   if buflisted(bufname('.git/'))
@@ -250,14 +250,11 @@ local git_actions = {
       vim.ui.select({ 'Yes', 'No' }, { prompt = 'Remove from remote?' }, function(choice)
         if choice == 'Yes' then
           vim.cmd 'G push --tags'
-          vim.ui.select({ 'master', 'main', 'develop' }, { prompt = 'What is the main branch?' },
-            function(default_branch)
-              if not default_branch then
-                pretty_print 'Did not select default branch'
-                return
-              end
-              vim.cmd('G push origin ' .. default_branch .. ' :refs/tags/' .. input)
-            end)
+          if not vim.g.default_branch then
+            pretty_print 'default_branch is not set'
+            return
+          end
+          vim.cmd('G push origin ' .. vim.g.default_branch .. ' :refs/tags/' .. input)
           pretty_print('Tag ' .. input .. ' deleted from local and remote.')
         else
           pretty_print('Tag ' .. input .. ' deleted locally.')
@@ -273,3 +270,16 @@ vim.keymap.set('n', '<leader>gm', function()
     end
   end)
 end)
+-- pcall(require, 'vim-fugitive')
+-- vim.fn.FugitiveExecute({ 'remote', 'show', vim.fn.FugitiveRemote().remote_name }, function(res)
+--   local default_branch = 'master'
+--   local remote_output = res.stdout
+--   for _, value in pairs(remote_output) do
+--     local found = value:match 's*HEAD.*'
+--     if found then
+--       local splitted = vim.split(found, ' ')
+--       default_branch = splitted[#splitted]
+--     end
+--   end
+--   vim.g.default_branch = default_branch
+-- end)
