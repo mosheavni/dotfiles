@@ -162,11 +162,7 @@ return packer.startup(function(use)
     'rcarriga/cmp-dap',
     'Pocco81/dap-buddy.nvim',
   }
-  use {
-    'microsoft/vscode-js-debug',
-    opt = true,
-    run = 'npm install --legacy-peer-deps && npm run compile',
-  }
+  use 'andrewferrier/debugprint.nvim'
 
   -- Functionality Tools
   use 'christoomey/vim-system-copy'

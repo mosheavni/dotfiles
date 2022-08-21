@@ -121,3 +121,6 @@ keymap('n', '<leader>a', function()
     end
   end)
 end)
+
+-- debug print
+require('debugprint').setup()
