@@ -115,6 +115,7 @@ return packer.startup(function(use)
       { 'tzachar/cmp-tabnine', run = './install.sh' },
       'windwp/nvim-autopairs',
       'hrsh7th/cmp-nvim-lsp-document-symbol',
+      'vappolinario/cmp-clippy',
     },
   }
   -- Github's suggeetsions engine
@@ -194,6 +195,7 @@ return packer.startup(function(use)
   use 'lukas-reineke/indent-blankline.nvim'
   use { 'akinsho/bufferline.nvim', tag = 'v2.*', requires = 'kyazdani42/nvim-web-devicons' }
   use 'https://gitlab.com/yorickpeterse/nvim-pqf.git'
+  use 'RRethy/vim-illuminate'
 
   use {
     'nvim-lualine/lualine.nvim',

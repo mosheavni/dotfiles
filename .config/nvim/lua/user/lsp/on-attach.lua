@@ -25,7 +25,9 @@ local default_on_attach = function(client, bufnr)
   local basics = require 'lsp_basics'
   basics.make_lsp_commands(client, bufnr)
   lsp_format.on_attach(client)
-  navic.attach(client, bufnr)
+  if client.name ~= 'null-ls' then
+    navic.attach(client, bufnr)
+  end
 
   if vim.tbl_contains(enable_ls_signature, client.name) then
     require('lsp_signature').on_attach({

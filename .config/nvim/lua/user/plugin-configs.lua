@@ -173,14 +173,13 @@ local conflict_patterns = {
   { pattern = 'GitConflictResolved', notify = vim.notify, text = 'resolved' },
 }
 for _, conflict_data in ipairs(conflict_patterns) do
-  vim.api.nvim_create_autocommand('User', {
+  vim.api.nvim_create_autocmd('User', {
     pattern = conflict_data.pattern,
     callback = function()
       conflict_data.notify('Conflict ' .. conflict_data.text .. ' in ' .. vim.fn.expand '<afile>')
     end,
   })
 end
---GitConflictResolved
 
 --------------
 -- Startify --
