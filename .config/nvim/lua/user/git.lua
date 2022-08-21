@@ -203,6 +203,15 @@ local git_actions = {
   ['Diff File History'] = function()
     vim.cmd 'DiffviewFileHistory %'
   end,
+  ['Diff with branch'] = function()
+    vim.ui.input({ prompt = 'Enter branch to diff with' }, function(branch_to_diff)
+      if not branch_to_diff then
+        pretty_print 'Canceled.'
+        return
+      end
+      vim.cmd('DiffviewOpen ' .. branch_to_diff)
+    end)
+  end,
   ['Diff close'] = function()
     vim.cmd 'DiffviewClose'
   end,
