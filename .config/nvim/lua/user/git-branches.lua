@@ -8,16 +8,33 @@ local action_state = require 'telescope.actions.state'
 local previewers = require 'telescope.previewers'
 local conf = require('telescope.config').values
 
-local open = function()
+local M = {}
+M.get_branches = function()
   local opts = {}
 
-  local format = '%(HEAD)' .. '%(refname)' .. '%(authorname)' .. '%(upstream:lstrip=2)' .. '%(committerdate:format-local:%Y/%m/%d %H:%M:%S)'
-  -- git for-each-ref --perl --format "%(HEAD)%(refname)%(authorname)%(upstream:lstrip=2)%(committerdate:format-local:%Y/%m/%d %H:%M:%S)" | grep -E "(refs\/remotes\/)|(refs\/heads\/)" | sed -e 's?refs/remotes/??g' -e 's?refs/heads/??g' | tr "'" " " | column -t
+  local format = '%(HEAD)' ..
+      '%(refname)' .. '%(authorname)' .. '%(upstream:lstrip=2)' .. '%(committerdate:format-local:%Y/%m/%d %H:%M:%S)'
 
-  local output = utils.get_os_command_output({ 'git', 'for-each-ref', '--perl', '--sort', 'committerdate', '--format', format, opts.pattern }, opts.cwd)
+  local output = utils.get_os_command_output({ 'git', 'for-each-ref', '--perl', '--sort', 'committerdate', '--format',
+    format, opts.pattern }, opts.cwd)
   local remotes = utils.get_os_command_output({ 'git', 'remote' }, opts.cwd)
 
+  local unescape_single_quote = function(v)
+    return string.gsub(v, "\\([\\'])", '%1')
+  end
+  return output
+end
+M.open = function()
+  local opts = {}
   local results = {}
+
+  local format = '%(HEAD)' ..
+      '%(refname)' .. '%(authorname)' .. '%(upstream:lstrip=2)' .. '%(committerdate:format-local:%Y/%m/%d %H:%M:%S)'
+
+  local output = utils.get_os_command_output({ 'git', 'for-each-ref', '--perl', '--sort', 'committerdate', '--format',
+    format, opts.pattern }, opts.cwd)
+  local remotes = utils.get_os_command_output({ 'git', 'remote' }, opts.cwd)
+
   local unescape_single_quote = function(v)
     return string.gsub(v, "\\([\\'])", '%1')
   end
@@ -33,8 +50,8 @@ local open = function()
 
     -- Create branch name var without the remote
     local clean_branch_name = selection.value
-    for _,remote_name in ipairs(remotes) do
-      if vim.startswith(selection.value, remote_name .. "/") then
+    for _, remote_name in ipairs(remotes) do
+      if vim.startswith(selection.value, remote_name .. '/') then
         clean_branch_name = string.sub(clean_branch_name, string.len(remote_name) + 2)
       end
     end
@@ -139,45 +156,45 @@ local open = function()
 
   -- TODO: checkout and set remote to new branch instead of just checking out
 
-  pickers.new(opts, {
-    prompt_title = 'Git Branches',
-    finder = finders.new_table {
-      results = results,
-      entry_maker = function(entry)
-        entry.name = entry.name
-        entry.value = entry.name
-        entry.ordinal = entry.value
-        entry.display = make_display
-        return entry
-      end,
-    },
-    previewer = previewers.git_branch_log.new(opts),
-    sorter = conf.generic_sorter(opts),
+  pickers
+      .new(opts, {
+        prompt_title = 'Git Branches',
+        finder = finders.new_table {
+          results = results,
+          entry_maker = function(entry)
+            entry.name = entry.name
+            entry.value = entry.name
+            entry.ordinal = entry.value
+            entry.display = make_display
+            return entry
+          end,
+        },
+        previewer = previewers.git_branch_log.new(opts),
+        sorter = conf.generic_sorter(opts),
 
-    attach_mappings = function(_, map)
-      actions.select_default:replace(git_checkout)
-      -- map('i', '<cr>', actions.git_checkout)
-      -- map('n', '<cr>', actions.git_checkout)
+        attach_mappings = function(_, map)
+          actions.select_default:replace(git_checkout)
+          -- map('i', '<cr>', actions.git_checkout)
+          -- map('n', '<cr>', actions.git_checkout)
 
-      map('i', '<c-r>', actions.git_rebase_branch)
-      map('n', '<c-r>', actions.git_rebase_branch)
+          map('i', '<c-r>', actions.git_rebase_branch)
+          map('n', '<c-r>', actions.git_rebase_branch)
 
-      map('i', '<c-a>', actions.git_create_branch)
-      map('n', '<c-a>', actions.git_create_branch)
+          map('i', '<c-a>', actions.git_create_branch)
+          map('n', '<c-a>', actions.git_create_branch)
 
-      map('i', '<c-s>', actions.git_switch_branch)
-      map('n', '<c-s>', actions.git_switch_branch)
+          map('i', '<c-s>', actions.git_switch_branch)
+          map('n', '<c-s>', actions.git_switch_branch)
 
-      map('i', '<c-d>', actions.git_delete_branch)
-      map('n', '<c-d>', actions.git_delete_branch)
+          map('i', '<c-d>', actions.git_delete_branch)
+          map('n', '<c-d>', actions.git_delete_branch)
 
-      map('i', '<c-y>', actions.git_merge_branch)
-      map('n', '<c-y>', actions.git_merge_branch)
-      return true
-    end,
-  }):find()
+          map('i', '<c-y>', actions.git_merge_branch)
+          map('n', '<c-y>', actions.git_merge_branch)
+          return true
+        end,
+      })
+      :find()
 end
 
-return {
-  open = open,
-}
+return M
