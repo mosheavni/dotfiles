@@ -5,6 +5,7 @@ local autocmd = utils.autocmd
 local augroup = utils.augroup
 local buf_set_option = vim.api.nvim_buf_set_option
 local lsp_format = require 'lsp-format'
+local navic = require 'nvim-navic'
 lsp_format.setup {}
 
 local disable_ls_format = {
@@ -24,6 +25,7 @@ local default_on_attach = function(client, bufnr)
   local basics = require 'lsp_basics'
   basics.make_lsp_commands(client, bufnr)
   lsp_format.on_attach(client)
+  navic.attach(client, bufnr)
 
   if vim.tbl_contains(enable_ls_signature, client.name) then
     require('lsp_signature').on_attach({

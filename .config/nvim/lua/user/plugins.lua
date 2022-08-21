@@ -32,7 +32,7 @@ return packer.startup(function(use)
   }
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
   use 'tpope/vim-fugitive'
-  use { 'rhysd/conflict-marker.vim' }
+  use { 'akinsho/git-conflict.nvim' }
   use { 'tpope/vim-rhubarb' }
 
   -- Documents
@@ -57,8 +57,8 @@ return packer.startup(function(use)
   }
   use 'JoosepAlviste/nvim-ts-context-commentstring'
   use {
-    'SmiteshP/nvim-gps',
-    requires = 'nvim-treesitter/nvim-treesitter',
+    'SmiteshP/nvim-navic',
+    requires = 'neovim/nvim-lspconfig',
   }
   use {
     'cuducos/yaml.nvim',
@@ -196,6 +196,7 @@ return packer.startup(function(use)
   use 'rcarriga/nvim-notify'
   use 'lukas-reineke/indent-blankline.nvim'
   use { 'akinsho/bufferline.nvim', tag = 'v2.*', requires = 'kyazdani42/nvim-web-devicons' }
+  use 'https://gitlab.com/yorickpeterse/nvim-pqf.git'
 
   use {
     'nvim-lualine/lualine.nvim',

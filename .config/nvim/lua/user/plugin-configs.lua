@@ -167,20 +167,20 @@ vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
 ---------------------
 -- Conflict marker --
 ---------------------
-vim.cmd [[
-" disable the default highlight group
-let g:conflict_marker_highlight_group = ''
-
-" Include text after begin and end markers
-let g:conflict_marker_begin = '^<<<<<<< .*$'
-let g:conflict_marker_end   = '^>>>>>>> .*$'
-
-highlight ConflictMarkerBegin guibg=#2f7366
-highlight ConflictMarkerOurs guibg=#2e5049
-highlight ConflictMarkerTheirs guibg=#344f69
-highlight ConflictMarkerEnd guibg=#2f628e
-highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
-]]
+require('git-conflict').setup()
+local conflict_patterns = {
+  { pattern = 'GitConflictDetected', notify = P, text = 'detected' },
+  { pattern = 'GitConflictResolved', notify = vim.notify, text = 'resolved' },
+}
+for _, conflict_data in ipairs(conflict_patterns) do
+  vim.api.nvim_create_autocommand('User', {
+    pattern = conflict_data.pattern,
+    callback = function()
+      conflict_data.notify('Conflict ' .. conflict_data.text .. ' in ' .. vim.fn.expand '<afile>')
+    end,
+  })
+end
+--GitConflictResolved
 
 --------------
 -- Startify --
@@ -368,6 +368,11 @@ require('indent_blankline').setup {
   --   'IndentBlanklineIndent6',
   -- },
 }
+
+--------------------------------
+-- Nvim PQF (pretty quickfix) --
+--------------------------------
+require('pqf').setup()
 
 -------------
 -- Ansible --
