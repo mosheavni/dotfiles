@@ -115,7 +115,6 @@ return packer.startup(function(use)
       { 'tzachar/cmp-tabnine', run = './install.sh' },
       'windwp/nvim-autopairs',
       'hrsh7th/cmp-nvim-lsp-document-symbol',
-      'vappolinario/cmp-clippy',
     },
   }
   -- Github's suggeetsions engine
