@@ -1,5 +1,5 @@
 local utils = require 'telescope.utils'
-local strings = require 'plenary.strings'
+-- local strings = require 'plenary.strings'
 local entry_display = require 'telescope.pickers.entry_display'
 local pickers = require 'telescope.pickers'
 local finders = require 'telescope.finders'
