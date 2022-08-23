@@ -127,7 +127,7 @@ end
 ----------------
 require('bufferline').setup {
   options = {
-    numbers = 'none',
+    numbers = 'ordinal',
     diagnostics = 'nvim_lsp',
     separator_style = 'thin',
     show_tab_indicators = true,
@@ -135,6 +135,11 @@ require('bufferline').setup {
     show_close_icon = true,
   },
 }
+vim.keymap.set('n', '<leader>1', '<cmd>BufferLineGoToBuffer 1<cr>')
+vim.keymap.set('n', '<leader>2', '<cmd>BufferLineGoToBuffer 2<cr>')
+vim.keymap.set('n', '<leader>3', '<cmd>BufferLineGoToBuffer 3<cr>')
+vim.keymap.set('n', '<leader>4', '<cmd>BufferLineGoToBuffer 4<cr>')
+vim.keymap.set('n', '<leader>5', '<cmd>BufferLineGoToBuffer 5<cr>')
 
 --------------------
 -- Github Copilot --
