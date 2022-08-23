@@ -102,8 +102,8 @@ augroup moshe_fugitive
 augroup END
 
 " Git merge origin master
-command! -bang Gmom exe 'G merge origin/' . g:default_branch
-command! -bang Gpom exe 'G pull origin ' . g:default_branch
+command! -bang Gmom exe 'G merge origin/' . 'master'
+command! -bang Gpom exe 'G pull origin ' . 'master'
 
 function! ToggleGStatus()
   if buflisted(bufname('.git/'))
