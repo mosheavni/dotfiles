@@ -35,7 +35,7 @@ nvim_tree.setup {
     },
   },
   git = {
-    enable = false,
+    enable = true,
     ignore = true,
   },
   actions = {
