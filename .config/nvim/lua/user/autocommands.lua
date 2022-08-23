@@ -1,7 +1,11 @@
 local utils = require 'user.utils'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
+local keymap = utils.keymap
 local opts = utils.map_opts
+local fn = vim.fn
+local cmd = vim.cmd
+local api = vim.api
 
 -- Auto reload file
 local reload_file_group = augroup 'ReloadFile'
@@ -63,12 +67,12 @@ local last_position = augroup 'LastPosition'
 autocmd({ 'BufReadPost' }, {
   group = last_position,
   callback = function()
-    local test_line_data = vim.api.nvim_buf_get_mark(0, '"')
+    local test_line_data = api.nvim_buf_get_mark(0, '"')
     local test_line = test_line_data[1]
-    local last_line = vim.api.nvim_buf_line_count(0)
+    local last_line = api.nvim_buf_line_count(0)
 
     if test_line > 0 and test_line <= last_line then
-      vim.api.nvim_win_set_cursor(0, test_line_data)
+      api.nvim_win_set_cursor(0, test_line_data)
     end
   end,
 })
@@ -92,20 +96,37 @@ autocmd({ 'FileType' }, {
   pattern = 'qf',
   callback = function()
     local open_quickfix = function(new_split_cmd)
-      local qf_idx = vim.fn.line '.'
-      vim.cmd 'wincmd p'
-      vim.cmd(new_split_cmd)
-      vim.cmd(qf_idx .. 'cc')
+      local qf_idx = fn.line '.'
+      cmd 'wincmd p'
+      cmd(new_split_cmd)
+      cmd(qf_idx .. 'cc')
     end
-    vim.keymap.set('n', '<c-v>', function()
+    keymap('n', '<c-v>', function()
       open_quickfix 'vnew'
     end, vim.tbl_extend('force', { buffer = true }, opts.no_remap))
 
-    vim.keymap.set('n', '<c-x>', function()
+    keymap('n', '<c-x>', function()
       open_quickfix 'split'
     end, vim.tbl_extend('force', { buffer = true }, opts.no_remap))
     -- "n", "<C-v>", :call <SID>OpenQuickfix("vnew")<CR>
     -- "n", "<C-x>", :call <SID>OpenQuickfix("split")<CR>
   end,
   desc = 'Open quickfix window on quickfix action',
+})
+
+-- Create dir if not exists
+
+autocmd({ 'BufWritePre' }, {
+  pattern = '*',
+  group = augroup('auto_create_dir', { clear = true }),
+  callback = function()
+    local fpath = fn.expand '<afile>'
+    local dir = fn.fnamemodify(fpath, ':p:h')
+
+    -- utils.may_create_dir(dir)
+    local res = fn.isdirectory(dir)
+    if res == 0 then
+      fn.mkdir(dir, 'p')
+    end
+  end,
 })
