@@ -22,7 +22,9 @@ keymap('v', '<tab>', '>gv', opts.remap)
 keymap('v', '<s-tab>', '<gv', opts.remap)
 
 -- Copy number of lines and paste below
-keymap('n', '<leader>cp', ":<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) . 'j' . (v:count == 0 ? 1 : v:count) . 'jo<C-v><Esc>p'<cr>", opts.no_remap)
+keymap('n', '<leader>cp',
+  ":<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) . 'j' . (v:count == 0 ? 1 : v:count) . 'jo<C-v><Esc>p'<cr>",
+  opts.no_remap)
 
 -- Format groovy map
 vim.cmd [=[
@@ -62,7 +64,9 @@ keymap('v', 'ae', '<esc>gg0vG$', opts.no_remap)
 -- Run and edit macros
 for _, key in pairs { 'Q', 'X' } do
   keymap('n', key, '@' .. key:lower(), opts.no_remap)
-  keymap('n', '<leader>' .. key, ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>", opts.no_remap)
+  keymap('n', '<leader>' .. key,
+    ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>",
+    opts.no_remap)
 end
 
 -- keymap('n', 'Q', '@q', opts.no_remap)
@@ -144,8 +148,10 @@ keymap('n', '_', [["ldd2k"lp]], opts.no_remap)
 keymap('n', 'Y', ':%y+<cr>', opts.no_remap)
 
 -- Copy file path to clipboard
-keymap('n', '<leader>cfp', [[:let @+ = expand('%')<cr>:echo   "Copied file path " . expand('%')<cr>]], opts.no_remap_silent)
-keymap('n', '<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>]], opts.no_remap_silent)
+keymap('n', '<leader>cfp', [[:let @+ = expand('%')<cr>:echo   "Copied file path " . expand('%')<cr>]],
+  opts.no_remap_silent)
+keymap('n', '<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>]],
+  opts.no_remap_silent)
 
 -- Change working directory based on open file
 keymap('n', '<leader>cd', ':cd %:p:h<CR>:pwd<CR>', opts.no_remap)
@@ -195,7 +201,8 @@ keymap('v', '<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<
 keymap('v', '<leader>p', '"_dP', opts.no_remap)
 
 -- Base64 dencode
-keymap('v', '<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>]], opts.no_remap_silent)
+keymap('v', '<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>]],
+  opts.no_remap_silent)
 keymap('v', '<leader>64', [[c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>]], opts.no_remap_silent)
 
 -- Vimrc edit mappings
@@ -306,19 +313,72 @@ vmap <c-r> :VisualCalculator<cr>
 --   -- return VisualCalculator()
 -- end, opts.no_remap)
 
-vim.api.nvim_create_user_command('AutoRun', function()
+----------
+-- Titleize --
+--------------
+vim.api.nvim_create_user_command('Titleize', function(opts)
+  local title_char = '-'
+  if opts.args ~= '' then
+    title_char = opts.args
+  end
+  local current_line = vim.api.nvim_get_current_line()
+  local r, _ = unpack(vim.api.nvim_win_get_cursor(0))
+
+  -- delete line
+  vim.api.nvim_del_current_line()
+
+  local top_bottom = title_char:rep(#current_line + 6)
+  vim.api.nvim_buf_set_lines(0, r - 1, r - 1, false, {
+    top_bottom,
+    title_char:rep(2) .. ' ' .. current_line .. ' ' .. title_char:rep(2),
+    top_bottom,
+  })
+end, { nargs = '?' })
+
+-------------
+-- AutoRun --
+-------------
+local attach_to_buffer = function(output_bufnr, pattern, command)
   vim.api.nvim_create_autocmd('BufWritePost', {
     group = vim.api.nvim_create_augroup('AutoRun', { clear = true }),
-    pattern = vim.fn.expand '%:p',
+    pattern = pattern,
     callback = function()
-      vim.cmd [[
-        write
-        source %
-      ]]
+      local append_data = function(_, data)
+        if data then
+          vim.api.nvim_buf_set_lines(output_bufnr, -1, -1, false, data)
+        end
+      end
+      vim.api.nvim_buf_set_lines(output_bufnr, 0, -1, false, { table.concat(command, ' ') .. ' output:' })
+      vim.fn.jobstart(command, {
+        stdout_buffered = true,
+        on_stdout = append_data,
+        on_stderr = append_data,
+      })
     end,
   })
-  -- vim.cmd 'vsplit'
-  -- local win = vim.api.nvim_get_current_win()
-  -- local buf = vim.api.nvim_create_buf(true, true)
-  -- vim.api.nvim_win_set_buf(win, buf)
+end
+vim.api.nvim_create_user_command('AutoRun', function()
+  local pattern = vim.fn.expand '%:p'
+  local command_text = vim.ui.input({ prompt = 'Command: ' }, function(command_text)
+    if command_text == nil then
+      return
+    end
+    if command_text:find [[%%]] then
+      command_text = command_text:gsub('%%', vim.fn.expand '%')
+    end
+    local command = vim.split(command_text, ' ')
+    print 'AutoRun starts now...'
+    -- Open split and focus on it
+    vim.cmd 'vsplit'
+    local win = vim.api.nvim_get_current_win()
+    local buf = vim.api.nvim_create_buf(true, true)
+    vim.api.nvim_win_set_buf(win, buf)
+
+    -- Resize
+    local win_width = vim.o.columns
+    local split_size = 25 * win_width / 100
+    vim.cmd('vertical resize ' .. tostring(split_size))
+
+    attach_to_buffer(tonumber(buf), pattern, command)
+  end)
 end, {})
