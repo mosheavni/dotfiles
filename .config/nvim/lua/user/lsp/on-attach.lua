@@ -71,7 +71,6 @@ local default_on_attach = function(client, bufnr)
     buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
   end
 
-  -- TODO: figure out why nothing is popping
   local diagnostic_pop = augroup 'DiagnosticPop'
   autocmd('CursorHold', {
     buffer = bufnr,
