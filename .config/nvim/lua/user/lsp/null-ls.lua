@@ -91,7 +91,7 @@ null_ls.setup {
     -- null_ls.builtins.diagnostics.write_good,
     null_ls.builtins.diagnostics.ansiblelint,
     null_ls.builtins.diagnostics.hadolint,
-    null_ls.builtins.diagnostics.pylint,
+    -- null_ls.builtins.diagnostics.pylint,
     null_ls.builtins.diagnostics.vint,
     null_ls.builtins.diagnostics.shellcheck.with {
       extra_filetypes = sh_extra_fts,
