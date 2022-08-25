@@ -85,14 +85,7 @@ function cpr() {
 }
 
 ### Kubernetes functions ###
-function kdpw () {
-  while true; do
-    n_lines=$(tput lines)
-    kubectl describe po $* | tail -${n_lines}
-    printf '\e[%dA' $n_lines
-    sleep 1
-  done
-}
+function kdpw () { watch "kubectl describe po $* | tail -20" }
 
 function kgres() {
   kubectl get pod $* \
