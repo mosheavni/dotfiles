@@ -4,5 +4,5 @@ dockerfile-language-server-nodejs
 eslint
 neovim
 npm
-semver
 prettier
+semver
