@@ -261,24 +261,12 @@ vim.g['switch_custom_definitions'] = {
 -------------------
 require('close_buffers').setup {}
 
-------------
--- fidget --
-------------
+----------------
+-- vim.notify --
+----------------
 vim.notify = require 'notify'
 require('notify').setup {
   background_colour = '#000000',
-}
-
-require('fidget').setup {
-  text = {
-    spinner = 'moon',
-  },
-  align = {
-    bottom = true,
-  },
-  window = {
-    relative = 'editor',
-  },
 }
 
 ---------------

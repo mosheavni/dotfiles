@@ -83,7 +83,6 @@ return packer.startup(function(use)
     { 'b0o/SchemaStore.nvim' },
     'folke/lsp-colors.nvim',
     'nvim-lua/lsp-status.nvim',
-    'j-hui/fidget.nvim',
     'nanotee/nvim-lsp-basics',
   }
   use {
