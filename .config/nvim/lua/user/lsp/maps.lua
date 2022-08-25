@@ -8,8 +8,8 @@ return function(bufnr)
 
   -- Goto previous/next diagnostic warning/error
   -- Use `[g` and `]g` to navigate diagnostics
-  buf_set_keymap('n', '[g', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts.silent)
-  buf_set_keymap('n', ']g', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts.silent)
+  buf_set_keymap('n', '[g', '<cmd>lua vim.diagnostic.goto_prev({float=false})<CR>', opts.silent)
+  buf_set_keymap('n', ']g', '<cmd>lua vim.diagnostic.goto_next({float=false})<CR>', opts.silent)
 
   -- GoTo code navigation
   buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts.silent)
