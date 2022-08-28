@@ -52,7 +52,7 @@ opt.showcmd = true
 opt.guifont = 'Fira Code,Hack Nerd Font'
 opt.mouse = 'a'
 opt.undofile = true -- Enables saving undo history to a file
-opt.colorcolumn = '80' -- Mark where are 80 characters to start breaking line
+-- opt.colorcolumn = '80' -- Mark where are 80 characters to start breaking line
 opt.textwidth = 80
 opt.fileencodings = { 'utf-8', 'cp1251' }
 opt.encoding = 'utf-8'
@@ -340,6 +340,17 @@ function s:VisualCalculator() abort
 endfunction
 command! -range VisualCalculator call <SID>VisualCalculator()
 vmap <c-r> :VisualCalculator<cr>
+]]
+
+-- SynStack - see highlight under cursor
+vim.cmd [[
+function! s:SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  return map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+command! SynStack echo <SID>SynStack()
 ]]
 
 vim.cmd [[
