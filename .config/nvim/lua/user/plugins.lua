@@ -94,13 +94,6 @@ return packer.startup(function(use)
     requires = 'kyazdani42/nvim-web-devicons',
   }
   use {
-    'ray-x/navigator.lua',
-    requires = {
-      { 'ray-x/guihua.lua', run = 'cd lua/fzy && make' },
-      { 'neovim/nvim-lspconfig' },
-    },
-  }
-  use {
     'hrsh7th/nvim-cmp', -- auto completion
     requires = {
       'hrsh7th/cmp-nvim-lsp',
