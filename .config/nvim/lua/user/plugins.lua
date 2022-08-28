@@ -39,7 +39,7 @@ return packer.startup(function(use)
   use 'nanotee/luv-vimdocs'
   use 'milisims/nvim-luaref'
 
-  -- Fuzzy Search
+  -- Fuzzy Search - Telescope
   use {
     'nvim-telescope/telescope.nvim',
     requires = {
@@ -64,9 +64,7 @@ return packer.startup(function(use)
   use {
     'cuducos/yaml.nvim',
     ft = { 'yaml' }, -- optional
-    requires = {
-      'nvim-treesitter/nvim-treesitter',
-    },
+    requires = { 'nvim-treesitter/nvim-treesitter' },
   }
   use 'lewis6991/nvim-treesitter-context'
   use 'nvim-treesitter/nvim-treesitter-refactor'
@@ -80,7 +78,7 @@ return packer.startup(function(use)
     'ray-x/lsp_signature.nvim', -- Show function signature when you type
     'lukas-reineke/lsp-format.nvim',
     'jose-elias-alvarez/null-ls.nvim',
-    { 'b0o/SchemaStore.nvim' },
+    'b0o/SchemaStore.nvim',
     'folke/lsp-colors.nvim',
     'nvim-lua/lsp-status.nvim',
     'nanotee/nvim-lsp-basics',
@@ -106,7 +104,6 @@ return packer.startup(function(use)
       'onsails/lspkind-nvim', -- show pictograms in the auto complete popup
       { 'tzachar/cmp-tabnine', run = './install.sh' },
       'windwp/nvim-autopairs',
-      'hrsh7th/cmp-nvim-lsp-document-symbol',
     },
   }
   -- Github's suggeetsions engine
@@ -178,7 +175,11 @@ return packer.startup(function(use)
   -- Find and replace
   use 'windwp/nvim-spectre'
   use { 'folke/which-key.nvim' }
-  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
+  use {
+    'sindrets/diffview.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+    commit = 'a2945c82a58f23fba15c1b5319642fd6b2666df7',
+  }
 
   -- Look & Feel
   use { 'stevearc/dressing.nvim' } -- overrides the default vim input to provide better visuals
