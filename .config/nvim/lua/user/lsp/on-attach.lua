@@ -21,12 +21,12 @@ local default_on_attach = function(client, bufnr)
   user_maps(bufnr)
 
   -- Plugins on-attach
-  lsp_status.on_attach(client)
   local basics = require 'lsp_basics'
   basics.make_lsp_commands(client, bufnr)
   lsp_format.on_attach(client)
-  if client.name ~= 'null-ls' then
+  if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufnr)
+    lsp_status.on_attach(client)
   end
 
   if vim.tbl_contains(enable_ls_signature, client.name) then
