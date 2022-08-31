@@ -38,10 +38,12 @@ end
 lualine.setup {
   options = {
     icons_enabled = true,
-    theme = 'neon',
+    theme = 'one_monokai',
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
-    disabled_filetypes = {},
+    disabled_filetypes = {
+      winbar = { 'fugitive', 'git', 'NvimTree' },
+    },
     always_divide_middle = true,
     globalstatus = true,
   },
@@ -96,8 +98,23 @@ lualine.setup {
     lualine_z = {},
   },
   tabline = {},
+  winbar = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = { 'modified' },
+    lualine_z = { 'filename' },
+  },
+  inactive_winbar = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = { 'modified' },
+    lualine_z = { 'filename' },
+  },
   extensions = {
-    'nerdtree',
     'fugitive',
     'quickfix',
   },

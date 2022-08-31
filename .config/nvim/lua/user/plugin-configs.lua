@@ -5,15 +5,16 @@ local opts = utils.map_opts
 -----------------
 -- Colorscheme --
 -----------------
-vim.g.material_style = 'darker'
-vim.g.neon_style = 'doom'
-vim.g.neon_italic_keyword = true
-vim.g.neon_italic_function = true
-vim.g.neon_transparent = true
-vim.g.neon_overrides = {
-  CursorColumn = { fg = 'NONE', bg = '#3f444a' },
-}
-vim.cmd [[colorscheme neon]]
+-- vim.g.material_style = 'darker'
+-- vim.g.neon_style = 'doom'
+-- vim.g.neon_italic_keyword = true
+-- vim.g.neon_italic_function = true
+-- vim.g.neon_transparent = true
+-- vim.g.neon_overrides = {
+--   CursorColumn = { fg = 'NONE', bg = '#3f444a' },
+-- }
+-- vim.cmd [[colorscheme neon]]
+require('one_monokai').setup()
 
 ----------------
 -- WinResizer --
