@@ -18,7 +18,7 @@ force_display = true
 style = 'yellow'
 
 [python]
-disabled = true
+disabled = false
 
 [battery]
 disabled = false

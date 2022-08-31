@@ -109,16 +109,6 @@ return packer.startup(function(use)
   -- Github's suggeetsions engine
   use {
     'github/copilot.vim', -- for initial login
-    -- {
-    --   'zbirenbaum/copilot.lua',
-    --   event = { 'VimEnter' },
-    --   config = function()
-    --     vim.defer_fn(function()
-    --       require('copilot').setup()
-    --     end, 100)
-    --   end,
-    -- },
-    -- { 'zbirenbaum/copilot-cmp', after = { 'copilot.lua', 'nvim-cmp' } },
   }
   use {
     'iamcco/markdown-preview.nvim',
@@ -147,7 +137,7 @@ return packer.startup(function(use)
     'rcarriga/nvim-dap-ui',
     'mfussenegger/nvim-dap-python',
     'nvim-telescope/telescope-dap.nvim',
-    'mxsdev/nvim-dap-vscode-js',
+    -- 'mxsdev/nvim-dap-vscode-js',
     'theHamsta/nvim-dap-virtual-text',
     'rcarriga/cmp-dap',
     'Pocco81/dap-buddy.nvim',
