@@ -81,7 +81,7 @@ lualine.setup {
     lualine_z = { 'location' },
   },
   inactive_sections = {
-    lualine_a = {},
+    lualine_a = { { 'mode', fmt = trunc(80, 4, nil, true) } },
     lualine_b = {},
     lualine_c = { 'filename' },
     lualine_x = { 'location' },
@@ -106,6 +106,8 @@ lualine.setup {
   },
   extensions = {
     'fugitive',
+    'nvim-dap-ui',
+    'nvim-tree',
     'quickfix',
   },
 }
