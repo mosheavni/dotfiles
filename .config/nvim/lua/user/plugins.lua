@@ -66,8 +66,10 @@ return packer.startup(function(use)
     ft = { 'yaml' }, -- optional
     requires = { 'nvim-treesitter/nvim-treesitter' },
   }
+  use 'someone-stole-my-name/yaml-companion.nvim'
   use 'lewis6991/nvim-treesitter-context'
   use 'nvim-treesitter/nvim-treesitter-refactor'
+
   -- LSP
   use {
     'williamboman/mason.nvim',

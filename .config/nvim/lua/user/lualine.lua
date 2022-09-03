@@ -44,13 +44,16 @@ lualine.setup {
     },
     lualine_c = {
       'diagnostics',
-      {
-        function()
-          return lsp_status.status()
-        end,
-        fmt = trunc(120, 20, 60),
-      },
-      "require'user.select-schema'.get_current_schema()",
+      'filename',
+      function()
+        if vim.bo.filetype == 'yaml' then
+          local schema = require('yaml-companion').get_buf_schema(0)
+          if schema then
+            return 'YAML Schema: ' .. schema.result[1].name
+          end
+        end
+        return ''
+      end,
     },
     lualine_x = {
       {

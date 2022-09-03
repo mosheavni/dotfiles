@@ -232,57 +232,45 @@ require('lspconfig')['jdtls'].setup {
   capabilities = capabilities,
 }
 -- yaml
-local clock = os.clock
-local yaml_install_path = vim.fn.expand '~' .. '/Repos/yaml-language-server'
-if vim.fn.empty(vim.fn.glob(yaml_install_path)) > 0 then
-  local function sleep(n) -- seconds
-    local t0 = clock()
-    while clock() - t0 <= n do
-    end
-  end
-
-  vim.fn.execute('!git clone https://github.com/redhat-developer/yaml-language-server.git ' .. yaml_install_path)
-  vim.fn.execute('!yarn install --cwd ' .. yaml_install_path)
-  sleep(5)
-  vim.fn.execute('!cd ' .. yaml_install_path .. ' && yarn run build')
-end
----@diagnostic disable-next-line: undefined-field
-require('lspconfig')['yamlls'].setup {
-  on_attach = default_on_attach,
-  capabilities = capabilities,
-  cmd = { 'node', yaml_install_path .. '/out/server/src/server.js', '--stdio' },
-  on_init = function()
-    require('user.select-schema').get_client()
-  end,
-  settings = {
-    redhat = { telemetry = { enabled = false } },
-    yaml = {
-      validate = true,
-      format = { enable = true },
-      hover = true,
-      trace = { server = 'debug' },
-      completion = true,
-      schemaStore = {
-        enable = true,
-        url = 'https://www.schemastore.org/api/json/catalog.json',
-      },
-      schemas = {
-        kubernetes = {
-          '*role*.y*ml',
-          'deploy.y*ml',
-          'deployment.y*ml',
-          'ingress.y*ml',
-          'kubectl-edit-*',
-          'pdb.y*ml',
-          'pod.y*ml',
-          'hpa.y*ml',
-          'rbac.y*ml',
-          'service.y*ml',
-          'service*account.y*ml',
-          'storageclass.y*ml',
-          'svc.y*ml',
+local yaml_cfg = require('yaml-companion').setup {
+  builtin_matchers = {
+    -- Detects Kubernetes files based on content
+    kubernetes = { enabled = true },
+  },
+  lspconfig = {
+    on_attach = default_on_attach,
+    capabilities = capabilities,
+    settings = {
+      redhat = { telemetry = { enabled = false } },
+      yaml = {
+        validate = true,
+        format = { enable = true },
+        hover = true,
+        trace = { server = 'debug' },
+        completion = true,
+        schemaStore = {
+          enable = true,
+          url = 'https://www.schemastore.org/api/json/catalog.json',
+        },
+        schemas = {
+          kubernetes = {
+            '*role*.y*ml',
+            'deploy.y*ml',
+            'deployment.y*ml',
+            'ingress.y*ml',
+            'kubectl-edit-*',
+            'pdb.y*ml',
+            'pod.y*ml',
+            'hpa.y*ml',
+            'rbac.y*ml',
+            'service.y*ml',
+            'service*account.y*ml',
+            'storageclass.y*ml',
+            'svc.y*ml',
+          },
         },
       },
     },
   },
 }
+require('lspconfig')['yamlls'].setup(yaml_cfg)

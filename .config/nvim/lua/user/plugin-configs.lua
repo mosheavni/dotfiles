@@ -152,6 +152,11 @@ vim.cmd [[
 " let g:copilot_no_tab_map = v:true
 ]]
 
+----------------
+-- Yaml Buddy --
+----------------
+keymap('n', '<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", opts.no_remap_silent)
+
 ---------------
 -- Colorizer --
 ---------------
