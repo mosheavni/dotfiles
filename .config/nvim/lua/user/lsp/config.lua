@@ -1,5 +1,4 @@
 local on_attaches = require 'user.lsp.on-attach'
-local lsp_status = require 'lsp-status'
 local default_on_attach = on_attaches.default
 local util = require 'lspconfig/util'
 local path = util.path
@@ -16,9 +15,6 @@ require('vim.lsp.log').set_format_func(vim.inspect)
 
 -- Capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-if lsp_status then
-  capabilities = vim.tbl_deep_extend('keep', capabilities, lsp_status.capabilities)
-end
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.codeAction = {
   dynamicRegistration = true,

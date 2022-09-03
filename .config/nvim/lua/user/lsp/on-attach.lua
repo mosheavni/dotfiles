@@ -1,4 +1,3 @@
-local lsp_status = require 'lsp-status'
 local utils = require 'user.utils'
 local user_maps = require 'user.lsp.maps'
 local autocmd = utils.autocmd
@@ -26,7 +25,6 @@ local default_on_attach = function(client, bufnr)
   lsp_format.on_attach(client)
   if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufnr)
-    lsp_status.on_attach(client)
   end
 
   if vim.tbl_contains(enable_ls_signature, client.name) then
@@ -96,7 +94,6 @@ local minimal_on_attach = function(_, bufnr)
   -- Add mappings
   user_maps(bufnr)
 
-  -- lsp_status.on_attach(client)
   -- local basics = require 'lsp_basics'
   -- basics.make_lsp_commands(client, bufnr)
   --

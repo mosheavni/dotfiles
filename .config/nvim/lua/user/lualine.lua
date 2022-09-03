@@ -3,18 +3,7 @@ if not status_ok then
   return vim.notify 'Module lualine not installed'
 end
 
--- lsp status.
-local status_ok_lsps, lsp_status = pcall(require, 'lsp-status')
-if not status_ok_lsps then
-  return vim.notify 'Module lsp-status not installed'
-end
-
 local navic = require 'nvim-navic'
-
-lsp_status.register_progress()
-lsp_status.config {
-  diagnostics = false,
-}
 
 -- Truncate items on a small window
 --- @param trunc_width any #Number trunctates component when screen width is less then trunc_width
@@ -62,7 +51,6 @@ lualine.setup {
         fmt = trunc(120, 20, 60),
       },
       "require'user.select-schema'.get_current_schema()",
-      { navic.get_location, cond = navic.is_available },
     },
     lualine_x = {
       {
@@ -103,8 +91,7 @@ lualine.setup {
     lualine_b = {},
     lualine_c = {},
     lualine_x = {},
-    lualine_y = { 'modified' },
-    lualine_z = { 'filename' },
+    lualine_z = { { navic.get_location, cond = navic.is_available } },
   },
   inactive_winbar = {
     lualine_a = {},

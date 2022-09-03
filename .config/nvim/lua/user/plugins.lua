@@ -80,8 +80,8 @@ return packer.startup(function(use)
     'jose-elias-alvarez/null-ls.nvim',
     'b0o/SchemaStore.nvim',
     'folke/lsp-colors.nvim',
-    'nvim-lua/lsp-status.nvim',
     'nanotee/nvim-lsp-basics',
+    'j-hui/fidget.nvim',
   }
   use {
     'kosayoda/nvim-lightbulb',
