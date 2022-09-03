@@ -26,12 +26,9 @@ return packer.startup(function(use)
   }
 
   -- Git Related
-  use {
-    'lewis6991/gitsigns.nvim',
-    tag = 'release', -- To use the latest release
-  }
+  use { 'tpope/vim-fugitive' }
+  use 'lewis6991/gitsigns.nvim'
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
-  use 'tpope/vim-fugitive'
   use { 'akinsho/git-conflict.nvim' }
   use { 'tpope/vim-rhubarb' }
 
@@ -148,7 +145,6 @@ return packer.startup(function(use)
 
   -- Functionality Tools
   use 'christoomey/vim-system-copy'
-  use 'danro/rename.vim'
   use 'voldikss/vim-floaterm'
   use { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } }
   use 'simeji/winresizer'
@@ -170,15 +166,18 @@ return packer.startup(function(use)
   use {
     'sindrets/diffview.nvim',
     requires = 'nvim-lua/plenary.nvim',
-    commit = 'a2945c82a58f23fba15c1b5319642fd6b2666df7',
   }
+
+  -- Quickfix
+  use 'https://gitlab.com/yorickpeterse/nvim-pqf.git'
+  use { 'kevinhwang91/nvim-bqf', ft = 'qf' }
+  use { 'tommcdo/vim-lister', ft = 'qf', cmd = { 'Qfilter', 'Qgrep' } } -- Qfilter and Qgrep on Quickfix
 
   -- Look & Feel
   use { 'stevearc/dressing.nvim' } -- overrides the default vim input to provide better visuals
   use 'rcarriga/nvim-notify'
   use 'lukas-reineke/indent-blankline.nvim'
   use { 'akinsho/bufferline.nvim', tag = 'v2.*', requires = 'kyazdani42/nvim-web-devicons' }
-  use 'https://gitlab.com/yorickpeterse/nvim-pqf.git'
   use 'RRethy/vim-illuminate'
 
   use {
@@ -215,7 +214,6 @@ return packer.startup(function(use)
   use 'junegunn/vim-easy-align'
   use 'AndrewRadev/switch.vim'
   use 'justinmk/vim-sneak'
-  use 'tommcdo/vim-lister' -- Qfilter and Qgrep on Quickfix
   use { 'alvan/vim-closetag', ft = { 'html', 'javascript' } }
   use 'editorconfig/editorconfig-vim'
 
