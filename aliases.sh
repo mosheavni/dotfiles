@@ -35,21 +35,7 @@ function mwatch() {
   # [[ -f $log_file ]] && cat /dev/null > $log_file || touch $log_file
   final_alias=`_alias_finder "$*"`
   echo $final_alias
-  watch --color "$final_alias"
-}
-
-function mwatcht() {
-  # log_file=/tmp/moshe_mwatch.log
-  # [[ -f $log_file ]] && cat /dev/null > $log_file || touch $log_file
-  final_alias=`_alias_finder "$*"`
-  echo $final_alias
-
-  while true; do
-    n_lines=$(tput lines)
-    echo $final_alias | bash | tail -${n_lines}
-    printf '\e[K'
-    sleep 1
-  done
+  viddy "$final_alias"
 }
 
 function ssh2 () {

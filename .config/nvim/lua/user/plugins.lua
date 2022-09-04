@@ -26,11 +26,12 @@ return packer.startup(function(use)
   }
 
   -- Git Related
-  use { 'tpope/vim-fugitive' }
+  use 'tpope/vim-fugitive'
   use 'lewis6991/gitsigns.nvim'
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
-  use { 'akinsho/git-conflict.nvim' }
-  use { 'tpope/vim-rhubarb' }
+  use 'akinsho/git-conflict.nvim'
+  use 'tpope/vim-rhubarb'
+  use 'tveskag/nvim-blame-line'
 
   -- Documents
   use 'nanotee/luv-vimdocs'
@@ -63,7 +64,7 @@ return packer.startup(function(use)
     ft = { 'yaml' }, -- optional
     requires = { 'nvim-treesitter/nvim-treesitter' },
   }
-  use 'someone-stole-my-name/yaml-companion.nvim'
+  use 'mosheavni/yaml-companion.nvim'
   use 'lewis6991/nvim-treesitter-context'
   use 'nvim-treesitter/nvim-treesitter-refactor'
 
@@ -144,7 +145,6 @@ return packer.startup(function(use)
   use 'andrewferrier/debugprint.nvim'
 
   -- Functionality Tools
-  use 'christoomey/vim-system-copy'
   use 'voldikss/vim-floaterm'
   use { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } }
   use 'simeji/winresizer'
