@@ -31,7 +31,6 @@ return packer.startup(function(use)
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
   use 'akinsho/git-conflict.nvim'
   use 'tpope/vim-rhubarb'
-  use 'tveskag/nvim-blame-line'
 
   -- Documents
   use 'nanotee/luv-vimdocs'
