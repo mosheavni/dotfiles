@@ -156,6 +156,7 @@ keymap('n', '<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied file path 
 -- Copy and paste to/from system clipboard
 keymap('n', 'cp', '"+y', {})
 keymap('n', 'cP', '"+yy', {})
+keymap('v', 'cp', '"+y', {})
 keymap('n', 'cv', '"+p', {})
 
 -- Change working directory based on open file
