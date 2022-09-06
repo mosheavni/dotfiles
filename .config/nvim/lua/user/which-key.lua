@@ -170,7 +170,6 @@ local mappings = {
       q = { 'Close all buffers and quit' },
     },
     r = { 'Search and Replace Word Under Cursor' },
-    S = { 'Spectre Search and Replace' },
     sa = { 'Visually select all' },
     t = {
       name = '+Toggle',

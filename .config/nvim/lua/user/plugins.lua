@@ -159,8 +159,6 @@ return packer.startup(function(use)
   }
   use 'kazhala/close-buffers.nvim'
 
-  -- Find and replace
-  use 'windwp/nvim-spectre'
   use { 'folke/which-key.nvim' }
   use {
     'sindrets/diffview.nvim',

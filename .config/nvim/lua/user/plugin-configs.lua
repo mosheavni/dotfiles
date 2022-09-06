@@ -96,14 +96,6 @@ vim.g['ansible_goto_role_paths'] = '.;,roles;'
 vim.g['yaml_revealer_separator'] = '.'
 vim.g['yaml_revealer_list_indicator'] = 1
 
--------------
--- Spectre --
--------------
-keymap('n', '<leader>S', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opts.silent)
-keymap('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opts.no_remap)
-require 'user.spectre'
-
--------------
 -- AnyJump --
 -------------
 keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
