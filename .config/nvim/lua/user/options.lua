@@ -95,6 +95,8 @@ opt.softtabstop = 4
 opt.tabstop = 4
 opt.smarttab = true -- insert tabs on the start of a line according to shiftwidth, not tabstop
 opt.expandtab = true -- Tab changes to spaces. Format with :retab
+opt.indentkeys:remove '0#'
+opt.indentkeys:remove '<:>'
 
 -- Neovide
 vim.g.neovide_cursor_vfx_mode = 'railgun'
@@ -128,6 +130,7 @@ hi ColorColumn ctermbg=238 guibg=lightgrey
 
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+set guicursor+=i:blinkon1
 
 filetype indent on
 ]]

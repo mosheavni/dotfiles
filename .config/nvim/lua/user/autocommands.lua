@@ -16,6 +16,57 @@ autocmd({ 'FocusGained', 'BufEnter' }, {
   command = 'if &buftype == "nofile" | checktime | endif',
 })
 
+-- Actions when the file is changed outside of Neovim
+autocmd('FileChangedShellPost', {
+  desc = 'Actions when the file is changed outside of Neovim',
+  group = reload_file_group,
+  callback = function()
+    vim.notify('File changed, reloading the buffer', vim.log.levels.WARN)
+  end,
+})
+
+-- Print the output of flag --startuptime startuptime.txt
+local first_load = augroup 'first_load'
+vim.api.nvim_create_autocmd('UIEnter', {
+  desc = 'Print the output of flag --startuptime startuptime.txt',
+  group = first_load,
+  pattern = 'init.lua',
+  once = true,
+  callback = function()
+    vim.defer_fn(function()
+      return vim.fn.filereadable 'startuptime.txt' == 1 and vim.cmd ':!tail -n3 startuptime.txt' and
+          vim.fn.delete 'startuptime.txt'
+    end, 1000)
+  end,
+})
+
+-- Buffer settings
+local buffer_settings = augroup 'buffer_settings'
+vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Quit with q in this filetypes',
+  group = buffer_settings,
+  pattern = {
+    'help',
+    'lspinfo',
+    'man',
+    'netrw',
+    'qf',
+    'startuptime',
+  },
+  callback = function()
+    vim.keymap.set('n', 'q', '<CMD>close<CR>', { buffer = 0 })
+  end,
+})
+
+-- Highlight on yank
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight on yank',
+  group = buffer_settings,
+  callback = function()
+    pcall(vim.highlight.on_yank, { higroup = 'Visual', timeout = 600 })
+  end,
+})
+
 -- Special filetypes
 local special_filetypes = augroup 'SpecialFiletype'
 autocmd({ 'FileType' }, {
