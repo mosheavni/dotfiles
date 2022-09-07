@@ -128,8 +128,8 @@ return packer.startup(function(use)
   use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
   use { 'phenomenes/ansible-snippets', ft = { 'yaml' } }
-  use { 'rafamadriz/friendly-snippets' } -- snippets for many languages
-  use { 'folke/lua-dev.nvim' }
+  use 'rafamadriz/friendly-snippets' -- snippets for many languages
+  use 'folke/lua-dev.nvim'
 
   -- Debug Adapter Protocol (DAP)
   use {
@@ -145,6 +145,7 @@ return packer.startup(function(use)
   use 'andrewferrier/debugprint.nvim'
 
   -- Functionality Tools
+  use 'kevinhwang91/nvim-hlslens'
   use 'voldikss/vim-floaterm'
   use { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } }
   use 'simeji/winresizer'
@@ -160,7 +161,7 @@ return packer.startup(function(use)
   }
   use 'kazhala/close-buffers.nvim'
 
-  use { 'folke/which-key.nvim' }
+  use 'folke/which-key.nvim'
   use {
     'sindrets/diffview.nvim',
     requires = 'nvim-lua/plenary.nvim',
@@ -172,7 +173,7 @@ return packer.startup(function(use)
   use { 'tommcdo/vim-lister', ft = 'qf', cmd = { 'Qfilter', 'Qgrep' } } -- Qfilter and Qgrep on Quickfix
 
   -- Look & Feel
-  use { 'stevearc/dressing.nvim' } -- overrides the default vim input to provide better visuals
+  use 'stevearc/dressing.nvim' -- overrides the default vim input to provide better visuals
   use 'rcarriga/nvim-notify'
   use 'lukas-reineke/indent-blankline.nvim'
   use { 'akinsho/bufferline.nvim', tag = 'v2.*', requires = 'kyazdani42/nvim-web-devicons' }
@@ -185,8 +186,7 @@ return packer.startup(function(use)
     },
   }
   use 'kyazdani42/nvim-web-devicons'
-  use 'karb94/neoscroll.nvim'
-  use 'machakann/vim-highlightedyank'
+  -- use 'karb94/neoscroll.nvim'
   use 'mhinz/vim-startify'
   use 'vim-scripts/CursorLineCurrentWindow'
   use 'norcalli/nvim-colorizer.lua'
@@ -208,7 +208,7 @@ return packer.startup(function(use)
   -- Text Manipulation
   use 'tpope/vim-repeat'
   use 'tpope/vim-surround'
-  use { 'numToStr/Comment.nvim' }
+  use 'numToStr/Comment.nvim'
   use 'junegunn/vim-easy-align'
   use 'AndrewRadev/switch.vim'
   use 'justinmk/vim-sneak'

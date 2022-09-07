@@ -108,12 +108,24 @@ vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
 ---------------
 -- neoscroll --
 ---------------
-if not vim.g.neovide then
-  require('neoscroll').setup {
-    -- All these keys will be mapped to their corresponding default scrolling animation
-    mappings = { '<C-u>', '<C-d>', 'zt', 'zz', 'zb' },
-  }
-end
+-- if not vim.g.neovide then
+--   require('neoscroll').setup {
+--     -- All these keys will be mapped to their corresponding default scrolling animation
+--     mappings = { '<C-u>', '<C-d>', 'zt', 'zz', 'zb' },
+--   }
+-- end
+
+-------------
+-- hlslens --
+-------------
+keymap('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
+  opts.no_remap_silent)
+keymap('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
+  opts.no_remap_silent)
+keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
+keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
+keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
+keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
 
 ----------------
 -- Bufferline --
