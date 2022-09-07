@@ -66,6 +66,7 @@ return packer.startup(function(use)
   use 'mosheavni/yaml-companion.nvim'
   use 'lewis6991/nvim-treesitter-context'
   use 'nvim-treesitter/nvim-treesitter-refactor'
+  use 'sam4llis/nvim-lua-gf'
 
   -- LSP
   use {
