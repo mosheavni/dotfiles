@@ -9,6 +9,7 @@ exclude:
   - .zshrc-minimal
   - Npmfile
   - README.md
+  - PYTHON-README.md
   - com.googlecode.iterm2.plist
   - requirements.txt
   - tags

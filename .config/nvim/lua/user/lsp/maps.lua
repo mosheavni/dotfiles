@@ -41,8 +41,4 @@ return function(bufnr)
   buf_set_keymap('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', {})
   buf_set_keymap('n', '<leader>lx', '<cmd>lua vim.lsp.codelens.run()<CR>', {})
   buf_set_keymap('x', '<leader>la', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', {})
-  buf_set_keymap('n', '<leader>lp', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', opts.silent)
-  -- vim.keymap.set('n', '<leader>lp', function()
-  --   utils.lsp_formatting(0)
-  -- end, { silent = true })
 end

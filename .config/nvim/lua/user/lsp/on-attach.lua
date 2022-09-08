@@ -2,14 +2,10 @@ local utils = require 'user.utils'
 local user_maps = require 'user.lsp.maps'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
+local moshe_formatting = require 'user.lsp.formatting'
 local buf_set_option = vim.api.nvim_buf_set_option
-local lsp_format = require 'lsp-format'
 local navic = require 'nvim-navic'
-lsp_format.setup {}
 
-local disable_ls_format = {
-  'sumneko_lua',
-}
 local enable_ls_signature = {
   'sumneko_lua',
 }
@@ -22,7 +18,7 @@ local default_on_attach = function(client, bufnr)
   -- Plugins on-attach
   local basics = require 'lsp_basics'
   basics.make_lsp_commands(client, bufnr)
-  lsp_format.on_attach(client)
+  moshe_formatting.setup(client, bufnr)
   if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufnr)
   end
@@ -60,13 +56,9 @@ local default_on_attach = function(client, bufnr)
     })
   end
 
-  -- Enable tag jump and formatting based on LSP
+  -- Enable tag jump based on LSP
   if client.server_capabilities.goto_definition == true then
     buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
-  end
-
-  if client.server_capabilities.document_formatting == true then
-    buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
   end
 
   local diagnostic_pop = augroup 'DiagnosticPop'
