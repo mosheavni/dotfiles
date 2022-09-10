@@ -6,7 +6,6 @@ local buf_set_option = vim.api.nvim_buf_set_option
 local lsp_format = require 'lsp-format'
 
 lsp_format.setup {
-  exclude = { 'copilot' },
   lua = {
     exclude = { 'sumneko_lua' },
   },
@@ -17,7 +16,6 @@ local function select_client(method, callback)
   local client_names = {}
   for _, client in ipairs(clients) do
     if client.supports_method(method) then
-      -- add client.name to client_names
       table.insert(client_names, client.name)
     end
   end
@@ -26,23 +24,7 @@ local function select_client(method, callback)
   vim.ui.select(client_names, { 'Select LSP client' }, callback)
 end
 
-local function formatting_sync(options, timeout_ms)
-  local client = select_client 'textDocument/formatting'
-  if client == nil then
-    return
-  end
-
-  local params = util.make_formatting_params(options)
-  local result, err = client.request_sync('textDocument/formatting', params, timeout_ms, vim.api.nvim_get_current_buf())
-  if result and result.result then
-    util.apply_text_edits(result.result)
-  elseif err then
-    vim.notify('vim.lsp.buf.formatting_sync: ' .. err, vim.log.levels.WARN)
-  end
-end
-
 M.setup = function(client, bufnr)
-  P('called for ' .. client.name)
   lsp_format.on_attach(client)
   vim.keymap.set('n', '<leader>lp', function()
     select_client('textDocument/formatting', function(client_name)
