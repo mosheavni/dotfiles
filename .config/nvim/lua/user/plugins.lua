@@ -89,6 +89,12 @@ return packer.startup(function(use)
       'null-ls.nvim',
       'mason.nvim',
     },
+    config = function()
+		require("mason-null-ls").setup({
+			automatic_installation = true,
+		})
+		require("mason-null-ls").check_install(true)
+	end,
   }
   use {
     'kosayoda/nvim-lightbulb',

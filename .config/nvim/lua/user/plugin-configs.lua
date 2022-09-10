@@ -321,15 +321,6 @@ keymap('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', opts.no_remap_silent)
 ----------------
 require('scope').setup()
 
--------------------
--- Mason Null-LS --
--------------------
--- local mason_null_ls = require 'mason-null-ls'
--- mason_null_ls.setup {
---   automatic_installation = true,
--- }
--- mason_null_ls.check_install(true)
-
 ----------------------
 -- indent_blankline --
 ----------------------
