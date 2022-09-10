@@ -123,10 +123,8 @@ vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
 -------------
 -- hlslens --
 -------------
-keymap('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
-  opts.no_remap_silent)
-keymap('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
-  opts.no_remap_silent)
+keymap('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
+keymap('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
 keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
 keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
 keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
@@ -326,10 +324,11 @@ require('scope').setup()
 -------------------
 -- Mason Null-LS --
 -------------------
-require("mason-null-ls").setup({
-  automatic_installation = true,
-})
-require("mason-null-ls").check_install(true)
+-- local mason_null_ls = require 'mason-null-ls'
+-- mason_null_ls.setup {
+--   automatic_installation = true,
+-- }
+-- mason_null_ls.check_install(true)
 
 ----------------------
 -- indent_blankline --
