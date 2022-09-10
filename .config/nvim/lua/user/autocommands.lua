@@ -25,14 +25,14 @@ autocmd('FileChangedShellPost', {
   end,
 })
 
--- Enable folds ()
-local enable_folds = augroup 'FoldFix'
-autocmd({ 'BufEnter' }, {
-  group = enable_folds,
-  desc = 'https://github.com/nvim-telescope/telescope.nvim/issues/699',
-  pattern = { '*' },
-  command = 'normal zx',
-})
+-- -- Enable folds
+-- local enable_folds = augroup 'FoldFix'
+-- autocmd({ 'BufEnter' }, {
+--   group = enable_folds,
+--   desc = 'https://github.com/nvim-telescope/telescope.nvim/issues/699',
+--   pattern = { '*' },
+--   command = 'normal zx',
+-- })
 
 -- Print the output of flag --startuptime startuptime.txt
 local first_load = augroup 'first_load'

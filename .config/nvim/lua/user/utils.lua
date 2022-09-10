@@ -13,6 +13,7 @@ M.map_opts = {
   no_remap_expr_silent = { expr = true, noremap = true, silent = true },
   no_remap_silent = { silent = true, noremap = true },
   remap = { noremap = false },
+  expr_silent = { silent = true, expr = true },
 }
 
 M.keymap = vim.keymap.set

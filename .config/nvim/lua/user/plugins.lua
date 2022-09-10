@@ -82,6 +82,7 @@ return packer.startup(function(use)
     'folke/lsp-colors.nvim',
     'nanotee/nvim-lsp-basics',
     'j-hui/fidget.nvim',
+    'simrat39/inlay-hints.nvim',
   }
   use {
     'jayp0521/mason-null-ls.nvim',
@@ -90,11 +91,11 @@ return packer.startup(function(use)
       'mason.nvim',
     },
     config = function()
-		require("mason-null-ls").setup({
-			automatic_installation = true,
-		})
-		require("mason-null-ls").check_install(true)
-	end,
+      require('mason-null-ls').setup {
+        automatic_installation = true,
+      }
+      require('mason-null-ls').check_install(true)
+    end,
   }
   use {
     'kosayoda/nvim-lightbulb',

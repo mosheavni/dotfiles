@@ -1,6 +1,8 @@
 local on_attaches = require 'user.lsp.on-attach'
 local default_on_attach = on_attaches.default
 local util = require 'lspconfig/util'
+local ih = require 'inlay-hints'
+local lspconfig = require 'lspconfig'
 local path = util.path
 require 'user.lsp.null-ls'
 
@@ -46,48 +48,48 @@ end
 
 -- ansiblels
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['ansiblels'].setup {
+lspconfig.ansiblels.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- ansblel
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['awk_ls'].setup {
+lspconfig.awk_ls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- bashls
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['bashls'].setup {
+lspconfig.bashls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- dockerls
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['dockerls'].setup {
+lspconfig.dockerls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- eslint
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['eslint'].setup {
+lspconfig.eslint.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- groovyls
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['groovyls'].setup {
+lspconfig.groovyls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- html
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['html'].setup {
+lspconfig.html.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- json
-require('lspconfig')['jsonls'].setup {
+lspconfig.jsonls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
   settings = {
@@ -119,7 +121,7 @@ local function get_python_path(workspace)
 end
 
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['pyright'].setup {
+lspconfig.pyright.setup {
   before_init = function(_, config)
     config.settings.python.pythonPath = get_python_path(config.root_dir)
   end,
@@ -136,23 +138,32 @@ local luadev = require('lua-dev').setup {
   runtime_path = true,
   lspconfig = {
     capabilities = capabilities,
-    on_attach = default_on_attach,
+    on_attach = function(c, b)
+      ih.on_attach(c, b)
+      default_on_attach(c, b)
+    end,
+    settings = {
+      Lua = {
+        hint = {
+          enable = true,
+        },
+      },
+    },
   },
 }
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['sumneko_lua'].setup(luadev)
+lspconfig.sumneko_lua.setup(luadev)
 --terraformls
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['terraformls'].setup {
+lspconfig.terraformls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 --tsserver
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['tsserver'].setup {
+lspconfig.tsserver.setup {
   capabilities = capabilities,
   -- Needed for inlayHints. Merge this table with your settings or copy
-  -- it from the source if you want to add your own init_options.
   init_options = require('nvim-lsp-ts-utils').init_options,
   on_attach = function(client, bufnr)
     local ts_utils = require 'nvim-lsp-ts-utils'
@@ -214,20 +225,21 @@ require('lspconfig')['tsserver'].setup {
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs', ':TSLspOrganize<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', ':TSLspRenameFile<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', ':TSLspImportAll<CR>', opts)
+    ih.on_attach(client, bufnr)
     default_on_attach(client, bufnr)
   end,
 }
 
 --vimls
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['vimls'].setup {
+lspconfig.vimls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 
 --jdtls
 ---@diagnostic disable-next-line: undefined-field
-require('lspconfig')['jdtls'].setup {
+lspconfig.jdtls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
@@ -273,4 +285,4 @@ local yaml_cfg = require('yaml-companion').setup {
     },
   },
 }
-require('lspconfig')['yamlls'].setup(yaml_cfg)
+lspconfig.yamlls.setup(yaml_cfg)

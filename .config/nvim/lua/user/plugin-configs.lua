@@ -321,6 +321,11 @@ keymap('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', opts.no_remap_silent)
 ----------------
 require('scope').setup()
 
+-----------------
+-- Inlay Hints --
+-----------------
+require('inlay-hints').setup()
+
 ----------------------
 -- indent_blankline --
 ----------------------
@@ -331,6 +336,7 @@ vim.cmd [[highlight IndentBlanklineIndent4 guifg=#98C379 gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent5 guifg=#56B6C2 gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent6 guifg=#61AFEF gui=nocombine]]
 require('indent_blankline').setup {
+  char = '┊',
   filetype_exclude = {
     'NvimTree',
     'TelescopePrompt',
