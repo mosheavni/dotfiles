@@ -25,6 +25,15 @@ autocmd('FileChangedShellPost', {
   end,
 })
 
+-- Enable folds ()
+local enable_folds = augroup 'FoldFix'
+autocmd({ 'BufEnter' }, {
+  group = enable_folds,
+  desc = 'https://github.com/nvim-telescope/telescope.nvim/issues/699',
+  pattern = { '*' },
+  command = 'normal zx',
+})
+
 -- Print the output of flag --startuptime startuptime.txt
 local first_load = augroup 'first_load'
 vim.api.nvim_create_autocmd('UIEnter', {
@@ -34,8 +43,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
   once = true,
   callback = function()
     vim.defer_fn(function()
-      return vim.fn.filereadable 'startuptime.txt' == 1 and vim.cmd ':!tail -n3 startuptime.txt' and
-          vim.fn.delete 'startuptime.txt'
+      return vim.fn.filereadable 'startuptime.txt' == 1 and vim.cmd ':!tail -n3 startuptime.txt' and vim.fn.delete 'startuptime.txt'
     end, 1000)
   end,
 })
