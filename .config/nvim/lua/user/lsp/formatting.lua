@@ -1,5 +1,4 @@
 local M = {}
-local util = require 'vim.lsp.util'
 local m_utils = require 'user.utils'
 local opts = m_utils.map_opts
 local buf_set_option = vim.api.nvim_buf_set_option
@@ -12,7 +11,7 @@ lsp_format.setup {
 }
 
 local function select_client(method, callback)
-  local clients = vim.tbl_values(vim.lsp.buf_get_clients())
+  local clients = vim.tbl_values(vim.lsp.get_active_clients { bufnr = 0 })
   local client_names = {}
   for _, client in ipairs(clients) do
     if client.supports_method(method) then
@@ -21,7 +20,10 @@ local function select_client(method, callback)
   end
 
   -- Prompt user for client with vim.ui.input and call callback with response
-  vim.ui.select(client_names, { 'Select LSP client' }, callback)
+  if #client_names == 1 then
+    return callback(client_names[1])
+  end
+  return vim.ui.select(client_names, { 'Select LSP client' }, callback)
 end
 
 M.setup = function(client, bufnr)
@@ -36,6 +38,7 @@ M.setup = function(client, bufnr)
           return s_client.name == client_name
         end,
       }
+      vim.notify('Formatted using ' .. client_name)
     end)
   end, vim.tbl_extend('force', opts.silent, { buffer = bufnr }))
 
