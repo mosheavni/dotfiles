@@ -324,7 +324,9 @@ require('scope').setup()
 -----------------
 -- Inlay Hints --
 -----------------
-require('inlay-hints').setup()
+require('inlay-hints').setup {
+  nerdfonts = true,
+}
 
 ----------------------
 -- indent_blankline --

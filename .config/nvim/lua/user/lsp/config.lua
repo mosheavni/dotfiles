@@ -1,7 +1,6 @@
 local on_attaches = require 'user.lsp.on-attach'
 local default_on_attach = on_attaches.default
 local util = require 'lspconfig/util'
-local ih = require 'inlay-hints'
 local lspconfig = require 'lspconfig'
 local path = util.path
 require 'user.lsp.null-ls'
@@ -138,10 +137,7 @@ local luadev = require('lua-dev').setup {
   runtime_path = true,
   lspconfig = {
     capabilities = capabilities,
-    on_attach = function(c, b)
-      ih.on_attach(c, b)
-      default_on_attach(c, b)
-    end,
+    on_attach = default_on_attach,
     settings = {
       Lua = {
         hint = {
@@ -225,7 +221,6 @@ lspconfig.tsserver.setup {
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs', ':TSLspOrganize<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', ':TSLspRenameFile<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', ':TSLspImportAll<CR>', opts)
-    ih.on_attach(client, bufnr)
     default_on_attach(client, bufnr)
   end,
 }
