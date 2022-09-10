@@ -152,6 +152,8 @@ keymap('n', '<leader>cfp', [[:let @+ = expand('%')<cr>:echo   "Copied file path 
   opts.no_remap_silent)
 keymap('n', '<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>]],
   opts.no_remap_silent)
+keymap('n', '<leader>cfd', [[:let @+ = expand('%:p:h')<cr>:echo "Copied file path " . expand('%:p:h')<cr>]],
+  opts.no_remap_silent)
 
 -- Copy and paste to/from system clipboard
 keymap('n', 'cp', '"+y', {})
