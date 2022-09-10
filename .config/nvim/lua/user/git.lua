@@ -175,7 +175,7 @@ local new_branch = function(branch_opts)
     return vim.cmd('Git checkout -b ' .. branch_opts.args)
   end
   vim.ui.input({ prompt = 'Enter new branch name: ' }, function(input)
-    if input == '' then
+    if not input then
       return
     end
     vim.cmd('Git checkout -b ' .. input)
