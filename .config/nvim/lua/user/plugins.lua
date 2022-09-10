@@ -84,6 +84,13 @@ return packer.startup(function(use)
     'j-hui/fidget.nvim',
   }
   use {
+	"jayp0521/mason-null-ls.nvim",
+	after = {
+		"null-ls.nvim",
+		"mason.nvim",
+	},
+}
+  use {
     'kosayoda/nvim-lightbulb',
     requires = 'antoinemadec/FixCursorHold.nvim',
   }

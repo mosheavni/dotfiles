@@ -51,6 +51,11 @@ vim.g['floaterm_height'] = 0.9
 -------------------
 require('dressing').setup {
   input = {
+    override = function(conf)
+      conf.col = -1
+      conf.row = 0
+      return conf
+    end,
     winblend = 0,
     border = 'rounded',
     width = '1.0',
@@ -317,6 +322,14 @@ keymap('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', opts.no_remap_silent)
 -- Scope.Nvim --
 ----------------
 require('scope').setup()
+
+-------------------
+-- Mason Null-LS --
+-------------------
+require("mason-null-ls").setup({
+  automatic_installation = true,
+})
+require("mason-null-ls").check_install(true)
 
 ----------------------
 -- indent_blankline --
