@@ -7,6 +7,11 @@ require 'user.lsp.null-ls'
 
 -- mason and lspconfig
 require('mason').setup()
+require('mason.settings').set {
+  ui = {
+    border = 'rounded',
+  },
+}
 require('mason-lspconfig').setup {
   automatic_installation = true,
 }
@@ -245,7 +250,15 @@ local yaml_cfg = require('yaml-companion').setup {
     kubernetes = { enabled = true },
   },
   lspconfig = {
-    on_attach = default_on_attach,
+    on_attach = function(c, b)
+      if vim.bo[b].buftype ~= '' or vim.bo[b].filetype == 'helm' or vim.bo[b].filetype == 'yaml.gotexttmpl' then
+        vim.diagnostic.disable(b)
+        vim.defer_fn(function()
+          vim.diagnostic.reset(nil, b)
+        end, 1000)
+      end
+      default_on_attach(c, b)
+    end,
     capabilities = capabilities,
     settings = {
       redhat = { telemetry = { enabled = false } },
