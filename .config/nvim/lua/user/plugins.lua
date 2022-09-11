@@ -67,6 +67,7 @@ return packer.startup(function(use)
   use 'lewis6991/nvim-treesitter-context'
   use 'nvim-treesitter/nvim-treesitter-refactor'
   use 'sam4llis/nvim-lua-gf'
+  use 'nvim-treesitter/playground'
 
   -- LSP
   use {

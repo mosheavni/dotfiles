@@ -78,7 +78,12 @@ lualine.setup {
       'filetype',
     },
     lualine_y = { 'progress' },
-    lualine_z = { 'location' },
+    lualine_z = {
+      'location',
+      function()
+        return os.date '%H:%M'
+      end,
+    },
   },
   inactive_sections = {
     lualine_a = { { 'mode', fmt = trunc(80, 4, nil, true) } },
