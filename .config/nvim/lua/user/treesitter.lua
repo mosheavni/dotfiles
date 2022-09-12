@@ -73,6 +73,7 @@ configs.setup {
       node_decremental = 'grm',
     },
   },
+  markid = { enable = true },
   highlight = {
     enable = true,
     disable = {

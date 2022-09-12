@@ -68,6 +68,8 @@ return packer.startup(function(use)
   use 'nvim-treesitter/nvim-treesitter-refactor'
   use 'sam4llis/nvim-lua-gf'
   use 'nvim-treesitter/playground'
+  use 'Afourcat/treesitter-terraform-doc.nvim'
+  use 'David-Kunz/markid'
 
   -- LSP
   use {

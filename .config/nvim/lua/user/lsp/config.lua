@@ -157,7 +157,10 @@ lspconfig.sumneko_lua.setup(luadev)
 --terraformls
 ---@diagnostic disable-next-line: undefined-field
 lspconfig.terraformls.setup {
-  on_attach = default_on_attach,
+  on_attach = function(c, b)
+    require('treesitter-terraform-doc').setup()
+    default_on_attach(c, b)
+  end,
   capabilities = capabilities,
 }
 --tsserver
