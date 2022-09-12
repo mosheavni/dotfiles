@@ -4,11 +4,18 @@ local M = {}
 
 M.readme = 'https://raw.githubusercontent.com/rockerBOO/awesome-neovim/main/README.md'
 M.plugins = {}
+M.loaded_plugins = {}
 
 M.find_default_branch = function(url)
   local new_url = url:gsub('github.com', 'api.github.com/repos')
   local result = vim.fn.json_decode(curl.get(new_url).body)
   return (result or {}).default_branch or 'master'
+end
+
+M.get_all_loaded_plugins = function()
+  local loaded_plugins = {}
+  local all_loaded = vim.tbl_keys(package.loaded)
+  return all_loaded
 end
 
 M.get_all_plugins = function()
@@ -24,12 +31,11 @@ M.get_all_plugins = function()
       local plugin_description = a:match '%) %- (.-)$'
       table.insert(plugins, { name = plugin_name, url = plugin_url, description = plugin_description, category = category })
     end
-    ::continue::
   end
   return plugins
 end
 
-M.display_select = function()
+M.display_awesome_plugins = function()
   if vim.tbl_isempty(M.plugins) then
     M.plugins = M.get_all_plugins()
   end
@@ -45,6 +51,20 @@ M.display_select = function()
     -- local default_branch = M.find_default_branch(plugin_chosen.url)
     -- local readme_url = plugin_chosen.url:gsub('github.com', 'raw.githubusercontent.com') .. '/' .. default_branch .. '/README.md'
     open_url(plugin_chosen.url)
+  end)
+end
+
+M.reload_plugin = function()
+  if vim.tbl_isempty(M.loaded_plugins) then
+    M.loaded_plugins = M.get_all_loaded_plugins()
+  end
+  vim.ui.select(M.loaded_plugins, { prompt = 'Plugins' }, function(plugin_chosen)
+    if not plugin_chosen then
+      return
+    end
+    package.loaded[plugin_chosen] = nil
+    pcall(require, plugin_chosen)
+    vim.notify('Successfully reloaded ' .. plugin_chosen)
   end)
 end
 

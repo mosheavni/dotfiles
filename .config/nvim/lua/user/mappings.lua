@@ -381,6 +381,11 @@ vim.api.nvim_create_user_command('AutoRun', function()
 end, {})
 
 -- Create user command to display list of plugins
-vim.api.nvim_create_user_command('Plugins', function()
-  require('user.list-plugins').display_select()
+vim.api.nvim_create_user_command('PluginsList', function()
+  require('user.plugins-mgmt').display_awesome_plugins()
+end, {})
+
+-- Bust loaded plugins
+vim.api.nvim_create_user_command('PluginsReload', function()
+  require('user.plugins-mgmt').reload_plugin()
 end, {})
