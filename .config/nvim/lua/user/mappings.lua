@@ -313,10 +313,10 @@ vmap <c-r> :VisualCalculator<cr>
 ----------
 -- Titleize --
 --------------
-vim.api.nvim_create_user_command('Titleize', function(opts)
+vim.api.nvim_create_user_command('Titleize', function(options)
   local title_char = '-'
-  if opts.args ~= '' then
-    title_char = opts.args
+  if options.args ~= '' then
+    title_char = options.args
   end
   local current_line = vim.api.nvim_get_current_line()
   local r, _ = unpack(vim.api.nvim_win_get_cursor(0))
@@ -356,7 +356,7 @@ local attach_to_buffer = function(output_bufnr, pattern, command)
 end
 vim.api.nvim_create_user_command('AutoRun', function()
   local pattern = vim.fn.expand '%:p'
-  local command_text = vim.ui.input({ prompt = 'Command: ' }, function(command_text)
+  vim.ui.input({ prompt = 'Command: ' }, function(command_text)
     if command_text == nil then
       return
     end
@@ -380,12 +380,13 @@ vim.api.nvim_create_user_command('AutoRun', function()
   end)
 end, {})
 
--- Create user command to display list of plugins
+------------------------
+-- Plugins Management --
+------------------------
 vim.api.nvim_create_user_command('PluginsList', function()
   require('user.plugins-mgmt').display_awesome_plugins()
 end, {})
 
--- Bust loaded plugins
 vim.api.nvim_create_user_command('PluginsReload', function()
   require('user.plugins-mgmt').reload_plugin()
 end, {})
