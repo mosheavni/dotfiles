@@ -112,6 +112,11 @@ autocmd({ 'BufWritePost' }, {
   pattern = 'plugins.lua',
   command = 'source <afile> | PackerCompile',
 })
+autocmd({ 'BufRead' }, {
+  group = special_filetypes,
+  pattern = 'plugins.lua',
+  command = 'lua require("user.open-url").setup()',
+})
 
 -- Nvim Blame Line
 -- local nvim_blame_line = augroup('NvimBlameLine')

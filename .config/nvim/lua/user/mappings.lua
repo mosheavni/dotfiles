@@ -379,3 +379,8 @@ vim.api.nvim_create_user_command('AutoRun', function()
     attach_to_buffer(tonumber(buf), pattern, command)
   end)
 end, {})
+
+-- Create user command to display list of plugins
+vim.api.nvim_create_user_command('Plugins', function()
+  require('user.list-plugins').display_select()
+end, {})
