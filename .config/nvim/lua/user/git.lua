@@ -219,6 +219,16 @@ local git_actions = {
     vim.cmd 'Gpom'
     pretty_print 'Pulled from origin master.'
   end,
+  ['Pull origin {branch}'] = function()
+    vim.ui.input({ prompt = 'Enter branch to pull from' }, function(branch_to_pull)
+      if not branch_to_pull then
+        pretty_print 'Canceled.'
+        return
+      end
+      vim.cmd('Gpom ' .. branch_to_pull)
+      pretty_print('Pulled from origin ' .. branch_to_pull)
+    end)
+  end,
   ['Merge origin/master'] = function()
     vim.cmd 'Gmom'
     pretty_print 'Merged with origin/master. (might need to fetch new commits)'
