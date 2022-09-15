@@ -8,13 +8,22 @@ local opts = utils.map_opts
 local keymap = utils.keymap
 
 nvim_tree.setup {
+  actions = {
+    open_file = {
+      resize_window = true,
+    },
+  },
   disable_netrw = false,
-  hijack_netrw = true,
-  open_on_tab = false,
+  git = {
+    enable = false,
+    ignore = true,
+  },
   hijack_cursor = true,
+  hijack_netrw = true,
   hijack_unnamed_buffer_when_opening = false,
-  update_cwd = true,
+  open_on_tab = false,
   reload_on_bufenter = false,
+  sync_root_with_cwd = true,
   update_focused_file = {
     enable = true,
     update_cwd = false,
@@ -34,17 +43,9 @@ nvim_tree.setup {
       },
     },
   },
-  git = {
-    enable = false,
-    ignore = true,
-  },
-  actions = {
-    open_file = {
-      resize_window = true,
-    },
-  },
   filters = {
     dotfiles = false,
+    custom = { '\\^.git' },
   },
   -- renderer = {
   --   highlight_git = false,
