@@ -225,7 +225,7 @@ local git_actions = {
         pretty_print 'Canceled.'
         return
       end
-      vim.cmd('Gpom ' .. branch_to_pull)
+      vim.cmd('G pull origin ' .. branch_to_pull)
       pretty_print('Pulled from origin ' .. branch_to_pull)
     end)
   end,
