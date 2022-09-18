@@ -199,7 +199,9 @@ keymap('v', '<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<
 keymap('v', '<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], opts.no_remap)
 
 -- Paste without saving deleted reg
-keymap('v', '<leader>p', '"_dP', opts.no_remap)
+keymap('n', '<leader>p', '<Plug>ReplaceWithRegisterOperator', {})
+keymap('n', '<leader>P', '<Plug>ReplaceWithRegisterLine', {})
+keymap('x', '<leader>P', '<Plug>ReplaceWithRegisterVisual', {})
 
 -- Base64 dencode
 keymap('v', '<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>]], opts.no_remap_silent)

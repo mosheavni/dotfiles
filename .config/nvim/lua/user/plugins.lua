@@ -163,6 +163,7 @@ return packer.startup(function(use)
 
   -- Functionality Tools
   use 'kevinhwang91/nvim-hlslens'
+  use 'vim-scripts/ReplaceWithRegister'
   use 'voldikss/vim-floaterm'
   use { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } }
   use 'simeji/winresizer'
