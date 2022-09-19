@@ -1,5 +1,3 @@
-# Fig pre block. Keep at the top of this file.
-[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && . "$HOME/.fig/shell/zshrc.pre.zsh"
 # shellcheck disable=2148,2034,2155,1091,2086,1094
 zmodload zsh/zprof
 # ================ #
@@ -13,7 +11,6 @@ export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="$HOME/.bin:$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:${PATH}"
 export PATH="/usr/local/opt/node@16/bin:$PATH"
-export PATH="$HOME/Downloads/nvim-macos/bin:$PATH"
 
 export ZSH="$HOME/.oh-my-zsh"
 # ZSH_THEME="mosherussell"
