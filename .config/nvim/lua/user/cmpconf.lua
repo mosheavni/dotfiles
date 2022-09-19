@@ -165,16 +165,13 @@ cmp.setup.filetype({ 'dap-repl', 'dapui_watches' }, {
 --   }),
 -- })
 
--- nvim autopairs
 require('nvim-autopairs').setup {
+  check_ts = true, -- treesitter integration
   disable_in_macro = true,
   disable_filetype = { 'TelescopePrompt', 'guihua', 'guihua_rust', 'clap_input' },
 }
 -- If you want insert `(` after select function or method item
 local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
 cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done { map_char = { tex = '' } })
-
-vim.cmd "autocmd! FileType guihua lua require('cmp').setup.buffer { enabled = false }"
-vim.cmd "autocmd! FileType guihua_rust lua require('cmp').setup.buffer { enabled = false }"
 
 require('luasnip.loaders.from_vscode').lazy_load()
