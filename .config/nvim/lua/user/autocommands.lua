@@ -25,18 +25,9 @@ autocmd('FileChangedShellPost', {
   end,
 })
 
--- -- Enable folds
--- local enable_folds = augroup 'FoldFix'
--- autocmd({ 'BufEnter' }, {
---   group = enable_folds,
---   desc = 'https://github.com/nvim-telescope/telescope.nvim/issues/699',
---   pattern = { '*' },
---   command = 'normal zx',
--- })
-
 -- Print the output of flag --startuptime startuptime.txt
 local first_load = augroup 'first_load'
-vim.api.nvim_create_autocmd('UIEnter', {
+autocmd('UIEnter', {
   desc = 'Print the output of flag --startuptime startuptime.txt',
   group = first_load,
   pattern = 'init.lua',
@@ -50,7 +41,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
 
 -- Buffer settings
 local buffer_settings = augroup 'buffer_settings'
-vim.api.nvim_create_autocmd('FileType', {
+autocmd('FileType', {
   desc = 'Quit with q in this filetypes',
   group = buffer_settings,
   pattern = {
@@ -67,7 +58,7 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- Highlight on yank
-vim.api.nvim_create_autocmd('TextYankPost', {
+autocmd('TextYankPost', {
   desc = 'Highlight on yank',
   group = buffer_settings,
   callback = function()
