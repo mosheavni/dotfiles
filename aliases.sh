@@ -105,7 +105,7 @@ function kubedebug () {
         echo "Usage: $0 [-e executable] [-p pod_name] [-i image] [-s service_account] [-- kubernetes_arguments]"
         return
         ;;
-    # exe provided
+        # exe provided
       -e )
         shift
         docker_exe=$1
@@ -237,7 +237,10 @@ alias tg='terragrunt'
 
 # fzf
 fdf() {
-  DIR=$(find $1/* -maxdepth 0 -type d -print 2> /dev/null | fzf) \
-    && cd "$DIR" && nvim
+  # remove trailing / from $1
+  dir_clean=${1%/}
+  all_files=$(find $dir_clean/* -maxdepth 0 -type d -print 2> /dev/null)
+  dir_to_enter=$(sed "s?$dir_clean/??g" <<< $all_files | fzf)
+  cd "$dir_clean/$dir_to_enter" && nvim
 }
 alias pj='fdf ~/Repos'
