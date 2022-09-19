@@ -13,15 +13,20 @@ null_ls.setup {
   on_attach = default_on_attach,
   debug = true,
   sources = {
+    null_ls.builtins.diagnostics.ansiblelint,
     null_ls.builtins.code_actions.shellcheck.with {
       extra_filetypes = sh_extra_fts,
     },
-    null_ls.builtins.diagnostics.ansiblelint,
     null_ls.builtins.diagnostics.hadolint,
+    null_ls.builtins.diagnostics.npm_groovy_lint,
     null_ls.builtins.diagnostics.vint,
-    -- null_ls.builtins.diagnostics.npm_groovy_lint,
     null_ls.builtins.diagnostics.shellcheck.with {
       extra_filetypes = sh_extra_fts,
+    },
+    null_ls.builtins.formatting.beautysh.with {
+      extra_args = function(params)
+        return { '-i', vim.api.nvim_buf_get_option(params.bufnr, 'shiftwidth') }
+      end,
     },
     null_ls.builtins.formatting.black,
     null_ls.builtins.formatting.fixjson,
@@ -29,9 +34,9 @@ null_ls.setup {
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.terraform_fmt,
-    null_ls.builtins.formatting.shfmt.with {
-      extra_filetypes = sh_extra_fts,
-    },
+    -- null_ls.builtins.formatting.shfmt.with {
+    --   extra_filetypes = sh_extra_fts,
+    -- },
   },
 }
 
