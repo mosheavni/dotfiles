@@ -2,7 +2,6 @@ local utils = require 'user.utils'
 local user_maps = require 'user.lsp.maps'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
-local ih = require 'inlay-hints'
 local moshe_formatting = require 'user.lsp.formatting'
 local buf_set_option = vim.api.nvim_buf_set_option
 local navic = require 'nvim-navic'
@@ -23,7 +22,6 @@ local default_on_attach = function(client, bufnr)
   if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufnr)
   end
-  ih.on_attach(client, bufnr)
 
   if vim.tbl_contains(enable_ls_signature, client.name) then
     require('lsp_signature').on_attach({

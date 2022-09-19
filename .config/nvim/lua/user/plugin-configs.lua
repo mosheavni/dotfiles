@@ -321,13 +321,6 @@ keymap('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', opts.no_remap_silent)
 ----------------
 require('scope').setup()
 
------------------
--- Inlay Hints --
------------------
-require('inlay-hints').setup {
-  nerdfonts = true,
-}
-
 ----------------------
 -- indent_blankline --
 ----------------------

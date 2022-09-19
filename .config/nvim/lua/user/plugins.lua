@@ -85,7 +85,6 @@ return packer.startup(function(use)
     'folke/lsp-colors.nvim',
     'nanotee/nvim-lsp-basics',
     'j-hui/fidget.nvim',
-    'simrat39/inlay-hints.nvim',
   }
   use {
     'jayp0521/mason-null-ls.nvim',
