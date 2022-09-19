@@ -321,6 +321,15 @@ keymap('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', opts.no_remap_silent)
 ----------------
 require('scope').setup()
 
+------------
+-- Fidget --
+------------
+require('fidget').setup {
+  text = {
+    spinner = 'moon',
+  },
+}
+
 ----------------------
 -- indent_blankline --
 ----------------------
