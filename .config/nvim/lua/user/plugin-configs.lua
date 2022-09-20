@@ -16,6 +16,20 @@ local opts = utils.map_opts
 -- vim.cmd [[colorscheme neon]]
 require('one_monokai').setup()
 
+---------------------
+-- Plugin requires --
+---------------------
+require 'user.cmpconf'
+require 'user.treesitter'
+require 'user.lsp'
+require 'user.autocommands'
+require 'user.gitsigns'
+require 'user.telescope'
+require 'user.lualine'
+require 'user.tree'
+require 'user.git'
+require 'user.dap'
+
 ----------------
 -- WinResizer --
 ----------------
@@ -396,20 +410,6 @@ augroup AnsibleFind
   au BufRead,BufNewFile */ansible/*.yml vnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
 augroup END
 ]]
-
----------------------
--- Plugin requires --
----------------------
-require 'user.cmpconf'
-require 'user.treesitter'
-require 'user.lsp'
-require 'user.autocommands'
-require 'user.gitsigns'
-require 'user.telescope'
-require 'user.lualine'
-require 'user.tree'
-require 'user.git'
-require 'user.dap'
 
 local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
 if custom_settings_ok then

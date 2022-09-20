@@ -244,3 +244,8 @@ fdf() {
   cd "$dir_clean/$dir_to_enter" && nvim
 }
 alias pj='fdf ~/Repos'
+
+# debug nvim startup time
+function nvim-startuptime() {
+  cat /dev/null > startuptime.txt && nvim ~/.config/nvim/init.lua --startuptime startuptime.txt
+}

@@ -34,29 +34,27 @@ telescope.setup {
       },
     },
   },
-  extensions = {
-    project = {
-      base_dirs = {
-        '~/Repos',
-      },
-      hidden_files = true,
-      theme = 'dropdown',
-    },
-  },
 }
 
 telescope.load_extension 'fzf'
 telescope.load_extension 'project'
 
 -- Keymaps
-keymap('n', '<c-p>', [[(expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Telescope find_files\<cr>"]], opts.no_remap_expr_silent)
+keymap('n', '<c-p>', [[:Telescope find_files<cr>]], opts.no_remap)
 keymap('n', '<c-b>', '<cmd>Telescope buffers<cr>', opts.no_remap)
 keymap('n', '<F4>', '<cmd>lua require("user.git-branches").open()<cr>', opts.no_remap)
 keymap('n', '<leader>hh', '<cmd>Telescope help_tags<cr>', opts.no_remap)
 keymap('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
-  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
-    previewer = false,
+  local view = require('telescope.themes').get_dropdown { winblend = 10, previewer = false }
+  view = vim.tbl_extend('force', view, {
+    additional_args = function()
+      return {
+        '--hidden',
+        '--glob',
+        '!.git',
+      }
+    end,
   })
+  require('telescope.builtin').live_grep(view)
 end, { desc = '[/] Fuzzily search in current buffer]' })

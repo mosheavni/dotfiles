@@ -1,12 +1,32 @@
+local fn = vim.fn
+
 -- Install packer
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
-
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+if fn.empty(fn.glob(install_path)) > 0 then
+  PACKER_BOOTSTRAP = fn.system {
+    'git',
+    'clone',
+    '--depth',
+    '1',
+    'https://github.com/wbthomason/packer.nvim',
+    install_path,
+  }
+  print 'Installing packer close and reopen Neovim...'
+  vim.cmd [[packadd packer.nvim]]
 end
-local packer = require 'packer'
+
+-- Use a protected call so we don't error out on first use
+local status_ok, packer = pcall(require, 'packer')
+if not status_ok then
+  return
+end
 packer.init {
   max_jobs = 10,
+  display = {
+    open_fn = function()
+      return require('packer.util').float { border = 'rounded' }
+    end,
+  },
 }
 return packer.startup(function(use)
   -- Infrastructure
@@ -92,12 +112,6 @@ return packer.startup(function(use)
       'null-ls.nvim',
       'mason.nvim',
     },
-    config = function()
-      require('mason-null-ls').setup {
-        automatic_installation = true,
-      }
-      require('mason-null-ls').check_install(true)
-    end,
   }
   use {
     'kosayoda/nvim-lightbulb',
@@ -238,5 +252,11 @@ return packer.startup(function(use)
   local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
   if custom_settings_ok then
     custom_settings.plugins(use)
+  end
+
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  if PACKER_BOOTSTRAP then
+    require('packer').sync()
   end
 end)
