@@ -3,7 +3,8 @@ local opts = utils.map_opts
 local keymap = utils.keymap
 local dap = require 'dap'
 require('telescope').load_extension 'dap'
-require('dapui').setup()
+local dapui = require 'dapui'
+dapui.setup()
 require('nvim-dap-virtual-text').setup {
   commented = true,
 }
@@ -106,7 +107,7 @@ local dap_actions = {
     dap.run_last()
   end,
   ['ui'] = function()
-    require('dapui').toggle()
+    dapui.toggle()
   end,
   ['log level trace'] = function()
     dap.set_log_level 'TRACE'
@@ -121,6 +122,3 @@ keymap('n', '<leader>a', function()
     end
   end)
 end)
-
--- debug print
-require('debugprint').setup()
