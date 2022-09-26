@@ -119,6 +119,9 @@ function! StarSearch(cmdtype) abort
 endfunction
 ]]
 
+-- Terminal
+keymap('t', '<Esc>', '<C-><C-n>', opts.no_remap)
+
 -- local function star_search(cmdtype)
 --   local old_reg = vim.fn.getreg('"')
 --   local old_regtype = vim.fn.getregtype('"')
