@@ -14,13 +14,15 @@ opt.shortmess:append { c = true, l = false, q = false, S = false }
 opt.list = true
 opt.listchars = { tab = '┆·', trail = '·', precedes = '', extends = '', eol = '↲' }
 -- set lcscope=tab:┆·,trail:·,precedes:,extends:
-opt.fillchars = { vert = '|', fold = '·' }
+opt.fillchars = { vert = '|', fold = '·', eob = ' ' }
 opt.emoji = false
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
 -- opt.whichwrap:append '<>[]hl'
+opt.iskeyword:append '-'
 
 opt.number = true -- Show current line number
+opt.numberwidth = 4 -- set number column width to 2 {default 4}
 opt.relativenumber = true -- Show relative line numbers
 opt.linebreak = true -- Avoid wrapping a line in the middle of a word.
 opt.wrap = true -- Wrap long lines
@@ -30,13 +32,14 @@ opt.inccommand = 'split' -- Incremental search and replace with small split wind
 opt.ignorecase = true -- Search case insensitive...
 opt.smartcase = true -- ignore case if search pattern is all lowercase, case-sensitive otherwise
 opt.autoread = true -- Re-read file if it was changed from the outside
-opt.scrolloff = 7 -- When about to scroll page, see 7 lines below cursor
+opt.scrolloff = 8 -- When about to scroll page, see 7 lines below cursor
 opt.cmdheight = 2 -- Height of the command bar
 opt.hidden = true -- Hide buffer if abandoned
 opt.showmatch = true -- When closing a bracket (like {}), show the enclosing
 opt.splitbelow = true -- Horizontaly plitted windows open below
 opt.splitright = true -- Vertically plitted windows open below bracket for a brief second
 opt.startofline = false -- Stop certain movements from always going to the first character of a line.
+opt.pumheight = 10 -- pop up menu height
 opt.confirm = true -- Prompt confirmation if exiting unsaved file
 opt.lazyredraw = true -- redraw only when we need to.
 opt.swapfile = false
@@ -57,11 +60,11 @@ opt.textwidth = 80
 opt.fileencodings = { 'utf-8', 'cp1251' }
 opt.encoding = 'utf-8'
 opt.visualbell = true -- Use visual bell instead of beeping
-opt.conceallevel = 1
+opt.conceallevel = 0
 opt.showmode = false -- Redundant as lighline takes care of that
 opt.history = 1000
 opt.termguicolors = true
-opt.signcolumn = 'auto'
+opt.signcolumn = 'yes'
 -- require 'user.winbar'
 -- opt.winbar = "%{%v:lua.require'user.winbar'.eval()%}"
 
@@ -98,43 +101,19 @@ opt.expandtab = true -- Tab changes to spaces. Format with :retab
 opt.indentkeys:remove '0#'
 opt.indentkeys:remove '<:>'
 
--- Neovide
-vim.g.neovide_cursor_vfx_mode = 'railgun'
-vim.g.neovide_scroll_animation_length = 0.5
-vim.g.neovide_fullscreen = true
 -- Allow clipboard copy paste in neovim
-vim.g.neovide_input_use_logo = 1
 keymap('', '<D-v>', '+p<CR>', opts.no_remap_silent)
 keymap('!', '<D-v>', '<C-R>+', opts.no_remap_silent)
 keymap('t', '<D-v>', '<C-R>+', opts.no_remap_silent)
 keymap('v', '<D-v>', '<C-R>+', opts.no_remap_silent)
 
--- Set shell
-if vim.fn.executable '/bin/zsh' == 1 then
-  opt.shell = '/bin/zsh -l'
-elseif vim.fn.executable '/bin/bash' == 1 then
-  opt.shell = '/bin/bash'
-else
-  opt.shell = '/bin/sh'
-end
-
--- Set python path
-if vim.fn.executable '/usr/local/bin/python3' == 1 then
-  vim.g.python3_host_prog = '/usr/local/bin/python3'
-elseif vim.fn.executable '/usr/bin/python3' == 1 then
-  vim.g.python3_host_prog = '/usr/bin/python3'
-end
-
 vim.cmd [[
-hi ColorColumn ctermbg=238 guibg=lightgrey
-
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+" hi ColorColumn ctermbg=238 guibg=lightgrey
+" let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+" let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 set guicursor+=i:blinkon1
-
-filetype indent on
 ]]
-
+--
 -- Abbreviations
 vim.cmd [[
 inoreabbrev teh the
@@ -155,21 +134,6 @@ inoreabbrev queyr query
 inoreabbrev htis this
 inoreabbrev foreahc foreach
 inoreabbrev forech foreach
-]]
-
-vim.cmd [[
-let g:sh_fold_enabled = 4
-
-com! FormatJSON exe '%!python -m json.tool'
-
-function! FormatEqual() abort
-  let save_cursor = getcurpos()
-  normal! gg=G
-  silent! exe '%s#)\zs\ze{# #g'
-  call setpos('.', save_cursor)
-  echom 'Formatted with equalprg'
-endfunction
-
 ]]
 
 -- Run current buffer
@@ -263,59 +227,6 @@ nmap <c-f> :RipGrepCWORD!<Space>
 vmap <c-f> :RipGrepCWORDVisual!<cr>
 ]]
 
--- Terminal configurations
-vim.cmd [[
-if exists(':terminal')
-
-  if !exists('g:terminal_ansi_colors')
-    let g:terminal_ansi_colors = [
-          \'#21222C',
-          \'#FF5555',
-          \'#69FF94',
-          \'#FFFFA5',
-          \'#D6ACFF',
-          \'#FF92DF',
-          \'#A4FFFF',
-          \'#FFFFFF',
-          \'#636363',
-          \'#F1FA8C',
-          \'#BD93F9',
-          \'#FF79C6',
-          \'#8BE9FD',
-          \'#F8F8F2',
-          \'#6272A4',
-          \'#FF6E6E'
-    \]
-  endif
-
-  " Function to set terminal colors
-  fun! s:setTerminalColors()
-    if exists('g:terminal_ansi_colors')
-      for i in range(len(g:terminal_ansi_colors))
-          exe 'let g:terminal_color_' . i . ' = g:terminal_ansi_colors[' . i . ']'
-      endfor
-      unlet! g:terminal_ansi_colors
-    endif
-  endfunction
-
-  augroup TerminalAugroup
-    autocmd!
-
-    " Start terminal in insert mode
-    autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
-
-    " Call terminal colors function only after colorscheme changed
-    autocmd Colorscheme * call <sid>setTerminalColors()
-  augroup END
-
-  tnoremap <Esc> <C-\><C-n>
-
-  " To force using 256 colors
-  set t_Co=256
-endif
-
-]]
-
 -- Visual Calculator
 vim.cmd [[
 function s:VisualCalculator() abort
@@ -354,32 +265,6 @@ function! s:SynStack()
   return map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
 command! SynStack echo <SID>SynStack()
-]]
-
-vim.cmd [[
-" Better yanking {{{
-" note:
-"   the register 1 is reserved for deletion
-"   there's no "small yank" register
-"   can break :h redo-register
-"   still misses any manual register 0 change
-augroup YankShift | au!
-    let s:regzero = [getreg(0), getregtype(0)]
-    autocmd TextYankPost * call <SID>yankshift(v:event)
-augroup end
-
-function! s:yankshift(event)
-    if a:event.operator ==# 'y' && (empty(a:event.regname) || a:event.regname == '"')
-        for l:regno in range(8, 2, -1)
-            call setreg(l:regno + 1, getreg(l:regno), getregtype(l:regno))
-        endfor
-        call setreg(2, s:regzero[0], s:regzero[1])
-        let s:regzero = [a:event.regcontents, a:event.regtype]
-    elseif a:event.regname == '0'
-        let s:regzero = [a:event.regcontents, a:event.regtype]
-    endif
-endfunction
-" }}}
 ]]
 
 -- disable some builtin vim plugins

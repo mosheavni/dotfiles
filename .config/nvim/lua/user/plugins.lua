@@ -1,12 +1,32 @@
+local fn = vim.fn
+
 -- Install packer
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
-
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+if fn.empty(fn.glob(install_path)) > 0 then
+  PACKER_BOOTSTRAP = fn.system {
+    'git',
+    'clone',
+    '--depth',
+    '1',
+    'https://github.com/wbthomason/packer.nvim',
+    install_path,
+  }
+  print 'Installing packer close and reopen Neovim...'
+  vim.cmd [[packadd packer.nvim]]
 end
-local packer = require 'packer'
+
+-- Use a protected call so we don't error out on first use
+local status_ok, packer = pcall(require, 'packer')
+if not status_ok then
+  return
+end
 packer.init {
   max_jobs = 10,
+  display = {
+    open_fn = function()
+      return require('packer.util').float { border = 'rounded' }
+    end,
+  },
 }
 return packer.startup(function(use)
   -- Infrastructure
@@ -22,7 +42,7 @@ return packer.startup(function(use)
     requires = {
       'kyazdani42/nvim-web-devicons', -- optional, for file icon
     },
-    tag = 'nightly', -- optional, updated every week. (see issue #1193)
+    command = 'NvimTreeToggle',
   }
 
   -- Git Related
@@ -30,11 +50,10 @@ return packer.startup(function(use)
   use 'lewis6991/gitsigns.nvim'
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
   use 'akinsho/git-conflict.nvim'
-  use 'tpope/vim-rhubarb'
 
   -- Documents
-  use 'nanotee/luv-vimdocs'
-  use 'milisims/nvim-luaref'
+  use { 'nanotee/luv-vimdocs', cmd = { 'Telescope', 'help' } }
+  use { 'milisims/nvim-luaref', cmd = { 'Telescope', 'help' } }
 
   -- Fuzzy Search - Telescope
   use {
@@ -63,11 +82,10 @@ return packer.startup(function(use)
     ft = { 'yaml' }, -- optional
     requires = { 'nvim-treesitter/nvim-treesitter' },
   }
-  use 'mosheavni/yaml-companion.nvim'
+  use 'someone-stole-my-name/yaml-companion.nvim'
   use 'lewis6991/nvim-treesitter-context'
   use 'nvim-treesitter/nvim-treesitter-refactor'
-  use 'sam4llis/nvim-lua-gf'
-  use 'nvim-treesitter/playground'
+  use { 'sam4llis/nvim-lua-gf', ft = { 'lua' } }
   use 'Afourcat/treesitter-terraform-doc.nvim'
   use 'David-Kunz/markid'
 
@@ -92,12 +110,6 @@ return packer.startup(function(use)
       'null-ls.nvim',
       'mason.nvim',
     },
-    config = function()
-      require('mason-null-ls').setup {
-        automatic_installation = true,
-      }
-      require('mason-null-ls').check_install(true)
-    end,
   }
   use {
     'kosayoda/nvim-lightbulb',
@@ -123,9 +135,7 @@ return packer.startup(function(use)
     },
   }
   -- Github's suggeetsions engine
-  use {
-    'github/copilot.vim', -- for initial login
-  }
+  use 'github/copilot.vim'
   use {
     'iamcco/markdown-preview.nvim',
     run = 'cd app && yarn install',
@@ -135,7 +145,7 @@ return packer.startup(function(use)
     cmd = 'MarkdownPreview',
     ft = { 'markdown' },
   }
-  use { 'jose-elias-alvarez/nvim-lsp-ts-utils' }
+  use 'jose-elias-alvarez/typescript.nvim'
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
@@ -193,7 +203,11 @@ return packer.startup(function(use)
   use 'stevearc/dressing.nvim' -- overrides the default vim input to provide better visuals
   use 'rcarriga/nvim-notify'
   use 'lukas-reineke/indent-blankline.nvim'
-  use { 'akinsho/bufferline.nvim', tag = 'v2.*', requires = 'kyazdani42/nvim-web-devicons' }
+  use {
+    'akinsho/bufferline.nvim',
+    tag = 'v2.*',
+    requires = 'kyazdani42/nvim-web-devicons',
+  }
   use 'RRethy/vim-illuminate'
 
   use {
@@ -215,11 +229,12 @@ return packer.startup(function(use)
   -- use { 'dracula/vim', as = 'dracula' }
   -- use 'jacoborus/tender.vim'
   -- use 'ellisonleao/gruvbox.nvim'
-  use 'ellisonleao/gruvbox.nvim'
-  use 'rafamadriz/neon'
-  use 'marko-cerovac/material.nvim'
-  use 'folke/tokyonight.nvim'
-  use 'cpea2506/one_monokai.nvim'
+  -- use 'ellisonleao/gruvbox.nvim'
+  -- use 'rafamadriz/neon'
+  -- use 'marko-cerovac/material.nvim'
+  -- use 'folke/tokyonight.nvim'
+  -- use 'cpea2506/one_monokai.nvim'
+  use 'Mofiqul/vscode.nvim'
   -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
 
   -- Text Manipulation
@@ -238,5 +253,11 @@ return packer.startup(function(use)
   local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
   if custom_settings_ok then
     custom_settings.plugins(use)
+  end
+
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  if PACKER_BOOTSTRAP then
+    require('packer').sync()
   end
 end)

@@ -14,7 +14,26 @@ local opts = utils.map_opts
 --   CursorColumn = { fg = 'NONE', bg = '#3f444a' },
 -- }
 -- vim.cmd [[colorscheme neon]]
-require('one_monokai').setup()
+-- require('one_monokai').setup()
+local c = require 'vscode.colors'
+require('vscode').setup {
+  transparent = true,
+  italic_comments = true,
+  disable_nvimtree_bg = true,
+}
+
+---------------------
+-- Plugin requires --
+---------------------
+require 'user.cmpconf'
+require 'user.treesitter'
+require 'user.lsp'
+require 'user.gitsigns'
+require 'user.telescope'
+require 'user.lualine'
+require 'user.tree'
+require 'user.git'
+require 'user.dap'
 
 ----------------
 -- WinResizer --
@@ -186,18 +205,6 @@ vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
 -- Conflict marker --
 ---------------------
 require('git-conflict').setup()
-local conflict_patterns = {
-  { pattern = 'GitConflictDetected', notify = P, text = 'detected' },
-  { pattern = 'GitConflictResolved', notify = vim.notify, text = 'resolved' },
-}
-for _, conflict_data in ipairs(conflict_patterns) do
-  vim.api.nvim_create_autocmd('User', {
-    pattern = conflict_data.pattern,
-    callback = function()
-      conflict_data.notify('Conflict ' .. conflict_data.text .. ' in ' .. vim.fn.expand '<afile>')
-    end,
-  })
-end
 
 --------------
 -- NERDTree --
@@ -396,20 +403,6 @@ augroup AnsibleFind
   au BufRead,BufNewFile */ansible/*.yml vnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
 augroup END
 ]]
-
----------------------
--- Plugin requires --
----------------------
-require 'user.cmpconf'
-require 'user.treesitter'
-require 'user.lsp'
-require 'user.autocommands'
-require 'user.gitsigns'
-require 'user.telescope'
-require 'user.lualine'
-require 'user.tree'
-require 'user.git'
-require 'user.dap'
 
 local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
 if custom_settings_ok then

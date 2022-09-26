@@ -34,7 +34,7 @@ autocmd('UIEnter', {
   once = true,
   callback = function()
     vim.defer_fn(function()
-      return vim.fn.filereadable 'startuptime.txt' == 1 and vim.cmd ':!tail -n3 startuptime.txt' and vim.fn.delete 'startuptime.txt'
+      return vim.fn.filereadable 'startuptime.txt' == 1 and vim.cmd ':!tail -n3 startuptime.txt' -- and vim.fn.delete 'startuptime.txt'
     end, 1000)
   end,
 })
@@ -167,21 +167,4 @@ autocmd({ 'FileType' }, {
     -- "n", "<C-x>", :call <SID>OpenQuickfix("split")<CR>
   end,
   desc = 'Open quickfix window on quickfix action',
-})
-
--- Create dir if not exists
-
-autocmd({ 'BufWritePre' }, {
-  pattern = '*',
-  group = augroup('auto_create_dir', { clear = true }),
-  callback = function()
-    local fpath = fn.expand '<afile>'
-    local dir = fn.fnamemodify(fpath, ':p:h')
-
-    -- utils.may_create_dir(dir)
-    local res = fn.isdirectory(dir)
-    if res == 0 then
-      fn.mkdir(dir, 'p')
-    end
-  end,
 })
