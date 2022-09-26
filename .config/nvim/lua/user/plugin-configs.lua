@@ -14,7 +14,13 @@ local opts = utils.map_opts
 --   CursorColumn = { fg = 'NONE', bg = '#3f444a' },
 -- }
 -- vim.cmd [[colorscheme neon]]
-require('one_monokai').setup()
+-- require('one_monokai').setup()
+local c = require 'vscode.colors'
+require('vscode').setup {
+  transparent = true,
+  italic_comments = true,
+  disable_nvimtree_bg = true,
+}
 
 ---------------------
 -- Plugin requires --
