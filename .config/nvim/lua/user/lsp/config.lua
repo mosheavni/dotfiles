@@ -51,43 +51,36 @@ for type, icon in pairs(signs) do
 end
 
 -- ansiblels
----@diagnostic disable-next-line: undefined-field
 lspconfig.ansiblels.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- ansblel
----@diagnostic disable-next-line: undefined-field
 lspconfig.awk_ls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- bashls
----@diagnostic disable-next-line: undefined-field
 lspconfig.bashls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- dockerls
----@diagnostic disable-next-line: undefined-field
 lspconfig.dockerls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- eslint
----@diagnostic disable-next-line: undefined-field
 lspconfig.eslint.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- groovyls
----@diagnostic disable-next-line: undefined-field
 lspconfig.groovyls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 -- html
----@diagnostic disable-next-line: undefined-field
 lspconfig.html.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
@@ -124,7 +117,6 @@ local function get_python_path(workspace)
   return exepath 'python3' or exepath 'python' or 'python'
 end
 
----@diagnostic disable-next-line: undefined-field
 lspconfig.pyright.setup {
   before_init = function(_, config)
     config.settings.python.pythonPath = get_python_path(config.root_dir)
@@ -152,10 +144,8 @@ local luadev = require('lua-dev').setup {
     },
   },
 }
----@diagnostic disable-next-line: undefined-field
 lspconfig.sumneko_lua.setup(luadev)
 --terraformls
----@diagnostic disable-next-line: undefined-field
 lspconfig.terraformls.setup {
   on_attach = function(c, b)
     require('treesitter-terraform-doc').setup()
@@ -164,7 +154,6 @@ lspconfig.terraformls.setup {
   capabilities = capabilities,
 }
 --tsserver
----@diagnostic disable-next-line: undefined-field
 lspconfig.tsserver.setup {
   on_attach = function(c, b)
     require('typescript').setup()
@@ -174,14 +163,12 @@ lspconfig.tsserver.setup {
 }
 
 --vimls
----@diagnostic disable-next-line: undefined-field
 lspconfig.vimls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
 
 --jdtls
----@diagnostic disable-next-line: undefined-field
 lspconfig.jdtls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
