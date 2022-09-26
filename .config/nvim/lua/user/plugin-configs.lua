@@ -22,7 +22,6 @@ require('one_monokai').setup()
 require 'user.cmpconf'
 require 'user.treesitter'
 require 'user.lsp'
-require 'user.autocommands'
 require 'user.gitsigns'
 require 'user.telescope'
 require 'user.lualine'
