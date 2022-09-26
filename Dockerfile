@@ -3,7 +3,11 @@ FROM ubuntu:bionic
 ENV DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_PRIORITY=critical
 
-RUN apt update && apt install -y gnupg2 git curl python3 python3-pip wget libfuse2 software-properties-common
+RUN apt update && apt install -y gnupg2 git curl python3 python3-pip wget libfuse2 software-properties-common ripgrep
+
+# Install RipGrep
+RUN curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb \
+  && dpkg -i ripgrep_13.0.0_amd64.deb
 
 # Install neovim nightly
 RUN add-apt-repository -y ppa:neovim-ppa/unstable \
@@ -25,14 +29,21 @@ RUN python3 -m pip install pynvim neovim && npm install -g neovim
 
 WORKDIR /root
 
+# add alias
+RUN echo 'alias vim="nvim"' >> ~/.bashrc
+
 # Run this step always without cache
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN git clone https://github.com/mosheavni/dotfiles.git && \
   gem install effuse && \
   cd dotfiles && \
-  effuse
+  git checkout fix-dockerfile \
+  && effuse
+
+# Set locale
+ENV LANG=en_US LC_ALL=en_US.UTF-8 LC_CTYPE=en_US.UTF-8
 
 # RUN nvim --headless +CocInstallAll +qall
-# join(get(g:, 'coc_global_extensions', []))
+  # join(get(g:, 'coc_global_extensions', []))
 
 CMD [ "nvim" ]

@@ -42,7 +42,7 @@ return packer.startup(function(use)
     requires = {
       'kyazdani42/nvim-web-devicons', -- optional, for file icon
     },
-    tag = 'nightly', -- optional, updated every week. (see issue #1193)
+    command = 'NvimTreeToggle',
   }
 
   -- Git Related
@@ -50,11 +50,10 @@ return packer.startup(function(use)
   use 'lewis6991/gitsigns.nvim'
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
   use 'akinsho/git-conflict.nvim'
-  use 'tpope/vim-rhubarb'
 
   -- Documents
-  use 'nanotee/luv-vimdocs'
-  use 'milisims/nvim-luaref'
+  use { 'nanotee/luv-vimdocs', cmd = { 'Telescope', 'help' } }
+  use { 'milisims/nvim-luaref', cmd = { 'Telescope', 'help' } }
 
   -- Fuzzy Search - Telescope
   use {
@@ -83,11 +82,10 @@ return packer.startup(function(use)
     ft = { 'yaml' }, -- optional
     requires = { 'nvim-treesitter/nvim-treesitter' },
   }
-  use 'mosheavni/yaml-companion.nvim'
+  use 'someone-stole-my-name/yaml-companion.nvim'
   use 'lewis6991/nvim-treesitter-context'
   use 'nvim-treesitter/nvim-treesitter-refactor'
-  use 'sam4llis/nvim-lua-gf'
-  use 'nvim-treesitter/playground'
+  use { 'sam4llis/nvim-lua-gf', ft = { 'lua' } }
   use 'Afourcat/treesitter-terraform-doc.nvim'
   use 'David-Kunz/markid'
 
@@ -137,9 +135,7 @@ return packer.startup(function(use)
     },
   }
   -- Github's suggeetsions engine
-  use {
-    'github/copilot.vim', -- for initial login
-  }
+  use 'github/copilot.vim'
   use {
     'iamcco/markdown-preview.nvim',
     run = 'cd app && yarn install',
@@ -207,7 +203,11 @@ return packer.startup(function(use)
   use 'stevearc/dressing.nvim' -- overrides the default vim input to provide better visuals
   use 'rcarriga/nvim-notify'
   use 'lukas-reineke/indent-blankline.nvim'
-  use { 'akinsho/bufferline.nvim', tag = 'v2.*', requires = 'kyazdani42/nvim-web-devicons' }
+  use {
+    'akinsho/bufferline.nvim',
+    tag = 'v2.*',
+    requires = 'kyazdani42/nvim-web-devicons',
+  }
   use 'RRethy/vim-illuminate'
 
   use {

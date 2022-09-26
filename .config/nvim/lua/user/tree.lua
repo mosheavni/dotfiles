@@ -19,6 +19,7 @@ nvim_tree.setup {
     ignore = true,
   },
   hijack_cursor = true,
+  select_prompts = true,
   hijack_netrw = true,
   hijack_unnamed_buffer_when_opening = false,
   open_on_tab = false,

@@ -205,18 +205,6 @@ vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
 -- Conflict marker --
 ---------------------
 require('git-conflict').setup()
-local conflict_patterns = {
-  { pattern = 'GitConflictDetected', notify = P, text = 'detected' },
-  { pattern = 'GitConflictResolved', notify = vim.notify, text = 'resolved' },
-}
-for _, conflict_data in ipairs(conflict_patterns) do
-  vim.api.nvim_create_autocmd('User', {
-    pattern = conflict_data.pattern,
-    callback = function()
-      conflict_data.notify('Conflict ' .. conflict_data.text .. ' in ' .. vim.fn.expand '<afile>')
-    end,
-  })
-end
 
 --------------
 -- NERDTree --
