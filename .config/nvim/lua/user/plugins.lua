@@ -149,7 +149,7 @@ return packer.startup(function(use)
     cmd = 'MarkdownPreview',
     ft = { 'markdown' },
   }
-  use { 'jose-elias-alvarez/nvim-lsp-ts-utils' }
+  use 'jose-elias-alvarez/typescript.nvim'
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
