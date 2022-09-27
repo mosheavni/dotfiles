@@ -101,7 +101,7 @@ autocmd({ 'FileType' }, {
 autocmd({ 'BufWritePost' }, {
   group = special_filetypes,
   pattern = 'plugins.lua',
-  command = 'source <afile> | PackerCompile',
+  command = 'if bufname(bufnr()) !~? "^fugitive:" | source <afile> | PackerCompile | endif',
 })
 autocmd({ 'BufRead' }, {
   group = special_filetypes,
