@@ -162,11 +162,17 @@ require('bufferline').setup {
     show_close_icon = true,
   },
 }
-vim.keymap.set('n', '<leader>1', '<cmd>BufferLineGoToBuffer 1<cr>')
-vim.keymap.set('n', '<leader>2', '<cmd>BufferLineGoToBuffer 2<cr>')
-vim.keymap.set('n', '<leader>3', '<cmd>BufferLineGoToBuffer 3<cr>')
-vim.keymap.set('n', '<leader>4', '<cmd>BufferLineGoToBuffer 4<cr>')
-vim.keymap.set('n', '<leader>5', '<cmd>BufferLineGoToBuffer 5<cr>')
+keymap('n', '<leader>1', '<cmd>BufferLineGoToBuffer 1<cr>')
+keymap('n', '<leader>2', '<cmd>BufferLineGoToBuffer 2<cr>')
+keymap('n', '<leader>3', '<cmd>BufferLineGoToBuffer 3<cr>')
+keymap('n', '<leader>4', '<cmd>BufferLineGoToBuffer 4<cr>')
+keymap('n', '<leader>5', '<cmd>BufferLineGoToBuffer 5<cr>')
+keymap('n', '<leader>5', '<cmd>BufferLineGoToBuffer 5<cr>')
+keymap('n', '<leader>6', '<cmd>BufferLineGoToBuffer 5<cr>')
+keymap('n', '<leader>7', '<cmd>BufferLineGoToBuffer 5<cr>')
+keymap('n', '<leader>8', '<cmd>BufferLineGoToBuffer 5<cr>')
+keymap('n', '<leader>9', '<cmd>BufferLineGoToBuffer 5<cr>')
+keymap('n', '<leader>10', '<cmd>BufferLineGoToBuffer 5<cr>')
 
 --------------------
 -- Github Copilot --
