@@ -172,25 +172,58 @@ return packer.startup(function(use)
   -- Functionality Tools
   use 'kevinhwang91/nvim-hlslens'
   use 'vim-scripts/ReplaceWithRegister'
-  use 'voldikss/vim-floaterm'
+  use {
+    'voldikss/vim-floaterm',
+    keys = {
+      'F6',
+      'F7',
+      'F8',
+    },
+    cmd = {
+      'FloatermFirst',
+      'FloatermHide',
+      'FloatermKill',
+      'FloatermLast',
+      'FloatermNew',
+      'FloatermNext',
+      'FloatermPrev',
+      'FloatermSend',
+      'FloatermShow',
+      'FloatermToggle',
+      'FloatermUpdate',
+    },
+  }
   use { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } }
-  use 'simeji/winresizer'
+  use {
+    'simeji/winresizer',
+    keys = {
+      '<C-e>',
+    },
+  }
   use 'tiagovla/scope.nvim'
   use {
     'dstein64/vim-startuptime',
     cmd = 'StartupTime',
   }
   use { 'pechorin/any-jump.vim', cmd = { 'AnyJump', 'AnyJumpVisual' } }
-  use {
-    'anuvyklack/fold-preview.nvim',
-    requires = 'anuvyklack/keymap-amend.nvim',
-  }
   use 'kazhala/close-buffers.nvim'
 
   use 'folke/which-key.nvim'
   use {
     'sindrets/diffview.nvim',
     requires = 'nvim-lua/plenary.nvim',
+    cmd = {
+      'DiffviewClose',
+      'DiffviewFileHistory',
+      'DiffviewFocusFiles',
+      'DiffviewLog',
+      'DiffviewOpen',
+      'DiffviewRefresh',
+      'DiffviewToggleFiles',
+    },
+    config = function()
+      require('diffview').setup()
+    end,
   }
 
   -- Quickfix

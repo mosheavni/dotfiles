@@ -99,7 +99,7 @@ fold_preview.setup {}
 -- Diffview --
 --------------
 -- local actions = require 'diffview.actions'
-require('diffview').setup {}
+-- require('diffview').setup {}
 --   enhanced_diff_hl = true, -- See ':h diffview-config-enhanced_diff_hl'
 --   keymaps = {
 --     disable_defaults = true, -- Disable the default keymaps
