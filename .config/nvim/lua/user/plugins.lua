@@ -168,7 +168,6 @@ return packer.startup(function(use)
     'rcarriga/cmp-dap',
     'Pocco81/dap-buddy.nvim',
   }
-  use 'andrewferrier/debugprint.nvim'
 
   -- Functionality Tools
   use 'kevinhwang91/nvim-hlslens'
