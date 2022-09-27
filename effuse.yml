@@ -1,19 +1,20 @@
 exclude:
   - ".config/karabiner"
+  - .alt.toml
   - .vimrc-minimal
+  - .zshrc-minimal
   - Brewfile
   - Brewfile-minimal
   - Brewfile.lock.json
   - Dockerfile
   - Dockerfile-minimal
-  - .zshrc-minimal
   - Npmfile
-  - README.md
   - PYTHON-README.md
+  - README.md
   - com.googlecode.iterm2.plist
-  - requirements.txt
-  - tags
-  - snippets.xml
-  - .alt.toml
   - images
   - material-design-colors.itermcolors
+  - requirements.txt
+  - snippets.xml
+  - start-docker.sh
+  - tags
