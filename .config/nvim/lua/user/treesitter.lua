@@ -2,12 +2,13 @@ local status_ok, configs = pcall(require, 'nvim-treesitter.configs')
 if not status_ok then
   return
 end
+local ts_parsers = require 'nvim-treesitter.parsers'
 
 -- unknown filetypes
-local ft_to_parser = require('nvim-treesitter.parsers').filetype_to_parsername
+local ft_to_parser = ts_parsers.filetype_to_parsername
 ft_to_parser.groovy = 'java'
-local ft_to_lang = require('nvim-treesitter.parsers').ft_to_lang
-require('nvim-treesitter.parsers').ft_to_lang = function(ft)
+local ft_to_lang = ts_parsers.ft_to_lang
+ts_parsers.ft_to_lang = function(ft)
   if ft == 'zsh' then
     return 'bash'
   end
@@ -120,34 +121,9 @@ vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 -- Treesitter context
 local status_ok_tsc, ts_context = pcall(require, 'treesitter-context')
 if not status_ok_tsc then
-  local status_ok, ts_context = pcall(require, 'treesitter-context')
-  if not status_ok then
-    return
-  end
-
-  -- Treesitter context
-  ts_context.setup {
-    enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
-    throttle = true, -- Throttles plugin updates (may improve performance)
-    max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
-    patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
-      default = {
-        'class',
-        'function',
-        'method',
-        'for', -- These won't appear in the context
-        'while',
-        'if',
-        'def',
-        'switch',
-        'case',
-      },
-    },
-  }
   return
 end
 
--- Treesitter context
 ts_context.setup {
   enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
   throttle = true, -- Throttles plugin updates (may improve performance)

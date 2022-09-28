@@ -60,8 +60,11 @@ keymap('n', 'ga', '<Plug>(EasyAlign)', {})
 -- Floaterm --
 --------------
 vim.g['floaterm_keymap_toggle'] = '<F6>'
+keymap('n', '<F6>', '<Cmd>FloatermToggle<CR>', opts.no_remap_silent)
 vim.g['floaterm_keymap_new'] = '<F7>'
+keymap('n', '<F7>', '<Cmd>FloatermNew<CR>', opts.no_remap_silent)
 vim.g['floaterm_keymap_next'] = '<F8>'
+keymap('n', '<F8>', '<Cmd>FloatermNext<CR>', opts.no_remap_silent)
 vim.g['floaterm_width'] = 0.7
 vim.g['floaterm_height'] = 0.9
 
@@ -88,12 +91,6 @@ require('dressing').setup {
   },
 }
 vim.cmd [[hi link FloatTitle Normal]]
-
-------------------
--- Fold Preview --
-------------------
-local fold_preview = require 'fold-preview'
-fold_preview.setup {}
 
 --------------
 -- Diffview --

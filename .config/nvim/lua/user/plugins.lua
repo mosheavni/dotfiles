@@ -33,15 +33,14 @@ return packer.startup(function(use)
   use 'wbthomason/packer.nvim'
   use 'lewis6991/impatient.nvim'
   use 'nvim-lua/plenary.nvim'
+  use {
+    'dstein64/vim-startuptime',
+    cmd = 'StartupTime',
+  }
 
   -- Project Drawer
-  -- use { 'preservim/nerdtree', cmd = { 'NERDTreeToggle' } }
-  -- use { 'Xuyuanp/nerdtree-git-plugin', cmd = { 'NERDTreeToggle' } }
   use {
     'kyazdani42/nvim-tree.lua',
-    requires = {
-      'kyazdani42/nvim-web-devicons', -- optional, for file icon
-    },
     command = 'NvimTreeToggle',
   }
 
@@ -115,10 +114,7 @@ return packer.startup(function(use)
     'kosayoda/nvim-lightbulb',
     requires = 'antoinemadec/FixCursorHold.nvim',
   }
-  use {
-    'folke/trouble.nvim',
-    requires = 'kyazdani42/nvim-web-devicons',
-  }
+  use 'folke/trouble.nvim'
   use {
     'hrsh7th/nvim-cmp', -- auto completion
     requires = {
@@ -201,10 +197,6 @@ return packer.startup(function(use)
     },
   }
   use 'tiagovla/scope.nvim'
-  use {
-    'dstein64/vim-startuptime',
-    cmd = 'StartupTime',
-  }
   use { 'pechorin/any-jump.vim', cmd = { 'AnyJump', 'AnyJumpVisual' } }
   use 'kazhala/close-buffers.nvim'
 
@@ -238,17 +230,14 @@ return packer.startup(function(use)
   use {
     'akinsho/bufferline.nvim',
     tag = 'v2.*',
-    requires = 'kyazdani42/nvim-web-devicons',
   }
   use 'RRethy/vim-illuminate'
 
+  use 'nvim-lualine/lualine.nvim'
   use {
-    'nvim-lualine/lualine.nvim',
-    requires = {
-      { 'kyazdani42/nvim-web-devicons', opt = true },
-    },
+    'kyazdani42/nvim-web-devicons',
+    event = 'BufWinEnter',
   }
-  use 'kyazdani42/nvim-web-devicons'
   -- use 'karb94/neoscroll.nvim'
   use 'mhinz/vim-startify'
   use 'vim-scripts/CursorLineCurrentWindow'
