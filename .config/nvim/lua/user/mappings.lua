@@ -120,7 +120,7 @@ endfunction
 ]]
 
 -- Terminal
-keymap('t', '<Esc>', '<C-><C-n>', opts.no_remap)
+keymap('t', '<Esc>', [[<C-\><C-n>]], opts.no_remap)
 
 -- local function star_search(cmdtype)
 --   local old_reg = vim.fn.getreg('"')
@@ -196,7 +196,7 @@ keymap('n', [[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], opts.no_remap_sile
 -- Search and Replace
 keymap('n', '<Leader>r', ':.,$s?\\V<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>', opts.no_remap)
 keymap('v', '<leader>r', '"hy:.,$s?\\V<C-r>h?<C-r>h?gc<left><left><left>', opts.no_remap)
-keymap('v', '<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], opts.no_remap)
+keymap('v', '<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], vim.tbl_extend('force', opts.no_remap, { desc = 'Delete all but ...' }))
 keymap('v', '<leader>daa', [["hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], opts.no_remap)
 keymap('v', '<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], opts.no_remap)
 keymap('v', '<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], opts.no_remap)
