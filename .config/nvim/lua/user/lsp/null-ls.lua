@@ -18,7 +18,7 @@ null_ls.setup {
       extra_filetypes = sh_extra_fts,
     },
     null_ls.builtins.diagnostics.hadolint,
-    null_ls.builtins.diagnostics.npm_groovy_lint,
+    -- null_ls.builtins.diagnostics.npm_groovy_lint,
     null_ls.builtins.diagnostics.vint,
     null_ls.builtins.diagnostics.shellcheck.with {
       extra_filetypes = sh_extra_fts,
