@@ -249,3 +249,9 @@ alias pj='fdf ~/Repos'
 function nvim-startuptime() {
   cat /dev/null > startuptime.txt && nvim ~/.config/nvim/init.lua --startuptime startuptime.txt
 }
+
+function python-venv-init() {
+  pyenv virtualenv 3.10.3 ${PWD##*/}
+  pyenv local ${PWD##*/}
+  pyenv pyright
+}
