@@ -30,7 +30,7 @@ local first_load = augroup 'first_load'
 autocmd('UIEnter', {
   desc = 'Print the output of flag --startuptime startuptime.txt',
   group = first_load,
-  pattern = 'init.lua',
+  pattern = '*',
   once = true,
   callback = function()
     vim.defer_fn(function()
