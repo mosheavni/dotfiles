@@ -406,8 +406,3 @@ augroup AnsibleFind
   au BufRead,BufNewFile */ansible/*.yml vnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
 augroup END
 ]]
-
-local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
-if custom_settings_ok then
-  custom_settings.plugin_configs()
-end
