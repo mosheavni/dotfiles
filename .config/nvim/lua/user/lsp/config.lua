@@ -55,36 +55,43 @@ lspconfig.ansiblels.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
+
 -- ansblel
 lspconfig.awk_ls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
+
 -- bashls
 lspconfig.bashls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
+
 -- dockerls
 lspconfig.dockerls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
+
 -- eslint
 lspconfig.eslint.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
+
 -- groovyls
 lspconfig.groovyls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
+
 -- html
 lspconfig.html.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
+
 -- json
 lspconfig.jsonls.setup {
   on_attach = default_on_attach,
@@ -98,6 +105,7 @@ lspconfig.jsonls.setup {
     },
   },
 }
+
 -- python
 local function get_python_path(workspace)
   -- Use activated virtualenv.
@@ -129,6 +137,7 @@ lspconfig.pyright.setup {
     },
   },
 }
+
 --lua
 local luadev = require('lua-dev').setup {
   runtime_path = true,
@@ -145,6 +154,7 @@ local luadev = require('lua-dev').setup {
   },
 }
 lspconfig.sumneko_lua.setup(luadev)
+
 --terraformls
 lspconfig.terraformls.setup {
   on_attach = function(c, b)
@@ -153,12 +163,10 @@ lspconfig.terraformls.setup {
   end,
   capabilities = capabilities,
 }
+
 --tsserver
 lspconfig.tsserver.setup {
-  on_attach = function(c, b)
-    require('typescript').setup()
-    default_on_attach(c, b)
-  end,
+  on_attach = default_on_attach,
   capabilities = capabilities,
 }
 
@@ -173,6 +181,7 @@ lspconfig.jdtls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }
+
 -- yaml
 local yaml_cfg = require('yaml-companion').setup {
   builtin_matchers = {

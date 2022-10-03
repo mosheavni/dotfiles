@@ -25,15 +25,7 @@ require('vscode').setup {
 ---------------------
 -- Plugin requires --
 ---------------------
-require 'user.cmpconf'
-require 'user.treesitter'
-require 'user.lsp'
-require 'user.gitsigns'
-require 'user.telescope'
-require 'user.lualine'
-require 'user.tree'
 require 'user.git'
-require 'user.dap'
 
 ----------------
 -- WinResizer --
@@ -146,31 +138,6 @@ keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_sil
 keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
 keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
 
-----------------
--- Bufferline --
-----------------
-require('bufferline').setup {
-  options = {
-    numbers = 'ordinal',
-    diagnostics = 'nvim_lsp',
-    separator_style = 'thin',
-    show_tab_indicators = true,
-    show_buffer_close_icons = true,
-    show_close_icon = true,
-  },
-}
-keymap('n', '<leader>1', '<cmd>BufferLineGoToBuffer 1<cr>')
-keymap('n', '<leader>2', '<cmd>BufferLineGoToBuffer 2<cr>')
-keymap('n', '<leader>3', '<cmd>BufferLineGoToBuffer 3<cr>')
-keymap('n', '<leader>4', '<cmd>BufferLineGoToBuffer 4<cr>')
-keymap('n', '<leader>5', '<cmd>BufferLineGoToBuffer 5<cr>')
-keymap('n', '<leader>5', '<cmd>BufferLineGoToBuffer 5<cr>')
-keymap('n', '<leader>6', '<cmd>BufferLineGoToBuffer 5<cr>')
-keymap('n', '<leader>7', '<cmd>BufferLineGoToBuffer 5<cr>')
-keymap('n', '<leader>8', '<cmd>BufferLineGoToBuffer 5<cr>')
-keymap('n', '<leader>9', '<cmd>BufferLineGoToBuffer 5<cr>')
-keymap('n', '<leader>10', '<cmd>BufferLineGoToBuffer 5<cr>')
-
 --------------------
 -- Github Copilot --
 --------------------
@@ -185,11 +152,6 @@ let g:copilot_no_tab_map = v:true
 -- Yaml Buddy --
 ----------------
 keymap('n', '<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", opts.no_remap_silent)
-
----------------
--- Colorizer --
----------------
-require('colorizer').setup()
 
 -------------------
 -- Vim close tag --
@@ -208,57 +170,6 @@ vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
 -- Conflict marker --
 ---------------------
 require('git-conflict').setup()
-
---------------
--- NERDTree --
---------------
--- vim.g['NERDTreeChDirMode'] = 2
--- vim.g['NERDTreeHijackNetrw'] = 1
--- vim.g['NERDTreeShowHidden'] = 1
--- vim.g['NERDTreeHighlightCursorline'] = 1
--- vim.g['NERDTreeFileExtensionHighlightFullName'] = 1
--- vim.g['NERDTreeGitStatusUseNerdFonts'] = 1
--- -- vim.g["NERDTreeGitStatusConcealBrackets"] = 1
--- vim.g['NERDTreeGitStatusIndicatorMapCustom'] = {
---   Modified = '✹',
---   Staged = '✚',
---   Untracked = '✭',
---   Unmerged = '═',
---   Dirty = '✗',
---   Renamed = '➜',
---   Clean = '✔︎',
---   Ignored = '☒',
---   Deleted = '✖',
---   Unknown = '?',
--- }
--- vim.cmd [[
--- " Check if NERDTree is open or active
--- function! IsNERDTreeOpen()
---   return exists('t:NERDTreeBufName') && (bufwinnr(t:NERDTreeBufName) != -1)
--- endfunction
--- " Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
--- " file, and we're not in vimdiff
--- function! SyncTree()
---   if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
---     NERDTreeFind
---     wincmd p
---   endif
--- endfunction
--- function! ToggleNerdTree()
---   set eventignore=BufEnter
---   NERDTreeToggle
---   set eventignore=
--- endfunction
--- augroup nerd_tree_augroup
---   autocmd!
---   " Highlight currently open buffer in NERDTree
---   autocmd BufEnter * call SyncTree()
---   " Close VIM if NERDTree is the only buffer left
---   autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
--- augroup END
--- nmap <silent> <C-o> :call ToggleNerdTree()<CR>
--- nmap <silent> <expr> <Leader>v ':'.(IsNERDTreeOpen() ? '' : 'call ToggleNerdTree()<bar>wincmd p<bar>').'NERDTreeFind<CR>'
--- ]]
 
 ----------------
 -- Switch vim --
@@ -315,17 +226,6 @@ lightbulb.setup {
   },
 }
 
--------------
--- Trouble --
--------------
-require('trouble').setup()
-keymap('n', '<leader>xx', '<cmd>TroubleToggle<cr>', opts.no_remap_silent)
-keymap('n', '<leader>xw', '<cmd>TroubleToggle workspace_diagnostics<cr>', opts.no_remap_silent)
-keymap('n', '<leader>xd', '<cmd>TroubleToggle document_diagnostics<cr>', opts.no_remap_silent)
-keymap('n', '<leader>xl', '<cmd>TroubleToggle loclist<cr>', opts.no_remap_silent)
-keymap('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>', opts.no_remap_silent)
-keymap('n', 'gR', '<cmd>TroubleToggle lsp_references<cr>', opts.no_remap_silent)
-
 ----------------
 -- Scope.Nvim --
 ----------------
@@ -339,51 +239,6 @@ require('fidget').setup {
     spinner = 'moon',
   },
 }
-
-----------------------
--- indent_blankline --
-----------------------
-vim.cmd [[highlight IndentBlanklineIndent1 guifg=#C678DD gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent2 guifg=#E06C75 gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent3 guifg=#E5C07B gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent4 guifg=#98C379 gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent5 guifg=#56B6C2 gui=nocombine]]
-vim.cmd [[highlight IndentBlanklineIndent6 guifg=#61AFEF gui=nocombine]]
-require('indent_blankline').setup {
-  char = '┊',
-  filetype_exclude = {
-    'NvimTree',
-    'TelescopePrompt',
-    'TelescopeResults',
-    'alpha',
-    'help',
-    'lspinfo',
-    'mason.nvim',
-    'nvchad_cheatsheet',
-    'packer',
-    'terminal',
-    '',
-  },
-  buftype_exclude = { 'terminal' },
-  show_trailing_blankline_indent = false,
-  show_first_indent_level = false,
-  show_current_context = true,
-  show_current_context_start = true,
-  space_char_blankline = ' ',
-  -- char_highlight_list = {
-  --   'IndentBlanklineIndent1',
-  --   'IndentBlanklineIndent2',
-  --   'IndentBlanklineIndent3',
-  --   'IndentBlanklineIndent4',
-  --   'IndentBlanklineIndent5',
-  --   'IndentBlanklineIndent6',
-  -- },
-}
-
---------------------------------
--- Nvim PQF (pretty quickfix) --
---------------------------------
-require('pqf').setup()
 
 -------------
 -- Ansible --

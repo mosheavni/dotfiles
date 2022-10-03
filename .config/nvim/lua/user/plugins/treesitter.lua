@@ -93,11 +93,8 @@ configs.setup {
   },
   rainbow = {
     enable = true,
-    -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
     extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
     max_file_lines = nil, -- Do not enable for files with more than n lines, int
-    -- colors = {}, -- table of hex strings
-    -- termcolors = {} -- table of colour name strings
   },
   refactor = {
     highlight_current_scope = { enable = true },
@@ -109,7 +106,6 @@ configs.setup {
     },
     highlight_definitions = {
       enable = true,
-      -- Set to false if you have an `updatetime` of ~100.
       clear_on_cursor_move = true,
     },
   },

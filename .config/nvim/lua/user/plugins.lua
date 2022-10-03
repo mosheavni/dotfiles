@@ -42,17 +42,24 @@ return packer.startup(function(use)
   use {
     'kyazdani42/nvim-tree.lua',
     command = 'NvimTreeToggle',
+    config = "require('user.plugins.tree')",
   }
 
   -- Git Related
   use 'tpope/vim-fugitive'
-  use 'lewis6991/gitsigns.nvim'
+  use {
+    'lewis6991/gitsigns.nvim',
+    event = 'BufWinEnter',
+    config = function()
+      require 'user.plugins.gitsigns'
+    end,
+  }
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
   use 'akinsho/git-conflict.nvim'
 
   -- Documents
-  use { 'nanotee/luv-vimdocs', cmd = { 'Telescope', 'help' } }
-  use { 'milisims/nvim-luaref', cmd = { 'Telescope', 'help' } }
+  use 'nanotee/luv-vimdocs'
+  use 'milisims/nvim-luaref'
 
   -- Fuzzy Search - Telescope
   use {
@@ -62,6 +69,7 @@ return packer.startup(function(use)
       { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
       { 'nvim-telescope/telescope-project.nvim' },
     },
+    config = "require('user.plugins.telescope')",
   }
 
   -- LSP, Completion and Language
@@ -89,10 +97,12 @@ return packer.startup(function(use)
   use 'David-Kunz/markid'
 
   -- LSP
+  use 'williamboman/mason.nvim'
+  use 'williamboman/mason-lspconfig.nvim'
   use {
-    'williamboman/mason.nvim',
-    'williamboman/mason-lspconfig.nvim',
     'neovim/nvim-lspconfig',
+    config = "require('user.lsp')",
+    event = 'UIEnter',
   }
   use {
     'ray-x/lsp_signature.nvim', -- Show function signature when you type
@@ -102,6 +112,7 @@ return packer.startup(function(use)
     'folke/lsp-colors.nvim',
     'nanotee/nvim-lsp-basics',
     'j-hui/fidget.nvim',
+    after = 'nvim-lspconfig',
   }
   use {
     'jayp0521/mason-null-ls.nvim',
@@ -110,28 +121,44 @@ return packer.startup(function(use)
       'mason.nvim',
     },
   }
+  use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
+  use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'groovy', 'Jenkinsfile' } }
+  use { 'chr4/nginx.vim', ft = { 'nginx' } }
+  use { 'mosheavni/vim-kubernetes', ft = { 'yaml' } }
+  use { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } }
+  use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
+  use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
+  use 'folke/lua-dev.nvim'
   use {
     'kosayoda/nvim-lightbulb',
     requires = 'antoinemadec/FixCursorHold.nvim',
   }
-  use 'folke/trouble.nvim'
+
+  -- Completion
   use {
-    'hrsh7th/nvim-cmp', -- auto completion
+    'hrsh7th/nvim-cmp',
     requires = {
-      'hrsh7th/cmp-nvim-lsp',
+      'rafamadriz/friendly-snippets',
       'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip',
+      'onsails/lspkind-nvim',
+      { 'tzachar/cmp-tabnine', run = './install.sh' },
+      { 'hrsh7th/cmp-nvim-lua', ft = { 'lua' } },
+      'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
-      { 'hrsh7th/cmp-nvim-lua', ft = { 'lua' } },
       'hrsh7th/cmp-cmdline',
-      'onsails/lspkind-nvim', -- show pictograms in the auto complete popup
-      { 'tzachar/cmp-tabnine', run = './install.sh' },
       'windwp/nvim-autopairs',
     },
+    config = "require('user.plugins.cmpconf')",
   }
+  use { 'phenomenes/ansible-snippets', ft = { 'yaml' } }
+
   -- Github's suggeetsions engine
-  use 'github/copilot.vim'
+  use {
+    'github/copilot.vim',
+    event = 'InsertEnter',
+  }
   use {
     'iamcco/markdown-preview.nvim',
     run = 'cd app && yarn install',
@@ -141,28 +168,23 @@ return packer.startup(function(use)
     cmd = 'MarkdownPreview',
     ft = { 'markdown' },
   }
-  use 'jose-elias-alvarez/typescript.nvim'
-  use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
-  use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'groovy', 'Jenkinsfile' } }
-  use { 'chr4/nginx.vim', ft = { 'nginx' } }
-  use { 'mosheavni/vim-kubernetes', ft = { 'yaml' } }
-  use { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } }
-  use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
-  use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
-  use { 'phenomenes/ansible-snippets', ft = { 'yaml' } }
-  use 'rafamadriz/friendly-snippets' -- snippets for many languages
-  use 'folke/lua-dev.nvim'
 
   -- Debug Adapter Protocol (DAP)
   use {
-    'mfussenegger/nvim-dap',
+    {
+      'mfussenegger/nvim-dap',
+      config = "require('user.plugins.dap')",
+    },
     'rcarriga/nvim-dap-ui',
     'mfussenegger/nvim-dap-python',
     'nvim-telescope/telescope-dap.nvim',
     -- 'mxsdev/nvim-dap-vscode-js',
     'theHamsta/nvim-dap-virtual-text',
-    'rcarriga/cmp-dap',
     'Pocco81/dap-buddy.nvim',
+  }
+  use {
+    'rcarriga/cmp-dap',
+    after = 'nvim-cmp',
   }
 
   -- Functionality Tools
@@ -219,21 +241,32 @@ return packer.startup(function(use)
   }
 
   -- Quickfix
-  use 'https://gitlab.com/yorickpeterse/nvim-pqf.git'
+  use {
+    'https://gitlab.com/yorickpeterse/nvim-pqf.git',
+    config = "require('pqf').setup()",
+  }
   use { 'kevinhwang91/nvim-bqf', ft = 'qf' }
   use { 'tommcdo/vim-lister', ft = 'qf', cmd = { 'Qfilter', 'Qgrep' } } -- Qfilter and Qgrep on Quickfix
 
   -- Look & Feel
   use 'stevearc/dressing.nvim' -- overrides the default vim input to provide better visuals
   use 'rcarriga/nvim-notify'
-  use 'lukas-reineke/indent-blankline.nvim'
+  use {
+    'lukas-reineke/indent-blankline.nvim',
+    config = "require('user.plugins.indentlines')",
+  }
   use {
     'akinsho/bufferline.nvim',
     tag = 'v2.*',
+    event = 'UIEnter',
+    config = "require('user.plugins.bufferline')",
   }
   use 'RRethy/vim-illuminate'
 
-  use 'nvim-lualine/lualine.nvim'
+  use {
+    'nvim-lualine/lualine.nvim',
+    config = "require('user.plugins.lualine')",
+  }
   use {
     'kyazdani42/nvim-web-devicons',
     event = 'BufWinEnter',
@@ -241,7 +274,11 @@ return packer.startup(function(use)
   -- use 'karb94/neoscroll.nvim'
   use 'mhinz/vim-startify'
   use 'vim-scripts/CursorLineCurrentWindow'
-  use 'norcalli/nvim-colorizer.lua'
+  use {
+    'norcalli/nvim-colorizer.lua',
+    config = "require('user.plugins.colorizer')",
+    event = { 'UIEnter' },
+  }
 
   -- Themes
   -- use 'drewtempelmeyer/palenight.vim'

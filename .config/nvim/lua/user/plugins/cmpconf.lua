@@ -57,11 +57,6 @@ local cmp_mappings = {
   end, { 'i', 's' }),
 }
 
-local custom_settings_ok, custom_settings = pcall(require, 'user.custom-settings')
-if custom_settings_ok then
-  cmp_mappings = vim.tbl_deep_extend('keep', custom_settings.mappings.cmp, cmp_mappings)
-end
-
 local source_mapping = {
   nvim_lsp = '[LSP]',
   luasnip = '[Snpt]',
@@ -118,7 +113,6 @@ local config = {
   sources = cmp.config.sources {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
-    -- { name = 'copilot', priority = 81 },
     { name = 'cmp_tabnine', priority = 80 },
     { name = 'path' },
     { name = 'buffer', keyword_length = 4 },
