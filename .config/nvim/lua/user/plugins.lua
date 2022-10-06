@@ -152,7 +152,7 @@ return packer.startup(function(use)
     },
     config = "require('user.plugins.cmpconf')",
   }
-  use { 'phenomenes/ansible-snippets', ft = { 'yaml' } }
+  use { 'phenomenes/ansible-snippets', ft = { 'yaml', 'ansible', 'yaml.ansible' } }
 
   -- Github's suggeetsions engine
   use {
