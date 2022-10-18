@@ -128,7 +128,7 @@ return packer.startup(function(use)
   use { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } }
   use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
-  use 'folke/lua-dev.nvim'
+  use 'folke/neodev.nvim'
   use {
     'kosayoda/nvim-lightbulb',
     requires = 'antoinemadec/FixCursorHold.nvim',

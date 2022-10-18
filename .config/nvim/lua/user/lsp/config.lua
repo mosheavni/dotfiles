@@ -1,6 +1,7 @@
 local on_attaches = require 'user.lsp.on-attach'
 local default_on_attach = on_attaches.default
 local util = require 'lspconfig/util'
+require('neodev').setup {}
 local lspconfig = require 'lspconfig'
 local path = util.path
 require 'user.lsp.null-ls'
@@ -20,7 +21,7 @@ require('mason-lspconfig').setup {
 require('vim.lsp.log').set_format_func(vim.inspect)
 
 -- Capabilities
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.codeAction = {
   dynamicRegistration = true,
@@ -34,7 +35,6 @@ capabilities.textDocument.codeAction = {
     },
   },
 }
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- general LSP config
 -- show icons in the sidebar
@@ -139,13 +139,16 @@ lspconfig.pyright.setup {
 }
 
 --lua
-local luadev = require('lua-dev').setup {
+lspconfig.sumneko_lua.setup {
   runtime_path = true,
   lspconfig = {
     capabilities = capabilities,
     on_attach = default_on_attach,
     settings = {
       Lua = {
+        completion = {
+          callSnippet = 'Replace',
+        },
         hint = {
           enable = true,
         },
@@ -153,7 +156,6 @@ local luadev = require('lua-dev').setup {
     },
   },
 }
-lspconfig.sumneko_lua.setup(luadev)
 
 --terraformls
 lspconfig.terraformls.setup {
