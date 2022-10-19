@@ -27,7 +27,7 @@ end
 lualine.setup {
   options = {
     icons_enabled = true,
-    theme = 'vscode',
+    theme = 'kanagawa',
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
     disabled_filetypes = {
@@ -99,7 +99,14 @@ lualine.setup {
     lualine_b = {},
     lualine_c = {},
     lualine_x = {},
-    lualine_z = { { navic.get_location, cond = navic.is_available } },
+    lualine_z = {
+      {
+        function()
+          local location = navic.get_location()
+          return navic.is_available() and location ~= '' and location or ''
+        end,
+      },
+    },
   },
   inactive_winbar = {
     lualine_a = {},

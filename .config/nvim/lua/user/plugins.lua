@@ -130,6 +130,7 @@ return packer.startup(function(use)
   use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
   use 'folke/neodev.nvim'
+  use 'jose-elias-alvarez/typescript.nvim'
   use {
     'kosayoda/nvim-lightbulb',
     requires = 'antoinemadec/FixCursorHold.nvim',
@@ -189,8 +190,27 @@ return packer.startup(function(use)
   }
 
   -- Functionality Tools
+  use {
+    'gbprod/yanky.nvim',
+    config = function()
+      require('yanky').setup {
+        ring = {
+          history_length = 100,
+          storage = 'sqlite',
+          sync_with_numbered_registers = true,
+          cancel_event = 'update',
+        },
+      }
+      vim.keymap.set({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)')
+      vim.keymap.set({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)')
+      vim.keymap.set({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
+      vim.keymap.set({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
+      vim.keymap.set('n', '<c-n>', '<Plug>(YankyCycleForward)')
+      vim.keymap.set('n', '<c-m>', '<Plug>(YankyCycleBackward)')
+    end,
+    requires = { 'kkharji/sqlite.lua' },
+  }
   use 'kevinhwang91/nvim-hlslens'
-  use 'vim-scripts/ReplaceWithRegister'
   use {
     'voldikss/vim-floaterm',
     keys = {
@@ -293,7 +313,9 @@ return packer.startup(function(use)
   -- use 'marko-cerovac/material.nvim'
   -- use 'folke/tokyonight.nvim'
   -- use 'cpea2506/one_monokai.nvim'
-  use 'Mofiqul/vscode.nvim'
+  -- use 'Mofiqul/vscode.nvim'
+  use 'cpea2506/one_monokai.nvim'
+  use 'rebelot/kanagawa.nvim'
   -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
 
   -- Text Manipulation

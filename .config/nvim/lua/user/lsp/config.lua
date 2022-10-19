@@ -1,7 +1,8 @@
 local on_attaches = require 'user.lsp.on-attach'
 local default_on_attach = on_attaches.default
-local util = require 'lspconfig/util'
 require('neodev').setup {}
+require('typescript').setup {}
+local util = require 'lspconfig/util'
 local lspconfig = require 'lspconfig'
 local path = util.path
 require 'user.lsp.null-ls'
@@ -140,18 +141,15 @@ lspconfig.pyright.setup {
 
 --lua
 lspconfig.sumneko_lua.setup {
-  runtime_path = true,
-  lspconfig = {
-    capabilities = capabilities,
-    on_attach = default_on_attach,
-    settings = {
-      Lua = {
-        completion = {
-          callSnippet = 'Replace',
-        },
-        hint = {
-          enable = true,
-        },
+  capabilities = capabilities,
+  on_attach = default_on_attach,
+  settings = {
+    Lua = {
+      completion = {
+        callSnippet = 'Replace',
+      },
+      hint = {
+        enable = true,
       },
     },
   },
