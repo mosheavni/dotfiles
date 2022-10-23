@@ -116,6 +116,7 @@ vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
 -------------
 -- hlslens --
 -------------
+require('hlslens').setup()
 keymap('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
 keymap('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
 keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
