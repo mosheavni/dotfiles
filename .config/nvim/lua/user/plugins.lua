@@ -212,6 +212,13 @@ return packer.startup(function(use)
   }
   use 'kevinhwang91/nvim-hlslens'
   use {
+    'kiran94/s3edit.nvim',
+    config = function()
+      require('s3edit').setup()
+    end,
+    cmd = 'S3Edit',
+  }
+  use {
     'voldikss/vim-floaterm',
     keys = {
       'F6',
