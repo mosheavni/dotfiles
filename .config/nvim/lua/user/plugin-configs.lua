@@ -5,7 +5,10 @@ local opts = utils.map_opts
 -----------------
 -- Colorscheme --
 -----------------
-vim.cmd.colorscheme 'kanagawa'
+require('catppuccin').setup {
+  flavour = 'macchiato', -- mocha, macchiato, frappe, latte
+}
+vim.api.nvim_command 'colorscheme catppuccin'
 
 ---------------------
 -- Plugin requires --
@@ -225,6 +228,11 @@ require('fidget').setup {
     spinner = 'moon',
   },
 }
+
+----------
+-- Leap --
+----------
+require('leap').add_default_mappings()
 
 -------------
 -- Ansible --

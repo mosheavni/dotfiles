@@ -1,5 +1,6 @@
 local utils = require 'user.utils'
 local keymap = utils.keymap
+local mocha = require('catppuccin.palettes').get_palette 'macchiato'
 
 ----------------
 -- Bufferline --
@@ -9,6 +10,20 @@ if not status_ok_bufferline then
   return
 end
 bufferline.setup {
+  highlights = require('catppuccin.groups.integrations.bufferline').get {
+    styles = { 'italic', 'bold' },
+    custom = {
+      all = {
+        fill = { bg = '#000000' },
+      },
+      mocha = {
+        background = { fg = mocha.text },
+      },
+      latte = {
+        background = { fg = '#000000' },
+      },
+    },
+  },
   options = {
     numbers = 'ordinal',
     diagnostics = 'nvim_lsp',

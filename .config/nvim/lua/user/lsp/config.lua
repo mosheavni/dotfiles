@@ -3,12 +3,11 @@ local default_on_attach = on_attaches.default
 require('neodev').setup {}
 require('typescript').setup {}
 local util = require 'lspconfig/util'
-local lspconfig = require 'lspconfig'
 local path = util.path
-require 'user.lsp.null-ls'
 
--- mason and lspconfig
 require('mason').setup()
+require 'user.lsp.null-ls'
+require('mason-null-ls').setup()
 require('mason.settings').set {
   ui = {
     border = 'rounded',
@@ -50,6 +49,9 @@ for type, icon in pairs(signs) do
   local hl = 'DiagnosticSign' .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
+
+-- LSPConfig after everything
+local lspconfig = require 'lspconfig'
 
 -- ansiblels
 lspconfig.ansiblels.setup {

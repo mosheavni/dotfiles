@@ -91,7 +91,7 @@ return packer.startup(function(use)
     requires = { 'nvim-treesitter/nvim-treesitter' },
   }
   use 'someone-stole-my-name/yaml-companion.nvim'
-  use 'lewis6991/nvim-treesitter-context'
+  use 'nvim-treesitter/nvim-treesitter-context'
   use 'nvim-treesitter/nvim-treesitter-refactor'
   use { 'sam4llis/nvim-lua-gf', ft = { 'lua' } }
   use 'Afourcat/treesitter-terraform-doc.nvim'
@@ -211,6 +211,7 @@ return packer.startup(function(use)
     requires = { 'kkharji/sqlite.lua' },
   }
   use 'kevinhwang91/nvim-hlslens'
+  use 'vim-scripts/ReplaceWithRegister'
   use {
     'kiran94/s3edit.nvim',
     config = function()
@@ -322,7 +323,11 @@ return packer.startup(function(use)
   -- use 'cpea2506/one_monokai.nvim'
   -- use 'Mofiqul/vscode.nvim'
   use 'cpea2506/one_monokai.nvim'
-  use 'rebelot/kanagawa.nvim'
+  -- use 'rebelot/kanagawa.nvim'
+  use {
+    'catppuccin/nvim',
+    as = 'catppuccin',
+  }
   -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
 
   -- Text Manipulation
@@ -331,7 +336,7 @@ return packer.startup(function(use)
   use 'numToStr/Comment.nvim'
   use 'junegunn/vim-easy-align'
   use 'AndrewRadev/switch.vim'
-  use 'justinmk/vim-sneak'
+  use 'ggandor/leap.nvim'
   use { 'alvan/vim-closetag', ft = { 'html', 'javascript' } }
   use 'editorconfig/editorconfig-vim'
 

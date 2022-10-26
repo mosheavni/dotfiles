@@ -1,5 +1,3 @@
-local Job = require 'plenary.job'
-
 local default_on_attach = require('user.lsp.on-attach').default
 local status_ok, null_ls = pcall(require, 'null-ls')
 if not status_ok then
@@ -17,6 +15,7 @@ null_ls.setup {
     null_ls.builtins.code_actions.shellcheck.with {
       extra_filetypes = sh_extra_fts,
     },
+    null_ls.builtins.code_actions.gitsigns,
     null_ls.builtins.diagnostics.hadolint,
     -- null_ls.builtins.diagnostics.npm_groovy_lint,
     null_ls.builtins.diagnostics.vint,
