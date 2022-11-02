@@ -336,7 +336,13 @@ return packer.startup(function(use)
   use 'numToStr/Comment.nvim'
   use 'junegunn/vim-easy-align'
   use 'AndrewRadev/switch.vim'
-  use 'ggandor/leap.nvim'
+  use {
+    'ggandor/leap.nvim',
+    config = function()
+      vim.keymap.set('n', 's', '<Plug>(leap-forward-to)', { silent = true })
+      vim.keymap.set('n', 'S', '<Plug>(leap-backward-to)', { silent = true })
+    end,
+  }
   use { 'alvan/vim-closetag', ft = { 'html', 'javascript' } }
   use 'editorconfig/editorconfig-vim'
 
