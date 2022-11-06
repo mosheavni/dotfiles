@@ -19,6 +19,7 @@ opt.emoji = false
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
 -- opt.whichwrap:append '<>[]hl'
+opt.diffopt:append { linematch = 50 }
 opt.number = true -- Show current line number
 opt.numberwidth = 4 -- set number column width to 2 {default 4}
 opt.relativenumber = true -- Show relative line numbers

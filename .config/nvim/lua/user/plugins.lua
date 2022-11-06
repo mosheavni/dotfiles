@@ -322,12 +322,13 @@ return packer.startup(function(use)
   -- use 'folke/tokyonight.nvim'
   -- use 'cpea2506/one_monokai.nvim'
   -- use 'Mofiqul/vscode.nvim'
-  use 'cpea2506/one_monokai.nvim'
+  -- use 'cpea2506/one_monokai.nvim'
+  use 'navarasu/onedark.nvim'
   -- use 'rebelot/kanagawa.nvim'
-  use {
-    'catppuccin/nvim',
-    as = 'catppuccin',
-  }
+  -- use {
+  --   'catppuccin/nvim',
+  --   as = 'catppuccin',
+  -- }
   -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
 
   -- Text Manipulation

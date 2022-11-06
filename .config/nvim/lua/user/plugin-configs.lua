@@ -5,10 +5,10 @@ local opts = utils.map_opts
 -----------------
 -- Colorscheme --
 -----------------
-require('catppuccin').setup {
-  flavour = 'macchiato', -- mocha, macchiato, frappe, latte
+require('onedark').setup {
+  style = 'warm',
 }
-vim.api.nvim_command 'colorscheme catppuccin'
+require('onedark').load()
 
 ---------------------
 -- Plugin requires --
