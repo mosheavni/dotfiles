@@ -26,6 +26,18 @@ keymap('t', '<C-E>', '<Esc><Cmd>WinResizerStartResize<CR>', opts.no_remap_silent
 -------------------
 vim.g['jsonpath_register'] = '*'
 
+-------------------
+-- Web-dev-icons --
+-------------------
+require('nvim-web-devicons').set_icon {
+  tf = {
+    icon = '',
+    color = '#6044E9',
+    cterm_color = '65',
+    name = 'Terraform',
+  },
+}
+
 ------------------
 -- Comment.nvim --
 ------------------
