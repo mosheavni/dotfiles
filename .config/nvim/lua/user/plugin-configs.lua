@@ -6,7 +6,7 @@ local opts = utils.map_opts
 -- Colorscheme --
 -----------------
 require('onedark').setup {
-  style = 'warm',
+  style = 'warmer',
 }
 require('onedark').load()
 
