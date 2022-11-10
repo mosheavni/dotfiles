@@ -77,12 +77,6 @@ lspconfig.dockerls.setup {
   capabilities = capabilities,
 }
 
--- eslint
-lspconfig.eslint.setup {
-  on_attach = default_on_attach,
-  capabilities = capabilities,
-}
-
 -- groovyls
 lspconfig.groovyls.setup {
   on_attach = default_on_attach,
