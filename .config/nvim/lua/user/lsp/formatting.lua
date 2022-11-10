@@ -11,6 +11,10 @@ lsp_format.setup {
   lua = {
     exclude = { 'sumneko_lua' },
   },
+
+  javascriptreact = {
+    exclude = { 'tsserver' },
+  },
 }
 
 local function select_client(method, callback)
