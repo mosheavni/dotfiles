@@ -12,11 +12,11 @@ local M = {}
 M.get_branches = function()
   local opts = {}
 
-  local format = '%(HEAD)' ..
-      '%(refname)' .. '%(authorname)' .. '%(upstream:lstrip=2)' .. '%(committerdate:format-local:%Y/%m/%d %H:%M:%S)'
+  local format = '%(HEAD)' .. '%(refname)' .. '%(authorname)' .. '%(upstream:lstrip=2)' .. '%(committerdate:format-local:%Y/%m/%d %H:%M:%S)'
 
-  local output = utils.get_os_command_output({ 'git', 'for-each-ref', '--perl', '--sort', 'committerdate', '--format',
-    format, opts.pattern }, opts.cwd)
+  -- git for-each-ref --sort=-committerdate --format="%(refname:short)"
+
+  local output = utils.get_os_command_output({ 'git', 'for-each-ref', '--perl', '--sort', '-committerdate', '--format', format, opts.pattern }, opts.cwd)
   local remotes = utils.get_os_command_output({ 'git', 'remote' }, opts.cwd)
 
   local unescape_single_quote = function(v)
@@ -28,11 +28,9 @@ M.open = function()
   local opts = {}
   local results = {}
 
-  local format = '%(HEAD)' ..
-      '%(refname)' .. '%(authorname)' .. '%(upstream:lstrip=2)' .. '%(committerdate:format-local:%Y/%m/%d %H:%M:%S)'
+  local format = '%(HEAD)' .. '%(refname)' .. '%(authorname)' .. '%(upstream:lstrip=2)' .. '%(committerdate:format-local:%Y/%m/%d %H:%M:%S)'
 
-  local output = utils.get_os_command_output({ 'git', 'for-each-ref', '--perl', '--sort', 'committerdate', '--format',
-    format, opts.pattern }, opts.cwd)
+  local output = utils.get_os_command_output({ 'git', 'for-each-ref', '--perl', '--sort', 'committerdate', '--format', format, opts.pattern }, opts.cwd)
   local remotes = utils.get_os_command_output({ 'git', 'remote' }, opts.cwd)
 
   local unescape_single_quote = function(v)
@@ -157,44 +155,44 @@ M.open = function()
   -- TODO: checkout and set remote to new branch instead of just checking out
 
   pickers
-      .new(opts, {
-        prompt_title = 'Git Branches',
-        finder = finders.new_table {
-          results = results,
-          entry_maker = function(entry)
-            entry.name = entry.name
-            entry.value = entry.name
-            entry.ordinal = entry.value
-            entry.display = make_display
-            return entry
-          end,
-        },
-        previewer = previewers.git_branch_log.new(opts),
-        sorter = conf.generic_sorter(opts),
-
-        attach_mappings = function(_, map)
-          actions.select_default:replace(git_checkout)
-          -- map('i', '<cr>', actions.git_checkout)
-          -- map('n', '<cr>', actions.git_checkout)
-
-          map('i', '<c-r>', actions.git_rebase_branch)
-          map('n', '<c-r>', actions.git_rebase_branch)
-
-          map('i', '<c-a>', actions.git_create_branch)
-          map('n', '<c-a>', actions.git_create_branch)
-
-          map('i', '<c-s>', actions.git_switch_branch)
-          map('n', '<c-s>', actions.git_switch_branch)
-
-          map('i', '<c-d>', actions.git_delete_branch)
-          map('n', '<c-d>', actions.git_delete_branch)
-
-          map('i', '<c-y>', actions.git_merge_branch)
-          map('n', '<c-y>', actions.git_merge_branch)
-          return true
+    .new(opts, {
+      prompt_title = 'Git Branches',
+      finder = finders.new_table {
+        results = results,
+        entry_maker = function(entry)
+          entry.name = entry.name
+          entry.value = entry.name
+          entry.ordinal = entry.value
+          entry.display = make_display
+          return entry
         end,
-      })
-      :find()
+      },
+      previewer = previewers.git_branch_log.new(opts),
+      sorter = conf.generic_sorter(opts),
+
+      attach_mappings = function(_, map)
+        actions.select_default:replace(git_checkout)
+        -- map('i', '<cr>', actions.git_checkout)
+        -- map('n', '<cr>', actions.git_checkout)
+
+        map('i', '<c-r>', actions.git_rebase_branch)
+        map('n', '<c-r>', actions.git_rebase_branch)
+
+        map('i', '<c-a>', actions.git_create_branch)
+        map('n', '<c-a>', actions.git_create_branch)
+
+        map('i', '<c-s>', actions.git_switch_branch)
+        map('n', '<c-s>', actions.git_switch_branch)
+
+        map('i', '<c-d>', actions.git_delete_branch)
+        map('n', '<c-d>', actions.git_delete_branch)
+
+        map('i', '<c-y>', actions.git_merge_branch)
+        map('n', '<c-y>', actions.git_merge_branch)
+        return true
+      end,
+    })
+    :find()
 end
 
 return M
