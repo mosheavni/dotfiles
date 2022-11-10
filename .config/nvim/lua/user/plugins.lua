@@ -79,6 +79,7 @@ return packer.startup(function(use)
     run = ':TSUpdate',
     config = "require('user.plugins.treesitter')",
   }
+  use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'p00f/nvim-ts-rainbow'
   use 'JoosepAlviste/nvim-ts-context-commentstring'
   use {
