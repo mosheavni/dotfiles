@@ -42,6 +42,7 @@ return packer.startup(function(use)
   use {
     'kyazdani42/nvim-tree.lua',
     command = 'NvimTreeToggle',
+    requires = { 'kyazdani42/nvim-web-devicons' },
     config = "require('user.plugins.tree')",
   }
 
@@ -212,6 +213,13 @@ return packer.startup(function(use)
     requires = { 'kkharji/sqlite.lua' },
   }
   use 'kevinhwang91/nvim-hlslens'
+  use {
+    'axelvc/template-string.nvim',
+    ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
+    config = function()
+      require('template-string').setup()
+    end,
+  }
   use 'vim-scripts/ReplaceWithRegister'
   use {
     'kiran94/s3edit.nvim',
@@ -297,10 +305,7 @@ return packer.startup(function(use)
     'nvim-lualine/lualine.nvim',
     config = "require('user.plugins.lualine')",
   }
-  use {
-    'kyazdani42/nvim-web-devicons',
-    event = 'BufWinEnter',
-  }
+  use 'kyazdani42/nvim-web-devicons'
   -- use 'karb94/neoscroll.nvim'
   use 'mhinz/vim-startify'
   use 'vim-scripts/CursorLineCurrentWindow'
@@ -347,9 +352,6 @@ return packer.startup(function(use)
   }
   use { 'alvan/vim-closetag', ft = { 'html', 'javascript' } }
   use 'editorconfig/editorconfig-vim'
-
-  -- Devicons is last so it can support all of the other plugins
-  use 'ryanoasis/vim-devicons'
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

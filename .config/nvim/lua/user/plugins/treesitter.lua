@@ -52,8 +52,8 @@ configs.setup {
     keymaps = {
       init_selection = 'gnn',
       scope_incremental = '<CR>',
-      node_incremental = '<TAB>',
-      node_decremental = '<S-TAB>',
+      -- node_incremental = '<TAB>',
+      -- node_decremental = '<S-TAB>',
     },
   },
   markid = { enable = true },
