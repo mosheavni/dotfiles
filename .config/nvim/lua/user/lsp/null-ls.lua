@@ -11,21 +11,24 @@ null_ls.setup {
   on_attach = default_on_attach,
   debug = true,
   sources = {
-    null_ls.builtins.diagnostics.ansiblelint,
     null_ls.builtins.code_actions.shellcheck.with {
       extra_filetypes = sh_extra_fts,
     },
     null_ls.builtins.code_actions.gitsigns,
+    null_ls.builtins.code_actions.eslint_d,
+    null_ls.builtins.diagnostics.ansiblelint,
     null_ls.builtins.diagnostics.hadolint,
     -- null_ls.builtins.diagnostics.npm_groovy_lint,
     null_ls.builtins.diagnostics.vint,
     null_ls.builtins.diagnostics.shellcheck.with {
       extra_filetypes = sh_extra_fts,
     },
+    null_ls.builtins.diagnostics.eslint_d,
     null_ls.builtins.formatting.black,
+    null_ls.builtins.formatting.eslint_d,
     null_ls.builtins.formatting.fixjson,
     null_ls.builtins.formatting.npm_groovy_lint,
-    null_ls.builtins.formatting.prettier,
+    -- null_ls.builtins.formatting.prettierd,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.terraform_fmt,
     null_ls.builtins.formatting.shfmt.with {
