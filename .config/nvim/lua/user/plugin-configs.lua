@@ -31,7 +31,7 @@ vim.g['jsonpath_register'] = '*'
 -------------------
 require('nvim-web-devicons').set_icon {
   tf = {
-    icon = '',
+    icon = '',
     color = '#6044E9',
     cterm_color = '65',
     name = 'Terraform',
