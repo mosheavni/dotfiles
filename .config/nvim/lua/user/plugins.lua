@@ -152,6 +152,8 @@ return packer.startup(function(use)
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-cmdline',
+      'hrsh7th/cmp-nvim-lsp-signature-help',
+      'hrsh7th/cmp-nvim-lsp-document-symbol',
       'windwp/nvim-autopairs',
     },
     config = "require('user.plugins.cmpconf')",
@@ -300,6 +302,12 @@ return packer.startup(function(use)
     config = "require('user.plugins.bufferline')",
   }
   use 'RRethy/vim-illuminate'
+  use {
+    'nvim-zh/colorful-winsep.nvim',
+    config = function()
+      require('colorful-winsep').setup()
+    end,
+  }
 
   use {
     'nvim-lualine/lualine.nvim',

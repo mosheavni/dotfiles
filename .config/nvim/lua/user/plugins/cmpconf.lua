@@ -115,6 +115,8 @@ local config = {
     { name = 'luasnip' },
     { name = 'cmp_tabnine', priority = 80 },
     { name = 'path' },
+    { name = 'nvim_lsp_signature_help' },
+    { name = 'nvim_lsp_document_symbol' },
     { name = 'buffer', keyword_length = 4 },
   },
   snippet = {
