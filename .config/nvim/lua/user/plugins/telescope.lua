@@ -47,7 +47,8 @@ keymap('n', '<leader>hh', '<cmd>Telescope help_tags<cr>', opts.no_remap)
 keymap('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   local view = require('telescope.themes').get_dropdown { winblend = 10, previewer = false }
-  view = vim.tbl_extend('force', view, {
+
+  local important_args = {
     additional_args = function()
       return {
         '--hidden',
@@ -55,6 +56,7 @@ keymap('n', '<leader>/', function()
         '!.git',
       }
     end,
-  })
-  require('telescope.builtin').live_grep(view)
+  }
+  view = vim.tbl_extend('force', view, important_args)
+  require('telescope.builtin').live_grep(important_args)
 end, { desc = '[/] Fuzzily search in current buffer]' })
