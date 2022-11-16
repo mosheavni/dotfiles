@@ -49,6 +49,7 @@ opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
 opt.completeopt = { 'menu', 'menuone', 'noselect' }
 opt.previewheight = 15
 opt.title = true -- Changes the iterm title
+opt.laststatus = 3 -- Global statusline, only one for all buffers
 opt.titlestring = "nvim: %{substitute(getcwd(), $HOME, '~', '')}"
 opt.showcmd = true
 opt.guifont = 'Fira Code,Hack Nerd Font'
