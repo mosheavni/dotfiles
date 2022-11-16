@@ -36,7 +36,7 @@ parso==0.8.2
 passlib==1.7.4
 pathspec==0.8.1
 prompt-toolkit==3.0.18
-protobuf==3.17.1
+protobuf==3.18.3
 psutil==5.8.0
 ptpython==3.0.17
 py-radix==0.10.0
