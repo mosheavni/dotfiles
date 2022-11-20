@@ -66,9 +66,10 @@ local source_mapping = {
   path = '[Path]',
   buffer = '[Buffer]',
   copilot = '[CP]',
+  git = '[Git]',
 }
 
-local config = {
+cmp.setup {
   native_menu = false,
   formatting = {
     format = lspkind.cmp_format {
@@ -130,18 +131,26 @@ local config = {
   },
 }
 
-tabnine:setup {
-  max_lines = 500,
-  max_num_results = 5,
-  sort = true,
-}
-
-cmp.setup(config)
 cmp.setup.filetype({ 'dap-repl', 'dapui_watches' }, {
   sources = {
     { name = 'dap' },
   },
 })
+
+cmp.setup.filetype('gitcommit', {
+  sources = cmp.config.sources({
+    { name = 'git' }, -- You can specify the `cmp_git` source if you were installed it.
+  }, {
+    { name = 'buffer' },
+  }),
+})
+require('cmp_git').setup()
+
+tabnine:setup {
+  max_lines = 500,
+  max_num_results = 5,
+  sort = true,
+}
 
 -- -- `/` cmdline setup.
 -- cmp.setup.cmdline('/', {
