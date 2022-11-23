@@ -29,7 +29,7 @@ command! -nargs=? Gco call s:changebranch("<args>")
 " Push
 function! s:MosheGitPush() abort
   echo 'Pushing to ' . FugitiveHead() . '...'
-  exe 'Git! push -u origin ' . FugitiveHead()
+  exe 'Git push -u origin ' . FugitiveHead()
   let l:exit_status = get(FugitiveResult(), 'exit_status', 1)
   if l:exit_status != 0
     echo 'Failed pushing 😒'

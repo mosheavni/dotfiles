@@ -6,3 +6,5 @@ neovim
 npm
 prettier
 semver
+typescript
+typescript-language-server

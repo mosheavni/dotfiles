@@ -21,6 +21,10 @@ keymap('v', 'H', '0', opts.no_remap)
 keymap('v', '<tab>', '>gv', opts.remap)
 keymap('v', '<s-tab>', '<gv', opts.remap)
 
+-- Indent by block
+vim.cmd [[let @i="v%koj>$"]]
+vim.cmd [[let @o="v%koj<$"]]
+
 -- Copy number of lines and paste below
 keymap('n', '<leader>cp', ":<c-u>exe 'normal! y' . (v:count == 0 ? 1 : v:count) . 'j' . (v:count == 0 ? 1 : v:count) . 'jo<C-v><Esc>p'<cr>", opts.no_remap)
 
@@ -157,9 +161,6 @@ keymap('n', 'cP', '"+yy', {})
 keymap('v', 'cp', '"+y', {})
 keymap('n', 'cv', '"+p', {})
 
--- Change working directory based on open file
-keymap('n', '<leader>cd', ':cd %:p:h<CR>:pwd<CR>', opts.no_remap)
-
 -- Move visually selected block
 keymap('v', 'J', [[:m '>+1<CR>gv=gv]], opts.no_remap)
 keymap('v', 'K', [[:m '<-2<CR>gv=gv]], opts.no_remap)
@@ -178,8 +179,8 @@ keymap('n', '<leader>fl', 'zazczA', opts.no_remap)
 keymap('n', '<leader><cr>', [[:silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>]], {})
 
 -- Move vertically by visual line (don't skip wrapped lines)
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", opts.expr_silent)
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", opts.expr_silent)
+keymap('n', 'k', "v:count == 0 ? 'gk' : 'k'", opts.expr_silent)
+keymap('n', 'j', "v:count == 0 ? 'gj' : 'j'", opts.expr_silent)
 
 -- Scroll one line
 keymap('n', '<PageUp>', '<c-y>', opts.no_remap_silent)

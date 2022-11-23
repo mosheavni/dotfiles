@@ -47,16 +47,20 @@ return packer.startup(function(use)
   }
 
   -- Git Related
-  use 'tpope/vim-fugitive'
+  use {
+    'tpope/vim-fugitive',
+    config = "require('user.git')",
+  }
   use {
     'lewis6991/gitsigns.nvim',
     event = 'BufWinEnter',
-    config = function()
-      require 'user.plugins.gitsigns'
-    end,
+    config = "require 'user.plugins.gitsigns'",
   }
   use { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } }
-  use 'akinsho/git-conflict.nvim'
+  use {
+    'akinsho/git-conflict.nvim',
+    config = "require('git-conflict').setup()",
+  }
 
   -- Documents
   use 'nanotee/luv-vimdocs'
@@ -88,6 +92,10 @@ return packer.startup(function(use)
     requires = 'neovim/nvim-lspconfig',
   }
   use {
+    'glepnir/lspsaga.nvim',
+    branch = 'main',
+  }
+  use {
     'cuducos/yaml.nvim',
     ft = { 'yaml' }, -- optional
     requires = { 'nvim-treesitter/nvim-treesitter' },
@@ -97,7 +105,6 @@ return packer.startup(function(use)
   use 'nvim-treesitter/nvim-treesitter-refactor'
   use { 'sam4llis/nvim-lua-gf', ft = { 'lua' } }
   use 'Afourcat/treesitter-terraform-doc.nvim'
-  use 'David-Kunz/markid'
 
   -- LSP
   use 'williamboman/mason.nvim'
@@ -133,10 +140,6 @@ return packer.startup(function(use)
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
   use 'folke/neodev.nvim'
   use 'jose-elias-alvarez/typescript.nvim'
-  use {
-    'kosayoda/nvim-lightbulb',
-    requires = 'antoinemadec/FixCursorHold.nvim',
-  }
 
   -- Completion
   use {
@@ -197,39 +200,24 @@ return packer.startup(function(use)
   -- Functionality Tools
   use {
     'gbprod/yanky.nvim',
-    config = function()
-      require('yanky').setup {
-        ring = {
-          history_length = 100,
-          storage = 'sqlite',
-          sync_with_numbered_registers = true,
-          cancel_event = 'update',
-        },
-      }
-      vim.keymap.set({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)')
-      vim.keymap.set({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)')
-      vim.keymap.set({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
-      vim.keymap.set({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
-      vim.keymap.set('n', '<c-n>', '<Plug>(YankyCycleForward)')
-      vim.keymap.set('n', '<c-m>', '<Plug>(YankyCycleBackward)')
-    end,
     requires = { 'kkharji/sqlite.lua' },
   }
+  use 'mizlan/iswap.nvim'
+  use {
+    'gnikdroy/projections.nvim',
+  }
   use 'kevinhwang91/nvim-hlslens'
+  -- (convert "${}" to `${}` in JS and "{}" to f"" in Python)
   use {
     'axelvc/template-string.nvim',
     ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
-    config = function()
-      require('template-string').setup()
-    end,
+    config = "require('template-string').setup()",
   }
   use 'vim-scripts/ReplaceWithRegister'
   use {
     'kiran94/s3edit.nvim',
-    config = function()
-      require('s3edit').setup()
-    end,
     cmd = 'S3Edit',
+    config = "require('s3edit').setup()",
   }
   use {
     'voldikss/vim-floaterm',
@@ -259,9 +247,11 @@ return packer.startup(function(use)
       '<C-e>',
     },
   }
-  use 'tiagovla/scope.nvim'
   use { 'pechorin/any-jump.vim', cmd = { 'AnyJump', 'AnyJumpVisual' } }
-  use 'kazhala/close-buffers.nvim'
+  use {
+    'kazhala/close-buffers.nvim',
+    config = "require('close_buffers').setup {}",
+  }
 
   use 'folke/which-key.nvim'
   use {
@@ -276,9 +266,7 @@ return packer.startup(function(use)
       'DiffviewRefresh',
       'DiffviewToggleFiles',
     },
-    config = function()
-      require('diffview').setup()
-    end,
+    config = "require('diffview')",
   }
 
   -- Quickfix
@@ -303,12 +291,6 @@ return packer.startup(function(use)
     config = "require('user.plugins.bufferline')",
   }
   use 'RRethy/vim-illuminate'
-  use {
-    'nvim-zh/colorful-winsep.nvim',
-    config = function()
-      require('colorful-winsep').setup()
-    end,
-  }
 
   use {
     'nvim-lualine/lualine.nvim',
@@ -349,15 +331,14 @@ return packer.startup(function(use)
   -- Text Manipulation
   use 'tpope/vim-repeat'
   use 'tpope/vim-surround'
-  use 'numToStr/Comment.nvim'
+  use {
+    'numToStr/Comment.nvim',
+    config = "require('Comment').setup {}",
+  }
   use 'junegunn/vim-easy-align'
   use 'AndrewRadev/switch.vim'
   use {
     'ggandor/leap.nvim',
-    config = function()
-      vim.keymap.set('n', 's', '<Plug>(leap-forward-to)', { silent = true })
-      vim.keymap.set('n', 'S', '<Plug>(leap-backward-to)', { silent = true })
-    end,
   }
   use { 'alvan/vim-closetag', ft = { 'html', 'javascript' } }
   use 'editorconfig/editorconfig-vim'

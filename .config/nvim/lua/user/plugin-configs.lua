@@ -10,11 +10,6 @@ require('onedark').setup {
 }
 require('onedark').load()
 
----------------------
--- Plugin requires --
----------------------
-require 'user.git'
-
 ----------------
 -- WinResizer --
 ----------------
@@ -26,10 +21,61 @@ keymap('t', '<C-E>', '<Esc><Cmd>WinResizerStartResize<CR>', opts.no_remap_silent
 -------------------
 vim.g['jsonpath_register'] = '*'
 
-------------------
--- Comment.nvim --
-------------------
-require('Comment').setup {}
+-----------
+-- Yanky --
+-----------
+require('yanky').setup {
+  ring = {
+    history_length = 100,
+    storage = 'sqlite',
+    sync_with_numbered_registers = true,
+    cancel_event = 'update',
+  },
+}
+keymap({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)')
+keymap({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)')
+keymap({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
+keymap({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
+keymap('n', '<c-n>', '<Plug>(YankyCycleForward)')
+keymap('n', '<c-m>', '<Plug>(YankyCycleBackward)')
+
+----------
+-- Leap --
+----------
+keymap('n', 's', '<Plug>(leap-forward-to)', opts.silent)
+keymap('n', 'S', '<Plug>(leap-backward-to)', opts.silent)
+
+-----------------
+-- Projections --
+-----------------
+require('projections').setup {
+  workspaces = { -- Default workspaces to search for
+    -- "~/dev",                               dev is a workspace. default patterns is used (specified below)
+    -- { "~/Documents/dev", { ".git" } },     Documents/dev is a workspace. patterns = { ".git" }
+    { '~/Repos', {} }, --                    An empty pattern list indicates that all subfolders are considered projects
+  },
+}
+
+-- Bind <leader>fp to Telescope projections
+require('telescope').load_extension 'projections'
+vim.keymap.set('n', '<leader>fp', function()
+  vim.cmd 'Telescope projections'
+end)
+
+-- Autostore session on DirChange and VimExit
+local Session = require 'projections.session'
+vim.api.nvim_create_autocmd({ 'DirChangedPre', 'VimLeavePre' }, {
+  callback = function()
+    Session.store(vim.loop.cwd())
+  end,
+})
+vim.api.nvim_create_user_command('StoreProjectSession', function()
+  Session.store(vim.loop.cwd())
+end, {})
+
+vim.api.nvim_create_user_command('RestoreProjectSession', function()
+  Session.restore(vim.loop.cwd())
+end, {})
 
 --------------------
 -- Vim easy align --
@@ -71,20 +117,6 @@ require('dressing').setup {
   },
 }
 vim.cmd [[hi link FloatTitle Normal]]
-
---------------
--- Diffview --
---------------
--- local actions = require 'diffview.actions'
--- require('diffview').setup {}
---   enhanced_diff_hl = true, -- See ':h diffview-config-enhanced_diff_hl'
---   keymaps = {
---     disable_defaults = true, -- Disable the default keymaps
---     file_panel = {
---       ['cc'] = '<cmd>G commit<cr>',
---     },
---   },
--- }
 
 -----------------
 -- Vim ansible --
@@ -155,11 +187,6 @@ vim.g['WebDevIconsOS'] = 'Darwin'
 vim.g['DevIconsEnableFoldersOpenClose'] = 1
 vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
 
----------------------
--- Conflict marker --
----------------------
-require('git-conflict').setup()
-
 ----------------
 -- Switch vim --
 ----------------
@@ -179,11 +206,6 @@ vim.g['switch_custom_definitions'] = {
   -- }
 }
 
--------------------
--- Close Buffers --
--------------------
-require('close_buffers').setup {}
-
 ----------------
 -- vim.notify --
 ----------------
@@ -191,6 +213,7 @@ vim.notify = require 'notify'
 require('notify').setup {
   background_colour = '#000000',
 }
+keymap('n', '<Leader>x', ":lua require('notify').dismiss()<cr>", opts.silent)
 
 ---------------
 -- Which-Key --
@@ -198,27 +221,11 @@ require('notify').setup {
 require('which-key').setup {}
 require 'user.which-key'
 
--------------------------
--- bulb (code actions) --
--------------------------
-local lightbulb = require 'nvim-lightbulb'
-lightbulb.setup {
-  autocmd = { enabled = true },
-  sign = {
-    enabled = false,
-  },
-  virtual_text = {
-    enabled = true,
-    text = '💡',
-    -- highlight mode to use for virtual text (replace, combine, blend), see :help nvim_buf_set_extmark() for reference
-    hl_mode = 'replace',
-  },
-}
-
-----------------
--- Scope.Nvim --
-----------------
-require('scope').setup()
+-----------
+-- ISwap --
+-----------
+require('iswap').setup()
+keymap('n', '<leader>sw', ':ISwapWith<CR>')
 
 ------------
 -- Fidget --
