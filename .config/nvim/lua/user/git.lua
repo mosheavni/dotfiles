@@ -201,7 +201,13 @@ local git_actions = {
     pretty_print 'Created a work in progress commit.'
   end,
   ['Diff File History'] = function()
-    vim.cmd 'DiffviewFileHistory %'
+    vim.ui.input({ prompt = 'Enter file path (empty for current file)' }, function(file_to_check)
+      if not file_to_check then
+        file_to_check = '%'
+      end
+
+      vim.cmd('DiffviewFileHistory ' .. file_to_check)
+    end)
   end,
   ['Diff with branch'] = function()
     vim.ui.input({ prompt = 'Enter branch to diff with' }, function(branch_to_diff)
@@ -281,6 +287,7 @@ local git_actions = {
       end)
     end)
   end,
+  ['Show full history of file'] = function() end,
 }
 vim.keymap.set('n', '<leader>gm', function()
   vim.ui.select(vim.tbl_keys(git_actions), { prompt = 'Choose git action' }, function(choice)
