@@ -100,22 +100,14 @@ autocmd({ 'FileType' }, {
 })
 autocmd({ 'BufWritePost' }, {
   group = special_filetypes,
-  pattern = 'plugins/init.lua',
+  pattern = '*/plugins/init.lua',
   command = 'if bufname(bufnr()) !~? "^fugitive:" | source <afile> | PackerCompile | endif',
 })
 autocmd({ 'BufRead' }, {
   group = special_filetypes,
-  pattern = 'plugins/init.lua',
+  pattern = '*/plugins/init.lua',
   command = 'lua require("user.open-url").setup()',
 })
-
--- Nvim Blame Line
--- local nvim_blame_line = augroup('NvimBlameLine')
--- autocmd({ 'BufEnter' }, {
---   group = nvim_blame_line,
---   pattern = '*',
---   command = 'EnableBlameLine'
--- })
 
 -- Last position on Document
 local last_position = augroup 'LastPosition'
