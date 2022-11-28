@@ -140,6 +140,11 @@ return packer.startup(function(use)
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
   use 'folke/neodev.nvim'
   use 'jose-elias-alvarez/typescript.nvim'
+  use {
+    'folke/trouble.nvim',
+    requires = 'kyazdani42/nvim-web-devicons',
+    config = 'require("trouble").setup {}',
+  }
 
   -- Completion
   use {
@@ -336,12 +341,13 @@ return packer.startup(function(use)
     config = "require('Comment').setup {}",
   }
   use 'junegunn/vim-easy-align'
-  use 'AndrewRadev/switch.vim'
+  use 'nguyenvukhang/nvim-toggler'
+
   use {
     'ggandor/leap.nvim',
   }
-  use { 'alvan/vim-closetag', ft = { 'html', 'javascript' } }
-  use 'editorconfig/editorconfig-vim'
+  use { 'windwp/nvim-ts-autotag', ft = { 'html', 'javascript' } }
+  use 'gpanders/editorconfig.nvim'
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

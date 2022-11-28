@@ -133,11 +133,6 @@ vim.g['yaml_revealer_list_indicator'] = 1
 -------------
 keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
 
--------------------
--- Editor config --
--------------------
-vim.g['EditorConfig_exclude_patterns'] = { 'fugitive://.*' }
-
 ---------------
 -- neoscroll --
 ---------------
@@ -169,16 +164,10 @@ imap <silent><script><expr> <M-Enter> copilot#Accept("\<CR>")
 let g:copilot_no_tab_map = v:true
 ]]
 
-----------------
--- Yaml Buddy --
-----------------
+--------------------
+-- Yaml Companion --
+--------------------
 keymap('n', '<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", opts.no_remap_silent)
-
--------------------
--- Vim close tag --
--------------------
-vim.g['closetag_filenames'] = '*.html,*.xhtml,*.phtml,*.erb,*.jsx,*.tsx,*.js'
-vim.g['closetag_filetypes'] = 'html,xhtml,phtml,javascript,javascriptreact'
 
 --------------
 -- DevIcons --
@@ -187,24 +176,16 @@ vim.g['WebDevIconsOS'] = 'Darwin'
 vim.g['DevIconsEnableFoldersOpenClose'] = 1
 vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
 
-----------------
--- Switch vim --
-----------------
--- The map switch is between underscores to camelCase: moshe_king -> mosheKing -> moshe_king.
-vim.g['switch_custom_definitions'] = {
-  { 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT' },
-  { 'yes', 'no' },
-  { 'enable', 'disable' },
-  { '==', '!=' },
-  -- {
-  --   [vim.regex([[\<[a-z0-9]\+_\k\+\>]])] = {
-  --     [vim.regex([[_\(.\)]])] = vim.regex([[\U\1]])
-  --   },
-  --   [vim.regex([[\<[a-z0-9]\+[A-Z]\k\+\>]])] = {
-  --     [vim.regex([[\([A-Z]\)]])] = vim.regex([[_\l\1]])
-  --   },
-  -- }
+------------------
+-- Nvim Toggler --
+------------------
+require('nvim-toggler').setup {
+  remove_default_keybinds = true,
+  inverses = {
+    ['enable'] = 'disable',
+  },
 }
+keymap({ 'n', 'v' }, 'gs', require('nvim-toggler').toggle)
 
 ----------------
 -- vim.notify --

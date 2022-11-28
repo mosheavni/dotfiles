@@ -56,6 +56,9 @@ configs.setup {
       -- node_decremental = '<S-TAB>',
     },
   },
+  autotag = {
+    enable = true,
+  },
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
