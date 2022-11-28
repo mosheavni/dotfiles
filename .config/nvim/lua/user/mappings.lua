@@ -223,9 +223,6 @@ keymap('n', '<leader>bd', '<cmd>BDelete this<cr>', opts.no_remap_silent)
 -- Close current buffer
 keymap('n', '<leader>bc', ':close<cr>', opts.no_remap_silent)
 
--- Highlight last inserted text
-keymap('n', 'gV', '`[v`]', opts.no_remap)
-
 -- Yaml 2 json
 vim.api.nvim_create_user_command('Yaml2Json', function()
   vim.cmd [[%!yq -ojson]]
@@ -236,17 +233,14 @@ vim.api.nvim_create_user_command('Json2Yaml', function()
 end, {})
 
 -- Change document indentation number
-vim.cmd [[
-function! s:ChangeIndentNum() abort
-  call inputsave()
-  let the_num = str2nr(input('Enter new indent: '))
-  call inputrestore()
-  exe 'setlocal shiftwidth=' . the_num
-  exe 'setlocal softtabstop=' . the_num
-  exe 'setlocal tabstop=' . the_num
-endfunction
-nnoremap cii :<C-u>call <SID>ChangeIndentNum()<CR>
-]]
+keymap('n', 'cii', function()
+  vim.ui.input({ prompt = 'Enter new indent' }, function(indent_size)
+    local indent_size = tonumber(indent_size)
+    vim.opt_local.shiftwidth = indent_size
+    vim.opt_local.softtabstop = indent_size
+    vim.opt_local.tabstop = indent_size
+  end)
+end, opts.no_remap)
 
 -- Every parameter in its own line
 vim.cmd [[

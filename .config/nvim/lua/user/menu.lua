@@ -76,6 +76,79 @@ local random_actions = {
       end)
     end)
   end,
+  ['Toggle Terminal'] = function()
+    vim.fn.feedkeys(T '<F6>')
+  end,
+  ['Create a new terminal window'] = function()
+    vim.fn.feedkeys(T '<F7>')
+  end,
+  ['Move to next terminal window'] = function()
+    vim.fn.feedkeys(T '<F8>')
+  end,
+  ['Find files'] = function()
+    vim.fn.feedkeys(T '<C-p>')
+  end,
+  ['Find buffers'] = function()
+    vim.fn.feedkeys(T '<C-b>')
+  end,
+  ['Open Nvim Tree File Browser'] = function()
+    vim.fn.feedkeys(T '<C-o>')
+  end,
+  ['Close all notifications'] = function()
+    vim.fn.feedkeys(T '<leader>' .. 'x')
+  end,
+  ['Quit all'] = function()
+    vim.fn.feedkeys(T '<leader>' .. 'qq')
+  end,
+  ['Paste from clipboard'] = function()
+    vim.fn.feedkeys(T '<C-v>')
+  end,
+  ['Copy entire file to clipboard'] = function()
+    vim.fn.feedkeys 'Y'
+  end,
+  ['Convert \\n to new lines'] = function()
+    vim.fn.feedkeys(T '<leader>' .. T '<cr>')
+  end,
+  ['Move line down'] = function()
+    vim.fn.feedkeys '-'
+  end,
+  ['Move line up'] = function()
+    vim.fn.feedkeys '_'
+  end,
+  ['Copy full file path to clipboard'] = function()
+    vim.fn.feedkeys(T '<leader>' .. 'cfa')
+  end,
+  ['Copy relative file path to clipboard'] = function()
+    vim.fn.feedkeys(T '<leader>' .. 'cfp')
+  end,
+  ['Copy directory path to clipboard'] = function()
+    vim.fn.feedkeys(T '<leader>' .. 'cfd')
+  end,
+  ['Split long bash line'] = function()
+    vim.fn.feedkeys(T '<leader>' .. [[\]])
+  end,
+  ['Delete all hidden buffers'] = function()
+    vim.cmd 'BDelete hidden'
+  end,
+  ['Delete current buffer'] = function()
+    vim.fn.feedkeys(T '<leader>' .. 'bd')
+  end,
+  ['Yaml to Json'] = function()
+    vim.cmd.Yaml2Json()
+  end,
+  ['Json to Yaml'] = function()
+    vim.cmd.Json2Yaml()
+  end,
+  ['Change indent size'] = function()
+    vim.cmd.Json2Yaml()
+    vim.fn.feedkeys 'cii'
+  end,
+  ['Convert tabs to spaces'] = function()
+    local original_expandtab = vim.opt_global.expandtab:get()
+    vim.opt.expandtab = true
+    vim.cmd.retab()
+    vim.opt.expandtab = original_expandtab
+  end,
 }
 
 -- add-prefix function
