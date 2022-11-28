@@ -100,12 +100,12 @@ autocmd({ 'FileType' }, {
 })
 autocmd({ 'BufWritePost' }, {
   group = special_filetypes,
-  pattern = 'plugins.lua',
+  pattern = 'plugins/init.lua',
   command = 'if bufname(bufnr()) !~? "^fugitive:" | source <afile> | PackerCompile | endif',
 })
 autocmd({ 'BufRead' }, {
   group = special_filetypes,
-  pattern = 'plugins.lua',
+  pattern = 'plugins/init.lua',
   command = 'lua require("user.open-url").setup()',
 })
 

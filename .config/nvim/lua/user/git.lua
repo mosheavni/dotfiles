@@ -287,7 +287,6 @@ local git_actions = {
       end)
     end)
   end,
-  ['Show full history of file'] = function() end,
 }
 vim.keymap.set('n', '<leader>gm', function()
   vim.ui.select(vim.tbl_keys(git_actions), { prompt = 'Choose git action' }, function(choice)
