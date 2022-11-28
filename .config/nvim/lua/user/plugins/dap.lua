@@ -1,4 +1,3 @@
-P 'loaded DAP'
 local utils = require 'user.utils'
 local opts = utils.map_opts
 local keymap = utils.keymap

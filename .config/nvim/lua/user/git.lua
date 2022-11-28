@@ -1,3 +1,7 @@
+local utils = require 'user.utils'
+local pretty_print = function(message)
+  utils.pretty_print(message, 'Git Actions', '')
+end
 --------------
 -- Fugitive --
 --------------
@@ -187,9 +191,6 @@ vim.keymap.set('n', '<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
 
 -- Git actions menu
 local M = {}
-local pretty_print = function(message)
-  vim.notify(message, 2, { title = 'Git Actions', icon = '' })
-end
 M.actions = {
   ['Change branch'] = function()
     require('user.git-branches').open()

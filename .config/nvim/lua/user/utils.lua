@@ -42,4 +42,14 @@ function M.get_selection()
   return lines
 end
 
+M.pretty_print = function(message, title, icon)
+  if not icon then
+    icon = ''
+  end
+  if not title then
+    title = 'Neovim'
+  end
+  vim.notify(message, 2, { title = title, icon = '' })
+end
+
 return M
