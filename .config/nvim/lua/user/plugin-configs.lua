@@ -238,3 +238,8 @@ augroup AnsibleFind
   au BufRead,BufNewFile */ansible/*.yml vnoremap <silent> <leader>gr :call FindAnsibleRoleUnderCursor()<CR>
 augroup END
 ]]
+
+---------------------
+-- Random Requires --
+---------------------
+require 'user.menu'

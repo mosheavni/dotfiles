@@ -111,7 +111,7 @@ return packer.startup(function(use)
   use 'williamboman/mason-lspconfig.nvim'
   use {
     'neovim/nvim-lspconfig',
-    config = "require('user.lsp')",
+    config = "require('user.lsp').setup()",
     event = 'UIEnter',
   }
   use {

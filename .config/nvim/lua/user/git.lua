@@ -186,10 +186,11 @@ vim.keymap.set('n', '<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
 -- redir @">|silent scriptnames|redir END|enew|put
 
 -- Git actions menu
+local M = {}
 local pretty_print = function(message)
   vim.notify(message, 2, { title = 'Git Actions', icon = '' })
 end
-local git_actions = {
+M.actions = {
   ['Change branch'] = function()
     require('user.git-branches').open()
   end,
@@ -262,6 +263,19 @@ local git_actions = {
       end)
     end)
   end,
+  ['Find in all commits'] = function()
+    -- local rev_list_unparsed = vim.api.nvim_exec('for i in FugitiveExecute("rev-list", "--all").stdout|echo i|endfor', true)
+    local rev_list_unparsed = vim.api.nvim_exec('G rev-list --all', true)
+    local rev_list = vim.split(vim.trim(rev_list_unparsed), '\n')
+    vim.ui.input({ prompt = 'Enter search term' }, function(search_term)
+      if not search_term then
+        pretty_print 'Canceled.'
+        return
+      end
+      pretty_print('Searching for ' .. search_term .. ' in all commits...')
+      vim.cmd('silent! Ggrep "' .. search_term .. '" ' .. table.concat(rev_list, ' '))
+    end)
+  end,
   ['Delete tag'] = function()
     local tags_unparsed = vim.api.nvim_exec('for i in FugitiveExecute("tag").stdout|echo i|endfor', true)
     local tags = vim.split(vim.trim(tags_unparsed), '\n')
@@ -287,11 +301,24 @@ local git_actions = {
       end)
     end)
   end,
+  ['Push'] = function()
+    vim.cmd 'Gp'
+  end,
+  ['Pull'] = function()
+    vim.cmd 'Gl'
+  end,
+  ['Add (Stage) All'] = function()
+    vim.cmd 'G add -A'
+  end,
+
+  ['Unstage All'] = function()
+    vim.cmd 'G reset'
+  end,
 }
 vim.keymap.set('n', '<leader>gm', function()
-  vim.ui.select(vim.tbl_keys(git_actions), { prompt = 'Choose git action' }, function(choice)
+  vim.ui.select(vim.tbl_keys(M.actions), { prompt = 'Choose git action' }, function(choice)
     if choice then
-      git_actions[choice]()
+      M.actions[choice]()
     end
   end)
 end)
@@ -308,3 +335,5 @@ end)
 --   end
 --   vim.g.default_branch = default_branch
 -- end)
+--
+return M

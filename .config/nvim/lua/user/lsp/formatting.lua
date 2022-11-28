@@ -33,20 +33,24 @@ local function select_client(method, callback)
   return vim.ui.select(client_names, { 'Select LSP client' }, callback)
 end
 
+M.format = function()
+  select_client('textDocument/formatting', function(client_name)
+    if client_name == nil then
+      return
+    end
+    vim.lsp.buf.format {
+      filter = function(s_client)
+        return s_client.name == client_name
+      end,
+    }
+    vim.notify('Formatted using ' .. client_name)
+  end)
+end
+
 M.setup = function(client, bufnr)
   lsp_format.on_attach(client)
   vim.keymap.set('n', '<leader>lp', function()
-    select_client('textDocument/formatting', function(client_name)
-      if client_name == nil then
-        return
-      end
-      vim.lsp.buf.format {
-        filter = function(s_client)
-          return s_client.name == client_name
-        end,
-      }
-      vim.notify('Formatted using ' .. client_name)
-    end)
+    M.format()
   end, vim.tbl_extend('force', opts.silent, { buffer = bufnr }))
 
   -- Formatexpr using LSP

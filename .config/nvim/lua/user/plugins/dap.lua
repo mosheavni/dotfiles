@@ -1,3 +1,4 @@
+P 'loaded DAP'
 local utils = require 'user.utils'
 local opts = utils.map_opts
 local keymap = utils.keymap
@@ -77,11 +78,8 @@ dap.configurations.sh = {
 }
 
 -- Menu
-local pretty_print = function(message)
-  vim.notify(message, 2, { title = 'DAP Actions', icon = '' })
-end
-
-local dap_actions = {
+local M = {}
+M.actions = {
   ['continue'] = function()
     dap.continue()
   end,
@@ -115,10 +113,12 @@ local dap_actions = {
   end,
 }
 
-keymap('n', '<leader>a', function()
-  vim.ui.select(vim.tbl_keys(dap_actions), { prompt = 'Choose dap action' }, function(choice)
-    if choice then
-      dap_actions[choice]()
-    end
-  end)
-end)
+-- keymap('n', '<leader>am', function()
+--   vim.ui.select(vim.tbl_keys(M.actions), { prompt = 'Choose dap action' }, function(choice)
+--     if choice then
+--       M.actions[choice]()
+--     end
+--   end)
+-- end)
+
+return M
