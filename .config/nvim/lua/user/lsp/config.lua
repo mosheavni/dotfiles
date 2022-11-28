@@ -137,9 +137,6 @@ lspconfig.pyright.setup {
 
 --lua
 --settings = {
-Lua = {
-  diagnostics = { globals = { 'vim' } },
-}
 lspconfig.sumneko_lua.setup {
   capabilities = capabilities,
   on_attach = default_on_attach,
@@ -151,7 +148,10 @@ lspconfig.sumneko_lua.setup {
       hint = {
         enable = true,
       },
-      diagnostics = { globals = { 'vim' } },
+      diagnostics = {
+        disable = { 'undefined-global' },
+        globals = { 'vim' },
+      },
     },
   },
 }
