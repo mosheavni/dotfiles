@@ -36,9 +36,9 @@ function! s:MosheGitPush() abort
   exe 'Git push -u origin ' . FugitiveHead()
   let l:exit_status = get(FugitiveResult(), 'exit_status', 1)
   if l:exit_status != 0
-    echo 'Failed pushing 😒'
+    echo '🔴 Failed pushing'
   else
-    echo 'Pushed! 🤩'
+    echo '🟢 Pushed!'
   endif
 endfunction
 command! Gp call <sid>MosheGitPush()
@@ -50,9 +50,9 @@ function! s:MosheGitPull() abort
   Git pull --quiet
   let l:exit_status = get(FugitiveResult(), 'exit_status', 1)
   if l:exit_status != 0
-    echo 'Failed pulling 😒'
+    echo '🔴 Failed pulling'
   else
-    echo 'Pulled! 😎'
+    echo '🟢 Pulled!'
   endif
 endfunction
 command! -bang Gl call <sid>MosheGitPull()
@@ -247,6 +247,17 @@ M.actions = {
   ['Log'] = function()
     vim.cmd 'G log --all --decorate --oneline'
   end,
+  ['See all tags'] = function()
+    local tags = vim.fn.FugitiveExecute('tag').stdout
+    vim.ui.select(tags, { prompt = 'Select tag to copy to clipboard' }, function(selection)
+      if not selection then
+        pretty_print 'Canceled.'
+        return
+      end
+      vim.fn.setreg('+', selection)
+      pretty_print('Copied ' .. selection .. ' to clipboard.')
+    end)
+  end,
   ['Create tag'] = function()
     vim.ui.input({ prompt = 'Enter tag name' }, function(input)
       if not input then
@@ -264,22 +275,8 @@ M.actions = {
       end)
     end)
   end,
-  ['Find in all commits'] = function()
-    -- local rev_list_unparsed = vim.api.nvim_exec('for i in FugitiveExecute("rev-list", "--all").stdout|echo i|endfor', true)
-    local rev_list_unparsed = vim.api.nvim_exec('G rev-list --all', true)
-    local rev_list = vim.split(vim.trim(rev_list_unparsed), '\n')
-    vim.ui.input({ prompt = 'Enter search term' }, function(search_term)
-      if not search_term then
-        pretty_print 'Canceled.'
-        return
-      end
-      pretty_print('Searching for ' .. search_term .. ' in all commits...')
-      vim.cmd('silent! Ggrep "' .. search_term .. '" ' .. table.concat(rev_list, ' '))
-    end)
-  end,
   ['Delete tag'] = function()
-    local tags_unparsed = vim.api.nvim_exec('for i in FugitiveExecute("tag").stdout|echo i|endfor', true)
-    local tags = vim.split(vim.trim(tags_unparsed), '\n')
+    local tags = vim.fn.FugitiveExecute('tag').stdout
 
     vim.ui.select(tags, { prompt = 'Enter tag name' }, function(input)
       if not input then
@@ -300,6 +297,17 @@ M.actions = {
           pretty_print('Tag ' .. input .. ' deleted locally.')
         end
       end)
+    end)
+  end,
+  ['Find in all commits'] = function()
+    local rev_list = vim.fn.FugitiveExecute({ 'rev-list', '--all' }).stdout
+    vim.ui.input({ prompt = 'Enter search term' }, function(search_term)
+      if not search_term then
+        pretty_print 'Canceled.'
+        return
+      end
+      pretty_print('Searching for ' .. search_term .. ' in all commits...')
+      vim.cmd('silent Ggrep  ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
     end)
   end,
   ['Push'] = function()
