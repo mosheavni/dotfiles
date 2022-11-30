@@ -86,7 +86,6 @@ return packer.startup(function(use)
   }
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'p00f/nvim-ts-rainbow'
-  use 'JoosepAlviste/nvim-ts-context-commentstring'
   use {
     'SmiteshP/nvim-navic',
     requires = 'neovim/nvim-lspconfig',
@@ -115,7 +114,6 @@ return packer.startup(function(use)
     event = 'UIEnter',
   }
   use {
-    'ray-x/lsp_signature.nvim', -- Show function signature when you type
     'lukas-reineke/lsp-format.nvim',
     'jose-elias-alvarez/null-ls.nvim',
     'b0o/SchemaStore.nvim',
