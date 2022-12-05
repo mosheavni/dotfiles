@@ -8,6 +8,10 @@ local keymap = utils.keymap
 -- Select all file visually
 keymap('n', '<leader>sa', 'gg^<S-v>G$', opts.no_remap)
 
+-- Inner word movements
+keymap('o', '<c-w>', 'iw', opts.no_remap)
+keymap('n', 'v<c-w>', 'viw', opts.no_remap)
+
 -- Map 0 to first non-blank character
 keymap('n', '0', '^', opts.no_remap)
 
