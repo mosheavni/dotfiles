@@ -104,11 +104,13 @@ require('dressing').setup {
       conf.row = 0
       return conf
     end,
-    winblend = 0,
+    win_options = {
+      winhighlight = 'NormalFloat:Normal',
+      winblend = 0,
+    },
     border = 'rounded',
     width = '1.0',
     prompt_align = 'center',
-    winhighlight = 'NormalFloat:Normal',
     -- get_config = function()
     --   if vim.api.nvim_buf_get_option(0, 'filetype') == 'NvimTree' then
     --     return { enabled = false }
