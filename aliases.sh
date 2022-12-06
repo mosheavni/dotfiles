@@ -251,7 +251,7 @@ function nvim-startuptime() {
 }
 
 function python-venv-init() {
-  pyenv virtualenv 3.10.3 ${PWD##*/}
+  pyenv virtualenv $(pyenv global) ${PWD##*/}
   pyenv local ${PWD##*/}
   pyenv pyright
 }

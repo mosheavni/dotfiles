@@ -15,11 +15,6 @@ return function(bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
 
-  -- Goto previous/next diagnostic warning/error
-  -- Use `[g` and `]g` to navigate diagnostics
-  buf_set_keymap('n', '[g', '<cmd>lua vim.diagnostic.goto_prev({float=false})<CR>', opts.silent)
-  buf_set_keymap('n', ']g', '<cmd>lua vim.diagnostic.goto_next({float=false})<CR>', opts.silent)
-
   -- GoTo code navigation
   buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts.silent)
   -- buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts.silent)
@@ -46,6 +41,10 @@ return function(bufnr)
   -- Diagnostics
   buf_set_keymap('n', '<leader>lq', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts.silent)
   buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.diagnostic.open_float()<cr>', opts.silent)
+  -- Goto previous/next diagnostic warning/error
+  -- Use `[g` and `]g` to navigate diagnostics
+  buf_set_keymap('n', '[g', '<cmd>lua vim.diagnostic.goto_prev({float=false})<CR>', opts.silent)
+  buf_set_keymap('n', ']g', '<cmd>lua vim.diagnostic.goto_next({float=false})<CR>', opts.silent)
 
   -- Code action
   buf_set_keymap('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', {})

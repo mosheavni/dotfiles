@@ -63,6 +63,8 @@ local default_on_attach = function(client, bufnr)
       }
       if vim.lsp.buf.server_ready() then
         vim.diagnostic.open_float(nil, opts)
+      else
+        P 'lsp not ready'
       end
     end,
   })
