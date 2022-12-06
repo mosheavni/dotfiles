@@ -83,9 +83,7 @@
 9. Install npm packages
 
    ```bash
-   while read -r npm_package;do
-      npm install --global $npm_package
-   done < Npmfile
+   npm install -g $(printf "%s " $(<Npmfile))
    ```
 
 10. Install pip dependencies
