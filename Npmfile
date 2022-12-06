@@ -1,4 +1,5 @@
 @fsouza/prettierd
+@johnnymorganz/stylua-bin
 bash-language-server
 compare-versions
 dockerfile-language-server-nodejs

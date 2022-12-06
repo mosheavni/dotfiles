@@ -7,7 +7,9 @@ local path = util.path
 
 require('mason').setup()
 require 'user.lsp.null-ls'
-require('mason-null-ls').setup()
+require('mason-null-ls').setup {
+  automatic_installation = true,
+}
 require('mason.settings').set {
   ui = {
     border = 'rounded',

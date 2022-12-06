@@ -92,6 +92,14 @@
     pip3 install -r requirements.txt
     ```
 
+11. Set python version
+
+  ```bash
+  PY_LATEST=$(pyenv latest -k 3)
+  pyenv install "$PY_LATEST"
+  pyenv global "$PY_LATEST"
+  ```
+
 11. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
 
     ```bash
