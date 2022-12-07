@@ -81,17 +81,21 @@ cmp.setup {
       -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
       before = function(entry, vim_item)
         vim_item.kind = lspkind.presets.default[vim_item.kind]
-
-        local menu = source_mapping[entry.source.name]
+        vim_item.menu = source_mapping[entry.source.name]
         if entry.source.name == 'cmp_tabnine' then
-          if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
-            menu = entry.completion_item.data.detail .. ' ' .. menu
-          end
+          local detail = (entry.completion_item.data or {}).detail
           vim_item.kind = ''
+          if detail and detail:find '.*%%.*' then
+            vim_item.kind = vim_item.kind .. ' ' .. detail
+          end
+
+          if (entry.completion_item.data or {}).multiline then
+            vim_item.kind = vim_item.kind .. ' ' .. '[ML]'
+          end
         end
 
-        vim_item.menu = menu
-
+        local maxwidth = 80
+        vim_item.abbr = string.sub(vim_item.abbr, 1, maxwidth)
         return vim_item
       end,
     },
