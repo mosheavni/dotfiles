@@ -175,6 +175,10 @@ return packer.startup(function(use)
     event = 'InsertEnter',
   }
   use {
+    'terror/chatgpt.nvim',
+    run = 'pip3 install -r requirements.txt',
+  }
+  use {
     'iamcco/markdown-preview.nvim',
     run = 'cd app && yarn install',
     setup = function()
