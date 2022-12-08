@@ -197,6 +197,10 @@ nmap('j', "v:count == 0 ? 'gj' : 'j'", opts.expr_silent)
 nnoremap('<PageUp>', '<c-y>', true)
 nnoremap('<PageDown>', '<c-e>', true)
 
+-- Scrolling centralized
+nnoremap('<C-u>', '<C-u>zz', true)
+nnoremap('<C-d>', '<C-d>zz', true)
+
 -- Change working directory based on open file
 nnoremap('<leader>cd', ':cd %:p:h<CR>:pwd<CR>')
 
