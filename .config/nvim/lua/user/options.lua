@@ -22,6 +22,8 @@ opt.emoji = false
 -- when cursor reaches end/beginning of line
 -- opt.whichwrap:append '<>[]hl'
 opt.diffopt:append { linematch = 50 }
+opt.diffopt:append 'vertical'
+
 opt.number = true -- Show current line number
 opt.numberwidth = 4 -- set number column width to 2 {default 4}
 opt.relativenumber = true -- Show relative line numbers
