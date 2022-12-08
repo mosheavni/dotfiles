@@ -56,6 +56,11 @@ autocmd('FileType', {
     vim.keymap.set('n', 'q', '<CMD>close<CR>', { buffer = 0 })
   end,
 })
+autocmd('BufEnter', {
+  pattern = { '*' },
+  group = buffer_settings,
+  command = 'normal zx',
+})
 
 -- Highlight on yank
 autocmd('TextYankPost', {
