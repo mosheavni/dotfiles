@@ -1,6 +1,6 @@
 local utils = require 'user.utils'
 local opts = utils.map_opts
-local keymap = utils.keymap
+local nnoremap = utils.nnoremap
 local dap = require 'dap'
 require('telescope').load_extension 'dap'
 local dapui = require 'dapui'
@@ -16,8 +16,8 @@ vim.fn.sign_define('DapBreakpointRejected', { text = '❓', texthl = '', linehl 
 vim.fn.sign_define('DapStopped', { text = '⭕️', texthl = '', linehl = '', numhl = '' })
 
 -- Mappings
-keymap('n', '<F5>', '<cmd>lua require("dap").continue()<cr>', opts.no_remap)
-keymap('n', '<leader>bp', '<cmd>lua require("dap").toggle_breakpoint()<cr>', opts.no_remap)
+nnoremap('<F5>', '<cmd>lua require("dap").continue()<cr>', opts.no_remap)
+nnoremap('<leader>bp', '<cmd>lua require("dap").toggle_breakpoint()<cr>', opts.no_remap)
 
 -- Python
 require('dap-python').setup '/usr/local/bin/python3'

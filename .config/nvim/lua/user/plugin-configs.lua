@@ -1,6 +1,8 @@
 local utils = require 'user.utils'
 local keymap = utils.keymap
-local opts = utils.map_opts
+local tnoremap = utils.inoremap
+local nmap = utils.nmap
+local nnoremap = utils.nnoremap
 
 -----------------
 -- Colorscheme --
@@ -14,7 +16,7 @@ require('onedark').load()
 -- WinResizer --
 ----------------
 vim.g['winresizer_start_key'] = '<C-E>'
-keymap('t', '<C-E>', '<Esc><Cmd>WinResizerStartResize<CR>', opts.no_remap_silent)
+tnoremap('<C-E>', '<Esc><Cmd>WinResizerStartResize<CR>', true)
 
 -------------------
 -- Vim json path --
@@ -34,16 +36,16 @@ require('yanky').setup {
 }
 keymap({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)')
 keymap({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)')
-keymap({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
-keymap({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
-keymap('n', '<c-n>', '<Plug>(YankyCycleForward)')
-keymap('n', '<c-m>', '<Plug>(YankyCycleBackward)')
+-- keymap({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
+-- keymap({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
+nmap('<c-n>', '<Plug>(YankyCycleForward)')
+nmap('<c-m>', '<Plug>(YankyCycleBackward)')
 
 ----------
 -- Leap --
 ----------
-keymap('n', 's', '<Plug>(leap-forward-to)', opts.silent)
-keymap('n', 'S', '<Plug>(leap-backward-to)', opts.silent)
+nnoremap('s', '<Plug>(leap-forward-to)', true)
+nnoremap('S', '<Plug>(leap-backward-to)', true)
 
 -----------------
 -- Projections --
@@ -58,7 +60,7 @@ require('projections').setup {
 
 -- Bind <leader>fp to Telescope projections
 require('telescope').load_extension 'projections'
-vim.keymap.set('n', '<leader>fp', function()
+nmap('<leader>fp', function()
   vim.cmd 'Telescope projections'
 end)
 
@@ -80,17 +82,17 @@ end, {})
 --------------------
 -- Vim easy align --
 --------------------
-keymap('n', 'ga', '<Plug>(EasyAlign)', {})
+nmap('ga', '<Plug>(EasyAlign)')
 
 --------------
 -- Floaterm --
 --------------
 vim.g['floaterm_keymap_toggle'] = '<F6>'
-keymap('n', '<F6>', '<Cmd>FloatermToggle<CR>', opts.no_remap_silent)
+nnoremap('<F6>', '<Cmd>FloatermToggle<CR>', true)
 vim.g['floaterm_keymap_new'] = '<F7>'
-keymap('n', '<F7>', '<Cmd>FloatermNew<CR>', opts.no_remap_silent)
+nnoremap('<F7>', '<Cmd>FloatermNew<CR>', true)
 vim.g['floaterm_keymap_next'] = '<F8>'
-keymap('n', '<F8>', '<Cmd>FloatermNext<CR>', opts.no_remap_silent)
+nnoremap('<F8>', '<Cmd>FloatermNext<CR>', true)
 vim.g['floaterm_width'] = 0.7
 vim.g['floaterm_height'] = 0.9
 
@@ -133,7 +135,7 @@ vim.g['yaml_revealer_list_indicator'] = 1
 
 -- AnyJump --
 -------------
-keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
+nnoremap('<leader>j', '<cmd>AnyJump<CR>')
 
 ---------------
 -- neoscroll --
@@ -149,12 +151,12 @@ keymap('n', '<leader>j', '<cmd>AnyJump<CR>', opts.no_remap)
 -- hlslens --
 -------------
 require('hlslens').setup()
-keymap('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
-keymap('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
-keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
-keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
-keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
-keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], opts.no_remap_silent)
+nnoremap('n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
+nnoremap('N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
+nnoremap('*', [[*<Cmd>lua require('hlslens').start()<CR>]], true)
+nnoremap('#', [[#<Cmd>lua require('hlslens').start()<CR>]], true)
+nnoremap('g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], true)
+nnoremap('g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], true)
 
 --------------------
 -- Github Copilot --
@@ -169,7 +171,7 @@ let g:copilot_no_tab_map = v:true
 --------------------
 -- Yaml Companion --
 --------------------
-keymap('n', '<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", opts.no_remap_silent)
+nnoremap('<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", true)
 
 --------------
 -- DevIcons --
@@ -196,7 +198,7 @@ vim.notify = require 'notify'
 require('notify').setup {
   background_colour = '#000000',
 }
-keymap('n', '<Leader>x', ":lua require('notify').dismiss()<cr>", opts.silent)
+nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
 
 ---------------
 -- Which-Key --
@@ -208,7 +210,7 @@ require 'user.which-key'
 -- ISwap --
 -----------
 require('iswap').setup()
-keymap('n', '<leader>sw', ':ISwapWith<CR>')
+nmap('<leader>sw', ':ISwapWith<CR>')
 
 ------------
 -- Fidget --

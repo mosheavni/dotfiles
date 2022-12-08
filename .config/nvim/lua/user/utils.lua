@@ -17,6 +17,53 @@ M.map_opts = {
 }
 
 M.keymap = vim.keymap.set
+M.check_silent = function(silent, rest)
+  if silent ~= nil then
+    if type(silent) == 'table' then
+      return vim.tbl_extend('force', rest, silent)
+    elseif silent then
+      return vim.tbl_extend('force', M.map_opts.silent, rest)
+    end
+  end
+  return rest
+end
+M.nmap = function(lhs, rhs, silent)
+  M.keymap('n', lhs, rhs, M.check_silent(silent, M.map_opts.remap))
+end
+M.nnoremap = function(lhs, rhs, silent)
+  M.keymap('n', lhs, rhs, M.check_silent(silent, M.map_opts.no_remap))
+end
+M.vmap = function(lhs, rhs, silent)
+  M.keymap('v', lhs, rhs, M.map_opts.remap)
+end
+M.vnoremap = function(lhs, rhs, silent)
+  M.keymap('v', lhs, rhs, M.check_silent(silent, M.map_opts.no_remap))
+end
+M.omap = function(lhs, rhs, silent)
+  M.keymap('o', lhs, rhs, M.check_silent(silent, M.map_opts.remap))
+end
+M.onoremap = function(lhs, rhs, silent)
+  M.keymap('o', lhs, rhs, M.check_silent(silent, M.map_opts.no_remap))
+end
+M.imap = function(lhs, rhs, silent)
+  M.keymap('i', lhs, rhs, M.check_silent(silent, M.map_opts.remap))
+end
+M.inoremap = function(lhs, rhs, silent)
+  M.keymap('i', lhs, rhs, M.check_silent(silent, M.map_opts.no_remap))
+end
+M.tmap = function(lhs, rhs, silent)
+  M.keymap('t', lhs, rhs, M.check_silent(silent, M.map_opts.remap))
+end
+M.tnoremap = function(lhs, rhs, silent)
+  M.keymap('t', lhs, rhs, M.check_silent(silent, M.map_opts.no_remap))
+end
+
+M.xmap = function(lhs, rhs, silent)
+  M.keymap('x', lhs, rhs, M.check_silent(silent, M.map_opts.remap))
+end
+M.xnoremap = function(lhs, rhs, silent)
+  M.keymap('x', lhs, rhs, M.check_silent(silent, M.map_opts.no_remap))
+end
 
 local vim = vim
 local api = vim.api

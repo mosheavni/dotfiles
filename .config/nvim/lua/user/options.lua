@@ -2,6 +2,8 @@ local opt = vim.opt
 local utils = require 'user.utils'
 local opts = utils.map_opts
 local keymap = utils.keymap
+local tnoremap = utils.tnoremap
+local vnoremap = utils.vnoremap
 opt.compatible = false
 
 -- disable legacy vim filetype detection in favor of new lua based from neovim
@@ -104,8 +106,8 @@ opt.indentkeys:remove '<:>'
 -- Allow clipboard copy paste in neovim
 keymap('', '<D-v>', '+p<CR>', opts.no_remap_silent)
 keymap('!', '<D-v>', '<C-R>+', opts.no_remap_silent)
-keymap('t', '<D-v>', '<C-R>+', opts.no_remap_silent)
-keymap('v', '<D-v>', '<C-R>+', opts.no_remap_silent)
+tnoremap('<D-v>', '<C-R>+', true)
+vnoremap('<D-v>', '<C-R>+', true)
 
 vim.cmd [[
 " hi ColorColumn ctermbg=238 guibg=lightgrey

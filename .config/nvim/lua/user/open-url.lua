@@ -1,5 +1,5 @@
 local utils = require 'user.utils'
-local keymap = utils.keymap
+local nnoremap = utils.nnoremap
 local opts = utils.map_opts
 local M = {}
 
@@ -47,9 +47,9 @@ M.setup = function(options)
     keymap_lhs = options.keymap
   end
 
-  keymap('n', keymap_lhs, function()
+  nnoremap(keymap_lhs, function()
     M.open_url_under_cursor()
-  end, opts.no_remap_silent)
+  end, true)
 end
 
 return M
