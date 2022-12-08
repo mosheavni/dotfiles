@@ -129,6 +129,8 @@ return packer.startup(function(use)
       'mason.nvim',
     },
   }
+  use 'jayp0521/mason-nvim-dap.nvim'
+
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
@@ -191,7 +193,7 @@ return packer.startup(function(use)
     'rcarriga/nvim-dap-ui',
     'mfussenegger/nvim-dap-python',
     'nvim-telescope/telescope-dap.nvim',
-    -- 'mxsdev/nvim-dap-vscode-js',
+    'mxsdev/nvim-dap-vscode-js',
     'theHamsta/nvim-dap-virtual-text',
     'Pocco81/dap-buddy.nvim',
   }

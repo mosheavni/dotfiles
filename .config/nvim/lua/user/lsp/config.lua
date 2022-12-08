@@ -18,6 +18,16 @@ require('mason.settings').set {
 require('mason-lspconfig').setup {
   automatic_installation = true,
 }
+require('mason-nvim-dap').setup {
+  ensure_installed = {
+    'bash',
+    'chrome',
+    'js',
+    'node2',
+    'python',
+  },
+  automatic_setup = true,
+}
 
 -- Set formatting of lsp log
 require('vim.lsp.log').set_format_func(vim.inspect)
