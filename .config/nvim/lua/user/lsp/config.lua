@@ -5,7 +5,9 @@ require('typescript').setup {}
 local util = require 'lspconfig/util'
 local path = util.path
 
-require('mason').setup()
+require('mason').setup {
+  log_level = vim.log.levels.TRACE,
+}
 require 'user.lsp.null-ls'
 require('mason-null-ls').setup {
   automatic_installation = true,
@@ -18,16 +20,17 @@ require('mason.settings').set {
 require('mason-lspconfig').setup {
   automatic_installation = true,
 }
-require('mason-nvim-dap').setup {
+local mason_nvim_dap = require 'mason-nvim-dap'
+mason_nvim_dap.setup {
   ensure_installed = {
     'bash',
     'chrome',
-    'js',
     'node2',
     'python',
   },
   automatic_setup = true,
 }
+mason_nvim_dap.setup_handlers()
 
 -- Set formatting of lsp log
 require('vim.lsp.log').set_format_func(vim.inspect)
