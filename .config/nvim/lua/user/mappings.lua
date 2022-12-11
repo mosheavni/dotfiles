@@ -11,7 +11,7 @@ local onoremap = utils.onoremap
 local inoremap = utils.inoremap
 local xmap = utils.xnoremap
 local xnoremap = utils.xnoremap
-local tnoremap = utils.inoremap
+local tnoremap = utils.tnoremap
 
 -- Select all file visually
 nnoremap('<leader>sa', 'gg^<S-v>G$')
@@ -167,7 +167,7 @@ nnoremap('<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied file path " .
 nnoremap('<leader>cfd', [[:let @+ = expand('%:p:h')<cr>:echo "Copied file path " . expand('%:p:h')<cr>]], true)
 
 -- Copy and paste to/from system clipboard
-nmap('cp', '"+y')
+vmap('cp', '"+y')
 nmap('cP', '"+yy')
 nmap('cp', '"+y')
 nmap('cv', '"+p')
