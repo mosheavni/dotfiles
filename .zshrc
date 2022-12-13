@@ -11,7 +11,7 @@ export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="$HOME/.bin:$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:${PATH}"
 export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/local/opt/node@16/bin:$PATH"
+# export PATH="/usr/local/opt/node@16/bin:$PATH"
 export PATH="$HOME/.local/share/neovim/bin:$PATH" # for bob
 
 export ZSH="$HOME/.oh-my-zsh"
