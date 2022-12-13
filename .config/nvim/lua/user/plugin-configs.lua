@@ -3,6 +3,8 @@ local keymap = utils.keymap
 local tnoremap = utils.inoremap
 local nmap = utils.nmap
 local nnoremap = utils.nnoremap
+local vnoremap = utils.vnoremap
+local inoremap = utils.inoremap
 
 -----------------
 -- Colorscheme --
@@ -17,6 +19,14 @@ require('onedark').load()
 ----------------
 vim.g['winresizer_start_key'] = '<C-E>'
 tnoremap('<C-E>', '<Esc><Cmd>WinResizerStartResize<CR>', true)
+
+------------
+-- ai.vim --
+------------
+vim.g.ai_no_mappings = true
+nnoremap('<M-a>', ':AI ')
+vnoremap('<M-a>', ':AI ')
+inoremap('<M-a>', '<Esc>:AI<CR>a')
 
 -------------------
 -- Vim json path --

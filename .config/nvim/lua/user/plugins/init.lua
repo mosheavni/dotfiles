@@ -174,10 +174,7 @@ return packer.startup(function(use)
     'github/copilot.vim',
     event = 'InsertEnter',
   }
-  use {
-    'terror/chatgpt.nvim',
-    run = 'pip3 install -r requirements.txt',
-  }
+  use 'aduros/ai.vim'
   use {
     'iamcco/markdown-preview.nvim',
     run = 'cd app && yarn install',
