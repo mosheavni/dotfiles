@@ -204,9 +204,11 @@ M.actions = {
   end,
   ['Diff File History'] = function()
     vim.ui.input({ prompt = 'Enter file path (empty for current file)' }, function(file_to_check)
-      if not file_to_check then
+      P('1 ' .. file_to_check)
+      if file_to_check == '' then
         file_to_check = '%'
       end
+      P('2' .. file_to_check)
 
       vim.cmd('DiffviewFileHistory ' .. file_to_check)
     end)

@@ -259,18 +259,19 @@ return packer.startup(function(use)
       'FloatermUpdate',
     },
   }
-  use {
-    'cossonleo/dirdiff.nvim',
-    cmd = {
-      'DClose',
-      'DCloseAll',
-      'DDiff',
-      'DDiffRec',
-      'DNext',
-      'DPre',
-      'DResume',
-    },
-  }
+  -- use {
+  --   'cossonleo/dirdiff.nvim',
+  --   cmd = {
+  --     'DClose',
+  --     'DCloseAll',
+  --     'DDiff',
+  --     'DDiffRec',
+  --     'DNext',
+  --     'DPre',
+  --     'DResume',
+  --   },
+  -- }
+  use { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } }
   use {
     'simeji/winresizer',
     keys = {
