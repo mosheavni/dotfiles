@@ -157,6 +157,10 @@ lspconfig.sumneko_lua.setup {
   on_attach = default_on_attach,
   settings = {
     Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT)
+        version = 'LuaJIT',
+      },
       completion = {
         callSnippet = 'Replace',
       },
@@ -167,6 +171,7 @@ lspconfig.sumneko_lua.setup {
         disable = { 'undefined-global' },
         globals = { 'vim' },
       },
+      telemetry = { enable = false },
     },
   },
 }

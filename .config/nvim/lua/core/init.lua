@@ -23,8 +23,4 @@ function _G.P(v, r)
   return v
 end
 
-vim.cmd [[
-set runtimepath^=~/.vim
-set runtimepath+=~/.vim/after
-let &packpath = &runtimepath
-]]
+vim.cmd [[ let &packpath = &runtimepath ]]

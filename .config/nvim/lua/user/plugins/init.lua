@@ -79,9 +79,11 @@ return packer.startup(function(use)
 
   -- LSP, Completion and Language
   -- Tree Sitter
-  use {
+  use { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
+    run = function()
+      pcall(require('nvim-treesitter.install').update { with_sync = true })
+    end,
     config = "require('user.plugins.treesitter')",
   }
   use 'nvim-treesitter/nvim-treesitter-textobjects'

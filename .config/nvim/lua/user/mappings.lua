@@ -223,8 +223,8 @@ nmap('<leader>P', '<Plug>ReplaceWithRegisterLine')
 xmap('<leader>P', '<Plug>ReplaceWithRegisterVisual')
 
 -- Base64 dencode
-nnoremap('<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>]], true)
-nnoremap('<leader>64', [[c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>]], true)
+vnoremap('<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>]], true)
+vnoremap('<leader>64', [[c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>]], true)
 
 -- Vimrc edit mappings
 nnoremap('<leader>ev', [[:execute("vsplit " . '~/.config/nvim/lua/user/options.lua')<cr>]])
