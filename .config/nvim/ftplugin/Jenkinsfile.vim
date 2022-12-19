@@ -1,3 +1,6 @@
-setlocal foldmethod=indent
-setlocal fillchars=fold:\ 
-setlocal foldtext=getline(v:foldstart)
+" setlocal foldmethod=indent
+" setlocal fillchars=fold:\
+" setlocal foldtext=getline(v:foldstart)
+setlocal shiftwidth=4
+setlocal softtabstop=4
+setlocal tabstop=4

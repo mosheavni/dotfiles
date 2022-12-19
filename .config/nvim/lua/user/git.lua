@@ -88,7 +88,7 @@ function! Enter_Wip_Moshe() abort
   let l:commit_message = l:random_emoji . ' wip ' . l:time_now
   echom "Committing: " . l:commit_message
   exe "G commit --quiet -m '" . l:commit_message . "'"
-  exe 'Git! push -u origin ' . FugitiveHead()
+  exe 'Git push -u origin ' . FugitiveHead()
 endfunction
 
 " Autocmd

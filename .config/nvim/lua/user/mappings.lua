@@ -65,7 +65,7 @@ nmap('<leader>cp', _G.__duplicate_lines)
 
 -- Indent block
 nmap('<leader>gt', function()
-  vim.cmd [[normal v%koj$> ]]
+  vim.cmd [[normal v%koj$>]]
 end)
 
 -- Format groovy map

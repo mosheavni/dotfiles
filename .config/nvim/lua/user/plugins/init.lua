@@ -263,6 +263,7 @@ return packer.startup(function(use)
     keys = {
       '<C-e>',
     },
+    config = 'vim.g.winresizer_vert_resize = 4',
   }
   use { 'pechorin/any-jump.vim', cmd = { 'AnyJump', 'AnyJumpVisual' } }
   use {
