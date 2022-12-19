@@ -136,7 +136,7 @@ return packer.startup(function(use)
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'chr4/nginx.vim', ft = { 'nginx' } }
-  use { 'mosheavni/vim-kubernetes', ft = { 'yaml' } }
+  use 'mosheavni/vim-kubernetes'
   use { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } }
   use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }

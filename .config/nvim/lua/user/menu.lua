@@ -35,6 +35,9 @@ local random_actions = {
   ['Select all'] = function()
     vim.fn.feedkeys(T '<leader>' .. 'sa')
   end,
+  ['Indent block forward'] = function()
+    vim.fn.feedkeys(T '<leader>gt')
+  end,
   ['Duplicate / Copy number of lines'] = function()
     vim.ui.input({ prompt = 'How many lines down?' }, function(lines_down)
       if not lines_down then
