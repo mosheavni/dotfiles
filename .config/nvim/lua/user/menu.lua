@@ -180,7 +180,6 @@ end
 
 M.set_dap_actions = function()
   M.dap_actions = require('user.plugins.dap').actions
-  P(M.dap_actions)
   M.set_actions()
 end
 

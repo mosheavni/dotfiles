@@ -202,6 +202,7 @@ require('lazy').setup {
       vim.api.nvim_create_user_command('DAP', function()
         require 'user.plugins.dap'
         require('user.menu').set_dap_actions()
+        require('dap').toggle_breakpoint()
         require('dapui').toggle()
       end, {})
     end,
