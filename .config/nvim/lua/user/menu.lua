@@ -2,9 +2,11 @@ local utils = require 'user.utils'
 -- local opts = utils.map_opts
 local nmap = utils.nmap
 local pretty_print = utils.pretty_print
-local dap_actions = require('user.plugins.dap').actions
-local git_actions = require('user.git').actions
-local lsp_actions = require('user.lsp').actions
+
+local M = {}
+M.git_actions = require('user.git').actions
+M.lsp_actions = require('user.lsp').actions
+M.dap_actions = {}
 
 local find_in_project = function(bang)
   vim.ui.input({ prompt = 'Enter search term (blank for word under cursor)' }, function(search_term)
@@ -22,7 +24,7 @@ local T = function(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
-local random_actions = {
+M.random_actions = {
   ['Find in pwd (literal search)'] = function()
     find_in_project(true)
   end,
@@ -171,12 +173,26 @@ end
 -- Merge all actions and prepend type to the name using add_prefix function
 -- I.E: Git - Delete tag
 -- I.E: Dap - Continue
-local actions = vim.tbl_extend('force', add_prefix(dap_actions, 'DAP'), add_prefix(git_actions, 'Git'), add_prefix(lsp_actions, 'LSP'), random_actions)
 
-nmap('<leader>a', function()
-  vim.ui.select(vim.tbl_keys(actions), { prompt = 'Choose action (' .. vim.tbl_count(actions) .. ' actions)' }, function(choice)
-    if choice then
-      actions[choice]()
-    end
+M.set_actions = function()
+  M.actions = vim.tbl_extend('force', add_prefix(M.dap_actions, 'DAP'), add_prefix(M.git_actions, 'Git'), add_prefix(M.lsp_actions, 'LSP'), M.random_actions)
+end
+
+M.set_dap_actions = function()
+  M.dap_actions = require('user.plugins.dap').actions
+  P(M.dap_actions)
+  M.set_actions()
+end
+
+M.setup = function()
+  M.set_actions()
+  nmap('<leader>a', function()
+    vim.ui.select(vim.tbl_keys(M.actions), { prompt = 'Choose action (' .. vim.tbl_count(M.actions) .. ' actions)' }, function(choice)
+      if choice then
+        M.actions[choice]()
+      end
+    end)
   end)
-end)
+end
+
+return M

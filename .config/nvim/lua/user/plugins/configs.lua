@@ -222,4 +222,4 @@ augroup END
 ---------------------
 -- Random Requires --
 ---------------------
-require 'user.menu'
+require('user.menu').setup()

@@ -1,6 +1,18 @@
 local utils = require 'user.utils'
 local opts = utils.map_opts
 local nnoremap = utils.nnoremap
+local mason_nvim_dap = require 'mason-nvim-dap'
+mason_nvim_dap.setup {
+  ensure_installed = {
+    'bash',
+    'chrome',
+    'node2',
+    'python',
+  },
+  automatic_setup = true,
+}
+mason_nvim_dap.setup_handlers()
+
 local dap = require 'dap'
 require('telescope').load_extension 'dap'
 local dapui = require 'dapui'

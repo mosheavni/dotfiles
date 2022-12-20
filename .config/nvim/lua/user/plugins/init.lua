@@ -124,7 +124,6 @@ require('lazy').setup {
         dependencies = {
           'williamboman/mason-lspconfig.nvim',
           'jayp0521/mason-null-ls.nvim',
-          'jayp0521/mason-nvim-dap.nvim',
         },
       },
     },
@@ -199,8 +198,12 @@ require('lazy').setup {
   -- Debug Adapter Protocol (DAP)
   {
     'mfussenegger/nvim-dap',
-    config = function()
-      require 'user.plugins.dap'
+    init = function()
+      vim.api.nvim_create_user_command('DAP', function()
+        require 'user.plugins.dap'
+        require('user.menu').set_dap_actions()
+        require('dapui').toggle()
+      end, {})
     end,
     dependencies = {
       'rcarriga/nvim-dap-ui',
@@ -208,6 +211,7 @@ require('lazy').setup {
       'nvim-telescope/telescope-dap.nvim',
       'mxsdev/nvim-dap-vscode-js',
       'theHamsta/nvim-dap-virtual-text',
+      'jayp0521/mason-nvim-dap.nvim',
     },
   },
 
