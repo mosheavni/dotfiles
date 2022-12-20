@@ -98,13 +98,13 @@ return packer.startup(function(use)
   }
   use {
     'cuducos/yaml.nvim',
-    ft = { 'yaml' }, -- optional
+    ft = 'yaml', -- optional
     requires = { 'nvim-treesitter/nvim-treesitter' },
   }
   use 'someone-stole-my-name/yaml-companion.nvim'
   use 'nvim-treesitter/nvim-treesitter-context'
   use 'nvim-treesitter/nvim-treesitter-refactor'
-  use { 'sam4llis/nvim-lua-gf', ft = { 'lua' } }
+  use { 'sam4llis/nvim-lua-gf', ft = 'lua' }
   use 'Afourcat/treesitter-terraform-doc.nvim'
 
   -- LSP
@@ -135,10 +135,10 @@ return packer.startup(function(use)
 
   use { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } }
   use { 'martinda/Jenkinsfile-vim-syntax', ft = { 'groovy', 'Jenkinsfile' } }
-  use { 'chr4/nginx.vim', ft = { 'nginx' } }
+  use { 'chr4/nginx.vim', ft = 'nginx' }
   use 'mosheavni/vim-kubernetes'
   use { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } }
-  use { 'mogelbrod/vim-jsonpath', ft = { 'json' } }
+  use { 'mogelbrod/vim-jsonpath', ft = 'json' }
   use { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } }
   use 'folke/neodev.nvim'
   use 'jose-elias-alvarez/typescript.nvim'
@@ -157,7 +157,7 @@ return packer.startup(function(use)
       'saadparwaiz1/cmp_luasnip',
       'onsails/lspkind-nvim',
       { 'tzachar/cmp-tabnine', run = './install.sh' },
-      { 'hrsh7th/cmp-nvim-lua', ft = { 'lua' } },
+      { 'hrsh7th/cmp-nvim-lua', ft = 'lua' },
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
@@ -197,7 +197,7 @@ return packer.startup(function(use)
       vim.g.mkdp_filetypes = { 'markdown' }
     end,
     cmd = 'MarkdownPreview',
-    ft = { 'markdown' },
+    ft = 'markdown',
   }
 
   -- Debug Adapter Protocol (DAP)
@@ -325,26 +325,24 @@ return packer.startup(function(use)
   }
 
   -- Themes
-  -- use 'drewtempelmeyer/palenight.vim'
-  -- use 'joshdick/onedark.vim'
-  -- use 'ghifarit53/tokyonight-vim'
-  -- use { 'dracula/vim', as = 'dracula' }
-  -- use 'jacoborus/tender.vim'
-  -- use 'ellisonleao/gruvbox.nvim'
-  -- use 'ellisonleao/gruvbox.nvim'
-  -- use 'rafamadriz/neon'
-  -- use 'marko-cerovac/material.nvim'
-  -- use 'folke/tokyonight.nvim'
-  -- use 'cpea2506/one_monokai.nvim'
   -- use 'Mofiqul/vscode.nvim'
   -- use 'cpea2506/one_monokai.nvim'
-  use 'navarasu/onedark.nvim'
+  -- use 'drewtempelmeyer/palenight.vim'
+  -- use 'ellisonleao/gruvbox.nvim'
+  -- use 'folke/tokyonight.nvim'
+  -- use 'ghifarit53/tokyonight-vim'
+  -- use 'jacoborus/tender.vim'
+  -- use 'joshdick/onedark.vim'
+  -- use 'marko-cerovac/material.nvim'
+  -- use 'rafamadriz/neon'
   -- use 'rebelot/kanagawa.nvim'
+  -- use { 'dracula/vim', as = 'dracula' }
+  -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
   -- use {
   --   'catppuccin/nvim',
   --   as = 'catppuccin',
   -- }
-  -- use { 'luisiacc/gruvbox-baby', branch = 'main' }
+  use 'navarasu/onedark.nvim'
 
   -- Text Manipulation
   use 'tpope/vim-repeat'
@@ -367,4 +365,5 @@ return packer.startup(function(use)
   if PACKER_BOOTSTRAP then
     require('packer').sync()
   end
+  require 'user.plugins.configs'
 end)

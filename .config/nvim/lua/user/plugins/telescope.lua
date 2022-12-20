@@ -5,8 +5,8 @@ end
 
 local actions = require 'telescope.actions'
 local utils = require 'user.utils'
-local opts = utils.map_opts
-local keymap = utils.keymap
+local nmap = utils.nmap
+local nnoremap = utils.nmap
 
 telescope.setup {
   defaults = {
@@ -37,14 +37,26 @@ telescope.setup {
 }
 
 telescope.load_extension 'fzf'
-telescope.load_extension 'project'
+-- Projections
+require('projections').setup {
+  workspaces = { -- Default workspaces to search for
+    -- "~/dev",                               dev is a workspace. default patterns is used (specified below)
+    -- { "~/Documents/dev", { ".git" } },     Documents/dev is a workspace. patterns = { ".git" }
+    { '~/Repos', {} }, --                    An empty pattern list indicates that all subfolders are considered projects
+  },
+}
+-- Bind <leader>fp to Telescope projections
+require('telescope').load_extension 'projections'
+nmap('<leader>fp', function()
+  vim.cmd 'Telescope projections'
+end)
 
 -- Keymaps
-keymap('n', '<c-p>', [[:Telescope find_files<cr>]], opts.no_remap)
-keymap('n', '<c-b>', '<cmd>Telescope buffers<cr>', opts.no_remap)
-keymap('n', '<F4>', '<cmd>lua require("user.git-branches").open()<cr>', opts.no_remap)
-keymap('n', '<leader>hh', '<cmd>Telescope help_tags<cr>', opts.no_remap)
-keymap('n', '<leader>/', function()
+nnoremap('<c-p>', [[:Telescope find_files<cr>]])
+nnoremap('<c-b>', '<cmd>Telescope buffers<cr>')
+nnoremap('<F4>', '<cmd>lua require("user.git-branches").open()<cr>')
+nnoremap('<leader>hh', '<cmd>Telescope help_tags<cr>')
+nnoremap('<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   local view = require('telescope.themes').get_dropdown { winblend = 10, previewer = false }
 

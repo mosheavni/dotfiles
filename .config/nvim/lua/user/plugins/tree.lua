@@ -4,8 +4,7 @@ if not status_ok then
 end
 
 local utils = require 'user.utils'
-local opts = utils.map_opts
-local keymap = utils.keymap
+local nnoremap = utils.nnoremap
 
 nvim_tree.setup {
   actions = {
@@ -50,5 +49,5 @@ nvim_tree.setup {
   },
 }
 
-keymap('n', '<c-o>', '<cmd>NvimTreeToggle<cr>', opts.no_remap)
-keymap('n', '<leader>v', '<cmd>NvimTreeFindFile<cr>', opts.no_remap)
+nnoremap('<c-o>', '<cmd>NvimTreeToggle<cr>')
+nnoremap('<leader>v', '<cmd>NvimTreeFindFile<cr>')

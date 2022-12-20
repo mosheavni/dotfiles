@@ -57,23 +57,6 @@ nmap('<c-m>', '<Plug>(YankyCycleBackward)')
 nnoremap('s', '<Plug>(leap-forward-to)', true)
 nnoremap('S', '<Plug>(leap-backward-to)', true)
 
------------------
--- Projections --
------------------
-require('projections').setup {
-  workspaces = { -- Default workspaces to search for
-    -- "~/dev",                               dev is a workspace. default patterns is used (specified below)
-    -- { "~/Documents/dev", { ".git" } },     Documents/dev is a workspace. patterns = { ".git" }
-    { '~/Repos', {} }, --                    An empty pattern list indicates that all subfolders are considered projects
-  },
-}
-
--- Bind <leader>fp to Telescope projections
-require('telescope').load_extension 'projections'
-nmap('<leader>fp', function()
-  vim.cmd 'Telescope projections'
-end)
-
 -- Autostore session on DirChange and VimExit
 local Session = require 'projections.session'
 vim.api.nvim_create_autocmd({ 'DirChangedPre', 'VimLeavePre' }, {
