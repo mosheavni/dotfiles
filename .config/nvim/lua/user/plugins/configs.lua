@@ -173,17 +173,6 @@ vim.g['WebDevIconsOS'] = 'Darwin'
 vim.g['DevIconsEnableFoldersOpenClose'] = 1
 vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
 
-------------------
--- Nvim Toggler --
-------------------
-require('nvim-toggler').setup {
-  remove_default_keybinds = true,
-  inverses = {
-    ['enable'] = 'disable',
-  },
-}
-keymap({ 'n', 'v' }, 'gs', require('nvim-toggler').toggle)
-
 ----------------
 -- vim.notify --
 ----------------
@@ -198,12 +187,6 @@ nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
 ---------------
 require('which-key').setup {}
 require 'user.which-key'
-
------------
--- ISwap --
------------
-require('iswap').setup()
-nmap('<leader>sw', ':ISwapWith<CR>')
 
 ------------
 -- Fidget --

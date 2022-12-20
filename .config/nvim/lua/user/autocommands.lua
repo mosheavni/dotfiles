@@ -1,8 +1,7 @@
 local utils = require 'user.utils'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
-local keymap = utils.keymap
-local opts = utils.map_opts
+local nnoremap = utils.nnoremap
 local fn = vim.fn
 local cmd = vim.cmd
 local api = vim.api
@@ -53,7 +52,7 @@ autocmd('FileType', {
     'startuptime',
   },
   callback = function()
-    vim.keymap.set('n', 'q', '<CMD>close<CR>', { buffer = 0 })
+    nnoremap('q', '<CMD>close<CR>', { buffer = 0 })
   end,
 })
 autocmd('BufEnter', {
@@ -103,14 +102,9 @@ autocmd({ 'FileType' }, {
   pattern = 'nginx',
   command = 'setlocal iskeyword+=$',
 })
-autocmd({ 'BufWritePost' }, {
-  group = special_filetypes,
-  pattern = '*/plugins/init.lua',
-  command = 'if bufname(bufnr()) !~? "^fugitive:" | source <afile> | PackerCompile | endif',
-})
 autocmd({ 'BufRead' }, {
   group = special_filetypes,
-  pattern = '*/plugins/*.lua',
+  pattern = '*/plugins/init.lua',
   command = 'lua require("user.open-url").setup()',
 })
 
@@ -153,13 +147,13 @@ autocmd({ 'FileType' }, {
       cmd(new_split_cmd)
       cmd(qf_idx .. 'cc')
     end
-    keymap('n', '<c-v>', function()
+    nnoremap('<c-v>', function()
       open_quickfix 'vnew'
-    end, vim.tbl_extend('force', { buffer = true }, opts.no_remap))
+    end, { buffer = true })
 
-    keymap('n', '<c-x>', function()
+    nnoremap('<c-x>', function()
       open_quickfix 'split'
-    end, vim.tbl_extend('force', { buffer = true }, opts.no_remap))
+    end, { buffer = true })
     -- "n", "<C-v>", :call <SID>OpenQuickfix("vnew")<CR>
     -- "n", "<C-x>", :call <SID>OpenQuickfix("split")<CR>
   end,

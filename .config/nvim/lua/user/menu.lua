@@ -1,6 +1,6 @@
 local utils = require 'user.utils'
 -- local opts = utils.map_opts
-local keymap = utils.keymap
+local nmap = utils.nmap
 local pretty_print = utils.pretty_print
 local dap_actions = require('user.plugins.dap').actions
 local git_actions = require('user.git').actions
@@ -173,7 +173,7 @@ end
 -- I.E: Dap - Continue
 local actions = vim.tbl_extend('force', add_prefix(dap_actions, 'DAP'), add_prefix(git_actions, 'Git'), add_prefix(lsp_actions, 'LSP'), random_actions)
 
-keymap('n', '<leader>a', function()
+nmap('<leader>a', function()
   vim.ui.select(vim.tbl_keys(actions), { prompt = 'Choose action (' .. vim.tbl_count(actions) .. ' actions)' }, function(choice)
     if choice then
       actions[choice]()

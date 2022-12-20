@@ -1,6 +1,7 @@
 local saga = require 'lspsaga'
 local utils = require 'user.utils'
-local opts = utils.map_opts
+local nnoremap = utils.nnoremap
+local inoremap = utils.inoremap
 
 return function(bufnr)
   saga.init_lsp_saga {
@@ -10,44 +11,46 @@ return function(bufnr)
       split = '<C-x>',
       quit = 'q',
     },
+    code_action_lightbulb = {
+      enable = false,
+    },
   }
-  local function buf_set_keymap(...)
-    vim.api.nvim_buf_set_keymap(bufnr, ...)
-  end
+
+  local buffer_opts = { buffer = bufnr, silent = true }
 
   -- GoTo code navigation
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts.silent)
-  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts.silent)
-  buf_set_keymap('n', 'gp', '<cmd>Lspsaga peek_definition<CR>', opts.silent)
-  buf_set_keymap('n', 'gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts.silent)
-  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts.silent)
-  -- buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references({ includeDeclaration = false })<CR>', opts.silent)
-  buf_set_keymap('n', 'gr', '<cmd>Lspsaga lsp_finder<CR>', opts.silent)
+  nnoremap('gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', buffer_opts)
+  nnoremap('gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', buffer_opts)
+  nnoremap('gp', '<cmd>Lspsaga peek_definition<CR>', buffer_opts)
+  nnoremap('gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>', buffer_opts)
+  nnoremap('gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', buffer_opts)
+  -- nnoremap('gr', '<cmd>lua vim.lsp.buf.references({ includeDeclaration = false })<CR>', buffer_opts)
+  nnoremap('gr', '<cmd>Lspsaga lsp_finder<CR>', buffer_opts)
 
   -- Documentation
-  buf_set_keymap('i', '<M-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts.silent)
-  buf_set_keymap('n', '<leader>lk', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts.silent)
+  inoremap('<M-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', buffer_opts)
+  nnoremap('<leader>lk', '<cmd>lua vim.lsp.buf.signature_help()<CR>', buffer_opts)
   -- calling twice make the cursor go into the float window. good for navigating big docs
-  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts.silent)
+  nnoremap('K', '<Cmd>lua vim.lsp.buf.hover()<CR>', buffer_opts)
 
   -- Refactor rename
-  buf_set_keymap('n', '<leader>lrn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts.silent)
+  nnoremap('<leader>lrn', '<cmd>lua vim.lsp.buf.rename()<CR>', buffer_opts)
 
   -- Workspace
-  buf_set_keymap('n', '<leader>lwa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts.silent)
-  buf_set_keymap('n', '<leader>lwr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts.silent)
-  buf_set_keymap('n', '<leader>lwl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts.silent)
+  nnoremap('<leader>lwa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', buffer_opts)
+  nnoremap('<leader>lwr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', buffer_opts)
+  nnoremap('<leader>lwl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', buffer_opts)
 
   -- Diagnostics
-  buf_set_keymap('n', '<leader>lq', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts.silent)
-  buf_set_keymap('n', '<leader>ld', '<cmd>lua vim.diagnostic.open_float()<cr>', opts.silent)
+  nnoremap('<leader>lq', '<cmd>lua vim.diagnostic.setqflist()<CR>', buffer_opts)
+  nnoremap('<leader>ld', '<cmd>lua vim.diagnostic.open_float()<cr>', buffer_opts)
   -- Goto previous/next diagnostic warning/error
   -- Use `[g` and `]g` to navigate diagnostics
-  buf_set_keymap('n', '[g', '<cmd>lua vim.diagnostic.goto_prev({float=false})<CR>', opts.silent)
-  buf_set_keymap('n', ']g', '<cmd>lua vim.diagnostic.goto_next({float=false})<CR>', opts.silent)
+  nnoremap('[g', '<cmd>lua vim.diagnostic.goto_prev({float=false})<CR>', buffer_opts)
+  nnoremap(']g', '<cmd>lua vim.diagnostic.goto_next({float=false})<CR>', buffer_opts)
 
   -- Code action
-  buf_set_keymap('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', {})
-  buf_set_keymap('n', '<leader>lx', '<cmd>lua vim.lsp.codelens.run()<CR>', {})
-  buf_set_keymap('x', '<leader>la', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', {})
+  nnoremap('<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+  nnoremap('<leader>lx', '<cmd>lua vim.lsp.codelens.run()<CR>')
+  nnoremap('<leader>la', '<cmd>lua vim.lsp.buf.range_code_action()<CR>')
 end

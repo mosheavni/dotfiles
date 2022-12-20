@@ -1,6 +1,5 @@
 local utils = require 'user.utils'
 local nnoremap = utils.nnoremap
-local opts = utils.map_opts
 local M = {}
 
 local uname = vim.loop.os_uname()

@@ -34,7 +34,7 @@ M.nnoremap = function(lhs, rhs, silent)
   M.keymap('n', lhs, rhs, M.check_silent(silent, M.map_opts.no_remap))
 end
 M.vmap = function(lhs, rhs, silent)
-  M.keymap('v', lhs, rhs, M.map_opts.remap)
+  M.keymap('v', lhs, rhs, M.check_silent(silent, M.map_opts.remap))
 end
 M.vnoremap = function(lhs, rhs, silent)
   M.keymap('v', lhs, rhs, M.check_silent(silent, M.map_opts.no_remap))

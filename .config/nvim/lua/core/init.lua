@@ -22,5 +22,3 @@ function _G.P(v, r)
   end
   return v
 end
-
-vim.cmd [[ let &packpath = &runtimepath ]]

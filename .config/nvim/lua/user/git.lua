@@ -1,4 +1,5 @@
 local utils = require 'user.utils'
+local nmap = utils.nmap
 local pretty_print = function(message)
   utils.pretty_print(message, 'Git Actions', '')
 end
@@ -186,7 +187,7 @@ local new_branch = function(branch_opts)
   end)
 end
 vim.api.nvim_create_user_command('Gcb', new_branch, { nargs = '?' })
-vim.keymap.set('n', '<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
+nmap('<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
 -- redir @">|silent scriptnames|redir END|enew|put
 
 -- Git actions menu
@@ -326,7 +327,7 @@ M.actions = {
     vim.cmd 'G reset'
   end,
 }
-vim.keymap.set('n', '<leader>gm', function()
+nmap('<leader>gm', function()
   vim.ui.select(vim.tbl_keys(M.actions), { prompt = 'Choose git action' }, function(choice)
     if choice then
       M.actions[choice]()

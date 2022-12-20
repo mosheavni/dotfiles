@@ -15,13 +15,19 @@ vim.opt.shortmess:append { c = true, l = false, q = false, S = false }
 vim.opt.list = true
 vim.opt.listchars = { tab = '┆·', trail = '·', precedes = '', extends = '', eol = '↲' }
 -- set lcscope=tab:┆·,trail:·,precedes:,extends:
-vim.opt.fillchars = { vert = '|', fold = '·' }
+vim.opt.fillchars = {
+  vert = '|',
+  fold = '·',
+  foldopen = '',
+  foldclose = '',
+}
 vim.opt.emoji = false
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
 -- opt.whichwrap:append '<>[]hl'
 vim.opt.diffopt:append { linematch = 50 }
 vim.opt.diffopt:append 'vertical'
+vim.opt.splitkeep = 'screen'
 
 vim.opt.number = true -- Show current line number
 vim.opt.numberwidth = 4 -- set number column width to 2 {default 4}
@@ -34,7 +40,8 @@ vim.opt.inccommand = 'split' -- Incremental search and replace with small split 
 vim.opt.ignorecase = true -- Search case insensitive...
 vim.opt.smartcase = true -- ignore case if search pattern is all lowercase, case-sensitive otherwise
 vim.opt.autoread = true -- Re-read file if it was changed from the outside
-vim.opt.scrolloff = 8 -- When about to scroll page, see 7 lines below cursor
+vim.opt.scrolloff = 4 -- When about to scroll page, see 7 lines below cursor
+vim.opt.sidescrolloff = 8 -- Columns of context
 vim.opt.cmdheight = 2 -- Height of the command bar
 vim.opt.hidden = true -- Hide buffer if abandoned
 vim.opt.showmatch = true -- When closing a bracket (like {}), show the enclosing
@@ -42,10 +49,12 @@ vim.opt.splitbelow = true -- Horizontaly plitted windows open below
 vim.opt.splitright = true -- Vertically plitted windows open below bracket for a brief second
 vim.opt.startofline = false -- Stop certain movements from always going to the first character of a line.
 vim.opt.pumheight = 10 -- pop up menu height
+vim.opt.pumblend = 40 -- Popup blend
 vim.opt.confirm = true -- Prompt confirmation if exiting unsaved file
 vim.opt.lazyredraw = false -- redraw only when we need to.
 vim.opt.swapfile = false
 vim.opt.backup = false
+vim.opt.backupdir = vim.fn.stdpath 'state' .. '/backup'
 vim.opt.writebackup = false
 vim.opt.wildmenu = true -- Displays a menu on autocomplete
 vim.opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
@@ -58,6 +67,7 @@ vim.opt.showcmd = true
 vim.opt.guifont = 'Fira Code,Hack Nerd Font'
 vim.opt.mouse = 'a'
 vim.opt.undofile = true -- Enables saving undo history to a file
+vim.opt.undolevels = 10000
 -- opt.colorcolumn = '80' -- Mark where are 80 characters to start breaking line
 vim.opt.textwidth = 80
 vim.opt.fileencodings = { 'utf-8', 'cp1251' }
@@ -97,6 +107,7 @@ vim.opt.autoindent = true -- always set autoindenting on
 vim.opt.copyindent = true -- copy the previous indentation on autoindenting
 vim.opt.smartindent = true -- Number of spaces to use for each step of (auto)indent.
 vim.opt.shiftwidth = 4 -- Number of spaces for each indent
+vim.opt.shiftround = true -- use multiple of shiftwidth when indenting with '<' and '>'
 vim.opt.softtabstop = 4
 vim.opt.tabstop = 4
 vim.opt.smarttab = true -- insert tabs on the start of a line according to shiftwidth, not tabstop
@@ -119,24 +130,11 @@ set guicursor+=i:blinkon1
 --
 -- Abbreviations
 vim.cmd [[
-inoreabbrev teh the
 inoreabbrev seperate separate
 inoreabbrev dont don't
 inoreabbrev rbm # TODO: remove before merging
 inoreabbrev cbm # TODO: change before merging
 inoreabbrev ubm # TODO: uncomment before merging
-inoreabbrev funciton function
-inoreabbrev functiton function
-inoreabbrev fucntion function
-inoreabbrev funtion function
-inoreabbrev erturn return
-inoreabbrev retunr return
-inoreabbrev reutrn return
-inoreabbrev reutn return
-inoreabbrev queyr query
-inoreabbrev htis this
-inoreabbrev foreahc foreach
-inoreabbrev forech foreach
 ]]
 
 -- Run current buffer
@@ -257,17 +255,6 @@ function s:VisualCalculator() abort
 endfunction
 command! -range VisualCalculator call <SID>VisualCalculator()
 vmap <c-r> :VisualCalculator<cr>
-]]
-
--- SynStack - see highlight under cursor
-vim.cmd [[
-function! s:SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  return map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
-command! SynStack echo <SID>SynStack()
 ]]
 
 -- disable some builtin vim plugins

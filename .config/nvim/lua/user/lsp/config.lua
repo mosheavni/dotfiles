@@ -2,8 +2,6 @@ local on_attaches = require 'user.lsp.on-attach'
 local default_on_attach = on_attaches.default
 require('neodev').setup {}
 require('typescript').setup {}
-local util = require 'lspconfig/util'
-local path = util.path
 
 require('mason').setup {
   log_level = vim.log.levels.TRACE,
@@ -67,6 +65,8 @@ end
 
 -- LSPConfig after everything
 local lspconfig = require 'lspconfig'
+local util = require 'lspconfig/util'
+local path = util.path
 
 -- ansiblels
 lspconfig.ansiblels.setup {
