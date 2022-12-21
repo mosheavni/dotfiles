@@ -15,7 +15,7 @@ export PATH="/usr/local/sbin:$PATH"
 export PATH="$HOME/.local/share/neovim/bin:$PATH" # for bob
 
 export ZSH="$HOME/.oh-my-zsh"
-# ZSH_THEME="mosherussell"
+ZSH_THEME="mosherussell"
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
@@ -123,4 +123,4 @@ export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta
 export NEOVIDE_MULTIGRID=1
 
 # Load starship last
-eval "$(starship init zsh)"
+# eval "$(starship init zsh)"

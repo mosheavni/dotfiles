@@ -51,7 +51,7 @@ require('lazy').setup({
   },
   {
     'lewis6991/gitsigns.nvim',
-    event = 'BufWinEnter',
+    event = 'BufReadPre',
     config = function()
       require 'user.plugins.gitsigns'
     end,
@@ -325,6 +325,7 @@ require('lazy').setup({
     config = function()
       require 'user.plugins.indentlines'
     end,
+    event = 'BufReadPre',
   },
   {
     'akinsho/bufferline.nvim',
@@ -332,6 +333,7 @@ require('lazy').setup({
     config = function()
       require 'user.plugins.bufferline'
     end,
+    event = 'BufReadPre',
   },
   'RRethy/vim-illuminate',
 
@@ -354,6 +356,7 @@ require('lazy').setup({
     config = function()
       require 'user.plugins.colorizer'
     end,
+    event = 'BufReadPre',
   },
 
   -- Themes
@@ -388,9 +391,14 @@ require('lazy').setup({
   {
     'numToStr/Comment.nvim',
     config = function()
-      require('Comment').setup {}
+      require('Comment').setup {
+        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+      }
     end,
-    keys = { 'gc' },
+    keys = { 'gc', 'gcc' },
+    dependencies = {
+      'JoosepAlviste/nvim-ts-context-commentstring',
+    },
   },
   'junegunn/vim-easy-align',
   {
@@ -407,7 +415,10 @@ require('lazy').setup({
     end,
   },
 
-  'ggandor/leap.nvim',
+  {
+    'ggandor/leap.nvim',
+    event = 'VeryLazy',
+  },
   { 'windwp/nvim-ts-autotag', ft = { 'html', 'javascript' } },
   'gpanders/editorconfig.nvim',
   { 'kevinhwang91/nvim-bqf', ft = 'qf' },
@@ -418,10 +429,11 @@ require('lazy').setup({
   performance = {
     rtp = {
       disabled_plugins = {
-        'shada',
+        'rplugin',
         'gzip',
         'matchit',
         'matchparen',
+        'shada',
         'tarPlugin',
         'tohtml',
         'tutor',
