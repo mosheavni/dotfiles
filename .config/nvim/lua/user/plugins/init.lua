@@ -38,7 +38,7 @@ require('lazy').setup({
   {
     'tpope/vim-fugitive',
     init = function()
-      require 'user.git'
+      require 'user.plugins.git'
     end,
     event = 'VeryLazy',
     dependencies = {

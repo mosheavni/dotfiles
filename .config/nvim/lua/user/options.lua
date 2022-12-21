@@ -21,6 +21,7 @@ vim.opt.fillchars = {
   foldopen = '',
   foldclose = '',
 }
+-- vim.opt.foldcolumn = '1'
 vim.opt.emoji = false
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line

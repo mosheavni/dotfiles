@@ -255,11 +255,11 @@ vnoremap('<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$',
 vnoremap('<leader>64', [[c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>]], true)
 
 -- Vimrc edit mappings
-nnoremap('<leader>ev', [[:execute("vsplit " . '~/.config/nvim/lua/user/options.lua')<cr>]])
-nnoremap('<leader>ep', [[:execute("vsplit " . '~/.config/nvim/lua/user/plugins/init.lua')<cr>]])
-nnoremap('<leader>ec', [[:execute("vsplit " . '~/.config/nvim/lua/user/plugins/configs.lua')<cr>]])
-nnoremap('<leader>el', [[:execute("vsplit " . '~/.config/nvim/lua/user/lsp/config.lua')<cr>]])
-nnoremap('<leader>em', [[:execute("vsplit " . '~/.config/nvim/lua/user/mappings.lua')<cr>]])
+nnoremap('<leader>ev', [[:execute("vsplit " . '~/.config/nvim/lua/user/options.lua')<cr>]], true)
+nnoremap('<leader>ep', [[:execute("vsplit " . '~/.config/nvim/lua/user/plugins/init.lua')<cr>]], true)
+nnoremap('<leader>ec', [[:execute("vsplit " . '~/.config/nvim/lua/user/plugins/configs.lua')<cr>]], true)
+nnoremap('<leader>el', [[:execute("vsplit " . '~/.config/nvim/lua/user/lsp/config.lua')<cr>]], true)
+nnoremap('<leader>em', [[:execute("vsplit " . '~/.config/nvim/lua/user/mappings.lua')<cr>]], true)
 
 -- Delete current buffer
 nnoremap('<leader>bd', '<cmd>BDelete this<cr>', true)
