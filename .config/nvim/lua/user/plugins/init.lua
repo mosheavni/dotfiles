@@ -74,7 +74,7 @@ require('lazy').setup({
       require 'user.plugins.telescope'
     end,
     cmd = 'Telescope',
-    keys = { '<c-p>', '<c-b>', 'F4', '<leader>cc', '<leader>hh', '<leader>/' },
+    keys = { '<c-p>', '<c-b>', 'F4', '<leader>cc', '<leader>hh', '<leader>/', '<leader>fp' },
   },
 
   -- LSP, Completion and Language

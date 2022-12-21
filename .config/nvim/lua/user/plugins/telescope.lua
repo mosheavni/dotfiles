@@ -45,6 +45,21 @@ require('projections').setup {
     { '~/Repos', {} }, --                    An empty pattern list indicates that all subfolders are considered projects
   },
 }
+-- Autostore session on DirChange and VimExit
+local Session = require 'projections.session'
+vim.api.nvim_create_autocmd({ 'DirChangedPre', 'VimLeavePre' }, {
+  callback = function()
+    Session.store(vim.loop.cwd())
+  end,
+})
+vim.api.nvim_create_user_command('StoreProjectSession', function()
+  Session.store(vim.loop.cwd())
+end, {})
+
+vim.api.nvim_create_user_command('RestoreProjectSession', function()
+  Session.restore(vim.loop.cwd())
+end, {})
+
 -- Bind <leader>fp to Telescope projections
 require('telescope').load_extension 'projections'
 nmap('<leader>fp', function()

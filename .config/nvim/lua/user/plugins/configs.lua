@@ -57,21 +57,6 @@ nmap('<c-m>', '<Plug>(YankyCycleBackward)')
 nnoremap('s', '<Plug>(leap-forward-to)', true)
 nnoremap('S', '<Plug>(leap-backward-to)', true)
 
--- Autostore session on DirChange and VimExit
-local Session = require 'projections.session'
-vim.api.nvim_create_autocmd({ 'DirChangedPre', 'VimLeavePre' }, {
-  callback = function()
-    Session.store(vim.loop.cwd())
-  end,
-})
-vim.api.nvim_create_user_command('StoreProjectSession', function()
-  Session.store(vim.loop.cwd())
-end, {})
-
-vim.api.nvim_create_user_command('RestoreProjectSession', function()
-  Session.restore(vim.loop.cwd())
-end, {})
-
 --------------------
 -- Vim easy align --
 --------------------
