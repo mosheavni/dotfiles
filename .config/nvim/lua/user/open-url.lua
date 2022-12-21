@@ -9,8 +9,14 @@ M.is_linux = uname.sysname == 'Linux'
 M.is_windows = uname.sysname == 'Windows_NT'
 M.is_wsl = not (string.find(uname.release, 'microsoft') == nil)
 
+M.url_prefix = 'https://github.com'
+M.keymap_lhs = 'gx'
+M.open_cmd = nil
+
 M.open_url = function(url)
-  if M.is_windows then
+  if M.open_cmd ~= nil then
+    vim.cmd('silent !' .. M.open_cmd .. ' ' .. url)
+  elseif M.is_windows then
     vim.cmd([[:execute 'silent !start ]] .. url .. "'")
   elseif M.is_wsl then
     vim.cmd([[:execute 'silent !powershell.exe start ]] .. url .. "'")
@@ -36,17 +42,26 @@ M.open_url_under_cursor = function()
 
   -- If string matches `user/repo`
   if string.match(url, [[.*/.*]]) then
-    return M.open_url('https://github.com/' .. url)
+    return M.open_url(M.url_prefix .. '/' .. url)
   end
 end
 
 M.setup = function(options)
-  local keymap_lhs = 'gx'
-  if options and options.keymap ~= nil then
-    keymap_lhs = options.keymap
+  if options then
+    if options.keymap ~= nil then
+      M.keymap_lhs = options.keymap
+    end
+
+    if options.url_prefix ~= nil then
+      M.url_prefix = options.url_prefix
+    end
+
+    if options.open_cmd ~= nil then
+      M.open_cmd = options.open_cmd
+    end
   end
 
-  nnoremap(keymap_lhs, function()
+  nnoremap(M.keymap_lhs, function()
     M.open_url_under_cursor()
   end, true)
 end
