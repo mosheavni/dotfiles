@@ -247,7 +247,7 @@ alias pj='fdf ~/Repos'
 
 # debug nvim startup time
 function nvim-startuptime() {
-  cat /dev/null > startuptime.txt && nvim --startuptime startuptime.txt
+  cat /dev/null > startuptime.txt && nvim --startuptime startuptime.txt "$@"
 }
 
 function python-venv-init() {
