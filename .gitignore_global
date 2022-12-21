@@ -1,3 +1,4 @@
 .alt.toml
 tags
 .luarc.json
+pyrightconfig.json

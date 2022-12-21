@@ -52,10 +52,18 @@ nmap('<leader>fp', function()
 end)
 
 -- Keymaps
-nnoremap('<c-p>', [[:Telescope find_files<cr>]])
-nnoremap('<c-b>', '<cmd>Telescope buffers<cr>')
-nnoremap('<F4>', '<cmd>lua require("user.git-branches").open()<cr>')
-nnoremap('<leader>hh', '<cmd>Telescope help_tags<cr>')
+nnoremap('<c-p>', function()
+  require('telescope.builtin').find_files()
+end)
+nnoremap('<c-b>', function()
+  require('telescope.builtin').buffers()
+end)
+nnoremap('<F4>', function()
+  require('user.git-branches').open()
+end)
+nnoremap('<leader>hh', function()
+  require('telescope.builtin').help_tags()
+end)
 nnoremap('<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   local view = require('telescope.themes').get_dropdown { winblend = 10, previewer = false }

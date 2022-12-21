@@ -13,7 +13,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.runtimepath:prepend(lazypath)
 
-require('lazy').setup {
+require('lazy').setup({
   -- the colorscheme should be available when starting Neovim
   'navarasu/onedark.nvim',
   'nvim-lua/plenary.nvim',
@@ -73,6 +73,8 @@ require('lazy').setup {
     config = function()
       require 'user.plugins.telescope'
     end,
+    cmd = 'Telescope',
+    keys = { '<c-p>', '<c-b>', 'F4', '<leader>cc', '<leader>hh', '<leader>/' },
   },
 
   -- LSP, Completion and Language
@@ -93,6 +95,7 @@ require('lazy').setup {
       'p00f/nvim-ts-rainbow',
       { 'cuducos/yaml.nvim', ft = 'yaml' },
     },
+    event = 'BufReadPost',
   },
 
   -- LSP
@@ -220,7 +223,7 @@ require('lazy').setup {
   {
     'gbprod/yanky.nvim',
     dependencies = { 'kkharji/sqlite.lua' },
-    lazy = true,
+    event = 'VeryLazy',
   },
   {
     'mizlan/iswap.nvim',
@@ -340,6 +343,7 @@ require('lazy').setup {
     dependencies = {
       'SmiteshP/nvim-navic',
     },
+    event = 'VeryLazy',
   },
   'kyazdani42/nvim-web-devicons',
   -- 'karb94/neoscroll.nvim',
@@ -407,5 +411,23 @@ require('lazy').setup {
   { 'windwp/nvim-ts-autotag', ft = { 'html', 'javascript' } },
   'gpanders/editorconfig.nvim',
   { 'kevinhwang91/nvim-bqf', ft = 'qf' },
-}
+}, {
+  ui = {
+    border = 'rounded',
+  },
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        'shada',
+        'gzip',
+        'matchit',
+        'matchparen',
+        'tarPlugin',
+        'tohtml',
+        'tutor',
+        'zipPlugin',
+      },
+    },
+  },
+})
 require 'user.plugins.configs'

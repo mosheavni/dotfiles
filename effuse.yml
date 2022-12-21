@@ -1,6 +1,7 @@
 exclude:
   - ".config/karabiner"
   - .alt.toml
+  - .python-version
   - .vimrc-minimal
   - .zshrc-minimal
   - Brewfile
@@ -14,6 +15,7 @@ exclude:
   - com.googlecode.iterm2.plist
   - images
   - material-design-colors.itermcolors
+  - pyrightconfig.json
   - requirements.txt
   - snippets.xml
   - start-docker.sh

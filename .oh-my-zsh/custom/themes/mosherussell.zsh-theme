@@ -5,9 +5,9 @@ EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
 
 RPROMPT=''
 
-PROMPT='%{$FG[049]%}%(4~|.../%3~|%~)%{$reset_color%} $(branch_prompt_info) $(kube_ps1 2>/dev/null || :)'
-# PROMPT='%{%G${EMOJI}%} %{$FG[049]%}%c%{$reset_color%} $(branch_prompt_info) $(kube_ps1 2>/dev/null || :)'
-# PROMPT+=$'\n'
+# PROMPT='%{$FG[049]%}%(4~|.../%3~|%~)%{$reset_color%} $(branch_prompt_info) $(kube_ps1 2>/dev/null || :)'
+PROMPT='%{%G${EMOJI}%} %{$FG[049]%}%c%{$reset_color%} $(branch_prompt_info) $(kube_ps1 2>/dev/null || :)'
+PROMPT+=$'\n'
 PROMPT+='%(?:%{$fg[green]%} → :%{$fg[red]%} → )'
 PROMPT+='%{$reset_color%}'
 
