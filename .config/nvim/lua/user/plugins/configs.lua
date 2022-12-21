@@ -33,24 +33,6 @@ inoremap('<M-a>', '<Esc>:AI<CR>a')
 -------------------
 vim.g['jsonpath_register'] = '*'
 
------------
--- Yanky --
------------
-require('yanky').setup {
-  ring = {
-    history_length = 100,
-    storage = 'sqlite',
-    sync_with_numbered_registers = true,
-    cancel_event = 'update',
-  },
-}
-keymap({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)')
-keymap({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)')
--- keymap({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
--- keymap({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
-nmap('<c-n>', '<Plug>(YankyCycleForward)')
-nmap('<c-m>', '<Plug>(YankyCycleBackward)')
-
 ----------
 -- Leap --
 ----------
@@ -75,66 +57,10 @@ vim.g['floaterm_width'] = 0.7
 vim.g['floaterm_height'] = 0.9
 
 -------------------
--- Dressing.nvim --
--------------------
-require('dressing').setup {
-  input = {
-    override = function(conf)
-      conf.col = -1
-      conf.row = 0
-      return conf
-    end,
-    win_options = {
-      winhighlight = 'NormalFloat:Normal',
-      winblend = 0,
-    },
-    border = 'rounded',
-    width = '1.0',
-    prompt_align = 'center',
-    -- get_config = function()
-    --   if vim.api.nvim_buf_get_option(0, 'filetype') == 'NvimTree' then
-    --     return { enabled = false }
-    --   end
-    -- end,
-  },
-}
-vim.cmd [[hi link FloatTitle Normal]]
-
------------------
--- Vim ansible --
------------------
-vim.g['ansible_goto_role_paths'] = '.;,roles;'
-
--------------------
 -- Yaml Revealer --
 -------------------
 vim.g['yaml_revealer_separator'] = '.'
 vim.g['yaml_revealer_list_indicator'] = 1
-
--- AnyJump --
--------------
-nnoremap('<leader>j', '<cmd>AnyJump<CR>')
-
----------------
--- neoscroll --
----------------
--- if not vim.g.neovide then
---   require('neoscroll').setup {
---     -- All these keys will be mapped to their corresponding default scrolling animation
---     mappings = { '<C-u>', '<C-d>', 'zt', 'zz', 'zb' },
---   }
--- end
-
--------------
--- hlslens --
--------------
-require('hlslens').setup()
-nnoremap('n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
-nnoremap('N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
-nnoremap('*', [[*<Cmd>lua require('hlslens').start()<CR>]], true)
-nnoremap('#', [[#<Cmd>lua require('hlslens').start()<CR>]], true)
-nnoremap('g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], true)
-nnoremap('g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], true)
 
 --------------------
 -- Github Copilot --
@@ -166,12 +92,6 @@ require('notify').setup {
   background_colour = '#000000',
 }
 nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
-
----------------
--- Which-Key --
----------------
-require('which-key').setup {}
-require 'user.which-key'
 
 ------------
 -- Fidget --

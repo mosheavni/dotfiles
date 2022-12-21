@@ -1,5 +1,6 @@
 local utils = require 'user.utils'
 local nmap = utils.nmap
+local nnoremap = utils.nnoremap
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system {
@@ -165,7 +166,13 @@ require('lazy').setup({
     end,
     event = 'InsertEnter',
   },
-  { 'phenomenes/ansible-snippets', ft = { 'yaml', 'ansible', 'yaml.ansible' } },
+  {
+    'phenomenes/ansible-snippets',
+    ft = { 'yaml', 'ansible', 'yaml.ansible' },
+    config = function()
+      vim.g['ansible_goto_role_paths'] = '.;,roles;'
+    end,
+  },
 
   -- Github's suggeetsions engine
   {
@@ -224,6 +231,22 @@ require('lazy').setup({
     'gbprod/yanky.nvim',
     dependencies = { 'kkharji/sqlite.lua' },
     event = 'VeryLazy',
+    config = function()
+      require('yanky').setup {
+        ring = {
+          history_length = 100,
+          storage = 'sqlite',
+          sync_with_numbered_registers = true,
+          cancel_event = 'update',
+        },
+      }
+      vim.keymap.set({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)')
+      vim.keymap.set({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)')
+      -- keymap({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
+      -- keymap({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
+      nmap('<c-n>', '<Plug>(YankyCycleForward)')
+      nmap('<c-m>', '<Plug>(YankyCycleBackward)')
+    end,
   },
   {
     'mizlan/iswap.nvim',
@@ -233,7 +256,19 @@ require('lazy').setup({
       nmap('<leader>sw', ':ISwapWith<CR>')
     end,
   },
-  'kevinhwang91/nvim-hlslens',
+  {
+    'kevinhwang91/nvim-hlslens',
+    keys = { '*', 'n', 'N' },
+    config = function()
+      require('hlslens').setup()
+      nnoremap('n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
+      nnoremap('N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
+      nnoremap('*', [[*<Cmd>lua require('hlslens').start()<CR>]], true)
+      nnoremap('#', [[#<Cmd>lua require('hlslens').start()<CR>]], true)
+      nnoremap('g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], true)
+      nnoremap('g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], true)
+    end,
+  },
   -- (convert "${}" to `${}` in JS and "{}" to f"" in Python)
   {
     'axelvc/template-string.nvim',
@@ -278,18 +313,20 @@ require('lazy').setup({
       vim.g.winresizer_vert_resize = 4
     end,
   },
-  { 'pechorin/any-jump.vim', cmd = { 'AnyJump', 'AnyJumpVisual' } },
+  {
+    'pechorin/any-jump.vim',
+    cmd = { 'AnyJump', 'AnyJumpVisual' },
+    keys = { '<leader>j' },
+    config = function()
+      nnoremap('<leader>j', '<cmd>AnyJump<CR>')
+    end,
+  },
   {
     'kazhala/close-buffers.nvim',
     config = function()
       require('close_buffers').setup {}
     end,
     cmd = { 'BDelete', 'BWipeout' },
-  },
-
-  {
-    'folke/which-key.nvim',
-    lazy = true,
   },
   {
     'sindrets/diffview.nvim',
@@ -318,7 +355,35 @@ require('lazy').setup({
   { 'tommcdo/vim-lister', ft = 'qf', cmd = { 'Qfilter', 'Qgrep' } }, -- Qfilter and Qgrep on Quickfix
 
   -- Look & Feel
-  { 'stevearc/dressing.nvim', lazy = true },
+  {
+    'stevearc/dressing.nvim',
+    config = function()
+      require('dressing').setup()
+      require('dressing').setup {
+        input = {
+          override = function(conf)
+            conf.col = -1
+            conf.row = 0
+            return conf
+          end,
+          win_options = {
+            winhighlight = 'NormalFloat:Normal',
+            winblend = 0,
+          },
+          border = 'rounded',
+          width = '1.0',
+          prompt_align = 'center',
+          -- get_config = function()
+          --   if vim.api.nvim_buf_get_option(0, 'filetype') == 'NvimTree' then
+          --     return { enabled = false }
+          --   end
+          -- end,
+        },
+      }
+      vim.cmd [[hi link FloatTitle Normal]]
+    end,
+    event = 'VeryLazy',
+  },
   'rcarriga/nvim-notify',
   {
     'lukas-reineke/indent-blankline.nvim',
@@ -335,7 +400,10 @@ require('lazy').setup({
     end,
     event = 'BufReadPre',
   },
-  'RRethy/vim-illuminate',
+  {
+    'RRethy/vim-illuminate',
+    event = 'BufReadPost',
+  },
 
   {
     'nvim-lualine/lualine.nvim',
