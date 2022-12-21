@@ -4,7 +4,7 @@ local nmap = utils.nmap
 local pretty_print = utils.pretty_print
 
 local M = {}
-M.git_actions = require('user.git').actions
+M.git_actions = require('user.plugins.git').actions
 M.lsp_actions = require('user.lsp').actions
 M.dap_actions = {}
 

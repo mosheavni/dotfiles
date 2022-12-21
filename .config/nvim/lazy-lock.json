@@ -1,5 +1,5 @@
 {
-  "ChatGPT.nvim": { "branch": "main", "commit": "39ff544391d78b4c0486a76cdfe61ea6527bed40" },
+  "ChatGPT.nvim": { "branch": "main", "commit": "4cca045c95495f52340b953e2380e68b44d9f02e" },
   "Comment.nvim": { "branch": "master", "commit": "5f01c1a89adafc52bf34e3bf690f80d9d726715d" },
   "CursorLineCurrentWindow": { "branch": "master", "commit": "b4eeea98b0d139772969fd243a8802a9883fd2a8" },
   "Jenkinsfile-vim-syntax": { "branch": "master", "commit": "0d05729168ea44d60862f17cffa80024ab30bcc9" },
