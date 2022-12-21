@@ -427,9 +427,9 @@ end, {})
 -- Plugins Management --
 ------------------------
 vim.api.nvim_create_user_command('PluginsList', function()
-  require('user.plugins-mgmt').display_awesome_plugins()
+  require('user.plugins.mgmt').display_awesome_plugins()
 end, {})
 
 vim.api.nvim_create_user_command('PluginsReload', function()
-  require('user.plugins-mgmt').reload_plugin()
+  require('user.plugins.mgmt').reload_plugin()
 end, {})
