@@ -16,7 +16,10 @@ vim.opt.runtimepath:prepend(lazypath)
 
 require('lazy').setup({
   -- the colorscheme should be available when starting Neovim
-  'navarasu/onedark.nvim',
+  {
+    'navarasu/onedark.nvim',
+    lazy = true,
+  },
   'nvim-lua/plenary.nvim',
   {
     'dstein64/vim-startuptime',
@@ -75,7 +78,7 @@ require('lazy').setup({
       require 'user.plugins.telescope'
     end,
     cmd = 'Telescope',
-    keys = { '<c-p>', '<c-b>', 'F4', '<leader>cc', '<leader>hh', '<leader>/', '<leader>fp' },
+    keys = { '<c-p>', '<c-b>', 'F4', '<leader>hh', '<leader>/', '<leader>fp' },
   },
 
   -- LSP, Completion and Language
@@ -504,6 +507,10 @@ require('lazy').setup({
 }, {
   ui = {
     border = 'rounded',
+  },
+  checker = {
+    -- automatically check for plugin updates
+    enabled = false,
   },
   performance = {
     rtp = {
