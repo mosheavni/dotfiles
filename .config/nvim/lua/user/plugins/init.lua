@@ -468,6 +468,7 @@ require('lazy').setup({
       'ds',
       'cs',
       'ys',
+      { 'S', nil, mode = 'v' },
     },
   },
   {
