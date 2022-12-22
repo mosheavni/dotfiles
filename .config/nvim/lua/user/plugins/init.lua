@@ -20,7 +20,6 @@ require('lazy').setup({
     'navarasu/onedark.nvim',
     lazy = true,
   },
-  'nvim-lua/plenary.nvim',
   {
     'dstein64/vim-startuptime',
     cmd = 'StartupTime',
@@ -40,7 +39,7 @@ require('lazy').setup({
   -- Git Related
   {
     'tpope/vim-fugitive',
-    init = function()
+    config = function()
       require 'user.plugins.git'
     end,
     event = 'VeryLazy',
@@ -105,9 +104,10 @@ require('lazy').setup({
   -- LSP
   {
     'neovim/nvim-lspconfig',
-    init = function()
+    config = function()
       require('user.lsp').setup()
     end,
+    event = 'BufReadPre',
     dependencies = {
       'lukas-reineke/lsp-format.nvim',
       'jose-elias-alvarez/null-ls.nvim',
@@ -272,7 +272,7 @@ require('lazy').setup({
   },
   {
     'kevinhwang91/nvim-hlslens',
-    keys = { '*', 'n', 'N' },
+    keys = { '*', '#', 'n', 'N' },
     config = function()
       require('hlslens').setup()
       nnoremap('n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
@@ -367,6 +367,7 @@ require('lazy').setup({
     end,
   },
   { 'tommcdo/vim-lister', ft = 'qf', cmd = { 'Qfilter', 'Qgrep' } }, -- Qfilter and Qgrep on Quickfix
+  { 'kevinhwang91/nvim-bqf', ft = 'qf' },
 
   -- Look & Feel
   {
@@ -432,7 +433,7 @@ require('lazy').setup({
   'kyazdani42/nvim-web-devicons',
   -- 'karb94/neoscroll.nvim',
   'mhinz/vim-startify',
-  'vim-scripts/CursorLineCurrentWindow',
+  { 'vim-scripts/CursorLineCurrentWindow', event = 'VeryLazy' },
   {
     'norcalli/nvim-colorizer.lua',
     config = function()
@@ -461,15 +462,10 @@ require('lazy').setup({
   -- },
 
   -- Text Manipulation
-  'tpope/vim-repeat',
+  { 'tpope/vim-repeat', event = 'VeryLazy' },
   {
     'tpope/vim-surround',
-    keys = {
-      'ds',
-      'cs',
-      'ys',
-      { 'S', nil, mode = 'v' },
-    },
+    keys = { 'ds', 'cs', 'ys', { 'S', nil, mode = 'v' } },
   },
   {
     'numToStr/Comment.nvim',
@@ -478,7 +474,7 @@ require('lazy').setup({
         pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
       }
     end,
-    keys = { 'gc', 'gcc' },
+    keys = { 'gc', 'gcc', { 'gc', nil, mode = 'v' } },
     dependencies = {
       'JoosepAlviste/nvim-ts-context-commentstring',
     },
@@ -497,14 +493,14 @@ require('lazy').setup({
       vim.keymap.set({ 'n', 'v' }, 'gs', require('nvim-toggler').toggle)
     end,
   },
-
   {
     'ggandor/leap.nvim',
     event = 'VeryLazy',
   },
   { 'windwp/nvim-ts-autotag', ft = { 'html', 'javascript' } },
-  'gpanders/editorconfig.nvim',
-  { 'kevinhwang91/nvim-bqf', ft = 'qf' },
+  { 'gpanders/editorconfig.nvim', event = 'VeryLazy' },
+
+  -- DONE ✅
 }, {
   ui = {
     border = 'rounded',
