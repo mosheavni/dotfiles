@@ -408,8 +408,7 @@ require('lazy').setup({
     event = 'BufReadPre',
   },
   {
-    'akinsho/bufferline.nvim',
-    version = '^3',
+    'noib3/nvim-cokeline',
     config = function()
       require 'user.plugins.bufferline'
     end,
