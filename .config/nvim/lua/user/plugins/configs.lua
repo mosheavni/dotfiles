@@ -28,11 +28,6 @@ nnoremap('<M-a>', ':AI ')
 vnoremap('<M-a>', ':AI ')
 inoremap('<M-a>', '<Esc>:AI<CR>a')
 
--------------------
--- Vim json path --
--------------------
-vim.g['jsonpath_register'] = '*'
-
 ----------
 -- Leap --
 ----------

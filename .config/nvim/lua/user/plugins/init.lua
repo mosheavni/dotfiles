@@ -138,7 +138,18 @@ require('lazy').setup({
   { 'chr4/nginx.vim', ft = 'nginx' },
   'mosheavni/vim-kubernetes',
   { 'towolf/vim-helm', ft = { 'yaml', 'yaml.gotexttmpl' } },
-  { 'mogelbrod/vim-jsonpath', ft = 'json' },
+  {
+    'phelipetls/jsonpath.nvim',
+    ft = 'json',
+    config = function()
+      vim.api.nvim_buf_create_user_command(0, 'JsonPath', function()
+        local json_path = require('jsonpath').get()
+        local register = '+'
+        vim.fn.setreg(register, json_path)
+        vim.notify('Copied ' .. json_path .. ' to register ' .. register, vim.log.levels.INFO, { title = 'JsonPath' })
+      end, {})
+    end,
+  },
   { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } },
 
   -- Completion
