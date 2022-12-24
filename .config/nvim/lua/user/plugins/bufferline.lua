@@ -57,7 +57,9 @@ require('cokeline').setup {
       end,
     },
     {
-      text = '',
+      text = function(buffer)
+        return buffer.is_modified and '●' or ''
+      end,
       delete_buffer_on_left_click = true,
     },
     {

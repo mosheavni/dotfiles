@@ -3,16 +3,16 @@ local opts = utils.map_opts
 local keymap = utils.keymap
 local tnoremap = utils.tnoremap
 local vnoremap = utils.vnoremap
-vim.opt.compatible = false
+vim.o.compatible = false
 
 -- disable legacy vim filetype detection in favor of new lua based from neovim
 -- vim.g.do_filetype_lua = 1
 -- vim.g.did_load_filetypes = 0
 
-vim.opt.cursorcolumn = true
-vim.opt.cursorline = true -- Add highlight behind current line
+vim.o.cursorcolumn = true
+vim.o.cursorline = true -- Add highlight behind current line
 vim.opt.shortmess:append { c = true, l = false, q = false, S = false }
-vim.opt.list = true
+vim.o.list = true
 vim.opt.listchars = { tab = '┆·', trail = '·', precedes = '', extends = '', eol = '↲' }
 -- set lcscope=tab:┆·,trail:·,precedes:,extends:
 vim.opt.fillchars = {
@@ -22,78 +22,78 @@ vim.opt.fillchars = {
   foldclose = '',
 }
 -- vim.opt.foldcolumn = '1'
-vim.opt.emoji = false
+vim.o.emoji = false
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
 -- opt.whichwrap:append '<>[]hl'
 vim.opt.diffopt:append { linematch = 50 }
 vim.opt.diffopt:append 'vertical'
-vim.opt.splitkeep = 'screen'
+vim.o.splitkeep = 'screen'
 
-vim.opt.number = true -- Show current line number
-vim.opt.numberwidth = 4 -- set number column width to 2 {default 4}
-vim.opt.relativenumber = true -- Show relative line numbers
-vim.opt.linebreak = true -- Avoid wrapping a line in the middle of a word.
-vim.opt.wrap = true -- Wrap long lines
-vim.opt.hlsearch = true -- highlight reg. ex. in @/ register
-vim.opt.incsearch = true -- Search as characters are typed
-vim.opt.inccommand = 'split' -- Incremental search and replace with small split window
-vim.opt.ignorecase = true -- Search case insensitive...
-vim.opt.smartcase = true -- ignore case if search pattern is all lowercase, case-sensitive otherwise
-vim.opt.autoread = true -- Re-read file if it was changed from the outside
-vim.opt.scrolloff = 4 -- When about to scroll page, see 7 lines below cursor
-vim.opt.sidescrolloff = 8 -- Columns of context
-vim.opt.cmdheight = 2 -- Height of the command bar
-vim.opt.hidden = true -- Hide buffer if abandoned
-vim.opt.showmatch = true -- When closing a bracket (like {}), show the enclosing
-vim.opt.splitbelow = true -- Horizontaly plitted windows open below
-vim.opt.splitright = true -- Vertically plitted windows open below bracket for a brief second
-vim.opt.startofline = false -- Stop certain movements from always going to the first character of a line.
-vim.opt.pumheight = 10 -- pop up menu height
-vim.opt.pumblend = 40 -- Popup blend
-vim.opt.confirm = true -- Prompt confirmation if exiting unsaved file
-vim.opt.lazyredraw = false -- redraw only when we need to.
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.backupdir = vim.fn.stdpath 'state' .. '/backup'
-vim.opt.writebackup = false
-vim.opt.wildmenu = true -- Displays a menu on autocomplete
+vim.o.number = true -- Show current line number
+vim.o.numberwidth = 4 -- set number column width to 2 {default 4}
+vim.o.relativenumber = true -- Show relative line numbers
+vim.o.linebreak = true -- Avoid wrapping a line in the middle of a word.
+vim.o.wrap = true -- Wrap long lines
+vim.o.hlsearch = true -- highlight reg. ex. in @/ register
+vim.o.incsearch = true -- Search as characters are typed
+vim.o.inccommand = 'split' -- Incremental search and replace with small split window
+vim.o.ignorecase = true -- Search case insensitive...
+vim.o.smartcase = true -- ignore case if search pattern is all lowercase, case-sensitive otherwise
+vim.o.autoread = true -- Re-read file if it was changed from the outside
+vim.o.scrolloff = 4 -- When about to scroll page, see 7 lines below cursor
+vim.o.sidescrolloff = 8 -- Columns of context
+vim.o.cmdheight = 2 -- Height of the command bar
+vim.o.hidden = true -- Hide buffer if abandoned
+vim.o.showmatch = true -- When closing a bracket (like {}), show the enclosing
+vim.o.splitbelow = true -- Horizontaly plitted windows open below
+vim.o.splitright = true -- Vertically plitted windows open below bracket for a brief second
+vim.o.startofline = false -- Stop certain movements from always going to the first character of a line.
+vim.o.pumheight = 10 -- pop up menu height
+vim.o.pumblend = 40 -- Popup blend
+vim.o.confirm = true -- Prompt confirmation if exiting unsaved file
+vim.o.lazyredraw = false -- redraw only when we need to.
+vim.o.swapfile = false
+vim.o.backup = false
+vim.o.backupdir = vim.fn.stdpath 'state' .. '/backup'
+vim.o.writebackup = false
+vim.o.wildmenu = true -- Displays a menu on autocomplete
 vim.opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
-vim.opt.previewheight = 15
-vim.opt.title = true -- Changes the iterm title
-vim.opt.laststatus = 3 -- Global statusline, only one for all buffers
-vim.opt.titlestring = "nvim: %{substitute(getcwd(), $HOME, '~', '')}"
-vim.opt.showcmd = true
-vim.opt.guifont = 'Fira Code,Hack Nerd Font'
-vim.opt.mouse = 'a'
-vim.opt.undofile = true -- Enables saving undo history to a file
-vim.opt.undolevels = 10000
+vim.o.previewheight = 15
+vim.o.title = true -- Changes the iterm title
+vim.o.laststatus = 3 -- Global statusline, only one for all buffers
+vim.o.titlestring = "nvim: %{substitute(getcwd(), $HOME, '~', '')}"
+vim.o.showcmd = true
+vim.o.guifont = 'Fira Code,Hack Nerd Font'
+vim.o.mouse = 'a'
+vim.o.undofile = true -- Enables saving undo history to a file
+vim.o.undolevels = 10000
 -- opt.colorcolumn = '80' -- Mark where are 80 characters to start breaking line
-vim.opt.textwidth = 80
+vim.o.textwidth = 80
 vim.opt.fileencodings = { 'utf-8', 'cp1251' }
-vim.opt.encoding = 'utf-8'
-vim.opt.visualbell = true -- Use visual bell instead of beeping
-vim.opt.conceallevel = 0
-vim.opt.showmode = false -- Redundant as lighline takes care of that
-vim.opt.history = 1000
-vim.opt.termguicolors = true
-vim.opt.signcolumn = 'yes'
+vim.o.encoding = 'utf-8'
+vim.o.visualbell = true -- Use visual bell instead of beeping
+vim.o.conceallevel = 0
+vim.o.showmode = false -- Redundant as lighline takes care of that
+vim.o.history = 1000
+vim.o.termguicolors = true
+vim.o.signcolumn = 'yes'
 -- require 'user.winbar'
 -- opt.winbar = "%{%v:lua.require'user.winbar'.eval()%}"
 
 -- Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
-vim.opt.updatetime = 300
+vim.o.updatetime = 300
 
 -- Ignore node_modules and other dirs
 vim.opt.wildignore:append { '**/node_modules/**', '.hg', '.git', '.svn', '*.DS_Store', '*.pyc' }
 vim.opt.path:append { '**' }
 
 -- Folding
-vim.opt.foldenable = true
-vim.opt.foldmethod = 'syntax'
-vim.opt.foldlevel = 999
-vim.opt.foldlevelstart = 10
+vim.o.foldenable = true
+vim.o.foldmethod = 'syntax'
+vim.o.foldlevel = 999
+vim.o.foldlevelstart = 10
 
 -- j = Delete comment character when joining commented lines.
 -- t = auto break long lines
@@ -103,16 +103,16 @@ vim.opt.foldlevelstart = 10
 vim.opt.formatoptions:append { j = true, t = true, r = true, o = true, l = true }
 
 -- Indenting
-vim.opt.breakindent = true -- Maintain indent on wrapping lines
-vim.opt.autoindent = true -- always set autoindenting on
-vim.opt.copyindent = true -- copy the previous indentation on autoindenting
-vim.opt.smartindent = true -- Number of spaces to use for each step of (auto)indent.
-vim.opt.shiftwidth = 4 -- Number of spaces for each indent
-vim.opt.shiftround = true -- use multiple of shiftwidth when indenting with '<' and '>'
-vim.opt.softtabstop = 4
-vim.opt.tabstop = 4
-vim.opt.smarttab = true -- insert tabs on the start of a line according to shiftwidth, not tabstop
-vim.opt.expandtab = true -- Tab changes to spaces. Format with :retab
+vim.o.breakindent = true -- Maintain indent on wrapping lines
+vim.o.autoindent = true -- always set autoindenting on
+vim.o.copyindent = true -- copy the previous indentation on autoindenting
+vim.o.smartindent = true -- Number of spaces to use for each step of (auto)indent.
+vim.o.shiftwidth = 4 -- Number of spaces for each indent
+vim.o.shiftround = true -- use multiple of shiftwidth when indenting with '<' and '>'
+vim.o.softtabstop = 4
+vim.o.tabstop = 4
+vim.o.smarttab = true -- insert tabs on the start of a line according to shiftwidth, not tabstop
+vim.o.expandtab = true -- Tab changes to spaces. Format with :retab
 vim.opt.indentkeys:remove '0#'
 vim.opt.indentkeys:remove '<:>'
 

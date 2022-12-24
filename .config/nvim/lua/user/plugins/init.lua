@@ -271,6 +271,14 @@ require('lazy').setup({
     end,
   },
   {
+    'monkoose/matchparen.nvim',
+    event = 'VeryLazy',
+    config = function()
+      require('matchparen').setup()
+    end,
+  },
+
+  {
     'kevinhwang91/nvim-hlslens',
     keys = { '*', '#', 'n', 'N' },
     config = function()

@@ -200,7 +200,9 @@ local yaml_cfg = require('yaml-companion').setup {
   },
   lspconfig = {
     on_attach = function(c, b)
-      if vim.bo[b].buftype ~= '' or vim.bo[b].filetype == 'helm' or vim.bo[b].filetype == 'yaml.gotexttmpl' then
+      local filetype = vim.api.nvim_buf_get_option(b, 'filetype')
+      local buftype = vim.api.nvim_buf_get_option(b, 'buftype')
+      if buftype ~= '' or filetype == 'helm' or filetype == 'yaml.gotexttmpl' then
         vim.diagnostic.disable(b)
         vim.defer_fn(function()
           vim.diagnostic.reset(nil, b)

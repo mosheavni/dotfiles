@@ -36,6 +36,7 @@ local colors = {
 }
 
 local one_dark_theme = require 'lualine.themes.onedark'
+one_dark_theme.visual.a.bg = one_dark_theme.normal.a.bg
 one_dark_theme.normal.a.bg = colors.violet
 one_dark_theme.normal.b.bg = colors.light_grey
 one_dark_theme.normal.b.fg = colors.whiter
@@ -66,7 +67,7 @@ lualine.setup {
       'diagnostics',
       'filename',
       function()
-        if vim.bo.filetype == 'yaml' then
+        if vim.api.nvim_buf_get_option(0, 'filetype') == 'yaml' then
           local schema = require('yaml-companion').get_buf_schema(0)
           if schema then
             return 'YAML Schema: ' .. schema.result[1].name
@@ -94,7 +95,6 @@ lualine.setup {
         icon = ' LSP:',
         color = { fg = '#ffffff', gui = 'bold' },
       },
-      'encoding',
       'fileformat',
       'filetype',
     },
