@@ -22,6 +22,7 @@ indent_blankline.setup {
     'help',
     'lazy',
     'lspinfo',
+    'noice',
     'mason',
     'nvchad_cheatsheet',
     'packer',

@@ -91,11 +91,11 @@ nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
 ------------
 -- Fidget --
 ------------
-require('fidget').setup {
-  text = {
-    spinner = 'moon',
-  },
-}
+-- require('fidget').setup {
+--   text = {
+--     spinner = 'moon',
+--   },
+-- }
 
 -------------
 -- Ansible --
