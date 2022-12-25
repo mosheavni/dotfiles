@@ -113,19 +113,13 @@ require('lazy').setup({
       'jose-elias-alvarez/null-ls.nvim',
       'folke/lsp-colors.nvim',
       'nanotee/nvim-lsp-basics',
-      'j-hui/fidget.nvim',
+      -- 'j-hui/fidget.nvim',
       'b0o/SchemaStore.nvim',
       'folke/neodev.nvim',
       'someone-stole-my-name/yaml-companion.nvim',
       'jose-elias-alvarez/typescript.nvim',
       'SmiteshP/nvim-navic',
       { 'glepnir/lspsaga.nvim', branch = 'main' },
-      {
-        'folke/trouble.nvim',
-        config = function()
-          require('trouble').setup {}
-        end,
-      },
       {
         'williamboman/mason.nvim',
         dependencies = {
@@ -134,6 +128,13 @@ require('lazy').setup({
         },
       },
     },
+  },
+  {
+    'folke/trouble.nvim',
+    config = function()
+      require('trouble').setup {}
+    end,
+    cmd = 'TroubleToggle',
   },
   { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } },
   { 'sam4llis/nvim-lua-gf', ft = 'lua' },
@@ -265,19 +266,19 @@ require('lazy').setup({
     end,
   },
 
-  {
-    'kevinhwang91/nvim-hlslens',
-    keys = { '*', '#', 'n', 'N' },
-    config = function()
-      require('hlslens').setup()
-      nnoremap('n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
-      nnoremap('N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
-      nnoremap('*', [[*<Cmd>lua require('hlslens').start()<CR>]], true)
-      nnoremap('#', [[#<Cmd>lua require('hlslens').start()<CR>]], true)
-      nnoremap('g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], true)
-      nnoremap('g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], true)
-    end,
-  },
+  -- {
+  --   'kevinhwang91/nvim-hlslens',
+  --   keys = { '*', '#', 'n', 'N' },
+  --   config = function()
+  --     require('hlslens').setup()
+  --     nnoremap('n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
+  --     nnoremap('N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
+  --     nnoremap('*', [[*<Cmd>lua require('hlslens').start()<CR>]], true)
+  --     nnoremap('#', [[#<Cmd>lua require('hlslens').start()<CR>]], true)
+  --     nnoremap('g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], true)
+  --     nnoremap('g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], true)
+  --   end,
+  -- },
   -- (convert "${}" to `${}` in JS and "{}" to f"" in Python)
   {
     'axelvc/template-string.nvim',
@@ -373,33 +374,49 @@ require('lazy').setup({
   {
     'stevearc/dressing.nvim',
     config = function()
-      require('dressing').setup()
       require('dressing').setup {
         input = {
-          override = function(conf)
-            conf.col = -1
-            conf.row = 0
-            return conf
-          end,
-          win_options = {
-            winhighlight = 'NormalFloat:Normal',
-            winblend = 0,
-          },
-          border = 'rounded',
-          width = '1.0',
-          prompt_align = 'center',
-          -- get_config = function()
-          --   if vim.api.nvim_buf_get_option(0, 'filetype') == 'NvimTree' then
-          --     return { enabled = false }
-          --   end
-          -- end,
+          enabled = false,
         },
+        -- input = {
+        --   override = function(conf)
+        --     conf.col = -1
+        --     conf.row = 0
+        --     return conf
+        --   end,
+        --   win_options = {
+        --     winhighlight = 'NormalFloat:Normal',
+        --     winblend = 0,
+        --   },
+        --   border = 'rounded',
+        --   width = '1.0',
+        --   prompt_align = 'center',
+        --   -- get_config = function()
+        --   --   if vim.api.nvim_buf_get_option(0, 'filetype') == 'NvimTree' then
+        --   --     return { enabled = false }
+        --   --   end
+        --   -- end,
+        -- },
       }
       vim.cmd [[hi link FloatTitle Normal]]
     end,
     event = 'VeryLazy',
   },
-  'rcarriga/nvim-notify',
+  {
+    'folke/noice.nvim',
+    config = function()
+      require 'user.plugins.noice'
+    end,
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      'MunifTanjim/nui.nvim',
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      'rcarriga/nvim-notify',
+    },
+    event = 'VeryLazy',
+  },
   {
     'lukas-reineke/indent-blankline.nvim',
     config = function()

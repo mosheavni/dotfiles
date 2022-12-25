@@ -175,6 +175,9 @@ function! s:add_mappings() abort
 endfunction
 ]]
 
+-------------------------
+-- Create a new branch --
+-------------------------
 local new_branch = function(branch_opts)
   if branch_opts.args ~= '' then
     return vim.cmd('Git checkout -b ' .. branch_opts.args)
@@ -183,6 +186,10 @@ local new_branch = function(branch_opts)
     if not input then
       return
     end
+    -- validate branch name regex in lua
+    if not string.match(input, '^[a-zA-Z0-9_-]+$') then
+      return vim.notify('Invalid branch name', vim.log.levels.ERROR)
+    end
     vim.cmd('Git checkout -b ' .. input)
   end)
 end
@@ -190,7 +197,9 @@ vim.api.nvim_create_user_command('Gcb', new_branch, { nargs = '?' })
 nmap('<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
 -- redir @">|silent scriptnames|redir END|enew|put
 
--- Git actions menu
+----------------------
+-- Git actions menu --
+----------------------
 local M = {}
 M.actions = {
   ['Change branch'] = function()
@@ -205,11 +214,9 @@ M.actions = {
   end,
   ['Diff File History'] = function()
     vim.ui.input({ prompt = 'Enter file path (empty for current file)' }, function(file_to_check)
-      P('1 ' .. file_to_check)
       if file_to_check == '' then
         file_to_check = '%'
       end
-      P('2' .. file_to_check)
 
       vim.cmd('DiffviewFileHistory ' .. file_to_check)
     end)

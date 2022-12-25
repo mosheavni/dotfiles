@@ -82,20 +82,20 @@ vim.g['DevIconsEnableFolderExtensionPatternMatching'] = 1
 ----------------
 -- vim.notify --
 ----------------
-vim.notify = require 'notify'
-require('notify').setup {
-  background_colour = '#000000',
-}
+-- vim.notify = require 'notify'
+-- require('notify').setup {
+--   background_colour = '#000000',
+-- }
 nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
 
 ------------
 -- Fidget --
 ------------
-require('fidget').setup {
-  text = {
-    spinner = 'moon',
-  },
-}
+-- require('fidget').setup {
+--   text = {
+--     spinner = 'moon',
+--   },
+-- }
 
 -------------
 -- Ansible --
