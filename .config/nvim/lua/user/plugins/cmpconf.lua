@@ -70,9 +70,9 @@ local source_mapping = {
 }
 
 cmp.setup {
-  enabled = function()
-    return vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' or require('cmp_dap').is_dap_buffer()
-  end,
+  -- enabled = function()
+  --   return vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' or require('cmp_dap').is_dap_buffer()
+  -- end,
   native_menu = false,
   formatting = {
     format = lspkind.cmp_format {
@@ -137,12 +137,6 @@ cmp.setup {
     documentation = cmp.config.window.bordered(),
   },
 }
-
-cmp.setup.filetype({ 'dap-repl', 'dapui_watches' }, {
-  sources = {
-    { name = 'dap' },
-  },
-})
 
 cmp.setup.filetype('gitcommit', {
   sources = cmp.config.sources({

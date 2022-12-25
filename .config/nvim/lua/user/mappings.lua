@@ -239,12 +239,12 @@ nnoremap('<leader>ct<space>', ':retab<cr>')
 nnoremap([[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], true)
 
 -- Search and Replace
-nnoremap('<Leader>r', ':.,$s?\\V<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>')
-vnoremap('<leader>r', '"hy:.,$s?\\V<C-r>h?<C-r>h?gc<left><left><left>')
-vnoremap('<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], { desc = 'Delete all but ...' })
-vnoremap('<leader>daa', [["hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]])
-vnoremap('<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]])
-vnoremap('<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]])
+nnoremap('<Leader>r', ':.,$s?\\V<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>', true)
+vnoremap('<leader>r', '"hy:.,$s?\\V<C-r>h?<C-r>h?gc<left><left><left>', true)
+vnoremap('<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], { desc = 'Delete all but ...', silent = true })
+vnoremap('<leader>daa', [["hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], true)
+vnoremap('<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>, true]])
+vnoremap('<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], true)
 
 -- Paste without saving deleted reg
 nmap('<leader>p', '<Plug>ReplaceWithRegisterOperator')

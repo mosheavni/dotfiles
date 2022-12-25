@@ -165,7 +165,7 @@ require('lazy').setup({
       'saadparwaiz1/cmp_luasnip',
       'onsails/lspkind-nvim',
       { 'tzachar/cmp-tabnine', build = './install.sh' },
-      { 'hrsh7th/cmp-nvim-lua', ft = 'lua' },
+      { 'hrsh7th/cmp-nvim-lua' },
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
@@ -174,7 +174,6 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lsp-signature-help',
       'hrsh7th/cmp-nvim-lsp-document-symbol',
       'windwp/nvim-autopairs',
-      'rcarriga/cmp-dap',
     },
     config = function()
       require 'user.plugins.cmpconf'
@@ -231,10 +230,12 @@ require('lazy').setup({
         require('dapui').toggle()
       end, {})
     end,
+    cmd = { 'DAP' },
     dependencies = {
       'rcarriga/nvim-dap-ui',
       'mfussenegger/nvim-dap-python',
       'nvim-telescope/telescope-dap.nvim',
+      'rcarriga/cmp-dap',
       'mxsdev/nvim-dap-vscode-js',
       'theHamsta/nvim-dap-virtual-text',
       'jayp0521/mason-nvim-dap.nvim',
@@ -245,7 +246,7 @@ require('lazy').setup({
   {
     'gbprod/yanky.nvim',
     dependencies = { 'kkharji/sqlite.lua' },
-    event = 'VeryLazy',
+    keys = { 'p', '<c-n>', '<c-m>' },
     config = function()
       require 'user.plugins.yanky'
     end,
@@ -448,7 +449,13 @@ require('lazy').setup({
   },
   'kyazdani42/nvim-web-devicons',
   -- 'karb94/neoscroll.nvim',
-  'mhinz/vim-startify',
+  {
+    'goolord/alpha-nvim',
+    config = function()
+      local startify = require 'alpha.themes.startify'
+      require('alpha').setup(startify.config)
+    end,
+  },
   { 'vim-scripts/CursorLineCurrentWindow', event = 'VeryLazy' },
   {
     'norcalli/nvim-colorizer.lua',

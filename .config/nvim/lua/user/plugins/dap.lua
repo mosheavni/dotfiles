@@ -1,4 +1,5 @@
 local utils = require 'user.utils'
+local cmp = require 'cmp'
 local opts = utils.map_opts
 local nnoremap = utils.nnoremap
 local mason_nvim_dap = require 'mason-nvim-dap'
@@ -37,6 +38,19 @@ require('dap-python').setup(vim.fn.stdpath 'data' .. '/mason/packages/debugpy/ve
 table.insert(dap.configurations.python, {
   justMyCode = false,
 })
+
+-- lua
+dap.configurations.lua = {
+  {
+    type = 'nlua',
+    request = 'attach',
+    name = 'Attach to running Neovim instance',
+  },
+}
+
+dap.adapters.nlua = function(callback, config)
+  callback { type = 'server', host = config.host or '127.0.0.1', port = config.port or 8086 }
+end
 
 -- Javascript
 -- dap.adapters.node2 = {
@@ -153,6 +167,20 @@ M.actions = {
   ['log level trace'] = function()
     dap.set_log_level 'TRACE'
     vim.cmd 'DapShowLog'
+  end,
+}
+
+-------------
+-- Set CMP --
+-------------
+cmp.setup.filetype({ 'dap-repl', 'dapui_watches' }, {
+  sources = {
+    { name = 'dap' },
+  },
+})
+cmp.setup {
+  enabled = function()
+    return vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' or require('cmp_dap').is_dap_buffer()
   end,
 }
 
