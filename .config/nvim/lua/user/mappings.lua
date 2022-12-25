@@ -267,6 +267,9 @@ nnoremap('<leader>bd', '<cmd>BDelete this<cr>', true)
 -- Close current buffer
 nnoremap('<leader>bc', ':close<cr>', true)
 
+-----------------
+-- Yaml / Json --
+-----------------
 -- Yaml 2 json
 vim.api.nvim_create_user_command('Yaml2Json', function()
   vim.cmd [[%!yq -ojson]]
@@ -276,7 +279,9 @@ vim.api.nvim_create_user_command('Json2Yaml', function()
   vim.cmd [[%!yq -P]]
 end, {})
 
--- Change document indentation number
+------------------------
+-- Change indentation --
+------------------------
 nnoremap('cii', function()
   vim.ui.input({ prompt = 'Enter new indent' }, function(indent_size)
     local indent_size = tonumber(indent_size)
@@ -286,7 +291,9 @@ nnoremap('cii', function()
   end)
 end)
 
--- Every parameter in its own line
+-------------------------------
+-- Split parameters to lines --
+-------------------------------
 vim.cmd [[
 function! SplitParamLines() abort
   let f_line_num = line('.')
@@ -299,7 +306,9 @@ endfunction
 nnoremap <silent> <leader>( :call SplitParamLines()<cr>
 ]]
 
--- Diff with last save function
+-------------------------
+-- Diff with last save --
+-------------------------
 vim.cmd [[
 function! s:DiffWithSaved()
   let filetype=&ft
@@ -310,7 +319,7 @@ function! s:DiffWithSaved()
   nnoremap <buffer> q :bd!<cr>
   augroup ShutDownDiffOnLeave
     autocmd! * <buffer>
-    autocmd BufDelete,BufUnload,BufWipeout <buffer> wincmd p | diffoff | wincmd p
+    autocmd BufDelete,BufUnload,BufWipeout <buffer> wincmd p | diffoff | wincmd p | diffoff
   augroup END
 
   wincmd p
@@ -319,7 +328,9 @@ com! DiffSaved call s:DiffWithSaved()
 nnoremap <leader>ds :DiffSaved<cr>
 ]]
 
--- Visual calculator -- TODO: finish...
+-----------------------
+-- Visual calculator --
+-----------------------
 vim.cmd [[
 function s:VisualCalculator() abort
   let save_pos = getpos('.')
