@@ -93,7 +93,7 @@ lualine.setup {
           return table.concat(all_client_names, ', ')
         end,
         icon = ' LSP:',
-        color = { fg = '#ffffff', gui = 'bold' },
+        color = { fg = colors.whiter, gui = 'bold' },
       },
       'fileformat',
       'filetype',

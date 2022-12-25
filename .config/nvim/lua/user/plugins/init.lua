@@ -246,20 +246,7 @@ require('lazy').setup({
     dependencies = { 'kkharji/sqlite.lua' },
     event = 'VeryLazy',
     config = function()
-      require('yanky').setup {
-        ring = {
-          history_length = 100,
-          storage = 'sqlite',
-          sync_with_numbered_registers = true,
-          cancel_event = 'update',
-        },
-      }
-      vim.keymap.set({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)')
-      vim.keymap.set({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)')
-      -- keymap({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
-      -- keymap({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
-      nmap('<c-n>', '<Plug>(YankyCycleForward)')
-      nmap('<c-m>', '<Plug>(YankyCycleBackward)')
+      require 'user.plugins.yanky'
     end,
   },
   {
@@ -552,4 +539,5 @@ require('lazy').setup({
     },
   },
 })
+
 require 'user.plugins.configs'
