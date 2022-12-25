@@ -27,9 +27,21 @@ require('cokeline').setup {
   },
   buffers = {
     filter_valid = function(buffer)
-      return buffer.type ~= 'nowrite'
+      return buffer.type ~= 'nowrite' and buffer.type ~= 'nofile'
     end,
   },
+  sidebar = {
+    filetype = 'NvimTree',
+    components = {
+      {
+        text = '  NvimTree',
+        fg = vim.g.terminal_color_3,
+        bg = get_hex('NvimTreeNormal', 'bg'),
+        style = 'bold',
+      },
+    },
+  },
+
   components = {
     {
       text = ' ',

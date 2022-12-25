@@ -37,6 +37,7 @@ configs.setup {
     'lua',
     'make',
     'markdown',
+    'markdown_inline',
     'python',
     'query',
     'regex',
