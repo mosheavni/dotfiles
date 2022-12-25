@@ -325,6 +325,11 @@ require('lazy').setup({
       'FloatermUpdate',
     },
   },
+  {
+    'samjwill/nvim-unception',
+    event = 'VeryLazy',
+  },
+
   { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } },
   {
     'simeji/winresizer',
@@ -511,6 +516,21 @@ require('lazy').setup({
 }, {
   ui = {
     border = 'rounded',
+    custom_keys = {
+      ['<localleader>l'] = function(plugin)
+        require('lazy.util').open_cmd({ 'git', 'log' }, {
+          cwd = plugin.dir,
+          terminal = true,
+          close_on_exit = true,
+          enter = true,
+        })
+      end,
+
+      -- open a terminal for the plugin dir
+      ['<localleader>t'] = function(plugin)
+        vim.cmd('FloatermNew --cwd=' .. plugin.dir)
+      end,
+    },
   },
   checker = {
     -- automatically check for plugin updates

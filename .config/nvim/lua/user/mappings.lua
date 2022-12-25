@@ -1,5 +1,6 @@
 -- leader key - before mapping lsp maps
 vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
 local utils = require 'user.utils'
 local opts = utils.map_opts
