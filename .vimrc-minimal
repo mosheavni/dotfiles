@@ -30,7 +30,7 @@ filetype plugin on
 filetype plugin indent on
 set path+=**
 " Set python path
-let g:python3_host_prog="/usr/bin/python3"
+let g:python3_host_prog='/usr/bin/python3'
 
 filetype indent on
 set autoindent
@@ -44,7 +44,7 @@ set expandtab
 set splitbelow
 set splitright
 
-let mapleader=" "
+let mapleader=' '
 
 nnoremap <Leader><Leader> <C-^>
 nnoremap <tab> <c-w>w
@@ -63,14 +63,6 @@ set foldlevelstart=10
 nnoremap <leader>f za
 nnoremap <leader>caf zM
 nnoremap <leader>oaf zR
-
-
-let s:vimplug_dir = '~/.vim/plugged'
-call plug#begin(s:vimplug_dir)
-Plug 'tpope/vim-sensible'
-Plug 'sheerun/vim-polyglot'
-Plug 'morhetz/gruvbox'
-call plug#end()
 
 
 set termguicolors

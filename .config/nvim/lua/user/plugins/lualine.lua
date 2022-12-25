@@ -57,7 +57,12 @@ lualine.setup {
   },
   sections = {
     lualine_a = {
-      { 'mode', separator = { left = '' }, right_padding = 2 },
+      {
+        'mode',
+        separator = { right = '', left = '' },
+        left_padding = 2,
+        right_padding = 2,
+      },
     },
     lualine_b = {
       'branch',
@@ -129,6 +134,9 @@ lualine.setup {
           local location = navic.get_location()
           return navic.is_available() and location ~= '' and location or ''
         end,
+        separator = { right = '', left = '' },
+        left_padding = 2,
+        right_padding = 2,
       },
     },
   },
