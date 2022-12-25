@@ -117,10 +117,10 @@ end
 inoremap('<c-v>', '<c-r>')
 
 -- Quickfix
-nnoremap(']q', ':cnext<cr>zz')
-nnoremap('[q', ':cprev<cr>zz')
-nnoremap(']l', ':lnext<cr>zz')
-nnoremap('[l', ':lprev<cr>zz')
+nnoremap(']q', ':cnext<cr>zz', true)
+nnoremap('[q', ':cprev<cr>zz', true)
+nnoremap(']l', ':lnext<cr>zz', true)
+nnoremap('[l', ':lprev<cr>zz', true)
 
 -- This creates a new line of '=' signs the same length of the line
 nnoremap('<leader>=', 'yypVr=')

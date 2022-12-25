@@ -34,10 +34,20 @@ require('cokeline').setup {
     filetype = 'NvimTree',
     components = {
       {
-        text = '  NvimTree',
+        text = '',
         fg = vim.g.terminal_color_3,
         bg = get_hex('NvimTreeNormal', 'bg'),
+      },
+      {
+        text = '  NvimTree  ',
+        bg = vim.g.terminal_color_3,
+        fg = get_hex('NvimTreeNormal', 'bg'),
         style = 'bold',
+      },
+      {
+        text = '',
+        fg = vim.g.terminal_color_3,
+        bg = get_hex('NvimTreeNormal', 'bg'),
       },
     },
   },
