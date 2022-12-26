@@ -15,7 +15,9 @@ end
 vim.opt.runtimepath:prepend(lazypath)
 
 require('lazy').setup({
-  -- the colorscheme should be available when starting Neovim
+  -------------------
+  --   Colorscheme --
+  -------------------
   {
     'navarasu/onedark.nvim',
     lazy = true,
@@ -25,7 +27,9 @@ require('lazy').setup({
     cmd = 'StartupTime',
   },
 
-  -- Project Drawer
+  ---------------------------
+  -- Project Drawer / tree --
+  ---------------------------
   {
     'kyazdani42/nvim-tree.lua',
     cmd = 'NvimTreeToggle',
@@ -36,7 +40,9 @@ require('lazy').setup({
     end,
   },
 
-  -- Git Related
+  ---------
+  -- Git --
+  ---------
   {
     'tpope/vim-fugitive',
     config = function()
@@ -46,9 +52,7 @@ require('lazy').setup({
     dependencies = {
       {
         'akinsho/git-conflict.nvim',
-        config = function()
-          require('git-conflict').setup()
-        end,
+        config = true,
       },
     },
   },
@@ -61,11 +65,9 @@ require('lazy').setup({
   },
   { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } },
 
-  -- Documents
-  { 'milisims/nvim-luaref', event = 'VeryLazy' },
-  { 'nanotee/luv-vimdocs', event = 'VeryLazy' },
-
-  -- Fuzzy Search - Telescope
+  ------------------------------
+  -- Fuzzy Search - Telescope --
+  ------------------------------
   {
     'nvim-telescope/telescope.nvim',
     dependencies = {
@@ -80,8 +82,9 @@ require('lazy').setup({
     keys = { '<c-p>', '<c-b>', 'F4', '<leader>hh', '<leader>/', '<leader>fp' },
   },
 
-  -- LSP, Completion and Language
-  -- Tree Sitter
+  -----------------
+  -- TreeSitter --
+  -----------------
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = function()
@@ -101,7 +104,9 @@ require('lazy').setup({
     event = 'BufReadPost',
   },
 
-  -- LSP
+  ------------------------------------
+  -- Language Server Protocol (LSP) --
+  ------------------------------------
   {
     'neovim/nvim-lspconfig',
     config = function()
@@ -131,9 +136,7 @@ require('lazy').setup({
   },
   {
     'folke/trouble.nvim',
-    config = function()
-      require('trouble').setup {}
-    end,
+    config = true,
     cmd = 'TroubleToggle',
   },
   { 'vim-scripts/groovyindent-unix', ft = { 'groovy', 'Jenkinsfile' } },
@@ -155,8 +158,12 @@ require('lazy').setup({
     end,
   },
   { 'chrisbra/vim-sh-indent', ft = { 'sh', 'bash', 'zsh' } },
+  { 'milisims/nvim-luaref', event = 'VeryLazy' },
+  { 'nanotee/luv-vimdocs', event = 'VeryLazy' },
 
-  -- Completion
+  ----------------
+  -- Completion --
+  ----------------
   {
     'hrsh7th/nvim-cmp',
     dependencies = {
@@ -188,7 +195,9 @@ require('lazy').setup({
     end,
   },
 
-  -- Github's suggeetsions engine
+  -----------------------------
+  -- AI and smart completion --
+  -----------------------------
   {
     'github/copilot.vim',
     event = 'InsertEnter',
@@ -199,9 +208,7 @@ require('lazy').setup({
   },
   {
     'jackMort/ChatGPT.nvim',
-    config = function()
-      require('chatgpt').setup {}
-    end,
+    config = true,
     dependencies = {
       'MunifTanjim/nui.nvim',
       'nvim-lua/plenary.nvim',
@@ -209,6 +216,7 @@ require('lazy').setup({
     },
     cmd = 'ChatGPT',
   },
+
   {
     'iamcco/markdown-preview.nvim',
     build = 'cd app && yarn install',
@@ -262,9 +270,7 @@ require('lazy').setup({
   {
     'monkoose/matchparen.nvim',
     event = 'VeryLazy',
-    config = function()
-      require('matchparen').setup()
-    end,
+    config = true,
   },
 
   -- {
@@ -285,17 +291,13 @@ require('lazy').setup({
     'axelvc/template-string.nvim',
     ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
     event = 'InsertEnter',
-    config = function()
-      require('template-string').setup()
-    end,
+    config = true,
   },
   'vim-scripts/ReplaceWithRegister',
   {
     'kiran94/s3edit.nvim',
     cmd = 'S3Edit',
-    config = function()
-      require('s3edit').setup()
-    end,
+    config = true,
   },
   {
     'voldikss/vim-floaterm',
@@ -337,9 +339,7 @@ require('lazy').setup({
   },
   {
     'kazhala/close-buffers.nvim',
-    config = function()
-      require('close_buffers').setup {}
-    end,
+    config = true,
     cmd = { 'BDelete', 'BWipeout' },
   },
   {
@@ -362,9 +362,7 @@ require('lazy').setup({
   -- Quickfix
   {
     url = 'https://gitlab.com/yorickpeterse/nvim-pqf.git',
-    config = function()
-      require('pqf').setup()
-    end,
+    config = true,
   },
   { 'tommcdo/vim-lister', ft = 'qf', cmd = { 'Qfilter', 'Qgrep' } }, -- Qfilter and Qgrep on Quickfix
   { 'kevinhwang91/nvim-bqf', ft = 'qf' },
