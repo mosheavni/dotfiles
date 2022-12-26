@@ -322,9 +322,7 @@ require('lazy').setup({
   { 'mosheavni/vim-dirdiff', cmd = { 'DirDiff' } },
   {
     'simeji/winresizer',
-    keys = {
-      '<C-e>',
-    },
+    keys = { '<C-e>' },
     config = function()
       vim.g.winresizer_vert_resize = 4
     end,
