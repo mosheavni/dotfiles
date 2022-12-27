@@ -59,6 +59,9 @@ lualine.setup {
     lualine_a = {
       {
         'mode',
+        fmt = function(mode)
+          return mode:sub(1, 1):upper()
+        end,
         separator = { right = '', left = '' },
         left_padding = 2,
         right_padding = 2,
@@ -102,13 +105,16 @@ lualine.setup {
       },
       'fileformat',
       'filetype',
+      'progress',
     },
     lualine_z = {
-      'location',
+      '%l/%L',
+      'searchcount',
       {
         function()
-          return os.date '%H:%M:%S'
+          return require('lazy').stats().startuptime
         end,
+        -- cond = require('lazy.status').has_updates,
         separator = { right = '' },
         left_padding = 2,
       },
