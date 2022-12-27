@@ -18,6 +18,7 @@ null_ls.setup {
     null_ls.builtins.code_actions.eslint_d,
     null_ls.builtins.diagnostics.ansiblelint,
     null_ls.builtins.diagnostics.hadolint,
+    null_ls.builtins.diagnostics.markdownlint,
     -- null_ls.builtins.diagnostics.npm_groovy_lint,
     null_ls.builtins.diagnostics.vint,
     null_ls.builtins.diagnostics.shellcheck.with {
@@ -27,6 +28,7 @@ null_ls.setup {
     null_ls.builtins.formatting.black,
     null_ls.builtins.formatting.eslint_d,
     null_ls.builtins.formatting.fixjson,
+    null_ls.builtins.formatting.markdownlint,
     null_ls.builtins.formatting.npm_groovy_lint,
     -- null_ls.builtins.formatting.prettierd,
     null_ls.builtins.formatting.stylua,

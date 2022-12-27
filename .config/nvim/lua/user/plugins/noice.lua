@@ -1,5 +1,15 @@
 require('noice').setup {
   -- lsp = { progress = { enabled = false }, signature = { enabled = false }, hover = { enabled = false }, message = { enabled = false } },
+  routes = {
+    {
+      filter = {
+        event = 'msg_show',
+        kind = '',
+        find = 'written',
+      },
+      opts = { skip = true },
+    },
+  },
 
   lsp = {
     progress = {

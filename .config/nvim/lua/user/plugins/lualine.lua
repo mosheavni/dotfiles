@@ -73,6 +73,11 @@ lualine.setup {
     },
     lualine_c = {
       'diagnostics',
+      {
+        require('noice').api.statusline.mode.get,
+        cond = require('noice').api.statusline.mode.has,
+        color = { fg = colors.whiter },
+      },
       'filename',
       function()
         if vim.api.nvim_buf_get_option(0, 'filetype') == 'yaml' then
