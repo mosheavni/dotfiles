@@ -521,6 +521,7 @@ require('lazy').setup({
 
   -- DONE ✅
 }, {
+  change_detection = { notify = true },
   ui = {
     border = 'rounded',
     custom_keys = {
