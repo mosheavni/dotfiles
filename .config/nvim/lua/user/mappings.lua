@@ -88,17 +88,17 @@ com! -bang FormatGroovyMap call s:FormatGroovyMap("<bang>")
 ]=]
 
 -- Windows mappings
-nnoremap('<Leader><Leader>', '<C-^>')
-nnoremap('<tab>', '<c-w>w')
-nnoremap('<c-w><c-c>', '<c-w>c')
-nnoremap('<leader>bn', ':bn<cr>')
-nnoremap('<c-w>v', ':vnew<cr>')
-nnoremap('<c-w>s', ':new<cr>')
-nnoremap('<c-w>e', ':enew<cr>')
-nnoremap('<C-J>', '<C-W><C-J>')
-nnoremap('<C-K>', '<C-W><C-K>')
-nnoremap('<C-L>', '<C-W><C-L>')
-nnoremap('<C-H>', '<C-W><C-H>')
+nnoremap('<Leader><Leader>', '<C-^>', true)
+nnoremap('<tab>', '<c-w>w', true)
+nnoremap('<c-w><c-c>', '<c-w>c', true)
+nnoremap('<leader>bn', ':bn<cr>', true)
+nnoremap('<c-w>v', ':vnew<cr>', true)
+nnoremap('<c-w>s', ':new<cr>', true)
+nnoremap('<c-w>e', ':enew<cr>', true)
+nnoremap('<C-J>', '<C-W><C-J>', true)
+nnoremap('<C-K>', '<C-W><C-K>', true)
+nnoremap('<C-L>', '<C-W><C-L>', true)
+nnoremap('<C-H>', '<C-W><C-H>', true)
 
 -- entire file text-object
 onoremap('ae', '<cmd>normal! ggVG<CR>', true)
