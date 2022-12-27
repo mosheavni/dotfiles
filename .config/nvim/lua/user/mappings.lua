@@ -114,7 +114,7 @@ end
 -- keymap('n', '<leader>Q', ":<c-u><c-r><c-r>='let @q = '. string(getreg('q'))<cr><c-f><left>", opts.no_remap)
 
 -- Paste in insert mode
-inoremap('<c-v>', '<c-r>')
+inoremap('<c-v>', '<c-r>"', true)
 
 -- Quickfix
 nnoremap(']q', ':cnext<cr>zz', true)
@@ -126,17 +126,17 @@ nnoremap('[l', ':lprev<cr>zz', true)
 nnoremap('<leader>=', 'yypVr=')
 
 -- Map dp and dg with leader for diffput and diffget
-nnoremap('<leader>dp', ':diffput<cr>')
-nnoremap('<leader>dg', ':diffget<cr>')
-nnoremap('<leader>dn', ':windo diffthis<cr>')
-nnoremap('<leader>df', ':bufdo diffoff<cr>')
+nnoremap('<leader>dp', ':diffput<cr>', true)
+nnoremap('<leader>dg', ':diffget<cr>', true)
+nnoremap('<leader>dn', ':windo diffthis<cr>', true)
+nnoremap('<leader>df', ':bufdo diffoff<cr>', true)
 
 -- Map enter to no highlight
 nnoremap('<CR>', ':nohlsearch<CR><CR>', true)
 
 -- Set mouse=v mapping
-nnoremap('<leader>ma', ':set mouse=a<cr>')
-nnoremap('<leader>mv', ':set mouse=v<cr>')
+nnoremap('<leader>ma', ':set mouse=a<cr>', true)
+nnoremap('<leader>mv', ':set mouse=v<cr>', true)
 
 -- Exit mappings
 inoremap('jk', '<esc>')
@@ -180,15 +180,15 @@ tnoremap('<Esc>', [[<C-\><C-n>]])
 --   return star_search('*')
 -- end)
 
-vnoremap('*', ":call StarSearch('/')<CR>/<C-R>=@/<CR><CR>")
-vnoremap('#', ":call StarSearch('?')<CR>?<C-R>=@/<CR><CR>")
+vnoremap('*', ":call StarSearch('/')<CR>/<C-R>=@/<CR><CR>", true)
+vnoremap('#', ":call StarSearch('?')<CR>?<C-R>=@/<CR><CR>", true)
 
 -- Map - to move a line down and _ a line up
 nnoremap('-', [["ldd$"lp]])
 nnoremap('_', [["ldd2k"lp]])
 
 -- Copy entire file to clipboard
-nnoremap('Y', ':%y+<cr>')
+nnoremap('Y', ':%y+<cr>', true)
 
 -- Copy file path to clipboard
 nnoremap('<leader>cfp', [[:let @+ = expand('%')<cr>:echo   "Copied file path " . expand('%')<cr>]], true)
@@ -202,11 +202,11 @@ nmap('cp', '"+y')
 nmap('cv', '"+p')
 
 -- Move visually selected block
-vnoremap('J', [[:m '>+1<CR>gv=gv]])
-vnoremap('K', [[:m '<-2<CR>gv=gv]])
+vnoremap('J', [[:m '>+1<CR>gv=gv]], true)
+vnoremap('K', [[:m '<-2<CR>gv=gv]], true)
 
 -- Convert all tabs to spaces
-nnoremap('<leader>ct<space>', ':retab<cr>')
+nnoremap('<leader>ct<space>', ':retab<cr>', true)
 
 -- Enable folding with the leader-f/a
 nnoremap('<leader>ff', 'za')
@@ -216,7 +216,7 @@ nnoremap('<leader>fo', 'zR')
 nnoremap('<leader>fl', 'zazczA')
 
 -- Change \n to new lines
-nmap('<leader><cr>', [[:silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>]])
+nmap('<leader><cr>', [[:silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>]], true)
 
 -- Move vertically by visual line (don't skip wrapped lines)
 nmap('k', "v:count == 0 ? 'gk' : 'k'", opts.expr_silent)
@@ -231,10 +231,10 @@ nnoremap('<C-u>', '<C-u>zz', true)
 nnoremap('<C-d>', '<C-d>zz', true)
 
 -- Change working directory based on open file
-nnoremap('<leader>cd', ':cd %:p:h<CR>:pwd<CR>')
+nnoremap('<leader>cd', ':cd %:p:h<CR>:pwd<CR>', true)
 
 -- Convert all tabs to spaces
-nnoremap('<leader>ct<space>', ':retab<cr>')
+nnoremap('<leader>ct<space>', ':retab<cr>', true)
 -- Change every " -" with " \<cr> -" to break long lines of bash
 nnoremap([[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], true)
 
