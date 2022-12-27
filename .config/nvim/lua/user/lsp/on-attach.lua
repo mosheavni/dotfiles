@@ -8,10 +8,14 @@ local navic = require 'nvim-navic'
 
 local on_attach_aug = augroup 'OnAttachAu'
 local default_on_attach = function(client, bufnr)
-  -- Add mappings
+  ------------------
+  -- Add mappings --
+  ------------------
   user_maps(bufnr)
 
-  -- Plugins on-attach
+  -----------------------
+  -- Plugins on-attach --
+  -----------------------
   local basics = require 'lsp_basics'
   basics.make_lsp_commands(client, bufnr)
   moshe_formatting.setup(client, bufnr)
@@ -19,6 +23,9 @@ local default_on_attach = function(client, bufnr)
     navic.attach(client, bufnr)
   end
 
+  ------------------
+  -- AutoCommands --
+  ------------------
   if client.server_capabilities.code_lens then
     autocmd({ 'BufEnter', 'InsertLeave', 'InsertEnter' }, {
       group = on_attach_aug,
@@ -42,12 +49,6 @@ local default_on_attach = function(client, bufnr)
       command = 'silent! lua vim.lsp.buf.clear_references()',
     })
   end
-
-  -- Enable tag jump based on LSP
-  if client.server_capabilities.goto_definition == true then
-    buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
-  end
-
   local diagnostic_pop = augroup 'DiagnosticPop'
   autocmd('CursorHold', {
     buffer = bufnr,
@@ -67,27 +68,19 @@ local default_on_attach = function(client, bufnr)
       end
     end,
   })
+
+  ----------------------------------
+  -- Enable tag jump based on LSP --
+  ----------------------------------
+  if client.server_capabilities.goto_definition then
+    buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
+  end
 end
 
 local minimal_on_attach = function(_, bufnr)
   P 'minimal on_attach'
   -- Add mappings
   user_maps(bufnr)
-
-  -- local basics = require 'lsp_basics'
-  -- basics.make_lsp_commands(client, bufnr)
-  --
-  -- if not vim.tbl_contains(disable_ls_signature, client.name) then
-  --   require('lsp_signature').on_attach()
-  -- end
-
-  -- Enable tag jump and formatting based on LSP
-  -- if client.server_capabilities.goto_definition == true then
-  --   buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
-  -- end
-  -- if client.server_capabilities.document_formatting == true then
-  --   buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
-  -- end
 end
 
 return {

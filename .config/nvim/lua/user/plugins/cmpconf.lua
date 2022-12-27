@@ -34,7 +34,10 @@ local cmp_mappings = {
     end
   end, { 'i', 's' }),
   ['<C-y>'] = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true },
-  ['<CR>'] = cmp.mapping.confirm { select = false },
+  ['<CR>'] = cmp.mapping.confirm {
+    behavior = cmp.ConfirmBehavior.Replace,
+    select = true,
+  },
   ['<Tab>'] = cmp.mapping(function(fallback)
     if cmp.visible() then
       cmp.select_next_item()
@@ -129,7 +132,7 @@ cmp.setup {
   },
   snippet = {
     expand = function(args)
-      luasnip.lsp_expand(args.body) -- For `luasnip` users.
+      luasnip.lsp_expand(args.body)
     end,
   },
   window = {
@@ -140,7 +143,7 @@ cmp.setup {
 
 cmp.setup.filetype('gitcommit', {
   sources = cmp.config.sources({
-    { name = 'git' }, -- You can specify the `cmp_git` source if you were installed it.
+    { name = 'git' },
   }, {
     { name = 'buffer' },
   }),

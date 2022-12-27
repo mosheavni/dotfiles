@@ -19,38 +19,39 @@ return function(bufnr)
   local buffer_opts = { buffer = bufnr, silent = true }
 
   -- GoTo code navigation
-  nnoremap('gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', buffer_opts)
-  nnoremap('gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', buffer_opts)
+  nnoremap('gD', vim.lsp.buf.declaration, buffer_opts)
+  nnoremap('gd', vim.lsp.buf.definition, buffer_opts)
   nnoremap('gp', '<cmd>Lspsaga peek_definition<CR>', buffer_opts)
-  nnoremap('gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>', buffer_opts)
-  nnoremap('gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', buffer_opts)
+  nnoremap('gy', vim.lsp.buf.type_definition, buffer_opts)
+  nnoremap('gi', vim.lsp.buf.implementation, buffer_opts)
   -- nnoremap('gr', '<cmd>lua vim.lsp.buf.references({ includeDeclaration = false })<CR>', buffer_opts)
   nnoremap('gr', '<cmd>Lspsaga lsp_finder<CR>', buffer_opts)
 
   -- Documentation
-  inoremap('<M-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', buffer_opts)
-  nnoremap('<leader>lk', '<cmd>lua vim.lsp.buf.signature_help()<CR>', buffer_opts)
+  inoremap('<M-k>', vim.lsp.buf.signature_help, buffer_opts)
+  nnoremap('<leader>lk', vim.lsp.buf.signature_help, buffer_opts)
   -- calling twice make the cursor go into the float window. good for navigating big docs
-  nnoremap('K', '<Cmd>lua vim.lsp.buf.hover()<CR>', buffer_opts)
+  nnoremap('K', vim.lsp.buf.hover, buffer_opts)
 
   -- Refactor rename
-  nnoremap('<leader>lrn', '<cmd>lua vim.lsp.buf.rename()<CR>', buffer_opts)
+  nnoremap('<leader>lrn', vim.lsp.buf.rename, buffer_opts)
 
   -- Workspace
-  nnoremap('<leader>lwa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', buffer_opts)
-  nnoremap('<leader>lwr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', buffer_opts)
-  nnoremap('<leader>lwl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', buffer_opts)
+  nnoremap('<leader>lwa', vim.lsp.buf.add_workspace_folder, buffer_opts)
+  nnoremap('<leader>lwr', vim.lsp.buf.remove_workspace_folder, buffer_opts)
+  nnoremap('<leader>lwl',function()
+    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  end, buffer_opts)
 
   -- Diagnostics
-  nnoremap('<leader>lq', '<cmd>lua vim.diagnostic.setqflist()<CR>', buffer_opts)
-  nnoremap('<leader>ld', '<cmd>lua vim.diagnostic.open_float()<cr>', buffer_opts)
+  nnoremap('<leader>lq', vim.diagnostic.setqflist, buffer_opts)
+  nnoremap('<leader>ld', vim.diagnostic.open_float, buffer_opts)
   -- Goto previous/next diagnostic warning/error
   -- Use `[g` and `]g` to navigate diagnostics
-  nnoremap('[g', '<cmd>lua vim.diagnostic.goto_prev({float=false})<CR>', buffer_opts)
-  nnoremap(']g', '<cmd>lua vim.diagnostic.goto_next({float=false})<CR>', buffer_opts)
+  nnoremap('[g', vim.diagnostic.goto_prev, buffer_opts)
+  nnoremap(']g', vim.diagnostic.goto_next, buffer_opts)
 
   -- Code action
-  nnoremap('<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>')
-  nnoremap('<leader>lx', '<cmd>lua vim.lsp.codelens.run()<CR>')
-  nnoremap('<leader>la', '<cmd>lua vim.lsp.buf.range_code_action()<CR>')
+  nnoremap('<leader>la', vim.lsp.buf.code_action, buffer_opts)
+  nnoremap('<leader>lx', vim.lsp.codelens.run, buffer_opts)
 end

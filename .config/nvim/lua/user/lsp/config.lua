@@ -1,7 +1,6 @@
 local on_attaches = require 'user.lsp.on-attach'
 local default_on_attach = on_attaches.default
 require('neodev').setup {}
-require('typescript').setup {}
 
 require('mason').setup {
   log_level = vim.log.levels.TRACE,
@@ -175,9 +174,16 @@ lspconfig.terraformls.setup {
 }
 
 --tsserver
-lspconfig.tsserver.setup {
-  on_attach = default_on_attach,
-  capabilities = capabilities,
+-- lspconfig.tsserver.setup {
+--   on_attach = default_on_attach,
+--   capabilities = capabilities,
+-- }
+
+require('typescript').setup {
+  server = {
+    on_attach = default_on_attach,
+    capabilities = capabilities,
+  },
 }
 
 --vimls
