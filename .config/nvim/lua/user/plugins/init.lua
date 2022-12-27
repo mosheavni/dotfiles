@@ -63,7 +63,26 @@ require('lazy').setup({
       require 'user.plugins.gitsigns'
     end,
   },
-  { 'mosheavni/vim-to-github', cmd = { 'ToGithub' } },
+  {
+    'mosheavni/vim-to-github',
+    cmd = { 'ToGithub' },
+  },
+  {
+    'sindrets/diffview.nvim',
+    dependencies = 'nvim-lua/plenary.nvim',
+    cmd = {
+      'DiffviewClose',
+      'DiffviewFileHistory',
+      'DiffviewFocusFiles',
+      'DiffviewLog',
+      'DiffviewOpen',
+      'DiffviewRefresh',
+      'DiffviewToggleFiles',
+    },
+    config = function()
+      require 'diffview'
+    end,
+  },
 
   ------------------------------
   -- Fuzzy Search - Telescope --
@@ -281,42 +300,9 @@ require('lazy').setup({
     end,
   },
   {
-    'mizlan/iswap.nvim',
-    cmd = { 'ISwap', 'ISwapWith' },
-    config = function()
-      require('iswap').setup()
-      nmap('<leader>sw', ':ISwapWith<CR>')
-    end,
-  },
-  {
     'monkoose/matchparen.nvim',
     keys = { '%' },
     config = true,
-  },
-
-  -- {
-  --   'kevinhwang91/nvim-hlslens',
-  --   keys = { '*', '#', 'n', 'N' },
-  --   config = function()
-  --     require('hlslens').setup()
-  --     nnoremap('n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
-  --     nnoremap('N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
-  --     nnoremap('*', [[*<Cmd>lua require('hlslens').start()<CR>]], true)
-  --     nnoremap('#', [[#<Cmd>lua require('hlslens').start()<CR>]], true)
-  --     nnoremap('g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], true)
-  --     nnoremap('g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], true)
-  --   end,
-  -- },
-  -- (convert "${}" to `${}` in JS and "{}" to f"" in Python)
-  {
-    'axelvc/template-string.nvim',
-    ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
-    event = 'InsertEnter',
-    config = true,
-  },
-  {
-    'vim-scripts/ReplaceWithRegister',
-    event = 'VeryLazy',
   },
   {
     'kiran94/s3edit.nvim',
@@ -344,7 +330,6 @@ require('lazy').setup({
     'samjwill/nvim-unception',
     event = 'VeryLazy',
   },
-
   {
     'mosheavni/vim-dirdiff',
     cmd = { 'DirDiff' },
@@ -370,22 +355,6 @@ require('lazy').setup({
     cmd = { 'BDelete', 'BWipeout' },
   },
   {
-    'sindrets/diffview.nvim',
-    dependencies = 'nvim-lua/plenary.nvim',
-    cmd = {
-      'DiffviewClose',
-      'DiffviewFileHistory',
-      'DiffviewFocusFiles',
-      'DiffviewLog',
-      'DiffviewOpen',
-      'DiffviewRefresh',
-      'DiffviewToggleFiles',
-    },
-    config = function()
-      require 'diffview'
-    end,
-  },
-  {
     'iamcco/markdown-preview.nvim',
     build = 'cd app && yarn install',
     config = function()
@@ -393,6 +362,10 @@ require('lazy').setup({
     end,
     cmd = 'MarkdownPreview',
     ft = 'markdown',
+  },
+  {
+    'jdhao/better-escape.vim',
+    event = 'InsertEnter',
   },
 
   --------------
@@ -496,7 +469,10 @@ require('lazy').setup({
     event = 'BufReadPost',
   },
 
-  'kyazdani42/nvim-web-devicons',
+  {
+    'kyazdani42/nvim-web-devicons',
+    event = 'VeryLazy',
+  },
   -- 'karb94/neoscroll.nvim',
   {
     'goolord/alpha-nvim',
@@ -517,7 +493,9 @@ require('lazy').setup({
     event = 'BufReadPre',
   },
 
-  -- Themes
+  ------------
+  -- Themes --
+  ------------
   -- 'Mofiqul/vscode.nvim',
   -- 'cpea2506/one_monokai.nvim',
   -- 'drewtempelmeyer/palenight.vim',
@@ -536,7 +514,9 @@ require('lazy').setup({
   --   name = 'catppuccin',
   -- },
 
-  -- Text Manipulation
+  -----------------------
+  -- Text Manipulation --
+  -----------------------
   {
     'tpope/vim-repeat',
     event = 'VeryLazy',
@@ -586,10 +566,30 @@ require('lazy').setup({
     'gpanders/editorconfig.nvim',
     event = 'VeryLazy',
   },
+  {
+    'axelvc/template-string.nvim',
+    ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
+    event = 'InsertEnter',
+    config = true,
+  },
+  {
+    'mizlan/iswap.nvim',
+    cmd = { 'ISwap', 'ISwapWith' },
+    config = function()
+      require('iswap').setup()
+      nmap('<leader>sw', ':ISwapWith<CR>')
+    end,
+  },
+  {
+    'vim-scripts/ReplaceWithRegister',
+    event = 'VeryLazy',
+  },
 
   -- DONE ✅
 }, {
-  change_detection = { notify = true },
+  change_detection = {
+    notify = true,
+  },
   ui = {
     border = 'rounded',
     custom_keys = {
@@ -607,6 +607,9 @@ require('lazy').setup({
         vim.cmd('FloatermNew --cwd=' .. plugin.dir)
       end,
     },
+  },
+  diff = {
+    cmd = 'diffview.nvim',
   },
   checker = {
     -- automatically check for plugin updates
