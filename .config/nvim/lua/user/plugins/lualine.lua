@@ -30,7 +30,7 @@ local colors = {
   white = '#c6c6c6',
   whiter = '#fafafa',
   red = '#ff5189',
-  violet = '#d183e8',
+  violet = '#8683e8',
   grey = '#303030',
   light_grey = '#505050',
 }
