@@ -38,6 +38,17 @@ vmap('<s-tab>', '<gv')
 vim.cmd [[let @i="v%koj>$"]]
 vim.cmd [[let @o="v%koj<$"]]
 
+-- command line mappings
+vim.keymap.set('c', '<c-h>', '<left>')
+vim.keymap.set('c', '<c-j>', '<down>')
+vim.keymap.set('c', '<c-k>', '<up>')
+vim.keymap.set('c', '<c-l>', '<right>')
+vim.keymap.set('c', '^', '<home>')
+vim.keymap.set('c', '$', '<end>')
+
+-- Search for string within the visual selection
+vim.keymap.set('x', '/', '<Esc>/\\%V')
+
 -- Copy number of lines and paste below
 function _G.__duplicate_lines(motion)
   local count = vim.api.nvim_get_vvar 'count'
