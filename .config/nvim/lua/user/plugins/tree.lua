@@ -1,8 +1,4 @@
-local status_ok, nvim_tree = pcall(require, 'nvim-tree')
-if not status_ok then
-  return vim.notify 'Module nvim_tree not installed'
-end
-
+local nvim_tree = require 'nvim-tree'
 local utils = require 'user.utils'
 local nnoremap = utils.nnoremap
 
