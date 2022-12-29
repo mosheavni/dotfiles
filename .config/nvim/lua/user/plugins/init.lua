@@ -235,7 +235,7 @@ require('lazy').setup({
   },
   {
     'phenomenes/ansible-snippets',
-    ft = { 'yaml', 'ansible', 'yaml.ansible' },
+    ft = { 'ansible', 'yaml.ansible' },
     config = function()
       vim.g['ansible_goto_role_paths'] = '.;,roles;'
     end,
@@ -294,7 +294,7 @@ require('lazy').setup({
   {
     'gbprod/yanky.nvim',
     dependencies = { 'kkharji/sqlite.lua' },
-    keys = { 'p', '<c-n>', '<c-m>' },
+    keys = { 'yy', 'p', '<c-n>', '<c-m>' },
     config = function()
       require 'user.plugins.yanky'
     end,
