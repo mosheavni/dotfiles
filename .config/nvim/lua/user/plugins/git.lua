@@ -213,7 +213,7 @@ M.actions = {
     pretty_print 'Created a work in progress commit.'
   end,
   ['Diff File History'] = function()
-    vim.ui.input({ prompt = 'Enter file path (empty for current file)' }, function(file_to_check)
+    vim.ui.input({ prompt = 'Enter file path (empty for current file): ' }, function(file_to_check)
       if file_to_check == '' then
         file_to_check = '%'
       end
@@ -222,7 +222,7 @@ M.actions = {
     end)
   end,
   ['Diff with branch'] = function()
-    vim.ui.input({ prompt = 'Enter branch to diff with' }, function(branch_to_diff)
+    vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
       if not branch_to_diff then
         pretty_print 'Canceled.'
         return
@@ -238,7 +238,7 @@ M.actions = {
     pretty_print 'Pulled from origin master.'
   end,
   ['Pull origin {branch}'] = function()
-    vim.ui.input({ prompt = 'Enter branch to pull from' }, function(branch_to_pull)
+    vim.ui.input({ prompt = 'Enter branch to pull from: ' }, function(branch_to_pull)
       if not branch_to_pull then
         pretty_print 'Canceled.'
         return
@@ -269,7 +269,7 @@ M.actions = {
     end)
   end,
   ['Create tag'] = function()
-    vim.ui.input({ prompt = 'Enter tag name' }, function(input)
+    vim.ui.input({ prompt = 'Enter tag name: ' }, function(input)
       if not input then
         pretty_print 'Canceled.'
         return
@@ -311,7 +311,7 @@ M.actions = {
   end,
   ['Find in all commits'] = function()
     local rev_list = vim.fn.FugitiveExecute({ 'rev-list', '--all' }).stdout
-    vim.ui.input({ prompt = 'Enter search term' }, function(search_term)
+    vim.ui.input({ prompt = 'Enter search term: ' }, function(search_term)
       if not search_term then
         pretty_print 'Canceled.'
         return

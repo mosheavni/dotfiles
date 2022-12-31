@@ -181,6 +181,16 @@ lspconfig.terraformls.setup {
 
 require('typescript').setup {
   server = {
+    init_options = {
+      preferences = {
+        allowRenameOfImportPath = true,
+        importModuleSpecifierEnding = 'auto',
+        importModuleSpecifierPreference = 'non-relative',
+        includeCompletionsForImportStatements = true,
+        includeCompletionsForModuleExports = true,
+        quotePreference = 'single',
+      },
+    },
     on_attach = default_on_attach,
     capabilities = capabilities,
   },

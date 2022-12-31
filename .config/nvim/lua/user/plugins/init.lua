@@ -1,6 +1,7 @@
 local utils = require 'user.utils'
 local nmap = utils.nmap
 local nnoremap = utils.nnoremap
+local tnoremap = utils.tnoremap
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system {
@@ -136,7 +137,7 @@ require('lazy').setup({
     config = function()
       require('user.lsp').setup()
     end,
-    event = 'VeryLazy',
+    event = 'BufReadPre',
     dependencies = {
       'lukas-reineke/lsp-format.nvim',
       'jose-elias-alvarez/null-ls.nvim',
@@ -532,6 +533,11 @@ require('lazy').setup({
           -- require('notify').setup {
           --   background_colour = '#000000',
           -- }
+          require('noice').setup {
+            presets = {
+              command_palette = true,
+            },
+          }
           nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
         end,
       },

@@ -1,9 +1,5 @@
 local default_on_attach = require('user.lsp.on-attach').default
-local status_ok, null_ls = pcall(require, 'null-ls')
-if not status_ok then
-  return vim.notify 'Module null-ls not installed'
-end
-local helpers = require 'null-ls.helpers'
+local null_ls = require 'null-ls'
 
 -- null-ls
 local sh_extra_fts = { 'bash', 'zsh' }
@@ -16,6 +12,7 @@ null_ls.setup {
     },
     null_ls.builtins.code_actions.gitsigns,
     null_ls.builtins.code_actions.eslint_d,
+    require 'typescript.extensions.null-ls.code-actions',
     null_ls.builtins.diagnostics.ansiblelint,
     null_ls.builtins.diagnostics.hadolint,
     null_ls.builtins.diagnostics.markdownlint,
@@ -38,19 +35,3 @@ null_ls.setup {
     },
   },
 }
-
-local null_ls_stop = function()
-  local null_ls_client
-  for _, client in ipairs(vim.lsp.get_active_clients()) do
-    if client.name == 'null-ls' then
-      null_ls_client = client
-    end
-  end
-  if not null_ls_client then
-    return
-  end
-
-  null_ls_client.stop()
-end
-
-vim.api.nvim_create_user_command('NullLsStop', null_ls_stop, {})

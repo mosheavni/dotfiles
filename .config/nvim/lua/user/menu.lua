@@ -9,7 +9,7 @@ M.lsp_actions = require('user.lsp').actions
 M.dap_actions = {}
 
 local find_in_project = function(bang)
-  vim.ui.input({ prompt = 'Enter search term (blank for word under cursor)' }, function(search_term)
+  vim.ui.input({ prompt = 'Enter search term (blank for word under cursor): ' }, function(search_term)
     if search_term then
       search_term = ' ' .. search_term
     end
@@ -41,7 +41,7 @@ M.random_actions = {
     vim.fn.feedkeys(T '<leader>gt')
   end,
   ['Duplicate / Copy number of lines'] = function()
-    vim.ui.input({ prompt = 'How many lines down?' }, function(lines_down)
+    vim.ui.input({ prompt = 'Enter how many lines down: ' }, function(lines_down)
       if not lines_down then
         lines_down = ''
       end
@@ -58,7 +58,7 @@ M.random_actions = {
     vim.fn.feedkeys 'zt'
   end,
   ['Record Macro'] = function()
-    vim.ui.input({ prompt = 'Macro letter' }, function(macro_letter)
+    vim.ui.input({ prompt = 'Macro letter: ' }, function(macro_letter)
       if not macro_letter then
         macro_letter = 'q'
       end
@@ -69,11 +69,11 @@ M.random_actions = {
   end,
 
   ['Repeat Macro'] = function()
-    vim.ui.input({ prompt = 'Macro letter' }, function(macro_letter)
+    vim.ui.input({ prompt = 'Macro letter: ' }, function(macro_letter)
       if not macro_letter then
         macro_letter = 'q'
       end
-      vim.ui.input({ prompt = 'How many times? (leave blank for once)' }, function(macro_times)
+      vim.ui.input({ prompt = 'Enter how many times (leave blank for once): ' }, function(macro_times)
         if not macro_times then
           macro_times = ''
         end
