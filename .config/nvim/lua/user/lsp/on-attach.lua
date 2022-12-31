@@ -63,8 +63,6 @@ local default_on_attach = function(client, bufnr)
           prefix = ' ',
           scope = 'cursor',
         })
-      else
-        P 'lsp not ready'
       end
     end,
   })
