@@ -488,28 +488,17 @@ require('lazy').setup({
     'stevearc/dressing.nvim',
     config = function()
       require('dressing').setup {
+        select = {
+          telescope = require('telescope.themes').get_dropdown {
+            layout_config = {
+              width = 0.4,
+              height = 0.8,
+            },
+          },
+        },
         input = {
           enabled = false,
         },
-        -- input = {
-        --   override = function(conf)
-        --     conf.col = -1
-        --     conf.row = 0
-        --     return conf
-        --   end,
-        --   win_options = {
-        --     winhighlight = 'NormalFloat:Normal',
-        --     winblend = 0,
-        --   },
-        --   border = 'rounded',
-        --   width = '1.0',
-        --   prompt_align = 'center',
-        --   -- get_config = function()
-        --   --   if vim.api.nvim_buf_get_option(0, 'filetype') == 'NvimTree' then
-        --   --     return { enabled = false }
-        --   --   end
-        --   -- end,
-        -- },
       }
       vim.cmd [[hi link FloatTitle Normal]]
     end,
@@ -521,18 +510,10 @@ require('lazy').setup({
       require 'user.plugins.noice'
     end,
     dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
       'MunifTanjim/nui.nvim',
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
       {
         'rcarriga/nvim-notify',
         config = function()
-          -- vim.notify = require 'notify'
-          -- require('notify').setup {
-          --   background_colour = '#000000',
-          -- }
           require('noice').setup {
             presets = {
               command_palette = true,
@@ -560,7 +541,6 @@ require('lazy').setup({
     'kyazdani42/nvim-web-devicons',
     event = 'VeryLazy',
   },
-  -- 'karb94/neoscroll.nvim',
   {
     'goolord/alpha-nvim',
     config = function()
@@ -707,7 +687,7 @@ require('lazy').setup({
   },
   checker = {
     -- automatically check for plugin updates
-    enabled = false,
+    enabled = true,
   },
   performance = {
     rtp = {
