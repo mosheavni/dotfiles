@@ -62,7 +62,7 @@ lspconfig.ansiblels.setup {
   capabilities = capabilities,
 }
 
--- ansblel
+-- awk
 lspconfig.awk_ls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
@@ -70,6 +70,18 @@ lspconfig.awk_ls.setup {
 
 -- bashls
 lspconfig.bashls.setup {
+  on_attach = default_on_attach,
+  capabilities = capabilities,
+}
+
+-- cssls
+lspconfig.cssls.setup {
+  on_attach = default_on_attach,
+  capabilities = capabilities,
+}
+
+-- cssmodules_ls
+lspconfig.cssmodules_ls.setup {
   on_attach = default_on_attach,
   capabilities = capabilities,
 }

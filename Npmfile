@@ -4,6 +4,7 @@ bash-language-server
 compare-versions
 dockerfile-language-server-nodejs
 eslint
+eslint-config-react-app
 neovim
 npm
 prettier

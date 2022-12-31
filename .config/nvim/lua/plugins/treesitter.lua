@@ -34,6 +34,7 @@ M.config = function()
 
   configs.setup {
     ensure_installed = {
+      'awk',
       'bash',
       'comment',
       'dockerfile',
