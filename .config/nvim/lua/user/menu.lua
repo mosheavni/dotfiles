@@ -4,8 +4,8 @@ local nmap = utils.nmap
 local pretty_print = utils.pretty_print
 
 local M = {}
-M.git_actions = require('user.plugins.git').actions
-M.lsp_actions = require('user.lsp').actions
+M.git_actions = require('user.actions').git
+M.lsp_actions = require('user.actions').lsp
 M.dap_actions = {}
 
 local find_in_project = function(bang)
@@ -179,7 +179,7 @@ M.set_actions = function()
 end
 
 M.set_dap_actions = function()
-  M.dap_actions = require('user.plugins.dap').actions
+  M.dap_actions = require('user.actions').dap()
   M.set_actions()
 end
 

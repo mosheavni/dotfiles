@@ -22,3 +22,6 @@ function _G.P(v, r)
   end
   return v
 end
+-- leader key - before mapping lsp maps
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '

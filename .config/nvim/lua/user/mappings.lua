@@ -1,7 +1,3 @@
--- leader key - before mapping lsp maps
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-
 local utils = require 'user.utils'
 local opts = utils.map_opts
 local nmap = utils.nnoremap
@@ -268,8 +264,7 @@ vnoremap('<leader>64', [[c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')
 
 -- Vimrc edit mappings
 nnoremap('<leader>ev', [[:execute("vsplit " . '~/.config/nvim/lua/user/options.lua')<cr>]], true)
-nnoremap('<leader>ep', [[:execute("vsplit " . '~/.config/nvim/lua/user/plugins/init.lua')<cr>]], true)
-nnoremap('<leader>ec', [[:execute("vsplit " . '~/.config/nvim/lua/user/plugins/configs.lua')<cr>]], true)
+nnoremap('<leader>ep', [[:execute("vsplit " . '~/.config/nvim/lua/plugins/init.lua')<cr>]], true)
 nnoremap('<leader>el', [[:execute("vsplit " . '~/.config/nvim/lua/user/lsp/config.lua')<cr>]], true)
 nnoremap('<leader>em', [[:execute("vsplit " . '~/.config/nvim/lua/user/mappings.lua')<cr>]], true)
 
@@ -450,9 +445,9 @@ end, {})
 -- Plugins Management --
 ------------------------
 vim.api.nvim_create_user_command('PluginsList', function()
-  require('user.plugins.mgmt').display_awesome_plugins()
+  require('user.plugins-mgmt').display_awesome_plugins()
 end, {})
 
 vim.api.nvim_create_user_command('PluginsReload', function()
-  require('user.plugins.mgmt').reload_plugin()
+  require('user.plugins-mgmt').reload_plugin()
 end, {})

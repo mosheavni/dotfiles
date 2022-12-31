@@ -2,10 +2,7 @@ local M = {}
 local m_utils = require 'user.utils'
 local opts = m_utils.map_opts
 local buf_set_option = vim.api.nvim_buf_set_option
-local lsp_format_ok, lsp_format = pcall(require, 'lsp-format')
-if not lsp_format_ok then
-  return
-end
+local lsp_format = require 'lsp-format'
 
 lsp_format.setup {
   lua = {

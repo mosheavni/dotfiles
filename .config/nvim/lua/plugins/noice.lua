@@ -1,4 +1,25 @@
-require('noice').setup {
+local utils = require 'user.utils'
+local nmap = utils.nmap
+local M = {
+  'folke/noice.nvim',
+  dependencies = {
+    'MunifTanjim/nui.nvim',
+    {
+      'rcarriga/nvim-notify',
+      config = function()
+        require('noice').setup {
+          presets = {
+            command_palette = true,
+          },
+        }
+        nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
+      end,
+    },
+  },
+  event = 'VeryLazy',
+}
+
+M.config = {
   -- lsp = { progress = { enabled = false }, signature = { enabled = false }, hover = { enabled = false }, message = { enabled = false } },
   routes = {
     {
@@ -23,7 +44,7 @@ require('noice').setup {
     },
   },
   presets = {
-    bottom_search = true, -- use a classic bottom cmdline for search
+    -- bottom_search = true, -- use a classic bottom cmdline for search
     command_palette = true, -- position the cmdline and popupmenu together
     long_message_to_split = true, -- long messages will be sent to a split
     inc_rename = false, -- enables an input dialog for inc-rename.nvim
@@ -60,3 +81,5 @@ require('noice').setup {
     },
   },
 }
+
+return M

@@ -27,41 +27,4 @@ M.setup = function()
   end)
 end
 
-M.actions = {
-  ['Format'] = function()
-    require('user.lsp.formatting').format()
-  end,
-  ['Code Actions'] = function()
-    vim.lsp.buf.code_action()
-  end,
-  ['Code Lens'] = function()
-    vim.lsp.codelens.run()
-  end,
-  ['Show Definition'] = function()
-    vim.cmd 'Lspsaga peek_definition'
-  end,
-  ['Show Declaration'] = function()
-    vim.lsp.buf.declaration()
-  end,
-
-  ['Show Type Definition'] = function()
-    vim.lsp.buf.type_definition()
-  end,
-  ['Show Implementation'] = function()
-    vim.lsp.buf.implementation()
-  end,
-  ['Find References'] = function()
-    vim.cmd 'Lspsaga lsp_finder'
-  end,
-  ['Signature Help'] = function()
-    vim.lsp.buf.signature_help()
-  end,
-  ['Signature Documentation'] = function()
-    vim.lsp.buf.hover()
-  end,
-  ['Diagnostics quickfix list'] = function()
-    vim.diagnostic.setqflist()
-  end,
-}
-
 return M
