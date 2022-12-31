@@ -1,4 +1,5 @@
 local nvim_tree = require 'nvim-tree'
+local api = require 'nvim-tree.api'
 local utils = require 'user.utils'
 local nnoremap = utils.nnoremap
 
@@ -45,5 +46,9 @@ nvim_tree.setup {
   },
 }
 
-nnoremap('<c-o>', '<cmd>NvimTreeToggle<cr>')
-nnoremap('<leader>v', '<cmd>NvimTreeFindFile<cr>')
+nnoremap('<leader>v', function()
+  vim.cmd.NvimTreeFindFile()
+end)
+nnoremap('<c-o>', function()
+  api.tree.toggle()
+end)
