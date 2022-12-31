@@ -20,7 +20,12 @@ require('lazy').setup({
   -------------------
   {
     'navarasu/onedark.nvim',
-    lazy = true,
+    config = function()
+      require('onedark').setup {
+        style = 'dark',
+      }
+      require('onedark').load()
+    end,
   },
   {
     'dstein64/vim-startuptime',
@@ -131,16 +136,30 @@ require('lazy').setup({
     config = function()
       require('user.lsp').setup()
     end,
-    event = 'BufReadPre',
+    event = 'VeryLazy',
     dependencies = {
       'lukas-reineke/lsp-format.nvim',
       'jose-elias-alvarez/null-ls.nvim',
       'folke/lsp-colors.nvim',
       'nanotee/nvim-lsp-basics',
-      -- 'j-hui/fidget.nvim',
+      -- {
+      --   'j-hui/fidget.nvim',
+      --   config = function()
+      --     require('fidget').setup {
+      --       text = {
+      --         spinner = 'moon',
+      --       },
+      --     }
+      --   end,
+      -- },
       'b0o/SchemaStore.nvim',
       'folke/neodev.nvim',
-      'someone-stole-my-name/yaml-companion.nvim',
+      {
+        'someone-stole-my-name/yaml-companion.nvim',
+        config = function()
+          nnoremap('<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", true)
+        end,
+      },
       'jose-elias-alvarez/typescript.nvim',
       'SmiteshP/nvim-navic',
       { 'glepnir/lspsaga.nvim', branch = 'main' },
@@ -244,13 +263,54 @@ require('lazy').setup({
   -----------------------------
   -- AI and smart completion --
   -----------------------------
+  -- {
+  --   'github/copilot.vim',
+  --   event = 'InsertEnter',
+  --   config = function()
+  --     vim.cmd [[
+  --       imap <silent><script><expr> <M-Enter> copilot#Accept("\<CR>")
+  --       " imap <silent> <c-]> <Plug>(copilot-next)
+  --       " inoremap <silent> <c-[> <Plug>(copilot-previous)
+  --       let g:copilot_no_tab_map = v:true
+  --     ]]
+  --   end,
+  -- },
   {
-    'github/copilot.vim',
+    'zbirenbaum/copilot.lua',
     event = 'InsertEnter',
+    config = function()
+      vim.schedule(function()
+        require('copilot').setup {
+          panel = {
+            enabled = true,
+            auto_refresh = false,
+            keymap = {
+              jump_prev = '[[',
+              jump_next = ']]',
+              accept = '<CR>',
+              refresh = 'gr',
+              open = '<M-l>',
+            },
+          },
+          suggestion = {
+            auto_trigger = true,
+            keymap = {
+              accept = '<M-Enter>',
+            },
+          },
+        }
+      end)
+    end,
   },
   {
     'aduros/ai.vim',
     cmd = 'AI',
+    config = function()
+      vim.g.ai_no_mappings = true
+      nnoremap('<M-a>', ':AI ')
+      vnoremap('<M-a>', ':AI ')
+      inoremap('<M-a>', '<Esc>:AI<CR>a')
+    end,
   },
   {
     'jackMort/ChatGPT.nvim',
@@ -325,6 +385,16 @@ require('lazy').setup({
       'FloatermToggle',
       'FloatermUpdate',
     },
+    config = function()
+      nnoremap('<F6>', '<Cmd>FloatermToggle<CR>', true)
+      nnoremap('<F7>', '<Cmd>FloatermNew<CR>', true)
+      nnoremap('<F8>', '<Cmd>FloatermNext<CR>', true)
+      vim.g['floaterm_height'] = 0.9
+      vim.g['floaterm_keymap_new'] = '<F7>'
+      vim.g['floaterm_keymap_next'] = '<F8>'
+      vim.g['floaterm_keymap_toggle'] = '<F6>'
+      vim.g['floaterm_width'] = 0.7
+    end,
   },
   {
     'samjwill/nvim-unception',
@@ -339,6 +409,8 @@ require('lazy').setup({
     keys = { '<C-e>' },
     config = function()
       vim.g.winresizer_vert_resize = 4
+      vim.g.winresizer_start_key = '<C-E>'
+      tnoremap('<C-E>', '<Esc><Cmd>WinResizerStartResize<CR>', true)
     end,
   },
   {
@@ -453,7 +525,16 @@ require('lazy').setup({
       -- OPTIONAL:
       --   `nvim-notify` is only needed, if you want to use the notification view.
       --   If not available, we use `mini` as the fallback
-      'rcarriga/nvim-notify',
+      {
+        'rcarriga/nvim-notify',
+        config = function()
+          -- vim.notify = require 'notify'
+          -- require('notify').setup {
+          --   background_colour = '#000000',
+          -- }
+          nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
+        end,
+      },
     },
     event = 'VeryLazy',
   },
@@ -466,7 +547,7 @@ require('lazy').setup({
   },
   {
     'RRethy/vim-illuminate',
-    event = 'BufReadPost',
+    event = 'VeryLazy',
   },
 
   {
@@ -540,6 +621,9 @@ require('lazy').setup({
   {
     'junegunn/vim-easy-align',
     event = 'VeryLazy',
+    config = function()
+      nmap('ga', '<Plug>(EasyAlign)')
+    end,
   },
   {
     'nguyenvukhang/nvim-toggler',
@@ -557,6 +641,10 @@ require('lazy').setup({
   {
     'ggandor/leap.nvim',
     event = 'VeryLazy',
+    config = function()
+      nnoremap('s', '<Plug>(leap-forward-to)', true)
+      nnoremap('S', '<Plug>(leap-backward-to)', true)
+    end,
   },
   {
     'windwp/nvim-ts-autotag',
@@ -631,5 +719,3 @@ require('lazy').setup({
     },
   },
 })
-
-require 'user.plugins.configs'
