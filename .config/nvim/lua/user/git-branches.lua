@@ -17,13 +17,14 @@ M.get_branches = function()
   -- git for-each-ref --sort=-committerdate --format="%(refname:short)"
 
   local output = utils.get_os_command_output({ 'git', 'for-each-ref', '--perl', '--sort', '-committerdate', '--format', format, opts.pattern }, opts.cwd)
-  local remotes = utils.get_os_command_output({ 'git', 'remote' }, opts.cwd)
+  -- local remotes = utils.get_os_command_output({ 'git', 'remote' }, opts.cwd)
 
-  local unescape_single_quote = function(v)
-    return string.gsub(v, "\\([\\'])", '%1')
-  end
+  -- local unescape_single_quote = function(v)
+  --   return string.gsub(v, "\\([\\'])", '%1')
+  -- end
   return output
 end
+
 M.open = function()
   local opts = {}
   local results = {}
@@ -65,7 +66,7 @@ M.open = function()
         level = 'ERROR',
       })
     end
-    local _, ret_u, stderr_u = utils.get_os_command_output({ 'git', 'branch', '-u', selection.value }, cwd)
+    utils.get_os_command_output({ 'git', 'branch', '-u', selection.value }, cwd)
   end
   local parsed_branches = {}
   local parse_line = function(line)
