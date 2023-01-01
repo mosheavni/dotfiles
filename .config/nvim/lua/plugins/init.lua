@@ -206,7 +206,7 @@ local M =
         'FloatermToggle',
         'FloatermUpdate',
       },
-      config = function()
+      init = function()
         nnoremap('<F6>', '<Cmd>FloatermToggle<CR>', true)
         nnoremap('<F7>', '<Cmd>FloatermNew<CR>', true)
         nnoremap('<F8>', '<Cmd>FloatermNext<CR>', true)
