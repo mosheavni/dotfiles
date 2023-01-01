@@ -50,7 +50,7 @@ M.git = {
   end,
   ['Work in Progress commit'] = function()
     vim.cmd 'call Enter_Wip_Moshe()'
-    pretty_print 'Created a work in progress commit.'
+    M.pretty_print 'Created a work in progress commit.'
   end,
   ['Diff File History'] = function()
     vim.ui.input({ prompt = 'Enter file path (empty for current file): ' }, function(file_to_check)
@@ -64,7 +64,7 @@ M.git = {
   ['Diff with branch'] = function()
     vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
       if not branch_to_diff then
-        pretty_print 'Canceled.'
+        M.pretty_print 'Canceled.'
         return
       end
       vim.cmd('DiffviewOpen ' .. branch_to_diff)
@@ -75,21 +75,21 @@ M.git = {
   end,
   ['Pull origin master'] = function()
     vim.cmd 'Gpom'
-    pretty_print 'Pulled from origin master.'
+    M.pretty_print 'Pulled from origin master.'
   end,
   ['Pull origin {branch}'] = function()
     vim.ui.input({ prompt = 'Enter branch to pull from: ' }, function(branch_to_pull)
       if not branch_to_pull then
-        pretty_print 'Canceled.'
+        M.pretty_print 'Canceled.'
         return
       end
       vim.cmd('G pull origin ' .. branch_to_pull)
-      pretty_print('Pulled from origin ' .. branch_to_pull)
+      M.pretty_print('Pulled from origin ' .. branch_to_pull)
     end)
   end,
   ['Merge origin/master'] = function()
     vim.cmd 'Gmom'
-    pretty_print 'Merged with origin/master. (might need to fetch new commits)'
+    M.pretty_print 'Merged with origin/master. (might need to fetch new commits)'
   end,
   ['Status'] = function()
     vim.cmd 'Git'
@@ -101,26 +101,26 @@ M.git = {
     local tags = vim.fn.FugitiveExecute('tag').stdout
     vim.ui.select(tags, { prompt = 'Select tag to copy to clipboard' }, function(selection)
       if not selection then
-        pretty_print 'Canceled.'
+        M.pretty_print 'Canceled.'
         return
       end
       vim.fn.setreg('+', selection)
-      pretty_print('Copied ' .. selection .. ' to clipboard.')
+      M.pretty_print('Copied ' .. selection .. ' to clipboard.')
     end)
   end,
   ['Create tag'] = function()
     vim.ui.input({ prompt = 'Enter tag name: ' }, function(input)
       if not input then
-        pretty_print 'Canceled.'
+        M.pretty_print 'Canceled.'
         return
       end
       vim.cmd('G tag ' .. input)
       vim.ui.select({ 'Yes', 'No' }, { prompt = 'Push?' }, function(choice)
         if choice == 'Yes' then
           vim.cmd 'G push --tags'
-          pretty_print('Tag ' .. input .. ' created and pushed.')
+          M.pretty_print('Tag ' .. input .. ' created and pushed.')
         else
-          pretty_print('Tag ' .. input .. ' created.')
+          M.pretty_print('Tag ' .. input .. ' created.')
         end
       end)
     end)
@@ -130,7 +130,7 @@ M.git = {
 
     vim.ui.select(tags, { prompt = 'Enter tag name' }, function(input)
       if not input then
-        pretty_print 'Canceled.'
+        M.pretty_print 'Canceled.'
         return
       end
       vim.cmd('G tag -d ' .. input)
@@ -138,13 +138,13 @@ M.git = {
         if choice == 'Yes' then
           vim.cmd 'G push --tags'
           if not vim.g.default_branch then
-            pretty_print 'default_branch is not set'
+            M.pretty_print 'default_branch is not set'
             return
           end
           vim.cmd('G push origin ' .. vim.g.default_branch .. ' :refs/tags/' .. input)
-          pretty_print('Tag ' .. input .. ' deleted from local and remote.')
+          M.pretty_print('Tag ' .. input .. ' deleted from local and remote.')
         else
-          pretty_print('Tag ' .. input .. ' deleted locally.')
+          M.pretty_print('Tag ' .. input .. ' deleted locally.')
         end
       end)
     end)
@@ -153,10 +153,10 @@ M.git = {
     local rev_list = vim.fn.FugitiveExecute({ 'rev-list', '--all' }).stdout
     vim.ui.input({ prompt = 'Enter search term: ' }, function(search_term)
       if not search_term then
-        pretty_print 'Canceled.'
+        M.pretty_print 'Canceled.'
         return
       end
-      pretty_print('Searching for ' .. search_term .. ' in all commits...')
+      M.pretty_print('Searching for ' .. search_term .. ' in all commits...')
       vim.cmd('silent Ggrep  ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
     end)
   end,
