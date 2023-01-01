@@ -17,14 +17,6 @@ M.setup = function()
     end
     return tmp
   end
-
-  vim.keymap.set('n', '<leader>ls', function()
-    _G.lsp_tmp_write(true)
-  end)
-
-  vim.keymap.set('n', '<leader>ls', function()
-    _G.lsp_tmp_write(false)
-  end)
 end
 
 return M

@@ -72,7 +72,6 @@ local M =
     },
     {
       'mosheavni/vim-kubernetes',
-      event = 'VeryLazy',
     },
     {
       'towolf/vim-helm',

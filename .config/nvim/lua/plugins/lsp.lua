@@ -39,6 +39,16 @@ local M = {
   },
 }
 
+M.init = function()
+  vim.keymap.set('n', '<leader>ls', function()
+    _G.lsp_tmp_write(true)
+  end)
+
+  vim.keymap.set('n', '<leader>ls', function()
+    _G.lsp_tmp_write(false)
+  end)
+end
+
 M.config = function()
   require('user.lsp').setup()
 end
