@@ -331,7 +331,7 @@ function! s:DiffWithSaved()
   wincmd p
 endfunction
 com! DiffSaved call s:DiffWithSaved()
-nnoremap <leader>ds :DiffSaved<cr>
+nnoremap <silent> <leader>ds :DiffSaved<cr>
 ]]
 
 -----------------------
