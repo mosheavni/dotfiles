@@ -8,7 +8,6 @@ local M = {
     'nvim-treesitter/nvim-treesitter-context',
     'nvim-treesitter/nvim-treesitter-refactor',
     'Afourcat/treesitter-terraform-doc.nvim',
-    'p00f/nvim-ts-rainbow',
     { 'cuducos/yaml.nvim', ft = 'yaml' },
   },
   event = 'BufReadPost',
@@ -82,11 +81,6 @@ M.config = function()
     indent = {
       enable = true,
       disable = { 'yaml' },
-    },
-    rainbow = {
-      enable = false,
-      extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-      max_file_lines = nil, -- Do not enable for files with more than n lines, int
     },
     textobjects = {
       select = {
