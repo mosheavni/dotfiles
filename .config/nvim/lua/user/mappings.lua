@@ -6,7 +6,6 @@ local vmap = utils.vnoremap
 local vnoremap = utils.vnoremap
 local onoremap = utils.onoremap
 local inoremap = utils.inoremap
-local xmap = utils.xnoremap
 local xnoremap = utils.xnoremap
 local tnoremap = utils.tnoremap
 
@@ -252,11 +251,6 @@ vnoremap('<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], { d
 vnoremap('<leader>daa', [["hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], true)
 vnoremap('<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>, true]])
 vnoremap('<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], true)
-
--- Paste without saving deleted reg
-nmap('<leader>p', '<Plug>ReplaceWithRegisterOperator')
-nmap('<leader>P', '<Plug>ReplaceWithRegisterLine')
-xmap('<leader>P', '<Plug>ReplaceWithRegisterVisual')
 
 -- Base64 dencode
 vnoremap('<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>]], true)
