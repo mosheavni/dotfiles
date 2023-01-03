@@ -1,5 +1,4 @@
 local utils = require 'user.utils'
--- local opts = utils.map_opts
 local nmap = utils.nmap
 local pretty_print = utils.pretty_print
 

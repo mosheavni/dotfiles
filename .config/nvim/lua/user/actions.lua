@@ -1,3 +1,4 @@
+local utils = require 'user.utils'
 local M = {}
 
 M.pretty_print = function(message)
