@@ -96,7 +96,7 @@ _G.load_config = function()
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
   -- Add the server that troubles you here
-  local name = 'pyright'
+  local name = 'terraformls'
   -- local cmd = { 'node', yaml_install_path .. '/out/server/src/server.js', '--stdio' }
   if not name then
     print 'You have not defined a server name, please edit minimal_init.lua'
@@ -107,7 +107,7 @@ _G.load_config = function()
   end
 
   nvim_lsp[name].setup {
-    -- cmd = cmd,
+    cmd = { '/Users/mavni/.local/share/nvim/mason/bin/terraform-ls', 'serve' },
     on_attach = on_attach,
     capabilities = capabilities,
     -- on_init = function()
@@ -150,6 +150,7 @@ _G.load_config = function()
 end
 
 require('lazy').setup({
+  'habamax/vim-habamax',
   'neovim/nvim-lspconfig',
   {
     'hrsh7th/nvim-cmp',
@@ -161,14 +162,19 @@ require('lazy').setup({
   },
   'L3MON4D3/LuaSnip',
   'nvim-treesitter/nvim-treesitter',
-  {
-    'akinsho/bufferline.nvim',
-    version = '^3',
-    config = function()
-      require 'user.plugins.bufferline'
-    end,
-  },
+  config = function()
+    local configs = require 'nvim-treesitter.configs'
+    configs.setup {
+      ensure_installed = 'all',
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+      },
+    }
+  end,
 }, {
   root = package_root,
 })
 _G.load_config()
+
+vim.cmd [[colorscheme habamax]]
