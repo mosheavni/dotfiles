@@ -78,6 +78,10 @@ function kdpw () {
   watch "kubectl describe po $* | tail -${desired_lines}"
 }
 
+### Kubernetes find and watch pods ###
+function mkgp () {
+  watch "kubectl get pods | grep $*"
+}
 
 function kgres() {
   kubectl get pod $* \
