@@ -74,6 +74,9 @@ M.git = {
   ['Diff close'] = function()
     vim.cmd 'DiffviewClose'
   end,
+  ['Blame'] = function()
+    vim.cmd 'G blame'
+  end,
   ['Pull origin master'] = function()
     vim.cmd 'Gpom'
     M.pretty_print 'Pulled from origin master.'
