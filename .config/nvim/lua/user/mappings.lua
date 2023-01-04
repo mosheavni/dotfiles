@@ -39,7 +39,7 @@ vim.keymap.set('c', '<c-j>', '<down>')
 vim.keymap.set('c', '<c-k>', '<up>')
 vim.keymap.set('c', '<c-l>', '<right>')
 vim.keymap.set('c', '^', '<home>')
-vim.keymap.set('c', '$', '<end>')
+-- vim.keymap.set('c', '$', '<end>')
 
 -- Search for string within the visual selection
 vim.keymap.set('x', '/', '<Esc>/\\%V')
