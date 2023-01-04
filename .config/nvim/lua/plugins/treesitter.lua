@@ -1,5 +1,6 @@
 local M = {
   'nvim-treesitter/nvim-treesitter',
+  commit = 'e5dd204291d16f1061157711a69884f7a2fe02b1',
   build = function()
     pcall(require('nvim-treesitter.install').update { with_sync = true })
   end,
