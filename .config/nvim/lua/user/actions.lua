@@ -98,6 +98,9 @@ M.git = {
   ['Status'] = function()
     vim.cmd 'Git'
   end,
+  ['Open GitHub on this line'] = function()
+    vim.cmd 'ToGithub'
+  end,
   ['Log'] = function()
     vim.cmd 'G log --all --decorate --oneline'
   end,
