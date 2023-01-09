@@ -1,7 +1,6 @@
 local on_attaches = require 'user.lsp.on-attach'
 local default_on_attach = on_attaches.default
 require('neodev').setup {}
-
 require('mason').setup {
   log_level = vim.log.levels.TRACE,
 }
@@ -17,7 +16,6 @@ require('mason.settings').set {
 require('mason-lspconfig').setup {
   automatic_installation = true,
 }
-
 -- Set formatting of lsp log
 require('vim.lsp.log').set_format_func(vim.inspect)
 
