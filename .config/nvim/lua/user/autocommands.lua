@@ -104,7 +104,7 @@ autocmd({ 'FileType' }, {
 })
 autocmd({ 'BufRead' }, {
   group = special_filetypes,
-  pattern = '*/plugins/init.lua',
+  pattern = '*/plugins/*.lua',
   command = 'lua require("user.open-url").setup()',
 })
 
