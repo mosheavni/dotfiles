@@ -282,6 +282,7 @@ local M = {
   -----------------
   -- Look & Feel --
   -----------------
+  'rcarriga/nvim-notify',
   {
     'stevearc/dressing.nvim',
     config = function()
@@ -295,7 +296,8 @@ local M = {
           },
         },
         input = {
-          enabled = false,
+          enabled = true,
+          relative = 'editor',
         },
       }
       vim.cmd [[hi link FloatTitle Normal]]

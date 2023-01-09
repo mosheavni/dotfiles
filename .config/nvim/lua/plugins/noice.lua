@@ -82,4 +82,4 @@ M.config = {
   },
 }
 
-return M
+return {}

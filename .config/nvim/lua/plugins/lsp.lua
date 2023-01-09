@@ -8,16 +8,16 @@ local M = {
     'jose-elias-alvarez/null-ls.nvim',
     'folke/lsp-colors.nvim',
     'nanotee/nvim-lsp-basics',
-    -- {
-    --   'j-hui/fidget.nvim',
-    --   config = function()
-    --     require('fidget').setup {
-    --       text = {
-    --         spinner = 'moon',
-    --       },
-    --     }
-    --   end,
-    -- },
+    {
+      'j-hui/fidget.nvim',
+      config = function()
+        require('fidget').setup {
+          text = {
+            spinner = 'moon',
+          },
+        }
+      end,
+    },
     'b0o/SchemaStore.nvim',
     'folke/neodev.nvim',
     {
