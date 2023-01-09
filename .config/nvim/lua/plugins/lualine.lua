@@ -88,6 +88,15 @@ M.config = function()
           end
           return ''
         end,
+        {
+          function()
+            local location = navic.get_location()
+            return navic.is_available() and location ~= '' and location or ''
+          end,
+          separator = { right = '', left = '' },
+          left_padding = 2,
+          right_padding = 2,
+        },
       },
       lualine_x = {},
       lualine_y = {
@@ -138,32 +147,14 @@ M.config = function()
       lualine_a = {},
       lualine_b = {},
       lualine_c = {},
-      lualine_x = {},
-      lualine_z = {
-        {
-          function()
-            local location = navic.get_location()
-            return navic.is_available() and location ~= '' and location or ''
-          end,
-          separator = { right = '', left = '' },
-          left_padding = 2,
-          right_padding = 2,
-        },
-      },
-    },
-    inactive_winbar = {
-      lualine_a = {},
-      lualine_b = {},
-      lualine_c = {},
-      lualine_x = {},
       lualine_y = { 'modified' },
       lualine_z = { 'filename' },
     },
     extensions = {
-      -- 'fugitive',
-      -- 'nvim-dap-ui',
-      -- 'nvim-tree',
-      -- 'quickfix',
+      'fugitive',
+      'nvim-dap-ui',
+      'nvim-tree',
+      'quickfix',
     },
   }
 end
