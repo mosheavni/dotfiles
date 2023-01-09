@@ -247,10 +247,22 @@ M.random = {
     vim.fn.feedkeys(T '<leader>' .. 'r')
   end,
   ['Select all'] = function()
-    vim.fn.feedkeys(T '<leader>' .. 'sa')
+    vim.cmd [[normal! ggVG]]
   end,
   ['Indent block forward'] = function()
-    vim.fn.feedkeys(T '<leader>gt')
+    vim.cmd [[normal! v%koj$>]]
+  end,
+  ['Open all folds'] = function()
+    vim.cmd 'normal! zR'
+  end,
+  ['Open fold'] = function()
+    vim.cmd 'normal! za'
+  end,
+  ['Open all folds folds under the cursor (level fold)'] = function()
+    vim.cmd 'normal! zazczA'
+  end,
+  ['Close all folds'] = function()
+    vim.cmd 'normal! zM'
   end,
   ['Duplicate / Copy number of lines'] = function()
     vim.ui.input({ prompt = 'Enter how many lines down: ' }, function(lines_down)
@@ -294,28 +306,31 @@ M.random = {
     end)
   end,
   ['Toggle Terminal'] = function()
-    vim.fn.feedkeys(T '<F6>')
+    vim.cmd.FloatermToggle()
   end,
   ['Create a new terminal window'] = function()
-    vim.fn.feedkeys(T '<F7>')
+    vim.cmd.FloatermNew()
   end,
   ['Move to next terminal window'] = function()
-    vim.fn.feedkeys(T '<F8>')
+    vim.cmd.FloatermNext()
+  end,
+  ['Move to previous terminal window'] = function()
+    vim.cmd.FloatermPrev()
   end,
   ['Find files'] = function()
-    vim.fn.feedkeys(T '<C-p>')
+    require('telescope.builtin').find_files()
   end,
   ['Find buffers'] = function()
-    vim.fn.feedkeys(T '<C-b>')
+    require('telescope.builtin').buffers()
   end,
   ['Open Nvim Tree File Browser'] = function()
-    vim.fn.feedkeys(T '<C-o>')
+    api.tree.toggle()
   end,
   ['Close all notifications'] = function()
-    vim.fn.feedkeys(T '<leader>' .. 'x')
+    require('notify').dismiss()
   end,
   ['Quit all'] = function()
-    vim.fn.feedkeys(T '<leader>' .. 'qq')
+    vim.cmd.qall()
   end,
   ['Paste from clipboard'] = function()
     vim.fn.feedkeys(T '<C-v>')
