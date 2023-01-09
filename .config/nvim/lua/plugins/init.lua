@@ -379,19 +379,19 @@ local M = {
       nmap('ga', '<Plug>(EasyAlign)')
     end,
   },
-  {
-    'nguyenvukhang/nvim-toggler',
-    keys = { 'gs' },
-    config = function()
-      require('nvim-toggler').setup {
-        remove_default_keybinds = true,
-        inverses = {
-          ['enable'] = 'disable',
-        },
-      }
-      vim.keymap.set({ 'n', 'v' }, 'gs', require('nvim-toggler').toggle)
-    end,
-  },
+  -- {
+  --   'nguyenvukhang/nvim-toggler',
+  --   keys = { 'gs' },
+  --   config = function()
+  --     require('nvim-toggler').setup {
+  --       remove_default_keybinds = true,
+  --       inverses = {
+  --         ['enable'] = 'disable',
+  --       },
+  --     }
+  --     vim.keymap.set({ 'n', 'v' }, 'gs', require('nvim-toggler').toggle)
+  --   end,
+  -- },
   {
     'ggandor/leap.nvim',
     keys = { 's', 'S' },
@@ -438,5 +438,7 @@ local M = {
 
   -- DONE ✅
 }
+
+nmap('<leader>z', ':Lazy<CR>', true)
 
 return M

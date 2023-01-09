@@ -9,6 +9,12 @@ local M = {
     'nvim-treesitter/nvim-treesitter-refactor',
     'Afourcat/treesitter-terraform-doc.nvim',
     { 'cuducos/yaml.nvim', ft = 'yaml' },
+    {
+      'ckolkey/ts-node-action',
+      config = function()
+        vim.keymap.set({ 'n', 'v' }, 'gs', require('ts-node-action').node_action, { desc = 'Trigger Node Action' })
+      end,
+    },
   },
   event = 'BufReadPost',
 }
