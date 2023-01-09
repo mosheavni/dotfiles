@@ -128,6 +128,11 @@ M.config = function()
         end,
       },
     },
+    experimental = {
+      ghost_text = {
+        hl_group = 'LspCodeLens',
+      },
+    },
     mapping = cmp.mapping.preset.insert(cmp_mappings),
     sorting = {
       priority_weight = 2,
