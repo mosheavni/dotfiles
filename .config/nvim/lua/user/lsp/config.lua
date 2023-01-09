@@ -38,10 +38,10 @@ capabilities.textDocument.codeAction = {
 -- general LSP config
 -- show icons in the sidebar
 local signs = {
-  Error = ' ',
+  Error = '',
   Warn = ' ',
   Hint = ' ',
-  Info = '',
+  Info = ' ',
 }
 
 for type, icon in pairs(signs) do

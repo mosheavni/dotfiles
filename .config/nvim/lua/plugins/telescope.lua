@@ -18,6 +18,8 @@ M.config = function()
 
   telescope.setup {
     defaults = {
+      prompt_prefix = ' ',
+      selection_caret = ' ',
       mappings = {
         i = {
           ['<esc>'] = actions.close,
