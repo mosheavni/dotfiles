@@ -2,7 +2,7 @@ local utils = require 'user.utils'
 local opts = utils.map_opts
 local nmap = utils.nnoremap
 local nnoremap = utils.nnoremap
-local vmap = utils.vnoremap
+local vmap = utils.vmap
 local vnoremap = utils.vnoremap
 local onoremap = utils.onoremap
 local inoremap = utils.inoremap
@@ -10,7 +10,7 @@ local xnoremap = utils.xnoremap
 local tnoremap = utils.tnoremap
 
 -- Select all file visually
-nnoremap('<leader>sa', 'gg^<S-v>G$')
+nnoremap('<leader>sa', 'ggVG')
 
 -- Inner word movements
 onoremap('<c-w>', 'iw')

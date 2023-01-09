@@ -1,8 +1,10 @@
 local utils = require 'user.utils'
+local inoremap = utils.inoremap
 local nmap = utils.nmap
-local xmap = utils.xmap
 local nnoremap = utils.nnoremap
 local tnoremap = utils.tnoremap
+local vnoremap = utils.vnoremap
+local xmap = utils.xmap
 
 local M = {
   -------------------
