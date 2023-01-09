@@ -1,4 +1,5 @@
 exclude:
+  - .github/workflows/gitguardian.yml
   - ".config/karabiner"
   - .alt.toml
   - .python-version
