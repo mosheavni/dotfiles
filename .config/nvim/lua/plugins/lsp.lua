@@ -1,5 +1,3 @@
-local utils = require 'user.utils'
-local nnoremap = utils.nnoremap
 local M = {
   'neovim/nvim-lspconfig',
   event = 'BufReadPre',
@@ -23,6 +21,7 @@ local M = {
     {
       'someone-stole-my-name/yaml-companion.nvim',
       config = function()
+        local nnoremap = require('user.utils').nnoremap
         nnoremap('<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", true)
       end,
     },

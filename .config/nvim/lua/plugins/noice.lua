@@ -1,5 +1,3 @@
-local utils = require 'user.utils'
-local nmap = utils.nmap
 local M = {
   'folke/noice.nvim',
   dependencies = {
@@ -12,6 +10,7 @@ local M = {
             command_palette = true,
           },
         }
+        local nmap = require('user.utils').nmap
         nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
       end,
     },

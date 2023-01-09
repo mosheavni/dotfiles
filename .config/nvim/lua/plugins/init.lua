@@ -74,6 +74,7 @@ local M = {
   },
   {
     'mosheavni/vim-kubernetes',
+    event = 'VeryLazy',
   },
   {
     'towolf/vim-helm',
@@ -284,7 +285,10 @@ local M = {
   -----------------
   -- Look & Feel --
   -----------------
-  'rcarriga/nvim-notify',
+  {
+    'rcarriga/nvim-notify',
+    event = 'VeryLazy',
+  },
   {
     'stevearc/dressing.nvim',
     config = function()
@@ -317,6 +321,7 @@ local M = {
   },
   {
     'goolord/alpha-nvim',
+    event = 'VimEnter',
     config = function()
       local startify = require 'alpha.themes.startify'
       require('alpha').setup(startify.config)
