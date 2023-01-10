@@ -18,7 +18,7 @@ local M = {
   event = 'VeryLazy',
 }
 
-M.config = {
+M.opts = {
   -- lsp = { progress = { enabled = false }, signature = { enabled = false }, hover = { enabled = false }, message = { enabled = false } },
   routes = {
     {
