@@ -324,7 +324,11 @@ M.random = {
     require('telescope.builtin').buffers()
   end,
   ['Open Nvim Tree File Browser'] = function()
+    local api = require 'nvim-tree.api'
     api.tree.toggle()
+  end,
+  ['Resize panes'] = function()
+    vim.fn.feedkeys(T '<C-e>')
   end,
   ['Close all notifications'] = function()
     require('notify').dismiss()
