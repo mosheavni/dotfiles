@@ -1,13 +1,6 @@
 local on_attaches = require 'user.lsp.on-attach'
 local default_on_attach = on_attaches.default
-require('neodev').setup {}
-require('mason').setup {
-  log_level = vim.log.levels.TRACE,
-}
-require 'user.lsp.null-ls'
-require('mason-null-ls').setup {
-  automatic_installation = true,
-}
+-- }
 require('mason.settings').set {
   ui = {
     border = 'rounded',

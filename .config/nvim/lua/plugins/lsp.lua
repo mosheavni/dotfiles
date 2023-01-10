@@ -3,7 +3,6 @@ local M = {
   event = 'BufReadPre',
   dependencies = {
     'lukas-reineke/lsp-format.nvim',
-    'jose-elias-alvarez/null-ls.nvim',
     'folke/lsp-colors.nvim',
     'nanotee/nvim-lsp-basics',
     {
@@ -17,7 +16,7 @@ local M = {
       end,
     },
     'b0o/SchemaStore.nvim',
-    'folke/neodev.nvim',
+    { 'folke/neodev.nvim', config = true },
     {
       'someone-stole-my-name/yaml-companion.nvim',
       config = function()
@@ -32,8 +31,12 @@ local M = {
       'williamboman/mason.nvim',
       dependencies = {
         'williamboman/mason-lspconfig.nvim',
-        'jayp0521/mason-null-ls.nvim',
+        {
+          'jayp0521/mason-null-ls.nvim',
+          opts = { automatic_installation = true },
+        },
       },
+      config = true,
     },
   },
 }
