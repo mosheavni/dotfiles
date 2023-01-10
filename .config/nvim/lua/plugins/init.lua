@@ -414,10 +414,6 @@ local M = {
     ft = { 'html', 'javascript' },
   },
   {
-    'gpanders/editorconfig.nvim',
-    event = 'VeryLazy',
-  },
-  {
     'axelvc/template-string.nvim',
     ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
     event = 'InsertEnter',
