@@ -80,7 +80,9 @@ function kdpw () {
 
 ### Kubernetes find and watch pods ###
 function mkgp () {
-  watch "kubectl get pods | grep $*"
+  grep_pattern=$1
+  [[ -z $grep_pattern ]] && grep_pattern='.*'
+  watch "kubectl get pods | grep '$grep_pattern'"
 }
 
 function kgres() {
