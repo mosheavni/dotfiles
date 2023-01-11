@@ -30,58 +30,6 @@ M.config = function()
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
   end
 
-  local cmp_mappings = {
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-j>'] = cmp.mapping(function(fallback)
-      if luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      elseif cmp.visible() then
-        cmp.select_next_item()
-      elseif has_words_before() then
-        cmp.complete()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<C-k>'] = cmp.mapping(function(fallback)
-      if luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      elseif cmp.visible() then
-        cmp.select_prev_item()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<C-y>'] = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true },
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = false,
-    },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      -- elseif luasnip.expand_or_jumpable() then
-      --   luasnip.expand_or_jump()
-      elseif has_words_before() then
-        cmp.complete()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  }
-
   local source_mapping = {
     nvim_lsp = '[LSP]',
     luasnip = '[Snpt]',
@@ -128,7 +76,57 @@ M.config = function()
         end,
       },
     },
-    mapping = cmp.mapping.preset.insert(cmp_mappings),
+    mapping = cmp.mapping.preset.insert {
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-j>'] = cmp.mapping(function(fallback)
+        if luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        elseif cmp.visible() then
+          cmp.select_next_item()
+        elseif has_words_before() then
+          cmp.complete()
+        else
+          fallback()
+        end
+      end, { 'i', 's' }),
+      ['<C-k>'] = cmp.mapping(function(fallback)
+        if luasnip.jumpable(-1) then
+          luasnip.jump(-1)
+        elseif cmp.visible() then
+          cmp.select_prev_item()
+        else
+          fallback()
+        end
+      end, { 'i', 's' }),
+      ['<C-y>'] = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true },
+      ['<CR>'] = cmp.mapping.confirm {
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = false,
+      },
+      ['<Tab>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        -- elseif luasnip.expand_or_jumpable() then
+        --   luasnip.expand_or_jump()
+        elseif has_words_before() then
+          cmp.complete()
+        else
+          fallback()
+        end
+      end, { 'i', 's' }),
+      ['<S-Tab>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        elseif luasnip.jumpable(-1) then
+          luasnip.jump(-1)
+        else
+          fallback()
+        end
+      end, { 'i', 's' }),
+    },
     sorting = {
       priority_weight = 2,
       comparators = {
@@ -146,10 +144,11 @@ M.config = function()
     sources = cmp.config.sources {
       { name = 'nvim_lsp' },
       { name = 'luasnip' },
-      { name = 'cmp_tabnine', priority = 80 },
-      { name = 'path' },
+      { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
       { name = 'nvim_lsp_document_symbol' },
+      { name = 'cmp_tabnine', priority = 80 },
+      { name = 'path' },
       { name = 'buffer', keyword_length = 4 },
     },
     snippet = {

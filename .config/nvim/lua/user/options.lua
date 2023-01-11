@@ -81,7 +81,7 @@ vim.o.termguicolors = true
 vim.o.signcolumn = 'yes'
 -- require 'user.winbar'
 -- opt.winbar = "%{%v:lua.require'user.winbar'.eval()%}"
-vim.o.statuscolumn = '%=%{v:wrap?"":v:relnum?v:relnum:v:lnum} %s%C'
+-- vim.o.statuscolumn = '%=%{v:wrap?"":v:relnum?v:relnum:v:lnum} %s%C'
 
 -- Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
 vim.o.updatetime = 300
