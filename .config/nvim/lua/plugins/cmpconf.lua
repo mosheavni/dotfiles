@@ -33,7 +33,6 @@ M.config = function()
   local source_mapping = {
     nvim_lsp = '[LSP]',
     luasnip = '[Snpt]',
-    treesitter = '[TS]',
     cmp_tabnine = '[TN]',
     nvim_lua = '[Vim]',
     path = '[Path]',
@@ -43,9 +42,6 @@ M.config = function()
   }
 
   cmp.setup {
-    -- enabled = function()
-    --   return vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' or require('cmp_dap').is_dap_buffer()
-    -- end,
     native_menu = false,
     formatting = {
       format = lspkind.cmp_format {
@@ -58,6 +54,10 @@ M.config = function()
         before = function(entry, vim_item)
           vim_item.kind = lspkind.presets.default[vim_item.kind]
           vim_item.menu = source_mapping[entry.source.name]
+          -- check if entry.source.name is in source_mapping
+          if not source_mapping[entry.source.name] then
+            vim_item.menu = entry.source.name
+          end
           if entry.source.name == 'cmp_tabnine' then
             local detail = (entry.completion_item.data or {}).detail
             vim_item.kind = ''
