@@ -110,16 +110,7 @@ export KUBECONFIG=$HOME/.kube/config
 # fi
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
-
-bookitmeinit() {
-  cd $HOME/Repos/bookitme || return
-  export KUBECONFIG=$HOME/.kube/contexts/bookitme-k8s.yaml.config
-  source $HOME/Repos/bookitme/bookitme-terraform/.env
-  kgp
-}
-
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
-export NEOVIDE_MULTIGRID=1
 
 # Load starship last
 # eval "$(starship init zsh)"
