@@ -1,21 +1,8 @@
-local saga = require 'lspsaga'
 local utils = require 'user.utils'
 local nnoremap = utils.nnoremap
 local inoremap = utils.inoremap
 
 return function(bufnr)
-  saga.init_lsp_saga {
-    finder_action_keys = {
-      edit = '<CR>',
-      vsplit = '<C-v>',
-      split = '<C-x>',
-      quit = 'q',
-    },
-    code_action_lightbulb = {
-      enable = false,
-    },
-  }
-
   local buffer_opts = { buffer = bufnr, silent = true }
 
   -- GoTo code navigation

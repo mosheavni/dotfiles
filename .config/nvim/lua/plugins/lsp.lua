@@ -26,7 +26,21 @@ local M = {
     },
     'jose-elias-alvarez/typescript.nvim',
     'SmiteshP/nvim-navic',
-    { 'glepnir/lspsaga.nvim', branch = 'main' },
+    {
+      'glepnir/lspsaga.nvim',
+      opts = {
+        finder_action_keys = {
+          edit = '<CR>',
+          vsplit = '<C-v>',
+          split = '<C-x>',
+          quit = 'q',
+        },
+        code_action_lightbulb = {
+          enable = false,
+        },
+      },
+      config = true,
+    },
     {
       'williamboman/mason.nvim',
       dependencies = {

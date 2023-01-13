@@ -15,6 +15,9 @@ local M = {
     config = function()
       require('onedark').setup {
         style = 'dark',
+        highlights = {
+          EndOfBuffer = { fg = '#61afef' },
+        },
       }
       require('onedark').load()
     end,
