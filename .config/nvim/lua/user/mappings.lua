@@ -138,7 +138,7 @@ nnoremap('<leader>dn', ':windo diffthis<cr>', true)
 nnoremap('<leader>df', ':bufdo diffoff<cr>', true)
 
 -- Map enter to no highlight
-nnoremap('<CR>', ':nohlsearch<CR><CR>', true)
+nnoremap('<Esc>', '<Esc>:nohlsearch<CR>', true)
 
 -- Set mouse=v mapping
 nnoremap('<leader>ma', ':set mouse=a<cr>', true)
