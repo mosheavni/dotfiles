@@ -46,7 +46,7 @@ local M = {
       dependencies = {
         'williamboman/mason-lspconfig.nvim',
         {
-          'jayp0521/mason-null-ls.nvim',
+          'jay-babu/mason-null-ls.nvim',
           opts = { automatic_installation = true },
         },
       },

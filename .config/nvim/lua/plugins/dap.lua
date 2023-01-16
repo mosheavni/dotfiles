@@ -15,7 +15,7 @@ local M = {
     'rcarriga/cmp-dap',
     'mxsdev/nvim-dap-vscode-js',
     'theHamsta/nvim-dap-virtual-text',
-    'jayp0521/mason-nvim-dap.nvim',
+    'jay-babu/mason-nvim-dap.nvim',
   },
 }
 
@@ -40,9 +40,7 @@ M.config = function()
   require('telescope').load_extension 'dap'
   local dapui = require 'dapui'
   dapui.setup()
-  require('nvim-dap-virtual-text').setup {
-    commented = true,
-  }
+  require('nvim-dap-virtual-text').setup()
 
   vim.g.dap_virtual_text = true
   vim.fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
