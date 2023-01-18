@@ -1,6 +1,6 @@
 local M = {
   'neovim/nvim-lspconfig',
-  event = 'BufReadPre',
+  event = 'VeryLazy',
   dependencies = {
     'lukas-reineke/lsp-format.nvim',
     'folke/lsp-colors.nvim',
