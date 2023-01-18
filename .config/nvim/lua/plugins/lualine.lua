@@ -78,7 +78,6 @@ M.config = function()
       },
       lualine_c = {
         'diagnostics',
-        'filename',
         function()
           if vim.api.nvim_buf_get_option(0, 'filetype') == 'yaml' then
             local schema = require('yaml-companion').get_buf_schema(0)
@@ -143,13 +142,13 @@ M.config = function()
       lualine_z = {},
     },
     tabline = {},
-    winbar = {
-      lualine_a = {},
-      lualine_b = {},
-      lualine_c = {},
-      lualine_y = { 'modified' },
-      lualine_z = { 'filename' },
-    },
+    -- winbar = {
+    --   lualine_a = {},
+    --   lualine_b = {},
+    --   lualine_c = {},
+    --   lualine_y = { 'modified' },
+    --   lualine_z = { 'filename' },
+    -- },
     extensions = {
       'fugitive',
       'nvim-dap-ui',

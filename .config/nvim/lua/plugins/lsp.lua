@@ -38,6 +38,9 @@ local M = {
         code_action_lightbulb = {
           enable = false,
         },
+        symbol_in_winbar = {
+          enable = true,
+        },
       },
       config = true,
     },
