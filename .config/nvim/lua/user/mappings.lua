@@ -38,7 +38,7 @@ vim.keymap.set('c', '<c-h>', '<left>')
 vim.keymap.set('c', '<c-j>', '<down>')
 vim.keymap.set('c', '<c-k>', '<up>')
 vim.keymap.set('c', '<c-l>', '<right>')
-vim.keymap.set('c', '^', '<home>')
+-- vim.keymap.set('c', '^', '<home>')
 -- vim.keymap.set('c', '$', '<end>')
 
 -- Search for string within the visual selection
@@ -138,7 +138,7 @@ nnoremap('<leader>dn', ':windo diffthis<cr>', true)
 nnoremap('<leader>df', ':bufdo diffoff<cr>', true)
 
 -- Map enter to no highlight
-nnoremap('<Esc>', '<Esc>:nohlsearch<CR>', true)
+nnoremap('<CR>', '<Esc>:nohlsearch<CR><CR>', true)
 
 -- Set mouse=v mapping
 nnoremap('<leader>ma', ':set mouse=a<cr>', true)
