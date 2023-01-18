@@ -291,6 +291,9 @@ local M = {
   {
     'rcarriga/nvim-notify',
     event = 'VeryLazy',
+    config = function()
+      nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
+    end,
   },
   {
     'stevearc/dressing.nvim',
