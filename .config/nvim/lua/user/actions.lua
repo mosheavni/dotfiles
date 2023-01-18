@@ -25,7 +25,7 @@ end
 M.dap = function()
   local dap = require 'dap'
   return {
-    ['continue'] = function()
+    ['continue (F5)'] = function()
       dap.continue()
     end,
     ['step over'] = function()
@@ -60,13 +60,13 @@ M.dap = function()
 end
 
 M.git = {
-  ['Change branch'] = function()
+  ['Change branch (F4)'] = function()
     require('user.git-branches').open()
   end,
-  ['Checkout new branch'] = function()
+  ['Checkout new branch (:Gcb {new_branch})'] = function()
     new_branch { args = '' }
   end,
-  ['Work in Progress commit'] = function()
+  ['Work in Progress commit (on git window - wip)'] = function()
     vim.cmd 'call Enter_Wip_Moshe()'
     M.pretty_print 'Created a work in progress commit.'
   end,
@@ -94,7 +94,7 @@ M.git = {
   ['Blame'] = function()
     vim.cmd 'G blame'
   end,
-  ['Pull origin master'] = function()
+  ['Pull origin master (:Gpom)'] = function()
     vim.cmd 'Gpom'
     M.pretty_print 'Pulled from origin master.'
   end,
@@ -108,14 +108,14 @@ M.git = {
       M.pretty_print('Pulled from origin ' .. branch_to_pull)
     end)
   end,
-  ['Merge origin/master'] = function()
+  ['Merge origin/master (:Gmom)'] = function()
     vim.cmd 'Gmom'
     M.pretty_print 'Merged with origin/master. (might need to fetch new commits)'
   end,
-  ['Status'] = function()
+  ['Status (<leader>gg / :G)'] = function()
     vim.cmd 'Git'
   end,
-  ['Open GitHub on this line'] = function()
+  ['Open GitHub on this line (:ToGithub)'] = function()
     vim.cmd 'ToGithub'
   end,
   ['Log'] = function()
@@ -184,87 +184,85 @@ M.git = {
       vim.cmd('silent Ggrep  ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
     end)
   end,
-  ['Push'] = function()
+  ['Push (:Gp)'] = function()
     vim.cmd 'Gp'
   end,
-  ['Pull'] = function()
+  ['Pull (:Gl)'] = function()
     vim.cmd 'Gl'
   end,
   ['Add (Stage) All'] = function()
     vim.cmd 'G add -A'
   end,
-
   ['Unstage All'] = function()
     vim.cmd 'G reset'
   end,
 }
 
 M.lsp = {
-  ['Format'] = function()
+  ['Format (<leader>lp)'] = function()
     require('user.lsp.formatting').format()
   end,
-  ['Code Actions'] = function()
+  ['Code Actions (<leader>la)'] = function()
     vim.lsp.buf.code_action()
   end,
-  ['Code Lens'] = function()
+  ['Code Lens (<leader>lx)'] = function()
     vim.lsp.codelens.run()
   end,
-  ['Show Definition'] = function()
+  ['Show Definition (gd)'] = function()
     vim.cmd 'Lspsaga peek_definition'
   end,
-  ['Show Declaration'] = function()
+  ['Show Declaration (gD)'] = function()
     vim.lsp.buf.declaration()
   end,
-
-  ['Show Type Definition'] = function()
+  ['Show Type Definition (gy)'] = function()
     vim.lsp.buf.type_definition()
   end,
-  ['Show Implementation'] = function()
+  ['Show Implementation (gi)'] = function()
     vim.lsp.buf.implementation()
   end,
-  ['Find References'] = function()
+  ['Find References (gr)'] = function()
     vim.cmd 'Lspsaga lsp_finder'
   end,
-  ['Signature Help'] = function()
+  ['Signature Help (<leader>lk)'] = function()
     vim.lsp.buf.signature_help()
   end,
-  ['Signature Documentation'] = function()
+  ['Signature Documentation (K)'] = function()
     vim.lsp.buf.hover()
   end,
-  ['Diagnostics quickfix list'] = function()
+  ['Diagnostics quickfix list (<leader>lq)'] = function()
     vim.diagnostic.setqflist()
   end,
 }
 
 M.random = {
-  ['Find in pwd (literal search)'] = function()
+  ['Find in pwd (literal search) (<C-f>)'] = function()
     find_in_project(true)
   end,
-  ['Find in pwd (regex search)'] = function()
+  ['Find in pwd (regex search) (<C-f>)'] = function()
     find_in_project(false)
   end,
-  ['Replace word under cursor'] = function()
+  ['Replace word under cursor (<leader>r)'] = function()
     vim.fn.feedkeys(T '<leader>' .. 'r')
   end,
-  ['Select all'] = function()
+  ['Select all (vae / <leader>sa)'] = function()
     vim.cmd [[normal! ggVG]]
   end,
-  ['Indent block forward'] = function()
+  ['Indent block forward (<leader>gt)'] = function()
     vim.cmd [[normal! v%koj$>]]
   end,
-  ['Open all folds'] = function()
+  ['Open all folds (zR / <leader>fo)'] = function()
     vim.cmd 'normal! zR'
   end,
-  ['Open fold'] = function()
+  ['Open fold (za / <leader>ff)'] = function()
     vim.cmd 'normal! za'
   end,
-  ['Open all folds folds under the cursor (level fold)'] = function()
+  ['Open all folds folds under the cursor (level fold) (<leader>fl)'] = function()
     vim.cmd 'normal! zazczA'
   end,
-  ['Close all folds'] = function()
+  ['Close all folds (<leader>fc)'] = function()
     vim.cmd 'normal! zM'
   end,
-  ['Duplicate / Copy number of lines'] = function()
+  ['Duplicate / Copy number of lines ({count}<leader>cp)'] = function()
     vim.ui.input({ prompt = 'Enter how many lines down: ' }, function(lines_down)
       if not lines_down then
         lines_down = ''
@@ -272,16 +270,16 @@ M.random = {
       vim.fn.feedkeys(lines_down .. T '<leader>' .. 'cp')
     end)
   end,
-  ['Center Focus'] = function()
+  ['Center Focus (zz)'] = function()
     vim.fn.feedkeys 'zz'
   end,
-  ['Bottom Focus'] = function()
+  ['Bottom Focus (zb)'] = function()
     vim.fn.feedkeys 'zb'
   end,
-  ['Top Focus'] = function()
+  ['Top Focus (zt)'] = function()
     vim.fn.feedkeys 'zt'
   end,
-  ['Record Macro'] = function()
+  ['Record Macro (q{letter})'] = function()
     vim.ui.input({ prompt = 'Macro letter: ' }, function(macro_letter)
       if not macro_letter then
         macro_letter = 'q'
@@ -292,7 +290,7 @@ M.random = {
     end)
   end,
 
-  ['Repeat Macro'] = function()
+  ['Repeat Macro (@{letter} / Q)'] = function()
     vim.ui.input({ prompt = 'Macro letter: ' }, function(macro_letter)
       if not macro_letter then
         macro_letter = 'q'
@@ -305,87 +303,86 @@ M.random = {
       end)
     end)
   end,
-  ['Toggle Terminal'] = function()
+  ['Toggle Terminal (<F6>)'] = function()
     vim.cmd.FloatermToggle()
   end,
-  ['Create a new terminal window'] = function()
+  ['Create a new terminal window (<F7>)'] = function()
     vim.cmd.FloatermNew()
   end,
-  ['Move to next terminal window'] = function()
+  ['Move to next terminal window (<F8>)'] = function()
     vim.cmd.FloatermNext()
   end,
   ['Move to previous terminal window'] = function()
     vim.cmd.FloatermPrev()
   end,
-  ['Find files'] = function()
+  ['Find files (<C-p>)'] = function()
     require('telescope.builtin').find_files()
   end,
-  ['Find buffers'] = function()
+  ['Find buffers (<C-b>)'] = function()
     require('telescope.builtin').buffers()
   end,
-  ['Open Nvim Tree File Browser'] = function()
+  ['Open Nvim Tree File Browser (<C-o>)'] = function()
     local api = require 'nvim-tree.api'
     api.tree.toggle()
   end,
-  ['Resize panes'] = function()
+  ['Resize panes (<C-e>)'] = function()
     vim.fn.feedkeys(T '<C-e>')
   end,
-  ['Close all notifications'] = function()
+  ['Close all notifications (<leader>x)'] = function()
     require('notify').dismiss()
   end,
-  ['Quit all'] = function()
+  ['Quit all (<leader>qq)'] = function()
     vim.cmd.qall()
   end,
-  ['Paste from clipboard'] = function()
-    vim.fn.feedkeys(T '<C-v>')
+  ['Paste from clipboard (cv)'] = function()
+    vim.fn.feedkeys 'cv'
   end,
-  ['Copy entire file to clipboard'] = function()
+  ['Copy entire file to clipboard (Y)'] = function()
     vim.fn.feedkeys 'Y'
   end,
-  ['Convert \\n to new lines'] = function()
+  ['Convert \\n to new lines (<leader><cr>)'] = function()
     vim.fn.feedkeys(T '<leader>' .. T '<cr>')
   end,
-  ['Move line down'] = function()
+  ['Move line down (-)'] = function()
     vim.fn.feedkeys '-'
   end,
-  ['Move line up'] = function()
+  ['Move line up (_)'] = function()
     vim.fn.feedkeys '_'
   end,
-  ['Copy full file path to clipboard'] = function()
+  ['Copy full file path to clipboard (<leader>cfa)'] = function()
     vim.fn.feedkeys(T '<leader>' .. 'cfa')
   end,
-  ['Copy relative file path to clipboard'] = function()
+  ['Copy relative file path to clipboard (<leader>cfp)'] = function()
     vim.fn.feedkeys(T '<leader>' .. 'cfp')
   end,
-  ['Copy directory path to clipboard'] = function()
+  ['Copy directory path to clipboard (<leader>cfd)'] = function()
     vim.fn.feedkeys(T '<leader>' .. 'cfd')
   end,
-  ['Split long bash line'] = function()
+  ['Split long bash line (<leader>\\'] = function()
     vim.fn.feedkeys(T '<leader>' .. [[\]])
   end,
-  ['Delete all hidden buffers'] = function()
+  ['Delete all hidden buffers (:BDelete hidden)'] = function()
     vim.cmd 'BDelete hidden'
   end,
-  ['Delete current buffer'] = function()
+  ['Delete current buffer (<leader>bd)'] = function()
     vim.fn.feedkeys(T '<leader>' .. 'bd')
   end,
-  ['Yaml to Json'] = function()
+  ['Yaml to Json (:Yaml2Json)'] = function()
     vim.cmd.Yaml2Json()
   end,
-  ['Json to Yaml'] = function()
+  ['Json to Yaml (:Json2Yaml)'] = function()
     vim.cmd.Json2Yaml()
   end,
-  ['Change indent size'] = function()
-    vim.cmd.Json2Yaml()
-    vim.fn.feedkeys 'cii'
+  ['Change indent size (<leader>cii)'] = function()
+    vim.fn.feedkeys(T '<leader>' .. 'cii')
   end,
-  ['Convert tabs to spaces'] = function()
+  ['Convert tabs to spaces (<leader>ct<SPC>)'] = function()
     local original_expandtab = vim.opt_global.expandtab:get()
     vim.opt.expandtab = true
     vim.cmd.retab()
     vim.opt.expandtab = original_expandtab
   end,
-  ['Diff unsaved with saved file'] = function()
+  ['Diff unsaved with saved file (<leader>ds)'] = function()
     vim.fn.feedkeys(T '<leader>' .. 'ds')
   end,
 }
