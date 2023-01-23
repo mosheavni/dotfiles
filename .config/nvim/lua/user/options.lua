@@ -11,7 +11,7 @@ vim.o.compatible = false
 
 vim.o.cursorcolumn = true
 vim.o.cursorline = true -- Add highlight behind current line
-vim.opt.shortmess:append { c = true, l = false, q = false, S = false }
+vim.opt.shortmess:append { c = true, l = false, q = false, S = false, C = true, I = false }
 vim.o.list = true
 vim.opt.listchars = { tab = '┆·', trail = '·', precedes = '', extends = '', eol = '↲' }
 -- set lcscope=tab:┆·,trail:·,precedes:,extends:
@@ -59,7 +59,7 @@ vim.o.backupdir = vim.fn.stdpath 'state' .. '/backup'
 vim.o.writebackup = false
 vim.o.wildmenu = true -- Displays a menu on autocomplete
 vim.opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
-vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
+vim.opt.completeopt = 'menu,menuone,noselect'
 vim.o.previewheight = 15
 vim.o.title = true -- Changes the iterm title
 vim.o.laststatus = 3 -- Global statusline, only one for all buffers
@@ -101,7 +101,15 @@ vim.o.foldlevelstart = 10
 -- r = auto insert comment leader after <Enter> (insert mode)
 -- o = auto insert comment leader after o (normal mode)
 -- l = don't break long lines
-vim.opt.formatoptions:append { j = true, t = true, r = true, o = true, l = true }
+vim.opt.formatoptions:append {
+  j = true, -- Where it makes sense, remove a comment leader when joining lines.
+  t = true, -- Auto-wrap text using 'textwidth'
+  r = true, -- Automatically insert the current comment leader after hitting
+  -- <Enter> in Insert mode.
+  o = true,
+  l = true,
+  c = true,
+}
 
 -- Indenting
 vim.o.breakindent = true -- Maintain indent on wrapping lines
