@@ -1,6 +1,7 @@
 local M = {
   'noib3/nvim-cokeline',
   event = 'BufReadPre',
+  enabled = false,
 }
 
 M.config = function()
