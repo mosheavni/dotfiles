@@ -25,7 +25,6 @@ local M = {
       end,
     },
     'jose-elias-alvarez/typescript.nvim',
-    'SmiteshP/nvim-navic',
     {
       'glepnir/lspsaga.nvim',
       opts = {
@@ -40,6 +39,7 @@ local M = {
         },
         symbol_in_winbar = {
           enable = true,
+          hide_keyword = false,
         },
       },
       config = true,

@@ -1,14 +1,10 @@
 local M = {
   'nvim-lualine/lualine.nvim',
-  dependencies = {
-    'SmiteshP/nvim-navic',
-  },
   event = 'VeryLazy',
 }
 
 M.config = function()
   local lualine = require 'lualine'
-  local navic = require 'nvim-navic'
 
   -- Truncate items on a small window
   --- @param trunc_width any #Number trunctates component when screen width is less then trunc_width
@@ -88,10 +84,6 @@ M.config = function()
           return ''
         end,
         {
-          function()
-            local location = navic.get_location()
-            return navic.is_available() and location ~= '' and location or ''
-          end,
           separator = { right = '', left = '' },
           left_padding = 2,
           right_padding = 2,
@@ -113,7 +105,7 @@ M.config = function()
             end
             return table.concat(all_client_names, ', ')
           end,
-          icon = ' LSP:',
+          icon = ' ',
           color = { fg = colors.whiter, gui = 'bold' },
         },
         'fileformat',
