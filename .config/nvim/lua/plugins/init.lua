@@ -428,10 +428,10 @@ local M = {
   {
     'mizlan/iswap.nvim',
     cmd = { 'ISwap', 'ISwapWith' },
-    config = function()
-      require('iswap').setup()
+    init = function()
       nmap('<leader>sw', ':ISwapWith<CR>')
     end,
+    config = true,
   },
   {
     'vim-scripts/ReplaceWithRegister',

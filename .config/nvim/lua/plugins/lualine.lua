@@ -49,7 +49,7 @@ M.config = function()
       -- theme = 'ayu_mirage',
       theme = one_dark_theme,
       component_separators = '|',
-      section_separators = { left = '', right = '' },
+      section_separators = { right = '', left = '' },
       disabled_filetypes = {
         winbar = { 'fugitive', 'git', 'NvimTree' },
       },
@@ -63,7 +63,7 @@ M.config = function()
           fmt = function(mode)
             return mode:sub(1, 1):upper()
           end,
-          separator = { right = '', left = '' },
+          separator = { left = '', right = '' },
           left_padding = 2,
           right_padding = 2,
         },
@@ -84,7 +84,7 @@ M.config = function()
           return ''
         end,
         {
-          separator = { right = '', left = '' },
+          separator = { left = '', right = '' },
           left_padding = 2,
           right_padding = 2,
         },
