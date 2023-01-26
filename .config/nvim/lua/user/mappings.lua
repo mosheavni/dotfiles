@@ -135,7 +135,7 @@ nnoremap('<leader>=', 'yypVr=')
 nnoremap('<leader>dp', ':diffput<cr>', true)
 nnoremap('<leader>dg', ':diffget<cr>', true)
 nnoremap('<leader>dn', ':windo diffthis<cr>', true)
-nnoremap('<leader>df', ':bufdo diffoff<cr>', true)
+nnoremap('<leader>df', ':windo diffoff<cr>', true)
 
 -- Map enter to no highlight
 nnoremap('<CR>', '<Esc>:nohlsearch<CR><CR>', true)

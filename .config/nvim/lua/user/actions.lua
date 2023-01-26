@@ -85,7 +85,7 @@ M.git = {
         M.pretty_print 'Canceled.'
         return
       end
-      vim.cmd('DiffviewOpen ' .. branch_to_diff)
+      vim.cmd('DiffviewOpen origin/' .. branch_to_diff .. '..HEAD')
     end)
   end,
   ['Diff close'] = function()

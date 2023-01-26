@@ -5,7 +5,7 @@ require 'user.mappings'
 -- require 'user.plugins'
 require('lazy').setup('plugins', {
   change_detection = {
-    notify = true,
+    notify = false,
   },
   ui = {
     border = 'rounded',
