@@ -234,8 +234,8 @@ function! RipGrepCWORD(bang, visualmode, ...) abort
 endfunction
 command! -bang -range -nargs=? RipGrepCWORD call RipGrepCWORD("<bang>", v:false, <q-args>)
 command! -bang -range -nargs=? RipGrepCWORDVisual call RipGrepCWORD("<bang>", v:true, <q-args>)
-nmap <c-f> :RipGrepCWORD!<Space>
-vmap <c-f> :RipGrepCWORDVisual!<cr>
+nnoremap <c-f> :RipGrepCWORD!<Space>
+vnoremap <c-f> :RipGrepCWORDVisual!<cr>
 ]]
 
 -- Visual Calculator
