@@ -13,7 +13,6 @@ local M = {
     'hrsh7th/cmp-cmdline',
     'petertriho/cmp-git',
     'hrsh7th/cmp-nvim-lsp-signature-help',
-    'hrsh7th/cmp-nvim-lsp-document-symbol',
     'windwp/nvim-autopairs',
   },
   event = 'InsertEnter',
@@ -56,7 +55,7 @@ M.config = function()
           vim_item.menu = source_mapping[entry.source.name]
           -- check if entry.source.name is in source_mapping
           if not source_mapping[entry.source.name] then
-            vim_item.menu = entry.source.name
+            vim_item.menu = '[' .. entry.source.name .. ']'
           end
           if entry.source.name == 'cmp_tabnine' then
             local detail = (entry.completion_item.data or {}).detail
@@ -146,7 +145,6 @@ M.config = function()
       { name = 'luasnip' },
       { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
-      { name = 'nvim_lsp_document_symbol' },
       { name = 'cmp_tabnine', priority = 80 },
       { name = 'path' },
       { name = 'buffer', keyword_length = 4 },
