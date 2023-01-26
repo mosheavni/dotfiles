@@ -6,14 +6,6 @@ local M = {
       'akinsho/git-conflict.nvim',
       config = true,
     },
-    {
-      'ldelossa/gh.nvim',
-      dependencies = { 'ldelossa/litee.nvim' },
-      config = function()
-        require('litee.lib').setup()
-        require('litee.gh').setup()
-      end,
-    },
   },
 }
 
