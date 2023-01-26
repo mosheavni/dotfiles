@@ -33,8 +33,10 @@ autocmd('UIEnter', {
   once = true,
   callback = function()
     vim.defer_fn(function()
-      return vim.fn.filereadable 'startuptime.txt' == 1 and vim.cmd ':!tail -n3 startuptime.txt' and vim.fn.delete 'startuptime.txt'
-    end, 1000)
+      return vim.fn.filereadable 'startuptime.txt' == 1
+        and vim.notify(vim.fn.systemlist { 'tail', '-n3', 'startuptime.txt' })
+        and vim.fn.delete 'startuptime.txt'
+    end, 1500)
   end,
 })
 
