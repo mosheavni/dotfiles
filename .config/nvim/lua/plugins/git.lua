@@ -217,20 +217,6 @@ endfunction
       end
     end)
   end)
-  -- pcall(require, 'vim-fugitive')
-  -- vim.fn.FugitiveExecute({ 'remote', 'show', vim.fn.FugitiveRemote().remote_name }, function(res)
-  --   local default_branch = 'master'
-  --   local remote_output = res.stdout
-  --   for _, value in pairs(remote_output) do
-  --     local found = value:match 's*HEAD.*'
-  --     if found then
-  --       local splitted = vim.split(found, ' ')
-  --       default_branch = splitted[#splitted]
-  --     end
-  --   end
-  --   vim.g.default_branch = default_branch
-  -- end)
-  --
 end
 
 return M

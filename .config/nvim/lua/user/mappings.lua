@@ -41,6 +41,11 @@ vim.keymap.set('c', '<c-l>', '<right>')
 -- vim.keymap.set('c', '^', '<home>')
 -- vim.keymap.set('c', '$', '<end>')
 
+-- Add undo break-points
+inoremap(',', ',<c-g>u')
+inoremap('.', '.<c-g>u')
+inoremap(';', ';<c-g>u')
+
 -- Search for string within the visual selection
 vim.keymap.set('x', '/', '<Esc>/\\%V')
 

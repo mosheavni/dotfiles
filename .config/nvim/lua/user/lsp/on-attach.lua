@@ -24,8 +24,8 @@ local default_on_attach = function(client, bufnr)
   ------------------
   if client.server_capabilities.code_lens then
     autocmd({ 'BufEnter', 'InsertLeave', 'InsertEnter' }, {
-      group = on_attach_aug,
       desc = 'Auto show code lenses',
+      group = on_attach_aug,
       buffer = bufnr,
       command = 'silent! lua vim.lsp.codelens.refresh()',
     })
