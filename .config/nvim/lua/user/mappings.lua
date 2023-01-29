@@ -3,7 +3,6 @@ local opts = utils.map_opts
 local nmap = utils.nnoremap
 local nnoremap = utils.nnoremap
 local vmap = utils.vmap
-local imap = utils.imap
 local vnoremap = utils.vnoremap
 local onoremap = utils.onoremap
 local inoremap = utils.inoremap
@@ -43,9 +42,9 @@ vim.keymap.set('c', '<c-l>', '<right>')
 -- vim.keymap.set('c', '$', '<end>')
 
 -- Add undo break-points
-imap('i', ',', ',<c-g>u')
-imap('i', '.', '.<c-g>u')
-imap('i', ';', ';<c-g>u')
+inoremap(',', ',<c-g>u')
+inoremap('.', '.<c-g>u')
+inoremap(';', ';<c-g>u')
 
 -- Search for string within the visual selection
 vim.keymap.set('x', '/', '<Esc>/\\%V')
