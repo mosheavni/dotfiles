@@ -39,7 +39,7 @@ async def main(connection):
     top_grid_size = top.grid_size
     await bottom.async_activate()
     await top.async_send_text(
-        text=f"""watch 'kubectl get pods | grep "{search_term}"'\n""",
+        text=f"""watch 'kubectl get pods --sort-by=.metadata.creationTimestamp | grep {cmd_flags} "{search_term}"'\n""",
         suppress_broadcast=False,
     )
     set_session_size(app, bottom_grid_size, bottom, height=70)
@@ -49,8 +49,14 @@ async def main(connection):
 
 
 search_term = ".*"
+cmd_flags = ""
+
 if len(sys.argv) == 2:
     search_term = sys.argv[1]
+
+if len(sys.argv) == 3:
+    cmd_flags = sys.argv[1]
+    search_term = sys.argv[2]
 
 print(f"Searching for {search_term} pods")
 iterm2.run_until_complete(main)
