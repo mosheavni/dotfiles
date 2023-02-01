@@ -314,24 +314,36 @@ nnoremap <silent> <leader>( :call SplitParamLines()<cr>
 -------------------------
 -- Diff with last save --
 -------------------------
-vim.cmd [[
-function! s:DiffWithSaved()
-  let filetype=&ft
-  diffthis
-  lefta vnew | r # | normal! 1Gdd
-  exe 'setlocal bt=nofile bh=wipe nobl noswf ro foldlevel=999 ft=' . filetype
-  diffthis
-  nnoremap <buffer> q :bd!<cr>
-  augroup ShutDownDiffOnLeave
-    autocmd! * <buffer>
-    autocmd BufDelete,BufUnload,BufWipeout <buffer> wincmd p | diffoff | wincmd p | diffoff
-  augroup END
+vim.api.nvim_create_user_command('DiffWithSaved', function()
+  -- Get start buffer
+  local start = vim.api.nvim_get_current_buf()
+  local filetype = vim.api.nvim_buf_get_option(start, 'filetype')
 
-  wincmd p
-endfunction
-com! DiffSaved call s:DiffWithSaved()
-nnoremap <silent> <leader>ds :DiffSaved<cr>
-]]
+  -- `vnew` - Create empty vertical split window
+  -- `set buftype=nofile` - Buffer is not related to a file, will not be written
+  -- `0d_` - Remove an extra empty start row
+  -- `diffthis` - Set diff mode to a new vertical split
+  vim.cmd 'vnew | set buftype=nofile | read ++edit # | 0d_ | diffthis'
+
+  -- Get scratch buffer
+  local scratch = vim.api.nvim_get_current_buf()
+
+  -- Set filetype of scratch buffer to be the same as start
+  vim.api.nvim_buf_set_option(scratch, 'filetype', filetype)
+
+  -- `wincmd p` - Go to the start window
+  -- `diffthis` - Set diff mode to a start window
+  vim.cmd 'wincmd p | diffthis'
+
+  -- Map `q` for both buffers to exit diff view and delete scratch buffer
+  for _, buf in ipairs { scratch, start } do
+    vim.keymap.set('n', 'q', function()
+      vim.api.nvim_buf_delete(scratch, { force = true })
+      vim.keymap.del('n', 'q', { buffer = start })
+    end, { buffer = buf })
+  end
+end, {})
+nnoremap('<leader>ds', ':DiffWithSaved<cr>', true)
 
 -----------------------
 -- Visual calculator --
