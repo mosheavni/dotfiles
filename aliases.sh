@@ -35,7 +35,7 @@ function mwatch() {
   # [[ -f $log_file ]] && cat /dev/null > $log_file || touch $log_file
   final_alias=`_alias_finder "$*"`
   echo $final_alias
-  viddy "$final_alias"
+  watch "$final_alias"
 }
 
 function ssh2 () {

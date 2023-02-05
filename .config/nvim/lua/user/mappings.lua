@@ -375,12 +375,6 @@ endfunction
 command! -range VisualCalculator call <SID>VisualCalculator()
 vmap <c-r> :VisualCalculator<cr>
 ]]
--- keymap('v', '<c-r>', function()
---   local selection = utils.get_selection()
---   local num = tonumber(selection)
---   P(selection)
---   -- return VisualCalculator()
--- end, opts.no_remap)
 
 ----------
 -- Titleize --
