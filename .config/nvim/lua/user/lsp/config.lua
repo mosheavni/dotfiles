@@ -1,6 +1,9 @@
 local on_attaches = require 'user.lsp.on-attach'
 local default_on_attach = on_attaches.default
--- }
+
+-----------
+-- Mason --
+-----------
 require('mason.settings').set {
   ui = {
     border = 'rounded',
@@ -12,7 +15,9 @@ require('mason-lspconfig').setup {
 -- Set formatting of lsp log
 require('vim.lsp.log').set_format_func(vim.inspect)
 
--- Capabilities
+------------------
+-- Capabilities --
+------------------
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.codeAction = {
@@ -26,6 +31,11 @@ capabilities.textDocument.codeAction = {
       end)(),
     },
   },
+}
+
+capabilities.textDocument.foldingRange = {
+  dynamicRegistration = false,
+  lineFoldingOnly = true,
 }
 
 -- general LSP config
