@@ -153,7 +153,7 @@ lspconfig.pyright.setup {
 
 --lua
 --settings = {
-lspconfig.sumneko_lua.setup {
+lspconfig.lua_ls.setup {
   capabilities = capabilities,
   on_attach = default_on_attach,
   settings = {
