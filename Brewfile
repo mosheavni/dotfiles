@@ -38,7 +38,6 @@ brew "golang"
 brew "grep"
 brew "hacker1024/hacker1024/coretemp"
 brew "hadolint"
-brew "hashicorp/tap/terraform-ls"
 brew "helm"
 brew "hyperkit", link: false
 brew "jq"
