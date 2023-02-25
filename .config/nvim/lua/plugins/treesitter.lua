@@ -25,8 +25,7 @@ M.config = function()
   local ts_parsers = require 'nvim-treesitter.parsers'
 
   -- unknown filetypes
-  local ft_to_parser = ts_parsers.filetype_to_parsername
-  ft_to_parser.groovy = 'java'
+  vim.treesitter.language.register('java', 'groovy')
   local ft_to_lang = ts_parsers.ft_to_lang
   ts_parsers.ft_to_lang = function(ft)
     if ft == 'zsh' then
