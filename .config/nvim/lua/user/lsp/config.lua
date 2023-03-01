@@ -180,7 +180,7 @@ lspconfig.lua_ls.setup {
 --terraformls
 lspconfig.terraformls.setup {
   on_attach = function(c, b)
-    require('treesitter-terraform-doc').setup()
+    require('treesitter-terraform-doc').setup {}
     default_on_attach(c, b)
   end,
   capabilities = capabilities,
