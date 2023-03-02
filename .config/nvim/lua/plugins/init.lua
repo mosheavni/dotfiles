@@ -12,6 +12,7 @@ local M = {
   -------------------
   {
     'navarasu/onedark.nvim',
+    enabled = false,
     config = function()
       require('onedark').setup {
         style = 'dark',
@@ -20,6 +21,15 @@ local M = {
         },
       }
       require('onedark').load()
+    end,
+  },
+  {
+    'uloco/bluloco.nvim',
+    lazy = false,
+    priority = 1000,
+    dependencies = { 'rktjmp/lush.nvim' },
+    config = function()
+      vim.cmd [[colorscheme bluloco-dark]]
     end,
   },
   {

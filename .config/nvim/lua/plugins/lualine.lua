@@ -46,8 +46,8 @@ M.config = function()
   lualine.setup {
     options = {
       icons_enabled = true,
-      -- theme = 'ayu_mirage',
-      theme = one_dark_theme,
+      theme = 'auto',
+      -- theme = one_dark_theme,
       component_separators = '|',
       section_separators = { right = '', left = '' },
       disabled_filetypes = {
