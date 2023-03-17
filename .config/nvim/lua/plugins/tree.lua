@@ -40,12 +40,12 @@ M.config = function()
       mappings = {
         custom_only = false,
         list = {
-          { key = 'x', action = 'close_node' },
-          { key = 's', action = 'vsplit' },
-          { key = 'i', action = 'split' },
+          { key = 'x',     action = 'close_node' },
+          { key = 's',     action = 'vsplit' },
+          { key = 'i',     action = 'split' },
           { key = '<C-e>', action = '' },
-          { key = 'cd', action = 'cd' },
-          { key = 'r', action = 'full_rename' },
+          { key = 'cd',    action = 'cd' },
+          { key = 'r',     action = 'full_rename' },
         },
       },
     },
@@ -56,7 +56,8 @@ M.config = function()
   }
 
   nnoremap('<leader>v', function()
-    vim.cmd.NvimTreeFindFile()
+    local api = require 'nvim-tree.api'
+    api.tree.find_file { open = true, focus = true }
   end)
   nnoremap('<c-o>', function()
     api.tree.toggle()
