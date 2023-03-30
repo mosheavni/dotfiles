@@ -4,7 +4,9 @@ local M = {
   dependencies = {
     {
       'akinsho/git-conflict.nvim',
-      config = true,
+      opts = {
+        default_mappings = true,
+      },
     },
   },
 }

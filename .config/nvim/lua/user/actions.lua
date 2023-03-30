@@ -161,11 +161,7 @@ M.git = {
       vim.ui.select({ 'Yes', 'No' }, { prompt = 'Remove from remote?' }, function(choice)
         if choice == 'Yes' then
           vim.cmd 'G push --tags'
-          if not vim.g.default_branch then
-            M.pretty_print 'default_branch is not set'
-            return
-          end
-          vim.cmd('G push origin ' .. vim.g.default_branch .. ' :refs/tags/' .. input)
+          vim.cmd('G push origin ' .. 'master' .. ' :refs/tags/' .. input)
           M.pretty_print('Tag ' .. input .. ' deleted from local and remote.')
         else
           M.pretty_print('Tag ' .. input .. ' deleted locally.')
@@ -289,7 +285,6 @@ M.random = {
       pretty_print('You can repeat this macro with @' .. macro_letter, 'Macro')
     end)
   end,
-
   ['Repeat Macro (@{letter} / Q)'] = function()
     vim.ui.input({ prompt = 'Macro letter: ' }, function(macro_letter)
       if not macro_letter then
