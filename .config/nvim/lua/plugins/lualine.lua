@@ -73,6 +73,7 @@ M.config = function()
         'diff',
       },
       lualine_c = {
+        'filename',
         'diagnostics',
         function()
           if vim.api.nvim_buf_get_option(0, 'filetype') == 'yaml' then
