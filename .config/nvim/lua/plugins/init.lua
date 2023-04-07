@@ -272,7 +272,10 @@ local M = {
     ft = 'markdown',
   },
   {
-    'jdhao/better-escape.vim',
+    'max397574/better-escape.nvim',
+    opts = {
+      mapping = { 'jk' },
+    },
     event = 'InsertEnter',
   },
 
