@@ -356,6 +356,10 @@ local M = {
     config = true,
     event = 'BufReadPre',
   },
+  {
+    'eandrju/cellular-automaton.nvim',
+    cmd = 'CellularAutomaton',
+  },
 
   ------------
   -- Themes --
