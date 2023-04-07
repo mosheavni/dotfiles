@@ -1,4 +1,5 @@
 # shellcheck disable=2148,2034,2155,1091,2086,1094
+zmodload zsh/zprof
 # ================ #
 # Basic ZSH Config #
 # ================ #
@@ -27,6 +28,8 @@ ZSH_THEME="mosherussell"
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_AUTO_UPDATE="true"
+unset ZSH_AUTOSUGGEST_USE_ASYNC
 export GPG_TTY=$(tty)
 
 # Set Locale
@@ -120,6 +123,3 @@ export KUBECONFIG=$HOME/.kube/config
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
-
-# Load starship last
-# eval "$(starship init zsh)"
