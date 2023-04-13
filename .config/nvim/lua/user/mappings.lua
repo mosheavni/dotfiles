@@ -73,6 +73,7 @@ function _G.__duplicate_lines(motion)
   -- vim.cmd.normal(finish[1] + 1 .. 'G')
   vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { finish[1] + 1, finish[2] })
 end
+
 nmap('<leader>cp', _G.__duplicate_lines)
 
 -- Indent block
@@ -118,7 +119,8 @@ vnoremap('ae', '<esc>gg0vG$')
 -- Run and edit macros
 for _, key in pairs { 'Q', 'X' } do
   nnoremap(key, '@' .. key:lower())
-  nnoremap('<leader>' .. key, ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>")
+  nnoremap('<leader>' .. key,
+  ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>")
 end
 
 -- keymap('n', 'Q', '@q', opts.no_remap)
@@ -202,9 +204,10 @@ nnoremap('_', [["ldd2k"lp]])
 nnoremap('Y', ':%y+<cr>', true)
 
 -- Copy file path to clipboard
-nnoremap('<leader>cfp', [[:let @+ = expand('%')<cr>:echo   "Copied file path " . expand('%')<cr>]], true)
-nnoremap('<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied file path " . expand('%:p')<cr>]], true)
-nnoremap('<leader>cfd', [[:let @+ = expand('%:p:h')<cr>:echo "Copied file path " . expand('%:p:h')<cr>]], true)
+nnoremap('<leader>cfp', [[:let @+ = expand('%')<cr>:echo   "Copied relative file path " . expand('%')<cr>]], true)
+nnoremap('<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied full file path " . expand('%:p')<cr>]], true)
+nnoremap('<leader>cfd', [[:let @+ = expand('%:p:h')<cr>:echo "Copied file directory path " . expand('%:p:h')<cr>]], true)
+nnoremap('<leader>cfn', [[:let @+ = expand('%:t')<cr>:echo "Copied file directory path " . expand('%:t')<cr>]], true)
 
 -- Copy and paste to/from system clipboard
 vmap('cp', '"+y')
@@ -252,7 +255,8 @@ nnoremap([[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], true)
 -- Search and Replace
 nnoremap('<Leader>r', ':.,$s?\\V<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>', true)
 vnoremap('<leader>r', '"hy:.,$s?\\V<C-r>h?<C-r>h?gc<left><left><left>', true)
-vnoremap('<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], { desc = 'Delete all but ...', silent = true })
+vnoremap('<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]],
+{ desc = 'Delete all but ...', silent = true })
 vnoremap('<leader>daa', [["hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], true)
 vnoremap('<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>, true]])
 vnoremap('<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], true)
