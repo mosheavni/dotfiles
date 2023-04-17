@@ -5,6 +5,25 @@ local M = {
   dependencies = { 'kyazdani42/nvim-web-devicons' },
 }
 
+local function on_attach(bufnr)
+  local api = require 'nvim-tree.api'
+
+  local function opts(desc)
+    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  end
+
+  api.config.mappings.default_on_attach(bufnr)
+  vim.keymap.set('n', 'x', api.fs.cut, opts 'Cut')
+  vim.keymap.set('n', 's', api.node.open.vertical, opts 'Open: Vertical Split')
+  vim.keymap.set('n', 'i', api.node.open.horizontal, opts 'Open: Horizontal Split')
+  vim.keymap.set('n', 'cd', api.tree.change_root_to_node, opts 'CD')
+  vim.keymap.set('n', 'r', api.fs.rename, opts 'Rename')
+  -- vim.keymap.set('n', 'r', api.fs.rename_node, opts 'Rename node')
+  -- vim.keymap.set('n', 'r', api.fs.rename_basename, opts 'Rename basename')
+  -- vim.keymap.set('n', 'r', api.fs.rename_sub, opts 'Rename sub')
+  vim.keymap.del('n', '<C-e>', { buffer = bufnr })
+end
+
 M.config = function()
   local nvim_tree = require 'nvim-tree'
   local api = require 'nvim-tree.api'
@@ -12,6 +31,7 @@ M.config = function()
   local nnoremap = utils.nnoremap
 
   nvim_tree.setup {
+    on_attach = on_attach,
     actions = {
       open_file = {
         resize_window = false,
@@ -37,17 +57,6 @@ M.config = function()
       side = 'left',
       width = 25,
       hide_root_folder = false,
-      mappings = {
-        custom_only = false,
-        list = {
-          { key = 'x',     action = 'close_node' },
-          { key = 's',     action = 'vsplit' },
-          { key = 'i',     action = 'split' },
-          { key = '<C-e>', action = '' },
-          { key = 'cd',    action = 'cd' },
-          { key = 'r',     action = 'full_rename' },
-        },
-      },
     },
     filters = {
       dotfiles = false,
