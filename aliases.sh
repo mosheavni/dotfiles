@@ -179,7 +179,7 @@ alias dc='cd '
 
 # global aliases
 alias -g Wt='while :;do '
-alias -g Wr=' | while read -r line;do '
+alias -g Wr=' | while read -r line;do echo "=== $line ==="; '
 alias -g D=';done'
 alias -g S='| sort'
 alias -g SRT='+short | sort'
