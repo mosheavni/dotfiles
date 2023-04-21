@@ -18,10 +18,10 @@ export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 # ####### #
 #  Pyenv  #
 # ####### #
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+# export PYENV_ROOT="$HOME/.pyenv"
+# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
 
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="mosherussell"
@@ -57,7 +57,6 @@ setopt HIST_BEEP              # Beep when accessing nonexistent history.
 plugins=(
   ag
   aliases
-  ansible
   autoupdate
   aws
   branch
@@ -72,7 +71,6 @@ plugins=(
   kube-ps1
   kubectl
   terraform
-  z
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
