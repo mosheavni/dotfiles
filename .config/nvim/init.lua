@@ -1,3 +1,4 @@
+vim.loader.enable()
 require 'core'
 require 'core.lazy-bootstrap' -- bootstraps folke/lazy
 require 'user.options'
