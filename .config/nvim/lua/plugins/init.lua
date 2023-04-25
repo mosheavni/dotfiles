@@ -69,18 +69,18 @@ local M = {
     config = true,
     cmd = 'TroubleToggle',
   },
-  {
-    'vim-scripts/groovyindent-unix',
-    ft = { 'groovy', 'Jenkinsfile' },
-  },
+  -- {
+  --   'vim-scripts/groovyindent-unix',
+  --   ft = { 'groovy', 'Jenkinsfile' },
+  -- },
   {
     'sam4llis/nvim-lua-gf',
     ft = 'lua',
   },
-  {
-    'martinda/Jenkinsfile-vim-syntax',
-    ft = { 'groovy', 'Jenkinsfile' },
-  },
+  -- {
+  --   'martinda/Jenkinsfile-vim-syntax',
+  --   ft = { 'groovy', 'Jenkinsfile' },
+  -- },
   {
     'chr4/nginx.vim',
     ft = 'nginx',
@@ -232,10 +232,10 @@ local M = {
       vim.g['floaterm_width'] = 0.7
     end,
   },
-  {
-    'samjwill/nvim-unception',
-    event = 'VeryLazy',
-  },
+  -- {
+  --   'samjwill/nvim-unception',
+  --   event = 'VeryLazy',
+  -- },
   {
     'mosheavni/vim-dirdiff',
     cmd = { 'DirDiff' },
