@@ -39,8 +39,8 @@ toApprove.each {pending -&gt; ScriptApproval.get().approveScript(pending.getHash
 				<content>Jenkins.instance.getItemByFullName(&apos;JobName&apos;).builds.findAll { it.number &gt; 10 &amp;&amp; it.number &lt; 1717 }.each { it.delete() }</content>
 			</snippet>
 			<snippet>
-				<title>apk - awscli</title>
-				<content>apk add --update python3 ;python3 -m ensurepip &amp;&amp; pip3 install awscli</content>
+				<title>get all successful builds of job</title>
+				<content>return jenkins.model.Jenkins.instance.getJob(System.getenv(&apos;JOB_NAME&apos;)).builds.findAll{ it.result == hudson.model.Result.SUCCESS }.collect{ &quot;$it.number&quot; }</content>
 			</snippet>
 		</snippets>
 	</folder>
@@ -86,6 +86,10 @@ alias ll=&apos;ls -l --color&apos;</content>
 				<title>pablo</title>
 				<content>Pablo3mili03sc0barGaviria</content>
 			</snippet>
+			<snippet>
+				<title>print proc cmdline or environ</title>
+				<content>xargs -0 printf &apos;%s\n&apos; &lt;/proc/1/cmdline</content>
+			</snippet>
 		</snippets>
 	</folder>
 	<folder>
@@ -104,6 +108,10 @@ alias ll=&apos;ls -l --color&apos;</content>
 			<snippet>
 				<title>remove all containers</title>
 				<content>docker ps -aq | xargs docker rm -f</content>
+			</snippet>
+			<snippet>
+				<title>run trivy</title>
+				<content>docker run -v /var/run/docker.sock:/var/run/docker.sock -v ~/.cache/trivy:/root/.cache/ aquasec/trivy image 109311601880.dkr.ecr.us-west-2.amazonaws.com/rnd/controller:1.0.93-alpha</content>
 			</snippet>
 		</snippets>
 	</folder>
@@ -274,6 +282,19 @@ document.onkeydown = function(event) {
 			<snippet>
 				<title>get iframe src</title>
 				<content>document.querySelector(&apos;iframe&apos;).src</content>
+			</snippet>
+		</snippets>
+	</folder>
+	<folder>
+		<title>AWS cli queries</title>
+		<snippets>
+			<snippet>
+				<title>describe all volumes that has tag</title>
+				<content>aws ec2 describe-volumes --query &apos;Volumes[?Tags[?Key == `kubernetes.io/cluster/spot-dev-us-east-2`]].VolumeId&apos;</content>
+			</snippet>
+			<snippet>
+				<title>print all certificates alt names and expiry</title>
+				<content> aws acm list-certificates --query &apos;CertificateSummaryList[*].CertificateArn&apos; | jq -r &apos;.[]&apos; Wr aws acm describe-certificate --query &apos;Certificate.{arn: CertificateArn, altNames: SubjectAlternativeNames, notAfter: NotAfter}&apos; --certificate-arn &quot;$line&quot; D</content>
 			</snippet>
 		</snippets>
 	</folder>
