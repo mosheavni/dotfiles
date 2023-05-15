@@ -50,16 +50,14 @@ local default_on_attach = function(client, bufnr)
     buffer = bufnr,
     group = diagnostic_pop,
     callback = function()
-      if vim.lsp.buf.server_ready() then
-        vim.diagnostic.open_float(nil, {
-          focusable = false,
-          close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
-          border = 'rounded',
-          source = 'always',
-          prefix = ' ',
-          scope = 'cursor',
-        })
-      end
+      vim.diagnostic.open_float(nil, {
+        focusable = false,
+        close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
+        border = 'rounded',
+        source = 'always',
+        prefix = ' ',
+        scope = 'cursor',
+      })
     end,
   })
 
