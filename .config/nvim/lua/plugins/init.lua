@@ -22,16 +22,16 @@ local M = {
       require('onedark').load()
     end,
   },
-  {
-    'uloco/bluloco.nvim',
-    enabled = false,
-    lazy = false,
-    priority = 1000,
-    dependencies = { 'rktjmp/lush.nvim' },
-    config = function()
-      vim.cmd [[colorscheme bluloco-dark]]
-    end,
-  },
+  -- {
+  --   'uloco/bluloco.nvim',
+  --   enabled = false,
+  --   lazy = false,
+  --   priority = 1000,
+  --   dependencies = { 'rktjmp/lush.nvim' },
+  --   config = function()
+  --     vim.cmd [[colorscheme bluloco-dark]]
+  --   end,
+  -- },
   {
     'dstein64/vim-startuptime',
     cmd = 'StartupTime',
@@ -305,7 +305,7 @@ local M = {
     'rcarriga/nvim-notify',
     event = 'VeryLazy',
     config = function()
-      -- vim.notify = require 'notify'
+      vim.notify = require 'notify'
       nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
     end,
   },

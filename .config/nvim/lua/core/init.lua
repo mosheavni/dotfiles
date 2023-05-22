@@ -15,13 +15,14 @@ function _G.P(v, r)
   if r then
     print(vim.inspect(v))
   else
-    vim.notify(vim.inspect(v), 4, {
+    require 'notify' (vim.inspect(v), 2, {
       title = 'P debug',
       icon = '✎',
     })
   end
   return v
 end
+
 -- leader key - before mapping lsp maps
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
