@@ -8,6 +8,9 @@ lsp_format.setup {
   lua = {
     exclude = { 'sumneko_lua' },
   },
+  yaml = {
+    exclude = { 'yamlls', 'null-ls' },
+  },
 
   javascriptreact = {
     exclude = { 'tsserver' },
