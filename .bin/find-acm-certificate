@@ -1,0 +1,17 @@
+#!/bin/bash
+usage() {
+  echo "Usage: $0 <domain-substring>" 1>&2
+  echo "<domain-substring> is a substring of the domain name to search for" 1>&2
+  exit 1
+}
+if [ $# -ne 1 ]; then
+  usage
+fi
+export CERT_SUBSTRING=$1
+aws acm list-certificates --query 'CertificateSummaryList[].{domain: DomainName,exp: NotAfter,arn: CertificateArn}' |
+  jq -c '.[] | select(.domain | contains($ENV.CERT_SUBSTRING))' | while read -r line; do
+  exp=$(jq -r '.exp' <<<"$line")
+  n_date=$(gdate -d @"$exp")
+  export n_date
+  jq -c '.exp = $ENV.n_date' <<<"$line"
+done
