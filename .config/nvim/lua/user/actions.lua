@@ -60,6 +60,9 @@ M.dap = function()
 end
 
 M.git = {
+  ['Open Git Menu (<leader>gg / :Git)'] = function()
+    vim.cmd 'Git'
+  end,
   ['Change branch (F4)'] = function()
     require('user.git-branches').open()
   end,
