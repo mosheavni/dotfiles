@@ -60,9 +60,6 @@ M.dap = function()
 end
 
 M.git = {
-  ['Open Git Menu (<leader>gg / :Git)'] = function()
-    vim.cmd 'Git'
-  end,
   ['Change branch (F4)'] = function()
     require('user.git-branches').open()
   end,
@@ -115,7 +112,7 @@ M.git = {
     vim.cmd 'Gmom'
     M.pretty_print 'Merged with origin/master. (might need to fetch new commits)'
   end,
-  ['Status (<leader>gg / :G)'] = function()
+  ['Open Status / Menu (<leader>gg / :G)'] = function()
     vim.cmd 'Git'
   end,
   ['Open GitHub on this line (:ToGithub)'] = function()
