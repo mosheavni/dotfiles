@@ -90,6 +90,10 @@ alias ll=&apos;ls -l --color&apos;</content>
 				<title>print proc cmdline or environ</title>
 				<content>xargs -0 printf &apos;%s\n&apos; &lt;/proc/1/cmdline</content>
 			</snippet>
+			<snippet>
+				<title>python http server</title>
+				<content>python3 -m http.server 9000</content>
+			</snippet>
 		</snippets>
 	</folder>
 	<folder>
@@ -160,6 +164,10 @@ alias ll=&apos;ls -l --color&apos;</content>
   --query &quot;Parameters[*].[Name,Value]&quot; \
   --with-decryption | jq \
   -r &apos;.[] | .[0] |= (split(&quot;/&quot;)|.[2]) | &quot;export \(.[0])=\&quot;\(.[1])\&quot;&quot;&apos; | tr &apos;&quot;&apos; &quot;&apos;&quot;</content>
+			</snippet>
+			<snippet>
+				<title>find acm certificate</title>
+				<content>export CERT_SUBSTRING=internal &amp;&amp; aws acm list-certificates --query &apos;CertificateSummaryList[].{domain: DomainName,arn: CertificateArn}&apos; | jq -c &apos;.[] | select(.domain | contains($ENV.CERT_SUBSTRING))&apos; | column -t -s,</content>
 			</snippet>
 		</snippets>
 	</folder>
