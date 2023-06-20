@@ -278,6 +278,10 @@ local M = {
     },
     event = 'InsertEnter',
   },
+  {
+    'AndrewRadev/linediff.vim',
+    cmd = { 'Linediff' },
+  },
 
   --------------
   -- Quickfix --
@@ -337,7 +341,7 @@ local M = {
 
   {
     'kyazdani42/nvim-web-devicons',
-    event = 'VeryLazy',
+    lazy = true,
   },
   {
     'goolord/alpha-nvim',
