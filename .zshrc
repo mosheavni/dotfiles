@@ -70,6 +70,7 @@ plugins=(
   helm
   kube-ps1
   kubectl
+  kubetail
   terraform
   zsh-autosuggestions
   zsh-syntax-highlighting
@@ -90,9 +91,6 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 compdef tf='terraform'
 compdef tg='terraform'
 compdef terragrunt='terraform'
-
-# Source azure-cli completion
-[[ -f /usr/local/etc/bash_completion.d/az ]] && source /usr/local/etc/bash_completion.d/az
 
 # ===================== #
 # Aliases and Functions #
@@ -121,9 +119,3 @@ export KUBECONFIG=$HOME/.kube/config
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/mavni/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/mavni/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/mavni/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/mavni/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
