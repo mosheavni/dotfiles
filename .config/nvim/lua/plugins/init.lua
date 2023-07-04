@@ -282,6 +282,16 @@ local M = {
     'AndrewRadev/linediff.vim',
     cmd = { 'Linediff' },
   },
+  {
+    'tomiis4/Hypersonic.nvim',
+    event = 'CmdlineEnter',
+    cmd = 'Hypersonic',
+    config = function()
+      require('hypersonic').setup {
+        -- config
+      }
+    end,
+  },
 
   --------------
   -- Quickfix --
