@@ -3,7 +3,6 @@ local M = {
   dependencies = {
     'nvim-lua/plenary.nvim',
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
-    'gnikdroy/projections.nvim',
   },
   cmd = 'Telescope',
   keys = { '<c-p>', '<c-b>', '<F4>', '<leader>hh', '<leader>/', '<leader>fp' },
@@ -47,34 +46,6 @@ M.config = function()
   }
 
   telescope.load_extension 'fzf'
-  -- Projections
-  require('projections').setup {
-    workspaces = { -- Default workspaces to search for
-      -- "~/dev",                               dev is a workspace. default patterns is used (specified below)
-      -- { "~/Documents/dev", { ".git" } },     Documents/dev is a workspace. patterns = { ".git" }
-      { '~/Repos', {} }, --                    An empty pattern list indicates that all subfolders are considered projects
-    },
-  }
-  -- Autostore session on DirChange and VimExit
-  local Session = require 'projections.session'
-  vim.api.nvim_create_autocmd({ 'DirChangedPre', 'VimLeavePre' }, {
-    callback = function()
-      Session.store(vim.loop.cwd())
-    end,
-  })
-  vim.api.nvim_create_user_command('StoreProjectSession', function()
-    Session.store(vim.loop.cwd())
-  end, {})
-
-  vim.api.nvim_create_user_command('RestoreProjectSession', function()
-    Session.restore(vim.loop.cwd())
-  end, {})
-
-  -- Bind <leader>fp to Telescope projections
-  require('telescope').load_extension 'projections'
-  nmap('<leader>fp', function()
-    vim.cmd 'Telescope projections'
-  end)
 
   -- Keymaps
   nnoremap('<c-p>', function()
