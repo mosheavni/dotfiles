@@ -202,6 +202,7 @@ require('typescript').setup {
     init_options = {
       preferences = {
         allowRenameOfImportPath = true,
+        disableSuggestions = true,
         importModuleSpecifierEnding = 'auto',
         importModuleSpecifierPreference = 'non-relative',
         includeCompletionsForImportStatements = true,
