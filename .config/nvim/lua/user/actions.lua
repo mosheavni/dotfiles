@@ -88,6 +88,15 @@ M.git = {
       vim.cmd('DiffviewOpen origin/' .. branch_to_diff .. '..HEAD')
     end)
   end,
+  ['Diff file with branch'] = function()
+    vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
+      if not branch_to_diff then
+        M.pretty_print 'Canceled.'
+        return
+      end
+      vim.cmd('DiffviewFileHistory ' .. branch_to_diff)
+    end)
+  end,
   ['Diff close'] = function()
     vim.cmd 'DiffviewClose'
   end,
