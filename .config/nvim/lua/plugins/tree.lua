@@ -17,11 +17,21 @@ local function on_attach(bufnr)
   vim.keymap.set('n', 's', api.node.open.vertical, opts 'Open: Vertical Split')
   vim.keymap.set('n', 'i', api.node.open.horizontal, opts 'Open: Horizontal Split')
   vim.keymap.set('n', 'cd', api.tree.change_root_to_node, opts 'CD')
-  vim.keymap.set('n', 'r', api.fs.rename, opts 'Rename')
+  -- vim.keymap.set('n', 'r', api.fs.rename, opts 'Rename')
   -- vim.keymap.set('n', 'r', api.fs.rename_node, opts 'Rename node')
   -- vim.keymap.set('n', 'r', api.fs.rename_basename, opts 'Rename basename')
   -- vim.keymap.set('n', 'r', api.fs.rename_sub, opts 'Rename sub')
   vim.keymap.del('n', '<C-e>', { buffer = bufnr })
+
+  local function move_file_to()
+    local node = api.tree.get_node_under_cursor()
+    local file_src = node['absolute_path']
+    local file_out = vim.fn.input('MOVE TO: ', file_src, 'file')
+    local dir = vim.fn.fnamemodify(file_out, ':h')
+    vim.fn.system { 'mkdir', '-p', dir }
+    vim.fn.system { 'mv', file_src, file_out }
+  end
+  vim.keymap.set('n', 'r', move_file_to, opts 'Move File To')
 end
 
 M.config = function()
