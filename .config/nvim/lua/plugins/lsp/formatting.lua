@@ -9,7 +9,7 @@ lsp_format.setup {
     exclude = { 'sumneko_lua' },
   },
   yaml = {
-    exclude = { 'yamlls', 'null-ls' },
+    exclude = { 'yamlls' },
   },
 
   javascriptreact = {

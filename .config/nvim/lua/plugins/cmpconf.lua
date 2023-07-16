@@ -1,12 +1,14 @@
 local M = {
   'hrsh7th/nvim-cmp',
+  version = false, -- last release is way too old
+  event = 'InsertEnter',
   dependencies = {
     'rafamadriz/friendly-snippets',
     'L3MON4D3/LuaSnip',
     'saadparwaiz1/cmp_luasnip',
     'onsails/lspkind-nvim',
     { 'tzachar/cmp-tabnine', build = './install.sh' },
-    { 'hrsh7th/cmp-nvim-lua' },
+    'hrsh7th/cmp-nvim-lua',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-path',
@@ -15,7 +17,6 @@ local M = {
     'hrsh7th/cmp-nvim-lsp-signature-help',
     'windwp/nvim-autopairs',
   },
-  event = 'InsertEnter',
 }
 
 M.config = function()
@@ -46,7 +47,7 @@ M.config = function()
       format = lspkind.cmp_format {
         mode = 'symbol_text', -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
         preset = 'codicons',
-        maxwidth = 40, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+        maxwidth = 40,        -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
 
         -- The function below will be called before any actual modifications from lspkind
         -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
@@ -108,8 +109,8 @@ M.config = function()
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
-        -- elseif luasnip.expand_or_jumpable() then
-        --   luasnip.expand_or_jump()
+          -- elseif luasnip.expand_or_jumpable() then
+          --   luasnip.expand_or_jump()
         elseif has_words_before() then
           cmp.complete()
         else
@@ -145,9 +146,9 @@ M.config = function()
       { name = 'luasnip' },
       { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
-      { name = 'cmp_tabnine', priority = 80 },
+      { name = 'cmp_tabnine',            priority = 80 },
       { name = 'path' },
-      { name = 'buffer', keyword_length = 4 },
+      { name = 'buffer',                 keyword_length = 4 },
     },
     snippet = {
       expand = function(args)
