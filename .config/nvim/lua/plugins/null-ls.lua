@@ -15,7 +15,7 @@ M.config = function()
       null_ls.builtins.code_actions.shellcheck.with {
         extra_filetypes = sh_extra_fts,
       },
-      null_ls.builtins.code_actions.gitsigns,
+      -- null_ls.builtins.code_actions.gitsigns,
       null_ls.builtins.code_actions.eslint_d,
       require 'typescript.extensions.null-ls.code-actions',
       null_ls.builtins.diagnostics.ansiblelint,

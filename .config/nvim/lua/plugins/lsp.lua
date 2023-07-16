@@ -1,6 +1,9 @@
 local M = {
   'neovim/nvim-lspconfig',
   event = 'VeryLazy',
+  opts = {
+    inlay_hints = { enabled = true },
+  },
   dependencies = {
     'lukas-reineke/lsp-format.nvim',
     'folke/lsp-colors.nvim',
