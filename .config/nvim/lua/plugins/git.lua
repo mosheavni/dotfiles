@@ -97,7 +97,7 @@ endfunction
 function! Enter_Wip_Moshe() abort
   let l:random_emoji = RandomEmoji()
   let l:time_now = strftime('%c')
-  let l:commit_message = l:random_emoji . ' wip ' . l:time_now
+  let l:commit_message = l:random_emoji . ' work in progress ' . l:time_now
   echom "Committing: " . l:commit_message
   exe "G commit --quiet -m '" . l:commit_message . "'"
   exe 'Git push -u origin ' . FugitiveHead()
