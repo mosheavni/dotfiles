@@ -1,8 +1,7 @@
 local utils = require 'user.utils'
-local user_maps = require 'user.lsp.maps'
+local user_maps = require 'plugins.lsp.maps'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
-local moshe_formatting = require 'user.lsp.formatting'
 local buf_set_option = vim.api.nvim_buf_set_option
 
 local on_attach_aug = augroup 'OnAttachAu'
@@ -17,7 +16,7 @@ local default_on_attach = function(client, bufnr)
   -----------------------
   local basics = require 'lsp_basics'
   basics.make_lsp_commands(client, bufnr)
-  moshe_formatting.setup(client, bufnr)
+  require('plugins.lsp.formatting').setup(client, bufnr)
 
   ------------------
   -- AutoCommands --

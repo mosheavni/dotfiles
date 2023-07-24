@@ -205,7 +205,7 @@ M.git = {
 
 M.lsp = {
   ['Format (<leader>lp)'] = function()
-    require('user.lsp.formatting').format()
+    require('plugins.lsp.formatting').format()
   end,
   ['Code Actions (<leader>la)'] = function()
     vim.lsp.buf.code_action()
