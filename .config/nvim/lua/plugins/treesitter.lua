@@ -45,7 +45,6 @@ M.config = function()
       'embedded_template',
       'go',
       'hcl',
-      'help',
       'hjson',
       'html',
       'http',
