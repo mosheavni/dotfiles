@@ -36,7 +36,7 @@ local search_and_replace = function(literal_search)
             M.pretty_print 'Canceled.'
             return
           end
-          vim.cmd('noautocmd cdo %s?' .. search_term .. '?' .. replace_term .. '?' .. flags)
+          vim.cmd('silent noautocmd cdo %s?' .. search_term .. '?' .. replace_term .. '?' .. flags)
         end)
       end)
     end,
