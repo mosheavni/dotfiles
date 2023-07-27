@@ -64,6 +64,3 @@ nnoremap <leader>f za
 nnoremap <leader>caf zM
 nnoremap <leader>oaf zR
 
-
-set termguicolors
-colorscheme gruvbox
