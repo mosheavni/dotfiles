@@ -140,7 +140,7 @@ M.git = {
     M.pretty_print 'Pulled from origin master.'
   end,
   ['Pull origin {branch}'] = function()
-    vim.ui.input({ prompt = 'Enter branch to pull from: ' }, function(branch_to_pull)
+    vim.ui.input({ default = 'main', prompt = 'Enter branch to pull from: ' }, function(branch_to_pull)
       if not branch_to_pull then
         M.pretty_print 'Canceled.'
         return
@@ -174,7 +174,7 @@ M.git = {
     end)
   end,
   ['Create tag'] = function()
-    vim.ui.input({ prompt = 'Enter tag name: ' }, function(input)
+    vim.ui.input({ prompt = 'Enter tag name to create: ' }, function(input)
       if not input then
         M.pretty_print 'Canceled.'
         return
@@ -193,16 +193,17 @@ M.git = {
   ['Delete tag'] = function()
     local tags = vim.fn.FugitiveExecute('tag').stdout
 
-    vim.ui.select(tags, { prompt = 'Enter tag name' }, function(input)
+    vim.ui.select(tags, { prompt = 'Enter tag name to delete' }, function(input)
       if not input then
         M.pretty_print 'Canceled.'
         return
       end
+      M.pretty_print('Deleting tag ' .. input .. ' locally...')
       vim.cmd('G tag -d ' .. input)
       vim.ui.select({ 'Yes', 'No' }, { prompt = 'Remove from remote?' }, function(choice)
         if choice == 'Yes' then
-          vim.cmd 'G push --tags'
-          vim.cmd('G push origin ' .. 'master' .. ' :refs/tags/' .. input)
+          M.pretty_print('Deleting tag ' .. input .. ' from remote...')
+          vim.cmd('G push origin :refs/tags/' .. input)
           M.pretty_print('Tag ' .. input .. ' deleted from local and remote.')
         else
           M.pretty_print('Tag ' .. input .. ' deleted locally.')
