@@ -130,7 +130,6 @@ M.config = function()
     sorting = {
       priority_weight = 2,
       comparators = {
-        require 'cmp_tabnine.compare',
         compare.offset,
         compare.exact,
         compare.score,
@@ -139,14 +138,15 @@ M.config = function()
         compare.sort_text,
         compare.length,
         compare.order,
+        require 'cmp_tabnine.compare',
       },
     },
     sources = cmp.config.sources {
-      { name = 'nvim_lsp' },
+      { name = 'nvim_lsp',               priority = 100 },
       { name = 'luasnip' },
       { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
-      { name = 'cmp_tabnine',            priority = 80 },
+      { name = 'cmp_tabnine' },
       { name = 'path' },
       { name = 'buffer',                 keyword_length = 4 },
     },
