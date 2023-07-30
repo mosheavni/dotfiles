@@ -292,6 +292,10 @@ local M = {
       }
     end,
   },
+  {
+    'nvim-pack/nvim-spectre',
+    keys = { { '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', desc = 'Start Spectre' } },
+  },
 
   --------------
   -- Quickfix --
