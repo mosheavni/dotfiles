@@ -283,16 +283,6 @@ local M = {
     cmd = { 'Linediff' },
   },
   {
-    'tomiis4/Hypersonic.nvim',
-    event = 'CmdlineEnter',
-    cmd = 'Hypersonic',
-    config = function()
-      require('hypersonic').setup {
-        -- config
-      }
-    end,
-  },
-  {
     'nvim-pack/nvim-spectre',
     keys = { { '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', desc = 'Start Spectre' } },
   },
