@@ -291,3 +291,19 @@ local default_plugins = {
 for _, plugin in pairs(default_plugins) do
   vim.g['loaded_' .. plugin] = 1
 end
+
+vim.filetype.add {
+  pattern = {
+    ['.*/templates/.*%.yaml'] = {
+      function()
+        if vim.fn.search('{{.+}}', 'nw') then
+          return 'gotmpl'
+        end
+      end,
+      { priority = 200 },
+    },
+    ['.*/tasks/.*%.ya?ml'] = { 'yaml.ansible', { priority = 201 } },
+    ['.*/playbooks?/.*%.ya?ml'] = { 'yaml.ansible', { priority = 201 } },
+    ['playbook%.ya?ml'] = { 'yaml.ansible', { priority = 201 } },
+  },
+}
