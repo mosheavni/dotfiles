@@ -21,8 +21,8 @@ local M = {
       textDocument = {
         completion = {
           completionItem = {
-            snippetSupport = true
-          }
+            snippetSupport = true,
+          },
         },
         codeAction = {
           dynamicRegistration = true,
@@ -39,8 +39,8 @@ local M = {
         foldingRange = {
           dynamicRegistration = false,
           lineFoldingOnly = true,
-        }
-      }
+        },
+      },
     },
     setup = {
 
@@ -57,25 +57,11 @@ local M = {
             -- Detects Kubernetes files based on content
             kubernetes = { enabled = true },
           },
-          lspconfig = opts
+          lspconfig = opts,
         }
         require('lspconfig')['yamlls'].setup(yaml_cfg)
         return true
       end,
-
-      -- efm = function(_, opts)
-      --   local efmls = require 'efmls-configs'
-      --   efmls.init(opts)
-      --
-      --   efmls.setup({
-      --     yaml = {
-      --       formatter = require 'efmls-configs.formatters.prettier'
-      --     }
-      --   })
-      --
-      --   return true
-      -- end,
-
     },
   },
   dependencies = {
@@ -84,7 +70,6 @@ local M = {
     'folke/lsp-colors.nvim',
     'williamboman/mason-lspconfig.nvim',
     'nanotee/nvim-lsp-basics',
-    -- 'creativenull/efmls-configs-nvim',
     {
       'j-hui/fidget.nvim',
       tag = 'legacy',
@@ -107,7 +92,8 @@ local M = {
     },
     'jose-elias-alvarez/typescript.nvim',
     {
-      'glepnir/lspsaga.nvim',
+      'nvimdev/lspsaga.nvim',
+      lazy = false,
       opts = {
         finder_action_keys = {
           edit = '<CR>',
@@ -169,8 +155,6 @@ M.config = function(_, opts)
     has_cmp and cmp_nvim_lsp.default_capabilities() or {},
     opts.capabilities or {}
   )
-
-
 
   local function setup(server)
     local server_opts = vim.tbl_deep_extend('force', {

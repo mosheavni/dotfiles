@@ -259,7 +259,7 @@ M.lsp = {
     vim.lsp.buf.implementation()
   end,
   ['Find References (gr)'] = function()
-    vim.cmd 'Lspsaga lsp_finder'
+    vim.cmd 'Lspsaga finder'
   end,
   ['Signature Help (<leader>lk)'] = function()
     vim.lsp.buf.signature_help()
