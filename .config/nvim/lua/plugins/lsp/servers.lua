@@ -125,6 +125,7 @@ local M = {
       require('treesitter-terraform-doc').setup {}
       default_on_attach(c, b)
     end,
+    cmd = { 'terraform-ls', 'serve', '-log-file=/tmp/terraform-ls-{{pid}}.log' },
   },
 
   --tsserver
@@ -198,12 +199,6 @@ local M = {
       },
     },
   },
-
-  --efm
-  -- efm = {
-  --   on_attach = default_on_attach,
-  --   default_config = false,
-  -- }
 }
 
 return M
