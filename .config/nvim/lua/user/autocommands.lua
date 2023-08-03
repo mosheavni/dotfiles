@@ -30,8 +30,8 @@ autocmd('UIEnter', {
   callback = function()
     vim.defer_fn(function()
       return vim.fn.filereadable 'startuptime.txt' == 1
-        and vim.notify(vim.fn.systemlist { 'tail', '-n3', 'startuptime.txt' })
-        and vim.fn.delete 'startuptime.txt'
+          and vim.notify(vim.fn.systemlist { 'tail', '-n3', 'startuptime.txt' })
+          and vim.fn.delete 'startuptime.txt'
     end, 1500)
   end,
 })
@@ -95,25 +95,10 @@ autocmd({ 'FileType' }, {
   pattern = 'json',
   command = 'syntax match Comment +\\/\\/.\\+$+',
 })
-autocmd({ 'BufNewFile', 'BufRead' }, {
-  group = special_filetypes,
-  pattern = 'aliases.sh',
-  command = 'setf zsh',
-})
-autocmd({ 'BufNewFile', 'BufRead' }, {
-  group = special_filetypes,
-  pattern = '.eslintrc',
-  command = 'setf json',
-})
-autocmd({ 'BufRead', 'BufNewFile' }, {
-  group = special_filetypes,
-  pattern = { '*/templates/*.yaml', '*/templates/*.tpl', '*.gotmpl', 'helmfile.yaml' },
-  command = 'set ft=helm',
-})
 autocmd({ 'FileType' }, {
   group = special_filetypes,
   pattern = 'javascript',
-  command = 'set filetype=javascriptreact | set iskeyword+=-',
+  command = 'set iskeyword+=-',
 })
 autocmd({ 'FileType' }, {
   group = special_filetypes,
