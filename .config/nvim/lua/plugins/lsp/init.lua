@@ -43,7 +43,6 @@ local M = {
       },
     },
     setup = {
-
       tsserver = function(_, opts)
         require('typescript').setup {
           server = opts,
@@ -61,6 +60,26 @@ local M = {
         }
         require('lspconfig')['yamlls'].setup(yaml_cfg)
         return true
+      end,
+
+      helm_ls = function()
+        local configs = require 'lspconfig.configs'
+        local util = require 'lspconfig.util'
+
+        if not configs.helm_ls then
+          configs.helm_ls = {
+            default_config = {
+              cmd = { 'helm_ls', 'serve' },
+              filetypes = { 'helm', 'gotmpl' },
+              root_dir = function(fname)
+                return util.root_pattern 'Chart.yaml' (fname)
+              end,
+            },
+          }
+        end
+
+        -- Make sure helm_ls is installed
+        require '.core.helm-ls-downloader'
       end,
     },
   },

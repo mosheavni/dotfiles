@@ -154,6 +154,11 @@ local M = {
     on_attach = default_on_attach,
   },
 
+  --helm_ls
+  helm_ls = {
+    on_attach = default_on_attach,
+  },
+
   --yamlls
   yamlls = {
     on_attach = function(c, b)
