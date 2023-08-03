@@ -51,7 +51,7 @@ M.setup = function(client, bufnr)
   lsp_format.on_attach(client)
   vim.keymap.set('n', '<leader>lp', function()
     M.format()
-  end, vim.tbl_extend('force', opts.silent, { buffer = bufnr }))
+  end, vim.tbl_extend('force', opts.silent, { buffer = bufnr, desc = 'Format document' }))
 
   -- Formatexpr using LSP
   if client.server_capabilities.document_formatting == true then
