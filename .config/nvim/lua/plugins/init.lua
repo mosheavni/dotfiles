@@ -89,10 +89,10 @@ local M = {
     'mosheavni/vim-kubernetes',
     event = 'VeryLazy',
   },
-  {
-    'towolf/vim-helm',
-    ft = { 'yaml', 'yaml.gotexttmpl' },
-  },
+  -- {
+  --   'towolf/vim-helm',
+  --   ft = { 'yaml', 'yaml.gotexttmpl' },
+  -- },
   {
     'phelipetls/jsonpath.nvim',
     ft = 'json',

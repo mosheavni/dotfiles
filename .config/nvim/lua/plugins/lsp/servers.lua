@@ -159,7 +159,8 @@ local M = {
     on_attach = function(c, b)
       local filetype = vim.api.nvim_buf_get_option(b, 'filetype')
       local buftype = vim.api.nvim_buf_get_option(b, 'buftype')
-      if buftype ~= '' or filetype == 'helm' or filetype == 'yaml.gotexttmpl' then
+      local disabled_fts = { 'helm', 'yaml.gotexttmpl', 'gotmpl' }
+      if buftype ~= '' or filetype == '' or vim.tbl_contains(disabled_fts, filetype) then
         vim.diagnostic.disable(b)
         vim.defer_fn(function()
           vim.diagnostic.reset(nil, b)
