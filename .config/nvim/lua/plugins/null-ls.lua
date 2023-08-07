@@ -2,8 +2,8 @@ local M = {
   'jose-elias-alvarez/null-ls.nvim',
   lazy = true,
   dependencies = {
-    "jay-babu/mason-null-ls.nvim",
-  }
+    'jay-babu/mason-null-ls.nvim',
+  },
 }
 M.config = function()
   local null_ls = require 'null-ls'
@@ -42,10 +42,10 @@ M.config = function()
       },
     },
   }
-  require("mason-null-ls").setup({
+  require('mason-null-ls').setup {
     ensure_installed = nil,
     automatic_installation = true,
-  })
+  }
 end
 
 return M

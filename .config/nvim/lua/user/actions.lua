@@ -219,7 +219,7 @@ M.git = {
         return
       end
       M.pretty_print('Searching for ' .. search_term .. ' in all commits...')
-      vim.cmd('silent Ggrep  ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
+      vim.cmd('silent Ggrep ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
     end)
   end,
   ['Push (:Gp)'] = function()
