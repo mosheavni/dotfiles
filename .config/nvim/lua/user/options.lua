@@ -302,6 +302,7 @@ vim.filetype.add {
       end,
       { priority = 200 },
     },
+    ['.*Jenkinsfile.*'] = 'groovy',
     ['.*/tasks/.*%.ya?ml'] = { 'yaml.ansible', { priority = 201 } },
     ['.*/playbooks?/.*%.ya?ml'] = { 'yaml.ansible', { priority = 201 } },
     ['playbook%.ya?ml'] = { 'yaml.ansible', { priority = 201 } },
