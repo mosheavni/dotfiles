@@ -39,7 +39,7 @@ async def main(connection):
     top_grid_size = top.grid_size
     await bottom.async_activate()
     await top.async_send_text(
-        text=f"""watch 'kubectl get pods --sort-by=.metadata.creationTimestamp | grep {cmd_flags} "{search_term}"'\n""",
+        text=f"""watch 'kubectl get pods --sort-by=.metadata.creationTimestamp -owide | grep {cmd_flags} "{search_term}"'\n""",
         suppress_broadcast=False,
     )
     set_session_size(app, bottom_grid_size, bottom, height=70)

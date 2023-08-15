@@ -100,10 +100,14 @@ M.config = function()
         enable = true,
         lookahead = true,
         keymaps = {
+          ['ab'] = '@block.outer',
+          ['ib'] = '@block.inner',
+          ['ac'] = '@class.outer',
+          ['ic'] = '@class.inner',
           ['af'] = '@function.outer',
           ['if'] = '@function.inner',
-          ['ac'] = '@class.outer',
-          ['ic'] = { query = '@class.inner', desc = 'Select inner part of a class region' },
+          ['ao'] = '@object.outer',
+          ['io'] = '@object.inner',
         },
       },
       move = {

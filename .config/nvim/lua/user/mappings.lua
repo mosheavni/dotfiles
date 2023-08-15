@@ -129,11 +129,14 @@ end
 -- Paste in insert mode
 inoremap('<c-v>', '<c-r>"', true)
 
--- Quickfix
+-- Quickfix and tabs
 nnoremap(']q', ':cnext<cr>zz', true)
 nnoremap('[q', ':cprev<cr>zz', true)
 nnoremap(']l', ':lnext<cr>zz', true)
 nnoremap('[l', ':lprev<cr>zz', true)
+nnoremap(']t', ':tabnext<cr>zz', true)
+nnoremap('[t', ':tabprev<cr>zz', true)
+
 
 -- This creates a new line of '=' signs the same length of the line
 nnoremap('<leader>=', 'yypVr=')
