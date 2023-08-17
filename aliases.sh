@@ -160,9 +160,6 @@ function get_pods_of_svc() {
   kubectl get pod $* -l $label_selectors
 }
 
-alias k_get_failed_pods='kubectl get pods --field-selector status.phase!=Running'
-alias kgfp='k_get_failed_pods'
-
 ### General aliases ###
 alias watch='watch --color '
 alias vim="nvim"
@@ -216,8 +213,6 @@ alias ktp='kubectl top pod'
 alias krs='kubectl rollout restart'
 alias kesec='kubectl edit secret'
 alias kgnol='kgno -l'
-alias kgpname='kubectl get pod --no-headers -o custom-columns=":metadata.name"'
-alias kgdname='kubectl get deployment --no-headers -o custom-columns=":metadata.name"'
 alias kg='kubectl get '
 alias kd='kubectl describe '
 alias ke='kubectl edit '
@@ -228,18 +223,6 @@ alias kgpv='kubectl get persistentvolume'
 alias kdpv='kubectl describe persistentvolume'
 alias kepv='kubectl edit persistentvolume'
 alias kdelpv='kubectl delete persistentvolume'
-
-# Kubectl jobs
-alias kgj='kubectl get job'
-alias kdj='kubectl describe job'
-alias kej='kubectl edit job'
-alias kdelj='kubectl delete job'
-
-# Kubectl Statefulsets
-alias kgsts='kubectl get statefulsets'
-alias kdsts='kubectl describe statefulsets'
-alias kests='kubectl edit statefulsets'
-alias kdelsts='kubectl delete statefulsets'
 
 # Common Used tools:
 alias tf='terraform'
