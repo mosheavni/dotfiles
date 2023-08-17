@@ -26,6 +26,19 @@ M.config = function()
       },
     },
     pickers = {
+      buffers = {
+        sort_lastused = true,
+        theme = 'dropdown',
+        previewer = true,
+        mappings = {
+          i = {
+            ['<c-d>'] = actions.delete_buffer,
+          },
+          n = {
+            ['<c-d>'] = actions.delete_buffer,
+          },
+        },
+      },
       find_files = {
         find_command = {
           'rg',
