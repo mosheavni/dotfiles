@@ -286,6 +286,12 @@ local M = {
     'nvim-pack/nvim-spectre',
     keys = { { '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', desc = 'Start Spectre' } },
   },
+  {
+    'ellisonleao/carbon-now.nvim',
+    lazy = true,
+    cmd = 'CarbonNow',
+    opts = { open_cmd = 'open' },
+  },
 
   --------------
   -- Quickfix --
