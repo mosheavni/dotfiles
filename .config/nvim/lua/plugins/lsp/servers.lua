@@ -22,47 +22,42 @@ local function get_python_path(workspace)
 end
 
 local M = {
-  -- ansiblels
   ansiblels = {
     on_attach = default_on_attach,
   },
 
-  -- awk
   awk_ls = {
     on_attach = default_on_attach,
   },
 
-  -- bashls
   bashls = {
     on_attach = default_on_attach,
   },
 
-  -- cssls
   cssls = {
     on_attach = default_on_attach,
   },
 
-  -- cssmodules_ls
   cssmodules_ls = {
     on_attach = default_on_attach,
   },
 
-  -- dockerls
   dockerls = {
     on_attach = default_on_attach,
   },
 
-  -- groovyls
+  docker_compose_language_service = {
+    on_attach = default_on_attach,
+  },
+
   groovyls = {
     on_attach = default_on_attach,
   },
 
-  -- html
   html = {
     on_attach = default_on_attach,
   },
 
-  -- json
   jsonls = {
     on_attach = default_on_attach,
     settings = {
@@ -74,8 +69,6 @@ local M = {
       },
     },
   },
-
-  -- python
 
   pyright = {
     before_init = function(_, config)
@@ -89,8 +82,6 @@ local M = {
     },
   },
 
-  --lua
-  --settings = {
   lua_ls = {
     on_attach = default_on_attach,
     settings = {
@@ -119,7 +110,6 @@ local M = {
     },
   },
 
-  --terraformls
   terraformls = {
     on_attach = function(c, b)
       require('treesitter-terraform-doc').setup {}
@@ -128,7 +118,6 @@ local M = {
     end,
   },
 
-  --tsserver
   tsserver = {
     init_options = {
       preferences = {
@@ -144,22 +133,18 @@ local M = {
     on_attach = default_on_attach,
   },
 
-  --vimls
   vimls = {
     on_attach = default_on_attach,
   },
 
-  --jdtls
-  jdtls = {
-    on_attach = default_on_attach,
-  },
+  -- jdtls = {
+  --   on_attach = default_on_attach,
+  -- },
 
-  --helm_ls
   helm_ls = {
     on_attach = default_on_attach,
   },
 
-  --yamlls
   yamlls = {
     on_attach = function(c, b)
       local filetype = vim.api.nvim_buf_get_option(b, 'filetype')
