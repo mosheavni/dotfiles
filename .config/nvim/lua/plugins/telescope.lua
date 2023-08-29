@@ -11,8 +11,8 @@ local M = {
 M.config = function()
   local telescope = require 'telescope'
   local actions = require 'telescope.actions'
+  local action_layout = require 'telescope.actions.layout'
   local utils = require 'user.utils'
-  local nmap = utils.nmap
   local nnoremap = utils.nmap
 
   telescope.setup {
@@ -22,6 +22,11 @@ M.config = function()
       mappings = {
         i = {
           ['<esc>'] = actions.close,
+          ['<M-p>'] = action_layout.toggle_preview,
+        },
+        n = {
+          ['<esc>'] = actions.close,
+          ['<M-p>'] = action_layout.toggle_preview,
         },
       },
     },
