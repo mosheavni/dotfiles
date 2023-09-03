@@ -354,14 +354,6 @@ local M = {
     lazy = true,
   },
   {
-    'goolord/alpha-nvim',
-    event = 'VimEnter',
-    config = function()
-      local startify = require 'alpha.themes.startify'
-      require('alpha').setup(startify.config)
-    end,
-  },
-  {
     'vim-scripts/CursorLineCurrentWindow',
     event = 'VeryLazy',
   },
