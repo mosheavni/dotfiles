@@ -78,6 +78,9 @@ M.config = function()
   nnoremap('<leader>hh', function()
     require('telescope.builtin').help_tags()
   end)
+  nnoremap('<leader>hr', function()
+    require('telescope.builtin').oldfiles().pick()
+  end)
   nnoremap('<leader>/', function()
     -- You can pass additional configuration to telescope to change theme, layout, etc.
     local view = require('telescope.themes').get_dropdown { winblend = 10, previewer = false }
