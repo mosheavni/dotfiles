@@ -79,7 +79,7 @@ local M = {
         end
 
         -- Make sure helm_ls is installed
-        require '.core.helm-ls-downloader'
+        -- require '.core.helm-ls-downloader'
       end,
     },
   },
