@@ -27,7 +27,7 @@ local function select_client(callback)
       return client.name
     end,
   }, function(client)
-    if client.name == nil then
+    if client == nil then
       return
     end
     callback(client)
@@ -35,12 +35,16 @@ local function select_client(callback)
 end
 
 M.format = function(client)
+  local pre_buffer_content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
   vim.lsp.buf.format {
     filter = function(s_client)
       return s_client.name == client.name
     end,
   }
-  vim.notify('Formatted using ' .. client.name)
+  local post_buffer_content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  if table.concat(pre_buffer_content) ~= table.concat(post_buffer_content) then
+    vim.notify('Formatted using ' .. client.name)
+  end
 end
 
 M.format_select = function()
