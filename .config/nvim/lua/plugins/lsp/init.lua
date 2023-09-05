@@ -111,7 +111,6 @@ local M = {
     'jose-elias-alvarez/typescript.nvim',
     {
       'nvimdev/lspsaga.nvim',
-      lazy = false,
       opts = {
         finder_action_keys = {
           edit = '<CR>',
