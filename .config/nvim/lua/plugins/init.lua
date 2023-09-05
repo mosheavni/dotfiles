@@ -10,18 +10,18 @@ local M = {
   -------------------
   --   Colorscheme --
   -------------------
-  {
-    'navarasu/onedark.nvim',
-    config = function()
-      require('onedark').setup {
-        style = 'dark',
-        highlights = {
-          EndOfBuffer = { fg = '#61afef' },
-        },
-      }
-      require('onedark').load()
-    end,
-  },
+  -- {
+  --   'navarasu/onedark.nvim',
+  --   config = function()
+  --     require('onedark').setup {
+  --       style = 'dark',
+  --       highlights = {
+  --         EndOfBuffer = { fg = '#61afef' },
+  --       },
+  --     }
+  --     require('onedark').load()
+  --   end,
+  -- },
   -- {
   --   'uloco/bluloco.nvim',
   --   enabled = false,
@@ -32,6 +32,16 @@ local M = {
   --     vim.cmd [[colorscheme bluloco-dark]]
   --   end,
   -- },
+  {
+    'sainnhe/gruvbox-material',
+    config = function()
+      -- load the colorscheme here
+      vim.cmd [[
+        let g:gruvbox_material_better_performance = 1
+        colorscheme gruvbox-material
+      ]]
+    end,
+  },
   {
     'dstein64/vim-startuptime',
     cmd = 'StartupTime',
