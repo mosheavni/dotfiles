@@ -21,6 +21,7 @@ return function(bufnr)
   inoremap('<M-k>', vim.lsp.buf.signature_help, returnOpts 'Signature help')
   nnoremap('<leader>lk', vim.lsp.buf.signature_help, returnOpts 'Signature help')
   -- calling twice make the cursor go into the float window. good for navigating big docs
+  -- nnoremap('K', vim.lsp.buf.hover, returnOpts 'Hover doc')
   nnoremap('K', ':Lspsaga hover_doc<CR>', returnOpts 'Hover doc')
 
   -- Refactor rename
