@@ -2,56 +2,80 @@ local M = {}
 local m_utils = require 'user.utils'
 local opts = m_utils.map_opts
 local buf_set_option = vim.api.nvim_buf_set_option
-local lsp_format = require 'lsp-format'
 
-lsp_format.setup {
-  lua = {
-    exclude = { 'sumneko_lua' },
-  },
-  yaml = {
-    exclude = { 'yamlls' },
-  },
-
-  javascriptreact = {
-    exclude = { 'tsserver' },
-  },
-}
-
-local function select_client(method, callback)
+M.get_all_clients = function()
+  local method = 'textDocument/formatting'
   local clients = vim.tbl_values(vim.lsp.get_active_clients { bufnr = 0 })
-  local client_names = {}
+  local formatting_clients = {}
   for _, client in ipairs(clients) do
     if client.supports_method(method) then
-      table.insert(client_names, client.name)
+      table.insert(formatting_clients, client)
     end
   end
-
-  -- Prompt user for client with vim.ui.input and call callback with response
-  if #client_names == 1 then
-    return callback(client_names[1])
-  end
-  return vim.ui.select(client_names, { 'Select LSP client' }, callback)
+  return formatting_clients
 end
 
-M.format = function()
-  select_client('textDocument/formatting', function(client_name)
-    if client_name == nil then
+local function select_client(callback)
+  local clients = M.get_all_clients()
+  -- print only client names
+  for _, client in ipairs(clients) do
+    vim.print(client.name)
+  end
+  -- Prompt user for client with vim.ui.input and call callback with response
+  if #clients == 1 then
+    return callback(clients[1])
+  end
+  return vim.ui.select(clients, {
+    prompt = 'Select LSP client',
+    format_item = function(client)
+      return client.name
+    end,
+  }, function(client)
+    if client.name == nil then
       return
     end
-    vim.lsp.buf.format {
-      filter = function(s_client)
-        return s_client.name == client_name
-      end,
-    }
-    vim.notify('Formatted using ' .. client_name)
+    callback(client)
   end)
 end
 
+M.format = function(client)
+  vim.lsp.buf.format {
+    filter = function(s_client)
+      return s_client.name == client.name
+    end,
+  }
+  vim.notify('Formatted using ' .. client.name)
+end
+
+M.format_select = function()
+  select_client(function(client)
+    M.format(client)
+  end)
+end
+
+M.format_on_save = function()
+  local clients = M.get_all_clients()
+  M.format(clients[1])
+end
+
 M.setup = function(client, bufnr)
-  lsp_format.on_attach(client)
   vim.keymap.set('n', '<leader>lp', function()
-    M.format()
+    M.format_select()
   end, vim.tbl_extend('force', opts.silent, { buffer = bufnr, desc = 'Format document' }))
+
+  -- format on save
+  local group = vim.api.nvim_create_augroup('Format', { clear = false })
+  vim.api.nvim_clear_autocmds {
+    buffer = bufnr,
+    group = group,
+  }
+  local event = 'BufWritePre'
+  vim.api.nvim_create_autocmd(event, {
+    group = group,
+    desc = 'Format on save',
+    buffer = bufnr,
+    callback = M.format_on_save,
+  })
 
   -- Formatexpr using LSP
   if client.server_capabilities.document_formatting == true then

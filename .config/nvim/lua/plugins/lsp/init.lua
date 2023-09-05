@@ -72,7 +72,7 @@ local M = {
               cmd = { 'helm_ls', 'serve' },
               filetypes = { 'helm', 'gotmpl' },
               root_dir = function(fname)
-                return util.root_pattern 'Chart.yaml' (fname)
+                return util.root_pattern 'Chart.yaml'(fname)
               end,
             },
           }
@@ -84,7 +84,6 @@ local M = {
     },
   },
   dependencies = {
-    'lukas-reineke/lsp-format.nvim',
     'jose-elias-alvarez/null-ls.nvim',
     'folke/lsp-colors.nvim',
     'williamboman/mason-lspconfig.nvim',
