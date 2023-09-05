@@ -55,6 +55,7 @@ M.format_on_save = function()
 end
 
 M.setup = function(client, bufnr)
+  -- format keymap
   vim.keymap.set('n', '<leader>lp', function()
     M.format_select()
   end, vim.tbl_extend('force', opts.silent, { buffer = bufnr, desc = 'Format document' }))
