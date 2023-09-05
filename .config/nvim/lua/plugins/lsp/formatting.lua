@@ -17,10 +17,6 @@ end
 
 local function select_client(callback)
   local clients = M.get_all_clients()
-  -- print only client names
-  for _, client in ipairs(clients) do
-    vim.print(client.name)
-  end
   -- Prompt user for client with vim.ui.input and call callback with response
   if #clients == 1 then
     return callback(clients[1])
