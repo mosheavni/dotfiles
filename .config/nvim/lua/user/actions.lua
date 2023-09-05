@@ -265,7 +265,11 @@ M.lsp = {
     vim.lsp.buf.signature_help()
   end,
   ['Signature Documentation (K)'] = function()
-    vim.lsp.buf.hover()
+    -- vim.lsp.buf.hover()
+    vim.cmd 'Lspsaga hover_doc'
+  end,
+  ['Rename symbol (<leader>lrn)'] = function()
+    vim.cmd 'Lspsaga rename ++project'
   end,
   ['Diagnostics quickfix list (<leader>lq)'] = function()
     vim.diagnostic.setqflist()

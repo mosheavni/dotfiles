@@ -21,10 +21,11 @@ return function(bufnr)
   inoremap('<M-k>', vim.lsp.buf.signature_help, returnOpts 'Signature help')
   nnoremap('<leader>lk', vim.lsp.buf.signature_help, returnOpts 'Signature help')
   -- calling twice make the cursor go into the float window. good for navigating big docs
-  nnoremap('K', vim.lsp.buf.hover, returnOpts 'Hover doc')
+  nnoremap('K', ':Lspsaga hover_doc<CR>', returnOpts 'Hover doc')
 
   -- Refactor rename
-  nnoremap('<leader>lrn', vim.lsp.buf.rename, returnOpts 'Rename')
+  -- nnoremap('<leader>lrn', vim.lsp.buf.rename, returnOpts 'Rename')
+  nnoremap('<leader>lrn', ':Lspsaga rename ++project<CR>', returnOpts 'Rename')
 
   -- Workspace
   nnoremap('<leader>lwa', vim.lsp.buf.add_workspace_folder, returnOpts 'Add workspace folder')
