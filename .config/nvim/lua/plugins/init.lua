@@ -38,6 +38,7 @@ local M = {
       -- load the colorscheme here
       vim.cmd [[
         let g:gruvbox_material_better_performance = 1
+        let g:gruvbox_material_background = 'hard' " soft | medium | hard
         colorscheme gruvbox-material
       ]]
     end,
