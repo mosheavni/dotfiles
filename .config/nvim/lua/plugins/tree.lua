@@ -65,7 +65,7 @@ M.config = function()
     },
     view = {
       side = 'left',
-      width = 25,
+      width = '20%',
       hide_root_folder = false,
     },
     filters = {
