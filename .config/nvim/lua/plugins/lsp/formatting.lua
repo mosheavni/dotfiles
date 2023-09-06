@@ -1,11 +1,13 @@
-local M = {}
+local M = {
+  bufnr = 0,
+}
 local m_utils = require 'user.utils'
 local opts = m_utils.map_opts
 local buf_set_option = vim.api.nvim_buf_set_option
 
 M.get_all_clients = function()
   local method = 'textDocument/formatting'
-  local clients = vim.tbl_values(vim.lsp.get_active_clients { bufnr = 0 })
+  local clients = vim.tbl_values(vim.lsp.get_active_clients { bufnr = M.bufnr })
   local formatting_clients = {}
   for _, client in ipairs(clients) do
     if client.supports_method(method) then
@@ -35,14 +37,14 @@ local function select_client(callback)
 end
 
 M.format = function(client)
-  local pre_buffer_content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  M.format_changedtick = vim.api.nvim_buf_get_changedtick(M.bufnr)
   vim.lsp.buf.format {
     filter = function(s_client)
       return s_client.name == client.name
     end,
   }
-  local post_buffer_content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-  if table.concat(pre_buffer_content) ~= table.concat(post_buffer_content) then
+
+  if M.format_changedtick ~= vim.api.nvim_buf_get_changedtick(M.bufnr) then
     vim.notify('Formatted using ' .. client.name)
   end
 end
@@ -59,6 +61,7 @@ M.format_on_save = function()
 end
 
 M.setup = function(client, bufnr)
+  M.bufnr = bufnr
   -- format keymap
   vim.keymap.set('n', '<leader>lp', function()
     M.format_select()
