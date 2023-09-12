@@ -77,6 +77,8 @@ vim.o.encoding = 'utf-8'
 vim.o.visualbell = true -- Use visual bell instead of beeping
 vim.o.conceallevel = 0
 vim.o.showmode = false -- Redundant as lighline takes care of that
+vim.opt.cpoptions:append '>'
+vim.o.equalalways = true -- When splitting window, make new window same size
 vim.o.history = 1000
 vim.o.termguicolors = true
 vim.o.signcolumn = 'yes'
