@@ -57,6 +57,9 @@ end
 
 M.format_on_save = function()
   local clients = M.get_all_clients()
+  if #clients == 0 then
+    return
+  end
   M.format(clients[1])
 end
 

@@ -50,4 +50,7 @@ return function(bufnr)
   -- Code action
   nnoremap('<leader>la', vim.lsp.buf.code_action, returnOpts 'Code action')
   nnoremap('<leader>lx', vim.lsp.codelens.run, returnOpts 'Code lens')
+
+  -- code outline
+  nnoremap('<leader>o', ':Lspsaga outline<CR>', returnOpts 'Code lens')
 end

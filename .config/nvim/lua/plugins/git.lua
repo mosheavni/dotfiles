@@ -1,17 +1,4 @@
-local M = {
-  'tpope/vim-fugitive',
-  event = 'VeryLazy',
-  dependencies = {
-    {
-      'akinsho/git-conflict.nvim',
-      opts = {
-        default_mappings = true,
-      },
-    },
-  },
-}
-
-M.config = function()
+local fugitive_config = function()
   local utils = require 'user.utils'
   local nmap = utils.nmap
   --------------
@@ -220,5 +207,41 @@ endfunction
     end)
   end)
 end
+
+local M = {
+  {
+    'tpope/vim-fugitive',
+    event = 'VeryLazy',
+    config = fugitive_config,
+    dependencies = {
+      {
+        'akinsho/git-conflict.nvim',
+        opts = {
+          default_mappings = true,
+        },
+      },
+    },
+  },
+  {
+    'mosheavni/vim-to-github',
+    cmd = { 'ToGithub' },
+  },
+  {
+    'sindrets/diffview.nvim',
+    dependencies = 'nvim-lua/plenary.nvim',
+    cmd = {
+      'DiffviewClose',
+      'DiffviewFileHistory',
+      'DiffviewFocusFiles',
+      'DiffviewLog',
+      'DiffviewOpen',
+      'DiffviewRefresh',
+      'DiffviewToggleFiles',
+    },
+    config = function()
+      require 'diffview'
+    end,
+  },
+}
 
 return M

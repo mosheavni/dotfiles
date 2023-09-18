@@ -80,7 +80,9 @@ local M = {
 
         -- Make sure helm_ls is installed
         -- require '.core.helm-ls-downloader'
+        return true
       end,
+      docker_compose_language_service = function() end,
     },
   },
   dependencies = {
@@ -100,7 +102,7 @@ local M = {
       end,
     },
     'b0o/SchemaStore.nvim',
-    { 'folke/neodev.nvim', config = true },
+    { 'folke/neodev.nvim', opts = {} },
     {
       'someone-stole-my-name/yaml-companion.nvim',
       config = function()

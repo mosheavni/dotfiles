@@ -48,30 +48,6 @@ local M = {
     cmd = 'StartupTime',
   },
 
-  ---------
-  -- Git --
-  ---------
-  {
-    'mosheavni/vim-to-github',
-    cmd = { 'ToGithub' },
-  },
-  {
-    'sindrets/diffview.nvim',
-    dependencies = 'nvim-lua/plenary.nvim',
-    cmd = {
-      'DiffviewClose',
-      'DiffviewFileHistory',
-      'DiffviewFocusFiles',
-      'DiffviewLog',
-      'DiffviewOpen',
-      'DiffviewRefresh',
-      'DiffviewToggleFiles',
-    },
-    config = function()
-      require 'diffview'
-    end,
-  },
-
   ------------------------------------
   -- Language Server Protocol (LSP) --
   ------------------------------------
@@ -129,17 +105,6 @@ local M = {
     event = 'VeryLazy',
   },
 
-  ----------------
-  -- Completion --
-  ----------------
-  {
-    'phenomenes/ansible-snippets',
-    ft = { 'ansible', 'yaml.ansible' },
-    config = function()
-      vim.g['ansible_goto_role_paths'] = '.;,roles;'
-    end,
-  },
-
   -----------------------------
   -- AI and smart completion --
   -----------------------------
@@ -180,16 +145,6 @@ local M = {
           },
         }
       end)
-    end,
-  },
-  {
-    'aduros/ai.vim',
-    cmd = 'AI',
-    config = function()
-      vim.g.ai_no_mappings = true
-      nnoremap('<M-a>', ':AI ')
-      vnoremap('<M-a>', ':AI ')
-      inoremap('<M-a>', '<Esc>:AI<CR>a')
     end,
   },
   {
@@ -308,7 +263,7 @@ local M = {
   -- Quickfix --
   --------------
   {
-    url = 'https://gitlab.com/yorickpeterse/nvim-pqf.git',
+    url = 'yorickpeterse/nvim-pqf.git',
     config = true,
     event = 'BufWinEnter',
     -- ft = 'qf',
@@ -321,57 +276,6 @@ local M = {
   {
     'kevinhwang91/nvim-bqf',
     ft = 'qf',
-  },
-
-  -----------------
-  -- Look & Feel --
-  -----------------
-  {
-    'rcarriga/nvim-notify',
-    event = 'VeryLazy',
-    config = function()
-      vim.notify = require 'notify'
-      nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
-    end,
-  },
-  {
-    'stevearc/dressing.nvim',
-    config = function()
-      require('dressing').setup {
-        select = {
-          telescope = require('telescope.themes').get_dropdown {
-            layout_config = {
-              width = 0.4,
-              height = 0.8,
-            },
-          },
-        },
-        input = {
-          enabled = true,
-          relative = 'editor',
-        },
-      }
-      vim.cmd [[hi link FloatTitle Normal]]
-    end,
-    event = 'VeryLazy',
-  },
-  {
-    'RRethy/vim-illuminate',
-    event = 'BufReadPost',
-  },
-
-  {
-    'kyazdani42/nvim-web-devicons',
-    lazy = true,
-  },
-  {
-    'vim-scripts/CursorLineCurrentWindow',
-    event = 'VeryLazy',
-  },
-  {
-    'norcalli/nvim-colorizer.lua',
-    config = true,
-    event = 'BufReadPre',
   },
 
   ------------

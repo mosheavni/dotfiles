@@ -16,6 +16,13 @@ local M = {
     'petertriho/cmp-git',
     'hrsh7th/cmp-nvim-lsp-signature-help',
     'windwp/nvim-autopairs',
+    {
+      'phenomenes/ansible-snippets',
+      ft = { 'ansible', 'yaml.ansible' },
+      config = function()
+        vim.g['ansible_goto_role_paths'] = '.;,roles;'
+      end,
+    },
   },
 }
 
@@ -47,7 +54,7 @@ M.config = function()
       format = lspkind.cmp_format {
         mode = 'symbol_text', -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
         preset = 'codicons',
-        maxwidth = 40,        -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+        maxwidth = 40, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
 
         -- The function below will be called before any actual modifications from lspkind
         -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
@@ -142,13 +149,13 @@ M.config = function()
       },
     },
     sources = cmp.config.sources {
-      { name = 'nvim_lsp',               priority = 100 },
+      { name = 'nvim_lsp', priority = 100 },
       { name = 'luasnip' },
       { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
       { name = 'cmp_tabnine' },
       { name = 'path' },
-      { name = 'buffer',                 keyword_length = 4 },
+      { name = 'buffer', keyword_length = 4 },
     },
     snippet = {
       expand = function(args)

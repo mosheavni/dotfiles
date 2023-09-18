@@ -46,6 +46,8 @@ inoremap(',', ',<c-g>u')
 inoremap('.', '.<c-g>u')
 inoremap(';', ';<c-g>u')
 
+inoremap(';;', '<C-O>A;')
+
 -- Search for string within the visual selection
 vim.keymap.set('x', '/', '<Esc>/\\%V')
 
@@ -119,8 +121,7 @@ vnoremap('ae', '<esc>gg0vG$')
 -- Run and edit macros
 for _, key in pairs { 'Q', 'X' } do
   nnoremap(key, '@' .. key:lower())
-  nnoremap('<leader>' .. key,
-  ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>")
+  nnoremap('<leader>' .. key, ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>")
 end
 
 -- keymap('n', 'Q', '@q', opts.no_remap)
@@ -136,7 +137,6 @@ nnoremap(']l', ':lnext<cr>zz', true)
 nnoremap('[l', ':lprev<cr>zz', true)
 nnoremap(']t', ':tabnext<cr>zz', true)
 nnoremap('[t', ':tabprev<cr>zz', true)
-
 
 -- This creates a new line of '=' signs the same length of the line
 nnoremap('<leader>=', 'yypVr=')
@@ -258,8 +258,7 @@ nnoremap([[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], true)
 -- Search and Replace
 nnoremap('<Leader>r', ':.,$s?\\V<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>', true)
 vnoremap('<leader>r', '"hy:.,$s?\\V<C-r>h?<C-r>h?gc<left><left><left>', true)
-vnoremap('<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]],
-{ desc = 'Delete all but ...', silent = true })
+vnoremap('<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], { desc = 'Delete all but ...', silent = true })
 vnoremap('<leader>daa', [["hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], true)
 vnoremap('<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>, true]])
 vnoremap('<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], true)
@@ -463,3 +462,48 @@ end, {})
 vim.api.nvim_create_user_command('PluginsReload', function()
   require('user.plugins-mgmt').reload_plugin()
 end, {})
+
+---------------------
+-- Traverse indent --
+---------------------
+---Adapted from https://vi.stackexchange.com/a/12870
+---Traverse to indent >= or > current indent
+---@param direction integer 1 - forwards | -1 - backwards
+---@param equal boolean include lines equal to current indent in search?
+local function indent_traverse(direction, equal)
+  return function()
+    -- Get the current cursor position
+    local current_line, column = unpack(vim.api.nvim_win_get_cursor(0))
+    local match_line = current_line
+    local match_indent = false
+    local match = false
+
+    local buf_length = vim.api.nvim_buf_line_count(0)
+
+    -- Look for a line of appropriate indent
+    -- level without going out of the buffer
+    while (not match) and (match_line ~= buf_length) and (match_line ~= 1) do
+      match_line = match_line + direction
+      local match_line_str = vim.api.nvim_buf_get_lines(0, match_line - 1, match_line, false)[1]
+      -- local match_line_is_whitespace = match_line_str and match_line_str:match('^%s*$')
+      local match_line_is_whitespace = match_line_str:match '^%s*$'
+
+      if equal then
+        match_indent = vim.fn.indent(match_line) <= vim.fn.indent(current_line)
+      else
+        match_indent = vim.fn.indent(match_line) < vim.fn.indent(current_line)
+      end
+      match = match_indent and not match_line_is_whitespace
+    end
+
+    -- If a line is found go to line
+    if match or match_line == buf_length then
+      vim.fn.cursor { match_line, column + 1 }
+    end
+  end
+end
+vim.keymap.set({ 'n', 'v' }, 'gj', indent_traverse(1, true)) -- next equal indent
+vim.keymap.set({ 'n', 'v' }, 'gk', indent_traverse(-1, true)) -- previous equal indent
+
+vim.keymap.set({ 'n', 'v' }, 'gJ', indent_traverse(1, false)) -- next equal indent
+vim.keymap.set({ 'n', 'v' }, 'gK', indent_traverse(-1, false)) -- previous equal indent

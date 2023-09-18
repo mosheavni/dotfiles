@@ -115,11 +115,11 @@ M.config = function()
         set_jumps = true, -- whether to set jumps in the jumplist
         goto_next_start = {
           [']m'] = '@function.outer',
-          [']]'] = '@class.outer',
+          [']]'] = '@block.outer',
         },
         goto_next_end = {
           [']M'] = '@function.outer',
-          [']['] = '@class.outer',
+          [']['] = '@block.outer',
         },
         goto_previous_start = {
           ['[m'] = '@function.outer',
@@ -127,7 +127,7 @@ M.config = function()
         },
         goto_previous_end = {
           ['[M'] = '@function.outer',
-          ['[]'] = '@class.outer',
+          ['[]'] = '@block.outer',
         },
       },
     },
@@ -153,9 +153,9 @@ M.config = function()
   local ts_context = require 'treesitter-context'
 
   ts_context.setup {
-    enable = true,   -- Enable this plugin (Can be enabled/disabled later via commands)
+    enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
     throttle = true, -- Throttles plugin updates (may improve performance)
-    max_lines = 0,   -- How many lines the window should span. Values <= 0 mean no limit.
+    max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
     patterns = {
       -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
       default = {
