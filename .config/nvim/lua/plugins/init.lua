@@ -263,7 +263,7 @@ local M = {
   -- Quickfix --
   --------------
   {
-    url = 'yorickpeterse/nvim-pqf.git',
+    'yorickpeterse/nvim-pqf',
     config = true,
     event = 'BufWinEnter',
     -- ft = 'qf',
