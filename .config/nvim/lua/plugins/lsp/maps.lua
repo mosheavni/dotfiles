@@ -13,8 +13,7 @@ return function(bufnr)
   nnoremap('gp', '<cmd>Lspsaga peek_definition<CR>', returnOpts 'Peek definition')
   nnoremap('gy', vim.lsp.buf.type_definition, returnOpts 'Go to type definition')
   nnoremap('gi', vim.lsp.buf.implementation, returnOpts 'Go to implementation')
-  nnoremap('gR', '<cmd>lua vim.lsp.buf.references({ includeDeclaration = false })<CR>',
-    returnOpts 'Go to references (native)')
+  nnoremap('gR', '<cmd>lua vim.lsp.buf.references({ includeDeclaration = false })<CR>', returnOpts 'Go to references (native)')
   nnoremap('gr', '<cmd>Lspsaga finder<CR>', returnOpts 'Go to references')
 
   -- Documentation
@@ -34,6 +33,11 @@ return function(bufnr)
   nnoremap('<leader>lwl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, returnOpts 'List workspace folders')
+
+  -- Inlay hints
+  nnoremap('<leader>lh', function()
+    vim.lsp.inlay_hint(0, nil)
+  end, returnOpts 'Set qflist')
 
   -- Diagnostics
   nnoremap('<leader>lq', vim.diagnostic.setqflist, returnOpts 'Set qflist')
