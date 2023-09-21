@@ -8,7 +8,6 @@ local M = {
     'nvim-treesitter/nvim-treesitter-context',
     'nvim-treesitter/nvim-treesitter-refactor',
     'Afourcat/treesitter-terraform-doc.nvim',
-    { 'cuducos/yaml.nvim', ft = 'yaml' },
     -- {
     --   'ckolkey/ts-node-action',
     --   config = function()

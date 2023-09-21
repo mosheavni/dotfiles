@@ -104,6 +104,7 @@ local M = {
     'nanotee/luv-vimdocs',
     event = 'VeryLazy',
   },
+  { 'cuducos/yaml.nvim', ft = 'yaml' },
 
   -----------------------------
   -- AI and smart completion --
