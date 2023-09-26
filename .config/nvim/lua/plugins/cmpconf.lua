@@ -46,6 +46,7 @@ M.config = function()
     buffer = '[Buffer]',
     copilot = '[CP]',
     git = '[Git]',
+    ['vim-dadbod-completion'] = '[DB]',
   }
 
   cmp.setup {
@@ -176,6 +177,18 @@ M.config = function()
     }),
   })
   require('cmp_git').setup()
+
+  local db_fts = { 'sql', 'mysql', 'plsql' }
+  for _, ft in ipairs(db_fts) do
+    cmp.setup.filetype(ft, {
+      sources = cmp.config.sources {
+        {
+          name = 'vim-dadbod-completion',
+          trigger_character = { '.', '"', '`', '[' },
+        },
+      },
+    })
+  end
 
   tabnine:setup {
     max_lines = 500,
