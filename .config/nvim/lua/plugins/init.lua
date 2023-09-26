@@ -259,6 +259,11 @@ local M = {
     cmd = 'CarbonNow',
     opts = { open_cmd = 'open' },
   },
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    cmd = { 'Oil' },
+  },
 
   --------------
   -- Quickfix --
@@ -338,6 +343,7 @@ local M = {
         remove_default_keybinds = true,
         inverses = {
           ['enable'] = 'disable',
+          ['internet-facing'] = 'internal',
         },
       }
       vim.keymap.set({ 'n', 'v' }, 'gs', require('nvim-toggler').toggle)
