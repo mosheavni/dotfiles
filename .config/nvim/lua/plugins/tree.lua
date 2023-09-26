@@ -1,5 +1,5 @@
 local M = {
-  'kyazdani42/nvim-tree.lua',
+  'nvim-tree/nvim-tree.lua',
   cmd = 'NvimTreeToggle',
   keys = { '<c-o>', '<leader>v' },
   dependencies = { 'kyazdani42/nvim-web-devicons' },
