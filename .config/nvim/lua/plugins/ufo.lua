@@ -4,8 +4,8 @@ local M = {
   event = 'BufReadPost',
 
   keys = {
-    { 'n', '<leader>fo', '<cmd>lua require("ufo").openAllFolds()<cr>' },
-    { 'n', '<leader>fc', '<cmd>lua require("ufo").closeAllFolds()<cr>' },
+    { '<leader>fo', '<cmd>lua require("ufo").openAllFolds()<cr>' },
+    { '<leader>fc', '<cmd>lua require("ufo").closeAllFolds()<cr>' },
   },
   opts = {},
 
