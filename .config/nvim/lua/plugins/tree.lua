@@ -1,10 +1,3 @@
-local M = {
-  'nvim-tree/nvim-tree.lua',
-  cmd = 'NvimTreeToggle',
-  keys = { '<c-o>', '<leader>v' },
-  dependencies = { 'kyazdani42/nvim-web-devicons' },
-}
-
 local function on_attach(bufnr)
   local api = require 'nvim-tree.api'
 
@@ -26,6 +19,7 @@ local function on_attach(bufnr)
   local function move_file_to()
     local node = api.tree.get_node_under_cursor()
     local file_src = node['absolute_path']
+    ---@diagnostic disable-next-line: redundant-parameter
     local file_out = vim.fn.input('MOVE TO: ', file_src, 'file')
     local dir = vim.fn.fnamemodify(file_out, ':h')
     vim.fn.system { 'mkdir', '-p', dir }
@@ -33,6 +27,13 @@ local function on_attach(bufnr)
   end
   vim.keymap.set('n', 'r', move_file_to, opts 'Move File To')
 end
+
+local M = {
+  'nvim-tree/nvim-tree.lua',
+  cmd = 'NvimTreeToggle',
+  keys = { '<c-o>', '<leader>v' },
+  dependencies = { 'kyazdani42/nvim-web-devicons' },
+}
 
 M.config = function()
   local nvim_tree = require 'nvim-tree'
@@ -74,7 +75,6 @@ M.config = function()
   }
 
   nnoremap('<leader>v', function()
-    local api = require 'nvim-tree.api'
     api.tree.find_file { open = true, focus = true }
   end)
   nnoremap('<c-o>', function()

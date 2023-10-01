@@ -1,21 +1,11 @@
+----------------------
+-- indent_blankline --
+----------------------
 local M = {
   'lukas-reineke/indent-blankline.nvim',
+  main = 'ibl',
   event = 'BufReadPre',
-}
-
-M.config = function()
-  ----------------------
-  -- indent_blankline --
-  ----------------------
-  -- vim.cmd [[highlight IndentBlanklineIndent1 guifg=#C678DD gui=nocombine]]
-  -- vim.cmd [[highlight IndentBlanklineIndent2 guifg=#E06C75 gui=nocombine]]
-  -- vim.cmd [[highlight IndentBlanklineIndent3 guifg=#E5C07B gui=nocombine]]
-  -- vim.cmd [[highlight IndentBlanklineIndent4 guifg=#98C379 gui=nocombine]]
-  -- vim.cmd [[highlight IndentBlanklineIndent5 guifg=#56B6C2 gui=nocombine]]
-  -- vim.cmd [[highlight IndentBlanklineIndent6 guifg=#61AFEF gui=nocombine]]
-
-  local indent_blankline = require 'indent_blankline'
-  indent_blankline.setup {
+  opts = {
     char = '┊',
     filetype_exclude = {
       'NvimTree',
@@ -47,7 +37,7 @@ M.config = function()
     --   'IndentBlanklineIndent5',
     --   'IndentBlanklineIndent6',
     -- },
-  }
-end
+  },
+}
 
 return M

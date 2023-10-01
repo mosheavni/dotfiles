@@ -30,9 +30,11 @@ local M = {
   {
     'rcarriga/nvim-notify',
     event = 'VeryLazy',
+    keys = {
+      { '<Leader>x', ":lua require('notify').dismiss()<cr>" },
+    },
     config = function()
       vim.notify = require 'notify'
-      nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
     end,
   },
   {

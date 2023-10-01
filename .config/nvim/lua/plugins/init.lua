@@ -1,7 +1,5 @@
 local utils = require 'user.utils'
 local nmap = utils.nmap
-local nnoremap = utils.nnoremap
-local xmap = utils.xmap
 
 local M = {
   -------------------
@@ -235,32 +233,31 @@ local M = {
   },
   {
     'junegunn/vim-easy-align',
-    keys = { { 'ga', nil, mode = { 'v', 'n' } } },
-    config = function()
-      nmap('ga', '<Plug>(EasyAlign)')
-    end,
+    keys = { { 'ga', '<Plug>(EasyAlign)', mode = { 'v', 'n' } } },
   },
   {
     'nguyenvukhang/nvim-toggler',
-    keys = { 'gs' },
-    config = function()
-      require('nvim-toggler').setup {
-        remove_default_keybinds = true,
-        inverses = {
-          ['enable'] = 'disable',
-          ['internet-facing'] = 'internal',
-        },
-      }
+    keys = {
+      { 'gs', nil, { 'n', 'v' } },
+    },
+    opts = {
+      remove_default_keybinds = true,
+      inverses = {
+        ['enable'] = 'disable',
+        ['internet-facing'] = 'internal',
+      },
+    },
+    config = function(_, opts)
+      require('nvim-toggler').setup(opts)
       vim.keymap.set({ 'n', 'v' }, 'gs', require('nvim-toggler').toggle)
     end,
   },
   {
     'ggandor/leap.nvim',
-    keys = { 's', 'S' },
-    config = function()
-      nnoremap('s', '<Plug>(leap-forward-to)', true)
-      nnoremap('S', '<Plug>(leap-backward-to)', true)
-    end,
+    keys = {
+      { 's', '<Plug>(leap-forward-to)' },
+      { 'S', '<Plug>(leap-backward-to)' },
+    },
   },
   {
     'windwp/nvim-ts-autotag',
@@ -283,15 +280,10 @@ local M = {
   {
     'vim-scripts/ReplaceWithRegister',
     keys = {
-      '<leader>p',
-      '<leader>P',
-      { '<leader>p', nil, mode = { 'x' } },
+      { '<leader>p', '<Plug>ReplaceWithRegisterOperator' },
+      { '<leader>P', '<Plug>ReplaceWithRegisterLine' },
+      { '<leader>p', '<Plug>ReplaceWithRegisterVisual', mode = { 'x' } },
     },
-    config = function()
-      nmap('<leader>p', '<Plug>ReplaceWithRegisterOperator')
-      nmap('<leader>P', '<Plug>ReplaceWithRegisterLine')
-      xmap('<leader>p', '<Plug>ReplaceWithRegisterVisual')
-    end,
   },
 
   -- DONE ✅

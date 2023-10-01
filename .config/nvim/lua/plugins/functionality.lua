@@ -56,17 +56,14 @@ local M = {
     keys = { '<C-e>' },
     config = function()
       vim.g.winresizer_vert_resize = 4
-      vim.g.winresizer_start_key = '<C-E>'
-      tnoremap('<C-E>', '<Esc><Cmd>WinResizerStartResize<CR>', true)
+      vim.g.winresizer_start_key = '<C-e>'
+      tnoremap('<C-e>', '<Esc><Cmd>WinResizerStartResize<CR>', true)
     end,
   },
   {
     'pechorin/any-jump.vim',
     cmd = { 'AnyJump', 'AnyJumpVisual' },
-    keys = { '<leader>j' },
-    config = function()
-      nnoremap('<leader>j', '<cmd>AnyJump<CR>')
-    end,
+    keys = { '<leader>j', '<cmd>AnyJump<CR>' },
   },
   {
     'kazhala/close-buffers.nvim',
@@ -110,23 +107,10 @@ local M = {
   },
   {
     'rmagatti/gx-extended.nvim',
+    keys = { 'gx' },
     opts = {
-      log_level = 'debug',
       open_fn = require('lazy.util').open,
-      extensions = {
-        { -- match github repos in lazy.nvim plugin specs
-          patterns = { '*/plugins/**/*.lua' },
-          name = 'neovim plugins',
-          match_to_url = function(line_string)
-            local line = string.match(line_string, '["|\'].*/.*["|\']')
-            local repo = vim.split(line, ':')[1]:gsub('["|\']', '')
-            local url = 'https://github.com/' .. repo
-            return line and repo and url or nil
-          end,
-        },
-      },
     },
-    -- keys = { 'gx' },
   },
   -- {
   --   'sontungexpt/url-open',

@@ -1,26 +1,21 @@
 local M = {
   'gbprod/yanky.nvim',
   dependencies = { 'kkharji/sqlite.lua' },
-  keys = { 'yy', 'p', '<c-n>', '<c-m>' },
-}
-
-M.config = function()
-  local utils = require 'user.utils'
-  local nmap = utils.nmap
-  require('yanky').setup {
+  keys = {
+    'yy',
+    { 'p', '<Plug>(YankyPutAfter)', mode = { 'n', 'x' } },
+    { 'P', '<Plug>(YankyPutAfter)', mode = { 'n', 'x' } },
+    { '<c-n>', '<Plug>(YankyCycleForward)' },
+    { '<c-m>', '<Plug>(YankyCycleBackward)' },
+  },
+  opts = {
     ring = {
       history_length = 100,
       storage = 'sqlite',
       sync_with_numbered_registers = true,
       cancel_event = 'update',
     },
-  }
-  vim.keymap.set({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)')
-  vim.keymap.set({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)')
-  -- keymap({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
-  -- keymap({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
-  nmap('<c-n>', '<Plug>(YankyCycleForward)')
-  nmap('<c-m>', '<Plug>(YankyCycleBackward)')
-end
+  },
+}
 
 return M
