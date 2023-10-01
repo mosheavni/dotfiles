@@ -1,6 +1,3 @@
-local utils = require 'user.utils'
-local inoremap = utils.inoremap
-local nmap = utils.nmap
 -----------------
 -- Look & Feel --
 -----------------
@@ -14,7 +11,7 @@ local M = {
           telescope = require('telescope.themes').get_dropdown {
             layout_config = {
               width = 0.4,
-              height = 0.8,
+              -- height = 0.8,
             },
           },
         },
