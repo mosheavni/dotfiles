@@ -14,6 +14,7 @@ export PATH="/usr/local/sbin:$PATH"
 # export PATH="/usr/local/opt/node@16/bin:$PATH"
 export PATH="$HOME/.local/share/neovim/bin:$PATH" # for bob
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+export PATH="/usr/local/opt/postgresql@15/bin:$PATH"
 
 # ####### #
 #  Pyenv  #
