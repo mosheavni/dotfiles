@@ -170,6 +170,7 @@ alias lvim='NVIM_APPNAME=LazyVim nvim'
 alias sed=gsed
 alias grep=ggrep
 alias sort=gsort
+alias awk=gawk
 alias myip='curl ipv4.icanhazip.com'
 
 alias dotfiles='cd ~/Repos/dotfiles'
