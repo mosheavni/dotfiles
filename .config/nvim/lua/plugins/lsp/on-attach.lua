@@ -44,21 +44,21 @@ local default_on_attach = function(client, bufnr)
       command = 'silent! lua vim.lsp.buf.clear_references()',
     })
   end
-  local diagnostic_pop = augroup 'DiagnosticPop'
-  autocmd('CursorHold', {
-    buffer = bufnr,
-    group = diagnostic_pop,
-    callback = function()
-      vim.diagnostic.open_float(nil, {
-        focusable = false,
-        close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
-        border = 'rounded',
-        source = 'always',
-        prefix = ' ',
-        scope = 'cursor',
-      })
-    end,
-  })
+  -- local diagnostic_pop = augroup 'DiagnosticPop'
+  -- autocmd('CursorHold', {
+  --   buffer = bufnr,
+  --   group = diagnostic_pop,
+  --   callback = function()
+  --     vim.diagnostic.open_float(nil, {
+  --       focusable = false,
+  --       close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
+  --       border = 'rounded',
+  --       source = 'always',
+  --       prefix = ' ',
+  --       scope = 'cursor',
+  --     })
+  --   end,
+  -- })
 
   ----------------------------------
   -- Enable tag jump based on LSP --

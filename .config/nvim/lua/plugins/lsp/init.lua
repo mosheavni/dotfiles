@@ -87,6 +87,7 @@ local M = {
   },
   dependencies = {
     'nvimtools/none-ls.nvim',
+    'hinell/lsp-timeout.nvim',
     'folke/lsp-colors.nvim',
     'williamboman/mason-lspconfig.nvim',
     'nanotee/nvim-lsp-basics',
@@ -175,6 +176,13 @@ M.config = function(_, opts)
     opts.capabilities or {}
   )
 
+  -----------------
+  -- Diagnostics --
+  -----------------
+  vim.diagnostic.config {
+    update_in_insert = false,
+  }
+
   local function setup(server)
     local server_opts = vim.tbl_deep_extend('force', {
       capabilities = vim.deepcopy(capabilities),
@@ -217,7 +225,7 @@ M.config = function(_, opts)
   end
 end
 
-local M2 = {
+local Mason = {
   'williamboman/mason.nvim',
   cmd = 'Mason',
   keys = { { '<leader>cm', '<cmd>Mason<cr>', desc = 'Mason' } },
@@ -229,4 +237,4 @@ local M2 = {
   },
 }
 
-return { M, M2 }
+return { M, Mason }

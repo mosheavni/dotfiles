@@ -96,12 +96,14 @@ M.config = function()
           -- Lsp server name .
           function()
             local msg = 'No Active Lsp'
+            ---@diagnostic disable-next-line: deprecated
             local clients = vim.lsp.get_active_clients { bufnr = 0 }
             if #clients == 0 then
               return msg
             end
             local all_client_names = {}
             for _, client in ipairs(clients) do
+              ---@diagnostic disable-next-line: undefined-field
               table.insert(all_client_names, client.name)
             end
             return table.concat(all_client_names, ', ')

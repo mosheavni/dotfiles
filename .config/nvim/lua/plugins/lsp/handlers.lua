@@ -14,13 +14,6 @@ M.setup = function()
     end
   end
 
-  vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-    update_in_insert = true,
-    virtual_text = false,
-    signs = true,
-    underline = true,
-  })
-
   local border = {
     '╔',
     '═',
@@ -50,8 +43,10 @@ M.setup = function()
       'INFO',
       'DEBUG',
     })[result.type]
+    ---@diagnostic disable-next-line: param-type-mismatch
     vim.notify({ result.message }, lvl, {
-      title = 'LSP | ' .. client.name,
+      ---@diagnostic disable-next-line: undefined-field, need-check-nil
+      title = 'LSP | ' .. (client.name or ''),
       timeout = 10000,
       keep = function()
         return lvl == 'ERROR' or lvl == 'WARN'
