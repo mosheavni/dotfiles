@@ -17,7 +17,9 @@ local M = {
     event = 'VeryLazy', -- keep for lazy loading
     config = function()
       vim.cmd [[hi! link MatchParen TabLineSel]]
-      require('sentiment').setup {}
+      require('sentiment').setup {
+        excluded_filetypes = { 'fugitive' },
+      }
     end,
   },
   {
