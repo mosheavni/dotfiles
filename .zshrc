@@ -92,6 +92,10 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 compdef tf='terraform'
 compdef tg='terraform'
 compdef terragrunt='terraform'
+function get_cluster_short() {
+  awk -F/ '{print $NF}' <<<"$1"
+}
+KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
 
 # ===================== #
 # Aliases and Functions #
