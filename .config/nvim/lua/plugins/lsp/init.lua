@@ -87,7 +87,6 @@ local M = {
   },
   dependencies = {
     'nvimtools/none-ls.nvim',
-    'hinell/lsp-timeout.nvim',
     'folke/lsp-colors.nvim',
     'williamboman/mason-lspconfig.nvim',
     'nanotee/nvim-lsp-basics',
