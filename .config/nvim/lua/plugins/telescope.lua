@@ -44,6 +44,9 @@ M.config = function()
           },
         },
       },
+      oldfiles = {
+        only_cwd = true,
+      },
       find_files = {
         find_command = {
           'rg',
@@ -78,8 +81,8 @@ M.config = function()
   nnoremap('<leader>hh', function()
     require('telescope.builtin').help_tags()
   end)
-  nnoremap('<leader>hr', function()
-    require('telescope.builtin').oldfiles().pick()
+  nnoremap('<leader>i', function()
+    require('telescope.builtin').oldfiles()
   end)
   nnoremap('<leader>/', function()
     -- You can pass additional configuration to telescope to change theme, layout, etc.
