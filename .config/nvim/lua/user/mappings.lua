@@ -137,6 +137,8 @@ nnoremap(']l', ':lnext<cr>zz', true)
 nnoremap('[l', ':lprev<cr>zz', true)
 nnoremap(']t', ':tabnext<cr>zz', true)
 nnoremap('[t', ':tabprev<cr>zz', true)
+nnoremap(']b', ':bnext<cr>', true)
+nnoremap('[b', ':bprev<cr>', true)
 
 -- This creates a new line of '=' signs the same length of the line
 nnoremap('<leader>=', 'yypVr=')
