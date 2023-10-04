@@ -35,6 +35,10 @@ local M = {
     end,
   },
   {
+    'luukvbaal/statuscol.nvim',
+    opts = {},
+  },
+  {
     'RRethy/vim-illuminate',
     event = 'BufReadPost',
   },
