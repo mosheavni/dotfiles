@@ -4,7 +4,7 @@ M.config = {
     notify = false,
   },
   ui = {
-    border = 'rounded',
+    border = require('user.utils').float_border,
     custom_keys = {
       ['<localleader>l'] = function(plugin)
         require('lazy.util').open_cmd({ 'git', 'log' }, {

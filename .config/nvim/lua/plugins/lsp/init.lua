@@ -180,6 +180,13 @@ M.config = function(_, opts)
   -----------------
   vim.diagnostic.config {
     update_in_insert = false,
+    -- underline = {
+    --   severity = { max = vim.diagnostic.severity.INFO },
+    -- },
+    virtual_text = {
+      severity = { min = vim.diagnostic.severity.WARN },
+    },
+    float = { border = require('user.utils').float_border },
   }
 
   local function setup(server)
@@ -231,7 +238,7 @@ local Mason = {
   build = ':MasonUpdate',
   opts = {
     ui = {
-      border = 'rounded',
+      border = require('user.utils').float_border,
     },
   },
 }

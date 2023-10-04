@@ -99,4 +99,14 @@ M.pretty_print = function(message, title, icon)
   vim.notify(message, 2, { title = title, icon = '' })
 end
 
+-- borders
+M.borders = {
+  double_rounded = { '╔', '═', '╗', '║', '╝', '═', '╚', '║' },
+  single_rounded = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
+  double_sharp = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' },
+  single_sharp = { '┌', '─', '┐', '│', '┘', '─', '└', '│' },
+}
+-- M.float_border = M.single_border_rounded
+M.float_border = M.borders.single_rounded
+
 return M
