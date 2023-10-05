@@ -11,17 +11,17 @@ local M = {
     keys = { '%' },
     config = true,
   },
-  {
-    'utilyre/sentiment.nvim',
-    version = '*',
-    event = 'VeryLazy', -- keep for lazy loading
-    config = function()
-      vim.cmd [[hi! link MatchParen TabLineSel]]
-      require('sentiment').setup {
-        excluded_filetypes = { 'fugitive' },
-      }
-    end,
-  },
+  -- {
+  --   'utilyre/sentiment.nvim',
+  --   version = '*',
+  --   event = 'VeryLazy', -- keep for lazy loading
+  --   config = function()
+  --     vim.cmd [[hi! link MatchParen TabLineSel]]
+  --     require('sentiment').setup {
+  --       excluded_filetypes = { 'fugitive' },
+  --     }
+  --   end,
+  -- },
   {
     'kiran94/s3edit.nvim',
     cmd = 'S3Edit',

@@ -36,6 +36,7 @@ local M = {
   },
   {
     'luukvbaal/statuscol.nvim',
+    event = 'VeryLazy',
     opts = {},
   },
   {
