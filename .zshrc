@@ -124,3 +124,5 @@ export KUBECONFIG=$HOME/.kube/config
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
+
+# . /usr/local/opt/asdf/libexec/asdf.sh

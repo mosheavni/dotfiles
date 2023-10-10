@@ -87,6 +87,7 @@ local M = {
   },
   dependencies = {
     'nvimtools/none-ls.nvim',
+    'mfussenegger/nvim-jdtls',
     'folke/lsp-colors.nvim',
     'williamboman/mason-lspconfig.nvim',
     'nanotee/nvim-lsp-basics',

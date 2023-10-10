@@ -160,9 +160,18 @@ local M = {
     on_attach = default_on_attach,
   },
 
-  -- jdtls = {
-  --   on_attach = default_on_attach,
-  -- },
+  jdtls = {
+    on_attach = function(c, b)
+      require('jdtls.setup').add_commands()
+      require('jdtls').setup_dap()
+      require('lsp-status').register_progress()
+      default_on_attach(c, b)
+    end,
+    settings = {
+      filetypes = { 'kotlin', 'java' },
+      workspace = { checkThirdParty = false },
+    },
+  },
 
   helm_ls = {
     on_attach = default_on_attach,
