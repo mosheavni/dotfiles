@@ -5,6 +5,7 @@ zmodload zsh/zprof
 # ================ #
 
 # Additional PATHs
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
@@ -15,13 +16,12 @@ export PATH="/usr/local/sbin:$PATH"
 export PATH="$HOME/.local/share/neovim/bin:$PATH" # for bob
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 
-# ####### #
-#  Pyenv  #
-# ####### #
-# export PYENV_ROOT="$HOME/.pyenv"
-# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init -)"
-# eval "$(pyenv virtualenv-init -)"
+# =========== #
+# Pyenv Setup #
+# =========== #
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="mosherussell"

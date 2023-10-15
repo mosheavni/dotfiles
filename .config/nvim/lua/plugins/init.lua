@@ -104,6 +104,7 @@ local M = {
   --   'towolf/vim-helm',
   --   ft = { 'yaml', 'yaml.gotexttmpl' },
   -- },
+  { 'cuducos/yaml.nvim', ft = 'yaml' },
   {
     'phelipetls/jsonpath.nvim',
     ft = 'json',
