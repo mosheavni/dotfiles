@@ -71,13 +71,13 @@ plugins=(
   helm
   kube-ps1
   kubectl
-  kubetail
   terraform
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
 
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+fpath+=$(brew --prefix)/share/zsh/site-functions
 source $ZSH/oh-my-zsh.sh
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
