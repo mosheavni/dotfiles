@@ -87,7 +87,7 @@ vim.opt.cpoptions:append '>'
 vim.o.equalalways = true -- When splitting window, make new window same size
 vim.o.history = 1000
 vim.o.termguicolors = true
-vim.o.signcolumn = 'number'
+vim.o.signcolumn = 'yes'
 -- require 'user.winbar'
 -- opt.winbar = "%{%v:lua.require'user.winbar'.eval()%}"
 -- vim.o.statuscolumn = '%=%{v:wrap?"":v:relnum?v:relnum:v:lnum} %s%C'
