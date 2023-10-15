@@ -80,11 +80,14 @@ local M = {
 
         -- Make sure helm_ls is installed
         -- require '.core.helm-ls-downloader'
+        return true
       end,
+      docker_compose_language_service = function() end,
     },
   },
   dependencies = {
-    'jose-elias-alvarez/null-ls.nvim',
+    'nvimtools/none-ls.nvim',
+    'mfussenegger/nvim-jdtls',
     'folke/lsp-colors.nvim',
     'williamboman/mason-lspconfig.nvim',
     'nanotee/nvim-lsp-basics',
@@ -100,7 +103,7 @@ local M = {
       end,
     },
     'b0o/SchemaStore.nvim',
-    { 'folke/neodev.nvim', config = true },
+    { 'folke/neodev.nvim', opts = {} },
     {
       'someone-stole-my-name/yaml-companion.nvim',
       config = function()
@@ -173,6 +176,20 @@ M.config = function(_, opts)
     opts.capabilities or {}
   )
 
+  -----------------
+  -- Diagnostics --
+  -----------------
+  vim.diagnostic.config {
+    update_in_insert = false,
+    -- underline = {
+    --   severity = { max = vim.diagnostic.severity.INFO },
+    -- },
+    virtual_text = {
+      severity = { min = vim.diagnostic.severity.WARN },
+    },
+    float = { border = require('user.utils').float_border },
+  }
+
   local function setup(server)
     local server_opts = vim.tbl_deep_extend('force', {
       capabilities = vim.deepcopy(capabilities),
@@ -215,16 +232,16 @@ M.config = function(_, opts)
   end
 end
 
-local M2 = {
+local Mason = {
   'williamboman/mason.nvim',
   cmd = 'Mason',
   keys = { { '<leader>cm', '<cmd>Mason<cr>', desc = 'Mason' } },
   build = ':MasonUpdate',
   opts = {
     ui = {
-      border = 'rounded',
+      border = require('user.utils').float_border,
     },
   },
 }
 
-return { M, M2 }
+return { M, Mason }

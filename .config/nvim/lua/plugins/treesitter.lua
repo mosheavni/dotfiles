@@ -50,6 +50,9 @@ M.config = function()
       'comment',
       'dockerfile',
       'embedded_template',
+      'git_config',
+      'gitcommit',
+      'gitignore',
       'go',
       'hcl',
       'hjson',
@@ -67,11 +70,14 @@ M.config = function()
       'query',
       'regex',
       'scss',
+      'ssh_config',
       'terraform',
       'toml',
       'tsx',
       'typescript',
       'vim',
+      'vimdoc',
+      'xml',
       'yaml',
     },
     incremental_selection = {
@@ -114,11 +120,11 @@ M.config = function()
         set_jumps = true, -- whether to set jumps in the jumplist
         goto_next_start = {
           [']m'] = '@function.outer',
-          [']]'] = '@class.outer',
+          [']]'] = '@block.outer',
         },
         goto_next_end = {
           [']M'] = '@function.outer',
-          [']['] = '@class.outer',
+          [']['] = '@block.outer',
         },
         goto_previous_start = {
           ['[m'] = '@function.outer',
@@ -126,7 +132,7 @@ M.config = function()
         },
         goto_previous_end = {
           ['[M'] = '@function.outer',
-          ['[]'] = '@class.outer',
+          ['[]'] = '@block.outer',
         },
       },
     },
@@ -147,6 +153,36 @@ M.config = function()
 
   vim.opt.foldmethod = 'expr'
   vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+  local function get_custom_foldtxt_suffix(foldstart)
+    local fold_suffix_str = string.format('  %s [%s lines]', '⋯', vim.v.foldend - foldstart + 1)
+
+    return { fold_suffix_str, 'Folded' }
+  end
+
+  local function get_custom_foldtext(foldtxt_suffix, foldstart)
+    local line = vim.api.nvim_buf_get_lines(0, foldstart - 1, foldstart, false)[1]
+
+    return {
+      { line, 'Normal' },
+      foldtxt_suffix,
+    }
+  end
+
+  _G.get_foldtext = function()
+    local foldstart = vim.v.foldstart
+    local ts_foldtxt = vim.treesitter.foldtext()
+    local foldtxt_suffix = get_custom_foldtxt_suffix(foldstart)
+
+    if type(ts_foldtxt) == 'string' then
+      return get_custom_foldtext(foldtxt_suffix, foldstart)
+    else
+      table.insert(ts_foldtxt, foldtxt_suffix)
+      return ts_foldtxt
+    end
+  end
+
+  vim.opt.foldtext = 'v:lua.get_foldtext()'
+  -- vim.opt.foldtext = 'v:lua.vim.treesitter.foldtext()'
 
   -- Treesitter context
   local ts_context = require 'treesitter-context'

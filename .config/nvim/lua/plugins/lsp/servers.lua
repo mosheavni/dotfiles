@@ -102,7 +102,7 @@ local M = {
         },
         workspace = {
           -- Make the server aware of Neovim runtime files
-          library = vim.api.nvim_get_runtime_file('', true),
+          library = {},
           checkThirdParty = false,
         },
         telemetry = { enable = false },
@@ -119,15 +119,38 @@ local M = {
   },
 
   tsserver = {
-    init_options = {
+    settings = {
       preferences = {
         allowRenameOfImportPath = true,
-        disableSuggestions = true,
+        disableSuggestions = false,
         importModuleSpecifierEnding = 'auto',
         importModuleSpecifierPreference = 'non-relative',
         includeCompletionsForImportStatements = true,
         includeCompletionsForModuleExports = true,
         quotePreference = 'single',
+      },
+      -- specify some or all of the following settings if you want to adjust the default behavior
+      javascript = {
+        inlayHints = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
+      },
+      typescript = {
+        inlayHints = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
       },
     },
     on_attach = default_on_attach,
@@ -137,9 +160,18 @@ local M = {
     on_attach = default_on_attach,
   },
 
-  -- jdtls = {
-  --   on_attach = default_on_attach,
-  -- },
+  jdtls = {
+    on_attach = function(c, b)
+      require('jdtls.setup').add_commands()
+      require('jdtls').setup_dap()
+      require('lsp-status').register_progress()
+      default_on_attach(c, b)
+    end,
+    settings = {
+      filetypes = { 'kotlin', 'java' },
+      workspace = { checkThirdParty = false },
+    },
+  },
 
   helm_ls = {
     on_attach = default_on_attach,

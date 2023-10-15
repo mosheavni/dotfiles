@@ -1,13 +1,7 @@
 local M = {
   'lewis6991/gitsigns.nvim',
   event = 'BufReadPre',
-}
-
-M.config = function()
-  local gitsigns = require 'gitsigns'
-
-  -- Gitsigns.nvim
-  gitsigns.setup {
+  opts = {
     on_attach = function(bufnr)
       local gs = package.loaded.gitsigns
 
@@ -58,7 +52,7 @@ M.config = function()
       -- Text object
       map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
     end,
-  }
-end
+  },
+}
 
 return M

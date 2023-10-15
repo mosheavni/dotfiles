@@ -15,6 +15,7 @@ export PATH="/usr/local/sbin:$PATH"
 # export PATH="/usr/local/opt/node@16/bin:$PATH"
 export PATH="$HOME/.local/share/neovim/bin:$PATH" # for bob
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+export PATH="/usr/local/opt/postgresql@15/bin:$PATH"
 
 # =========== #
 # Pyenv Setup #
@@ -91,6 +92,10 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 compdef tf='terraform'
 compdef tg='terraform'
 compdef terragrunt='terraform'
+function get_cluster_short() {
+  awk -F/ '{print $NF}' <<<"$1"
+}
+KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
 
 # ===================== #
 # Aliases and Functions #
@@ -119,3 +124,5 @@ export KUBECONFIG=$HOME/.kube/config
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
+
+# . /usr/local/opt/asdf/libexec/asdf.sh

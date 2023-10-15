@@ -1,10 +1,5 @@
 local utils = require 'user.utils'
-local inoremap = utils.inoremap
 local nmap = utils.nmap
-local nnoremap = utils.nnoremap
-local tnoremap = utils.tnoremap
-local vnoremap = utils.vnoremap
-local xmap = utils.xmap
 
 local M = {
   -------------------
@@ -46,30 +41,6 @@ local M = {
   {
     'dstein64/vim-startuptime',
     cmd = 'StartupTime',
-  },
-
-  ---------
-  -- Git --
-  ---------
-  {
-    'mosheavni/vim-to-github',
-    cmd = { 'ToGithub' },
-  },
-  {
-    'sindrets/diffview.nvim',
-    dependencies = 'nvim-lua/plenary.nvim',
-    cmd = {
-      'DiffviewClose',
-      'DiffviewFileHistory',
-      'DiffviewFocusFiles',
-      'DiffviewLog',
-      'DiffviewOpen',
-      'DiffviewRefresh',
-      'DiffviewToggleFiles',
-    },
-    config = function()
-      require 'diffview'
-    end,
   },
 
   ------------------------------------
@@ -129,17 +100,7 @@ local M = {
     'nanotee/luv-vimdocs',
     event = 'VeryLazy',
   },
-
-  ----------------
-  -- Completion --
-  ----------------
-  {
-    'phenomenes/ansible-snippets',
-    ft = { 'ansible', 'yaml.ansible' },
-    config = function()
-      vim.g['ansible_goto_role_paths'] = '.;,roles;'
-    end,
-  },
+  { 'cuducos/yaml.nvim', ft = 'yaml' },
 
   -----------------------------
   -- AI and smart completion --
@@ -183,133 +144,36 @@ local M = {
       end)
     end,
   },
-  {
-    'aduros/ai.vim',
-    cmd = 'AI',
-    config = function()
-      vim.g.ai_no_mappings = true
-      nnoremap('<M-a>', ':AI ')
-      vnoremap('<M-a>', ':AI ')
-      inoremap('<M-a>', '<Esc>:AI<CR>a')
-    end,
-  },
-  {
-    'jackMort/ChatGPT.nvim',
-    config = true,
-    dependencies = {
-      'MunifTanjim/nui.nvim',
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
-    },
-    cmd = 'ChatGPT',
-  },
-
-  -------------------------
-  -- Functionality Tools --
-  -------------------------
-  {
-    'monkoose/matchparen.nvim',
-    keys = { '%' },
-    config = true,
-  },
-  {
-    'kiran94/s3edit.nvim',
-    cmd = 'S3Edit',
-    config = true,
-  },
-  {
-    'voldikss/vim-floaterm',
-    keys = { 'F6', 'F7', 'F8' },
-    cmd = {
-      'FloatermFirst',
-      'FloatermHide',
-      'FloatermKill',
-      'FloatermLast',
-      'FloatermNew',
-      'FloatermNext',
-      'FloatermPrev',
-      'FloatermSend',
-      'FloatermShow',
-      'FloatermToggle',
-      'FloatermUpdate',
-    },
-    init = function()
-      nnoremap('<F6>', '<Cmd>FloatermToggle<CR>', true)
-      nnoremap('<F7>', '<Cmd>FloatermNew<CR>', true)
-      nnoremap('<F8>', '<Cmd>FloatermNext<CR>', true)
-      vim.g['floaterm_height'] = 0.9
-      vim.g['floaterm_keymap_new'] = '<F7>'
-      vim.g['floaterm_keymap_next'] = '<F8>'
-      vim.g['floaterm_keymap_toggle'] = '<F6>'
-      vim.g['floaterm_width'] = 0.7
-    end,
-  },
   -- {
-  --   'samjwill/nvim-unception',
-  --   event = 'VeryLazy',
+  --   'jackMort/ChatGPT.nvim',
+  --   config = true,
+  --   dependencies = {
+  --     'MunifTanjim/nui.nvim',
+  --     'nvim-lua/plenary.nvim',
+  --     'nvim-telescope/telescope.nvim',
+  --   },
+  --   cmd = 'ChatGPT',
   -- },
-  {
-    'mosheavni/vim-dirdiff',
-    cmd = { 'DirDiff' },
-  },
-  {
-    'simeji/winresizer',
-    keys = { '<C-e>' },
-    config = function()
-      vim.g.winresizer_vert_resize = 4
-      vim.g.winresizer_start_key = '<C-E>'
-      tnoremap('<C-E>', '<Esc><Cmd>WinResizerStartResize<CR>', true)
-    end,
-  },
-  {
-    'pechorin/any-jump.vim',
-    cmd = { 'AnyJump', 'AnyJumpVisual' },
-    keys = { '<leader>j' },
-    config = function()
-      nnoremap('<leader>j', '<cmd>AnyJump<CR>')
-    end,
-  },
-  {
-    'kazhala/close-buffers.nvim',
-    config = true,
-    cmd = { 'BDelete', 'BWipeout' },
-  },
-  {
-    'iamcco/markdown-preview.nvim',
-    build = 'cd app && yarn install',
-    config = function()
-      vim.g.mkdp_filetypes = { 'markdown' }
-    end,
-    cmd = 'MarkdownPreview',
-    ft = 'markdown',
-  },
-  {
-    'max397574/better-escape.nvim',
-    opts = {
-      mapping = { 'jk' },
-    },
-    event = 'InsertEnter',
-  },
-  {
-    'AndrewRadev/linediff.vim',
-    cmd = { 'Linediff' },
-  },
-  {
-    'nvim-pack/nvim-spectre',
-    keys = { { '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', desc = 'Start Spectre' } },
-  },
-  {
-    'ellisonleao/carbon-now.nvim',
-    lazy = true,
-    cmd = 'CarbonNow',
-    opts = { open_cmd = 'open' },
-  },
+  -- {
+  --   'dense-analysis/neural',
+  --   dependencies = {
+  --     'muniftanjim/nui.nvim',
+  --     'elpiloto/significant.nvim',
+  --   },
+  --   opts = {
+  --     source = {
+  --       openai = {
+  --         api_key = vim.env.OPENAI_API_KEY,
+  --       },
+  --     },
+  --   },
+  -- },
 
   --------------
   -- Quickfix --
   --------------
   {
-    url = 'https://gitlab.com/yorickpeterse/nvim-pqf.git',
+    'yorickpeterse/nvim-pqf',
     config = true,
     event = 'BufWinEnter',
     -- ft = 'qf',
@@ -322,57 +186,6 @@ local M = {
   {
     'kevinhwang91/nvim-bqf',
     ft = 'qf',
-  },
-
-  -----------------
-  -- Look & Feel --
-  -----------------
-  {
-    'rcarriga/nvim-notify',
-    event = 'VeryLazy',
-    config = function()
-      vim.notify = require 'notify'
-      nmap('<Leader>x', ":lua require('notify').dismiss()<cr>", true)
-    end,
-  },
-  {
-    'stevearc/dressing.nvim',
-    config = function()
-      require('dressing').setup {
-        select = {
-          telescope = require('telescope.themes').get_dropdown {
-            layout_config = {
-              width = 0.4,
-              height = 0.8,
-            },
-          },
-        },
-        input = {
-          enabled = true,
-          relative = 'editor',
-        },
-      }
-      vim.cmd [[hi link FloatTitle Normal]]
-    end,
-    event = 'VeryLazy',
-  },
-  {
-    'RRethy/vim-illuminate',
-    event = 'BufReadPost',
-  },
-
-  {
-    'kyazdani42/nvim-web-devicons',
-    lazy = true,
-  },
-  {
-    'vim-scripts/CursorLineCurrentWindow',
-    event = 'VeryLazy',
-  },
-  {
-    'norcalli/nvim-colorizer.lua',
-    config = true,
-    event = 'BufReadPre',
   },
 
   ------------
@@ -421,31 +234,31 @@ local M = {
   },
   {
     'junegunn/vim-easy-align',
-    keys = { { 'ga', nil, mode = { 'v', 'n' } } },
-    config = function()
-      nmap('ga', '<Plug>(EasyAlign)')
-    end,
+    keys = { { 'ga', '<Plug>(EasyAlign)', mode = { 'v', 'n' } } },
   },
   {
     'nguyenvukhang/nvim-toggler',
-    keys = { 'gs' },
-    config = function()
-      require('nvim-toggler').setup {
-        remove_default_keybinds = true,
-        inverses = {
-          ['enable'] = 'disable',
-        },
-      }
+    keys = {
+      { 'gs', nil, { 'n', 'v' } },
+    },
+    opts = {
+      remove_default_keybinds = true,
+      inverses = {
+        ['enable'] = 'disable',
+        ['internet-facing'] = 'internal',
+      },
+    },
+    config = function(_, opts)
+      require('nvim-toggler').setup(opts)
       vim.keymap.set({ 'n', 'v' }, 'gs', require('nvim-toggler').toggle)
     end,
   },
   {
     'ggandor/leap.nvim',
-    keys = { 's', 'S' },
-    config = function()
-      nnoremap('s', '<Plug>(leap-forward-to)', true)
-      nnoremap('S', '<Plug>(leap-backward-to)', true)
-    end,
+    keys = {
+      { 's', '<Plug>(leap-forward-to)' },
+      { 'S', '<Plug>(leap-backward-to)' },
+    },
   },
   {
     'windwp/nvim-ts-autotag',
@@ -468,15 +281,10 @@ local M = {
   {
     'vim-scripts/ReplaceWithRegister',
     keys = {
-      '<leader>p',
-      '<leader>P',
-      { '<leader>p', nil, mode = { 'x' } },
+      { '<leader>p', '<Plug>ReplaceWithRegisterOperator' },
+      { '<leader>P', '<Plug>ReplaceWithRegisterLine' },
+      { '<leader>p', '<Plug>ReplaceWithRegisterVisual', mode = { 'x' } },
     },
-    config = function()
-      nmap('<leader>p', '<Plug>ReplaceWithRegisterOperator')
-      nmap('<leader>P', '<Plug>ReplaceWithRegisterLine')
-      xmap('<leader>p', '<Plug>ReplaceWithRegisterVisual')
-    end,
   },
 
   -- DONE ✅

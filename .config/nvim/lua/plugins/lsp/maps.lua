@@ -13,8 +13,7 @@ return function(bufnr)
   nnoremap('gp', '<cmd>Lspsaga peek_definition<CR>', returnOpts 'Peek definition')
   nnoremap('gy', vim.lsp.buf.type_definition, returnOpts 'Go to type definition')
   nnoremap('gi', vim.lsp.buf.implementation, returnOpts 'Go to implementation')
-  nnoremap('gR', '<cmd>lua vim.lsp.buf.references({ includeDeclaration = false })<CR>',
-    returnOpts 'Go to references (native)')
+  nnoremap('gR', '<cmd>lua vim.lsp.buf.references({ includeDeclaration = false })<CR>', returnOpts 'Go to references (native)')
   nnoremap('gr', '<cmd>Lspsaga finder<CR>', returnOpts 'Go to references')
 
   -- Documentation
@@ -35,6 +34,11 @@ return function(bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, returnOpts 'List workspace folders')
 
+  -- Inlay hints
+  nnoremap('<leader>lh', function()
+    vim.lsp.inlay_hint(0, nil)
+  end, returnOpts 'Set qflist')
+
   -- Diagnostics
   nnoremap('<leader>lq', vim.diagnostic.setqflist, returnOpts 'Set qflist')
   nnoremap('<leader>ld', vim.diagnostic.open_float, returnOpts 'Open diagnostics float window')
@@ -50,4 +54,7 @@ return function(bufnr)
   -- Code action
   nnoremap('<leader>la', vim.lsp.buf.code_action, returnOpts 'Code action')
   nnoremap('<leader>lx', vim.lsp.codelens.run, returnOpts 'Code lens')
+
+  -- code outline
+  nnoremap('<leader>o', ':Lspsaga outline<CR>', returnOpts 'Code lens')
 end

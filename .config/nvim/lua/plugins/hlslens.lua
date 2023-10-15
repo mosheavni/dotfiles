@@ -1,14 +1,12 @@
 return {
   'kevinhwang91/nvim-hlslens',
-  keys = { '*', '#', 'n', 'N' },
-  config = function()
-    local nnoremap = require('user.utils').nnoremap
-    require('hlslens').setup()
-    nnoremap('n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
-    nnoremap('N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], true)
-    nnoremap('*', [[*<Cmd>lua require('hlslens').start()<CR>]], true)
-    nnoremap('#', [[#<Cmd>lua require('hlslens').start()<CR>]], true)
-    nnoremap('g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], true)
-    nnoremap('g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], true)
-  end,
+  keys = {
+    { 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>zz]] },
+    { 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>zz]] },
+    { '*', [[*<Cmd>lua require('hlslens').start()<CR>]] },
+    { '#', [[#<Cmd>lua require('hlslens').start()<CR>]] },
+    { 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]] },
+    { 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]] },
+  },
+  config = true,
 }

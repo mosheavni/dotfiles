@@ -1,53 +1,34 @@
+----------------------
+-- indent_blankline --
+----------------------
 local M = {
   'lukas-reineke/indent-blankline.nvim',
+  main = 'ibl',
   event = 'BufReadPre',
-}
-
-M.config = function()
-  ----------------------
-  -- indent_blankline --
-  ----------------------
-  -- vim.cmd [[highlight IndentBlanklineIndent1 guifg=#C678DD gui=nocombine]]
-  -- vim.cmd [[highlight IndentBlanklineIndent2 guifg=#E06C75 gui=nocombine]]
-  -- vim.cmd [[highlight IndentBlanklineIndent3 guifg=#E5C07B gui=nocombine]]
-  -- vim.cmd [[highlight IndentBlanklineIndent4 guifg=#98C379 gui=nocombine]]
-  -- vim.cmd [[highlight IndentBlanklineIndent5 guifg=#56B6C2 gui=nocombine]]
-  -- vim.cmd [[highlight IndentBlanklineIndent6 guifg=#61AFEF gui=nocombine]]
-
-  local indent_blankline = require 'indent_blankline'
-  indent_blankline.setup {
-    char = '┊',
-    filetype_exclude = {
-      'NvimTree',
-      'TelescopePrompt',
-      'TelescopeResults',
-      'alpha',
-      'dashboard',
-      'help',
-      'lazy',
-      'lspinfo',
-      'mason',
-      'noice',
-      'nvchad_cheatsheet',
-      'packer',
-      'terminal',
-      '',
+  opts = {
+    indent = {
+      char = '┊',
     },
-    buftype_exclude = { 'terminal' },
-    show_trailing_blankline_indent = false,
-    show_first_indent_level = false,
-    show_current_context = true,
-    show_current_context_start = true,
-    space_char_blankline = ' ',
-    -- char_highlight_list = {
-    --   'IndentBlanklineIndent1',
-    --   'IndentBlanklineIndent2',
-    --   'IndentBlanklineIndent3',
-    --   'IndentBlanklineIndent4',
-    --   'IndentBlanklineIndent5',
-    --   'IndentBlanklineIndent6',
-    -- },
-  }
-end
+    exclude = {
+      filetypes = {
+        'NvimTree',
+        'TelescopePrompt',
+        'TelescopeResults',
+        'alpha',
+        'dashboard',
+        'help',
+        'lazy',
+        'lspinfo',
+        'mason',
+        'noice',
+        'nvchad_cheatsheet',
+        'packer',
+        'terminal',
+        '',
+      },
+      buftypes = { 'terminal' },
+    },
+  },
+}
 
 return M

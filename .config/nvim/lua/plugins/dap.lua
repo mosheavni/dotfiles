@@ -33,8 +33,16 @@ M.config = function()
       'python',
     },
     automatic_setup = true,
+    handlers = {
+      function(config)
+        -- all sources with no handler get passed here
+
+        -- Keep original functionality
+        require('mason-nvim-dap').default_setup(config)
+      end,
+    },
   }
-  mason_nvim_dap.setup_handlers()
+  -- mason_nvim_dap.setup_handlers()
 
   local dap = require 'dap'
   require('telescope').load_extension 'dap'

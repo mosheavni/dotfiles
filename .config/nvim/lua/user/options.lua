@@ -14,11 +14,17 @@ vim.o.cursorcolumn = true
 vim.o.cursorline = true -- Add highlight behind current line
 vim.opt.shortmess:append { c = true, l = false, q = false, S = false, C = true, I = true }
 vim.o.list = true
-vim.opt.listchars = { tab = '┆·', trail = '·', precedes = '', extends = '', eol = '↲' }
+vim.opt.listchars = {
+  tab = '┆·',
+  -- trail = '·',
+  precedes = '',
+  extends = '',
+  eol = '↲',
+}
 -- set lcscope=tab:┆·,trail:·,precedes:,extends:
 vim.opt.fillchars = {
   vert = '|',
-  fold = '·',
+  fold = ' ',
   foldopen = '',
   foldclose = '',
 }
@@ -95,9 +101,20 @@ vim.opt.path:append { '**' }
 
 -- Folding
 vim.o.foldenable = true
-vim.o.foldmethod = 'syntax'
+-- vim.o.foldmethod = 'syntax'
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.o.foldlevel = 999
-vim.o.foldlevelstart = 10
+vim.o.foldlevelstart = 99
+vim.o.foldcolumn = '1' -- '0' is not bad
+vim.o.foldenable = true
+
+-- Support undercurl
+vim.cmd [[
+let &t_8u = "\e[58:2:%lu:%lu:%lum"
+let &t_Cs = "\e[4:3m"
+let &t_Ce = "\e[4:0m"
+]]
 
 -- j = Delete comment character when joining commented lines.
 -- t = auto break long lines
@@ -277,15 +294,16 @@ local default_plugins = {
   'getscriptPlugin',
   'gzip',
   'logipat',
-  -- 'netrw',
-  -- 'netrwPlugin',
-  'netrwSettings',
-  'netrwFileHandlers',
   'matchit',
-  'tar',
-  'tarPlugin',
+  'matchparen',
+  'netrw',
+  'netrwFileHandlers',
+  'netrwPlugin',
+  'netrwSettings',
   'rrhelper',
   'spellfile_plugin',
+  'tar',
+  'tarPlugin',
   'vimball',
   'vimballPlugin',
   'zip',

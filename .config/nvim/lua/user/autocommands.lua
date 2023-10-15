@@ -30,8 +30,8 @@ autocmd('UIEnter', {
   callback = function()
     vim.defer_fn(function()
       return vim.fn.filereadable 'startuptime.txt' == 1
-          and vim.notify(vim.fn.systemlist { 'tail', '-n3', 'startuptime.txt' })
-          and vim.fn.delete 'startuptime.txt'
+        and vim.notify(vim.fn.systemlist { 'tail', '-n3', 'startuptime.txt' })
+        and vim.fn.delete 'startuptime.txt'
     end, 1500)
   end,
 })
@@ -146,4 +146,29 @@ autocmd({ 'FileType' }, {
     -- "n", "<C-v>", :call <SID>OpenQuickfix("vnew")<CR>
     -- "n", "<C-x>", :call <SID>OpenQuickfix("split")<CR>
   end,
+})
+
+-- custom settings
+local CustomSettingsGroup = augroup 'CustomSettingsGroup'
+autocmd('BufWritePost', {
+  group = CustomSettingsGroup,
+  pattern = '*',
+  callback = function(args)
+    local shebang = vim.api.nvim_buf_get_lines(0, 0, 1, true)[1]
+    if not shebang or not shebang:match '^#!.+' then
+      return
+    end
+    local filename = vim.api.nvim_buf_get_name(args.buf)
+    ---@diagnostic disable-next-line: undefined-field
+    local fileinfo = vim.uv.fs_stat(filename)
+    if not fileinfo or bit.band(fileinfo.mode - 32768, 0x40) ~= 0 then
+      return
+    end
+
+    vim.notify 'File made executable'
+    ---@diagnostic disable-next-line: undefined-field
+    vim.uv.fs_chmod(filename, bit.bor(fileinfo.mode, 493))
+  end,
+  once = false,
+  desc = 'Mark script files with shebangs as executable on write.',
 })

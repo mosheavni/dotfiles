@@ -170,6 +170,7 @@ alias lvim='NVIM_APPNAME=LazyVim nvim'
 alias sed=gsed
 alias grep=ggrep
 alias sort=gsort
+alias awk=gawk
 alias myip='curl ipv4.icanhazip.com'
 
 alias dotfiles='cd ~/Repos/dotfiles'
@@ -217,6 +218,7 @@ alias kg='kubectl get '
 alias kd='kubectl describe '
 alias ke='kubectl edit '
 alias kdel='kubectl delete '
+alias kdelrs='kubectl delete rs '
 
 # Kubectl Persistent Volume
 alias kgpv='kubectl get persistentvolume'
@@ -247,4 +249,11 @@ function python-venv-init() {
   pyenv virtualenv $(pyenv global) ${PWD##*/}
   pyenv local ${PWD##*/}
   pyenv pyright
+}
+
+zip-code ()
+{
+  ZIP_CODE=$(curl -s 'https://www.zipy.co.il/api/findzip/getZip' -H 'content-type: text/plain;charset=UTF-8' -H 'referer: https://www.zipy.co.il/%D7%9E%D7%99%D7%A7%D7%95%D7%93/' --data-raw '{"city":"תל אביב","street":"פלורנטין","house":"2","remote":true}' | jq -r '.result.zip')
+  echo "$ZIP_CODE"
+  echo "$ZIP_CODE" | pbcopy
 }
