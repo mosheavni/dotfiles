@@ -42,6 +42,14 @@ toApprove.each {pending -&gt; ScriptApproval.get().approveScript(pending.getHash
 				<title>get all successful builds of job</title>
 				<content>return jenkins.model.Jenkins.instance.getJob(System.getenv(&apos;JOB_NAME&apos;)).builds.findAll{ it.result == hudson.model.Result.SUCCESS }.collect{ &quot;$it.number&quot; }</content>
 			</snippet>
+			<snippet>
+				<title>get all users</title>
+				<content>import hudson.model.User
+
+User.getAll().each { user -&gt;
+   println user
+}</content>
+			</snippet>
 		</snippets>
 	</folder>
 	<folder>
@@ -93,6 +101,20 @@ alias ll=&apos;ls -l --color&apos;</content>
 			<snippet>
 				<title>python http server</title>
 				<content>python3 -m http.server 9000</content>
+			</snippet>
+			<snippet>
+				<title>find java home</title>
+				<content>dirname $(dirname $(readlink -f $(which javac)))</content>
+			</snippet>
+			<snippet>
+				<title>ps alternative on docke</title>
+				<content>for i in /proc/*; do
+  [[ $i =~ /proc/[0-9] ]] || continue
+  echo &quot;==== $i ====&quot;
+  xargs -0 printf &apos;%s\n&apos; &lt;$i/cmdline
+done
+
+</content>
 			</snippet>
 		</snippets>
 	</folder>
@@ -168,6 +190,11 @@ alias ll=&apos;ls -l --color&apos;</content>
 			<snippet>
 				<title>find acm certificate</title>
 				<content>export CERT_SUBSTRING=internal &amp;&amp; aws acm list-certificates --query &apos;CertificateSummaryList[].{domain: DomainName,arn: CertificateArn}&apos; | jq -c &apos;.[] | select(.domain | contains($ENV.CERT_SUBSTRING))&apos; | column -t -s,</content>
+			</snippet>
+			<snippet>
+				<title>assume role with web identity (curl)</title>
+				<content>curl \
+  &quot;https://sts.${AWS_REGION}.amazonaws.com/?Action=AssumeRoleWithWebIdentity&amp;DurationSeconds=3600&amp;RoleArn=$AWS_ROLE_ARN&amp;WebIdentityToken=$(&lt; $AWS_WEB_IDENTITY_TOKEN_FILE)&amp;Version=2011-06-15&amp;RoleSessionName=spotinst-monitor&quot;</content>
 			</snippet>
 		</snippets>
 	</folder>
