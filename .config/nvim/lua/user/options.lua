@@ -315,7 +315,7 @@ end
 
 local kube_config_pattern = [[.*\.kube/config]]
 vim.filetype.add {
-  extension = { hcl = 'terraform' },
+  extension = { hcl = 'terraform', tfvars = 'terraform' },
   pattern = {
     ['.*/templates/.*%.yaml'] = {
       function()
