@@ -274,6 +274,9 @@ M.lsp = {
   ['Diagnostics quickfix list (<leader>lq)'] = function()
     vim.diagnostic.setqflist()
   end,
+  ['Clear Diagnostics'] = function()
+    vim.diagnostic.reset()
+  end,
 }
 
 M.random = {
