@@ -4,7 +4,7 @@ local M = {
   keys = {
     'yy',
     { 'p', '<Plug>(YankyPutAfter)', mode = { 'n', 'x' } },
-    { 'P', '<Plug>(YankyPutAfter)', mode = { 'n', 'x' } },
+    { 'P', '<Plug>(YankyPutBefore)', mode = { 'n', 'x' } },
     { '<c-n>', '<Plug>(YankyCycleForward)' },
     { '<c-m>', '<Plug>(YankyCycleBackward)' },
   },
