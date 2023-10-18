@@ -262,7 +262,7 @@ local M = {
   },
   {
     'windwp/nvim-ts-autotag',
-    ft = { 'html', 'javascript' },
+    ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml' },
   },
   {
     'axelvc/template-string.nvim',
