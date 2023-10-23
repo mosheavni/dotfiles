@@ -12,17 +12,9 @@ export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="$HOME/.bin:$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:${PATH}"
 export PATH="/usr/local/sbin:$PATH"
-# export PATH="/usr/local/opt/node@16/bin:$PATH"
 export PATH="$HOME/.local/share/neovim/bin:$PATH" # for bob
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 export PATH="/usr/local/opt/postgresql@15/bin:$PATH"
-
-# =========== #
-# Pyenv Setup #
-# =========== #
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
 
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="mosherussell"
@@ -58,6 +50,7 @@ setopt HIST_BEEP              # Beep when accessing nonexistent history.
 plugins=(
   ag
   aliases
+  asdf
   autoupdate
   aws
   branch
@@ -124,5 +117,3 @@ export KUBECONFIG=$HOME/.kube/config
 
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
-
-# . /usr/local/opt/asdf/libexec/asdf.sh
