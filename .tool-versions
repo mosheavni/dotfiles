@@ -1,3 +1,5 @@
-java corretto-8.382.05.1
+java corretto-21.0.1.12.1
 python 3.8.18
 golang 1.21.3
+neovim nightly
+nodejs 21.0.0
