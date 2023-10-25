@@ -12,8 +12,6 @@ export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="$HOME/.bin:$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:${PATH}"
 export PATH="/usr/local/sbin:$PATH"
-export PATH="$HOME/.local/share/neovim/bin:$PATH" # for bob
-export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 export PATH="/usr/local/opt/postgresql@15/bin:$PATH"
 
 export ZSH="$HOME/.oh-my-zsh"
