@@ -24,18 +24,18 @@ local M = {
             snippetSupport = true,
           },
         },
-        codeAction = {
-          dynamicRegistration = true,
-          codeActionLiteralSupport = {
-            codeActionKind = {
-              valueSet = (function()
-                local res = vim.tbl_values(vim.lsp.protocol.CodeActionKind)
-                table.sort(res)
-                return res
-              end)(),
-            },
-          },
-        },
+        -- codeAction = {
+        --   dynamicRegistration = true,
+        --   codeActionLiteralSupport = {
+        --     codeActionKind = {
+        --       valueSet = (function()
+        --         local res = vim.tbl_values(vim.lsp.protocol.CodeActionKind)
+        --         table.sort(res)
+        --         return res
+        --       end)(),
+        --     },
+        --   },
+        -- },
         foldingRange = {
           dynamicRegistration = false,
           lineFoldingOnly = true,
