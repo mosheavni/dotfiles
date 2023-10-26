@@ -251,3 +251,5 @@ zip-code ()
   echo "$ZIP_CODE"
   echo "$ZIP_CODE" | pbcopy
 }
+
+alias update-nvim-nightly='asdf uninstall neovim nightly && asdf install neovim nightly'

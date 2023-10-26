@@ -1,5 +1,8 @@
-java corretto-21.0.1.12.1
-python 3.8.18
+aws-sso-cli 1.9.9
+awscli 2.9.9
 golang 1.21.3
+java corretto-21.0.1.12.1
 neovim nightly
 nodejs 21.0.0
+python 3.8.18
+semver 3.4.0
