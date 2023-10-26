@@ -50,6 +50,15 @@ User.getAll().each { user -&gt;
    println user
 }</content>
 			</snippet>
+			<snippet>
+				<title>delete all offline nodes</title>
+				<content>for (aSlave in hudson.model.Hudson.instance.slaves) {
+    if (aSlave.getComputer().isOffline()) {
+        aSlave.getComputer().setTemporarilyOffline(true,null);
+        aSlave.getComputer().doDoDelete();
+    }
+}</content>
+			</snippet>
 		</snippets>
 	</folder>
 	<folder>
