@@ -286,6 +286,10 @@ local M = {
       { '<leader>p', '<Plug>ReplaceWithRegisterVisual', mode = { 'x' } },
     },
   },
+  {
+    'vidocqh/auto-indent.nvim',
+    opts = {},
+  },
 
   -- DONE ✅
 }
