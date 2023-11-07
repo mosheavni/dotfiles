@@ -102,10 +102,6 @@ local M = {
     cmd = { 'Linediff' },
   },
   {
-    'nvim-pack/nvim-spectre',
-    keys = { { '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', desc = 'Start Spectre' } },
-  },
-  {
     'ellisonleao/carbon-now.nvim',
     lazy = true,
     cmd = 'CarbonNow',
@@ -115,13 +111,6 @@ local M = {
     'stevearc/oil.nvim',
     opts = {},
     cmd = { 'Oil' },
-  },
-  {
-    'rmagatti/gx-extended.nvim',
-    keys = { 'gx' },
-    opts = {
-      open_fn = require('lazy.util').open,
-    },
   },
   {
     'rest-nvim/rest.nvim',
