@@ -238,8 +238,8 @@ nnoremap('<leader>fl', 'zazczA')
 nmap('<leader><cr>', [[:silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>]], true)
 
 -- Move vertically by visual line (don't skip wrapped lines)
-nmap('k', "v:count == 0 ? 'gk' : 'k'", opts.expr_silent)
-nmap('j', "v:count == 0 ? 'gj' : 'j'", opts.expr_silent)
+-- nmap('k', "v:count == 0 ? 'gk' : 'k'", opts.expr_silent)
+-- nmap('j', "v:count == 0 ? 'gj' : 'j'", opts.expr_silent)
 
 -- Scroll one line
 nnoremap('<PageUp>', '<c-y>', true)
@@ -504,8 +504,8 @@ local function indent_traverse(direction, equal)
     end
   end
 end
-vim.keymap.set({ 'n', 'v' }, 'gj', indent_traverse(1, true)) -- next equal indent
-vim.keymap.set({ 'n', 'v' }, 'gk', indent_traverse(-1, true)) -- previous equal indent
-
-vim.keymap.set({ 'n', 'v' }, 'gJ', indent_traverse(1, false)) -- next equal indent
-vim.keymap.set({ 'n', 'v' }, 'gK', indent_traverse(-1, false)) -- previous equal indent
+-- vim.keymap.set({ 'n', 'v' }, 'gj', indent_traverse(1, true)) -- next equal indent
+-- vim.keymap.set({ 'n', 'v' }, 'gk', indent_traverse(-1, true)) -- previous equal indent
+--
+-- vim.keymap.set({ 'n', 'v' }, 'gJ', indent_traverse(1, false)) -- next equal indent
+-- vim.keymap.set({ 'n', 'v' }, 'gK', indent_traverse(-1, false)) -- previous equal indent
