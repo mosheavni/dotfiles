@@ -176,7 +176,7 @@ endfunction
   -------------------------
   -- Create a new branch --
   -------------------------
-  local new_branch = function(branch_opts)
+  function _G.create_new_branch(branch_opts)
     if branch_opts.args ~= '' then
       return vim.cmd('Git checkout -b ' .. branch_opts.args)
     end
@@ -191,7 +191,7 @@ endfunction
       vim.cmd('Git checkout -b ' .. input)
     end)
   end
-  vim.api.nvim_create_user_command('Gcb', new_branch, { nargs = '?' })
+  vim.api.nvim_create_user_command('Gcb', _G.create_new_branch, { nargs = '?' })
   nmap('<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
   -- redir @">|silent scriptnames|redir END|enew|put
 

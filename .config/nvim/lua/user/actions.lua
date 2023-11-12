@@ -96,7 +96,7 @@ M.git = {
     require('user.git-branches').open()
   end,
   ['Checkout new branch (:Gcb {new_branch})'] = function()
-    new_branch { args = '' }
+    _G.create_new_branch { args = '' }
   end,
   ['Work in Progress commit (on git window - wip)'] = function()
     vim.cmd 'call Enter_Wip_Moshe()'
