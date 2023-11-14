@@ -277,6 +277,12 @@ M.lsp = {
   ['Clear Diagnostics'] = function()
     vim.diagnostic.reset()
   end,
+  ['Delete Log'] = function()
+    vim.fn.system { 'rm', '-rf', vim.lsp.get_log_path() }
+  end,
+  ['Add YAML Schema Modeline'] = function()
+    require('user.additional-schemas').init()
+  end,
 }
 
 M.random = {

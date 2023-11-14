@@ -52,6 +52,7 @@ local M = {
 
       yamlls = function(_, opts)
         local yaml_cfg = require('yaml-companion').setup {
+          schemas = opts.settings.yaml.schemas or {},
           builtin_matchers = {
             -- Detects Kubernetes files based on content
             kubernetes = { enabled = true },
