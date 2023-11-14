@@ -146,6 +146,7 @@ M.init = function()
 end
 
 M.config = function(_, opts)
+  require('user.menu').set_lsp_actions()
   require('plugins.lsp.handlers').setup()
 
   -- Set formatting of lsp log

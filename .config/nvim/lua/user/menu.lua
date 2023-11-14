@@ -3,9 +3,9 @@ local nmap = utils.nmap
 
 local M = {}
 M.git_actions = require('user.actions').git
-M.lsp_actions = require('user.actions').lsp
 M.random_actions = require('user.actions').random
 
+M.lsp_actions = {} -- require('user.actions').lsp
 M.dap_actions = {}
 
 -- add-prefix function
@@ -29,6 +29,11 @@ end
 
 M.set_dap_actions = function()
   M.dap_actions = require('user.actions').dap()
+  M.set_actions()
+end
+
+M.set_lsp_actions = function()
+  M.lsp_actions = require('user.actions').lsp
   M.set_actions()
 end
 
