@@ -288,6 +288,7 @@ local M = {
   },
   {
     'vidocqh/auto-indent.nvim',
+    event = 'InsertEnter',
     opts = {},
   },
 
