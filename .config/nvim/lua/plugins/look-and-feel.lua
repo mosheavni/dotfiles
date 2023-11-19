@@ -14,6 +14,11 @@ local M = {
     end,
   },
   {
+    'folke/twilight.nvim',
+    cmd = { 'Twilight', 'TwilightEnable', 'TwilightDisable' },
+    opts = {},
+  },
+  {
     'luukvbaal/statuscol.nvim',
     event = 'VeryLazy',
     config = function()
