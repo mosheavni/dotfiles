@@ -4,27 +4,6 @@
 
 local M = {
   {
-    'stevearc/dressing.nvim',
-    config = function()
-      require('dressing').setup {
-        select = {
-          telescope = require('telescope.themes').get_dropdown {
-            layout_config = {
-              width = 0.4,
-              -- height = 0.8,
-            },
-          },
-        },
-        input = {
-          enabled = true,
-          relative = 'editor',
-        },
-      }
-      vim.cmd [[hi link FloatTitle Normal]]
-    end,
-    event = 'VeryLazy',
-  },
-  {
     'rcarriga/nvim-notify',
     event = 'VeryLazy',
     keys = {
