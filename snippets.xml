@@ -59,6 +59,21 @@ User.getAll().each { user -&gt;
     }
 }</content>
 			</snippet>
+			<snippet>
+				<title>delete parameters</title>
+				<content>def all_jobs = [
+  &quot;spotinst/spot-aws-ec2-market-predictions-v2/main&quot;,
+]
+for (job in all_jobs) {
+  def props = Jenkins.instance.getItemByFullName(job).getProperty(ParametersDefinitionProperty.class)
+  if (props != null) {
+    def bntt_result = props.getParameterDefinitions().removeAll { &apos;BUILD_NUM_TO_TAG&apos; == it.name }
+    def dp_result   = props.getParameterDefinitions().removeAll { &apos;DEPLOY_PROD&apos; == it.name }
+    def bla_tests   = props.getParameterDefinitions().removeAll { &apos;ADD_TESTS_TO_RUN&apos; == it.name }
+    println &quot;bntt_result: ${bntt_result}\ndp_result: ${dp_result}\nbla_tests: ${bla_tests}&quot;
+  }
+}</content>
+			</snippet>
 		</snippets>
 	</folder>
 	<folder>
