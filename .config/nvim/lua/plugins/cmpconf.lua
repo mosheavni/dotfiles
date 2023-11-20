@@ -1,7 +1,7 @@
 local M = {
   'hrsh7th/nvim-cmp',
   version = false, -- last release is way too old
-  event = 'InsertEnter',
+  event = { 'InsertEnter', 'CmdlineEnter' },
   dependencies = {
     'rafamadriz/friendly-snippets',
     'L3MON4D3/LuaSnip',
@@ -196,23 +196,23 @@ M.config = function()
     sort = true,
   }
 
-  -- -- `/` cmdline setup.
-  -- cmp.setup.cmdline('/', {
-  --   mapping = cmp.mapping.preset.cmdline(),
-  --   sources = {
-  --     { name = 'buffer' },
-  --   },
-  -- })
-  --
-  -- -- `:` cmdline setup.
-  -- cmp.setup.cmdline(':', {
-  --   mapping = cmp.mapping.preset.cmdline(),
-  --   sources = cmp.config.sources({
-  --     { name = 'path' },
-  --   }, {
-  --     { name = 'cmdline' },
-  --   }),
-  -- })
+  -- `/` cmdline setup.
+  cmp.setup.cmdline('/', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = 'buffer' },
+    },
+  })
+
+  -- `:` cmdline setup.
+  cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = 'path' },
+    }, {
+      { name = 'cmdline' },
+    }),
+  })
 
   require('nvim-autopairs').setup {
     check_ts = true, -- treesitter integration
