@@ -68,7 +68,7 @@ local M = {
     ft = 'nginx',
   },
   {
-    'mosheavni/vim-kubernetes',
+    'andrewstuart/vim-kubernetes',
     event = 'VeryLazy',
   },
   -- {
