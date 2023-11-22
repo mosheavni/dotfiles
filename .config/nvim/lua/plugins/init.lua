@@ -295,6 +295,6 @@ local M = {
   -- DONE ✅
 }
 
-nmap('<leader>z', ':Lazy<CR>', true)
+nmap('<leader>z', '<cmd>Lazy<CR>', true)
 
 return M
