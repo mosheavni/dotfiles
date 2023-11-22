@@ -330,5 +330,13 @@ vim.filetype.add {
     ['.*/playbooks?/.*%.ya?ml'] = { 'yaml.ansible', { priority = 201 } },
     ['playbook%.ya?ml'] = { 'yaml.ansible', { priority = 201 } },
     [kube_config_pattern] = 'yaml',
+    ['.*'] = {
+      function()
+        if vim.fn.search('---', 'nw') then
+          return 'yaml'
+        end
+      end,
+      { priority = 200 },
+    },
   },
 }
