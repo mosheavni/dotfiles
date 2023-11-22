@@ -8,3 +8,4 @@ python 3.8.18
 semver 3.4.0
 mysql 8.0.34
 helm 3.13.2
+kubectl 1.25.6
