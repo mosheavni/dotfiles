@@ -5,7 +5,7 @@ local M = {
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
   },
   cmd = 'Telescope',
-  keys = { '<c-p>', '<c-b>', '<F4>', '<leader>hh', '<leader>/', '<leader>fp' },
+  keys = { '<c-p>', '<c-b>', '<F4>', '<leader>hh', '<leader>/', '<leader>fp', '<leader>i' },
 }
 
 M.config = function()
