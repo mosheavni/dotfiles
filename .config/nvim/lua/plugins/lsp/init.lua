@@ -9,6 +9,8 @@ function _G.lsp_tmp_write(should_delete)
       command = 'delete("' .. tmp .. '")',
     })
   end
+  -- load lsp
+  require 'lspconfig'
   return tmp
 end
 
