@@ -1,12 +1,9 @@
 local utils = require 'user.utils'
 local nmap = utils.nmap
 
-local M = {}
-M.git_actions = require('user.actions').git
-M.random_actions = require('user.actions').random
-
-M.lsp_actions = {} -- require('user.actions').lsp
-M.dap_actions = {}
+local M = {
+  actions = require 'user.actions',
+}
 
 -- add-prefix function
 -- receives a table of functions and returns a table of functions with the
@@ -14,31 +11,26 @@ M.dap_actions = {}
 local function add_prefix(actions, prefix)
   local prefixed_actions = {}
   for k, v in pairs(actions) do
-    prefixed_actions[prefix .. ' - ' .. k] = v
+    prefixed_actions['[' .. prefix .. '] ' .. k] = v
   end
   return prefixed_actions
+end
+
+M.add_actions = function(prefix, actions)
+  local actions_prefixed = {}
+  if prefix ~= nil then
+    actions_prefixed = add_prefix(actions, prefix)
+  else
+    actions_prefixed = actions
+  end
+  M.actions = vim.tbl_extend('force', M.actions, actions_prefixed)
 end
 
 -- Merge all actions and prepend type to the name using add_prefix function
 -- I.E: Git - Delete tag
 -- I.E: Dap - Continue
 
-M.set_actions = function()
-  M.actions = vim.tbl_extend('force', add_prefix(M.dap_actions, 'DAP'), add_prefix(M.git_actions, 'Git'), add_prefix(M.lsp_actions, 'LSP'), M.random_actions)
-end
-
-M.set_dap_actions = function()
-  M.dap_actions = require('user.actions').dap()
-  M.set_actions()
-end
-
-M.set_lsp_actions = function()
-  M.lsp_actions = require('user.actions').lsp
-  M.set_actions()
-end
-
 M.setup = function()
-  M.set_actions()
   nmap('<leader>a', function()
     vim.ui.select(vim.tbl_keys(M.actions), { prompt = 'Choose action (' .. vim.tbl_count(M.actions) .. ' actions)' }, function(choice)
       if choice then

@@ -1,9 +1,46 @@
+local actions = function()
+  local dap = require 'dap'
+  local dapui = require 'dapui'
+  return {
+    ['continue (F5)'] = function()
+      dap.continue()
+    end,
+    ['step over'] = function()
+      dap.step_over()
+    end,
+    ['step into'] = function()
+      dap.step_into()
+    end,
+    ['step out'] = function()
+      dap.step_out()
+    end,
+    ['toggle breakpoint'] = function()
+      dap.toggle_breakpoint()
+    end,
+    ['clear all breakpoints'] = function()
+      dap.clear_breakpoints()
+    end,
+    ['open repl'] = function()
+      dap.repl.open()
+    end,
+    ['run last'] = function()
+      dap.run_last()
+    end,
+    ['ui'] = function()
+      dapui.toggle()
+    end,
+    ['log level trace'] = function()
+      dap.set_log_level 'TRACE'
+      vim.cmd 'DapShowLog'
+    end,
+  }
+end
+
 local M = {
   'mfussenegger/nvim-dap',
   init = function()
     vim.api.nvim_create_user_command('DAP', function()
-      require('user.menu').set_dap_actions()
-      require('dap').toggle_breakpoint()
+      require 'dap'
       require('dapui').toggle()
     end, {})
   end,
@@ -48,9 +85,8 @@ M.config = function()
   require('telescope').load_extension 'dap'
   local dapui = require 'dapui'
   dapui.setup()
-  require('nvim-dap-virtual-text').setup()
+  require('nvim-dap-virtual-text').setup { enabled = true }
 
-  vim.g.dap_virtual_text = true
   vim.fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
   vim.fn.sign_define('DapBreakpointRejected', { text = '❓', texthl = '', linehl = '', numhl = '' })
   vim.fn.sign_define('DapStopped', { text = '⭕️', texthl = '', linehl = '', numhl = '' })
@@ -58,6 +94,9 @@ M.config = function()
   -- Mappings
   nnoremap('<F5>', '<cmd>lua require("dap").continue()<cr>', opts.no_remap)
   nnoremap('<leader>bp', '<cmd>lua require("dap").toggle_breakpoint()<cr>', opts.no_remap)
+
+  -- Actions
+  require('user.menu').add_actions('DAP', actions())
 
   -- Python
   require('dap-python').setup '/usr/local/bin/python3'

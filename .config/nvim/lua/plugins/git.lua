@@ -1,3 +1,154 @@
+local actions_pretty_print = function(message)
+  require('user.utils').pretty_print(message, 'Git Actions', '')
+end
+
+local actions = function()
+  return {
+    ['Change branch (F4)'] = function()
+      require('user.git-branches').open()
+    end,
+    ['Checkout new branch (:Gcb {new_branch})'] = function()
+      _G.create_new_branch { args = '' }
+    end,
+    ['Work in Progress commit (on git window - wip)'] = function()
+      vim.cmd 'call Enter_Wip_Moshe()'
+      actions_pretty_print 'Created a work in progress commit.'
+    end,
+    ['Diff File History'] = function()
+      vim.ui.input({ prompt = 'Enter file path (empty for current file): ' }, function(file_to_check)
+        if file_to_check == '' then
+          file_to_check = '%'
+        end
+
+        vim.cmd('DiffviewFileHistory ' .. file_to_check)
+      end)
+    end,
+    ['Diff with branch'] = function()
+      vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
+        if not branch_to_diff then
+          actions_pretty_print 'Canceled.'
+          return
+        end
+        vim.cmd('DiffviewOpen origin/' .. branch_to_diff .. '..HEAD')
+      end)
+    end,
+    ['Diff file with branch'] = function()
+      vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
+        if not branch_to_diff then
+          actions_pretty_print 'Canceled.'
+          return
+        end
+        vim.cmd('DiffviewFileHistory ' .. branch_to_diff)
+      end)
+    end,
+    ['Diff close'] = function()
+      vim.cmd 'DiffviewClose'
+    end,
+    ['Blame'] = function()
+      vim.cmd 'G blame'
+    end,
+    ['Pull origin master (:Gpom)'] = function()
+      vim.cmd 'Gpom'
+      actions_pretty_print 'Pulled from origin master.'
+    end,
+    ['Pull origin {branch}'] = function()
+      vim.ui.input({ default = 'main', prompt = 'Enter branch to pull from: ' }, function(branch_to_pull)
+        if not branch_to_pull then
+          actions_pretty_print 'Canceled.'
+          return
+        end
+        vim.cmd('G pull origin ' .. branch_to_pull)
+        actions_pretty_print('Pulled from origin ' .. branch_to_pull)
+      end)
+    end,
+    ['Merge origin/master (:Gmom)'] = function()
+      vim.cmd 'Gmom'
+      actions_pretty_print 'Merged with origin/master. (might need to fetch new commits)'
+    end,
+    ['Open Status / Menu (<leader>gg / :G)'] = function()
+      vim.cmd 'Git'
+    end,
+    ['Open GitHub on this line (:ToGithub)'] = function()
+      vim.cmd 'ToGithub'
+    end,
+    ['Log'] = function()
+      vim.cmd 'G log --all --decorate --oneline'
+    end,
+    ['See all tags'] = function()
+      local tags = vim.fn.FugitiveExecute('tag').stdout
+      vim.ui.select(tags, { prompt = 'Select tag to copy to clipboard' }, function(selection)
+        if not selection then
+          actions_pretty_print 'Canceled.'
+          return
+        end
+        vim.fn.setreg('+', selection)
+        actions_pretty_print('Copied ' .. selection .. ' to clipboard.')
+      end)
+    end,
+    ['Create tag'] = function()
+      vim.ui.input({ prompt = 'Enter tag name to create: ' }, function(input)
+        if not input then
+          actions_pretty_print 'Canceled.'
+          return
+        end
+        vim.cmd('G tag ' .. input)
+        vim.ui.select({ 'Yes', 'No' }, { prompt = 'Push?' }, function(choice)
+          if choice == 'Yes' then
+            vim.cmd 'G push --tags'
+            actions_pretty_print('Tag ' .. input .. ' created and pushed.')
+          else
+            actions_pretty_print('Tag ' .. input .. ' created.')
+          end
+        end)
+      end)
+    end,
+    ['Delete tag'] = function()
+      local tags = vim.fn.FugitiveExecute('tag').stdout
+
+      vim.ui.select(tags, { prompt = 'Enter tag name to delete' }, function(input)
+        if not input then
+          actions_pretty_print 'Canceled.'
+          return
+        end
+        actions_pretty_print('Deleting tag ' .. input .. ' locally...')
+        vim.cmd('G tag -d ' .. input)
+        vim.ui.select({ 'Yes', 'No' }, { prompt = 'Remove from remote?' }, function(choice)
+          if choice == 'Yes' then
+            actions_pretty_print('Deleting tag ' .. input .. ' from remote...')
+            vim.cmd('G push origin :refs/tags/' .. input)
+            actions_pretty_print('Tag ' .. input .. ' deleted from local and remote.')
+          else
+            actions_pretty_print('Tag ' .. input .. ' deleted locally.')
+          end
+        end)
+      end)
+    end,
+    ['Find in all commits'] = function()
+      local rev_list = vim.fn.FugitiveExecute({ 'rev-list', '--all' }).stdout
+      vim.ui.input({ prompt = 'Enter search term: ' }, function(search_term)
+        if not search_term then
+          actions_pretty_print 'Canceled.'
+          return
+        end
+        actions_pretty_print('Searching for ' .. search_term .. ' in all commits...')
+        vim.cmd('silent Ggrep ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
+      end)
+    end,
+    ['Push (:Gp)'] = function()
+      vim.cmd 'Gp'
+    end,
+    ['Pull (:Gl)'] = function()
+      vim.cmd 'Gl'
+    end,
+    ['Add (Stage) All'] = function()
+      vim.cmd 'G add -A'
+    end,
+    ['Unstage All'] = function()
+      vim.cmd 'G reset'
+    end,
+  }
+end
+
 local fugitive_config = function()
   local utils = require 'user.utils'
   local nmap = utils.nmap
@@ -198,9 +349,9 @@ endfunction
   ----------------------
   -- Git actions menu --
   ----------------------
-  local actions = require('user.actions').git
+  require('user.menu').add_actions('Git', actions())
   nmap('<leader>gm', function()
-    vim.ui.select(vim.tbl_keys(actions), { prompt = 'Choose git action' }, function(choice)
+    vim.ui.select(vim.tbl_keys(actions()), { prompt = 'Choose git action' }, function(choice)
       if choice then
         actions[choice]()
       end
