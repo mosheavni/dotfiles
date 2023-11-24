@@ -32,7 +32,23 @@
    brew bundle
    ```
 
-4. Open [iTerm2](https://www.iterm2.com/) and start using a real terminal.
+4. Install [asdf-vm](https://asdf-vm.com/guide/getting-started.html) and its
+   plugins
+
+   ```bash
+   git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
+   ```
+
+   > **_NOTE:_** Reload shell
+
+   ```bash
+   while read -r plugin_line;do
+     asdf plugin-add $(awk '{print $1}' <<<"$plugin_line")
+   done < .tool-versions
+   asdf install
+   ```
+
+5. Open [iTerm2](https://www.iterm2.com/) and start using a real terminal.
    Also, install shell intergrations
 
    ```bash
@@ -40,7 +56,7 @@
    curl -L https://iterm2.com/misc/install_shell_integration.sh | bash
    ```
 
-5. Install [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh) and its plugins
+6. Install [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh) and its plugins
 
    ```bash
    sh -c \
@@ -59,22 +75,10 @@
       ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
    ```
 
-6. Install [effuse](https://github.com/jeromelefeuvre/effuse):
+7. Install [effuse](https://github.com/jeromelefeuvre/effuse):
 
    ```bash
    sudo gem install effuse
-   ```
-
-7. Backup current files:
-
-   ```bash
-    cd ~
-    mkdir dotfiles-backup
-    for dotfile in .*;do
-      if [[ -f ~/Repos/dotfiles/${dotfile} ]];then
-        mv ~/${dotfile} ~/dotfiles-backup/${dotfile}
-      fi
-    done
    ```
 
 8. Run effuse to create the symlinks between the repo dir and the home dir:
@@ -92,35 +96,15 @@
     pip3 install -r requirements.txt
     ```
 
-11. Set python version
-
-  ```bash
-  PY_LATEST=$(pyenv latest -k 3)
-  pyenv install "$PY_LATEST"
-  pyenv global "$PY_LATEST"
-  ```
-
 11. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
 
     ```bash
     $(brew --prefix)/opt/fzf/install
     ```
 
-12. Open vim with minimal packer file, wait 1 minute for the [packer.nvim](https://github.com/wbthomason/packer.nvim) repo to be cloned.
+12. ???
 
-    ```bash
-    nvim -u .config/nvim/first-init.lua
-    ```
-
-13. Now Install the plugins and wait. (TreeSitter might take some time):
-
-    ```vim
-    :PackerInstall
-    ```
-
-14. ???
-
-15. PROFIT
+13. PROFIT
 
 ## Additional stuff
 
@@ -130,16 +114,10 @@
 
 - Download and install [docker](https://www.docker.com/products/docker-desktop)
 
-- Change clipy shortcuts
+- Change clipy shortcuts, and load snippets
 
 - Install [magnet](https://apps.apple.com/us/app/magnet/id441258766?mt=12)
 
 - Install [Mac Media Key Forwarder](https://github.com/milgra/macmediakeyforwarder)
 
 - Install Snagit
-
-- Set Rhubarb file:
-
-  ```bash
-  echo 'machine api.github.com login moshe password <token>' >> ~/.netrc
-  ```
