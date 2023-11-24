@@ -77,12 +77,12 @@ local M = {
           disable = { 'undefined-global' },
           globals = { 'vim' },
         },
-        workspace = {
-          -- Make the server aware of Neovim runtime files
-          library = {},
-          checkThirdParty = false,
-        },
-        telemetry = { enable = false },
+        -- workspace = {
+        --   -- Make the server aware of Neovim runtime files
+        --   library = {},
+        --   checkThirdParty = false,
+        -- },
+        -- telemetry = { enable = false },
       },
     },
   },

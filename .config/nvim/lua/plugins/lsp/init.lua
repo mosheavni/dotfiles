@@ -157,7 +157,15 @@ local M = {
       end,
     },
     'b0o/SchemaStore.nvim',
-    { 'folke/neodev.nvim', opts = {} },
+    {
+      'folke/neodev.nvim',
+      opts = {
+        override = function(_, library)
+          library.enabled = true
+          library.plugins = true
+        end,
+      },
+    },
     {
       'someone-stole-my-name/yaml-companion.nvim',
       config = function()
