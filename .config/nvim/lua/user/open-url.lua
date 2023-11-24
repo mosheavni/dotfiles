@@ -2,7 +2,7 @@ local utils = require 'user.utils'
 local nnoremap = utils.nnoremap
 local M = {}
 
-local uname = vim.loop.os_uname()
+local uname = vim.uv.os_uname()
 
 M.is_mac = uname.sysname == 'Darwin'
 M.is_linux = uname.sysname == 'Linux'

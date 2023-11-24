@@ -31,6 +31,7 @@ autocmd('UIEnter', {
     vim.defer_fn(function()
       if vim.fn.filereadable 'startuptime.txt' == 1 then
         local tail = vim.fn.system { 'tail', '-n3', 'startuptime.txt' }
+        ---@diagnostic disable-next-line: param-type-mismatch
         vim.notify(tail)
         return vim.fn.delete 'startuptime.txt'
       else
@@ -64,6 +65,13 @@ autocmd('FileType', {
   },
   callback = function()
     nnoremap('q', '<CMD>close<CR>', { buffer = 0 })
+  end,
+})
+autocmd('FileType', {
+  pattern = 'cmp_docs',
+  group = buffer_settings,
+  callback = function()
+    vim.treesitter.start(0, 'markdown')
   end,
 })
 autocmd('BufEnter', {
