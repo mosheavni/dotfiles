@@ -48,7 +48,8 @@ M.config = function()
       icons_enabled = true,
       theme = 'auto',
       -- theme = one_dark_theme,
-      component_separators = '|',
+      -- component_separators = '|',
+      component_separators = { left = '', right = '' },
       section_separators = { right = '', left = '' },
       disabled_filetypes = {
         winbar = { 'fugitive', 'git', 'NvimTree' },
@@ -108,7 +109,7 @@ M.config = function()
             end
             return table.concat(all_client_names, ', ')
           end,
-          icon = ' ',
+          icon = '',
           color = { fg = colors.whiter, gui = 'bold' },
         },
         'fileformat',
@@ -116,7 +117,7 @@ M.config = function()
         'progress',
       },
       lualine_z = {
-        '%l/%L',
+        '%l/%c',
         'searchcount',
         {
           function()
