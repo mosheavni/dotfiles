@@ -6,16 +6,6 @@ M.config = {
   ui = {
     border = require('user.utils').float_border,
     custom_keys = {
-      ['<localleader>l'] = function(plugin)
-        ---@diagnostic disable-next-line: redundant-parameter
-        require('lazy.util').open_cmd({ 'git', 'log' }, {
-          cwd = plugin.dir,
-          terminal = true,
-          close_on_exit = true,
-          enter = true,
-        })
-      end,
-
       -- open a terminal for the plugin dir
       ['<localleader>t'] = function(plugin)
         vim.cmd('FloatermNew --cwd=' .. plugin.dir)

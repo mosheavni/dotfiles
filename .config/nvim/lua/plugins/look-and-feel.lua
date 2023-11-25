@@ -10,7 +10,7 @@ local M = {
       {
         '<Leader>x',
         function()
-          require('notify').dismiss()
+          require('notify').dismiss { pending = true, silent = true }
         end,
       },
     },

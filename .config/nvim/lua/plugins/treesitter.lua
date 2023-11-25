@@ -21,6 +21,7 @@ local M = {
 M.config = function()
   local configs = require 'nvim-treesitter.configs'
   local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+  ---@diagnostic disable-next-line: inject-field
   parser_config.gotmpl = {
     install_info = {
       url = 'https://github.com/ngalaiko/tree-sitter-go-template',
@@ -43,6 +44,7 @@ M.config = function()
   --   return ft_to_lang(ft)
   -- end
 
+  ---@diagnostic disable-next-line: missing-fields
   configs.setup {
     ensure_installed = {
       'awk',

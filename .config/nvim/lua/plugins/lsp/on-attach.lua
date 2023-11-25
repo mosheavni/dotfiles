@@ -2,7 +2,6 @@ local utils = require 'user.utils'
 local user_maps = require 'plugins.lsp.maps'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
-local buf_set_option = vim.api.nvim_buf_set_option
 
 local on_attach_aug = augroup 'OnAttachAu'
 local default_on_attach = function(client, bufnr)
@@ -64,7 +63,7 @@ local default_on_attach = function(client, bufnr)
   -- Enable tag jump based on LSP --
   ----------------------------------
   if client.server_capabilities.goto_definition then
-    buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
+    vim.api.nvim_set_option_value('tagfunc', 'v:lua.vim.lsp.tagfunc', { buf = bufnr })
   end
 end
 

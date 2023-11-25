@@ -1,3 +1,4 @@
+---@diagnostic disable: need-check-nil
 local M = {}
 M.autocmd = vim.api.nvim_create_autocmd
 

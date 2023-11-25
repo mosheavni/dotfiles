@@ -62,6 +62,7 @@ M.config = function()
   local opts = utils.map_opts
   local nnoremap = utils.nnoremap
   local mason_nvim_dap = require 'mason-nvim-dap'
+  ---@diagnostic disable-next-line: missing-fields
   mason_nvim_dap.setup {
     ensure_installed = {
       'bash',
@@ -116,20 +117,23 @@ M.config = function()
   }
 
   dap.adapters.nlua = function(callback, config)
+    ---@diagnostic disable-next-line: undefined-field
     callback { type = 'server', host = config.host or '127.0.0.1', port = config.port or 8086 }
   end
 
   -------------
   -- Set CMP --
   -------------
+  ---@diagnostic disable-next-line: missing-fields
   cmp.setup.filetype({ 'dap-repl', 'dapui_watches' }, {
     sources = {
       { name = 'dap' },
     },
   })
+  ---@diagnostic disable-next-line: missing-fields
   cmp.setup {
     enabled = function()
-      return vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' or require('cmp_dap').is_dap_buffer()
+      return vim.api.nvim_get_option_value('buftype', { buf = 0 }) ~= 'prompt' or require('cmp_dap').is_dap_buffer()
     end,
   }
 end

@@ -77,7 +77,7 @@ M.config = function()
         'filename',
         'diagnostics',
         function()
-          if vim.api.nvim_buf_get_option(0, 'filetype') == 'yaml' then
+          if vim.api.nvim_get_option_value('filetype', { buf = 0 }) == 'yaml' then
             local schema = require('yaml-companion').get_buf_schema(0)
             if schema then
               return 'YAML Schema: ' .. schema.result[1].name

@@ -3,11 +3,10 @@ local M = {
 }
 local m_utils = require 'user.utils'
 local opts = m_utils.map_opts
-local buf_set_option = vim.api.nvim_buf_set_option
 
 M.get_all_clients = function()
   local method = 'textDocument/formatting'
-  local clients = vim.tbl_values(vim.lsp.get_active_clients { bufnr = M.bufnr })
+  local clients = vim.tbl_values(vim.lsp.get_clients { bufnr = M.bufnr })
   local formatting_clients = {}
   for _, client in ipairs(clients) do
     if client.supports_method(method) then
@@ -86,7 +85,7 @@ M.setup = function(client, bufnr)
 
   -- Formatexpr using LSP
   if client.server_capabilities.document_formatting == true then
-    buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+    vim.api.nvim_set_option_value('formatexpr', 'v:lua.vim.lsp.formatexpr()', { buf = bufnr })
   end
 end
 

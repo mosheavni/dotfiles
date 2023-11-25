@@ -1,4 +1,4 @@
-function get_dropdown(opts)
+local function get_dropdown(opts)
   opts = opts or {}
 
   local theme_opts = {

@@ -297,10 +297,10 @@ end, {})
 ------------------------
 nnoremap('cii', function()
   vim.ui.input({ prompt = 'Enter new indent: ' }, function(indent_size)
-    local indent_size = tonumber(indent_size)
-    vim.opt_local.shiftwidth = indent_size
-    vim.opt_local.softtabstop = indent_size
-    vim.opt_local.tabstop = indent_size
+    local indent_size_normalized = tonumber(indent_size)
+    vim.opt_local.shiftwidth = indent_size_normalized
+    vim.opt_local.softtabstop = indent_size_normalized
+    vim.opt_local.tabstop = indent_size_normalized
   end)
 end)
 
@@ -325,7 +325,7 @@ nnoremap <silent> <leader>( :call SplitParamLines()<cr>
 vim.api.nvim_create_user_command('DiffWithSaved', function()
   -- Get start buffer
   local start = vim.api.nvim_get_current_buf()
-  local filetype = vim.api.nvim_buf_get_option(start, 'filetype')
+  local filetype = vim.api.nvim_get_option_value('filetype', { buf = start })
 
   -- `vnew` - Create empty vertical split window
   -- `set buftype=nofile` - Buffer is not related to a file, will not be written
@@ -337,7 +337,7 @@ vim.api.nvim_create_user_command('DiffWithSaved', function()
   local scratch = vim.api.nvim_get_current_buf()
 
   -- Set filetype of scratch buffer to be the same as start
-  vim.api.nvim_buf_set_option(scratch, 'filetype', filetype)
+  vim.api.nvim_set_option_value('filetype', filetype, { buf = scratch })
 
   -- `wincmd p` - Go to the start window
   -- `diffthis` - Set diff mode to a start window
