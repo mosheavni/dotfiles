@@ -17,5 +17,6 @@ nodejs 20.10.0
 python 3.8.18
 ripgrep 13.0.0
 semver 3.4.0
+terraform 1.5.5
 terragrunt 0.53.6
 yq 4.40.3

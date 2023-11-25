@@ -25,9 +25,9 @@ M.config = function()
       null_ls.builtins.diagnostics.hadolint,
       null_ls.builtins.diagnostics.markdownlint,
       null_ls.builtins.diagnostics.vint,
-      null_ls.builtins.diagnostics.shellcheck.with {
-        extra_filetypes = { 'bash' },
-      },
+      -- null_ls.builtins.diagnostics.shellcheck.with {
+      --   extra_filetypes = { 'bash' },
+      -- },
       null_ls.builtins.diagnostics.eslint_d,
       null_ls.builtins.formatting.black,
       -- null_ls.builtins.formatting.eslint_d,
@@ -43,6 +43,7 @@ M.config = function()
     },
   }
   require('mason-null-ls').setup {
+    ---@diagnostic disable-next-line: assign-type-mismatch
     ensure_installed = nil,
     automatic_installation = true,
   }

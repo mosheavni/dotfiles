@@ -33,6 +33,7 @@ M.open_url_under_cursor = function()
   local cword = vim.fn.expand '<cWORD>'
 
   -- Remove surronding quotes if exist
+  ---@diagnostic disable-next-line: param-type-mismatch
   local url = string.gsub(cword, [[.*['"](.*)['"].*$]], '%1')
 
   -- If string starts with https://
