@@ -151,21 +151,12 @@ keymap('!', '<D-v>', '<C-R>+', opts.no_remap_silent)
 tnoremap('<D-v>', '<C-R>+', true)
 vnoremap('<D-v>', '<C-R>+', true)
 
-vim.cmd [[
-" hi ColorColumn ctermbg=238 guibg=lightgrey
-" let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-" let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-set guicursor+=i:blinkon1
-]]
---
 -- Abbreviations
-vim.cmd [[
-inoreabbrev seperate separate
-inoreabbrev dont don't
-inoreabbrev rbm # TODO: remove before merging
-inoreabbrev cbm # TODO: change before merging
-inoreabbrev ubm # TODO: uncomment before merging
-]]
+vim.keymap.set('!a', 'dont', [[don't]], opts.no_remap)
+vim.keymap.set('!a', 'seperate', [[separate]], opts.no_remap)
+vim.keymap.set('!a', 'rbm', [[# TODO: remove before merging]], opts.no_remap)
+vim.keymap.set('!a', 'cbm', [[# TODO: change before merging]], opts.no_remap)
+vim.keymap.set('!a', 'ubm', [[# TODO: uncomment before merging]], opts.no_remap)
 
 -- Run current buffer
 vim.cmd [[
