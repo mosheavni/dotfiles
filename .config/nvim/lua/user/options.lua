@@ -285,21 +285,27 @@ local default_plugins = {
   'getscriptPlugin',
   'gzip',
   'logipat',
+  'man',
   'matchit',
   'matchparen',
   'netrw',
   'netrwFileHandlers',
   'netrwPlugin',
   'netrwSettings',
+  'rplugin',
   'rrhelper',
+  'shada',
   'spellfile_plugin',
   'tar',
   'tarPlugin',
+  'tohtml',
+  'tutor',
   'vimball',
   'vimballPlugin',
   'zip',
   'zipPlugin',
 }
+
 for _, plugin in pairs(default_plugins) do
   vim.g['loaded_' .. plugin] = 1
 end

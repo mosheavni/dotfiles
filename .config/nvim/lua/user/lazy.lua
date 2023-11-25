@@ -29,22 +29,6 @@ M.config = {
     -- automatically check for plugin updates
     enabled = false,
   },
-  performance = {
-    rtp = {
-      disabled_plugins = {
-        'gzip',
-        'man',
-        'matchit',
-        'matchparen',
-        'rplugin',
-        'shada',
-        'tarPlugin',
-        'tohtml',
-        'tutor',
-        'zipPlugin',
-      },
-    },
-  },
 }
 
 return M
