@@ -13,7 +13,6 @@ M.find_default_branch = function(url)
 end
 
 M.get_all_loaded_plugins = function()
-  local loaded_plugins = {}
   local all_loaded = vim.tbl_keys(package.loaded)
   return all_loaded
 end

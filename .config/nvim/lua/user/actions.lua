@@ -148,7 +148,7 @@ return {
     vim.fn.feedkeys(T '<C-e>')
   end,
   ['Close all notifications (<leader>x)'] = function()
-    require('notify').dismiss()
+    require('notify').dismiss { pending = true, silent = true }
   end,
   ['Quit all (<leader>qq)'] = function()
     vim.cmd.qall()
