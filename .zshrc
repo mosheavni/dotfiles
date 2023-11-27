@@ -45,9 +45,13 @@ setopt HIST_VERIFY            # Don't execute immediately upon history expansion
 setopt HIST_BEEP              # Beep when accessing nonexistent history.
 # setopt HIST_IGNORE_SPACE      # Don't record an entry starting with a space.
 
+# ========= #
+#  Plugins  #
+# ========= #
 plugins=(
   ag
   aliases
+  argocd
   asdf
   autoupdate
   aws
@@ -57,32 +61,39 @@ plugins=(
   common-aliases
   dircycle
   docker
+  fd
   git
   git-auto-fetch
+  golang
   helm
   kube-ps1
   kubectl
+  kubectx
+  ripgrep
   terraform
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
 
+# ============= #
+#  Completions  #
+# ============= #
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 fpath+=$(brew --prefix)/share/zsh/site-functions
+fpath+=$(asdf where kubectx)/completion
+
+# ============= #
+#  Autoloaders  #
+# ============= #
 source $ZSH/oh-my-zsh.sh
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
-# =================== #
-# Completions and PS1 #
-# =================== #
-
+# ================ #
+#  PS1 and Random  #
+# ================ #
+compdef terragrunt='terraform'
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-# Terraform completion
-complete -o nospace -C /usr/local/bin/terraform terraform
-compdef tf='terraform'
-compdef tg='terraform'
-compdef terragrunt='terraform'
 function get_cluster_short() {
   awk -F/ '{print $NF}' <<<"$1"
 }
