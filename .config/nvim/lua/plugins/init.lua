@@ -68,7 +68,7 @@ local M = {
     ft = 'nginx',
   },
   {
-    'andrewstuart/vim-kubernetes',
+    'mosheavni/vim-kubernetes',
     event = 'VeryLazy',
   },
   -- {
@@ -144,30 +144,6 @@ local M = {
       end)
     end,
   },
-  -- {
-  --   'jackMort/ChatGPT.nvim',
-  --   config = true,
-  --   dependencies = {
-  --     'MunifTanjim/nui.nvim',
-  --     'nvim-lua/plenary.nvim',
-  --     'nvim-telescope/telescope.nvim',
-  --   },
-  --   cmd = 'ChatGPT',
-  -- },
-  -- {
-  --   'dense-analysis/neural',
-  --   dependencies = {
-  --     'muniftanjim/nui.nvim',
-  --     'elpiloto/significant.nvim',
-  --   },
-  --   opts = {
-  --     source = {
-  --       openai = {
-  --         api_key = vim.env.OPENAI_API_KEY,
-  --       },
-  --     },
-  --   },
-  -- },
 
   --------------
   -- Quickfix --
@@ -187,27 +163,6 @@ local M = {
     'kevinhwang91/nvim-bqf',
     ft = 'qf',
   },
-
-  ------------
-  -- Themes --
-  ------------
-  -- 'Mofiqul/vscode.nvim',
-  -- 'cpea2506/one_monokai.nvim',
-  -- 'drewtempelmeyer/palenight.vim',
-  -- 'ellisonleao/gruvbox.nvim',
-  -- 'folke/tokyonight.nvim',
-  -- 'ghifarit53/tokyonight-vim',
-  -- 'jacoborus/tender.vim',
-  -- 'joshdick/onedark.vim',
-  -- 'marko-cerovac/material.nvim',
-  -- 'rafamadriz/neon',
-  -- 'rebelot/kanagawa.nvim',
-  -- { 'dracula/vim', as = 'dracula' },
-  -- { 'luisiacc/gruvbox-baby', branch = 'main' },
-  -- {
-  --   'catppuccin/nvim',
-  --   name = 'catppuccin',
-  -- },
 
   -----------------------
   -- Text Manipulation --
