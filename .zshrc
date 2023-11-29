@@ -62,6 +62,7 @@ plugins=(
   dircycle
   docker
   fd
+  fzf
   git
   git-auto-fetch
   golang
