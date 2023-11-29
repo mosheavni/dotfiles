@@ -97,7 +97,15 @@ M.config = function()
   nnoremap('<leader>bp', '<cmd>lua require("dap").toggle_breakpoint()<cr>', opts.no_remap)
 
   -- Actions
-  require('user.menu').add_actions('DAP', actions())
+  local the_actions = actions()
+  require('user.menu').add_actions('DAP', the_actions)
+  require('user.utils').nmap('<leader>dm', function()
+    vim.ui.select(vim.tbl_keys(the_actions), { prompt = 'Choose DAP action' }, function(choice)
+      if choice then
+        the_actions[choice]()
+      end
+    end)
+  end)
 
   -- Python
   require('dap-python').setup '/usr/local/bin/python3'
