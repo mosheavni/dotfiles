@@ -349,11 +349,12 @@ endfunction
   ----------------------
   -- Git actions menu --
   ----------------------
-  require('user.menu').add_actions('Git', actions())
+  local the_actions = actions()
+  require('user.menu').add_actions('Git', the_actions)
   nmap('<leader>gm', function()
-    vim.ui.select(vim.tbl_keys(actions()), { prompt = 'Choose git action' }, function(choice)
+    vim.ui.select(vim.tbl_keys(the_actions), { prompt = 'Choose git action' }, function(choice)
       if choice then
-        actions[choice]()
+        the_actions[choice]()
       end
     end)
   end)
