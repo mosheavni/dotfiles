@@ -131,10 +131,6 @@ local M = {
             },
           }
         end
-
-        -- Make sure helm_ls is installed
-        -- require '.core.helm-ls-downloader'
-        return true
       end,
       docker_compose_language_service = function() end,
     },
