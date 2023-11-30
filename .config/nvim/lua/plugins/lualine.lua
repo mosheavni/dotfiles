@@ -235,7 +235,7 @@ M.config = function()
       return table.concat(all_client_names, ', ')
     end,
     icon = ' LSP:',
-    color = { fg = '#ffffff', gui = 'bold' },
+    color = { fg = '#ffffff' },
   }
   ins_right {
     'fileformat',
