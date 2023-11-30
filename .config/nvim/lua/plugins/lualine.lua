@@ -198,18 +198,15 @@ M.config = function()
     -- Lsp server name .
     function()
       local msg = 'No Active Lsp'
-      local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
       local clients = vim.lsp.get_clients { bufnr = 0 }
       if next(clients) == nil then
         return msg
       end
+      local all_client_names = {}
       for _, client in ipairs(clients) do
-        local filetypes = client.config.filetypes or {}
-        if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-          return client.name
-        end
+        table.insert(all_client_names, client.name)
       end
-      return msg
+      return table.concat(all_client_names, ', ')
     end,
     icon = ' LSP:',
     color = { fg = '#ffffff', gui = 'bold' },
