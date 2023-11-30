@@ -190,115 +190,35 @@ endfunction
 nnoremap <silent> <F3> :call ExecuteFile()<CR>
 ]]
 
--- Grep
+-- Helper functions
 vim.cmd [[
-" Set grepprg as RipGrep or ag (the_silver_searcher), fallback to grep
-if executable('rg')
-  let &grepprg="rg --vimgrep --no-heading --smart-case --hidden --follow -g '!{" . &wildignore . "}' -uu $*"
-  let g:grep_literal_flag="-F"
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
-elseif executable('ag')
-  let &grepprg='ag --vimgrep --smart-case --hidden --follow --ignore "!{' . &wildignore . '}" $*'
-  let g:grep_literal_flag="-Q"
-  set grepformat=%f:%l:%c:%m
-else
-  let &grepprg='grep -n -r --exclude=' . shellescape(&wildignore) . ' . $*'
-  let g:grep_literal_flag="-F"
-endif
-
-function! RipGrepCWORD(bang, visualmode, ...) abort
-  let search_word = a:1
-
-  if a:visualmode
-    " Get the line and column of the visual selection marks
-    let [lnum1, col1] = getpos("'<")[1:2]
-    let [lnum2, col2] = getpos("'>")[1:2]
-
-    " Get all the lines represented by this range
-    let lines = getline(lnum1, lnum2)
-
-    " The last line might need to be cut if the visual selection didn't end on the last column
-    let lines[-1] = lines[-1][: col2 - (&selection ==? 'inclusive' ? 1 : 2)]
-    " The first line might need to be trimmed if the visual selection didn't start on the first column
-    let lines[0] = lines[0][col1 - 1:]
-
-    " Get the desired text
-    let search_word = join(lines, "\n")
-  endif
-  if search_word ==? ''
-    let search_word = expand('<cword>')
-  endif
-
-  " Set bang command for literal search (no regexp expansion)
-  let search_message_literally = "for " . search_word
-  if a:bang == "!"
-    let search_message_literally = "literally for " . search_word
-    let search_word = get(g:, 'grep_literal_flag', "") . ' ' . shellescape(search_word)
-  endif
-
-  echom 'Searching ' . search_message_literally
-
-  " Silent removes the "press enter to continue" prompt
-  " Bang (!) is for literal search (no regexp expansion)
-  let grepcmd = 'silent grep! ' . search_word
-  execute grepcmd
-endfunction
-command! -bang -range -nargs=? RipGrepCWORD call RipGrepCWORD("<bang>", v:false, <q-args>)
-command! -bang -range -nargs=? RipGrepCWORDVisual call RipGrepCWORD("<bang>", v:true, <q-args>)
-nnoremap <c-f> :RipGrepCWORD!<Space>
-vnoremap <c-f> :RipGrepCWORDVisual!<cr>
-]]
-
--- Visual Calculator
-vim.cmd [[
-function s:VisualCalculator() abort
-  let save_pos = getpos('.')
-  " Get visual selection
+function! GetVisualSelection() abort
   let [lnum1, col1] = getpos("'<")[1:2]
   let [lnum2, col2] = getpos("'>")[1:2]
   let lines = getline(lnum1, lnum2)
   let lines[-1] = lines[-1][: col2 - (&selection ==? 'inclusive' ? 1 : 2)]
   let lines[0] = lines[0][col1 - 1:]
-  let first_expr = join(lines, "\n")
-
-  " Get arithmetic operation from user input
-  call inputsave()
-  let operation = input('Enter operation: ')
-  call inputrestore()
-
-  " Calculate final result
-  let fin_result = eval(str2nr(first_expr) . operation)
-
-  " Replace
-  exe 's/\%V' . first_expr . '/' . fin_result . '/'
-
-  call setpos('.', save_pos)
+  let entire_selection = join(lines, "\n")
+  return entire_selection
 endfunction
-command! -range VisualCalculator call <SID>VisualCalculator()
-vmap <c-r> :VisualCalculator<cr>
+
+function! GetMotion(motion)
+  let saved_register = getreg('a')
+  defer setreg('a', saved_register)
+
+  exe 'normal! ' .. a:motion .. '"ay'
+  return @a
+endfunction
+
+function! ReplaceMotion(motion, text)
+  let saved_register = getreg('a')
+  defer setreg('a', saved_register)
+
+  let @a = a:text
+
+  exe 'normal! ' .. a:motion .. '"ap'
+endfunction
 ]]
-
-vim.cmd [[
-function s:SortJsonArrayByKey() abort
-    call inputsave()
-    let sort_key = input('Sort by key: ')
-    call inputrestore()
-    let save_pos = getpos('.')
-    let save_pos[2] = save_pos[2] - 1
-    " Get visual selection
-    let [lnum1, col1] = getpos("'<")[1:2]
-    let [lnum2, col2] = getpos("'>")[1:2]
-    let lines = getline(lnum1, lnum2)
-    let lines[-1] = lines[-1][: col2 - (&selection ==? 'inclusive' ? 1 : 2)]
-    let lines[0] = lines[0][col1 - 1:]
-    let entire_selection = join(lines, "\n")
-    let @x = system("jq 'sort_by(" . sort_key . ")'", entire_selection)
-    normal! gvd
-    call setpos('.', save_pos)
-    normal! "xp
-endfunction
-command! -range SortJsonArrayByKey call <SID>SortJsonArrayByKey()
-  ]]
 
 -- disable some builtin vim plugins
 local default_plugins = {
