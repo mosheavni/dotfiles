@@ -11,25 +11,9 @@ local M = {
     keys = { '%' },
     config = true,
   },
-  -- {
-  --   'utilyre/sentiment.nvim',
-  --   version = '*',
-  --   event = 'VeryLazy', -- keep for lazy loading
-  --   config = function()
-  --     vim.cmd [[hi! link MatchParen TabLineSel]]
-  --     require('sentiment').setup {
-  --       excluded_filetypes = { 'fugitive' },
-  --     }
-  --   end,
-  -- },
-  {
-    'kiran94/s3edit.nvim',
-    cmd = 'S3Edit',
-    config = true,
-  },
   {
     'voldikss/vim-floaterm',
-    keys = { 'F6', 'F7', 'F8' },
+    keys = { '<F6>', '<F7>', '<F8>' },
     cmd = {
       'FloatermFirst',
       'FloatermHide',
@@ -44,9 +28,6 @@ local M = {
       'FloatermUpdate',
     },
     init = function()
-      nnoremap('<F6>', '<Cmd>FloatermToggle<CR>', true)
-      nnoremap('<F7>', '<Cmd>FloatermNew<CR>', true)
-      nnoremap('<F8>', '<Cmd>FloatermNext<CR>', true)
       vim.g['floaterm_height'] = 0.9
       vim.g['floaterm_keymap_new'] = '<F7>'
       vim.g['floaterm_keymap_next'] = '<F8>'

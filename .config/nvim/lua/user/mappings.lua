@@ -452,7 +452,7 @@ function s:JsonSortArrayByKey() abort
   let formatted_selection = trim(system("jq 'sort_by(" . sort_key . ")'", entire_selection))
   call ReplaceMotion('gv', formatted_selection)
   call setpos('.', save_pos)
-  " normal! "xp
+  normal! gv=
 endfunction
 command! -range JsonSortArrayByKey call <SID>JsonSortArrayByKey()
 ]]

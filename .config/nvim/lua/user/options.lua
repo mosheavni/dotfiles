@@ -136,10 +136,10 @@ vim.o.breakindent = true -- Maintain indent on wrapping lines
 vim.o.autoindent = true -- always set autoindenting on
 vim.o.copyindent = true -- copy the previous indentation on autoindenting
 vim.o.smartindent = true -- Number of spaces to use for each step of (auto)indent.
-vim.o.shiftwidth = 4 -- Number of spaces for each indent
+vim.o.shiftwidth = 2 -- Number of spaces for each indent
 vim.o.shiftround = true -- use multiple of shiftwidth when indenting with '<' and '>'
-vim.o.softtabstop = 4
-vim.o.tabstop = 4
+vim.o.softtabstop = 2
+vim.o.tabstop = 2
 vim.o.smarttab = true -- insert tabs on the start of a line according to shiftwidth, not tabstop
 vim.o.expandtab = true -- Tab changes to spaces. Format with :retab
 vim.opt.indentkeys:remove '0#'

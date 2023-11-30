@@ -31,7 +31,6 @@ M.config = function()
       null_ls.builtins.diagnostics.eslint_d,
       null_ls.builtins.formatting.black,
       -- null_ls.builtins.formatting.eslint_d,
-      null_ls.builtins.formatting.fixjson,
       null_ls.builtins.formatting.markdownlint,
       null_ls.builtins.formatting.npm_groovy_lint,
       null_ls.builtins.formatting.prettierd,
