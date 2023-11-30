@@ -5,25 +5,6 @@ local M = {
 
 M.config = function()
   local lualine = require 'lualine'
-  local my_extensions = {
-    telescope = { sections = { lualine_a = {
-      function()
-        return 'telescope'
-      end,
-    } }, filetypes = { 'TelescopePrompt' } },
-
-    nvimtree_self = {
-      sections = {
-        lualine_a = { 'branch' },
-        lualine_b = {
-          function()
-            return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
-          end,
-        },
-      },
-      filetypes = { 'NvimTree' },
-    },
-  }
 
   -- Color table for highlights
   -- stylua: ignore
@@ -57,6 +38,37 @@ M.config = function()
     is_yaml_ft = function()
       return vim.api.nvim_get_option_value('filetype', { buf = 0 }) == 'yaml'
     end,
+  }
+
+  local my_extensions = {
+    telescope = {
+      sections = {
+        lualine_a = {
+          {
+            function()
+              return 'telescope'
+            end,
+            color = { fg = colors.red },
+          },
+        },
+      },
+      filetypes = { 'TelescopePrompt' },
+    },
+
+    nvimtree_self = {
+      sections = {
+        lualine_a = { { 'branch', icon = '', color = { fg = colors.violet, gui = 'bold' } } },
+        lualine_b = {
+          {
+            function()
+              return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
+            end,
+            color = { fg = colors.aqua },
+          },
+        },
+      },
+      filetypes = { 'NvimTree' },
+    },
   }
 
   -- lualine
@@ -130,7 +142,6 @@ M.config = function()
     'mode',
     icon = '',
     color = function()
-      -- auto change color according to neovims mode
       local mode_color = {
         n = colors.red,
         i = colors.green,
