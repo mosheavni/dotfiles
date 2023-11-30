@@ -5,6 +5,25 @@ local M = {
 
 M.config = function()
   local lualine = require 'lualine'
+  local my_extensions = {
+    telescope = { sections = { lualine_a = {
+      function()
+        return 'telescope'
+      end,
+    } }, filetypes = { 'TelescopePrompt' } },
+
+    nvimtree_self = {
+      sections = {
+        lualine_a = { 'branch' },
+        lualine_b = {
+          function()
+            return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
+          end,
+        },
+      },
+      filetypes = { 'NvimTree' },
+    },
+  }
 
   -- Color table for highlights
   -- stylua: ignore
@@ -81,14 +100,10 @@ M.config = function()
       'lazy',
       'mason',
       'nvim-dap-ui',
-      'nvim-tree',
       'quickfix',
       'trouble',
-      { sections = { lualine_a = {
-        function()
-          return 'telescope'
-        end,
-      } }, filetypes = { 'TelescopePrompt' } },
+      my_extensions.nvimtree_self,
+      my_extensions.telescope,
     },
   }
 
