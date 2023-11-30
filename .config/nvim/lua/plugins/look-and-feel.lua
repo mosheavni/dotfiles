@@ -56,9 +56,13 @@ local M = {
     event = 'VeryLazy',
   },
   {
-    'norcalli/nvim-colorizer.lua',
-    config = true,
-    event = 'BufReadPre',
+    'NvChad/nvim-colorizer.lua',
+    opts = { user_default_options = { mode = 'virtualtext', names = false } },
+    config = function(_, opts)
+      require('colorizer').setup(opts)
+      require('colorizer').attach_to_buffer(0, { mode = 'virtualtext', css = true })
+    end,
+    event = 'VeryLazy',
   },
 }
 
