@@ -278,6 +278,28 @@ command! -range VisualCalculator call <SID>VisualCalculator()
 vmap <c-r> :VisualCalculator<cr>
 ]]
 
+vim.cmd [[
+function s:SortJsonArrayByKey() abort
+    call inputsave()
+    let sort_key = input('Sort by key: ')
+    call inputrestore()
+    let save_pos = getpos('.')
+    let save_pos[2] = save_pos[2] - 1
+    " Get visual selection
+    let [lnum1, col1] = getpos("'<")[1:2]
+    let [lnum2, col2] = getpos("'>")[1:2]
+    let lines = getline(lnum1, lnum2)
+    let lines[-1] = lines[-1][: col2 - (&selection ==? 'inclusive' ? 1 : 2)]
+    let lines[0] = lines[0][col1 - 1:]
+    let entire_selection = join(lines, "\n")
+    let @x = system("jq 'sort_by(" . sort_key . ")'", entire_selection)
+    normal! gvd
+    call setpos('.', save_pos)
+    normal! "xp
+endfunction
+command! -range SortJsonArrayByKey call <SID>SortJsonArrayByKey()
+  ]]
+
 -- disable some builtin vim plugins
 local default_plugins = {
   '2html_plugin',
