@@ -53,9 +53,6 @@ M.config = function()
         inactive = { c = { fg = colors.fg, bg = colors.bg } },
       },
       icons_enabled = true,
-      disabled_filetypes = {
-        winbar = { 'fugitive', 'git', 'NvimTree' },
-      },
       always_divide_middle = true,
       globalstatus = true,
     },
@@ -80,9 +77,13 @@ M.config = function()
     },
     extensions = {
       'fugitive',
+      'lazy',
+      'mason',
       'nvim-dap-ui',
       'nvim-tree',
       'quickfix',
+      'trouble',
+      { sections = { lualine_a = {function() return 'telescope' end} }, filetypes = {'TelescopePrompt'} }
     },
   }
 
@@ -194,12 +195,12 @@ M.config = function()
     function()
       local msg = 'No Active Lsp'
       local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
-      local clients = vim.lsp.get_active_clients { bufnr = 0 }
+      local clients = vim.lsp.get_clients { bufnr = 0 }
       if next(clients) == nil then
         return msg
       end
       for _, client in ipairs(clients) do
-        local filetypes = client.config.filetypes
+        local filetypes = client.config.filetypes or {}
         if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
           return client.name
         end
