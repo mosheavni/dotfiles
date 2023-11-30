@@ -16,6 +16,18 @@ local M = {
       cancel_event = 'update',
     },
   },
+  init = function()
+    require('user.menu').add_actions('Yanky', {
+      ['Yank history'] = function()
+        require 'yanky' -- this calls config which sets up yanky
+        require('telescope').extensions.yank_history.yank_history()
+      end,
+    })
+  end,
+  config = function(_, opts)
+    require('yanky').setup(opts)
+    require('telescope').load_extension 'yank_history'
+  end,
 }
 
 return M
