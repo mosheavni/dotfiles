@@ -40,10 +40,28 @@ M.config = function()
     end,
   }
 
+  local borders = {
+    left = {
+      function()
+        return '▊'
+      end,
+      color = { fg = colors.blue }, -- Sets highlighting of component
+      padding = { left = 0, right = 1 }, -- We don't need space before this
+    },
+    right = {
+      function()
+        return '▊'
+      end,
+      color = { fg = colors.blue },
+      padding = { left = 1 },
+    },
+  }
+
   local my_extensions = {
     telescope = {
       sections = {
-        lualine_a = {
+        lualine_c = {
+          borders.left,
           {
             function()
               return 'telescope'
@@ -51,14 +69,16 @@ M.config = function()
             color = { fg = colors.red },
           },
         },
+        lualine_x = { borders.right },
       },
       filetypes = { 'TelescopePrompt' },
     },
 
     nvimtree_self = {
       sections = {
-        lualine_a = { { 'branch', icon = '', color = { fg = colors.violet, gui = 'bold' } } },
-        lualine_b = {
+        lualine_c = {
+          borders.left,
+          { 'branch', icon = '', color = { fg = colors.violet, gui = 'bold' } },
           {
             function()
               return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
@@ -66,6 +86,7 @@ M.config = function()
             color = { fg = colors.aqua },
           },
         },
+        lualine_x = { borders.right },
       },
       filetypes = { 'NvimTree' },
     },
@@ -129,13 +150,7 @@ M.config = function()
     table.insert(config.sections.lualine_x, component)
   end
 
-  ins_left {
-    function()
-      return '▊'
-    end,
-    color = { fg = colors.blue }, -- Sets highlighting of component
-    padding = { left = 0, right = 1 }, -- We don't need space before this
-  }
+  ins_left(borders.left)
 
   ins_left {
     -- mode component
@@ -256,13 +271,7 @@ M.config = function()
     end,
   }
 
-  ins_right {
-    function()
-      return '▊'
-    end,
-    color = { fg = colors.blue },
-    padding = { left = 1 },
-  }
+  ins_right(borders.right)
 
   -- setup
   lualine.setup(config)
