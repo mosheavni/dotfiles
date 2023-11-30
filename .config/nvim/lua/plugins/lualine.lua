@@ -11,6 +11,7 @@ M.config = function()
   local colors = {
     bg       = '#202328',
     fg       = '#bbc2cf',
+    aqua     = '#b8bb26',
     yellow   = '#ECBE7B',
     cyan     = '#008080',
     darkblue = '#081633',
@@ -83,7 +84,11 @@ M.config = function()
       'nvim-tree',
       'quickfix',
       'trouble',
-      { sections = { lualine_a = {function() return 'telescope' end} }, filetypes = {'TelescopePrompt'} }
+      { sections = { lualine_a = {
+        function()
+          return 'telescope'
+        end,
+      } }, filetypes = { 'TelescopePrompt' } },
     },
   }
 
@@ -186,7 +191,7 @@ M.config = function()
   ins_left {
     'filename',
     cond = conditions.buffer_not_empty,
-    color = { fg = colors.magenta, gui = 'bold' },
+    color = { fg = colors.aqua, gui = 'bold' },
   }
 
   ins_right {
