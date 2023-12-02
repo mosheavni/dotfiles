@@ -1,5 +1,4 @@
 local utils = require 'user.utils'
-local nnoremap = utils.nnoremap
 local tnoremap = utils.tnoremap
 
 local M = {
@@ -35,10 +34,6 @@ local M = {
       vim.g['floaterm_width'] = 0.7
     end,
   },
-  -- {
-  --   'samjwill/nvim-unception',
-  --   event = 'VeryLazy',
-  -- },
   {
     'mosheavni/vim-dirdiff',
     cmd = { 'DirDiff' },
@@ -51,11 +46,6 @@ local M = {
       vim.g.winresizer_start_key = '<C-e>'
       tnoremap('<C-e>', '<Esc><Cmd>WinResizerStartResize<CR>', true)
     end,
-  },
-  {
-    'pechorin/any-jump.vim',
-    cmd = { 'AnyJump', 'AnyJumpVisual' },
-    keys = { '<leader>j', '<cmd>AnyJump<CR>' },
   },
   {
     'kazhala/close-buffers.nvim',
