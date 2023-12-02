@@ -15,12 +15,14 @@ vim.o.cursorline = true -- Add highlight behind current line
 vim.opt.shortmess:append { c = true, l = false, q = false, S = false, C = true, I = true }
 vim.o.list = true
 vim.opt.listchars = {
-  tab = '┆·',
   -- trail = '·',
-  precedes = '',
-  extends = '',
   eol = '↲',
+  extends = '',
+  precedes = '',
+  tab = '┆·',
+  leadmultispace = '┊ ',
 }
+
 -- set lcscope=tab:┆·,trail:·,precedes:,extends:
 vim.opt.fillchars = {
   vert = '|',
