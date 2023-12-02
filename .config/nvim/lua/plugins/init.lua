@@ -217,10 +217,6 @@ local M = {
     },
   },
   {
-    'windwp/nvim-ts-autotag',
-    ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml' },
-  },
-  {
     'axelvc/template-string.nvim',
     ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
     event = 'InsertEnter',

@@ -8,6 +8,11 @@ local M = {
     'nvim-treesitter/nvim-treesitter-context',
     'nvim-treesitter/nvim-treesitter-refactor',
     'Afourcat/treesitter-terraform-doc.nvim',
+    {
+      'windwp/nvim-ts-autotag',
+      ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml' },
+    },
+    'RRethy/nvim-treesitter-endwise',
     -- {
     --   'ckolkey/ts-node-action',
     --   config = function()
@@ -90,6 +95,9 @@ M.config = function()
         scope_incremental = '<S-CR>',
         node_decremental = '<BS>',
       },
+    },
+    endwise = {
+      enable = true,
     },
     autotag = {
       enable = true,
