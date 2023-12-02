@@ -254,7 +254,6 @@ M.config = function()
   }
   ins_right {
     'fileformat',
-    fmt = string.upper,
     color = { fg = colors.green, gui = 'bold' },
   }
   ins_right { 'filetype' }
