@@ -80,6 +80,11 @@ M.config = function()
           borders.left,
           { 'branch', icon = '', color = { fg = colors.violet, gui = 'bold' } },
           {
+            function ()
+             return '%='
+            end
+          },
+          {
             function()
               return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
             end,
