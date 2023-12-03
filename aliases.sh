@@ -217,7 +217,6 @@ alias kgnol='kgno -l'
 alias kg='kubectl get '
 alias kd='kubectl describe '
 alias ke='kubectl edit '
-alias kdel='kubectl delete '
 alias kdelrs='kubectl delete rs '
 
 # Kubectl Persistent Volume
