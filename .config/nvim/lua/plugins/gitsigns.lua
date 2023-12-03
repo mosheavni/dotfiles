@@ -1,6 +1,7 @@
 local M = {
   'lewis6991/gitsigns.nvim',
   event = 'BufReadPre',
+  cmd = { 'Gitsigns' },
   opts = {
     on_attach = function(bufnr)
       local gs = package.loaded.gitsigns
@@ -41,6 +42,22 @@ local M = {
       map({ 'o', 'x' }, 'ih', '<cmd>Gitsigns select_hunk<CR>')
     end,
   },
+  init = function()
+    require('user.menu').add_actions('Git', {
+      ['Preview hunk'] = function()
+        vim.cmd.Gitsigns 'preview_hunk'
+      end,
+      ['Toggle current line blame'] = function()
+        vim.cmd.Gitsigns 'toggle_current_line_blame'
+      end,
+      ['Toggle deleted'] = function()
+        vim.cmd.Gitsigns 'toggle_deleted'
+      end,
+      ['Select hunk'] = function()
+        vim.cmd.Gitsigns 'select_hunk'
+      end,
+    })
+  end,
 }
 
 return M
