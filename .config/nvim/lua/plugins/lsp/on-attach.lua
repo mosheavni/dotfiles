@@ -1,5 +1,5 @@
 local utils = require 'user.utils'
-local user_maps = require 'plugins.lsp.maps'
+local user_maps = require 'plugins.lsp.keymaps'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
 

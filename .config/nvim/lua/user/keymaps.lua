@@ -275,6 +275,8 @@ nnoremap('<leader>ep', [[:execute("vsplit " . '~/.config/nvim/lua/plugins/init.l
 nnoremap('<leader>el', [[:execute("vsplit " . '~/.config/nvim/lua/user/lsp/config.lua')<cr>]], true)
 nnoremap('<leader>em', [[:execute("vsplit " . '~/.config/nvim/lua/user/mappings.lua')<cr>]], true)
 
+-- Delete current buffer
+nnoremap('<leader>bd', '<cmd>BDelete this<cr>', true)
 -- Close current buffer
 nnoremap('<leader>bc', ':close<cr>', true)
 
