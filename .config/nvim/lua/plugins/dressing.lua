@@ -1,6 +1,10 @@
 local function get_dropdown(opts)
   opts = opts or {}
 
+  local borders = {
+    first = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+  }
+
   local theme_opts = {
     theme = 'dropdown',
 
@@ -24,14 +28,14 @@ local function get_dropdown(opts)
     borderchars = {
       prompt = { '─', '│', ' ', '│', '╭', '╮', '│', '│' },
       results = { '─', '│', '─', '│', '├', '┤', '╯', '╰' },
-      preview = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+      preview = borders.first,
     },
   }
   if opts.layout_config and opts.layout_config.prompt_position == 'bottom' then
     theme_opts.borderchars = {
-      prompt = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+      prompt = borders.first,
       results = { '─', '│', '─', '│', '╭', '╮', '┤', '├' },
-      preview = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+      preview = borders.first,
     }
   end
 
