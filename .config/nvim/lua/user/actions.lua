@@ -70,16 +70,16 @@ return {
   ['Indent block forward (<leader>gt)'] = function()
     vim.cmd [[normal! v%koj$>]]
   end,
-  ['Open all folds (zR / <leader>fo)'] = function()
+  ['[Folds] Open all folds (zR / <leader>fo)'] = function()
     vim.cmd 'normal! zR'
   end,
-  ['Open fold (za / <leader>ff)'] = function()
+  ['[Folds] Open fold (za / <leader>ff)'] = function()
     vim.cmd 'normal! za'
   end,
-  ['Open all folds folds under the cursor (level fold) (<leader>fl)'] = function()
+  ['[Folds] Open all folds folds under the cursor (level fold) (<leader>fl)'] = function()
     vim.cmd 'normal! zazczA'
   end,
-  ['Close all folds (<leader>fc)'] = function()
+  ['[Folds] Close all folds (<leader>fc)'] = function()
     vim.cmd 'normal! zM'
   end,
   ['Duplicate / Copy number of lines ({count}<leader>cp)'] = function()
@@ -122,18 +122,6 @@ return {
       end)
     end)
   end,
-  ['Toggle Terminal (<F6>)'] = function()
-    vim.cmd.FloatermToggle()
-  end,
-  ['Create a new terminal window (<F7>)'] = function()
-    vim.cmd.FloatermNew()
-  end,
-  ['Move to next terminal window (<F8>)'] = function()
-    vim.cmd.FloatermNext()
-  end,
-  ['Move to previous terminal window'] = function()
-    vim.cmd.FloatermPrev()
-  end,
   ['Find files (<C-p>)'] = function()
     require('telescope.builtin').find_files()
   end,
@@ -143,9 +131,6 @@ return {
   ['Open Nvim Tree File Browser (<C-o>)'] = function()
     local api = require 'nvim-tree.api'
     api.tree.toggle()
-  end,
-  ['Resize panes (<C-e>)'] = function()
-    vim.fn.feedkeys(T '<C-e>')
   end,
   ['Close all notifications (<leader>x)'] = function()
     require('notify').dismiss { pending = true, silent = true }
@@ -183,12 +168,6 @@ return {
   ['Split long bash line (<leader>\\'] = function()
     vim.fn.feedkeys(T '<leader>' .. [[\]])
   end,
-  ['Delete all hidden buffers (:BDelete hidden)'] = function()
-    vim.cmd 'BDelete hidden'
-  end,
-  ['Delete current buffer (<leader>bd)'] = function()
-    vim.fn.feedkeys(T '<leader>' .. 'bd')
-  end,
   ['Yaml to Json (:Yaml2Json)'] = function()
     vim.cmd.Yaml2Json()
   end,
@@ -204,7 +183,7 @@ return {
     vim.cmd.retab()
     vim.opt.expandtab = original_expandtab
   end,
-  ['Diff unsaved with saved file (<leader>ds)'] = function()
+  ['[Diff] unsaved with saved file (<leader>ds)'] = function()
     vim.fn.feedkeys(T '<leader>' .. 'ds')
   end,
 }

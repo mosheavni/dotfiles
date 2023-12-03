@@ -49,22 +49,6 @@ local actions = function()
   }
 end
 
-function _G.lsp_tmp_write(should_delete)
-  local tmp = vim.fn.tempname()
-  vim.cmd(string.format('write %s', tmp))
-  vim.cmd 'edit'
-  -- Create autocmd to delete the file on exit
-  if should_delete then
-    vim.api.nvim_create_autocmd({ 'VimLeavePre' }, {
-      buffer = 0,
-      command = 'delete("' .. tmp .. '")',
-    })
-  end
-  -- load lsp
-  require 'lspconfig'
-  return tmp
-end
-
 local M = {
   'neovim/nvim-lspconfig',
   event = { 'BufReadPre', 'BufNewFile' },
@@ -194,11 +178,9 @@ local M = {
 
 M.init = function()
   vim.keymap.set('n', '<leader>ls', function()
-    _G.lsp_tmp_write(true)
-  end)
-
-  vim.keymap.set('n', '<leader>ls', function()
-    _G.lsp_tmp_write(false)
+    _G.tmp_write { should_delete = false }
+    -- load lsp
+    require 'lspconfig'
   end)
 end
 
