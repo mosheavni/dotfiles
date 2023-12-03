@@ -13,7 +13,7 @@ trim_trailing_whitespace = true
 [Makefile]
 indent_style = tab
 
-[{*.groovy,Jenkinsfile,*.py}]
+[{*.groovy,*Jenkinsfile*,*.py}]
 indent_size = 4
 tab_width = 4
 
