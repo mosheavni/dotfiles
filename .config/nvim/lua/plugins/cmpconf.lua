@@ -39,14 +39,15 @@ M.config = function()
   end
 
   local source_mapping = {
-    nvim_lsp = '[LSP]',
-    luasnip = '[Snpt]',
-    cmp_tabnine = '[TN]',
-    nvim_lua = '[Vim]',
-    path = '[Path]',
     buffer = '[Buffer]',
+    cmdline = '[Cmd]',
+    cmp_tabnine = '[TN]',
     copilot = '[CP]',
     git = '[Git]',
+    luasnip = '[Snpt]',
+    nvim_lsp = '[LSP]',
+    nvim_lua = '[Vim]',
+    path = '[Path]',
     ['vim-dadbod-completion'] = '[DB]',
   }
 
