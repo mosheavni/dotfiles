@@ -178,7 +178,7 @@ local M = {
 
 M.init = function()
   vim.keymap.set('n', '<leader>ls', function()
-    _G.tmp_write { should_delete = false }
+    _G.tmp_write { should_delete = false, new = false }
     -- load lsp
     require 'lspconfig'
   end)
