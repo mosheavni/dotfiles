@@ -119,7 +119,7 @@ autocmd({ 'FileType' }, {
 })
 autocmd({ 'BufRead' }, {
   group = special_filetypes,
-  pattern = '*/plugins/*.lua',
+  pattern = { '*/plugins/*.lua', '.github/workflows/*.y*ml' },
   command = 'lua require("user.open-url").setup()',
 })
 
