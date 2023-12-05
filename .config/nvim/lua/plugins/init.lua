@@ -118,6 +118,10 @@ local M = {
   --   end,
   -- },
   {
+    'David-Kunz/gen.nvim',
+    cmd = { 'Gen' },
+  },
+  {
     'zbirenbaum/copilot.lua',
     event = 'InsertEnter',
     config = function()
