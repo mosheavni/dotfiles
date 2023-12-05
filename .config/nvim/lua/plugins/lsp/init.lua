@@ -157,14 +157,24 @@ local M = {
     {
       'nvimdev/lspsaga.nvim',
       opts = {
-        finder_action_keys = {
-          edit = '<CR>',
-          vsplit = '<C-v>',
-          split = '<C-x>',
-          quit = 'q',
+        finder = {
+          keys = {
+            edit = '<CR>',
+            vsplit = '<C-v>',
+            split = '<C-x>',
+          },
         },
-        code_action_lightbulb = {
+        definition = {
+          keys = {
+            edit = '<CR>',
+            vsplit = '<C-v>',
+            split = '<C-x>',
+          },
+        },
+
+        lightbulb = {
           enable = false,
+          sign = false,
         },
         symbol_in_winbar = {
           enable = true,
