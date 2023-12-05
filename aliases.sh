@@ -239,6 +239,38 @@ fdf() {
 }
 alias pj='fdf ~/Repos'
 
+mkdp() {
+  kubectl get pod --no-headers | fzf | awk '{print $1}' | xargs -n 1 kubectl describe pod
+}
+
+mklf() {
+  substring=$1
+  if [[ -z $substring ]];then
+    substring='.*'
+  fi
+  deployment=$(kubectl get deploy,sd --no-headers | grep $substring | fzf | awk '{print $1}')
+
+  pod_labels=$(kubectl get $deployment -ojsonpath='{.spec.template.metadata.labels}' | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" | paste -s -d "," -)
+
+  pod_or_all=$(echo -e "$(kubectl get pod --no-headers -l "$pod_labels")\nAll" | fzf | awk '{print $1}')
+
+  since=$(echo -e "All\n1h\n1d\n1w\n1m\n1y" | fzf)
+
+  if [[ $since == "All" ]];then
+    since=""
+  else
+    since="--since=$since"
+  fi
+
+  set -x
+  if [[ $pod_or_all == "All" ]];then
+    kubectl logs -f -l $pod_labels $since
+  else
+    kubectl logs -f $pod_or_all $since
+  fi
+  set +x
+}
+
 # debug nvim startup time
 function nvim-startuptime() {
   cat /dev/null > startuptime.txt && nvim --startuptime startuptime.txt "$@"

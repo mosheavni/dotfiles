@@ -88,6 +88,7 @@ fpath+=$(asdf where kubectx)/completion
 # ============= #
 source $ZSH/oh-my-zsh.sh
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
 
 # ================ #
 #  PS1 and Random  #
