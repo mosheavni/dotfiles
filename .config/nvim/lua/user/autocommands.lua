@@ -2,8 +2,6 @@ local utils = require 'user.utils'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
 local nnoremap = utils.nnoremap
-local fn = vim.fn
-local cmd = vim.cmd
 
 local reload_file_group = augroup 'ReloadFile'
 autocmd({ 'FocusGained', 'BufEnter' }, {
@@ -138,15 +136,15 @@ autocmd({ 'QuickFixCmdPost' }, {
   command = 'copen',
 })
 autocmd({ 'FileType' }, {
-  desc = 'Open quickfix results in a new split',
+  desc = 'Quickfix window settings',
   group = quickfix_au,
   pattern = 'qf',
   callback = function()
     local open_quickfix = function(new_split_cmd)
-      local qf_idx = fn.line '.'
-      cmd 'wincmd p'
-      cmd(new_split_cmd)
-      cmd(qf_idx .. 'cc')
+      local qf_idx = vim.fn.line '.'
+      vim.cmd 'wincmd p'
+      vim.cmd(new_split_cmd)
+      vim.cmd(qf_idx .. 'cc')
     end
     nnoremap('<c-v>', function()
       open_quickfix 'vnew'
@@ -155,8 +153,24 @@ autocmd({ 'FileType' }, {
     nnoremap('<c-x>', function()
       open_quickfix 'split'
     end, { buffer = true })
-    -- "n", "<C-v>", :call <SID>OpenQuickfix("vnew")<CR>
-    -- "n", "<C-x>", :call <SID>OpenQuickfix("split")<CR>
+
+    local function remove_qf_item()
+      local curqfidx = vim.fn.line '.'
+      local qfall = vim.fn.getqflist()
+      table.remove(qfall, curqfidx)
+      vim.fn.setqflist(qfall, 'r')
+      vim.cmd(curqfidx + 1 .. 'cfirst')
+      vim.cmd 'copen'
+    end
+    vim.api.nvim_create_user_command('RemoveQFItem', remove_qf_item, {})
+    nnoremap('dd', '<CMD>RemoveQFItem<CR>', { buffer = true })
+
+    -- map yy to yank file name
+    nnoremap('yy', function()
+      local line = vim.api.nvim_get_current_line()
+      local filename = vim.split(line, ' ')[1]
+      vim.fn.setreg('"', filename)
+    end, { buffer = true })
   end,
 })
 
