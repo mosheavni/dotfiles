@@ -173,6 +173,7 @@ autocmd({ 'FileType' }, {
     end, { buffer = true })
   end,
 })
+
 -- autocmd for terminal buffers
 local term_au = augroup 'MosheTerm'
 autocmd({ 'TermOpen' }, {
