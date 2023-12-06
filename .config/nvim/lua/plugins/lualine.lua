@@ -161,6 +161,9 @@ M.config = function()
   ins_left {
     -- mode component
     'mode',
+    fmt = function(str)
+      return str:sub(1, 1)
+    end,
     icon = '',
     color = function()
       local mode_color = {
@@ -182,7 +185,7 @@ M.config = function()
         rm = colors.cyan,
         ['r?'] = colors.cyan,
         ['!'] = colors.red,
-        t = colors.red,
+        t = colors.cyan,
       }
       return { fg = mode_color[vim.fn.mode()] }
     end,
@@ -246,14 +249,14 @@ M.config = function()
       end
       return table.concat(all_client_names, ', ')
     end,
-    icon = ' LSP:',
+    icon = { ' LSP:', color = { fg = colors.green } },
     color = { fg = '#ffffff' },
   }
   ins_right {
     'fileformat',
     color = { fg = colors.aqua, gui = 'bold' },
   }
-  ins_right { 'filetype', color = { fg = colors.green } }
+  ins_right { 'filetype' }
 
   ins_right { 'progress', color = { fg = colors.fg, gui = 'bold' } }
 
