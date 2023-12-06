@@ -173,6 +173,13 @@ autocmd({ 'FileType' }, {
     end, { buffer = true })
   end,
 })
+-- autocmd for terminal buffers
+local term_au = augroup 'MosheTerm'
+autocmd({ 'TermOpen' }, {
+  group = term_au,
+  pattern = '*',
+  command = 'startinsert',
+})
 
 -- custom settings
 local CustomSettingsGroup = augroup 'CustomSettingsGroup'

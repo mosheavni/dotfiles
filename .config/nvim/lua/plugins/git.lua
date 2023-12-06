@@ -247,6 +247,7 @@ endfunction
 " Autocmd
 function! s:ftplugin_fugitive() abort
   resize 20
+  nnoremap <buffer> <silent> <leader>t :vert term<cr>
   nnoremap <buffer> <silent> cc :Git commit --quiet<CR>
   nnoremap <buffer> <silent> gl :Gl<CR>
   nnoremap <buffer> <silent> gp :Gp<CR>
