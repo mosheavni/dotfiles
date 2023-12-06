@@ -7,13 +7,13 @@ local M = {
 }
 M.config = function()
   local null_ls = require 'null-ls'
-  local default_on_attach = require('plugins.lsp.on-attach').default
+  local default_on_attach = require('user.lsp.on-attach').default
 
   -- null-ls
   local sh_extra_fts = { 'bash', 'zsh' }
   null_ls.setup {
     on_attach = default_on_attach,
-    debug = false,
+    debug = true,
     sources = {
       null_ls.builtins.code_actions.shellcheck.with {
         extra_filetypes = { 'bash' },
@@ -28,7 +28,7 @@ M.config = function()
       -- null_ls.builtins.diagnostics.shellcheck.with {
       --   extra_filetypes = { 'bash' },
       -- },
-      null_ls.builtins.diagnostics.eslint_d,
+      -- null_ls.builtins.diagnostics.eslint_d,
       null_ls.builtins.formatting.black,
       -- null_ls.builtins.formatting.eslint_d,
       null_ls.builtins.formatting.markdownlint,

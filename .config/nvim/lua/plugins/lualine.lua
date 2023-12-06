@@ -80,9 +80,9 @@ M.config = function()
           borders.left,
           { 'branch', icon = '', color = { fg = colors.violet, gui = 'bold' } },
           {
-            function ()
-             return '%='
-            end
+            function()
+              return '%='
+            end,
           },
           {
             function()
@@ -136,7 +136,6 @@ M.config = function()
     extensions = {
       'fugitive',
       'lazy',
-      'mason',
       'nvim-dap-ui',
       'quickfix',
       'trouble',

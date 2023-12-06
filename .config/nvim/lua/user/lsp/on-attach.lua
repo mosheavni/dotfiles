@@ -1,5 +1,5 @@
 local utils = require 'user.utils'
-local user_maps = require 'plugins.lsp.keymaps'
+local user_maps = require 'user.lsp.keymaps'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
 
@@ -15,7 +15,7 @@ local default_on_attach = function(client, bufnr)
   -----------------------
   local basics = require 'lsp_basics'
   basics.make_lsp_commands(client, bufnr)
-  require('plugins.lsp.formatting').setup(client, bufnr)
+  require('user.lsp.formatting').setup(client, bufnr)
 
   ------------------
   -- AutoCommands --

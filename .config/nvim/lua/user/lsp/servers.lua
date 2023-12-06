@@ -1,4 +1,4 @@
-local on_attaches = require 'plugins.lsp.on-attach'
+local on_attaches = require 'user.lsp.on-attach'
 local default_on_attach = on_attaches.default
 
 local M = {

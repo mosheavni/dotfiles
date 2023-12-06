@@ -1,7 +1,7 @@
 local actions = function()
   return {
     ['Format (<leader>lp)'] = function()
-      require('plugins.lsp.formatting').format()
+      require('user.lsp.formatting').format()
     end,
     ['Code Actions (<leader>la)'] = function()
       vim.lsp.buf.code_action()
@@ -119,71 +119,6 @@ local M = {
       docker_compose_language_service = function() end,
     },
   },
-  dependencies = {
-    'nvimtools/none-ls.nvim',
-    'mfussenegger/nvim-jdtls',
-    'folke/lsp-colors.nvim',
-    'williamboman/mason-lspconfig.nvim',
-    'nanotee/nvim-lsp-basics',
-    {
-      'j-hui/fidget.nvim',
-      tag = 'legacy',
-      config = function()
-        require('fidget').setup {
-          text = {
-            spinner = 'moon',
-          },
-        }
-      end,
-    },
-    'b0o/SchemaStore.nvim',
-    {
-      'folke/neodev.nvim',
-      opts = {
-        override = function(_, library)
-          library.enabled = true
-          library.plugins = true
-        end,
-      },
-    },
-    {
-      'someone-stole-my-name/yaml-companion.nvim',
-      config = function()
-        local nnoremap = require('user.utils').nnoremap
-        nnoremap('<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", true)
-      end,
-    },
-    'jose-elias-alvarez/typescript.nvim',
-    {
-      'nvimdev/lspsaga.nvim',
-      opts = {
-        finder = {
-          keys = {
-            edit = '<CR>',
-            vsplit = '<C-v>',
-            split = '<C-x>',
-          },
-        },
-        definition = {
-          keys = {
-            edit = '<CR>',
-            vsplit = '<C-v>',
-            split = '<C-x>',
-          },
-        },
-
-        lightbulb = {
-          enable = false,
-          sign = false,
-        },
-        symbol_in_winbar = {
-          enable = true,
-          hide_keyword = false,
-        },
-      },
-      config = true,
-    },
-  },
 }
 
 M.init = function()
@@ -196,7 +131,7 @@ end
 
 M.config = function(_, opts)
   require('user.menu').add_actions('LSP', actions())
-  require('plugins.lsp.handlers').setup()
+  require('user.lsp.handlers').setup()
 
   -- Set formatting of lsp log
   require('vim.lsp.log').set_format_func(vim.inspect)
@@ -215,7 +150,7 @@ M.config = function(_, opts)
     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
   end
 
-  local servers = require 'plugins.lsp.servers'
+  local servers = require 'user.lsp.servers'
   ------------------
   -- Capabilities --
   ------------------
@@ -283,16 +218,100 @@ M.config = function(_, opts)
   end
 end
 
-local Mason = {
-  'williamboman/mason.nvim',
-  cmd = 'Mason',
-  keys = { { '<leader>cm', '<cmd>Mason<cr>', desc = 'Mason' } },
-  build = ':MasonUpdate',
-  opts = {
-    ui = {
-      border = require('user.utils').float_border,
+M.dependencies = {
+  'nvimtools/none-ls.nvim',
+  'folke/lsp-colors.nvim',
+  {
+    'williamboman/mason.nvim',
+    cmd = 'Mason',
+    keys = { { '<leader>cm', '<cmd>Mason<cr>', desc = 'Mason' } },
+    build = ':MasonUpdate',
+    opts = {
+      ui = {
+        border = require('user.utils').float_border,
+      },
+    },
+  },
+  'williamboman/mason-lspconfig.nvim',
+  'nanotee/nvim-lsp-basics',
+  {
+    'j-hui/fidget.nvim',
+    -- tag = 'legacy',
+    config = function()
+      require('fidget').setup {
+        progress = {
+          display = {
+            progress_icon = { pattern = 'moon', period = 1 },
+          },
+        },
+      }
+    end,
+  },
+  {
+    'nvimdev/lspsaga.nvim',
+    opts = {
+      finder = {
+        keys = {
+          edit = '<CR>',
+          vsplit = '<C-v>',
+          split = '<C-x>',
+        },
+      },
+      definition = {
+        keys = {
+          edit = '<CR>',
+          vsplit = '<C-v>',
+          split = '<C-x>',
+        },
+      },
+
+      lightbulb = {
+        enable = false,
+        sign = false,
+      },
+      symbol_in_winbar = {
+        enable = true,
+        hide_keyword = false,
+      },
+    },
+    config = true,
+  },
+}
+
+local language_specific_plugins = {
+  {
+    'mfussenegger/nvim-jdtls',
+    ft = { 'java' },
+  },
+  {
+    'jose-elias-alvarez/typescript.nvim',
+    ft = { 'typescript', 'typescriptreact', 'typescript.tsx', 'javascript' },
+  },
+  {
+    'someone-stole-my-name/yaml-companion.nvim',
+    ft = { 'yaml' },
+    config = function()
+      local nnoremap = require('user.utils').nnoremap
+      nnoremap('<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", true)
+    end,
+  },
+  {
+    'b0o/SchemaStore.nvim',
+    ft = { 'yaml' },
+  },
+  {
+    'folke/neodev.nvim',
+    ft = { 'lua' },
+    opts = {
+      override = function(_, library)
+        library.enabled = true
+        library.plugins = true
+      end,
     },
   },
 }
 
-return { M, Mason }
+return {
+  M,
+  language_specific_plugins,
+}
