@@ -253,7 +253,7 @@ M.config = function()
     'fileformat',
     color = { fg = colors.aqua, gui = 'bold' },
   }
-  ins_right { 'filetype' }
+  ins_right { 'filetype', color = { fg = colors.green } }
 
   ins_right { 'progress', color = { fg = colors.fg, gui = 'bold' } }
 
@@ -264,6 +264,18 @@ M.config = function()
   ins_right {
     function()
       return require('lazy').stats().startuptime
+    end,
+    color = function()
+      local time = require('lazy').stats().startuptime
+      if time > 120 then
+        return { fg = colors.red }
+      elseif time > 90 then
+        return { fg = colors.orange }
+      elseif time > 60 then
+        return { fg = colors.yellow }
+      else
+        return { fg = colors.green }
+      end
     end,
   }
 
