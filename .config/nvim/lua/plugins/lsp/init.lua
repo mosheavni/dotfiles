@@ -236,7 +236,6 @@ M.dependencies = {
   'nanotee/nvim-lsp-basics',
   {
     'j-hui/fidget.nvim',
-    -- tag = 'legacy',
     config = function()
       require('fidget').setup {
         progress = {
