@@ -44,6 +44,9 @@ local actions = function()
     ['Diff close'] = function()
       vim.cmd 'DiffviewClose'
     end,
+    ['Set upstream to HAED'] = function()
+      vim.cmd('G branch --set-upstream-to=origin/' .. vim.fn.FugitiveHead())
+    end,
     ['Blame'] = function()
       vim.cmd 'G blame'
     end,
@@ -243,11 +246,13 @@ endfunction
 
 " Autocmd
 function! s:ftplugin_fugitive() abort
+  resize 20
   nnoremap <buffer> <silent> cc :Git commit --quiet<CR>
   nnoremap <buffer> <silent> gl :Gl<CR>
   nnoremap <buffer> <silent> gp :Gp<CR>
   nnoremap <buffer> <silent> pr :silent! !cpr<CR>
   nnoremap <buffer> <silent> wip :call Enter_Wip_Moshe()<cr>
+  nnoremap <buffer> <silent> R :e<cr>
 
 endfunction
 augroup moshe_fugitive
@@ -269,7 +274,7 @@ function! ToggleGStatus()
 endfunction
 command! ToggleGStatus :call ToggleGStatus()
 nnoremap <silent> <leader>gg :ToggleGStatus<cr>
-nmap <silent><expr> <leader>gf bufname('.git/index') ? ':exe bufwinnr(bufnr(bufname(".git/index"))) . "wincmd w"<cr>' : ':Git<cr>'
+nmap <silent><expr> <leader>gf bufname('.git/index') ? ':exe bufwinnr(bufnr(bufname(".git/index"))) . "wincmd w"<cr>' : '<cmd>Git<cr>'
 
 nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
 ]]
