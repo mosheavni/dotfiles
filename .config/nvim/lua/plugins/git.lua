@@ -272,56 +272,6 @@ nnoremap <silent> <leader>gg :ToggleGStatus<cr>
 nmap <silent><expr> <leader>gf bufname('.git/index') ? ':exe bufwinnr(bufnr(bufname(".git/index"))) . "wincmd w"<cr>' : ':Git<cr>'
 
 nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
-
-" Gdiffrev
-nmap <leader>dh :DiffHistory<Space>
-command! -nargs=? DiffHistory call s:view_git_history('<args>')
-command! DiffFile call s:view_git_history('current_file')
-nmap <silent> <leader>gh :DiffFile<cr>
-
-function! s:view_git_history(...) abort
-  let branch_name = a:1
-  if branch_name ==# 'current_file'
-    0Gclog
-  elseif branch_name !=? ''
-    execute 'Git difftool --name-only ' . branch_name . '...@'
-  else
-    Git difftool --name-only ! !^@
-  endif
-  call s:diff_current_quickfix_entry()
-  " Bind <CR> for current quickfix window to properly set up diff split layout after selecting an item
-  " There's probably a better way to map this without changing the window
-  copen
-  nnoremap <buffer> <CR> <CR><BAR>:call <sid>diff_current_quickfix_entry()<CR>
-  wincmd p
-endfunction
-
-function s:diff_current_quickfix_entry() abort
-  " Cleanup windows
-  for window in getwininfo()
-    if window.winnr !=? winnr() && bufname(window.bufnr) =~? '^fugitive:'
-      exe 'bdelete' window.bufnr
-    endif
-  endfor
-  cc
-  call s:add_mappings()
-  let qf = getqflist({'context': 0, 'idx': 0})
-  if get(qf, 'idx') && type(get(qf, 'context')) == type({}) && type(get(qf.context, 'items')) == type([])
-    let diff = get(qf.context.items[qf.idx - 1], 'diff', [])
-    for i in reverse(range(len(diff)))
-      exe (i ? 'leftabove' : 'rightbelow') 'vert diffsplit' fnameescape(diff[i].filename)
-      call s:add_mappings()
-    endfor
-  endif
-endfunction
-
-function! s:add_mappings() abort
-  nnoremap <buffer>]q :cnext <BAR> :call <sid>diff_current_quickfix_entry()<CR>
-  nnoremap <buffer>[q :cprevious <BAR> :call <sid>diff_current_quickfix_entry()<CR>
-  " Reset quickfix height. Sometimes it messes up after selecting another item
-  11copen
-  wincmd p
-endfunction
 ]]
 
   -------------------------
