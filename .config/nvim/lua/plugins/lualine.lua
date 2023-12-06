@@ -40,6 +40,8 @@ M.config = function()
     end,
   }
 
+  local my_branch = { 'branch', icon = '', color = { fg = colors.violet, gui = 'bold' } }
+
   local borders = {
     left = {
       function()
@@ -78,7 +80,7 @@ M.config = function()
       sections = {
         lualine_c = {
           borders.left,
-          { 'branch', icon = '', color = { fg = colors.violet, gui = 'bold' } },
+          my_branch,
           {
             function()
               return '%='
@@ -187,11 +189,7 @@ M.config = function()
     padding = { right = 1 },
   }
 
-  ins_left {
-    'branch',
-    icon = '',
-    color = { fg = colors.violet, gui = 'bold' },
-  }
+  ins_left(my_branch)
 
   ins_left {
     'diff',
