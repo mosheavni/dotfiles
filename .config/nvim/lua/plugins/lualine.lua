@@ -11,11 +11,11 @@ M.config = function()
   local colors = {
     bg       = '#202328',
     fg       = '#bbc2cf',
-    aqua     = '#b8bb26',
+    aqua     = '#6EB0A3',
     yellow   = '#ECBE7B',
     cyan     = '#008080',
     darkblue = '#081633',
-    green    = '#98be65',
+    green    = '#a9b665',
     orange   = '#FF8800',
     violet   = '#a9a1e1',
     magenta  = '#c678dd',
@@ -194,11 +194,6 @@ M.config = function()
   ins_left {
     'diff',
     symbols = { added = ' ', modified = '󰝤 ', removed = ' ' },
-    diff_color = {
-      added = { fg = colors.green },
-      modified = { fg = colors.orange },
-      removed = { fg = colors.red },
-    },
     cond = conditions.hide_in_width,
   }
 
@@ -256,7 +251,7 @@ M.config = function()
   }
   ins_right {
     'fileformat',
-    color = { fg = colors.green, gui = 'bold' },
+    color = { fg = colors.aqua, gui = 'bold' },
   }
   ins_right { 'filetype' }
 
