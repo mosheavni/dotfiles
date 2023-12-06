@@ -46,6 +46,7 @@ local M = {
           server = 'on',
         },
         schemas = require('schemastore').json.schemas(),
+        validate = { enable = true },
       },
     },
   },
