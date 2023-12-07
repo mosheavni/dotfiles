@@ -224,6 +224,9 @@ nmap('cv', '"+p')
 vnoremap('J', [[:m '>+1<CR>gv=gv]], true)
 vnoremap('K', [[:m '<-2<CR>gv=gv]], true)
 
+-- Select last inserted text
+nnoremap('gV', '`[v`]')
+
 -- Convert all tabs to spaces
 nnoremap('<leader>ct<space>', ':retab<cr>', true)
 
