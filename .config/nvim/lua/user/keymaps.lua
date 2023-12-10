@@ -435,8 +435,8 @@ function! RipGrepCWORD(bang, visualmode, ...) abort
   let grepcmd = 'silent grep! ' . search_word
   execute grepcmd
 endfunction
-command! -bang -range -nargs=? RipGrepCWORD call RipGrepCWORD("<bang>", v:false, <q-args>)
-command! -bang -range -nargs=? RipGrepCWORDVisual call RipGrepCWORD("<bang>", v:true, <q-args>)
+command! -bang -range -nargs=? -complete=file_in_path RipGrepCWORD call RipGrepCWORD("<bang>", v:false, <q-args>)
+command! -bang -range -nargs=? -complete=file_in_path RipGrepCWORDVisual call RipGrepCWORD("<bang>", v:true, <q-args>)
 nnoremap <c-f> :RipGrepCWORD!<Space>
 vnoremap <c-f> :RipGrepCWORDVisual!<cr>
 ]]
