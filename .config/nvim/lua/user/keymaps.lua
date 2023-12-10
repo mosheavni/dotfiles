@@ -49,7 +49,7 @@ inoremap(';', ';<c-g>u')
 inoremap(';;', '<C-O>A;')
 
 -- Search for string within the visual selection
-vim.keymap.set('x', '/', '<Esc>/\\%V')
+xnoremap('/', '<Esc>/\\%V')
 
 -- Copy number of lines and paste below
 function _G.__duplicate_lines(motion)
@@ -205,6 +205,12 @@ vnoremap('#', ":call StarSearch('?')<CR>?<C-R>=@/<CR><CR>", true)
 nnoremap('-', [["ldd$"lp]])
 nnoremap('_', [["ldd2k"lp]])
 
+-- Allow clipboard copy paste in neovim
+vim.keymap.set('', '<D-v>', '+p<CR>', opts.no_remap_silent)
+vim.keymap.set('!', '<D-v>', '<C-R>+', opts.no_remap_silent)
+tnoremap('<D-v>', '<C-R>+', true)
+vnoremap('<D-v>', '<C-R>+', true)
+
 -- Copy entire file to clipboard
 nnoremap('Y', ':%y+<cr>', true)
 
@@ -282,6 +288,13 @@ nnoremap('<leader>em', [[:execute("vsplit " . '~/.config/nvim/lua/user/mappings.
 nnoremap('<leader>bd', '<cmd>BDelete this<cr>', true)
 -- Close current buffer
 nnoremap('<leader>bc', ':close<cr>', true)
+
+-- Abbreviations
+vim.keymap.set('!a', 'dont', [[don't]], opts.no_remap)
+vim.keymap.set('!a', 'seperate', [[separate]], opts.no_remap)
+vim.keymap.set('!a', 'rbm', [[# TODO: remove before merging]], opts.no_remap)
+vim.keymap.set('!a', 'cbm', [[# TODO: change before merging]], opts.no_remap)
+vim.keymap.set('!a', 'ubm', [[# TODO: uncomment before merging]], opts.no_remap)
 
 -----------------
 -- Yaml / Json --
@@ -432,6 +445,39 @@ end, { bang = true, range = true, nargs = '?', complete = 'file_in_path' })
 vim.keymap.set({ 'n', 'v' }, '<C-f>', function()
   return vim.fn.mode() == 'v' and ':RipGrepCWORDVisual!<cr>' or ':RipGrepCWORD!<Space>'
 end, opts.no_remap_expr)
+
+------------------------
+-- Run current buffer --
+------------------------
+vim.cmd [[
+" Will attempt to execute the current file based on the `&filetype`
+" You need to manually map the filetypes you use most commonly to the
+" correct shell command.
+function! ExecuteFile()
+  let l:filetype_to_command = {
+        \   'javascript': 'node',
+        \   'python': 'python3',
+        \   'html': 'open',
+        \   'sh': 'bash'
+        \ }
+  call inputsave()
+  let sure = input('Are you sure you want to run the current file? (y/n): ')
+  call inputrestore()
+  if sure !=# 'y'
+    return ''
+  endif
+  echo ''
+  let l:cmd = get(l:filetype_to_command, &filetype, 'bash')
+  :%y
+  new | 0put
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  exe '%!'.l:cmd
+  normal! ggO
+  call setline(1, 'Output of ' . l:cmd . ' command:')
+  normal! yypVr=o
+endfunction
+]]
+nnoremap('<F3>', ':call ExecuteFile()<CR>', true)
 
 ----------------------------
 -- Sort Json Array by key --

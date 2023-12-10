@@ -1,8 +1,3 @@
-local utils = require 'user.utils'
-local opts = utils.map_opts
-local keymap = utils.keymap
-local tnoremap = utils.tnoremap
-local vnoremap = utils.vnoremap
 vim.o.compatible = false
 vim.g.python3_host_prog = 'python3'
 
@@ -146,51 +141,6 @@ vim.o.smarttab = true -- insert tabs on the start of a line according to shiftwi
 vim.o.expandtab = true -- Tab changes to spaces. Format with :retab
 vim.opt.indentkeys:remove '0#'
 vim.opt.indentkeys:remove '<:>'
-
--- Allow clipboard copy paste in neovim
-keymap('', '<D-v>', '+p<CR>', opts.no_remap_silent)
-keymap('!', '<D-v>', '<C-R>+', opts.no_remap_silent)
-tnoremap('<D-v>', '<C-R>+', true)
-vnoremap('<D-v>', '<C-R>+', true)
-
--- Abbreviations
-vim.keymap.set('!a', 'dont', [[don't]], opts.no_remap)
-vim.keymap.set('!a', 'seperate', [[separate]], opts.no_remap)
-vim.keymap.set('!a', 'rbm', [[# TODO: remove before merging]], opts.no_remap)
-vim.keymap.set('!a', 'cbm', [[# TODO: change before merging]], opts.no_remap)
-vim.keymap.set('!a', 'ubm', [[# TODO: uncomment before merging]], opts.no_remap)
-
--- Run current buffer
-vim.cmd [[
-" Will attempt to execute the current file based on the `&filetype`
-" You need to manually map the filetypes you use most commonly to the
-" correct shell command.
-function! ExecuteFile()
-  let l:filetype_to_command = {
-        \   'javascript': 'node',
-        \   'python': 'python3',
-        \   'html': 'open',
-        \   'sh': 'bash'
-        \ }
-  call inputsave()
-  let sure = input('Are you sure you want to run the current file? (y/n): ')
-  call inputrestore()
-  if sure !=# 'y'
-    return ''
-  endif
-  echo ''
-  let l:cmd = get(l:filetype_to_command, &filetype, 'bash')
-  :%y
-  new | 0put
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
-  exe '%!'.l:cmd
-  normal! ggO
-  call setline(1, 'Output of ' . l:cmd . ' command:')
-  normal! yypVr=o
-endfunction
-
-nnoremap <silent> <F3> :call ExecuteFile()<CR>
-]]
 
 -- disable some builtin vim plugins
 local default_plugins = {
