@@ -192,36 +192,6 @@ endfunction
 nnoremap <silent> <F3> :call ExecuteFile()<CR>
 ]]
 
--- Helper functions
-vim.cmd [[
-function! GetVisualSelection() abort
-  let [lnum1, col1] = getpos("'<")[1:2]
-  let [lnum2, col2] = getpos("'>")[1:2]
-  let lines = getline(lnum1, lnum2)
-  let lines[-1] = lines[-1][: col2 - (&selection ==? 'inclusive' ? 1 : 2)]
-  let lines[0] = lines[0][col1 - 1:]
-  let entire_selection = join(lines, "\n")
-  return entire_selection
-endfunction
-
-function! GetMotion(motion)
-  let saved_register = getreg('a')
-  defer setreg('a', saved_register)
-
-  exe 'normal! ' .. a:motion .. '"ay'
-  return @a
-endfunction
-
-function! ReplaceMotion(motion, text)
-  let saved_register = getreg('a')
-  defer setreg('a', saved_register)
-
-  let @a = a:text
-
-  exe 'normal! ' .. a:motion .. '"ap'
-endfunction
-]]
-
 -- disable some builtin vim plugins
 local default_plugins = {
   '2html_plugin',

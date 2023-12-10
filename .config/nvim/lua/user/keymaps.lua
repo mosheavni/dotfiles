@@ -402,20 +402,7 @@ function! RipGrepCWORD(bang, visualmode, ...) abort
   let search_word = a:1
 
   if a:visualmode
-    " Get the line and column of the visual selection marks
-    let [lnum1, col1] = getpos("'<")[1:2]
-    let [lnum2, col2] = getpos("'>")[1:2]
-
-    " Get all the lines represented by this range
-    let lines = getline(lnum1, lnum2)
-
-    " The last line might need to be cut if the visual selection didn't end on the last column
-    let lines[-1] = lines[-1][: col2 - (&selection ==? 'inclusive' ? 1 : 2)]
-    " The first line might need to be trimmed if the visual selection didn't start on the first column
-    let lines[0] = lines[0][col1 - 1:]
-
-    " Get the desired text
-    let search_word = join(lines, "\n")
+    let search_word = GetMotion('gv')
   endif
   if search_word ==? ''
     let search_word = expand('<cword>')
@@ -423,7 +410,7 @@ function! RipGrepCWORD(bang, visualmode, ...) abort
 
   " Set bang command for literal search (no regexp expansion)
   let search_message_literally = "for " . search_word
-  if a:bang == "!"
+  if a:bang == "!" || a:bang == v:true
     let search_message_literally = "literally for " . search_word
     let search_word = get(g:, 'grep_literal_flag', "") . ' ' . shellescape(search_word)
   endif
@@ -435,11 +422,16 @@ function! RipGrepCWORD(bang, visualmode, ...) abort
   let grepcmd = 'silent grep! ' . search_word
   execute grepcmd
 endfunction
-command! -bang -range -nargs=? -complete=file_in_path RipGrepCWORD call RipGrepCWORD("<bang>", v:false, <q-args>)
-command! -bang -range -nargs=? -complete=file_in_path RipGrepCWORDVisual call RipGrepCWORD("<bang>", v:true, <q-args>)
-nnoremap <c-f> :RipGrepCWORD!<Space>
-vnoremap <c-f> :RipGrepCWORDVisual!<cr>
 ]]
+vim.api.nvim_create_user_command('RipGrepCWORD', function(f_opts)
+  vim.fn.RipGrepCWORD(f_opts.bang, false, f_opts.args)
+end, { bang = true, range = true, nargs = '?', complete = 'file_in_path' })
+vim.api.nvim_create_user_command('RipGrepCWORDVisual', function(f_opts)
+  vim.fn.RipGrepCWORD(f_opts.bang, true, f_opts.args)
+end, { bang = true, range = true, nargs = '?', complete = 'file_in_path' })
+vim.keymap.set({ 'n', 'v' }, '<C-f>', function()
+  return vim.fn.mode() == 'v' and ':RipGrepCWORDVisual!<cr>' or ':RipGrepCWORD!<Space>'
+end, opts.no_remap_expr)
 
 ----------------------------
 -- Sort Json Array by key --
