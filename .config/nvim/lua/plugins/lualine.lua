@@ -156,6 +156,9 @@ M.config = function()
     table.insert(config.sections.lualine_x, component)
   end
 
+  ------------------
+  -- Left Section --
+  ------------------
   ins_left(borders.left)
 
   ins_left {
@@ -221,6 +224,9 @@ M.config = function()
     cond = conditions.is_yaml_ft,
   }
 
+  --------------------
+  -- Center Section --
+  --------------------
   -- Insert mid section. You can make any number of sections in neovim :)
   -- for lualine it's any number greater then 2
   ins_left {
@@ -228,13 +234,15 @@ M.config = function()
       return '%='
     end,
   }
-
   ins_left {
     'filename',
     cond = conditions.buffer_not_empty,
     color = { fg = colors.aqua, gui = 'bold' },
   }
 
+  -------------------
+  -- Right Section --
+  -------------------
   ins_right {
     -- Lsp server name .
     function()
@@ -261,8 +269,6 @@ M.config = function()
   ins_right { 'progress', color = { fg = colors.fg, gui = 'bold' } }
 
   ins_right { 'location' }
-
-  ins_right { 'searchcount' }
 
   ins_right {
     function()
