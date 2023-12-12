@@ -197,20 +197,20 @@ local M = {
     keys = { { 'ga', '<Plug>(EasyAlign)', mode = { 'v', 'n' } } },
   },
   {
-    'nguyenvukhang/nvim-toggler',
+    'AndrewRadev/switch.vim',
     keys = {
       { 'gs', nil, { 'n', 'v' } },
     },
-    opts = {
-      remove_default_keybinds = true,
-      inverses = {
-        ['enable'] = 'disable',
-        ['internet-facing'] = 'internal',
-      },
-    },
-    config = function(_, opts)
-      require('nvim-toggler').setup(opts)
-      vim.keymap.set({ 'n', 'v' }, 'gs', require('nvim-toggler').toggle)
+    config = function()
+      vim.g['switch_custom_definitions'] = {
+        vim.fn['switch#NormalizedCaseWords'] { 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' },
+        vim.fn['switch#NormalizedCase'] { 'yes', 'no' },
+        vim.fn['switch#NormalizedCase'] { 'on', 'off' },
+        vim.fn['switch#NormalizedCase'] { 'left', 'right' },
+        vim.fn['switch#NormalizedCase'] { 'up', 'down' },
+        vim.fn['switch#NormalizedCase'] { 'enable', 'disable' },
+        { '==', '!=' },
+      }
     end,
   },
   {
