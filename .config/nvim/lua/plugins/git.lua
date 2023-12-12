@@ -330,19 +330,18 @@ local M = {
       '<leader>gp',
     },
     cmd = { 'G', 'Git' },
-    dependencies = {
-      {
-        'akinsho/git-conflict.nvim',
-        version = '*',
-        opts = {
-          default_mappings = true,
-        },
-      },
-    },
   },
   {
     'mosheavni/vim-to-github',
     cmd = { 'ToGithub' },
+  },
+  {
+    'akinsho/git-conflict.nvim',
+    version = '*',
+    event = 'BufReadPre',
+    opts = {
+      default_mappings = true,
+    },
   },
   {
     'sindrets/diffview.nvim',
