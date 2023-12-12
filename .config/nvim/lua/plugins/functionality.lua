@@ -175,7 +175,7 @@ local M = {
             '}',
           })
           vim.cmd.write()
-          vim.cmd.edit()
+          P 'Invoke with <leader>cr'
         end,
       })
     end,

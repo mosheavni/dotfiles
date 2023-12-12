@@ -51,10 +51,11 @@ function _G.tmp_write(opts)
     end
   end
 
-  vim.cmd(string.format('write %s', tmp))
   if ft then
     vim.api.nvim_set_option_value('filetype', ft, { buf = 0 })
+    tmp = tmp .. '.' .. ft
   end
+  vim.cmd(string.format('write %s', tmp))
   vim.cmd 'edit'
 
   -- Create autocmd to delete the file on exit

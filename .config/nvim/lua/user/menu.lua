@@ -25,7 +25,7 @@ end
 
 M.setup = function()
   nmap('<leader>a', function()
-    vim.ui.select(vim.tbl_keys(M.actions), { prompt = 'Choose action (' .. vim.tbl_count(M.actions) .. ' actions)' }, function(choice)
+    vim.ui.select(vim.tbl_keys(M.actions), { prompt = 'Choose action❯ ' }, function(choice)
       if choice then
         M.actions[choice]()
       end
