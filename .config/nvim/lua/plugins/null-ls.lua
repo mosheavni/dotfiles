@@ -15,6 +15,8 @@ M.config = function()
     on_attach = default_on_attach,
     debug = true,
     sources = {
+      require('user.lsp.code-actions').revision_branch_comment,
+      require('user.lsp.code-actions').toggle_function_params,
       null_ls.builtins.code_actions.shellcheck.with {
         extra_filetypes = { 'bash' },
       },
