@@ -33,8 +33,6 @@ M.toggle_function_params = {
     fn = function(context)
       local row = context.range.row
       local current_line = context.content[row]
-      -- check if current line starts with \s*def .*\(
-
       local is_function = vim.regex([=[\v\s*def\s[^\)]+\(]=]):match_str(current_line)
       local final = current_line
       if is_function then

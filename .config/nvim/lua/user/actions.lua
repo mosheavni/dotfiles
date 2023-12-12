@@ -122,6 +122,24 @@ return {
       end)
     end)
   end,
+  ['Save current buffer as temp'] = function()
+    local ft = vim.api.nvim_buf_get_option(0, 'filetype')
+    if ft == '' then
+      vim.ui.select(vim.fn.getcompletion('', 'filetype'), { prompt = 'Filetype' }, function(selected)
+        if not selected then
+          pretty_print 'Canceled.'
+          return
+        end
+        vim.cmd('set filetype=' .. selected)
+        -- save with the filetype extension
+        vim.cmd('write ' .. vim.fn.tempname() .. '.' .. selected)
+        vim.cmd 'edit'
+      end)
+    else
+      vim.cmd('write ' .. vim.fn.tempname() .. '.' .. ft)
+      vim.cmd 'edit'
+    end
+  end,
   ['Find files (<C-p>)'] = function()
     require('telescope.builtin').find_files()
   end,
