@@ -69,7 +69,7 @@ local M = {
   },
   {
     'mosheavni/vim-kubernetes',
-    event = 'VeryLazy',
+    ft = 'yaml',
   },
   -- {
   --   'towolf/vim-helm',
@@ -94,11 +94,7 @@ local M = {
   },
   {
     'milisims/nvim-luaref',
-    event = 'VeryLazy',
-  },
-  {
-    'nanotee/luv-vimdocs',
-    event = 'VeryLazy',
+    ft = 'lua',
   },
   { 'cuducos/yaml.nvim', ft = 'yaml' },
 

@@ -319,8 +319,17 @@ end
 local M = {
   {
     'tpope/vim-fugitive',
-    event = 'VeryLazy',
     config = fugitive_config,
+    keys = {
+      '<leader>gb',
+      '<leader>gc',
+      '<leader>gf',
+      '<leader>gg',
+      '<leader>gl',
+      '<leader>gm',
+      '<leader>gp',
+    },
+    cmd = { 'G', 'Git' },
     dependencies = {
       {
         'akinsho/git-conflict.nvim',

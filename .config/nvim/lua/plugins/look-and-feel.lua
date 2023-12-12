@@ -53,7 +53,7 @@ local M = {
   },
   {
     'vim-scripts/CursorLineCurrentWindow',
-    event = 'VeryLazy',
+    event = 'BufReadPost',
   },
   {
     'NvChad/nvim-colorizer.lua',
@@ -62,7 +62,7 @@ local M = {
       require('colorizer').setup(opts)
       require('colorizer').attach_to_buffer(0, { mode = 'virtualtext', css = true })
     end,
-    event = 'VeryLazy',
+    event = 'BufReadPost',
   },
 }
 
