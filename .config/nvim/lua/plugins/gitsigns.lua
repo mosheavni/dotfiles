@@ -44,13 +44,13 @@ local M = {
   },
   init = function()
     require('user.menu').add_actions('Git', {
-      ['Preview hunk'] = function()
+      ['Preview hunk (<leader>hp)'] = function()
         vim.cmd.Gitsigns 'preview_hunk'
       end,
-      ['Toggle current line blame'] = function()
+      ['Toggle current line blame (<leader>hb)'] = function()
         vim.cmd.Gitsigns 'toggle_current_line_blame'
       end,
-      ['Toggle deleted'] = function()
+      ['Toggle deleted (<leader>hd)'] = function()
         vim.cmd.Gitsigns 'toggle_deleted'
       end,
       ['Select hunk'] = function()
