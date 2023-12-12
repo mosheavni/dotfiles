@@ -25,6 +25,7 @@ local M = {
   },
   {
     'luukvbaal/statuscol.nvim',
+    branch = '0.10',
     event = 'VeryLazy',
     config = function()
       local builtin = require 'statuscol.builtin'
