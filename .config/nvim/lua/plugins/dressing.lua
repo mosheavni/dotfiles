@@ -46,14 +46,6 @@ local M = {
   'stevearc/dressing.nvim',
   config = function()
     require('dressing').setup {
-      select = {
-        telescope = get_dropdown {
-          layout_config = {
-            width = 0.4,
-            -- height = 0.8,
-          },
-        },
-      },
       input = {
         enabled = true,
         relative = 'editor',

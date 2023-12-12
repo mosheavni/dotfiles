@@ -5,7 +5,7 @@ end
 local actions = function()
   return {
     ['Change branch (F4)'] = function()
-      require('user.git-branches').open()
+      vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<F4>', true, true, true))
     end,
     ['Checkout new branch (:Gcb {new_branch})'] = function()
       _G.create_new_branch { args = '' }
