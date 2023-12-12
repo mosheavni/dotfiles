@@ -15,7 +15,13 @@ local M = {
       },
     },
     config = function()
-      vim.notify = require 'notify'
+      local notify = require 'notify'
+      notify.setup {
+        render = 'compact',
+        stages = 'static',
+        timeout = 3000,
+      }
+      vim.notify = notify
     end,
   },
   {
