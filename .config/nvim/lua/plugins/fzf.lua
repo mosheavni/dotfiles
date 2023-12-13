@@ -11,6 +11,9 @@ return {
   },
   config = function()
     require('fzf-lua').setup {
+      oldfiles = {
+        cwd_only = true,
+      },
       actions = {
         live_grep = {
           ['ctrl-q'] = require('fzf-lua.actions').buf_sel_to_qf,
