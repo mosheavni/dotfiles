@@ -4,10 +4,10 @@ local M = {
     pcall(require('nvim-treesitter.install').update { with_sync = true })
   end,
   dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
+    'Afourcat/treesitter-terraform-doc.nvim',
     'nvim-treesitter/nvim-treesitter-context',
     'nvim-treesitter/nvim-treesitter-refactor',
-    'Afourcat/treesitter-terraform-doc.nvim',
+    'nvim-treesitter/nvim-treesitter-textobjects',
     {
       'windwp/nvim-ts-autotag',
       ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml' },
@@ -95,6 +95,9 @@ M.config = function()
         scope_incremental = '<S-CR>',
         node_decremental = '<BS>',
       },
+    },
+    matchup = {
+      enable = true,
     },
     endwise = {
       enable = true,

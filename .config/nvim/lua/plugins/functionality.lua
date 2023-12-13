@@ -6,9 +6,12 @@ local M = {
   -- Functionality Tools --
   -------------------------
   {
-    'monkoose/matchparen.nvim',
-    keys = { '%' },
-    config = true,
+    'andymass/vim-matchup',
+    event = 'VeryLazy',
+    init = function()
+      -- `matchparen.vim` needs to be disabled manually in case of lazy loading
+      vim.g.loaded_matchparen = 1
+    end,
   },
   {
     'voldikss/vim-floaterm',
