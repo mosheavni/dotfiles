@@ -10,6 +10,7 @@ local M = {
     'onsails/lspkind-nvim',
     { 'tzachar/cmp-tabnine', build = './install.sh' },
     'hrsh7th/cmp-nvim-lua',
+    'Exafunction/codeium.nvim',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-path',
@@ -58,6 +59,7 @@ M.config = function()
         mode = 'symbol_text', -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
         preset = 'codicons',
         maxwidth = 40, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+        symbol_map = { Codeium = '' },
 
         -- The function below will be called before any actual modifications from lspkind
         -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
@@ -157,6 +159,7 @@ M.config = function()
       { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
       { name = 'cmp_tabnine' },
+      { name = 'codeium' },
       { name = 'path' },
       { name = 'buffer', keyword_length = 4 },
     },
