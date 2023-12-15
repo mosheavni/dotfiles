@@ -46,11 +46,9 @@ M.toggle_function_params = {
               if string.find(function_args, 'Map args=') then
                 function_args = function_args:gsub('Map args=%[(.*)%]', '%1')
                 function_args = function_args:gsub('(%w+):([^,]*)', '%1=%2')
-                P(function_args)
                 final = current_line:gsub([=[(%s*def%s%w+%().*(%).*)]=], '%1' .. function_args .. '%2')
               else
                 function_args = function_args:gsub('(%w+)=([^,]*)', '%1:%2')
-                function_args = function_args:gsub('(%w+),', '%1:null,')
                 final = current_line:gsub([=[(%s*def%s%w+%().*(%).*)]=], '%1Map args=[' .. function_args .. ']%2')
               end
               -- function_args = string.gsub(function_args, [[\w+:\w+]], '')
