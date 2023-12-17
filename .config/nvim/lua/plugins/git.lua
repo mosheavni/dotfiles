@@ -329,7 +329,7 @@ local M = {
       '<leader>gm',
       '<leader>gp',
     },
-    cmd = { 'G', 'Git' },
+    cmd = { 'G', 'Git', 'Gcb' },
   },
   {
     'mosheavni/vim-to-github',
