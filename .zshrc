@@ -95,11 +95,7 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
 # ================ #
 compdef terragrunt='terraform'
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-function get_cluster_short() {
-  awk -F/ '{print $NF}' <<<"$1"
-}
-KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
+export EDITOR="nvim"
 
 # ===================== #
 # Aliases and Functions #
@@ -109,22 +105,15 @@ if [[ -f $HOME/aliases.sh ]]; then
 fi
 [[ -f $HOME/corp-aliases.sh ]] && source $HOME/corp-aliases.sh
 
-export EDITOR="nvim"
-
 # ================ #
 # Kubectl Contexts #
 # ================ #
 
 # Load all contexts
 export KUBECONFIG=$HOME/.kube/config
-# context_files=$(
-#   setopt nullglob dotglob
-#   echo $HOME/.kube/contexts/*
-# )
-# if ((${#context_files})) && [[ -d $HOME/.kube/contexts/ ]]; then
-#   ALL_CONTEXTS=$(awk -vRS=" " '{printf "%s%s",sep,$0;sep=":"}' <<<$(echo ~/.kube/contexts/*.yaml))
-#   export KUBECONFIG=${KUBECONFIG}:${ALL_CONTEXTS}
-# fi
-
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
+function get_cluster_short() {
+  awk -F/ '{print $NF}' <<<"$1"
+}
+KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
