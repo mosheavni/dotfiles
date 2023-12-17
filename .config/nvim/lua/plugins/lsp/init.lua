@@ -266,6 +266,15 @@ M.dependencies = {
     },
     config = true,
   },
+  {
+    'folke/neodev.nvim',
+    opts = {
+      override = function(_, library)
+        library.enabled = true
+        library.plugins = true
+      end,
+    },
+  },
 }
 
 local language_specific_plugins = {
@@ -288,16 +297,6 @@ local language_specific_plugins = {
   {
     'b0o/SchemaStore.nvim',
     ft = { 'yaml' },
-  },
-  {
-    'folke/neodev.nvim',
-    ft = { 'lua' },
-    opts = {
-      override = function(_, library)
-        library.enabled = true
-        library.plugins = true
-      end,
-    },
   },
 }
 
