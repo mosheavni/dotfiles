@@ -37,21 +37,23 @@ return {
       require('fzf-lua').git_branches {
         actions = {
           ['ctrl-d'] = function(selected)
-            local confirmation = require('user.utils').ask_to_confirm('Do you really want to delete the selected branches? [Y/n] ', 'y')
-            if not confirmation then
-              require('fzf-lua.utils').warn 'Action aborted'
-              return
-            end
-
-            -- Delete the branch
-            local _, ret, stderr = require('user.utils').get_os_command_output { 'git', 'branch', '-D', selected[1] }
-            if ret == 0 then
-              require('fzf-lua.utils').info('Deleted branch ' .. selected[1])
-            else
-              local msg = string.format('Error when deleting branch: %s. Git returned:\n%s', branch, table.concat(stderr, '\n'))
-              require('fzf-lua.utils').err(msg)
-            end
-            return ret == 0
+            vim.ui.select({ 'Yes', 'No' }, { prompt = 'Are you sure you want to delete the branch ' .. selected[1] }, function(yes_or_no)
+              if yes_or_no == 'No' then
+                require('fzf-lua.utils').warn 'Action aborted'
+                return
+              end
+              -- Delete the branch
+              local toplevel = vim.trim(vim.fn.system 'git rev-parse --show-toplevel')
+              local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'branch', '-D', selected[1] }, toplevel)
+              if ret == 0 then
+                require('fzf-lua.utils').info('Deleted branch ' .. selected[1])
+                return
+              else
+                local msg = string.format('Error when deleting branch: %s. Git returned:\n%s', branch, table.concat(stderr, '\n'))
+                require('fzf-lua.utils').err(msg)
+              end
+              return ret == 0
+            end)
           end,
         },
         cmd = [=[git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2]=],
