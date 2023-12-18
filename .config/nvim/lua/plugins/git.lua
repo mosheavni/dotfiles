@@ -138,10 +138,10 @@ local actions = function()
       end)
     end,
     ['Push (:Gp)'] = function()
-      vim.cmd 'Gp'
+      vim.cmd.Gp()
     end,
     ['Pull (:Gl)'] = function()
-      vim.cmd 'Gl'
+      vim.cmd.Gl()
     end,
     ['Add (Stage) All'] = function()
       vim.cmd 'G add -A'

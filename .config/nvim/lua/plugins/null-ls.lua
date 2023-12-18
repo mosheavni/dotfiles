@@ -30,7 +30,7 @@ M.config = function()
       -- null_ls.builtins.diagnostics.shellcheck.with {
       --   extra_filetypes = { 'bash' },
       -- },
-      -- null_ls.builtins.diagnostics.eslint_d,
+      null_ls.builtins.diagnostics.eslint_d,
       null_ls.builtins.formatting.black,
       -- null_ls.builtins.formatting.eslint_d,
       null_ls.builtins.formatting.markdownlint,

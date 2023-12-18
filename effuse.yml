@@ -1,7 +1,8 @@
 exclude:
-  - .github/workflows/gitguardian.yml
   - ".config/karabiner"
   - .alt.toml
+  - .eslintrc.json
+  - .github/workflows/gitguardian.yml
   - .python-version
   - .vimrc-minimal
   - .zshrc-minimal

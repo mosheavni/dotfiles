@@ -96,14 +96,17 @@ function! ReplaceMotion(motion, text)
 endfunction
 ]]
 
-M.pretty_print = function(message, title, icon)
+M.pretty_print = function(message, title, icon, level)
   if not icon then
     icon = ''
   end
   if not title then
     title = 'Neovim'
   end
-  vim.notify(message, 2, { title = title, icon = '' })
+  if not level then
+    level = vim.log.levels.INFO
+  end
+  vim.notify(message, level, { title = title, icon = icon })
 end
 
 -- borders
