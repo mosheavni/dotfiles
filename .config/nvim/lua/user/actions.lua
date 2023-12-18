@@ -82,6 +82,9 @@ return {
   ['[Folds] Close all folds (<leader>fc)'] = function()
     vim.cmd 'normal! zM'
   end,
+  ['Where am I?'] = function()
+    P(require('plenary.curl').get('http://ipconfig.io/country').body)
+  end,
   ['Duplicate / Copy number of lines ({count}<leader>cp)'] = function()
     vim.ui.input({ prompt = 'Enter how many lines down: ' }, function(lines_down)
       if not lines_down then
