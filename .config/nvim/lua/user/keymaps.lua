@@ -69,10 +69,8 @@ function _G.__duplicate_lines(motion)
     finish = vim.api.nvim_buf_get_mark(0, ']')
   end
   local text = vim.api.nvim_buf_get_lines(0, start[1] - 1, finish[1], false)
-  -- prepend empty string to text table
   table.insert(text, 1, '')
   vim.api.nvim_buf_set_lines(0, finish[1], finish[1], false, text)
-  -- vim.cmd.normal(finish[1] + 1 .. 'G')
   vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { finish[1] + 1, finish[2] })
 end
 
@@ -82,7 +80,6 @@ nmap('<leader>cp', _G.__duplicate_lines)
 function _G.__surround_with_interpolation(motion)
   local start = {}
   local finish = {}
-  -- Delete the branch
   if motion == nil or motion == 'line' then
     vim.o.operatorfunc = 'v:lua.__surround_with_interpolation'
     return vim.fn.feedkeys 'g@'
