@@ -14,11 +14,6 @@ return {
       oldfiles = {
         cwd_only = true,
       },
-      actions = {
-        live_grep = {
-          ['ctrl-q'] = require('fzf-lua.actions').buf_sel_to_qf,
-        },
-      },
     }
     require('fzf-lua').register_ui_select(function(_, items)
       local min_h, max_h = 0.15, 0.70
@@ -33,12 +28,32 @@ return {
 
     vim.keymap.set('n', '<leader>/', function()
       require('fzf-lua').live_grep {
+        keymap = { fzf = { ['ctrl-q'] = 'select-all+accept' } },
         multiprocess = true,
-        cmd = [=[rg --column --line-number --hidden --no-heading --color=always --smart-case --max-columns=4096 -g '!.git' -e]=],
+        rg_opts = [=[--column --line-number --hidden --no-heading --color=always --smart-case --max-columns=4096 -g '!.git' -e]=],
       }
     end)
     vim.keymap.set('n', '<F4>', function()
       require('fzf-lua').git_branches {
+        actions = {
+          ['ctrl-d'] = function(selected)
+            local confirmation = require('user.utils').ask_to_confirm('Do you really want to delete the selected branches? [Y/n] ', 'y')
+            if not confirmation then
+              require('fzf-lua.utils').warn 'Action aborted'
+              return
+            end
+
+            -- Delete the branch
+            local _, ret, stderr = require('user.utils').get_os_command_output { 'git', 'branch', '-D', selected[1] }
+            if ret == 0 then
+              require('fzf-lua.utils').info('Deleted branch ' .. selected[1])
+            else
+              local msg = string.format('Error when deleting branch: %s. Git returned:\n%s', branch, table.concat(stderr, '\n'))
+              require('fzf-lua.utils').err(msg)
+            end
+            return ret == 0
+          end,
+        },
         cmd = [=[git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2]=],
       }
     end)

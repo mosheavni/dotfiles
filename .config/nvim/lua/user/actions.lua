@@ -85,6 +85,27 @@ return {
   ['Where am I?'] = function()
     vim.cmd.Whereami()
   end,
+  ['Autocommand to reload the file'] = function()
+    if vim.api.nvim_buf_get_option(0, 'filetype') ~= 'lua' then
+      pretty_print('Filetype is not lua!', [[🖥️]], vim.log.levels.ERROR)
+      return
+    end
+
+    local text = [[
+-- Reload the file when it changes on disk
+vim.api.nvim_create_autocmd('BufWritePost', {
+  buffer = 0,
+  command = 'luafile %'
+})
+vim.keymap.set('n', 'bla', function()
+  vim.notify('hello!')
+end)
+    ]]
+    -- prepend those lines to the beggining of the file
+    vim.api.nvim_buf_set_lines(0, 0, 0, false, vim.split(text, '\n'))
+    vim.cmd.write()
+    vim.cmd 'luafile %'
+  end,
   ['Duplicate / Copy number of lines ({count}<leader>cp)'] = function()
     vim.ui.input({ prompt = 'Enter how many lines down: ' }, function(lines_down)
       if not lines_down then

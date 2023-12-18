@@ -78,6 +78,26 @@ end
 
 nmap('<leader>cp', _G.__duplicate_lines)
 
+-- surround with string interpolation with motion
+function _G.__surround_with_interpolation(motion)
+  local start = {}
+  local finish = {}
+  -- Delete the branch
+  if motion == nil or motion == 'line' then
+    vim.o.operatorfunc = 'v:lua.__surround_with_interpolation'
+    return vim.fn.feedkeys 'g@'
+  end
+  if motion == 'char' then
+    start = vim.api.nvim_buf_get_mark(0, '[')
+    finish = vim.api.nvim_buf_get_mark(0, ']')
+  end
+  local line = vim.api.nvim_buf_get_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, {})[1]
+  local new_text = { '"${' .. line .. '}"' }
+  vim.api.nvim_buf_set_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, new_text)
+  vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { finish[1], finish[2] })
+end
+nmap('mt', _G.__surround_with_interpolation)
+
 -- Indent block
 nmap('<leader>gt', function()
   vim.cmd [[normal v%koj$>]]
@@ -202,8 +222,8 @@ vnoremap('*', ":call StarSearch('/')<CR>/<C-R>=@/<CR><CR>", true)
 vnoremap('#', ":call StarSearch('?')<CR>?<C-R>=@/<CR><CR>", true)
 
 -- Map - to move a line down and _ a line up
-nnoremap('-', [["ldd$"lp]])
-nnoremap('_', [["ldd2k"lp]])
+nnoremap('-', [["ldd$"lp==]])
+nnoremap('_', [["ldd2k"lp==]])
 
 -- Allow clipboard copy paste in neovim
 vim.keymap.set('', '<D-v>', '+p<CR>', opts.no_remap_silent)
