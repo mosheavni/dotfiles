@@ -308,6 +308,14 @@ vim.api.nvim_create_user_command('Json2Yaml', function()
   vim.cmd [[%!yq -P]]
 end, {})
 
+-----------------
+-- Where am I? --
+-----------------
+vim.api.nvim_create_user_command('Whereami', function()
+  local msg = [[You're in ]] .. require('plenary.curl').get('http://ipconfig.io/country').body
+  vim.notify(msg, vim.log.levels.INFO, { title = 'Where am I?', icon = '🌎' })
+end, {})
+
 ------------------------
 -- Change indentation --
 ------------------------
