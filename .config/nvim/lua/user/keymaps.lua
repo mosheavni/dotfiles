@@ -329,8 +329,15 @@ end, {})
 -- Where am I? --
 -----------------
 vim.api.nvim_create_user_command('Whereami', function()
-  local msg = [[You're in ]] .. require('plenary.curl').get('http://ipconfig.io/country').body
-  vim.notify(msg, vim.log.levels.INFO, { title = 'Where am I?', icon = '🌎' })
+  local country_data = vim.json.decode(require('plenary.curl').get('http://ipconfig.io/json').body)
+  local iso = country_data.country_iso
+  local country = country_data.country
+  local emoji = require('user.utils').country_os_to_emoji(iso)
+  if not emoji then
+    emoji = '🌎'
+  end
+  local msg = [[You're in ]] .. country
+  vim.notify(msg, vim.log.levels.INFO, { title = 'Where am I?', icon = emoji })
 end, {})
 
 ------------------------
