@@ -15,7 +15,7 @@ vim.opt.listchars = {
   extends = '',
   precedes = '',
   tab = '┆·',
-  leadmultispace = '┊ ',
+  leadmultispace = '│ ',
 }
 
 -- set lcscope=tab:┆·,trail:·,precedes:,extends:
