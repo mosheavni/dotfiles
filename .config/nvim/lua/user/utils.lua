@@ -139,22 +139,13 @@ end
 
 M.country_os_to_emoji = function(iso)
   local python_file = vim.fn.tempname() .. '.py'
-  local python_file_content = [[
-import sys
-def country_to_emoji(country_code):
-  OFFSET = 127397  # offset between regional indicator symbols and ISO 3166-1 alpha-2 elements
-  return "".join(chr(ord(c) + OFFSET) for c in country_code.upper())
-if __name__ == "__main__":
-  print(country_to_emoji(sys.argv[1]), end='')
-  ]]
+  local python_file_content = [[import sys; print("".join(chr(ord(c) + 127397) for c in sys.argv[1].upper()), end='')]]
   local python_file_handle = io.open(python_file, 'w')
   if f ~= nil then
     python_file_handle:close()
   end
   python_file_handle:write(python_file_content)
   python_file_handle:close()
-
-  -- run the python with the
   local emoji = vim.fn.system('python3 ' .. python_file .. ' ' .. iso)
   vim.fn.delete(python_file)
   return emoji
