@@ -143,6 +143,7 @@ M.country_os_to_emoji = function(iso)
   local python_file_handle = io.open(python_file, 'w')
   if f ~= nil then
     python_file_handle:close()
+    return ''
   end
   python_file_handle:write(python_file_content)
   python_file_handle:close()
