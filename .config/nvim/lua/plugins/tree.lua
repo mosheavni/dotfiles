@@ -11,10 +11,6 @@ local function on_attach(bufnr)
   vim.keymap.del('n', 's', { buffer = bufnr })
   vim.keymap.set('n', 'i', api.node.open.horizontal, opts 'Open: Horizontal Split')
   vim.keymap.set('n', 'cd', api.tree.change_root_to_node, opts 'CD')
-  -- vim.keymap.set('n', 'r', api.fs.rename, opts 'Rename')
-  -- vim.keymap.set('n', 'r', api.fs.rename_node, opts 'Rename node')
-  -- vim.keymap.set('n', 'r', api.fs.rename_basename, opts 'Rename basename')
-  -- vim.keymap.set('n', 'r', api.fs.rename_sub, opts 'Rename sub')
   vim.keymap.del('n', '<C-e>', { buffer = bufnr })
 
   local function move_file_to()
@@ -41,6 +37,10 @@ M.config = function()
   local api = require 'nvim-tree.api'
   local utils = require 'user.utils'
   local nnoremap = utils.nnoremap
+  -- vim.cmd [[
+  --   highlight! NvimTreeOpenedFolderIcon ctermfg=109 guifg=#d8a657
+  --   highlight! NvimTreeClosedFolderIcon ctermfg=109 guifg=#d8a657
+  -- ]]
 
   nvim_tree.setup {
     on_attach = on_attach,

@@ -5,30 +5,21 @@ local M = {
   -------------------
   --   Colorscheme --
   -------------------
-  -- {
-  --   'navarasu/onedark.nvim',
-  --   config = function()
-  --     require('onedark').setup {
-  --       style = 'dark',
-  --       highlights = {
-  --         EndOfBuffer = { fg = '#61afef' },
-  --       },
-  --     }
-  --     require('onedark').load()
-  --   end,
-  -- },
-  -- {
-  --   'uloco/bluloco.nvim',
-  --   enabled = false,
-  --   lazy = false,
-  --   priority = 1000,
-  --   dependencies = { 'rktjmp/lush.nvim' },
-  --   config = function()
-  --     vim.cmd [[colorscheme bluloco-dark]]
-  --   end,
-  -- },
+  {
+    'navarasu/onedark.nvim',
+    config = function()
+      require('onedark').setup {
+        style = 'dark',
+        highlights = {
+          EndOfBuffer = { fg = '#61afef' },
+        },
+      }
+      require('onedark').load()
+    end,
+  },
   {
     'sainnhe/gruvbox-material',
+    enabled = false,
     config = function()
       -- load the colorscheme here
       vim.cmd [[
