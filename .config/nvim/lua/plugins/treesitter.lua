@@ -13,12 +13,6 @@ local M = {
       ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml' },
     },
     'RRethy/nvim-treesitter-endwise',
-    -- {
-    --   'ckolkey/ts-node-action',
-    --   config = function()
-    --     vim.keymap.set({ 'n', 'v' }, 'gs', require('ts-node-action').node_action, { desc = 'Trigger Node Action' })
-    --   end,
-    -- },
   },
   event = 'BufReadPost',
 }
@@ -35,19 +29,6 @@ M.config = function()
     filetype = 'gotmpl',
     used_by = { 'gohtmltmpl', 'gotexttmpl', 'gotmpl' },
   }
-
-  -- unknown filetypes
-  -- vim.treesitter.language.register('java', 'groovy')
-  -- local ft_to_lang = ts_parsers.ft_to_lang
-  -- ts_parsers.ft_to_lang = function(ft)
-  --   if ft == 'zsh' then
-  --     return 'bash'
-  --   end
-  --   if ft == 'groovy' then
-  --     return 'java'
-  --   end
-  --   return ft_to_lang(ft)
-  -- end
 
   ---@diagnostic disable-next-line: missing-fields
   configs.setup {
@@ -150,7 +131,7 @@ M.config = function()
       },
     },
     refactor = {
-      highlight_current_scope = { enable = true },
+      highlight_current_scope = { enable = false },
       smart_rename = {
         enable = true,
         keymaps = {
