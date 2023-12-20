@@ -40,17 +40,23 @@ local M = {
       vim.api.nvim_create_autocmd('FileType', {
         pattern = {
           'help',
-          'alpha',
+          'fugitive',
           'dashboard',
-          'neo-tree',
+          'NvimTree',
           'Trouble',
           'trouble',
           'lazy',
           'mason',
           'notify',
-          'toggleterm',
+          'floaterm',
           'lazyterm',
         },
+        callback = function()
+          vim.b.miniindentscope_disable = true
+        end,
+      })
+
+      vim.api.nvim_create_autocmd('TermOpen', {
         callback = function()
           vim.b.miniindentscope_disable = true
         end,
