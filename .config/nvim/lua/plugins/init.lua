@@ -7,6 +7,7 @@ local M = {
   -------------------
   {
     'navarasu/onedark.nvim',
+    enabled = false,
     config = function()
       require('onedark').setup {
         style = 'dark',
@@ -27,6 +28,14 @@ local M = {
         let g:gruvbox_material_background = 'hard' " soft | medium | hard
         colorscheme gruvbox-material
       ]]
+    end,
+  },
+  {
+    'tiagovla/tokyodark.nvim',
+    opts = {},
+    config = function(_, opts)
+      require('tokyodark').setup(opts) -- calling setup is optional
+      vim.cmd [[colorscheme tokyodark]]
     end,
   },
   {
@@ -197,15 +206,10 @@ local M = {
     },
     config = function()
       local fk = [=[\<\(\l\)\(\l\+\(\u\l\+\)\+\)\>]=]
-      local fv = [=[\=toupper(submatch(1)) . submatch(2)]=]
       local sk = [=[\<\(\u\l\+\)\(\u\l\+\)\+\>]=]
-      local sv = [=[\=tolower(substitute(submatch(0), '\(\l\)\(\u\)', '\1_\2', 'g'))]=]
       local tk = [=[\<\(\l\+\)\(_\l\+\)\+\>]=]
-      local tv = [=[\U\0]=]
       local fok = [=[\<\(\u\+\)\(_\u\+\)\+\>]=]
-      local fov = [=[\=tolower(substitute(submatch(0), '_', '-', 'g'))]=]
       local fik = [=[\<\(\l\+\)\(-\l\+\)\+\>]=]
-      local fiv = [=[\=substitute(submatch(0), '-\(\l\)', '\u\1', 'g')]=]
       vim.g['switch_custom_definitions'] = {
         vim.fn['switch#NormalizedCaseWords'] { 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' },
         vim.fn['switch#NormalizedCase'] { 'yes', 'no' },
@@ -215,13 +219,49 @@ local M = {
         vim.fn['switch#NormalizedCase'] { 'enable', 'disable' },
         { '==', '!=' },
         {
-          [fk] = fv,
-          [sk] = sv,
-          [tk] = tv,
-          [fok] = fov,
-          [fik] = fiv,
+          [fk] = [=[\=toupper(submatch(1)) . submatch(2)]=],
+          [sk] = [=[\=tolower(substitute(submatch(0), '\(\l\)\(\u\)', '\1_\2', 'g'))]=],
+          [tk] = [=[\U\0]=],
+          [fok] = [=[\=tolower(substitute(submatch(0), '_', '-', 'g'))]=],
+          [fik] = [=[\=substitute(submatch(0), '-\(\l\)', '\u\1', 'g')]=],
         },
       }
+    end,
+    init = function()
+      local custom_switches = require('user.utils').augroup 'CustomSwitches'
+      vim.api.nvim_create_autocmd('FileType', {
+        group = custom_switches,
+        pattern = { 'gitrebase' },
+        callback = function()
+          vim.b['switch_custom_definitions'] = {
+            { 'pick', 'reword', 'edit', 'squash', 'fixup', 'exec', 'drop' },
+          }
+        end,
+      })
+      vim.api.nvim_create_autocmd('FileType', {
+        group = custom_switches,
+        pattern = { 'markdown' },
+        callback = function()
+          local fk = [=[\v^(\s*[*+-] )?\[ \]]=]
+          local sk = [=[\v^(\s*[*+-] )?\[x\]]=]
+          local tk = [=[\v^(\s*[*+-] )?\[-\]]=]
+          local fok = [=[\v^(\s*\d+\. )?\[ \]]=]
+          local fik = [=[\v^(\s*\d+\. )?\[x\]]=]
+          local sik = [=[\v^(\s*\d+\. )?\[-\]]=]
+          vim.b['switch_custom_definitions'] = {
+            {
+              [fk] = [=[\1[x]]=],
+              [sk] = [=[\1[-]]=],
+              [tk] = [=[\1[ ]]=],
+            },
+            {
+              [fok] = [=[\1[x]]=],
+              [fik] = [=[\1[-]]=],
+              [sik] = [=[\1[ ]]=],
+            },
+          }
+        end,
+      })
     end,
   },
   {
