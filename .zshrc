@@ -72,6 +72,7 @@ plugins=(
   kubectx
   ripgrep
   terraform
+  zsh-autocomplete
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
