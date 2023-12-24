@@ -7,6 +7,7 @@ local M = {
   keys = {
     { '<leader>fo', '<cmd>lua require("ufo").openAllFolds()<cr>' },
     { '<leader>fc', '<cmd>lua require("ufo").closeAllFolds()<cr>' },
+    { '<leader>fp', '<cmd>lua require("ufo").peekFoldedLinesUnderCursor()<cr>' },
   },
   opts = {},
 

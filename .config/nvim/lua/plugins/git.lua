@@ -339,8 +339,15 @@ local M = {
     'akinsho/git-conflict.nvim',
     version = '*',
     event = 'BufReadPre',
+    keys = {
+      { ']x', '<cmd>GitConflictNextConflict<cr>' },
+      { '[x', '<cmd>GitConflictPrevConflict<cr>' },
+      { 'co', '<cmd>GitConflictChooseOurs<cr>' },
+      { 'ct', '<cmd>GitConflictChooseTheirs<cr>' },
+      { 'cb', '<cmd>GitConflictChooseBoth<cr>' },
+    },
     opts = {
-      default_mappings = true,
+      default_mappings = false,
     },
   },
   {
