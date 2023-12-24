@@ -20,7 +20,7 @@ local M = {
   },
   {
     'sainnhe/gruvbox-material',
-    enabled = false,
+    enabled = true,
     config = function()
       -- load the colorscheme here
       vim.cmd [[
@@ -32,6 +32,7 @@ local M = {
   },
   {
     'tiagovla/tokyodark.nvim',
+    enabled = false,
     opts = {},
     config = function(_, opts)
       require('tokyodark').setup(opts) -- calling setup is optional
