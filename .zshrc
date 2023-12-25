@@ -59,6 +59,7 @@ plugins=(
   colored-man-pages
   command-not-found
   common-aliases
+  copybuffer
   dircycle
   docker
   fd
@@ -72,6 +73,7 @@ plugins=(
   kubectx
   ripgrep
   terraform
+  z
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
@@ -96,6 +98,10 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
 compdef terragrunt='terraform'
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 export EDITOR="nvim"
+setopt MENU_COMPLETE
+unsetopt AUTO_MENU
+unsetopt CASE_GLOB
+setopt GLOB_COMPLETE
 
 # ===================== #
 # Aliases and Functions #
