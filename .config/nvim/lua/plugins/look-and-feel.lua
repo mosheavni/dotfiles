@@ -102,7 +102,10 @@ local M = {
   },
   {
     'NvChad/nvim-colorizer.lua',
-    opts = { user_default_options = { mode = 'virtualtext', names = false } },
+    opts = {
+      filetypes = { '*', '!packer', '!dashboard', '!NvimTree', '!Trouble', '!trouble', '!lazy', '!mason', '!notify', '!floaterm', '!lazyterm' },
+      user_default_options = { mode = 'virtualtext', names = false },
+    },
     config = function(_, opts)
       require('colorizer').setup(opts)
       require('colorizer').attach_to_buffer(0, { mode = 'virtualtext', css = true })
