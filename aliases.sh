@@ -38,6 +38,36 @@ function mwatch() {
   watch "$final_alias"
 }
 
+function dog() {
+  # loop through vars:
+  # - find var that starts with @ save it as server if exists
+  # - find var that starts with + save it as flag if exists
+  # - find var that is only letters and save it as record_type
+  # - find the query, strip from http[s]:// and the port (:80) save it as query
+
+  # start parsing args
+  server=""
+  flag=""
+  record_type=""
+  query=""
+  for s in `echo $*`;do
+    if [[ $s == @* ]];then
+      server=${s:1}
+    elif [[ $s == +* ]];then
+      flag=${s:1}
+    elif [[ $s =~ ^[a-zA-Z]+$ ]];then
+      record_type=$s
+    else
+      query=$(sed -E -e 's/:[0-9]*$//' -e 's/https?:\/\///'<<<$s)
+    fi
+  done
+  echo "server: $server"
+  echo "flag: $flag"
+  echo "record_type: $record_type"
+  echo "query: $query"
+  /usr/local/bin/dog $server $flag $record_type $query
+}
+
 function ssh2 () {
   in_url=$(sed -E 's?ip-([0-9]*)-([0-9]*)-([0-9]*)-([0-9]*)?\1.\2.\3.\4?g' <<< "$1")
   echo $in_url
@@ -158,6 +188,14 @@ function get_pods_of_svc() {
   shift
   label_selectors=$(kubectl get svc $svc_name $* -ojsonpath="{.spec.selector}" | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" | paste -s -d "," -)
   kubectl get pod $* -l $label_selectors
+}
+
+function kgel() {
+  if [[ -z $1 ]];then
+    echo "Usage: $0 <pod_name>"
+    return
+  fi
+  kubectl get pod $* -ojson | jq -r '.metadata.labels | to_entries | .[] | "\(.key)=\(.value)"'
 }
 
 ### General aliases ###
