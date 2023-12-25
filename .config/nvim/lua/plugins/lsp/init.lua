@@ -133,6 +133,8 @@ M.config = function(_, opts)
   require('user.menu').add_actions('LSP', actions())
   require('user.lsp.handlers').setup()
 
+  require('lspconfig.ui.windows').default_options.border = require('user.utils').borders.single_rounded
+
   -- Set formatting of lsp log
   require('vim.lsp.log').set_format_func(vim.inspect)
 
