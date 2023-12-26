@@ -8,15 +8,12 @@ function _alias_parser() {
 }
 
 function _alias_finder() {
-  # log_file=/tmp/moshe_mwatch.log
-  # echo "Got in _alias_finder with $*" >> $log_file
   final_result=()
   for s in `echo $1`;do
     alias_val=`_alias_parser "$s"`
     if [[ -n $alias_val ]]; then
       # Handle nested aliases with the same name
       if [[ $alias_val == *"$s"* ]]; then
-        # echo "$s is contained in $alias_val" >> $log_file
         final_result+=($alias_val)
       else
         final_result+=(`_alias_finder "$alias_val"`)
@@ -26,7 +23,6 @@ function _alias_finder() {
     fi
   done
   echo "${final_result[@]}"
-  # echo "final_result: ${final_result[@]}" >> $log_file
 }
 
 ### Random functions ###
@@ -39,13 +35,6 @@ function mwatch() {
 }
 
 function dog() {
-  # loop through vars:
-  # - find var that starts with @ save it as server if exists
-  # - find var that starts with + save it as flag if exists
-  # - find var that is only letters and save it as record_type
-  # - find the query, strip from http[s]:// and the port (:80) save it as query
-
-  # start parsing args
   server=""
   flag=""
   record_type=""
@@ -80,7 +69,7 @@ function ssh2 () {
   echo $in_url
   ssh $in_url
 }
-function jsonlint () { pbcopy && open https://jsonlint.com/ }
+
 function grl () { grep -rl $* . }
 
 function cnf() {
@@ -93,8 +82,10 @@ function opengit () { git remote -v | awk 'NR==1{print $2}' | sed -e "s?:?/?g" -
 
 # Create pull request = cpr
 function cpr() {
-  git_remote=$(git remote -v | head -1)
-  git_name=$(gsed -E 's?origin\s*(git@|https://)(\w+).*?\2?g' <<<"$git_remote")
+  git_remote=$(git remote -v | grep '(fetch)')
+  git_remote_name=$(awk '{print $1}' <<<"$git_remote")
+  git_remote_url=$(awk '{print $2}' <<<"$git_remote")
+  git_name=$(gsed -E 's?'$git_remote_name'\s*(git@|https://)(\w+).*?\2?g' <<<"$git_remote")
   project_name=$(gsed -E "s/.*com[:\/](.*)\/.*/\\1/" <<<"$git_remote")
   repo_name=$(gsed -E -e "s/.*com[:\/].*\/(.*).*/\\1/" -e "s/\.git\s*\((fetch|push)\)//" <<<"$git_remote")
   branch_name=$(git branch --show-current)
