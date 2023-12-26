@@ -265,6 +265,11 @@ M.dependencies = {
         enable = true,
         hide_keyword = false,
       },
+      outline = {
+        keys = {
+          toggle_or_jump = '<CR>',
+        }
+      }
     },
     config = true,
   },

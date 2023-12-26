@@ -14,36 +14,6 @@ local actions = function()
       vim.cmd 'call Enter_Wip_Moshe()'
       actions_pretty_print 'Created a work in progress commit.'
     end,
-    ['Diff File History'] = function()
-      vim.ui.input({ prompt = 'Enter file path (empty for current file): ' }, function(file_to_check)
-        if file_to_check == '' then
-          file_to_check = '%'
-        end
-
-        vim.cmd('DiffviewFileHistory ' .. file_to_check)
-      end)
-    end,
-    ['Diff with branch'] = function()
-      vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
-        if not branch_to_diff then
-          actions_pretty_print 'Canceled.'
-          return
-        end
-        vim.cmd('DiffviewOpen origin/' .. branch_to_diff .. '..HEAD')
-      end)
-    end,
-    ['Diff file with branch'] = function()
-      vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
-        if not branch_to_diff then
-          actions_pretty_print 'Canceled.'
-          return
-        end
-        vim.cmd('DiffviewFileHistory ' .. branch_to_diff)
-      end)
-    end,
-    ['Diff close'] = function()
-      vim.cmd 'DiffviewClose'
-    end,
     ['Set upstream to HAED'] = function()
       vim.cmd('G branch --set-upstream-to=origin/' .. vim.fn.FugitiveHead())
     end,
@@ -339,16 +309,34 @@ local M = {
     'akinsho/git-conflict.nvim',
     version = '*',
     event = 'BufReadPre',
-    keys = {
-      { ']x', '<cmd>GitConflictNextConflict<cr>' },
-      { '[x', '<cmd>GitConflictPrevConflict<cr>' },
-      { 'co', '<cmd>GitConflictChooseOurs<cr>' },
-      { 'ct', '<cmd>GitConflictChooseTheirs<cr>' },
-      { 'cb', '<cmd>GitConflictChooseBoth<cr>' },
-    },
-    opts = {
-      default_mappings = false,
-    },
+    config = function()
+      require('git-conflict').setup {
+        default_mappings = true,
+      }
+      require('user.menu').add_actions('GitConflict', {
+        ['Choose Ours'] = function()
+          vim.cmd 'GitConflictChooseOurs'
+        end,
+        ['Choose Theirs'] = function()
+          vim.cmd 'GitConflictChooseTheirs'
+        end,
+        ['Choose Both'] = function()
+          vim.cmd 'GitConflictChooseBoth'
+        end,
+        ['Choose None'] = function()
+          vim.cmd 'GitConflictChooseNone'
+        end,
+        ['Next Conflict'] = function()
+          vim.cmd 'GitConflictNextConflict'
+        end,
+        ['Previous Conflict'] = function()
+          vim.cmd 'GitConflictPrevConflict'
+        end,
+        ['Send conflicts to Quickfix'] = function()
+          vim.cmd 'GitConflictListQf'
+        end,
+      })
+    end,
   },
   {
     'sindrets/diffview.nvim',
@@ -362,6 +350,40 @@ local M = {
       'DiffviewRefresh',
       'DiffviewToggleFiles',
     },
+    init = function()
+      require('user.menu').add_actions('GitDiffView', {
+        ['Diff File History'] = function()
+          vim.ui.input({ prompt = 'Enter file path (empty for current file): ' }, function(file_to_check)
+            if file_to_check == '' then
+              file_to_check = '%'
+            end
+
+            vim.cmd('DiffviewFileHistory ' .. file_to_check)
+          end)
+        end,
+        ['Diff with branch'] = function()
+          vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
+            if not branch_to_diff then
+              actions_pretty_print 'Canceled.'
+              return
+            end
+            vim.cmd('DiffviewOpen origin/' .. branch_to_diff .. '..HEAD')
+          end)
+        end,
+        ['Diff file with branch'] = function()
+          vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
+            if not branch_to_diff then
+              actions_pretty_print 'Canceled.'
+              return
+            end
+            vim.cmd('DiffviewFileHistory ' .. branch_to_diff)
+          end)
+        end,
+        ['Diff close'] = function()
+          vim.cmd 'DiffviewClose'
+        end,
+      })
+    end,
     config = function()
       require 'diffview'
     end,

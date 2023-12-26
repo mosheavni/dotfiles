@@ -68,6 +68,13 @@ function dog() {
   /usr/local/bin/dog $server $flag $record_type $query
 }
 
+function clone() {
+  cd ~/Repos
+  git clone $1
+  cd "$(basename "$_" .git)"
+  nvim
+}
+
 function ssh2 () {
   in_url=$(sed -E 's?ip-([0-9]*)-([0-9]*)-([0-9]*)-([0-9]*)?\1.\2.\3.\4?g' <<< "$1")
   echo $in_url
