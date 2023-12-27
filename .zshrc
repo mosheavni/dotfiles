@@ -91,6 +91,8 @@ fpath+=$(asdf where kubectx)/completion
 source $ZSH/oh-my-zsh.sh
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
+export FZF_CTRL_T_COMMAND='rg --color=never --files --hidden --follow -g "!.git"'
+export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,changes {}"'
 
 # ================ #
 #  PS1 and Random  #

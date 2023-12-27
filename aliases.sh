@@ -64,6 +64,10 @@ function clone() {
   nvim
 }
 
+function gitcd() {
+  cd $(git rev-parse --show-toplevel)
+}
+
 function ssh2 () {
   in_url=$(sed -E 's?ip-([0-9]*)-([0-9]*)-([0-9]*)-([0-9]*)?\1.\2.\3.\4?g' <<< "$1")
   echo $in_url
