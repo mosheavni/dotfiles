@@ -5,7 +5,7 @@ awscli 2.13.30
 fd 8.7.1
 golang 1.21.3
 helm 3.13.2
-java corretto-17.0.9.8.1
+java corretto-21.0.1.12.1
 jq 1.7
 k9s 0.28.2
 kubectl 1.25.6
@@ -19,5 +19,5 @@ ripgrep 13.0.0
 semver 3.4.0
 terraform 1.5.5
 terragrunt 0.53.6
-yq 4.40.3
 tree-sitter 0.20.8
+yq 4.40.3
