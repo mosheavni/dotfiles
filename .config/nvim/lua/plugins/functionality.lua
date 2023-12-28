@@ -150,11 +150,6 @@ local M = {
     end,
   },
   {
-    'stevearc/oil.nvim',
-    opts = {},
-    cmd = { 'Oil' },
-  },
-  {
     'rest-nvim/rest.nvim',
     keys = { '<Plug>RestNvim', { '<leader>cr', '<Plug>RestNvim' } },
     opts = {},
