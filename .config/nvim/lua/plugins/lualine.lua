@@ -60,22 +60,6 @@ M.config = function()
   }
 
   local my_extensions = {
-    telescope = {
-      sections = {
-        lualine_c = {
-          borders.left,
-          {
-            function()
-              return 'telescope'
-            end,
-            color = { fg = colors.red },
-          },
-        },
-        lualine_x = { borders.right },
-      },
-      filetypes = { 'TelescopePrompt' },
-    },
-
     nvimtree_self = {
       sections = {
         lualine_c = {
@@ -142,7 +126,6 @@ M.config = function()
       'quickfix',
       'trouble',
       my_extensions.nvimtree_self,
-      my_extensions.telescope,
     },
   }
 

@@ -165,10 +165,10 @@ end)
     end
   end,
   ['Find files (<C-p>)'] = function()
-    require('telescope.builtin').find_files()
+    vim.cmd 'FzfLua files'
   end,
   ['Find buffers (<C-b>)'] = function()
-    require('telescope.builtin').buffers()
+    vim.cmd 'FzfLua buffers'
   end,
   ['Open Nvim Tree File Browser (<C-o>)'] = function()
     local api = require 'nvim-tree.api'
