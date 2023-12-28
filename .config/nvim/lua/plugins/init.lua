@@ -19,8 +19,31 @@ local M = {
     end,
   },
   {
-    'sainnhe/gruvbox-material',
+    'sainnhe/sonokai',
     enabled = true,
+    config = function()
+      vim.cmd [[
+        let g:sonokai_style = 'shusia'
+        colorscheme sonokai
+      ]]
+      require('user.menu').add_actions('Colorscheme', {
+        ['Toggle Sonokai Style'] = function()
+          local styles = { 'default', 'atlantis', 'andromeda', 'shusia', 'maia', 'espresso' }
+          -- toggle vim.g.sonokai_style and reset the colorscheme
+          local current_value = vim.g.sonokai_style
+          local index = require('user.utils').tbl_get_next(styles, current_value)
+          vim.g.sonokai_style = styles[index]
+          vim.defer_fn(function()
+            vim.cmd [[colorscheme sonokai]]
+            P('Set sonokai_style to ' .. styles[index])
+          end, 100)
+        end,
+      })
+    end,
+  },
+  {
+    'sainnhe/gruvbox-material',
+    enabled = false,
     config = function()
       -- load the colorscheme here
       vim.cmd [[
@@ -131,6 +154,7 @@ local M = {
     config = function()
       vim.schedule(function()
         require('copilot').setup {
+          filetypes = { ['*'] = true },
           panel = {
             enabled = true,
             auto_refresh = false,

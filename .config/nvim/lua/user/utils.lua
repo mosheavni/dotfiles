@@ -152,6 +152,17 @@ M.country_os_to_emoji = function(iso)
   return emoji
 end
 
+M.tbl_get_next = function(tbl, cur)
+  local idx = 1
+  for i, v in ipairs(tbl) do
+    if v == cur then
+      idx = i % #tbl + 1
+      break
+    end
+  end
+  return idx
+end
+
 -- borders
 M.borders = {
   double_rounded = { '╔', '═', '╗', '║', '╝', '═', '╚', '║' },
