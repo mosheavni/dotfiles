@@ -210,10 +210,13 @@ end)
   ['Split long bash line (<leader>\\'] = function()
     vim.fn.feedkeys(T '<leader>' .. [[\]])
   end,
-  ['Yaml to Json (:Yaml2Json)'] = function()
+  ['[YAML] Yaml to Json (:Yaml2Json)'] = function()
     vim.cmd.Yaml2Json()
   end,
-  ['Json to Yaml (:Json2Yaml)'] = function()
+  ['[YAML] Add YAML Schema Modeline'] = function()
+    require('user.additional-schemas').init()
+  end,
+  ['[JSON] Json to Yaml (:Json2Yaml)'] = function()
     vim.cmd.Json2Yaml()
   end,
   ['Change indent size (<leader>cii)'] = function()

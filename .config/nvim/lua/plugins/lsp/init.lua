@@ -43,9 +43,6 @@ local actions = function()
     ['Delete Log'] = function()
       vim.fn.system { 'rm', '-rf', vim.lsp.get_log_path() }
     end,
-    ['Add YAML Schema Modeline'] = function()
-      require('user.additional-schemas').init()
-    end,
   }
 end
 
@@ -268,8 +265,8 @@ M.dependencies = {
       outline = {
         keys = {
           toggle_or_jump = '<CR>',
-        }
-      }
+        },
+      },
     },
     config = true,
   },
@@ -299,6 +296,11 @@ local language_specific_plugins = {
     config = function()
       local nnoremap = require('user.utils').nnoremap
       nnoremap('<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", true)
+      require('user.menu').add_actions('YAML', {
+        ['Change Schema'] = function()
+          require('yaml-companion').open_ui_select()
+        end,
+      })
     end,
   },
   {

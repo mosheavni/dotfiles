@@ -32,8 +32,8 @@ local M = {
           local current_value = vim.g.sonokai_style
           local index = require('user.utils').tbl_get_next(styles, current_value)
           vim.g.sonokai_style = styles[index]
-            vim.cmd [[colorscheme sonokai]]
-            P('Set sonokai_style to ' .. styles[index])
+          vim.cmd [[colorscheme sonokai]]
+          P('Set sonokai_style to ' .. styles[index])
         end,
       })
     end,
@@ -61,7 +61,14 @@ local M = {
   },
   {
     'dstein64/vim-startuptime',
-    cmd = 'StartupTime',
+    cmd = 'Startup Time (:StartupTime)',
+    init = function()
+      require('user.menu').add_actions(nil, {
+        ['StartupTime'] = function()
+          vim.cmd [[StartupTime]]
+        end,
+      })
+    end,
   },
 
   ------------------------------------
@@ -69,21 +76,13 @@ local M = {
   ------------------------------------
   {
     'folke/trouble.nvim',
-    config = true,
+    opts = {},
     cmd = 'TroubleToggle',
   },
-  -- {
-  --   'vim-scripts/groovyindent-unix',
-  --   ft = { 'groovy', 'Jenkinsfile' },
-  -- },
   {
     'sam4llis/nvim-lua-gf',
     ft = 'lua',
   },
-  -- {
-  --   'martinda/Jenkinsfile-vim-syntax',
-  --   ft = { 'groovy', 'Jenkinsfile' },
-  -- },
   {
     'chr4/nginx.vim',
     ft = 'nginx',
@@ -91,11 +90,35 @@ local M = {
   {
     'mosheavni/vim-kubernetes',
     ft = 'yaml',
+    config = function()
+      require('user.menu').add_actions('Kubernetes', {
+        ['Apply (:KubeApply)'] = function()
+          vim.cmd [[KubeApply]]
+        end,
+        ['Apply Directory (:KubeApplyDir)'] = function()
+          vim.cmd [[KubeApplyDir]]
+        end,
+        ['Create (:KubeCreate)'] = function()
+          vim.cmd [[KubeCreate]]
+        end,
+        ['Decode Secret (:KubeDecodeSecret)'] = function()
+          vim.cmd [[KubeDecodeSecret]]
+        end,
+        ['Delete (:KubeDelete)'] = function()
+          vim.cmd [[KubeDelete]]
+        end,
+        ['Delete Dir (:KubeDeleteDir)'] = function()
+          vim.cmd [[KubeDeleteDir]]
+        end,
+        ['Encode Secret (:KubeEncodeSecret)'] = function()
+          vim.cmd [[KubeEncodeSecret]]
+        end,
+        ['Recreate (:KubeRecreate)'] = function()
+          vim.cmd [[KubeRecreate]]
+        end,
+      })
+    end,
   },
-  -- {
-  --   'towolf/vim-helm',
-  --   ft = { 'yaml', 'yaml.gotexttmpl' },
-  -- },
   { 'cuducos/yaml.nvim', ft = 'yaml' },
   {
     'phelipetls/jsonpath.nvim',
@@ -107,6 +130,11 @@ local M = {
         vim.fn.setreg(register, json_path)
         vim.notify('Copied ' .. json_path .. ' to register ' .. register, vim.log.levels.INFO, { title = 'JsonPath' })
       end, {})
+      require('user.menu').add_actions('JSON', {
+        ['Copy Json Path to clipboard (:JsonPath)'] = function()
+          vim.cmd [[JsonPath]]
+        end,
+      })
     end,
   },
   {

@@ -109,6 +109,20 @@ local M = {
     config = function(_, opts)
       require('colorizer').setup(opts)
       require('colorizer').attach_to_buffer(0, { mode = 'virtualtext', css = true })
+      require('user.menu').add_actions('Colorizer', {
+        ['Attach to Buffer (:ColorizerAttachToBuffer)'] = function()
+          vim.cmd 'ColorizerAttachToBuffer'
+        end,
+        ['Toggle (:ColorizerToggle)'] = function()
+          vim.cmd 'ColorizerToggle'
+        end,
+        ['Detach from Buffer (:ColorizerDetachFromBuffer)'] = function()
+          vim.cmd 'ColorizerDetachFromBuffer'
+        end,
+        ['Reload All Buffers (:ColorizerReloadAllBuffers)'] = function()
+          vim.cmd 'ColorizerReloadAllBuffers'
+        end,
+      })
     end,
     event = 'BufReadPost',
   },
