@@ -14,11 +14,9 @@ local function add_prefix(actions, prefix)
 end
 
 M.add_actions = function(prefix, actions)
-  local actions_prefixed = {}
+  local actions_prefixed = actions
   if prefix ~= nil then
     actions_prefixed = add_prefix(actions, prefix)
-  else
-    actions_prefixed = actions
   end
   M.actions = vim.tbl_extend('force', M.actions, actions_prefixed)
 end

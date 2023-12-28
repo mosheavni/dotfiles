@@ -29,14 +29,11 @@ local M = {
       require('user.menu').add_actions('Colorscheme', {
         ['Toggle Sonokai Style'] = function()
           local styles = { 'default', 'atlantis', 'andromeda', 'shusia', 'maia', 'espresso' }
-          -- toggle vim.g.sonokai_style and reset the colorscheme
           local current_value = vim.g.sonokai_style
           local index = require('user.utils').tbl_get_next(styles, current_value)
           vim.g.sonokai_style = styles[index]
-          vim.defer_fn(function()
             vim.cmd [[colorscheme sonokai]]
             P('Set sonokai_style to ' .. styles[index])
-          end, 100)
         end,
       })
     end,
