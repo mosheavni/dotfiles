@@ -90,7 +90,7 @@ M.config = function()
     },
     mapping = cmp.mapping.preset.insert {
       ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.abort(),
+      -- ['<C-e>'] = cmp.mapping.abort(),
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
       ['<C-u>'] = cmp.mapping.scroll_docs(-4),
       ['<C-j>'] = cmp.mapping(function(fallback)

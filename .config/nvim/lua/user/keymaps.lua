@@ -18,6 +18,7 @@ nnoremap('v<c-w>', 'viw')
 
 -- Map 0 to first non-blank character
 nnoremap('0', '^')
+vnoremap('0', '^')
 
 -- Move to the end of the line
 nnoremap('L', '$ze10zl')
@@ -47,6 +48,10 @@ inoremap('.', '.<c-g>u')
 inoremap(';', ';<c-g>u')
 
 inoremap(';;', '<C-O>A;')
+
+-- delete word on insert mode
+inoremap('<C-e>', '<C-o>de')
+inoremap('<C-b>', '<C-o>db')
 
 -- Search for string within the visual selection
 xnoremap('/', '<Esc>/\\%V')
