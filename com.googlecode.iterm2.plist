@@ -1057,13 +1057,13 @@
 			<key>Name</key>
 			<string>default</string>
 			<key>Non Ascii Font</key>
-			<string>HackNFM-Regular 15</string>
+			<string>HackNF-Regular 15</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<false/>
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>FiraCode-Regular 14</string>
+			<string>CascadiaCode-Italic 14</string>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>
@@ -1102,6 +1102,8 @@
 			<string></string>
 			<key>Silence Bell</key>
 			<false/>
+			<key>Special Font Config</key>
+			<string>{"entries":[{"start":9211,"count":4,"fontName":"UnicodeIECsymbol"},{"start":9829,"count":1,"fontName":"Octicons"},{"start":9889,"count":1,"fontName":"Octicons"},{"start":11096,"count":1,"fontName":"UnicodeIECsymbol"},{"start":57344,"count":11,"fontName":"Pomicons"},{"start":57504,"count":3,"fontName":"PowerlineSymbols"},{"start":57507,"count":1,"fontName":"PowerlineExtraSymbols"},{"start":57520,"count":4,"fontName":"PowerlineSymbols"},{"start":57524,"count":21,"fontName":"PowerlineExtraSymbols"},{"start":57546,"count":1,"fontName":"PowerlineExtraSymbols"},{"start":57548,"count":8,"fontName":"PowerlineExtraSymbols"},{"destination":57856,"fontName":"font-awesome-extension","count":170,"start":57344},{"destination":58112,"fontName":"Weather Icons Regular","count":236,"start":61440},{"destination":58874,"fontName":"Nerd Font File Types Regular","count":177,"start":58618},{"destination":59136,"fontName":"icomoon","count":198,"start":58880},{"start":60000,"count":396,"fontName":"codicon"},{"start":61440,"count":736,"fontName":"FontAwesome"},{"start":62208,"count":48,"fontName":"font-logos"},{"destination":62464,"fontName":"Octicons","count":168,"start":61440},{"destination":62633,"fontName":"Octicons","count":1,"start":62076},{"destination":62634,"fontName":"Octicons","count":86,"start":61609},{"destination":62720,"fontName":"Material Design Icons","count":2118,"start":61441},{"start":983041,"count":6896,"fontName":"Material Design Icons Desktop"}],"version":1}</string>
 			<key>Sync Title</key>
 			<false/>
 			<key>Tags</key>
