@@ -186,6 +186,7 @@ autocmd({ 'TermOpen' }, {
 local CustomSettingsGroup = augroup 'CustomSettingsGroup'
 autocmd('BufWritePost', {
   group = CustomSettingsGroup,
+  desc = 'make sh file executable if a shebang is deteced',
   pattern = '*',
   callback = function(args)
     local shebang = vim.api.nvim_buf_get_lines(0, 0, 1, true)[1]
@@ -204,5 +205,4 @@ autocmd('BufWritePost', {
     vim.uv.fs_chmod(filename, bit.bor(fileinfo.mode, 493))
   end,
   once = false,
-  desc = 'Mark script files with shebangs as executable on write.',
 })

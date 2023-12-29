@@ -288,6 +288,7 @@ local M = {
           }
         end,
       })
+      -- (un)check markdown buxes
       vim.api.nvim_create_autocmd('FileType', {
         group = custom_switches,
         pattern = { 'markdown' },
@@ -325,6 +326,7 @@ local M = {
     'https://github.com/atusy/treemonkey.nvim',
     init = function()
       vim.keymap.set({ 'x', 'o' }, 'm', function()
+        ---@diagnostic disable-next-line: missing-fields
         require('treemonkey').select { ignore_injections = false }
       end)
     end,
