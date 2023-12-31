@@ -3,6 +3,74 @@
 -----------------
 
 local M = {
+  -------------------
+  --   Colorscheme --
+  -------------------
+  {
+    'navarasu/onedark.nvim',
+    enabled = false,
+    config = function()
+      require('onedark').setup {
+        style = 'dark',
+        highlights = {
+          EndOfBuffer = { fg = '#61afef' },
+        },
+      }
+      require('onedark').load()
+    end,
+  },
+  {
+    'sainnhe/sonokai',
+    enabled = true,
+    config = function()
+      vim.cmd [[
+        let g:sonokai_style = 'shusia'
+        colorscheme sonokai
+      ]]
+      require('user.menu').add_actions('Colorscheme', {
+        ['Toggle Sonokai Style'] = function()
+          local styles = { 'default', 'atlantis', 'andromeda', 'shusia', 'maia', 'espresso' }
+          local current_value = vim.g.sonokai_style
+          local index = require('user.utils').tbl_get_next(styles, current_value)
+          vim.g.sonokai_style = styles[index]
+          vim.cmd [[colorscheme sonokai]]
+          P('Set sonokai_style to ' .. styles[index])
+        end,
+      })
+    end,
+  },
+  {
+    'sainnhe/gruvbox-material',
+    enabled = false,
+    config = function()
+      -- load the colorscheme here
+      vim.cmd [[
+        let g:gruvbox_material_better_performance = 1
+        let g:gruvbox_material_background = 'hard' " soft | medium | hard
+        colorscheme gruvbox-material
+      ]]
+    end,
+  },
+  {
+    'tiagovla/tokyodark.nvim',
+    enabled = false,
+    opts = {},
+    config = function(_, opts)
+      require('tokyodark').setup(opts) -- calling setup is optional
+      vim.cmd [[colorscheme tokyodark]]
+    end,
+  },
+  {
+    'dstein64/vim-startuptime',
+    cmd = 'Startup Time (:StartupTime)',
+    init = function()
+      require('user.menu').add_actions(nil, {
+        ['StartupTime'] = function()
+          vim.cmd [[StartupTime]]
+        end,
+      })
+    end,
+  },
   {
     'rcarriga/nvim-notify',
     event = 'VeryLazy',

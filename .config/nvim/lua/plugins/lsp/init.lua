@@ -290,6 +290,24 @@ local language_specific_plugins = {
     'jose-elias-alvarez/typescript.nvim',
     ft = { 'typescript', 'typescriptreact', 'typescript.tsx', 'javascript' },
   },
+  { 'cuducos/yaml.nvim', ft = 'yaml' },
+  {
+    'phelipetls/jsonpath.nvim',
+    ft = 'json',
+    config = function()
+      vim.api.nvim_buf_create_user_command(0, 'JsonPath', function()
+        local json_path = require('jsonpath').get()
+        local register = '+'
+        vim.fn.setreg(register, json_path)
+        vim.notify('Copied ' .. json_path .. ' to register ' .. register, vim.log.levels.INFO, { title = 'JsonPath' })
+      end, {})
+      require('user.menu').add_actions('JSON', {
+        ['Copy Json Path to clipboard (:JsonPath)'] = function()
+          vim.cmd [[JsonPath]]
+        end,
+      })
+    end,
+  },
   {
     'someone-stole-my-name/yaml-companion.nvim',
     ft = { 'yaml' },

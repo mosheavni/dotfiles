@@ -2,75 +2,6 @@ local utils = require 'user.utils'
 local nmap = utils.nmap
 
 local M = {
-  -------------------
-  --   Colorscheme --
-  -------------------
-  {
-    'navarasu/onedark.nvim',
-    enabled = false,
-    config = function()
-      require('onedark').setup {
-        style = 'dark',
-        highlights = {
-          EndOfBuffer = { fg = '#61afef' },
-        },
-      }
-      require('onedark').load()
-    end,
-  },
-  {
-    'sainnhe/sonokai',
-    enabled = true,
-    config = function()
-      vim.cmd [[
-        let g:sonokai_style = 'shusia'
-        colorscheme sonokai
-      ]]
-      require('user.menu').add_actions('Colorscheme', {
-        ['Toggle Sonokai Style'] = function()
-          local styles = { 'default', 'atlantis', 'andromeda', 'shusia', 'maia', 'espresso' }
-          local current_value = vim.g.sonokai_style
-          local index = require('user.utils').tbl_get_next(styles, current_value)
-          vim.g.sonokai_style = styles[index]
-          vim.cmd [[colorscheme sonokai]]
-          P('Set sonokai_style to ' .. styles[index])
-        end,
-      })
-    end,
-  },
-  {
-    'sainnhe/gruvbox-material',
-    enabled = false,
-    config = function()
-      -- load the colorscheme here
-      vim.cmd [[
-        let g:gruvbox_material_better_performance = 1
-        let g:gruvbox_material_background = 'hard' " soft | medium | hard
-        colorscheme gruvbox-material
-      ]]
-    end,
-  },
-  {
-    'tiagovla/tokyodark.nvim',
-    enabled = false,
-    opts = {},
-    config = function(_, opts)
-      require('tokyodark').setup(opts) -- calling setup is optional
-      vim.cmd [[colorscheme tokyodark]]
-    end,
-  },
-  {
-    'dstein64/vim-startuptime',
-    cmd = 'Startup Time (:StartupTime)',
-    init = function()
-      require('user.menu').add_actions(nil, {
-        ['StartupTime'] = function()
-          vim.cmd [[StartupTime]]
-        end,
-      })
-    end,
-  },
-
   ------------------------------------
   -- Language Server Protocol (LSP) --
   ------------------------------------
@@ -81,6 +12,10 @@ local M = {
   },
   {
     'sam4llis/nvim-lua-gf',
+    ft = 'lua',
+  },
+  {
+    'milisims/nvim-luaref',
     ft = 'lua',
   },
   {
@@ -119,33 +54,10 @@ local M = {
       })
     end,
   },
-  { 'cuducos/yaml.nvim', ft = 'yaml' },
-  {
-    'phelipetls/jsonpath.nvim',
-    ft = 'json',
-    config = function()
-      vim.api.nvim_buf_create_user_command(0, 'JsonPath', function()
-        local json_path = require('jsonpath').get()
-        local register = '+'
-        vim.fn.setreg(register, json_path)
-        vim.notify('Copied ' .. json_path .. ' to register ' .. register, vim.log.levels.INFO, { title = 'JsonPath' })
-      end, {})
-      require('user.menu').add_actions('JSON', {
-        ['Copy Json Path to clipboard (:JsonPath)'] = function()
-          vim.cmd [[JsonPath]]
-        end,
-      })
-    end,
-  },
   {
     'chrisbra/vim-sh-indent',
     ft = { 'sh', 'bash', 'zsh' },
   },
-  {
-    'milisims/nvim-luaref',
-    ft = 'lua',
-  },
-  { 'cuducos/yaml.nvim', ft = 'yaml' },
 
   -----------------------------
   -- AI and smart completion --
