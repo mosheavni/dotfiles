@@ -324,10 +324,14 @@ local M = {
   },
   {
     'https://github.com/atusy/treemonkey.nvim',
+    lazy = true,
     init = function()
       vim.keymap.set({ 'x', 'o' }, 'm', function()
-        ---@diagnostic disable-next-line: missing-fields
-        require('treemonkey').select { ignore_injections = false }
+        require 'nvim-treesitter.configs'
+        require('treemonkey').select {
+          ignore_injections = false,
+          action = require('treemonkey.actions').unite_selection,
+        }
       end)
     end,
   },
