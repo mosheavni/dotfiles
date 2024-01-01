@@ -256,10 +256,10 @@ local M = {
   {
     'mizlan/iswap.nvim',
     cmd = { 'ISwap', 'ISwapWith' },
-    init = function()
-      nmap('<leader>sw', ':ISwapWith<CR>')
-    end,
-    config = true,
+    keys = {
+      { '<leader>sw', '<cmd>ISwap<CR>' },
+    },
+    opts = {},
   },
   {
     'vim-scripts/ReplaceWithRegister',
