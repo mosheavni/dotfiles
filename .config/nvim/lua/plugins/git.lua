@@ -121,6 +121,40 @@ local actions = function()
     end,
   }
 end
+local diff_actions = function()
+  return {
+    ['[Diffview] Diff File History'] = function()
+      vim.ui.input({ prompt = 'Enter file path (empty for current file): ' }, function(file_to_check)
+        if file_to_check == '' then
+          file_to_check = '%'
+        end
+
+        vim.cmd('DiffviewFileHistory ' .. file_to_check)
+      end)
+    end,
+    ['[Diffview] Diff with branch'] = function()
+      vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
+        if not branch_to_diff then
+          actions_pretty_print 'Canceled.'
+          return
+        end
+        vim.cmd('DiffviewOpen origin/' .. branch_to_diff .. '..HEAD')
+      end)
+    end,
+    ['[Diffview] Diff file with branch'] = function()
+      vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
+        if not branch_to_diff then
+          actions_pretty_print 'Canceled.'
+          return
+        end
+        vim.cmd('DiffviewFileHistory ' .. branch_to_diff)
+      end)
+    end,
+    ['[Diffview] Diff close'] = function()
+      vim.cmd 'DiffviewClose'
+    end,
+  }
+end
 
 local fugitive_config = function()
   local utils = require 'user.utils'
@@ -275,7 +309,7 @@ nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
   ----------------------
   -- Git actions menu --
   ----------------------
-  local the_actions = actions()
+  local the_actions = vim.tbl_extend('force', actions(), diff_actions())
   require('user.menu').add_actions('Git', the_actions)
   nmap('<leader>gm', function()
     vim.ui.select(vim.tbl_keys(the_actions), { prompt = 'Choose git action' }, function(choice)
@@ -350,40 +384,6 @@ local M = {
       'DiffviewRefresh',
       'DiffviewToggleFiles',
     },
-    init = function()
-      require('user.menu').add_actions('GitDiffView', {
-        ['Diff File History'] = function()
-          vim.ui.input({ prompt = 'Enter file path (empty for current file): ' }, function(file_to_check)
-            if file_to_check == '' then
-              file_to_check = '%'
-            end
-
-            vim.cmd('DiffviewFileHistory ' .. file_to_check)
-          end)
-        end,
-        ['Diff with branch'] = function()
-          vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
-            if not branch_to_diff then
-              actions_pretty_print 'Canceled.'
-              return
-            end
-            vim.cmd('DiffviewOpen origin/' .. branch_to_diff .. '..HEAD')
-          end)
-        end,
-        ['Diff file with branch'] = function()
-          vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
-            if not branch_to_diff then
-              actions_pretty_print 'Canceled.'
-              return
-            end
-            vim.cmd('DiffviewFileHistory ' .. branch_to_diff)
-          end)
-        end,
-        ['Diff close'] = function()
-          vim.cmd 'DiffviewClose'
-        end,
-      })
-    end,
     config = function()
       require 'diffview'
     end,

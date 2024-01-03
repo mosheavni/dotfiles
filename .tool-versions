@@ -21,3 +21,4 @@ terraform 1.5.5
 terragrunt 0.53.6
 tree-sitter 0.20.8
 yq 4.40.3
+azure-cli 2.55.0
