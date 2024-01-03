@@ -2,6 +2,7 @@ ag 2.2.0
 argocd 2.9.2
 aws-sso-cli 1.9.9
 awscli 2.13.30
+azure-cli 2.55.0
 fd 8.7.1
 golang 1.21.3
 helm 3.13.2
@@ -21,4 +22,3 @@ terraform 1.5.5
 terragrunt 0.53.6
 tree-sitter 0.20.8
 yq 4.40.3
-azure-cli 2.55.0
