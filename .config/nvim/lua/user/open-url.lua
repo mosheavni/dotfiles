@@ -30,7 +30,7 @@ M.open_url = function(url)
 end
 
 M.open_url_under_cursor = function()
-  local cword = vim.fn.expand '<cWORD>'
+  local cword = vim.fn.expand '<cfile>'
 
   -- Remove surronding quotes if exist
   ---@diagnostic disable-next-line: param-type-mismatch
