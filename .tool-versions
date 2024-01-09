@@ -3,7 +3,7 @@ argocd 2.9.2
 aws-sso-cli 1.9.9
 awscli 2.13.30
 azure-cli 2.55.0
-fd 8.7.1
+fd 9.0.0
 golang 1.21.3
 helm 3.13.2
 java corretto-21.0.1.12.1

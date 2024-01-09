@@ -15,7 +15,7 @@ function _G.P(v, r)
   if r then
     print(vim.inspect(v))
   else
-    require 'notify'(vim.inspect(v), 2, {
+    vim.notify(vim.inspect(v), 2, {
       title = 'P debug',
       icon = '✎',
     })

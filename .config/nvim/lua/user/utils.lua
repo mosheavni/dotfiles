@@ -147,7 +147,7 @@ M.country_os_to_emoji = function(iso)
   end
   python_file_handle:write(python_file_content)
   python_file_handle:close()
-  local emoji = vim.fn.system('python3 ' .. python_file .. ' ' .. iso)
+  local emoji = vim.system({ 'python3', python_file, iso }, { text = true }):wait().stdout
   vim.fn.delete(python_file)
   return emoji
 end
