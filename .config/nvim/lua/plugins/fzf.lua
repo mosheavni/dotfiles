@@ -1,6 +1,6 @@
 return {
   'ibhagwan/fzf-lua',
-  opts = {},
+  commit = '210f6657c54084cddbbfe52f993f5c7a18761a74',
   keys = {
     { '<c-p>', ':FzfLua files<cr>' },
     { '<c-b>', ':FzfLua buffers<cr>' },
@@ -43,7 +43,7 @@ return {
                 return
               end
               -- Delete the branch
-              local toplevel = vim.trim(vim.fn.system 'git rev-parse --show-toplevel')
+              local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
               local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'branch', '-D', selected[1] }, toplevel)
               if ret == 0 then
                 require('fzf-lua.utils').info('Deleted branch ' .. selected[1])

@@ -28,7 +28,7 @@ autocmd('UIEnter', {
   callback = function()
     vim.defer_fn(function()
       if vim.fn.filereadable 'startuptime.txt' == 1 then
-        local tail = vim.fn.system { 'tail', '-n3', 'startuptime.txt' }
+        local tail = vim.system({ 'tail', '-n3', 'startuptime.txt' }, { text = true }):wait().stdout
         ---@diagnostic disable-next-line: param-type-mismatch
         vim.notify(tail)
         return vim.fn.delete 'startuptime.txt'

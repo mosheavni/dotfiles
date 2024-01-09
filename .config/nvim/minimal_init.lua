@@ -8,14 +8,16 @@ local temp_dir = vim.loop.os_getenv 'TEMP' or '/tmp'
 local package_root = join_paths(temp_dir, 'nvim', 'site', 'lazy')
 local lazypath = join_paths(temp_dir, 'nvim', 'site') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
-    'git',
-    'clone',
-    '--filter=blob:none',
-    '--single-branch',
-    'https://github.com/folke/lazy.nvim.git',
-    lazypath,
-  }
+  vim
+    .system({
+      'git',
+      'clone',
+      '--filter=blob:none',
+      '--single-branch',
+      'https://github.com/folke/lazy.nvim.git',
+      lazypath,
+    }, { text = true })
+    :wait()
 end
 vim.opt.runtimepath:prepend(lazypath)
 

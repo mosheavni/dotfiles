@@ -36,8 +36,8 @@ local function on_attach(bufnr)
     ---@diagnostic disable-next-line: redundant-parameter
     local file_out = vim.fn.input('MOVE TO: ', file_src, 'file')
     local dir = vim.fn.fnamemodify(file_out, ':h')
-    vim.fn.system { 'mkdir', '-p', dir }
-    vim.fn.system { 'mv', file_src, file_out }
+    vim.system({ 'mkdir', '-p', dir }, { text = true }):wait()
+    vim.system({ 'mv', file_src, file_out }, { text = true }):wait()
   end
   vim.keymap.set('n', 'r', move_file_to, opts 'Move File To')
 end
