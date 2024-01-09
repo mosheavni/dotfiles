@@ -1,11 +1,10 @@
 return {
   'ibhagwan/fzf-lua',
-  commit = '210f6657c54084cddbbfe52f993f5c7a18761a74',
   keys = {
-    { '<c-p>', ':FzfLua files<cr>' },
-    { '<c-b>', ':FzfLua buffers<cr>' },
-    { '<leader>hh', ':FzfLua help_tags<cr>' },
-    { '<leader>i', ':FzfLua oldfiles<cr>' },
+    { '<c-p>', ':FzfLua files<cr>', silent = true },
+    { '<c-b>', ':FzfLua buffers<cr>', silent = true },
+    { '<leader>hh', ':FzfLua help_tags<cr>', silent = true },
+    { '<leader>i', ':FzfLua oldfiles<cr>', silent = true },
     '<F4>',
     '<leader>/',
   },
