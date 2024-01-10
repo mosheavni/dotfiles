@@ -119,11 +119,17 @@ local M = {
 }
 
 M.init = function()
-  vim.keymap.set('n', '<leader>ls', function()
+  local start_ls = function()
     _G.tmp_write { should_delete = false, new = false }
     -- load lsp
     require 'lspconfig'
-  end)
+  end
+  vim.keymap.set('n', '<leader>ls', start_ls)
+  require('user.menu').add_actions('LSP', {
+    ['Start LSP (<leader>ls)'] = function()
+      start_ls()
+    end,
+  })
 end
 
 M.config = function(_, opts)

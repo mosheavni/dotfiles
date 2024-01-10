@@ -43,6 +43,11 @@ local M = {
       require 'dap'
       require('dapui').toggle()
     end, {})
+    require('user.menu').add_actions('DAP', {
+      ['Load DAP'] = function()
+        vim.cmd.DAP()
+      end,
+    })
   end,
   cmd = { 'DAP' },
   dependencies = {
