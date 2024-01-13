@@ -171,7 +171,8 @@ local M = {
       local sk = [=[\<\(\u\l\+\)\(\u\l\+\)\+\>]=]
       local tk = [=[\<\(\l\+\)\(_\l\+\)\+\>]=]
       local fok = [=[\<\(\u\+\)\(_\u\+\)\+\>]=]
-      local fik = [=[\<\(\l\+\)\(-\l\+\)\+\>]=]
+      local folk = [=[\<\(\l\+\)\(\-\l\+\)\+\>]=]
+      local fik = [=[\<\(\l\+\)\(\.\l\+\)\+\>]=]
       vim.g['switch_custom_definitions'] = {
         vim.fn['switch#NormalizedCaseWords'] { 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' },
         vim.fn['switch#NormalizedCase'] { 'yes', 'no' },
@@ -185,7 +186,8 @@ local M = {
           [sk] = [=[\=tolower(substitute(submatch(0), '\(\l\)\(\u\)', '\1_\2', 'g'))]=],
           [tk] = [=[\U\0]=],
           [fok] = [=[\=tolower(substitute(submatch(0), '_', '-', 'g'))]=],
-          [fik] = [=[\=substitute(submatch(0), '-\(\l\)', '\u\1', 'g')]=],
+          [folk] = [=[\=substitute(submatch(0), '-', '.', 'g')]=],
+          [fik] = [=[\=substitute(submatch(0), '\.\(\l\)', '\u\1', 'g')]=],
         },
       }
     end,
@@ -240,6 +242,7 @@ local M = {
     init = function()
       vim.keymap.set({ 'x', 'o' }, 'm', function()
         require 'nvim-treesitter.configs'
+        ---@diagnostic disable-next-line: missing-fields
         require('treemonkey').select {
           ignore_injections = false,
           action = require('treemonkey.actions').unite_selection,
