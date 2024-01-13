@@ -195,6 +195,9 @@ end)
   ['Move line up (_)'] = function()
     vim.fn.feedkeys '_'
   end,
+  ['Toggle words wrapping (<leader>ww)'] = function()
+    vim.o.wrap = not vim.o.wrap
+  end,
   ['Copy full file path to clipboard (<leader>cfa)'] = function()
     vim.fn.feedkeys(T '<leader>' .. 'cfa')
   end,

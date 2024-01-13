@@ -272,6 +272,9 @@ nmap('<leader><cr>', [[:silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! 
 -- nmap('k', "v:count == 0 ? 'gk' : 'k'", opts.expr_silent)
 -- nmap('j', "v:count == 0 ? 'gj' : 'j'", opts.expr_silent)
 
+-- toggle wrap
+nnoremap('<leader>ww', ':set wrap!<cr>', true)
+
 -- Scroll one line
 nnoremap('<PageUp>', '<c-y>', true)
 nnoremap('<PageDown>', '<c-e>', true)
