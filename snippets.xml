@@ -140,6 +140,36 @@ done
 
 </content>
 			</snippet>
+			<snippet>
+				<title>fancy_print</title>
+				<content>function fancy_print() {
+  str=$1
+  str_len=${#str}
+  eval printf &apos;=%.0s&apos; {1..$((str_len + 6))}
+  echo -e &quot;\n== $str ==&quot;
+  eval printf &apos;=%.0s&apos; {1..$((str_len + 6))}
+  echo &quot;&quot;
+}</content>
+			</snippet>
+			<snippet>
+				<title>colors</title>
+				<content># Colors
+black() { echo -e &quot;\033[30m${*}\033[0m&quot;; }
+red() { echo -e &quot;\033[31m${*}\033[0m&quot;; }
+green() { echo -e &quot;\033[32m${*}\033[0m&quot;; }
+yellow() { echo -e &quot;\033[33m${*}\033[0m&quot;; }
+blue() { echo -e &quot;\033[34m${*}\033[0m&quot;; }
+magenta() { echo -e &quot;\033[35m${*}\033[0m&quot;; }
+cyan() { echo -e &quot;\033[0;36m${*}\033[0m&quot;; }
+gray() { echo -e &quot;\033[90m${*}\033[0m&quot;; }
+warn() { yellow &quot;$(date) [WARNING] - $*&quot;; }
+err() {
+  red &quot;$(date) [ERROR] - $*&quot;
+  exit 1
+}
+info() { cyan &quot;$(date) [INFO] - $*&quot;; }
+</content>
+			</snippet>
 		</snippets>
 	</folder>
 	<folder>
