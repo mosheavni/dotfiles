@@ -79,13 +79,6 @@ local M = {
     cmd = { 'Gen' },
   },
   {
-    'Exafunction/codeium.nvim',
-    lazy = true,
-    config = function()
-      require('codeium').setup {}
-    end,
-  },
-  {
     'zbirenbaum/copilot.lua',
     event = 'InsertEnter',
     config = function()

@@ -10,7 +10,6 @@ local M = {
     'onsails/lspkind-nvim',
     { 'tzachar/cmp-tabnine', build = './install.sh' },
     'hrsh7th/cmp-nvim-lua',
-    'Exafunction/codeium.nvim',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-path',
@@ -42,7 +41,6 @@ M.config = function()
     buffer = '[Buffer]',
     cmdline = '[Cmd]',
     cmp_tabnine = '[TN]',
-    codeium = '[Code]',
     copilot = '[CP]',
     git = '[Git]',
     luasnip = '[Snpt]',
@@ -53,15 +51,11 @@ M.config = function()
   }
   local custom_kinds = {
     TabNine = '',
-    Codeium = '',
   }
 
   -- custom highlights
-  local custom_kinds_hl = {
-    Codeium = 'CmpItemKindCodeium',
-  }
+  local custom_kinds_hl = {}
   vim.api.nvim_set_hl(0, 'CmpItemKindTabNine', { link = 'Green' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindCodeium', { link = 'Green' })
   cmp.setup {
     native_menu = false,
     formatting = {
@@ -159,7 +153,6 @@ M.config = function()
       { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
       { name = 'cmp_tabnine' },
-      { name = 'codeium' },
       { name = 'path' },
       { name = 'buffer', keyword_length = 4 },
     },
