@@ -465,7 +465,7 @@ function! RipGrepCWORD(bang, visualmode, ...) abort
   let search_message_literally = "for " . search_word
   if a:bang == "!" || a:bang == v:true
     let search_message_literally = "literally for " . search_word
-    let search_word = get(g:, 'grep_literal_flag', "") . ' ' . shellescape(search_word)
+    let search_word = get(g:, 'grep_literal_flag', "") . ' -- ' . shellescape(search_word)
   endif
 
   echom 'Searching ' . search_message_literally
