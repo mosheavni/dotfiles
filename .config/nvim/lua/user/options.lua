@@ -144,7 +144,7 @@ vim.opt.indentkeys:remove '<:>'
 
 local kube_config_pattern = [[.*\.kube/config]]
 vim.filetype.add {
-  extension = { hcl = 'terraform', tfvars = 'terraform' },
+  extension = { tfvars = 'terraform' },
   pattern = {
     ['.*/templates/.*%.yaml'] = {
       function()
