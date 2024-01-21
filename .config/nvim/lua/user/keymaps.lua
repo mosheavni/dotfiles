@@ -120,7 +120,12 @@ function! s:FormatGroovyMap(surround_words)
   normal! gg=G
   noh
 endfunction
+function! s:BasicGroovyFormat() abort
+  silent! %s/\(\w\){/\1 {/gc
+  silent %s?\V){?) {?gc
+endfunction
 com! -bang FormatGroovyMap call s:FormatGroovyMap("<bang>")
+com! BasicGroovyFormat call s:BasicGroovyFormat()
 ]=]
 
 -- Windows mappings

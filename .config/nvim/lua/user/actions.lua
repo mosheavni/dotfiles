@@ -82,6 +82,9 @@ return {
   ['[Folds] Close all folds (<leader>fc)'] = function()
     vim.cmd 'normal! zM'
   end,
+  ['Basic groovy format'] = function()
+    vim.cmd.BasicGroovyFormat()
+  end,
   ['Where am I?'] = function()
     vim.cmd.Whereami()
   end,
