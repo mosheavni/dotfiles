@@ -38,6 +38,7 @@ end
 M.format = function(client)
   M.format_changedtick = vim.api.nvim_buf_get_changedtick(M.bufnr)
   vim.lsp.buf.format {
+    timeout_ms = 20000,
     filter = function(s_client)
       return s_client.name == client.name
     end,
