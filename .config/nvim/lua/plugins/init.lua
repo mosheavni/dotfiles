@@ -15,6 +15,11 @@ local M = {
     ft = 'lua',
   },
   {
+    'NStefan002/2048.nvim',
+    cmd = 'Play2048',
+    config = true,
+  },
+  {
     'milisims/nvim-luaref',
     ft = 'lua',
   },

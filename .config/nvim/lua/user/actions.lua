@@ -44,9 +44,7 @@ local search_and_replace = function(literal_search)
   }
 end
 
-local T = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
+local T = vim.keycode
 
 return {
   ['Find in pwd (literal search) (<C-f>)'] = function()

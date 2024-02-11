@@ -5,7 +5,7 @@ end
 local actions = function()
   return {
     ['Change branch (F4)'] = function()
-      vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<F4>', true, true, true))
+      vim.fn.feedkeys(vim.keycode '<F4>')
     end,
     ['Checkout new branch (:Gcb {new_branch})'] = function()
       _G.create_new_branch { args = '' }

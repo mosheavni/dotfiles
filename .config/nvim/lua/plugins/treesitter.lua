@@ -42,6 +42,7 @@ M.config = function()
       'gitcommit',
       'gitignore',
       'go',
+      'groovy',
       'hcl',
       'hjson',
       'html',

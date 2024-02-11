@@ -86,7 +86,7 @@ local M = {
     init = function()
       require('user.menu').add_actions(nil, {
         ['Resize window (<C-e>)'] = function()
-          vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-e>', true, true, true))
+          vim.fn.feedkeys(vim.keycode '<C-e>')
         end,
       })
     end,
@@ -156,7 +156,7 @@ local M = {
     init = function()
       require('user.menu').add_actions('REST', {
         ['Send request (<leader>cr)'] = function()
-          vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>RestNvim', true, true, true))
+          vim.fn.feedkeys(vim.keycode '<Plug>RestNvim')
         end,
         ['Open a buffer with a template'] = function()
           _G.tmp_write { should_delete = false, ft = 'http', new = true, vertical = true }
