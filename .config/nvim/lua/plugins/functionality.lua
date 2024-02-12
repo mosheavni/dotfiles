@@ -152,7 +152,9 @@ local M = {
   {
     'rest-nvim/rest.nvim',
     keys = { '<Plug>RestNvim', { '<leader>cr', '<Plug>RestNvim' } },
-    opts = {},
+    config = function()
+      require('rest-nvim').setup {}
+    end,
     init = function()
       require('user.menu').add_actions('REST', {
         ['Send request (<leader>cr)'] = function()

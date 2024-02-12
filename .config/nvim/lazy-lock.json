@@ -76,7 +76,7 @@
   "nvim-web-devicons": { "branch": "master", "commit": "7f30f2da3c3641841ceb0e2c150281f624445e8f" },
   "plenary.nvim": { "branch": "master", "commit": "4f71c0c4a196ceb656c824a70792f3df3ce6bb6d" },
   "promise-async": { "branch": "main", "commit": "94f6f03c6c1e2aab551aacdf0c1e597a7269abb6" },
-  "rest.nvim": { "branch": "main", "commit": "2d7bd3d398940ce2692941e6cd052c072207b9f9" },
+  "rest.nvim": { "branch": "main", "commit": "9741f827bd88b588e5136d67c7963e1904f8f1f7" },
   "sonokai": { "branch": "master", "commit": "42822f8f9b3a5088f05cf72a0aa1477598ad1a40" },
   "sqlite.lua": { "branch": "master", "commit": "b7e28c8463254c46a8e61c52d27d6a2040492fc3" },
   "statuscol.nvim": { "branch": "0.10", "commit": "b9e87ca941cbbb94618d784b90be0086729e2a26" },
