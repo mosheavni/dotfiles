@@ -5,6 +5,9 @@ local M = {
       input = {
         enabled = true,
         relative = 'editor',
+        trim_prompt = false,
+        insert_only = true,
+        start_in_insert = true,
       },
     }
     vim.cmd [[hi link FloatTitle Normal]]
