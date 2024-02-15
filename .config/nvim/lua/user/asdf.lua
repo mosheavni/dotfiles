@@ -5,16 +5,18 @@ local M = {
 
 local function read_tools(file_path)
   local f = io.open(file_path, 'r')
-  if f ~= nil then
-    local file_unparsed = f:read '*a'
-    file_unparsed = vim.split(file_unparsed, '\n')
-
-    for _, line in ipairs(file_unparsed) do
-      local tool = vim.split(line, ' ')
-      M.tools[tool[1]] = tool[2]
-    end
-    io.close(f)
+  if f == nil then
+    return false
   end
+  local file_unparsed = f:read '*a'
+  file_unparsed = vim.split(file_unparsed, '\n')
+
+  for _, line in ipairs(file_unparsed) do
+    local tool = vim.split(line, ' ')
+    M.tools[tool[1]] = tool[2]
+  end
+  io.close(f)
+  return true
 end
 
 local function check_if_theres_tool()
@@ -29,7 +31,34 @@ local function check_if_theres_tool()
 end
 
 M.setup = function()
-  check_if_theres_tool()
+  if not check_if_theres_tool() then
+    P 'no tools'
+    return
+  end
+  for tool, _ in pairs(M.tools) do
+    local installed = vim.system({ 'asdf', 'where', tool }, { text = true }):wait().stdout
+    installed = string.gsub(installed, '%s+$', '')
+    P(tool .. ' installed: ' .. installed)
+    if installed == 'Version not installed' then
+      P(tool .. ' is not installed')
+      return vim.ui.select({ 'All', 'Only ' .. tool, 'No' }, {
+        prompt = 'asdf detected, ' .. tool .. ' is not installed, do you want to install the tools?',
+      }, function(selected)
+        if not selected or selected == 'No' then
+          return
+        end
+        local install_cmd = { 'asdf', 'install' }
+        if selected ~= 'All' then
+          table.insert(install_cmd, tool)
+        end
+        P(install_cmd)
+        vim.system(install_cmd, { text = true }, function(a)
+          P(a.stdout)
+          vim.notify('Installed ' .. selected)
+        end)
+      end)
+    end
+  end
 end
 
 return M
