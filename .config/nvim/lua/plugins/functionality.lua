@@ -150,6 +150,21 @@ local M = {
     end,
   },
   {
+    'backdround/global-note.nvim',
+    cmd = 'GlobalNote',
+    keys = { '<leader>n' },
+    config = function()
+      local global_note = require 'global-note'
+      global_note.setup {
+        additional_presets = {},
+      }
+
+      vim.keymap.set('n', '<leader>n', global_note.toggle_note, {
+        desc = 'Toggle global note',
+      })
+    end,
+  },
+  {
     'rest-nvim/rest.nvim',
     keys = { '<Plug>RestNvim', { '<leader>cr', '<Plug>RestNvim' } },
     config = function()
