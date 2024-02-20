@@ -100,6 +100,7 @@ export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,changes {}
 compdef terragrunt='terraform'
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 export EDITOR="nvim"
+export AWS_PAGER=""
 setopt MENU_COMPLETE
 unsetopt AUTO_MENU
 unsetopt CASE_GLOB
@@ -124,4 +125,4 @@ export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta
 function get_cluster_short() {
   awk -F/ '{print $NF}' <<<"$1"
 }
-KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
+export KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
