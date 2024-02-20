@@ -119,6 +119,23 @@ function mbkgp () {
   python3 ~/.bin/mkgp.py -v "1/1\|2/2\|3/3\|4/4\|5/5\|6/6\|Completed\|Evicted"
 }
 
+function grafana_web () {
+  grafana_ingress=$(kubectl get ingress -n monitoring --no-headers -o custom-columns=":metadata.name" | grep -m1 grafana)
+  ingress_host=$(kubectl get ingress -n monitoring "${grafana_ingress}" -ojson | jq -r '.spec.rules[].host')
+  creds=$(kubectl get secret -n monitoring grafana-credentials -ojson | jq '.data | with_entries(.value |= @base64d)')
+  echo "${creds}"
+  jq -r '.password' <<< "${creds}" | pbcopy
+  open "https://${ingress_host}"
+}
+
+function k_average_cpu () {
+  kubectl top pod | awk '/'$1'/{print;gsub("m$","",$2);acc+=$2;n++}END{printf "avg: %s over %s pods",acc / n,n}'
+}
+
+function k_average_memory () {
+  kubectl top pod | awk '/'$1'/{print;substr($3,2, length($3));acc+=$3;n++}END{printf "avg: %s over %s pods",acc / n,n}'
+}
+
 function kgres() {
   kubectl get pod $* \
     -ojsonpath='{range .items[*]}{.spec.containers[*].name}{" memory: "}{.spec.containers..resources.requests.memory}{"/"}{.spec.containers..resources.limits.memory}{" | cpu: "}{.spec.containers..resources.requests.cpu}{"/"}{.spec.containers..resources.limits.cpu}{"\n"}{end}' | sort \
@@ -133,6 +150,7 @@ function kubedebug () {
   local pod_name=debug
   local kubectl_args=()
   local processing_k_args=false
+  local sa_override
   while test $# -gt 0;do
     if $processing_k_args;then
       kubectl_args=($kubectl_args $1)
