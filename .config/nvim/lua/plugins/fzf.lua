@@ -35,6 +35,25 @@ return {
     vim.keymap.set('n', '<F4>', function()
       require('fzf-lua').git_branches {
         actions = {
+          ['ctrl-r'] = function(selected)
+            vim.ui.input({ prompt = 'Rename branch: ', default = selected[1] }, function(new_name)
+              if new_name == '' then
+                require('fzf-lua.utils').warn 'Action aborted'
+                return
+              end
+              -- Rename the branch
+              local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
+              local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'branch', '-m', selected[1], new_name }, toplevel)
+              if ret == 0 then
+                require('fzf-lua.utils').info('Renamed branch ' .. selected[1] .. ' to ' .. new_name)
+                return
+              else
+                local msg = string.format('Error when renaming branch: %s. Git returned:\n%s', branch, table.concat(stderr, '\n'))
+                require('fzf-lua.utils').err(msg)
+              end
+              return ret == 0
+            end)
+          end,
           ['ctrl-d'] = function(selected)
             vim.ui.select({ 'Yes', 'No' }, { prompt = 'Are you sure you want to delete the branch ' .. selected[1] }, function(yes_or_no)
               if yes_or_no == 'No' then
