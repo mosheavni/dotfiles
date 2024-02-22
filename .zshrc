@@ -122,7 +122,3 @@ fi
 export KUBECONFIG=$HOME/.kube/config
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
-function get_cluster_short() {
-  awk -F/ '{print $NF}' <<<"$1"
-}
-export KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
