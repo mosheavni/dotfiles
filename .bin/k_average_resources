@@ -1,0 +1,32 @@
+#!/bin/bash
+
+svc_name=$1
+top_result=$(kubectl top pod | awk '/'$svc_name'/{print}')
+echo "$top_result"
+num_of_pods=$(wc -l <<<"$top_result" | xargs)
+avg_cpu=$(awk '{gsub("m$","",$2);acc+=$2}END{printf "%s",acc/'${num_of_pods}'}' <<<"$top_result")
+avg_memory=$(awk '{substr($3,2, length($3));acc+=$3}END{printf "%s",acc/'${num_of_pods}'}' <<<"$top_result")
+percent_of_utilization_cpu=$(kubectl get hpa $svc_name -ojson | jq -r '.status.currentMetrics[].resource | select(.name=="cpu").current.averageUtilization')
+percent_of_utilization_memory=$(kubectl get hpa $svc_name -ojson | jq -r '.status.currentMetrics[].resource | select(.name=="memory").current.averageUtilization')
+echo "Data across $num_of_pods pods"
+echo "============================="
+{
+  echo "metric avg-utilization percent-of-request"
+  echo "cpu ${avg_cpu}m ${percent_of_utilization_cpu}%"
+  echo "memory ${avg_memory}Mi ${percent_of_utilization_memory}%"
+} | column -t
+#
+#
+#
+#
+#
+#
+#
+# svc_name=$1
+# top_result=$(kubectl top pod)
+# pods_and_avg=$(awk '/'$svc_name'/{substr($3,2, length($3));acc+=$3;n++}END{printf "avg=%s~pods=%s",acc/n,n}' <<<"$top_result")
+# avg_mem=$(awk -v'RS=~' -F= '$1 == "avg"{print $2}' <<<"$pods_and_avg")
+# num_of_pods=$(awk -v'RS=~' -F= '$1 == "pods"{print $2}' <<<"$pods_and_avg")
+# percent_of_utilization=$(kubectl get hpa $svc_name -ojson | jq -r '.status.currentMetrics[].resource | select(.name=="memory").current.averageUtilization')
+# awk '/'$svc_name'/{print}' <<<"$top_result"
+# echo "avg: ${avg_mem}Mi over $num_of_pods pods (${percent_of_utilization}% utilization of request)"

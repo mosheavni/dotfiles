@@ -128,14 +128,6 @@ function grafana_web () {
   open "https://${ingress_host}"
 }
 
-function k_average_cpu () {
-  kubectl top pod | awk '/'$1'/{print;gsub("m$","",$2);acc+=$2;n++}END{printf "avg: %s over %s pods",acc / n,n}'
-}
-
-function k_average_memory () {
-  kubectl top pod | awk '/'$1'/{print;substr($3,2, length($3));acc+=$3;n++}END{printf "avg: %s over %s pods",acc / n,n}'
-}
-
 function kgres() {
   kubectl get pod $* \
     -ojsonpath='{range .items[*]}{.spec.containers[*].name}{" memory: "}{.spec.containers..resources.requests.memory}{"/"}{.spec.containers..resources.limits.memory}{" | cpu: "}{.spec.containers..resources.requests.cpu}{"/"}{.spec.containers..resources.limits.cpu}{"\n"}{end}' | sort \
