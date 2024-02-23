@@ -25,6 +25,7 @@ local M = {
     config = function()
       vim.cmd [[
         let g:sonokai_style = 'shusia'
+        let g:sonokai_transparent_background = 1
         colorscheme sonokai
       ]]
       require('user.menu').add_actions('Colorscheme', {

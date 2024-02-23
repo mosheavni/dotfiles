@@ -1,9 +1,7 @@
 local M = {
   'kevinhwang91/nvim-ufo',
-  enabled = true,
   dependencies = { 'kevinhwang91/promise-async' },
   event = 'BufReadPost',
-
   keys = {
     { '<leader>fo', '<cmd>lua require("ufo").openAllFolds()<cr>' },
     { '<leader>fc', '<cmd>lua require("ufo").closeAllFolds()<cr>' },
