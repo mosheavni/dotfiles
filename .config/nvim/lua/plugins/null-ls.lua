@@ -2,6 +2,7 @@ local M = {
   'nvimtools/none-ls.nvim',
   lazy = true,
   dependencies = {
+    'gbprod/none-ls-shellcheck.nvim',
     'jay-babu/mason-null-ls.nvim',
   },
 }
@@ -17,22 +18,13 @@ M.config = function()
     sources = {
       require('user.lsp.code-actions').revision_branch_comment,
       require('user.lsp.code-actions').toggle_function_params,
-      null_ls.builtins.code_actions.shellcheck.with {
-        extra_filetypes = { 'bash' },
-      },
-      -- null_ls.builtins.code_actions.gitsigns,
-      null_ls.builtins.code_actions.eslint_d,
       require 'typescript.extensions.null-ls.code-actions',
+      require 'none-ls-shellcheck.code_actions',
       null_ls.builtins.diagnostics.ansiblelint,
       null_ls.builtins.diagnostics.hadolint,
       null_ls.builtins.diagnostics.markdownlint,
       null_ls.builtins.diagnostics.vint,
-      -- null_ls.builtins.diagnostics.shellcheck.with {
-      --   extra_filetypes = { 'bash' },
-      -- },
-      null_ls.builtins.diagnostics.eslint_d,
       null_ls.builtins.formatting.black,
-      -- null_ls.builtins.formatting.eslint_d,
       null_ls.builtins.formatting.markdownlint,
       null_ls.builtins.formatting.npm_groovy_lint,
       null_ls.builtins.formatting.prettierd,
