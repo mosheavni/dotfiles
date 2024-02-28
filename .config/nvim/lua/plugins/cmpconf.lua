@@ -18,6 +18,33 @@ local M = {
     'hrsh7th/cmp-nvim-lsp-signature-help',
     'windwp/nvim-autopairs',
     {
+      'zbirenbaum/copilot.lua',
+      config = function()
+        vim.schedule(function()
+          require('copilot').setup {
+            filetypes = { ['*'] = true },
+            panel = {
+              enabled = true,
+              auto_refresh = false,
+              keymap = {
+                jump_prev = '[[',
+                jump_next = ']]',
+                accept = '<CR>',
+                refresh = 'gr',
+                open = '<M-l>',
+              },
+            },
+            suggestion = {
+              auto_trigger = true,
+              keymap = {
+                accept = '<M-Enter>',
+              },
+            },
+          }
+        end)
+      end,
+    },
+    {
       'phenomenes/ansible-snippets',
       ft = { 'ansible', 'yaml.ansible' },
       config = function()
