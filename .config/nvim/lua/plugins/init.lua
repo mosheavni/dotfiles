@@ -15,6 +15,12 @@ local M = {
     ft = 'lua',
   },
   {
+    'asdf.nvim',
+    enabled = false,
+    dir = '~/Repos/asdf.nvim',
+    opts = {},
+  },
+  {
     'NStefan002/2048.nvim',
     cmd = 'Play2048',
     config = true,
@@ -178,6 +184,7 @@ local M = {
         vim.fn['switch#NormalizedCase'] { 'left', 'right' },
         vim.fn['switch#NormalizedCase'] { 'up', 'down' },
         vim.fn['switch#NormalizedCase'] { 'enable', 'disable' },
+        vim.fn['switch#NormalizedCase'] { 'Always', 'Never' },
         { '==', '!=' },
         {
           [fk] = [=[\=toupper(submatch(1)) . submatch(2)]=],

@@ -24,6 +24,10 @@ local actions = function()
       vim.cmd 'Gpom'
       actions_pretty_print 'Pulled from origin master.'
     end,
+    ['Revert last commit (soft)'] = function()
+      vim.cmd 'G reset --soft HEAD^'
+      actions_pretty_print 'Reset to HEAD^'
+    end,
     ['Pull origin {branch}'] = function()
       vim.ui.input({ default = 'main', prompt = 'Enter branch to pull from: ' }, function(branch_to_pull)
         if not branch_to_pull then
