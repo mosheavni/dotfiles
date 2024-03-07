@@ -72,12 +72,6 @@ autocmd('FileType', {
     vim.treesitter.start(0, 'markdown')
   end,
 })
-autocmd('BufEnter', {
-  group = buffer_settings,
-  pattern = { '*' },
-  command = 'normal zx',
-})
-
 autocmd('TextYankPost', {
   desc = 'Highlight on yank',
   group = buffer_settings,
