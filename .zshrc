@@ -73,7 +73,6 @@ plugins=(
   kubectx
   ripgrep
   terraform
-  z
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
@@ -105,6 +104,7 @@ setopt MENU_COMPLETE
 unsetopt AUTO_MENU
 unsetopt CASE_GLOB
 setopt GLOB_COMPLETE
+eval "$(zoxide init --cmd cd zsh)"
 
 # ===================== #
 # Aliases and Functions #
