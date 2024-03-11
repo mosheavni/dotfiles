@@ -52,6 +52,16 @@ local M = {
     end,
   },
   {
+    'danymat/neogen',
+    dependencies = 'nvim-treesitter/nvim-treesitter',
+    cmd = { 'Neogen' },
+    opts = {
+      snippet_engine = 'luasnip',
+    },
+    -- Uncomment next line if you want to follow only stable versions
+    -- version = "*"
+  },
+  {
     'mosheavni/vim-dirdiff',
     cmd = { 'DirDiff' },
     init = function()

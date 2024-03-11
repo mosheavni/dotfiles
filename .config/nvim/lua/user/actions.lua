@@ -87,7 +87,7 @@ return {
     vim.cmd.Whereami()
   end,
   ['Autocommand to reload the file'] = function()
-    if vim.api.nvim_buf_get_option(0, 'filetype') ~= 'lua' then
+    if vim.api.nvim_get_option_value('filetype', { buf = 0 }) ~= 'lua' then
       pretty_print('Filetype is not lua!', [[🖥️]], vim.log.levels.ERROR)
       return
     end
