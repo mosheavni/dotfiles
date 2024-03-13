@@ -136,9 +136,7 @@ alias ll=&apos;ls -l --color&apos;</content>
   [[ $i =~ /proc/[0-9] ]] || continue
   echo &quot;==== $i ====&quot;
   xargs -0 printf &apos;%s\n&apos; &lt;$i/cmdline
-done
-
-</content>
+done</content>
 			</snippet>
 			<snippet>
 				<title>fancy_print</title>
@@ -167,8 +165,7 @@ err() {
   red &quot;$(date) [ERROR] - $*&quot;
   exit 1
 }
-info() { cyan &quot;$(date) [INFO] - $*&quot;; }
-</content>
+info() { cyan &quot;$(date) [INFO] - $*&quot;; }</content>
 			</snippet>
 		</snippets>
 	</folder>
@@ -383,7 +380,187 @@ document.onkeydown = function(event) {
 			</snippet>
 			<snippet>
 				<title>print all certificates alt names and expiry</title>
-				<content> aws acm list-certificates --query &apos;CertificateSummaryList[*].CertificateArn&apos; | jq -r &apos;.[]&apos; Wr aws acm describe-certificate --query &apos;Certificate.{arn: CertificateArn, altNames: SubjectAlternativeNames, notAfter: NotAfter}&apos; --certificate-arn &quot;$line&quot; D</content>
+				<content>aws acm list-certificates --query &apos;CertificateSummaryList[*].CertificateArn&apos; | jq -r &apos;.[]&apos; Wr aws acm describe-certificate --query &apos;Certificate.{arn: CertificateArn, altNames: SubjectAlternativeNames, notAfter: NotAfter}&apos; --certificate-arn &quot;$line&quot; D</content>
+			</snippet>
+		</snippets>
+	</folder>
+	<folder>
+		<title>java</title>
+		<snippets>
+			<snippet>
+				<title>jpsstat.sh</title>
+				<content>#!/bin/bash
+#
+# MIT License
+#
+# Copyright (c) 2017 Amarjeet Anand
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy 
+# of this software and associated documentation files (the &quot;Software&quot;), to deal 
+# in the Software without restriction, including without limitation the rights 
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+# copies of the Software, and to permit persons to whom the Software is furnished 
+# to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all 
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS 
+# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
+# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+RUNONCE=0
+SHOW_HEADERS=1
+commandline_args=(&quot;$@&quot;)
+
+parse_options() {
+  for var in &quot;${commandline_args[@]}&quot;; do
+      if [ $var = &quot;-h&quot; ] || [ $var = &quot;-help&quot; ]
+      then
+          echo &quot;usage: ./jpsstat.sh [options]&quot;
+          echo &quot;&quot;
+          echo &quot;[OPTIONS] :&quot;
+          echo &quot;    -l&quot;
+          echo &quot;        Displays the full package name for the application&apos;s main class or the full path name to the application&apos;s JAR file.&quot;
+          echo &quot;&quot;
+          echo &quot;    -1 | --once&quot;
+          echo &quot;        Just run the script once, do not continuously refresh&quot;
+          echo &quot;&quot;
+          echo &quot;    -H | --no-headers&quot;
+          echo &quot;        Do not display the text header with the field names&quot;
+          echo &quot;&quot;
+          echo &quot;    -h | -help&quot;
+          echo &quot;        Display this help menu&quot;
+          echo &quot;&quot;
+          echo &quot;/********* Output Format *****************&quot;
+          echo &quot; * PID    : Process Id&quot;
+          echo &quot; * Name   : Process Name&quot;
+          echo &quot; * CurHeap: Heap memory(MB) currently in use&quot;
+          echo &quot; * MaxHeap: Max Heap memory(MB) used by now&quot;
+          echo &quot; * CurRAM : Current RAM(MB) used&quot;
+          echo &quot; * MaxRAM : Max RAM(MB) used by now&quot;
+          echo &quot; * %_CPU  : Current CPU use by PID&quot;
+          echo &quot; */&quot;
+          exit 0
+      elif [ $var = &quot;-1&quot; ] || [ $var = &quot;--once&quot; ]
+      then
+          RUNONCE=1
+      elif [ $var = &quot;-H&quot; ] || [ $var = &quot;--no-headers&quot; ]
+      then
+          SHOW_HEADERS=0
+      fi
+  done
+}
+
+parse_options
+
+if [ $SHOW_HEADERS -eq 1 ]; then
+    echo &quot;=====  ==============================  =======  =======  ======  ======  =====&quot;
+    echo &quot; PID                Name               CurHeap  MaxHeap  CurRAM  MaxRAM  %_CPU&quot;
+    echo &quot;=====  ==============================  =======  =======  ======  ======  =====&quot;
+fi
+
+declare -A prev_pid_max_heap=()
+declare -A prev_pid_max_ram=()
+
+while true
+do  
+
+    declare -A curr_pid_name=()
+    declare -A curr_pid_max_heap=()
+    declare -A curr_pid_max_ram=()
+    
+    IFS=$&apos;\n&apos;
+    DATA=
+    ## check if -l option is given
+    for var in &quot;$@&quot;
+    do
+        if [ $var = &quot;-l&quot; ]
+        then
+            DATA=($(jps -l))
+        fi
+    done
+
+    if [ -z &quot;$DATA&quot; ]
+    then
+        DATA=($(&quot;jps&quot;))
+    fi
+    
+    # put curser up with # of prev processes
+    if (( ${#prev_pid_max_heap[@]} &gt; 0 ));
+    then
+        tput cuu $(( ${#prev_pid_max_heap[@]} )) 
+    fi
+
+    # for each process line we get in jps 
+    IFS=$&apos; &apos;
+    for LINE in &quot;${DATA[@]}&quot;
+    do
+        read -ra TOKENS &lt;&lt;&lt; &quot;$LINE&quot;
+        # if -l option is given, get the last element of the jar file/class name
+        TOKENS[1]=${TOKENS[1]##*[\\ /]}
+
+        # skip the process if its Jps or Jstat itself 
+        if [ &quot;${TOKENS[1]}&quot; == &quot;Jps&quot; ] || [ &quot;${TOKENS[1]}&quot; == &quot;sun.tools.jps.Jps&quot; ] || [ &quot;${TOKENS[1]}&quot; == &quot;Jstat&quot; ] || [ &quot;${TOKENS[1]}&quot; == &quot;sun.tools.jstat.Jstat&quot; ]
+        then
+            continue
+        fi
+        pid=${TOKENS[0]}
+        # insert to associative array
+        curr_pid_name[&quot;$pid&quot;]=${TOKENS[1]:-&quot;&lt;no name&gt;&quot;}
+
+        # compare current heap with previous to get max_heap
+        HEAP_MEMORY=$( (jstat -gc $pid 2&gt;/dev/null || echo &quot;0 0 0 0 0 0 0 0 0&quot;) | tail -n 1 | awk &apos;{split($0,a,&quot; &quot;); sum=a[3]+a[4]+a[6]+a[8]; print sum/1024}&apos; ) 2&gt;/dev/null
+        HEAP_MEMORY=${HEAP_MEMORY%.*}
+        if [ ${prev_pid_max_heap[&quot;$pid&quot;]+_} ] &amp;&amp; [ $HEAP_MEMORY -lt ${prev_pid_max_heap[$pid]} ]; then
+            curr_pid_max_heap[&quot;$pid&quot;]=${prev_pid_max_heap[&quot;$pid&quot;]}
+        else
+            curr_pid_max_heap[&quot;$pid&quot;]=$HEAP_MEMORY
+        fi
+        
+        # compare current ram with previous to get max_ram
+        RAM_MEMORY=$(( ` cut -d&apos; &apos; -f2 &lt;&lt;&lt;cat /proc/$pid/statm 2&gt;/dev/null || echo &quot;0&quot; ` / 1024 ))
+        RAM_MEMORY=${RAM_MEMORY%.*}
+        if [ ${prev_pid_max_ram[&quot;$pid&quot;]+_} ] &amp;&amp; [ $RAM_MEMORY -lt ${prev_pid_max_ram[$pid]} ]; then
+            curr_pid_max_ram[&quot;$pid&quot;]=${prev_pid_max_ram[&quot;$pid&quot;]}
+        else
+            curr_pid_max_ram[&quot;$pid&quot;]=$RAM_MEMORY
+        fi
+
+        #output for current pid
+        cpuuse=$( (ps -p $pid -o %cpu 2&gt;/dev/null || echo &quot;0&quot;) | tail -n 1 )
+        cpuuse=${cpuuse%.*}
+        printf &quot;%-6s %-30s %8i %8i %7d %7d  %5i\n&quot; $pid ${curr_pid_name[&quot;$pid&quot;]:0:30} $HEAP_MEMORY ${curr_pid_max_heap[&quot;$pid&quot;]} $RAM_MEMORY ${curr_pid_max_ram[&quot;$pid&quot;]} $cpuuse | sort 
+    done
+
+    
+    # clean stuff of previous iteration
+    unset prev_pid_max_heap
+    declare -A prev_pid_max_heap
+    unset prev_pid_max_ram
+    declare -A prev_pid_max_ram
+
+    # put all current pid and max_memory into prev_associative_array
+    for pid in &quot;${!curr_pid_max_heap[@]}&quot;;
+    do
+        prev_pid_max_heap[$pid]=${curr_pid_max_heap[$pid]}
+    done
+    # put all current pid, max_ram_memory into prev associative array
+    for pid in &quot;${!curr_pid_max_ram[@]}&quot;;
+    do
+        prev_pid_max_ram[$pid]=${curr_pid_max_ram[$pid]}
+    done
+
+    if [ $RUNONCE -eq 1 ]
+    then
+        exit
+    fi
+
+    sleep 0.3
+done</content>
 			</snippet>
 		</snippets>
 	</folder>
