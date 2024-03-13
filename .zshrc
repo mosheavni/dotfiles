@@ -105,6 +105,7 @@ unsetopt AUTO_MENU
 unsetopt CASE_GLOB
 setopt GLOB_COMPLETE
 eval "$(zoxide init --cmd cd zsh)"
+export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
 
 # ===================== #
 # Aliases and Functions #

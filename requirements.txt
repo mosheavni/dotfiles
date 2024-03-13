@@ -1,4 +1,3 @@
-PyYAML==5.4.1
 Pygments==2.15.0
 ansicolor==0.3.2
 ansible-lint==6.1.0
