@@ -82,7 +82,8 @@ return {
   end,
   ['Remove terragrunt files'] = function()
     local scan_dir = require 'plenary.scandir'
-    local terraform_repo = vim.fn.getcwd()
+    local terraform_repo = vim.fn.FugitiveExecute({ 'rev-parse', '--show-toplevel' }).stdout
+    P(terraform_repo)
     scan_dir.scan_dir(terraform_repo, {
       add_dirs = false,
       respect_gitignore = false,
