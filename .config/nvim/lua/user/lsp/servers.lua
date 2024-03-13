@@ -180,7 +180,7 @@ local M = {
           url = 'https://www.schemastore.org/api/json/catalog.json',
         },
         schemas = {
-          kubernetes = '*',
+          kubernetes = '',
         },
       },
     },
