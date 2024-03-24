@@ -6,10 +6,6 @@ local M = {
     on_attach = default_on_attach,
   },
 
-  awk_ls = {
-    on_attach = default_on_attach,
-  },
-
   bashls = {
     on_attach = default_on_attach,
   },
