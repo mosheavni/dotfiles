@@ -182,37 +182,6 @@ local M = {
       })
     end,
   },
-  {
-    'rest-nvim/rest.nvim',
-    keys = { '<Plug>RestNvim', { '<leader>cr', '<Plug>RestNvim' } },
-    config = function()
-      require('rest-nvim').setup {}
-    end,
-    init = function()
-      require('user.menu').add_actions('REST', {
-        ['Send request (<leader>cr)'] = function()
-          vim.fn.feedkeys(vim.keycode '<Plug>RestNvim')
-        end,
-        ['Open a buffer with a template'] = function()
-          _G.tmp_write { should_delete = false, ft = 'http', new = true, vertical = true }
-          vim.api.nvim_buf_set_lines(0, 0, -1, false, {
-            'POST https://reqres.in/api/v1/users',
-            'Content-Type: application/json',
-            '',
-            '# --silent',
-            '# --insecure',
-            '',
-            '{',
-            '  "name": "John Doe",',
-            '  "email": "john.doe@gmail.com',
-            '}',
-          })
-          vim.cmd.write()
-          P 'Invoke with <leader>cr'
-        end,
-      })
-    end,
-  },
 }
 
 return M
