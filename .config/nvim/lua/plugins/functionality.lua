@@ -14,6 +14,10 @@ local M = {
     end,
   },
   {
+    'tpope/vim-speeddating',
+    keys = { '<C-a>', '<C-x>' },
+  },
+  {
     'voldikss/vim-floaterm',
     keys = { '<F6>', '<F7>', '<F8>' },
     cmd = {
