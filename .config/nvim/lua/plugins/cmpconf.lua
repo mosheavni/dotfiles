@@ -85,6 +85,11 @@ M.config = function()
   vim.api.nvim_set_hl(0, 'CmpItemKindTabNine', { link = 'Green' })
   cmp.setup {
     native_menu = false,
+    view = {
+      entries = {
+        follow_cursor = true,
+      },
+    },
     formatting = {
       format = function(entry, vim_item)
         local lspkind = require 'lspkind'
