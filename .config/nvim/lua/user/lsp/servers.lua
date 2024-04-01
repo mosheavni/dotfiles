@@ -88,7 +88,7 @@ local M = {
     on_attach = function(c, b)
       require('treesitter-terraform-doc').setup {}
       default_on_attach(c, b)
-      c.server_capabilities.semanticTokensProvider = nil
+      c.server_capabilities.semanticTokensProvider = {}
     end,
   },
 
