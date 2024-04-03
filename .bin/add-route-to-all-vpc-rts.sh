@@ -68,8 +68,13 @@ elif [[ "$DEST_TYPE" == "nat" ]]; then
     --nat-gateway-id
     "$DEST_ID"
   )
+elif [[ "$DEST_TYPE" == "tgw" ]]; then
+  CREATE_ROUTE_PARAMS+=(
+    --transit-gateway-id
+    "$DEST_ID"
+  )
 else
-  usage "Destination type $DEST_TYPE is not valid" "Valid values: pcx, igw, eni, vgw, nat"
+  usage "Destination type $DEST_TYPE is not valid" "Valid values: pcx, igw, eni, vgw, nat or tgw"
 fi
 
 ############
@@ -82,6 +87,6 @@ if [ -z "$VPC_ID" ]; then
   exit 1
 fi
 echo "VPC ID: $VPC_ID"
-set +e
-aws ec2 describe-route-tables --filters "Name=vpc-id,Values=${VPC_ID}" --query 'RouteTables[*].RouteTableId' --output text | xargs -n 1 aws "${CREATE_ROUTE_PARAMS[@]}" --route-table-id
 set -e
+aws ec2 describe-route-tables --filters "Name=vpc-id,Values=${VPC_ID}" --query 'RouteTables[*].RouteTableId' --output text | xargs -n 1 aws "${CREATE_ROUTE_PARAMS[@]}" --route-table-id
+set +e

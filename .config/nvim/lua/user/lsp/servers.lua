@@ -137,7 +137,6 @@ local M = {
   jdtls = {
     on_attach = function(c, b)
       require('jdtls').setup_dap()
-      require('lsp-status').register_progress()
       default_on_attach(c, b)
     end,
     settings = {
