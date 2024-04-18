@@ -38,29 +38,6 @@ function mwatch() {
   watch "$final_alias"
 }
 
-function dog() {
-  server=""
-  flag=""
-  record_type=""
-  query=""
-  for s in `echo $*`;do
-    if [[ $s == @* ]];then
-      server=${s:1}
-    elif [[ $s == +* ]];then
-      flag=${s:1}
-    elif [[ $s =~ ^[a-zA-Z]+$ ]];then
-      record_type=$s
-    else
-      query=$(sed -E -e 's/:[0-9]*$//' -e 's/https?:\/\///'<<<$s)
-    fi
-  done
-  echo "server: $server"
-  echo "flag: $flag"
-  echo "record_type: $record_type"
-  echo "query: $query"
-  /usr/local/bin/dog $server $flag $record_type $query
-}
-
 function clone() {
   cd ~/Repos
   git clone $1
@@ -129,6 +106,15 @@ function grafana_web () {
   creds=$(kubectl get secret -n monitoring grafana-credentials -ojson | jq '.data | with_entries(.value |= @base64d)')
   echo "${creds}"
   jq -r '.password' <<< "${creds}" | pbcopy
+  open "https://${ingress_host}"
+}
+
+function kibana_web () {
+  kibana_ingress=$(kubectl get ingress -n elastic --no-headers -o custom-columns=":metadata.name" | grep kb-ingress)
+  ingress_host=$(kubectl get ingress -n elastic "${kibana_ingress}" -ojson | jq -r '.spec.rules[].host')
+  creds=$(kubectl get secret -n elastic logs-es-elastic-user -ojson | jq '.data | with_entries(.value |= @base64d)')
+  echo "${creds}"
+  jq -r '.elastic' <<< "${creds}" | pbcopy
   open "https://${ingress_host}"
 }
 
@@ -244,6 +230,7 @@ alias -g YML='-oyaml | vim -c "set filetype=yaml | nnoremap <buffer> q :qall<cr>
 alias -g NM=' --no-headers -o custom-columns=":metadata.name"'
 alias -g RC='--sort-by=".status.containerStatuses[0].restartCount" -A | grep -v "\s0\s"'
 alias -g BAD='| grep -v "1/1\|2/2\|3/3\|4/4\|5/5\|6/6\|Completed\|Evicted"'
+alias -g IP='-ojsonpath="{.status.hostIP}"'
 
 ### Git related ###
 # see recently pushed branches
