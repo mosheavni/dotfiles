@@ -167,6 +167,33 @@ err() {
 }
 info() { cyan &quot;$(date) [INFO] - $*&quot;; }</content>
 			</snippet>
+			<snippet>
+				<title>fancy_print</title>
+				<content>function fancy_print() {
+  str=$1
+  str_len=${#str}
+  eval printf &apos;=%.0s&apos; {1..$((str_len + 6))}
+  echo -e &quot;\n== $str ==&quot;
+  eval printf &apos;=%.0s&apos; {1..$((str_len + 6))}
+  echo &quot;&quot;
+}
+</content>
+			</snippet>
+			<snippet>
+				<title>parallel function</title>
+				<content>#!/bin/bash
+cat /dev/null &gt;results.txt
+dowork() {
+	i=$1
+	echo &quot;### trigger $i&quot;
+	curl -L https://google.com
+	echo &quot;&quot;
+}
+export -f dowork
+
+seq 100 | parallel -k dowork &gt;results.txt
+</content>
+			</snippet>
 		</snippets>
 	</folder>
 	<folder>
