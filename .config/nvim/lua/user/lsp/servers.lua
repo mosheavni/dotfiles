@@ -1,40 +1,40 @@
-local on_attaches = require 'user.lsp.on-attach'
-local default_on_attach = on_attaches.default
-
-local M = {
-  ansiblels = {
+local M = {}
+M.setup = function()
+  local on_attaches = require 'user.lsp.on-attach'
+  local default_on_attach = on_attaches.default
+  require('lspconfig')['ansiblels'].setup {
     on_attach = default_on_attach,
-  },
+  }
 
-  bashls = {
+  require('lspconfig')['bashls'].setup {
     on_attach = default_on_attach,
-  },
+  }
 
-  cssls = {
+  require('lspconfig')['cssls'].setup {
     on_attach = default_on_attach,
-  },
+  }
 
-  cssmodules_ls = {
+  require('lspconfig')['cssmodules_ls'].setup {
     on_attach = default_on_attach,
-  },
+  }
 
-  dockerls = {
+  require('lspconfig')['dockerls'].setup {
     on_attach = default_on_attach,
-  },
+  }
 
-  docker_compose_language_service = {
+  require('lspconfig')['docker_compose_language_service'].setup {
     on_attach = default_on_attach,
-  },
+  }
 
-  groovyls = {
+  require('lspconfig')['groovyls'].setup {
     on_attach = default_on_attach,
-  },
+  }
 
-  html = {
+  require('lspconfig')['html'].setup {
     on_attach = default_on_attach,
-  },
+  }
 
-  jsonls = {
+  require('lspconfig')['jsonls'].setup {
     on_attach = default_on_attach,
     settings = {
       json = {
@@ -45,18 +45,18 @@ local M = {
         validate = { enable = true },
       },
     },
-  },
+  }
 
-  pyright = {
+  require('lspconfig')['pyright'].setup {
     on_attach = default_on_attach,
     settings = {
       organizeimports = {
         provider = 'isort',
       },
     },
-  },
+  }
 
-  lua_ls = {
+  require('lspconfig')['lua_ls'].setup {
     on_attach = default_on_attach,
     settings = {
       Lua = {
@@ -82,17 +82,17 @@ local M = {
         -- telemetry = { enable = false },
       },
     },
-  },
+  }
 
-  terraformls = {
+  require('lspconfig')['terraformls'].setup {
     on_attach = function(c, b)
       require('treesitter-terraform-doc').setup {}
       default_on_attach(c, b)
       c.server_capabilities.semanticTokensProvider = {}
     end,
-  },
+  }
 
-  tsserver = {
+  require('lspconfig')['tsserver'].setup {
     settings = {
       preferences = {
         allowRenameOfImportPath = true,
@@ -128,13 +128,13 @@ local M = {
       },
     },
     on_attach = default_on_attach,
-  },
+  }
 
-  vimls = {
+  require('lspconfig')['vimls'].setup {
     on_attach = default_on_attach,
-  },
+  }
 
-  jdtls = {
+  require('lspconfig')['jdtls'].setup {
     on_attach = function(c, b)
       require('jdtls').setup_dap()
       default_on_attach(c, b)
@@ -143,43 +143,33 @@ local M = {
       filetypes = { 'kotlin', 'java' },
       workspace = { checkThirdParty = false },
     },
-  },
+  }
 
-  helm_ls = {
+  require('lspconfig')['helm_ls'].setup {
     on_attach = default_on_attach,
-  },
+  }
 
-  yamlls = {
-    on_attach = function(c, b)
-      local filetype = vim.api.nvim_get_option_value('filetype', { buf = b })
-      local buftype = vim.api.nvim_get_option_value('buftype', { buf = b })
-      local disabled_fts = { 'helm', 'yaml.gotexttmpl', 'gotmpl' }
-      if buftype ~= '' or filetype == '' or vim.tbl_contains(disabled_fts, filetype) then
-        vim.diagnostic.disable(b)
-        vim.defer_fn(function()
-          vim.diagnostic.reset(nil, b)
-        end, 1000)
-      end
-      default_on_attach(c, b)
-    end,
-    settings = {
-      redhat = { telemetry = { enabled = false } },
-      yaml = {
-        validate = true,
-        format = { enable = true },
-        hover = true,
-        trace = { server = 'debug' },
-        completion = true,
-        schemaStore = {
-          enable = true,
-          url = 'https://www.schemastore.org/api/json/catalog.json',
-        },
-        schemas = {
-          kubernetes = '',
-        },
-      },
+  local yaml_cfg = require('yaml-companion').setup {
+    builtin_matchers = {
+      -- Detects Kubernetes files based on content
+      kubernetes = { enabled = true },
     },
-  },
-}
+    lspconfig = {
+      on_attach = function(c, b)
+        local filetype = vim.api.nvim_get_option_value('filetype', { buf = b })
+        local buftype = vim.api.nvim_get_option_value('buftype', { buf = b })
+        local disabled_fts = { 'helm', 'yaml.gotexttmpl', 'gotmpl' }
+        if buftype ~= '' or filetype == '' or vim.tbl_contains(disabled_fts, filetype) then
+          vim.diagnostic.disable(b)
+          vim.defer_fn(function()
+            vim.diagnostic.reset(nil, b)
+          end, 1000)
+        end
+        default_on_attach(c, b)
+      end,
+    },
+  }
+  require('lspconfig')['yamlls'].setup(yaml_cfg)
+end
 
 return M
