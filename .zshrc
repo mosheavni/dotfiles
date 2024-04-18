@@ -68,6 +68,7 @@ plugins=(
   git-auto-fetch
   golang
   helm
+  jq
   kube-ps1
   kubectl
   kubectx
@@ -81,7 +82,7 @@ plugins=(
 #  Completions  #
 # ============= #
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
-fpath+=$(brew --prefix)/share/zsh/site-functions
+# fpath+=$(brew --prefix)/share/zsh/site-functions
 # fpath+=$(asdf where kubectx)/completion
 
 # ============= #
