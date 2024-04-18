@@ -31,14 +31,9 @@ M.setup_capabilities = function()
   ------------------
   -- Capabilities --
   ------------------
-  M.capabilities = vim.tbl_deep_extend(
-    'force',
-    {},
-    vim.lsp.protocol.make_client_capabilities(),
-    -- TODO: fix cmp capabilities
-    has_cmp and cmp_nvim_lsp.default_capabilities() or {},
-    M.capabilities or {}
-  )
+  local cmp_default_capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+  M.capabilities = vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), cmp_default_capabilities, M.capabilities or {}, {})
 end
 
 M.diagnostics = function()
@@ -60,13 +55,6 @@ M.diagnostics = function()
     },
     float = { border = require('user.utils').float_border },
   }
-end
-
-M.get_mason_lspconfig = function()
-  local have_mason, _ = pcall(require, 'mason-lspconfig')
-  if have_mason then
-    M.all_mason_lsp_servers = vim.tbl_keys(require('mason-lspconfig.mappings.server').lspconfig_to_package)
-  end
 end
 
 M.init = function()
@@ -99,8 +87,8 @@ M.setup = function()
   -- set up diagnostics configuration
   M.diagnostics()
 
-  -- get all the servers that are available thourgh mason-lspconfig
-  M.get_mason_lspconfig()
+  -- set up mason to install lsp servers
+  require('mason-lspconfig').setup { automatic_installation = true }
 
   -- setup lsp servers
   require('user.lsp.servers').setup()

@@ -43,27 +43,19 @@ local default_on_attach = function(client, bufnr)
       command = 'silent! lua vim.lsp.buf.clear_references()',
     })
   end
-  -- local diagnostic_pop = augroup 'DiagnosticPop'
-  -- autocmd('CursorHold', {
-  --   buffer = bufnr,
-  --   group = diagnostic_pop,
-  --   callback = function()
-  --     vim.diagnostic.open_float(nil, {
-  --       focusable = false,
-  --       close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
-  --       border = 'rounded',
-  --       source = 'always',
-  --       prefix = ' ',
-  --       scope = 'cursor',
-  --     })
-  --   end,
-  -- })
 
   ----------------------------------
   -- Enable tag jump based on LSP --
   ----------------------------------
   if client.server_capabilities.goto_definition then
     vim.api.nvim_set_option_value('tagfunc', 'v:lua.vim.lsp.tagfunc', { buf = bufnr })
+  end
+
+  -----------------
+  -- Inlay Hints --
+  -----------------
+  if client.server_capabilities.inlayHintProvider then
+    vim.lsp.inlay_hint.enable(bufnr, true)
   end
 end
 

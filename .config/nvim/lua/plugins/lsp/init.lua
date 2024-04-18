@@ -2,31 +2,7 @@ local M = {
   'neovim/nvim-lspconfig',
   event = { 'BufReadPre', 'BufNewFile' },
   opts = {
-    inlay_hints = { enabled = true },
     setup = {
-      tsserver = function(_, opts)
-        require('typescript').setup {
-          server = opts,
-        }
-        return true
-      end,
-
-      helm_ls = function()
-        local configs = require 'lspconfig.configs'
-        local util = require 'lspconfig.util'
-
-        if not configs.helm_ls then
-          configs.helm_ls = {
-            default_config = {
-              cmd = { 'helm_ls', 'serve' },
-              filetypes = { 'helm', 'gotmpl' },
-              root_dir = function(fname)
-                return util.root_pattern 'Chart.yaml'(fname)
-              end,
-            },
-          }
-        end
-      end,
       docker_compose_language_service = function() end,
     },
   },
@@ -34,49 +10,7 @@ local M = {
 
 M.init = require('user.lsp.config').init
 
-M.config = function()
-  require('user.lsp.config').setup()
-  -- local function setup(server)
-  --   local server_opts = vim.tbl_deep_extend('force', {
-  --     capabilities = vim.deepcopy(capabilities),
-  --   }, servers[server] or {})
-  --
-  --   if opts.setup[server] then
-  --     if opts.setup[server](server, server_opts) then
-  --       return
-  --     end
-  --   elseif opts.setup['*'] then
-  --     if opts.setup['*'](server, server_opts) then
-  --       return
-  --     end
-  --   end
-  --   require('lspconfig')[server].setup(server_opts)
-  -- end
-
-  -- get all the servers that are available thourgh mason-lspconfig
-  -- local have_mason, mlsp = pcall(require, 'mason-lspconfig')
-  -- local all_mslp_servers = {}
-  -- if have_mason then
-  --   all_mslp_servers = vim.tbl_keys(require('mason-lspconfig.mappings.server').lspconfig_to_package)
-  -- end
-  --
-  -- local ensure_installed = {} ---@type string[]
-  -- for server, server_opts in pairs(servers) do
-  --   if server_opts then
-  --     server_opts = server_opts == true and {} or server_opts
-  --     -- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
-  --     if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
-  --       setup(server)
-  --     else
-  --       ensure_installed[#ensure_installed + 1] = server
-  --     end
-  --   end
-  -- end
-  --
-  -- if have_mason then
-  --   mlsp.setup { ensure_installed = ensure_installed, handlers = { setup } }
-  -- end
-end
+M.config = require('user.lsp.config').setup
 
 M.dependencies = {
   'nvimtools/none-ls.nvim',
@@ -152,10 +86,7 @@ M.dependencies = {
 }
 
 local language_specific_plugins = {
-  {
-    'mfussenegger/nvim-jdtls',
-    ft = { 'java' },
-  },
+  { 'mfussenegger/nvim-jdtls', ft = 'java' },
   {
     'jose-elias-alvarez/typescript.nvim',
     ft = { 'typescript', 'typescriptreact', 'typescript.tsx', 'javascript' },
@@ -180,7 +111,7 @@ local language_specific_plugins = {
   },
   {
     'someone-stole-my-name/yaml-companion.nvim',
-    ft = { 'yaml' },
+    ft = 'yaml',
     config = function()
       local nnoremap = require('user.utils').nnoremap
       nnoremap('<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", true)
@@ -191,10 +122,7 @@ local language_specific_plugins = {
       })
     end,
   },
-  {
-    'b0o/SchemaStore.nvim',
-    ft = { 'yaml' },
-  },
+  { 'b0o/SchemaStore.nvim', ft = 'yaml' },
 }
 
 return {

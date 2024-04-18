@@ -2,40 +2,53 @@ local M = {}
 M.setup = function()
   local on_attaches = require 'user.lsp.on-attach'
   local default_on_attach = on_attaches.default
+  local capabilities = require('user.lsp.config').capabilities
+  local configs = require 'lspconfig.configs'
+  local util = require 'lspconfig.util'
+
   require('lspconfig')['ansiblels'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
   }
 
   require('lspconfig')['bashls'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
   }
 
   require('lspconfig')['cssls'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
   }
 
   require('lspconfig')['cssmodules_ls'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
   }
 
   require('lspconfig')['dockerls'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
   }
 
   require('lspconfig')['docker_compose_language_service'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
   }
 
   require('lspconfig')['groovyls'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
   }
 
   require('lspconfig')['html'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
   }
 
   require('lspconfig')['jsonls'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
     settings = {
       json = {
         trace = {
@@ -49,6 +62,7 @@ M.setup = function()
 
   require('lspconfig')['pyright'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
     settings = {
       organizeimports = {
         provider = 'isort',
@@ -58,6 +72,7 @@ M.setup = function()
 
   require('lspconfig')['lua_ls'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
     settings = {
       Lua = {
         runtime = {
@@ -90,48 +105,53 @@ M.setup = function()
       default_on_attach(c, b)
       c.server_capabilities.semanticTokensProvider = {}
     end,
+    capabilities = capabilities,
   }
 
-  require('lspconfig')['tsserver'].setup {
-    settings = {
-      preferences = {
-        allowRenameOfImportPath = true,
-        disableSuggestions = false,
-        importModuleSpecifierEnding = 'auto',
-        importModuleSpecifierPreference = 'non-relative',
-        includeCompletionsForImportStatements = true,
-        includeCompletionsForModuleExports = true,
-        quotePreference = 'single',
-      },
-      -- specify some or all of the following settings if you want to adjust the default behavior
-      javascript = {
-        inlayHints = {
-          includeInlayEnumMemberValueHints = true,
-          includeInlayFunctionLikeReturnTypeHints = true,
-          includeInlayFunctionParameterTypeHints = true,
-          includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-          includeInlayPropertyDeclarationTypeHints = true,
-          includeInlayVariableTypeHints = true,
+  require('typescript').setup {
+    server = {
+      settings = {
+        preferences = {
+          allowRenameOfImportPath = true,
+          disableSuggestions = false,
+          importModuleSpecifierEnding = 'auto',
+          importModuleSpecifierPreference = 'non-relative',
+          includeCompletionsForImportStatements = true,
+          includeCompletionsForModuleExports = true,
+          quotePreference = 'single',
+        },
+        -- specify some or all of the following settings if you want to adjust the default behavior
+        javascript = {
+          inlayHints = {
+            includeInlayEnumMemberValueHints = true,
+            includeInlayFunctionLikeReturnTypeHints = true,
+            includeInlayFunctionParameterTypeHints = true,
+            includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayVariableTypeHints = true,
+          },
+        },
+        typescript = {
+          inlayHints = {
+            includeInlayEnumMemberValueHints = true,
+            includeInlayFunctionLikeReturnTypeHints = true,
+            includeInlayFunctionParameterTypeHints = true,
+            includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayVariableTypeHints = true,
+          },
         },
       },
-      typescript = {
-        inlayHints = {
-          includeInlayEnumMemberValueHints = true,
-          includeInlayFunctionLikeReturnTypeHints = true,
-          includeInlayFunctionParameterTypeHints = true,
-          includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-          includeInlayPropertyDeclarationTypeHints = true,
-          includeInlayVariableTypeHints = true,
-        },
-      },
+      on_attach = default_on_attach,
+      capabilities = capabilities,
     },
-    on_attach = default_on_attach,
   }
 
   require('lspconfig')['vimls'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
   }
 
   require('lspconfig')['jdtls'].setup {
@@ -139,14 +159,27 @@ M.setup = function()
       require('jdtls').setup_dap()
       default_on_attach(c, b)
     end,
+    capabilities = capabilities,
     settings = {
       filetypes = { 'kotlin', 'java' },
       workspace = { checkThirdParty = false },
     },
   }
 
+  if not configs.helm_ls then
+    configs.helm_ls = {
+      default_config = {
+        cmd = { 'helm_ls', 'serve' },
+        filetypes = { 'helm', 'gotmpl' },
+        root_dir = function(fname)
+          return util.root_pattern 'Chart.yaml'(fname)
+        end,
+      },
+    }
+  end
   require('lspconfig')['helm_ls'].setup {
     on_attach = default_on_attach,
+    capabilities = capabilities,
   }
 
   local yaml_cfg = require('yaml-companion').setup {
@@ -167,6 +200,7 @@ M.setup = function()
         end
         default_on_attach(c, b)
       end,
+      capabilities = capabilities,
     },
   }
   require('lspconfig')['yamlls'].setup(yaml_cfg)
