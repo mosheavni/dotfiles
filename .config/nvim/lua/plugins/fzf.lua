@@ -48,10 +48,9 @@ return {
                 require('fzf-lua.utils').info('Renamed branch ' .. selected[1] .. ' to ' .. new_name)
                 return
               else
-                local msg = string.format('Error when renaming branch: %s. Git returned:\n%s', branch, table.concat(stderr, '\n'))
+                local msg = string.format('Error when renaming branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
                 require('fzf-lua.utils').err(msg)
               end
-              return ret == 0
             end)
           end,
           ['ctrl-d'] = function(selected)
@@ -67,10 +66,9 @@ return {
                 require('fzf-lua.utils').info('Deleted branch ' .. selected[1])
                 return
               else
-                local msg = string.format('Error when deleting branch: %s. Git returned:\n%s', branch, table.concat(stderr, '\n'))
+                local msg = string.format('Error when deleting branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
                 require('fzf-lua.utils').err(msg)
               end
-              return ret == 0
             end)
           end,
         },
