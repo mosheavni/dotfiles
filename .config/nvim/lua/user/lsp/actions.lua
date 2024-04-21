@@ -38,6 +38,9 @@ M.actions = function()
     ['Diagnostics quickfix list (<leader>lq)'] = function()
       vim.diagnostic.setqflist()
     end,
+    ['Toggle inlay hints (<leader>lh)'] = function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(), { bufnr = 0 })
+    end,
     ['Clear Diagnostics'] = function()
       vim.diagnostic.reset()
     end,

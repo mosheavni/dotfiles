@@ -25,7 +25,7 @@ local default_on_attach = function(client, bufnr)
       desc = 'Auto show code lenses',
       group = on_attach_aug,
       buffer = bufnr,
-      command = 'silent! lua vim.lsp.codelens.refresh()',
+      command = 'silent! lua vim.lsp.codelens.refresh({bufnr=' .. bufnr .. '})',
     })
   end
   if client.server_capabilities.document_highlight then
@@ -55,7 +55,7 @@ local default_on_attach = function(client, bufnr)
   -- Inlay Hints --
   -----------------
   if client.server_capabilities.inlayHintProvider then
-    vim.lsp.inlay_hint.enable(bufnr, true)
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
 end
 

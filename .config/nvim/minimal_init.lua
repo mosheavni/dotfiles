@@ -4,7 +4,7 @@ local function join_paths(...)
   return result
 end
 
-local temp_dir = vim.loop.os_getenv 'TEMP' or '/tmp'
+local temp_dir = vim.uv.os_getenv 'TEMP' or '/tmp'
 local package_root = join_paths(temp_dir, 'nvim', 'site', 'lazy')
 local lazypath = join_paths(temp_dir, 'nvim', 'site') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
@@ -31,11 +31,7 @@ _G.load_config = function()
       vim.api.nvim_buf_set_keymap(bufnr, ...)
     end
 
-    local function buf_set_option(...)
-      vim.api.nvim_buf_set_option(bufnr, ...)
-    end
-
-    buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+    vim.api.nvim_set_option_value('omnifunc', 'v:lua.vim.lsp.omnifunc', { buf = bufnr })
 
     -- Mappings.
     local opts = { noremap = true, silent = true }

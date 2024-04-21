@@ -6,25 +6,12 @@ local M = {
           snippetSupport = true,
         },
       },
-      -- codeAction = {
-      --   dynamicRegistration = true,
-      --   codeActionLiteralSupport = {
-      --     codeActionKind = {
-      --       valueSet = (function()
-      --         local res = vim.tbl_values(vim.lsp.protocol.CodeActionKind)
-      --         table.sort(res)
-      --         return res
-      --       end)(),
-      --     },
-      --   },
-      -- },
       foldingRange = {
         dynamicRegistration = false,
         lineFoldingOnly = true,
       },
     },
   },
-  all_mason_lsp_servers = {},
 }
 
 M.setup_capabilities = function()
@@ -36,19 +23,20 @@ M.setup_capabilities = function()
   M.capabilities = vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), cmp_default_capabilities, M.capabilities or {}, {})
 end
 
+M.diagnostic_signs = {
+  [vim.diagnostic.severity.ERROR] = '✘',
+  [vim.diagnostic.severity.WARN] = '',
+  [vim.diagnostic.severity.HINT] = ' ',
+  [vim.diagnostic.severity.INFO] = ' ',
+}
+
 M.diagnostics = function()
   -----------------
   -- Diagnostics --
   -----------------
   -- show icons in the sidebar
-  local signs = {
-    [vim.diagnostic.severity.ERROR] = '✘',
-    [vim.diagnostic.severity.WARN] = '',
-    [vim.diagnostic.severity.HINT] = ' ',
-    [vim.diagnostic.severity.INFO] = ' ',
-  }
   vim.diagnostic.config {
-    signs = { text = signs },
+    signs = { text = M.diagnostic_signs },
     update_in_insert = false,
     virtual_text = {
       severity = { min = vim.diagnostic.severity.WARN },

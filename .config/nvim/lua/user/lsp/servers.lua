@@ -193,7 +193,7 @@ M.setup = function()
         local buftype = vim.api.nvim_get_option_value('buftype', { buf = b })
         local disabled_fts = { 'helm', 'yaml.gotexttmpl', 'gotmpl' }
         if buftype ~= '' or filetype == '' or vim.tbl_contains(disabled_fts, filetype) then
-          vim.diagnostic.disable(b)
+          vim.diagnostic.enable(false, b)
           vim.defer_fn(function()
             vim.diagnostic.reset(nil, b)
           end, 1000)

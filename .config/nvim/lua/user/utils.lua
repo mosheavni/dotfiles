@@ -157,7 +157,7 @@ M.country_os_to_emoji = function(iso)
   python_file_handle:close()
   local emoji = vim.system({ 'python3', python_file, iso }, { text = true }):wait().stdout
   vim.fn.delete(python_file)
-  return emoji
+  return emoji or ''
 end
 
 M.tbl_get_next = function(tbl, cur)
