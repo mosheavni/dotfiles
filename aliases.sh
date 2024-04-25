@@ -118,6 +118,28 @@ function kibana_web () {
   open "https://${ingress_host}"
 }
 
+function argocd_web () {
+  argocd_ingress=$(kubectl get ingress -n argocd --no-headers -o custom-columns=":metadata.name" | grep argocd-server)
+  ingress_host=https://$(kubectl get ingress -n argocd "${argocd_ingress}" -ojson | jq -r '.spec.rules[].host')
+  creds=$(kubectl get secret -n argocd argocd-initial-admin-secret -ojson | jq '.data | with_entries(.value |= @base64d)')
+
+  # port forward
+  if [[ -n $1 ]] && [[ $1 == "-f" ]];then
+    kubectl port-forward -n argocd svc/argocd-server 8080:443 & CMDPID=$!
+    ingress_host="http://localhost:8080"
+    echo "waiting for port-forward to start"
+    while ! lsof -nP -iTCP:8080 | grep LISTEN;do
+      echo "port 8080 is still not open"
+      sleep 1
+    done
+    echo "Port forward for svc/argocd-server started on port 8080"
+    echo "To kill, run 'kill $CMDPID' or exit the shell"
+  fi
+  echo "${creds}"
+  jq -r '.password' <<< "${creds}" | pbcopy
+  open "${ingress_host}"
+}
+
 function kgres() {
   kubectl get pod $* \
     -ojsonpath='{range .items[*]}{.spec.containers[*].name}{" memory: "}{.spec.containers..resources.requests.memory}{"/"}{.spec.containers..resources.limits.memory}{" | cpu: "}{.spec.containers..resources.requests.cpu}{"/"}{.spec.containers..resources.limits.cpu}{"\n"}{end}' | sort \
@@ -231,6 +253,7 @@ alias -g NM=' --no-headers -o custom-columns=":metadata.name"'
 alias -g RC='--sort-by=".status.containerStatuses[0].restartCount" -A | grep -v "\s0\s"'
 alias -g BAD='| grep -v "1/1\|2/2\|3/3\|4/4\|5/5\|6/6\|Completed\|Evicted"'
 alias -g IP='-ojsonpath="{.status.hostIP}"'
+alias -g dollar_1_line='$(awk "{print \$1}"<<<"${line}")'
 
 ### Git related ###
 # see recently pushed branches
