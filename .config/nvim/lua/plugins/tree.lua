@@ -44,7 +44,7 @@ end
 
 local M = {
   'nvim-tree/nvim-tree.lua',
-  cmd = 'NvimTreeToggle',
+  cmd = { 'NvimTreeToggle', 'NvimTreeOpen', 'NvimTreeFocus', 'NvimTreeRefresh' },
   keys = { '<c-o>', '<leader>v' },
   dependencies = { 'kyazdani42/nvim-web-devicons' },
 }

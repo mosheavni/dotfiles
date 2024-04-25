@@ -344,6 +344,43 @@ local M = {
     cmd = { 'ToGithub' },
   },
   {
+    'moyiz/git-dev.nvim',
+    event = 'VeryLazy',
+    opts = {
+      ephemeral = false,
+      read_only = false,
+      opener = function(dir)
+        vim.cmd('NvimTreeOpen ' .. vim.fn.fnameescape(dir))
+      end,
+    },
+    keys = {
+      {
+        '<leader>go',
+        function()
+          local repo = vim.fn.input 'Repository name / URI: '
+          if repo ~= '' then
+            require('git-dev').open(repo)
+          end
+        end,
+        desc = '[O]pen a remote git repository',
+      },
+    },
+    config = function(_, opts)
+      require('user.menu').add_actions('Git', {
+        ['Open a remote git repository (<leader>go)'] = function()
+          vim.ui.input({ prompt = 'Enter git repository URL: ' }, function(url)
+            if not url then
+              return
+            end
+            require('git-dev').open(url)
+          end)
+        end,
+      })
+      require('git-dev').setup(opts)
+    end,
+  },
+
+  {
     'akinsho/git-conflict.nvim',
     version = '*',
     event = 'BufReadPre',
