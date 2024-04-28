@@ -313,12 +313,13 @@ nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
   ----------------------
   -- Git actions menu --
   ----------------------
-  local the_actions = vim.tbl_extend('force', actions(), diff_actions())
-  require('user.menu').add_actions('Git', the_actions)
+  -- add default git actions
+  require('user.menu').add_actions('Git', vim.tbl_extend('force', actions(), diff_actions()))
   nmap('<leader>gm', function()
-    vim.ui.select(vim.tbl_keys(the_actions), { prompt = 'Choose git action: ' }, function(choice)
+    local git_actions = require('user.menu').get_actions { prefix = 'Git' }
+    vim.ui.select(vim.tbl_keys(git_actions), { prompt = 'Choose git action: ' }, function(choice)
       if choice then
-        the_actions[choice]()
+        git_actions[choice]()
       end
     end)
   end)
