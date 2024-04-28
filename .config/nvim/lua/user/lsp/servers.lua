@@ -187,6 +187,16 @@ M.setup = function()
       -- Detects Kubernetes files based on content
       kubernetes = { enabled = true },
     },
+    schemas = {
+      {
+        name = 'Kubernetes 1.27.12',
+        uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.27.12-standalone-strict/all.json',
+      },
+      {
+        name = 'Kubernetes 1.26.14',
+        uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.26.14-standalone-strict/all.json',
+      },
+    },
     lspconfig = {
       on_attach = function(c, b)
         local filetype = vim.api.nvim_get_option_value('filetype', { buf = b })
@@ -200,7 +210,21 @@ M.setup = function()
         end
         default_on_attach(c, b)
       end,
-      capabilities = capabilities,
+      capabilities = vim.tbl_deep_extend('force', capabilities, {
+        textDocument = {
+          foldingRange = {
+            dynamicRegistration = true,
+          },
+        },
+      }),
+      cmd = { 'node', vim.fn.expand '~/Repos/yaml-language-server/out/server/src/server.js', '--stdio' },
+      settings = {
+        yaml = {
+          schemas = {
+            kubernetes = '/*',
+          },
+        },
+      },
     },
   }
   require('lspconfig')['yamlls'].setup(yaml_cfg)

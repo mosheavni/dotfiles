@@ -181,4 +181,16 @@ M.borders = {
 -- M.float_border = M.single_border_rounded
 M.float_border = M.borders.single_rounded
 
+M.filetype_to_extension = {
+  bash = 'sh',
+  zsh = 'sh',
+  python = 'py',
+  javascript = 'js',
+  typescript = 'ts',
+  javascriptreact = 'jsx',
+  typescriptreact = 'tsx',
+  markdown = 'md',
+  terraform = 'tf',
+}
+
 return M
