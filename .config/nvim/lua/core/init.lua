@@ -52,8 +52,9 @@ function _G.tmp_write(opts)
   end
 
   if ft then
+    local extension = require('user.utils').filetype_to_extension[ft] or ft
     vim.api.nvim_set_option_value('filetype', ft, { buf = 0 })
-    tmp = tmp .. '.' .. ft
+    tmp = tmp .. '.' .. extension
   end
   vim.cmd(string.format('write %s', tmp))
   vim.cmd 'edit'

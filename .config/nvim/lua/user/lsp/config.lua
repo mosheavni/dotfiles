@@ -47,7 +47,8 @@ end
 
 M.init = function()
   local start_ls = function()
-    _G.tmp_write { should_delete = false, new = false }
+    local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
+    _G.tmp_write { should_delete = false, new = false, ft = ft }
     -- load lsp
     require 'lspconfig'
   end
