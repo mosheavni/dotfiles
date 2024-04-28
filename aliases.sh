@@ -109,6 +109,11 @@ function grafana_web () {
   open "https://${ingress_host}"
 }
 
+function cerebro_web() {
+  cerebro_ingress=$(kubectl get ingress -l app=cerebro -A -ojson | jq -r '.items[].spec.rules[0].host')
+  open https://${cerebro_ingress}
+}
+
 function kibana_web () {
   kibana_ingress=$(kubectl get ingress -n elastic --no-headers -o custom-columns=":metadata.name" | grep kb-ingress)
   ingress_host=$(kubectl get ingress -n elastic "${kibana_ingress}" -ojson | jq -r '.spec.rules[].host')
@@ -254,6 +259,7 @@ alias -g RC='--sort-by=".status.containerStatuses[0].restartCount" -A | grep -v 
 alias -g BAD='| grep -v "1/1\|2/2\|3/3\|4/4\|5/5\|6/6\|Completed\|Evicted"'
 alias -g IP='-ojsonpath="{.status.hostIP}"'
 alias -g dollar_1_line='$(awk "{print \$1}"<<<"${line}")'
+alias -g dollar_2_line='$(awk "{print \$2}"<<<"${line}")'
 
 ### Git related ###
 # see recently pushed branches
@@ -292,6 +298,15 @@ alias kdelpv='kubectl delete persistentvolume'
 # Common Used tools:
 alias tf='terraform'
 alias tg='terragrunt'
+
+asdf-kubectl-version() {
+  K8S_VERSION=$(kubectl version -ojson | jq -r '.serverVersion | "\(.major).\(.minor)"' | sed 's/\+$//')
+  TO_INSTALL=$(asdf list-all kubectl | grep "${K8S_VERSION}" | tail -1)
+  if ! asdf list kubectl 1.27.9 &> /dev/null;then
+    asdf install kubectl "${TO_INSTALL}"
+  fi
+  asdf global kubectl "${TO_INSTALL}"
+}
 
 # fzf
 fdf() {
