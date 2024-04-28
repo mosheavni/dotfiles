@@ -87,7 +87,7 @@
 9. Install npm packages
 
    ```bash
-   npm install -g $(printf "%s " $(<Npmfile))
+   npm install -g $(printf "%s " $(<.default-npm-packages))
    ```
 
 10. Install pip dependencies
