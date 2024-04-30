@@ -180,13 +180,13 @@ M.config = function()
       },
     },
     sources = cmp.config.sources {
-      { name = 'nvim_lsp', priority = 100 },
+      { name = 'nvim_lsp',               priority = 100 },
       { name = 'luasnip' },
       { name = 'nvim_lua' },
       { name = 'nvim_lsp_signature_help' },
       { name = 'cmp_tabnine' },
       { name = 'path' },
-      { name = 'buffer', keyword_length = 4 },
+      { name = 'buffer',                 keyword_length = 4 },
     },
     snippet = {
       expand = function(args)

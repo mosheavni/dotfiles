@@ -172,7 +172,7 @@ M.setup = function()
         cmd = { 'helm_ls', 'serve' },
         filetypes = { 'helm', 'gotmpl' },
         root_dir = function(fname)
-          return util.root_pattern 'Chart.yaml'(fname)
+          return util.root_pattern 'Chart.yaml' (fname)
         end,
       },
     }
@@ -180,6 +180,36 @@ M.setup = function()
   require('lspconfig')['helm_ls'].setup {
     on_attach = default_on_attach,
     capabilities = capabilities,
+  }
+
+  local yaml_lspconfig = {
+    on_attach = function(c, b)
+      local filetype = vim.api.nvim_get_option_value('filetype', { buf = b })
+      local buftype = vim.api.nvim_get_option_value('buftype', { buf = b })
+      local disabled_fts = { 'helm', 'yaml.gotexttmpl', 'gotmpl' }
+      if buftype ~= '' or filetype == '' or vim.tbl_contains(disabled_fts, filetype) then
+        vim.diagnostic.enable(false, b)
+        vim.defer_fn(function()
+          vim.diagnostic.reset(nil, b)
+        end, 1000)
+      end
+      default_on_attach(c, b)
+    end,
+    capabilities = vim.tbl_deep_extend('force', capabilities, {
+      textDocument = {
+        foldingRange = {
+          dynamicRegistration = true,
+        },
+      },
+    }),
+    cmd = { 'node', vim.fn.expand '~/Repos/yaml-language-server/out/server/src/server.js', '--stdio' },
+    settings = {
+      yaml = {
+        schemas = {
+          kubernetes = '/*',
+        },
+      },
+    },
   }
 
   local yaml_cfg = require('yaml-companion').setup {
@@ -197,35 +227,7 @@ M.setup = function()
         uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.26.14-standalone-strict/all.json',
       },
     },
-    lspconfig = {
-      on_attach = function(c, b)
-        local filetype = vim.api.nvim_get_option_value('filetype', { buf = b })
-        local buftype = vim.api.nvim_get_option_value('buftype', { buf = b })
-        local disabled_fts = { 'helm', 'yaml.gotexttmpl', 'gotmpl' }
-        if buftype ~= '' or filetype == '' or vim.tbl_contains(disabled_fts, filetype) then
-          vim.diagnostic.enable(false, b)
-          vim.defer_fn(function()
-            vim.diagnostic.reset(nil, b)
-          end, 1000)
-        end
-        default_on_attach(c, b)
-      end,
-      capabilities = vim.tbl_deep_extend('force', capabilities, {
-        textDocument = {
-          foldingRange = {
-            dynamicRegistration = true,
-          },
-        },
-      }),
-      cmd = { 'node', vim.fn.expand '~/Repos/yaml-language-server/out/server/src/server.js', '--stdio' },
-      settings = {
-        yaml = {
-          schemas = {
-            kubernetes = '/*',
-          },
-        },
-      },
-    },
+    lspconfig = yaml_lspconfig,
   }
   require('lspconfig')['yamlls'].setup(yaml_cfg)
 end
