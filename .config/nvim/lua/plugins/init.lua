@@ -101,17 +101,9 @@ local M = {
     keys = { 'ds', 'cs', 'ys', { 'S', nil, mode = 'v' } },
   },
   {
-    'numToStr/Comment.nvim',
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('Comment').setup {
-        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-      }
-    end,
-    keys = { 'gc', 'gcc', { 'gc', nil, mode = 'v' } },
-    dependencies = {
-      'JoosepAlviste/nvim-ts-context-commentstring',
-    },
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    opts = {},
+    event = 'BufReadPre',
   },
   {
     'junegunn/vim-easy-align',
