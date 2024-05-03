@@ -186,7 +186,7 @@ local M = {
     },
   },
   {
-    'https://github.com/atusy/treemonkey.nvim',
+    'atusy/treemonkey.nvim',
     lazy = true,
     init = function()
       vim.keymap.set({ 'x', 'o' }, 'm', function()
