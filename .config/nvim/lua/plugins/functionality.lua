@@ -159,29 +159,6 @@ local M = {
       })
     end,
   },
-  {
-    'backdround/global-note.nvim',
-    cmd = 'GlobalNote',
-    keys = { '<leader>n' },
-    config = function()
-      local global_note = require 'global-note'
-      global_note.setup {
-        additional_presets = {},
-      }
-
-      vim.keymap.set('n', '<leader>n', global_note.toggle_note, {
-        desc = 'Toggle global note',
-      })
-
-      -- autocommand to run :MarkdownPreview when opening a global note
-      -- in the path /Users/mavni/.local/share/nvim/global-note/global.md
-      vim.api.nvim_create_autocmd('BufReadPost', {
-        group = vim.api.nvim_create_augroup('GlobalNote', {}),
-        pattern = '*/.local/share/nvim/global-note/global.md',
-        command = 'MarkdownPreview',
-      })
-    end,
-  },
 }
 
 return M
