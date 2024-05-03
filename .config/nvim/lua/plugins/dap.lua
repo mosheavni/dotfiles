@@ -61,11 +61,12 @@ local M = {
   },
 }
 
+M.keys = {
+  { '<F5>', '<cmd>lua require("dap").continue()<cr>' },
+  { '<leader>bp', '<cmd>lua require("dap").toggle_breakpoint()<cr>' },
+}
 M.config = function()
-  local utils = require 'user.utils'
   local cmp = require 'cmp'
-  local opts = utils.map_opts
-  local nnoremap = utils.nnoremap
   local mason_nvim_dap = require 'mason-nvim-dap'
   ---@diagnostic disable-next-line: missing-fields
   mason_nvim_dap.setup {
@@ -95,10 +96,6 @@ M.config = function()
   vim.fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
   vim.fn.sign_define('DapBreakpointRejected', { text = '❓', texthl = '', linehl = '', numhl = '' })
   vim.fn.sign_define('DapStopped', { text = '⭕️', texthl = '', linehl = '', numhl = '' })
-
-  -- Mappings
-  nnoremap('<F5>', '<cmd>lua require("dap").continue()<cr>', opts.no_remap)
-  nnoremap('<leader>bp', '<cmd>lua require("dap").toggle_breakpoint()<cr>', opts.no_remap)
 
   -- Actions
   local the_actions = actions()

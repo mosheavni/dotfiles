@@ -49,15 +49,13 @@ local M = {
   dependencies = { 'kyazdani42/nvim-web-devicons' },
 }
 
+M.keys = {
+  { '<leader>v', ':lua require("nvim-tree.api").tree.find_file { open = true, focus = true }<cr>' },
+  { '<c-o>', ':lua require("nvim-tree.api").tree.toggle()<cr>' },
+}
 M.config = function()
   local nvim_tree = require 'nvim-tree'
   local api = require 'nvim-tree.api'
-  local utils = require 'user.utils'
-  local nnoremap = utils.nnoremap
-  -- vim.cmd [[
-  --   highlight! NvimTreeOpenedFolderIcon ctermfg=109 guifg=#d8a657
-  --   highlight! NvimTreeClosedFolderIcon ctermfg=109 guifg=#d8a657
-  -- ]]
 
   local sort_by = function()
     return SORT_METHODS[sort_current]
@@ -99,13 +97,6 @@ M.config = function()
 
   api.events.subscribe(api.events.Event.FileCreated, function(file)
     vim.cmd('edit ' .. file.fname)
-  end)
-
-  nnoremap('<leader>v', function()
-    api.tree.find_file { open = true, focus = true }
-  end)
-  nnoremap('<c-o>', function()
-    api.tree.toggle()
   end)
 end
 

@@ -1,6 +1,3 @@
-local utils = require 'user.utils'
-local tnoremap = utils.tnoremap
-
 local M = {
   -------------------------
   -- Functionality Tools --
@@ -95,7 +92,6 @@ local M = {
     config = function()
       vim.g.winresizer_vert_resize = 4
       vim.g.winresizer_start_key = '<C-e>'
-      tnoremap('<C-e>', '<Cmd>WinResizerStartResize<CR>', true)
     end,
     init = function()
       require('user.menu').add_actions(nil, {
