@@ -7,6 +7,11 @@ local SORT_METHODS = {
 }
 local function on_attach(bufnr)
   local api = require 'nvim-tree.api'
+
+  local function opts(desc)
+    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  end
+
   local cycle_sort = function()
     if sort_current >= #SORT_METHODS then
       sort_current = 1
@@ -17,8 +22,68 @@ local function on_attach(bufnr)
     P('Sort Method: ' .. SORT_METHODS[sort_current])
   end
 
-  local function opts(desc)
-    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  -- mark operation
+  local mark_move_j = function()
+    api.marks.toggle()
+    vim.cmd 'norm j'
+  end
+  local mark_move_k = function()
+    api.marks.toggle()
+    vim.cmd 'norm k'
+  end
+
+  -- marked files operation
+  local mark_trash = function()
+    local marks = api.marks.list()
+    if #marks == 0 then
+      table.insert(marks, api.tree.get_node_under_cursor())
+    end
+    vim.ui.input({ prompt = string.format('Trash %s files? [y/n] ', #marks) }, function(input)
+      if input == 'y' then
+        for _, node in ipairs(marks) do
+          api.fs.trash(node)
+        end
+        api.marks.clear()
+        api.tree.reload()
+      end
+    end)
+  end
+  local mark_remove = function()
+    local marks = api.marks.list()
+    if #marks == 0 then
+      table.insert(marks, api.tree.get_node_under_cursor())
+    end
+    vim.ui.input({ prompt = string.format('Remove/Delete %s files? [y/n] ', #marks) }, function(input)
+      if input == 'y' then
+        for _, node in ipairs(marks) do
+          api.fs.remove(node)
+        end
+        api.marks.clear()
+        api.tree.reload()
+      end
+    end)
+  end
+  local mark_copy = function()
+    local marks = api.marks.list()
+    if #marks == 0 then
+      table.insert(marks, api.tree.get_node_under_cursor())
+    end
+    for _, node in pairs(marks) do
+      api.fs.copy.node(node)
+    end
+    api.marks.clear()
+    api.tree.reload()
+  end
+  local mark_cut = function()
+    local marks = api.marks.list()
+    if #marks == 0 then
+      table.insert(marks, api.tree.get_node_under_cursor())
+    end
+    for _, node in pairs(marks) do
+      api.fs.cut(node)
+    end
+    api.marks.clear()
+    api.tree.reload()
   end
 
   api.config.mappings.default_on_attach(bufnr)
@@ -29,6 +94,19 @@ local function on_attach(bufnr)
   vim.keymap.set('n', 'T', cycle_sort, opts 'Cycle Sort')
   vim.keymap.del('n', 's', { buffer = bufnr })
   vim.keymap.del('n', '<C-e>', { buffer = bufnr })
+  vim.keymap.del('n', 'bd', { buffer = bufnr })
+
+  -- multi files operations
+  vim.keymap.set('n', 'p', api.fs.paste, opts 'Paste')
+  vim.keymap.set('n', 'J', mark_move_j, opts 'Toggle Bookmark Down')
+  vim.keymap.set('n', 'K', mark_move_k, opts 'Toggle Bookmark Up')
+
+  vim.keymap.set('n', 'dd', mark_cut, opts 'Cut File(s)')
+  vim.keymap.set('n', 'df', mark_trash, opts 'Trash File(s)')
+  vim.keymap.set('n', 'dF', mark_remove, opts 'Remove File(s)')
+  vim.keymap.set('n', 'yy', mark_copy, opts 'Copy File(s)')
+
+  vim.keymap.set('n', 'mv', api.marks.bulk.move, opts 'Move Bookmarked')
 
   local function move_file_to()
     local node = api.tree.get_node_under_cursor()
@@ -53,6 +131,7 @@ M.keys = {
   { '<leader>v', ':lua require("nvim-tree.api").tree.find_file { open = true, focus = true }<cr>' },
   { '<c-o>', ':lua require("nvim-tree.api").tree.toggle()<cr>' },
 }
+
 M.config = function()
   local nvim_tree = require 'nvim-tree'
   local api = require 'nvim-tree.api'
@@ -62,6 +141,12 @@ M.config = function()
   end
 
   nvim_tree.setup {
+    ui = {
+      confirm = {
+        remove = true,
+        trash = false,
+      },
+    },
     on_attach = on_attach,
     sort = { sorter = sort_by },
     actions = {
