@@ -1,3 +1,14 @@
+local actions = function()
+  return {
+    ['Incremental Selection (vn)'] = function()
+      vim.fn.feedkeys 'vn'
+    end,
+
+    ['Smart Rename Symbol (grr)'] = function()
+      vim.fn.feedkeys 'grr'
+    end,
+  }
+end
 local M = {
   'nvim-treesitter/nvim-treesitter',
   build = function()
@@ -18,6 +29,7 @@ local M = {
 }
 
 M.config = function()
+  require('user.menu').add_actions('TreeSitter', actions())
   local configs = require 'nvim-treesitter.configs'
   local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
   ---@diagnostic disable-next-line: inject-field
