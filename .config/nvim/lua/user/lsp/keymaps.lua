@@ -42,14 +42,6 @@ return function(bufnr)
   -- Diagnostics
   nnoremap('<leader>lq', vim.diagnostic.setqflist, returnOpts 'Set qflist')
   nnoremap('<leader>ld', vim.diagnostic.open_float, returnOpts 'Open diagnostics float window')
-  -- Goto previous/next diagnostic warning/error
-  -- Use `[g` and `]g` to navigate diagnostics
-  -- nnoremap('[g', function()
-  --   vim.diagnostic.goto_prev { float = false }
-  -- end, returnOpts 'Go to previous diagnostic')
-  -- nnoremap(']g', function()
-  --   vim.diagnostic.goto_next { float = false }
-  -- end, returnOpts 'Go to next diagnostic')
 
   -- Code action
   nnoremap('<leader>la', vim.lsp.buf.code_action, returnOpts 'Code action')
