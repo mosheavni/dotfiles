@@ -36,8 +36,8 @@ return function(bufnr)
 
   -- Inlay hints
   nnoremap('<leader>lh', function()
-    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = bufnr }, returnOpts 'Toggle inlay hints')
-  end, returnOpts 'Set qflist')
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(bufnr))
+  end, returnOpts 'Toggle inlay hints')
 
   -- Diagnostics
   nnoremap('<leader>lq', vim.diagnostic.setqflist, returnOpts 'Set qflist')
