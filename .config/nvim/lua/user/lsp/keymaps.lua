@@ -36,7 +36,7 @@ return function(bufnr)
 
   -- Inlay hints
   nnoremap('<leader>lh', function()
-    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(bufnr))
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = bufnr })
   end, returnOpts 'Toggle inlay hints')
 
   -- Diagnostics
