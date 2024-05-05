@@ -34,6 +34,14 @@ local M = {
     ft = 'nginx',
   },
   {
+    'ton/vim-bufsurf',
+    event = 'VeryLazy',
+    keys = {
+      { ']b', '<Plug>(buf-surf-forward)' },
+      { '[b', '<Plug>(buf-surf-back)' },
+    },
+  },
+  {
     'mosheavni/vim-kubernetes',
     ft = 'yaml',
     config = function()
