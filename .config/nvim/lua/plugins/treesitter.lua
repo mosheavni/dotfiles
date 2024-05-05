@@ -28,9 +28,125 @@ local M = {
   event = 'BufReadPost',
 }
 
-M.config = function()
+M.opts = {
+  ensure_installed = {
+    'awk',
+    'bash',
+    'comment',
+    'dockerfile',
+    'embedded_template',
+    'git_config',
+    'gitcommit',
+    'gitignore',
+    'go',
+    'graphql',
+    'groovy',
+    'hcl',
+    'hjson',
+    'html',
+    'http',
+    'java',
+    'javascript',
+    'json',
+    'jsonc',
+    'lua',
+    'make',
+    'markdown',
+    'markdown_inline',
+    'python',
+    'query',
+    'regex',
+    'scss',
+    'ssh_config',
+    'terraform',
+    'toml',
+    'tsx',
+    'typescript',
+    'vim',
+    'vimdoc',
+    'xml',
+    'yaml',
+  },
+
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = 'vn',
+      node_incremental = '<CR>',
+      scope_incremental = '<S-CR>',
+      node_decremental = '<BS>',
+    },
+  },
+  matchup = {
+    enable = true,
+  },
+  endwise = {
+    enable = true,
+  },
+  autotag = {
+    enable = true,
+  },
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+  indent = {
+    enable = true,
+    disable = { 'yaml' },
+  },
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        ['ab'] = '@block.outer',
+        ['ib'] = '@block.inner',
+        ['ac'] = '@class.outer',
+        ['ic'] = '@class.inner',
+        ['af'] = '@function.outer',
+        ['if'] = '@function.inner',
+        ['ao'] = '@object.outer',
+        ['io'] = '@object.inner',
+      },
+    },
+    move = {
+      enable = true,
+      set_jumps = true, -- whether to set jumps in the jumplist
+      goto_next_start = {
+        [']m'] = '@function.outer',
+        [']]'] = '@block.outer',
+      },
+      goto_next_end = {
+        [']M'] = '@function.outer',
+        [']['] = '@block.outer',
+      },
+      goto_previous_start = {
+        ['[m'] = '@function.outer',
+        ['[['] = '@class.outer',
+      },
+      goto_previous_end = {
+        ['[M'] = '@function.outer',
+        ['[]'] = '@block.outer',
+      },
+    },
+  },
+  refactor = {
+    highlight_current_scope = { enable = false },
+    smart_rename = {
+      enable = true,
+      keymaps = {
+        smart_rename = 'grr',
+      },
+    },
+    highlight_definitions = {
+      enable = true,
+      clear_on_cursor_move = true,
+    },
+  },
+}
+
+M.config = function(_, opts)
   require('user.menu').add_actions('TreeSitter', actions())
-  local configs = require 'nvim-treesitter.configs'
   local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
   ---@diagnostic disable-next-line: inject-field
   parser_config.gotmpl = {
@@ -43,121 +159,7 @@ M.config = function()
   }
 
   ---@diagnostic disable-next-line: missing-fields
-  configs.setup {
-    ensure_installed = {
-      'awk',
-      'bash',
-      'comment',
-      'dockerfile',
-      'embedded_template',
-      'git_config',
-      'gitcommit',
-      'gitignore',
-      'go',
-      'graphql',
-      'groovy',
-      'hcl',
-      'hjson',
-      'html',
-      'http',
-      'java',
-      'javascript',
-      'json',
-      'jsonc',
-      'lua',
-      'make',
-      'markdown',
-      'markdown_inline',
-      'python',
-      'query',
-      'regex',
-      'scss',
-      'ssh_config',
-      'terraform',
-      'toml',
-      'tsx',
-      'typescript',
-      'vim',
-      'vimdoc',
-      'xml',
-      'yaml',
-    },
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = 'vn',
-        node_incremental = '<CR>',
-        scope_incremental = '<S-CR>',
-        node_decremental = '<BS>',
-      },
-    },
-    matchup = {
-      enable = true,
-    },
-    endwise = {
-      enable = true,
-    },
-    autotag = {
-      enable = true,
-    },
-    highlight = {
-      enable = true,
-      additional_vim_regex_highlighting = false,
-    },
-    indent = {
-      enable = true,
-      disable = { 'yaml' },
-    },
-    textobjects = {
-      select = {
-        enable = true,
-        lookahead = true,
-        keymaps = {
-          ['ab'] = '@block.outer',
-          ['ib'] = '@block.inner',
-          ['ac'] = '@class.outer',
-          ['ic'] = '@class.inner',
-          ['af'] = '@function.outer',
-          ['if'] = '@function.inner',
-          ['ao'] = '@object.outer',
-          ['io'] = '@object.inner',
-        },
-      },
-      move = {
-        enable = true,
-        set_jumps = true, -- whether to set jumps in the jumplist
-        goto_next_start = {
-          [']m'] = '@function.outer',
-          [']]'] = '@block.outer',
-        },
-        goto_next_end = {
-          [']M'] = '@function.outer',
-          [']['] = '@block.outer',
-        },
-        goto_previous_start = {
-          ['[m'] = '@function.outer',
-          ['[['] = '@class.outer',
-        },
-        goto_previous_end = {
-          ['[M'] = '@function.outer',
-          ['[]'] = '@block.outer',
-        },
-      },
-    },
-    refactor = {
-      highlight_current_scope = { enable = false },
-      smart_rename = {
-        enable = true,
-        keymaps = {
-          smart_rename = 'grr',
-        },
-      },
-      highlight_definitions = {
-        enable = true,
-        clear_on_cursor_move = true,
-      },
-    },
-  }
+  require('nvim-treesitter.configs').setup(opts)
 
   vim.opt.foldmethod = 'expr'
   vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
