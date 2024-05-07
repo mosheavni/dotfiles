@@ -51,7 +51,7 @@ local M = {
 
 M.keys = {
   { '<leader>v', ':lua require("nvim-tree.api").tree.find_file { open = true, focus = true }<cr>' },
-  { '<c-o>', ':lua require("nvim-tree.api").tree.toggle()<cr>' },
+  { '<c-o>', ':lua require("nvim-tree.api").tree.toggle()<cr>', silent = true },
 }
 M.config = function()
   local nvim_tree = require 'nvim-tree'

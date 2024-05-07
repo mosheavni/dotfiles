@@ -115,6 +115,7 @@ local M = {
     cmd = { 'BDelete', 'BWipeout' },
     keys = {
       { '<leader>bd', '<cmd>BDelete this<cr>' },
+      { '<leader>bh', '<cmd>BDelete hidden<cr>' },
     },
     init = function()
       require('user.menu').add_actions(nil, {

@@ -105,8 +105,10 @@ local M = {
     event = 'VeryLazy',
   },
   {
-    'tpope/vim-surround',
+    'kylechui/nvim-surround',
+    version = '*', -- Use for stability; omit to use `main` branch for the latest features
     keys = { 'ds', 'cs', 'ys', { 'S', nil, mode = 'v' } },
+    opts = {},
   },
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
