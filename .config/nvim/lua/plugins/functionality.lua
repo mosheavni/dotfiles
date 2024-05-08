@@ -111,7 +111,7 @@ local M = {
   },
   {
     'kazhala/close-buffers.nvim',
-    config = true,
+    opts = {},
     cmd = { 'BDelete', 'BWipeout' },
     keys = {
       { '<leader>bd', '<cmd>BDelete this<cr>' },
