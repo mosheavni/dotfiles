@@ -35,7 +35,7 @@ local M = {
   },
   {
     'ton/vim-bufsurf',
-    event = 'VeryLazy',
+    event = { 'BufReadPre', 'BufNewFile' },
     keys = {
       { ']b', '<Plug>(buf-surf-forward)' },
       { '[b', '<Plug>(buf-surf-back)' },
@@ -83,8 +83,8 @@ local M = {
   --------------
   {
     'yorickpeterse/nvim-pqf',
-    config = true,
-    event = 'BufWinEnter',
+    opts = {},
+    event = 'QuickFixCmdPre',
     -- ft = 'qf',
   },
   {
@@ -190,7 +190,6 @@ local M = {
   },
   {
     'folke/flash.nvim',
-    event = 'VeryLazy',
     ---@type Flash.Config
     opts = {
       modes = {

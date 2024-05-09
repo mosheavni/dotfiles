@@ -346,7 +346,6 @@ local M = {
   },
   {
     'moyiz/git-dev.nvim',
-    event = 'VeryLazy',
     opts = {
       ephemeral = false,
       read_only = false,
