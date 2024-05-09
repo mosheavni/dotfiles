@@ -122,7 +122,7 @@ local language_specific_plugins = {
       })
     end,
   },
-  { 'b0o/SchemaStore.nvim', ft = 'yaml' },
+  { 'b0o/SchemaStore.nvim', lazy = true },
 }
 
 return {
