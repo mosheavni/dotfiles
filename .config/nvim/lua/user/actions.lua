@@ -81,6 +81,7 @@ return {
     vim.cmd 'normal! zM'
   end,
   ['Remove terragrunt files'] = function()
+    require('lazy').load { plugins = { 'vim-fugitive' } }
     local scan_dir = require 'plenary.scandir'
     local terraform_repo = vim.fn.FugitiveExecute({ 'rev-parse', '--show-toplevel' }).stdout
     P(terraform_repo)
