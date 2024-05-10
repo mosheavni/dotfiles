@@ -141,6 +141,10 @@ M.config = function()
   end
 
   nvim_tree.setup {
+    live_filter = {
+      prefix = '[FILTER]: ',
+      always_show_folders = false,
+    },
     ui = {
       confirm = {
         remove = true,
