@@ -96,7 +96,7 @@ local M = {
   {
     'echasnovski/mini.indentscope',
     version = false,
-    event = 'VeryLazy',
+    event = 'BufReadPost',
     opts = {
       symbol = '│',
       options = { try_as_border = true },
@@ -140,7 +140,7 @@ local M = {
   {
     'luukvbaal/statuscol.nvim',
     branch = '0.10',
-    event = 'VeryLazy',
+    event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local builtin = require 'statuscol.builtin'
       require('statuscol').setup {
@@ -162,7 +162,7 @@ local M = {
     event = 'BufReadPost',
   },
   {
-    'kyazdani42/nvim-web-devicons',
+    'nvim-tree/nvim-web-devicons',
     lazy = true,
   },
   {

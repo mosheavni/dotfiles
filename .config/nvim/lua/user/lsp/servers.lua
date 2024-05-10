@@ -172,7 +172,7 @@ M.setup = function()
         cmd = { 'helm_ls', 'serve' },
         filetypes = { 'helm', 'gotmpl' },
         root_dir = function(fname)
-          return util.root_pattern 'Chart.yaml' (fname)
+          return util.root_pattern 'Chart.yaml'(fname)
         end,
       },
     }
@@ -205,9 +205,9 @@ M.setup = function()
     cmd = { 'node', vim.fn.expand '~/Repos/yaml-language-server/out/server/src/server.js', '--stdio' },
     settings = {
       yaml = {
-        schemas = {
+        schemas = vim.tbl_deep_extend('force', require('schemastore').yaml.schemas(), {
           kubernetes = '/*',
-        },
+        }),
       },
     },
   }

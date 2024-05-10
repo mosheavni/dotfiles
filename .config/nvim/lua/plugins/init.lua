@@ -34,6 +34,14 @@ local M = {
     ft = 'nginx',
   },
   {
+    'ton/vim-bufsurf',
+    event = { 'BufReadPre', 'BufNewFile' },
+    keys = {
+      { ']b', '<Plug>(buf-surf-forward)' },
+      { '[b', '<Plug>(buf-surf-back)' },
+    },
+  },
+  {
     'mosheavni/vim-kubernetes',
     ft = 'yaml',
     config = function()
@@ -75,8 +83,8 @@ local M = {
   --------------
   {
     'yorickpeterse/nvim-pqf',
-    config = true,
-    event = 'BufWinEnter',
+    opts = {},
+    event = 'QuickFixCmdPre',
     -- ft = 'qf',
   },
   {
@@ -97,8 +105,10 @@ local M = {
     event = 'VeryLazy',
   },
   {
-    'tpope/vim-surround',
+    'kylechui/nvim-surround',
+    version = '*', -- Use for stability; omit to use `main` branch for the latest features
     keys = { 'ds', 'cs', 'ys', { 'S', nil, mode = 'v' } },
+    opts = {},
   },
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
@@ -179,11 +189,26 @@ local M = {
     end,
   },
   {
-    'ggandor/leap.nvim',
-    keys = {
-      { 's', '<Plug>(leap-forward-to)' },
-      { 'S', '<Plug>(leap-backward-to)' },
+    'folke/flash.nvim',
+    ---@type Flash.Config
+    opts = {
+      modes = {
+        search = {
+          enabled = false,
+        },
+        char = {
+          enabled = false,
+        },
+      },
     },
+  -- stylua: ignore
+  keys = {
+    { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+    -- { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+    -- { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+    -- { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+    -- { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+  },
   },
   {
     'atusy/treemonkey.nvim',

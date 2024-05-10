@@ -302,7 +302,7 @@ alias tg='terragrunt'
 asdf-kubectl-version() {
   K8S_VERSION=$(kubectl version -ojson | jq -r '.serverVersion | "\(.major).\(.minor)"' | sed 's/\+$//')
   TO_INSTALL=$(asdf list-all kubectl | grep "${K8S_VERSION}" | tail -1)
-  if ! asdf list kubectl 1.27.9 &> /dev/null;then
+  if ! asdf list kubectl "${TO_INSTALL}" &> /dev/null;then
     asdf install kubectl "${TO_INSTALL}"
   fi
   asdf global kubectl "${TO_INSTALL}"

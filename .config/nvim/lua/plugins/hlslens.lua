@@ -8,5 +8,6 @@ return {
     { 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]] },
     { 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]] },
   },
-  config = true,
+  event = 'CmdlineEnter',
+  opts = {},
 }

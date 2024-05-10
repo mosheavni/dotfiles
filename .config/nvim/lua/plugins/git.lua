@@ -338,7 +338,7 @@ local M = {
       '<leader>gm',
       '<leader>gp',
     },
-    cmd = { 'G', 'Git', 'Gcb' },
+    cmd = { 'G', 'Git', 'Gcb', 'Gl', 'Gp', 'Gmom', 'Gpom', 'Gread' },
   },
   {
     'mosheavni/vim-to-github',
@@ -346,7 +346,6 @@ local M = {
   },
   {
     'moyiz/git-dev.nvim',
-    event = 'VeryLazy',
     opts = {
       ephemeral = false,
       read_only = false,

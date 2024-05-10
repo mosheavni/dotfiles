@@ -53,6 +53,14 @@ local M = {
     end,
   },
   {
+    'chomosuke/term-edit.nvim',
+    ft = 'floaterm',
+    opts = {
+      prompt_end = '%$ ',
+    },
+    version = '1.*',
+  },
+  {
     'danymat/neogen',
     dependencies = 'nvim-treesitter/nvim-treesitter',
     cmd = { 'Neogen' },
@@ -103,10 +111,11 @@ local M = {
   },
   {
     'kazhala/close-buffers.nvim',
-    config = true,
+    opts = {},
     cmd = { 'BDelete', 'BWipeout' },
     keys = {
       { '<leader>bd', '<cmd>BDelete this<cr>' },
+      { '<leader>bh', '<cmd>BDelete hidden<cr>' },
     },
     init = function()
       require('user.menu').add_actions(nil, {

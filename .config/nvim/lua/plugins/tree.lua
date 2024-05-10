@@ -124,12 +124,12 @@ local M = {
   'nvim-tree/nvim-tree.lua',
   cmd = { 'NvimTreeToggle', 'NvimTreeOpen', 'NvimTreeFocus', 'NvimTreeRefresh' },
   keys = { '<c-o>', '<leader>v' },
-  dependencies = { 'kyazdani42/nvim-web-devicons' },
+  dependencies = { 'nvim-tree/nvim-web-devicons' },
 }
 
 M.keys = {
   { '<leader>v', ':lua require("nvim-tree.api").tree.find_file { open = true, focus = true }<cr>' },
-  { '<c-o>', ':lua require("nvim-tree.api").tree.toggle()<cr>' },
+  { '<c-o>', ':lua require("nvim-tree.api").tree.toggle()<cr>', silent = true },
 }
 
 M.config = function()
