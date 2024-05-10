@@ -68,12 +68,12 @@ plugins=(
   git-auto-fetch
   golang
   helm
-  jq
   kube-ps1
   kubectl
   kubectx
   ripgrep
   terraform
+  urltools
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
