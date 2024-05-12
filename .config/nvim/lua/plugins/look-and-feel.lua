@@ -74,24 +74,29 @@ local M = {
   },
   {
     'rcarriga/nvim-notify',
-    event = 'VeryLazy',
     keys = {
       {
         '<Leader>x',
         function()
           require('notify').dismiss { pending = true, silent = true }
         end,
+        desc = 'Dismiss all notifications',
       },
     },
-    config = function()
-      local notify = require 'notify'
-      notify.setup {
-        render = 'compact',
-        stages = 'static',
-        timeout = 3000,
-      }
-      vim.notify = notify
+    init = function()
+      ---@diagnostic disable-next-line: duplicate-set-field
+      vim.notify = function(...)
+        if not require('lazy.core.config').plugins['nvim-notify']._.loaded then
+          require('lazy').load { plugins = { 'nvim-notify' } }
+        end
+        require 'notify'(...)
+      end
     end,
+    opts = {
+      render = 'compact',
+      stages = 'static',
+      timeout = 3000,
+    },
   },
   {
     'echasnovski/mini.indentscope',
