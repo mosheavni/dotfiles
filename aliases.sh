@@ -257,7 +257,7 @@ alias -g YML='-oyaml | vim -c "set filetype=yaml | nnoremap <buffer> q :qall<cr>
 alias -g NM=' --no-headers -o custom-columns=":metadata.name"'
 alias -g RC='--sort-by=".status.containerStatuses[0].restartCount" -A | grep -v "\s0\s"'
 alias -g BAD='| grep -v "1/1\|2/2\|3/3\|4/4\|5/5\|6/6\|Completed\|Evicted"'
-alias -g IP='-ojsonpath="{.status.hostIP}"'
+alias -g IP='-ojsonpath="{.spec.nodeName}"'
 alias -g dollar_1_line='$(awk "{print \$1}"<<<"${line}")'
 alias -g dollar_2_line='$(awk "{print \$2}"<<<"${line}")'
 
@@ -270,6 +270,10 @@ alias gb='git for-each-ref --sort=-committerdate --format="%(refname:short)" | g
 ### Shortcuts to directories ###
 alias repos="~/Repos"
 alias difff='code --diff'
+
+# Common Used tools:
+alias tf='terraform'
+alias tg='terragrunt'
 
 ### Kubernetes Aliases ###
 alias cinfo='kubectl cluster-info'
@@ -295,9 +299,7 @@ alias kdpv='kubectl describe persistentvolume'
 alias kepv='kubectl edit persistentvolume'
 alias kdelpv='kubectl delete persistentvolume'
 
-# Common Used tools:
-alias tf='terraform'
-alias tg='terragrunt'
+alias kgevents='kubectl get event --sort-by=.metadata.creationTimestamp | grep -E -v "(Successfully (pulled|assigned)|(Started|Created) container|(Deleted|Created) pod)"'
 
 asdf-kubectl-version() {
   K8S_VERSION=$(kubectl version -ojson | jq -r '.serverVersion | "\(.major).\(.minor)"' | sed 's/\+$//')
