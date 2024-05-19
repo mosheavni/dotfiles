@@ -1,5 +1,3 @@
-local utils = require 'user.utils'
-local nnoremap = utils.nnoremap
 local M = {}
 
 local uname = vim.uv.os_uname()
@@ -70,7 +68,7 @@ M.setup = function(options)
   end
 
   local bufnr = vim.api.nvim_get_current_buf()
-  nnoremap(M.keymap_lhs, function()
+  vim.keymap.set('n', M.keymap_lhs, function()
     M.open_url_under_cursor()
   end, { buffer = bufnr, silent = true, desc = 'Open plugin url under cursor' })
 end
