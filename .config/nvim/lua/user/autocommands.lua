@@ -3,12 +3,15 @@ local autocmd = utils.autocmd
 local augroup = utils.augroup
 local nnoremap = utils.nnoremap
 
+-- Check if we need to reload the file when it changed
 local reload_file_group = augroup 'ReloadFile'
-autocmd({ 'FocusGained', 'BufEnter' }, {
-  desc = 'Auto load file changes when focus or buffer is entered',
+vim.api.nvim_create_autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
   group = reload_file_group,
-  pattern = '*',
-  command = 'if &buftype == "nofile" | checktime | endif',
+  callback = function()
+    if vim.o.buftype ~= 'nofile' then
+      vim.cmd 'checktime'
+    end
+  end,
 })
 
 autocmd('FileChangedShellPost', {
@@ -54,15 +57,24 @@ autocmd('FileType', {
   desc = 'Quit with q in this filetypes',
   group = buffer_settings,
   pattern = {
+    'PlenaryTestPopup',
+    'checkhealth',
     'help',
     'lspinfo',
     'man',
+    'neotest-output',
+    'neotest-output-panel',
+    'neotest-summary',
     'netrw',
+    'notify',
     'qf',
+    'spectre_panel',
     'startuptime',
+    'tsplayground',
   },
   callback = function()
-    nnoremap('q', '<CMD>close<CR>', { buffer = 0 })
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set('n', 'q', '<cmd>close<cr>', { buffer = event.buf, silent = true })
   end,
 })
 autocmd('FileType', {
@@ -80,12 +92,28 @@ autocmd('TextYankPost', {
   end,
 })
 
+-- resize splits if window got resized
+vim.api.nvim_create_autocmd({ 'VimResized' }, {
+  group = buffer_settings,
+  callback = function()
+    local current_tab = vim.fn.tabpagenr()
+    vim.cmd 'tabdo wincmd ='
+    vim.cmd('tabnext ' .. current_tab)
+  end,
+})
+
 vim.api.nvim_create_autocmd('BufReadPost', {
   desc = 'go to last loc when opening a buffer',
   group = buffer_settings,
-  callback = function()
-    local mark = vim.api.nvim_buf_get_mark(0, '"')
-    local lcount = vim.api.nvim_buf_line_count(0)
+  callback = function(event)
+    local exclude = { 'gitcommit' }
+    local buf = event.buf
+    if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].lazyvim_last_loc then
+      return
+    end
+    vim.b[buf].lazyvim_last_loc = true
+    local mark = vim.api.nvim_buf_get_mark(buf, '"')
+    local lcount = vim.api.nvim_buf_line_count(buf)
     if mark[1] > 0 and mark[1] <= lcount then
       pcall(vim.api.nvim_win_set_cursor, 0, mark)
     end
@@ -140,11 +168,11 @@ autocmd({ 'FileType' }, {
       vim.cmd(new_split_cmd)
       vim.cmd(qf_idx .. 'cc')
     end
-    nnoremap('<c-v>', function()
+    vim.keymap.set('n', '<c-v>', function()
       open_quickfix 'vnew'
     end, { buffer = true })
 
-    nnoremap('<c-x>', function()
+    vim.keymap.set('n', '<c-x>', function()
       open_quickfix 'split'
     end, { buffer = true })
 
