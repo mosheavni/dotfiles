@@ -411,6 +411,11 @@ local M = {
           vim.cmd 'GitConflictListQf'
         end,
       })
+      local function opts(desc)
+        return { remap = false, silent = true, buffer = bufnr, desc = 'Git Conflict: ' .. desc }
+      end
+      vim.keymap.set('n', ']x', '<Plug>(git-conflict-next-conflict)', opts 'Next Conflict')
+      vim.keymap.set('n', '[x', '<Plug>(git-conflict-prev-conflict)', opts 'Previous Conflict')
     end,
   },
   {
