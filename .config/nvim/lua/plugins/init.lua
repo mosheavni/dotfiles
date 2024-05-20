@@ -111,11 +111,6 @@ local M = {
     opts = {},
   },
   {
-    'JoosepAlviste/nvim-ts-context-commentstring',
-    opts = {},
-    event = 'BufReadPre',
-  },
-  {
     'junegunn/vim-easy-align',
     keys = { { 'ga', '<Plug>(EasyAlign)', mode = { 'v', 'n' } } },
   },
