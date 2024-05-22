@@ -8,7 +8,7 @@ vim.g.python3_host_prog = 'python3'
 vim.o.cursorcolumn = true
 vim.o.cursorline = true -- Add highlight behind current line
 vim.opt.shortmess:append { c = true, l = false, q = false, S = false, C = true, I = true }
-vim.o.list = true
+vim.o.list = true -- Show some invisible characters (tabs...
 vim.opt.listchars = {
   -- trail = '·',
   eol = '↲',
@@ -24,6 +24,9 @@ vim.opt.fillchars = {
   fold = ' ',
   foldopen = '',
   foldclose = '',
+  foldsep = ' ',
+  diff = '╱',
+  eob = ' ',
 }
 -- vim.opt.foldcolumn = '1'
 vim.o.emoji = false
@@ -118,14 +121,14 @@ let &t_Ce = "\e[4:0m"
 -- r = auto insert comment leader after <Enter> (insert mode)
 -- o = auto insert comment leader after o (normal mode)
 -- l = don't break long lines
+-- t = Auto-wrap text using 'textwidth'
 vim.opt.formatoptions:append {
-  j = true, -- Where it makes sense, remove a comment leader when joining lines.
-  t = true, -- Auto-wrap text using 'textwidth'
-  r = true, -- Automatically insert the current comment leader after hitting
-  -- <Enter> in Insert mode.
-  o = true,
-  l = true,
   c = true,
+  j = true,
+  l = true,
+  o = true,
+  r = true,
+  t = true,
 }
 
 -- Indenting
