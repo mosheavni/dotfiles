@@ -1,5 +1,4 @@
 local utils = require 'user.utils'
-local nmap = utils.nmap
 
 local M = {
   ------------------------------------
@@ -238,6 +237,6 @@ local M = {
   -- DONE ✅
 }
 
-nmap('<leader>z', '<cmd>Lazy<CR>', true)
+vim.keymap.set('n', '<leader>z', '<cmd>Lazy<CR>', { silent = true })
 
 return M

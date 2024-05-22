@@ -113,8 +113,7 @@ local language_specific_plugins = {
     'someone-stole-my-name/yaml-companion.nvim',
     ft = 'yaml',
     config = function()
-      local nnoremap = require('user.utils').nnoremap
-      nnoremap('<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", true)
+      vim.keymap.set('n', '<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", { remap = false, silent = true })
       require('user.menu').add_actions('YAML', {
         ['Change Schema'] = function()
           require('yaml-companion').open_ui_select()

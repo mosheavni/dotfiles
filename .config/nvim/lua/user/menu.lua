@@ -1,6 +1,3 @@
-local utils = require 'user.utils'
-local nmap = utils.nmap
-
 local M = {
   actions = require 'user.actions',
 }
@@ -36,7 +33,7 @@ M.get_actions = function(opts)
 end
 
 M.setup = function()
-  nmap('<leader>a', function()
+  vim.keymap.set('n', '<leader>a', function()
     vim.ui.select(vim.tbl_keys(M.actions), { prompt = 'Choose action❯ ' }, function(choice)
       if choice then
         M.actions[choice]()

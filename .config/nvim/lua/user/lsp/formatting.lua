@@ -1,9 +1,6 @@
 local M = {
   bufnr = 0,
 }
-local m_utils = require 'user.utils'
-local opts = m_utils.map_opts
-
 M.get_all_clients = function()
   local method = 'textDocument/formatting'
   local clients = vim.tbl_values(vim.lsp.get_clients { bufnr = M.bufnr })
@@ -68,7 +65,7 @@ M.setup = function(client, bufnr)
   -- format keymap
   vim.keymap.set('n', '<leader>lp', function()
     M.format_select()
-  end, vim.tbl_extend('force', opts.silent, { buffer = bufnr, desc = 'Format document' }))
+  end, { silent = true, buffer = bufnr, desc = 'Format document' })
 
   -- format on save
   local group = vim.api.nvim_create_augroup('Format', { clear = false })

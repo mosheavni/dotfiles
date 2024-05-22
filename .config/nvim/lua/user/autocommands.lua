@@ -1,7 +1,6 @@
 local utils = require 'user.utils'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
-local nnoremap = utils.nnoremap
 
 -- Check if we need to reload the file when it changed
 local reload_file_group = augroup 'ReloadFile'
@@ -185,14 +184,14 @@ autocmd({ 'FileType' }, {
       vim.cmd 'copen'
     end
     vim.api.nvim_create_user_command('RemoveQFItem', remove_qf_item, {})
-    nnoremap('dd', '<CMD>RemoveQFItem<CR>', { buffer = true })
+    vim.keymap.set('n', 'dd', '<CMD>RemoveQFItem<CR>', { remap = false, buffer = true })
 
     -- map yy to yank file name
-    nnoremap('yy', function()
+    vim.keymap.set('n', 'yy', function()
       local line = vim.api.nvim_get_current_line()
       local filename = vim.split(line, ' ')[1]
       vim.fn.setreg('"', filename)
-    end, { buffer = true })
+    end, { remap = false, buffer = true })
   end,
 })
 

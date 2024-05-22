@@ -161,8 +161,6 @@ local diff_actions = function()
 end
 
 local fugitive_config = function()
-  local utils = require 'user.utils'
-  local nmap = utils.nmap
   --------------
   -- Fugitive --
   --------------
@@ -307,7 +305,7 @@ nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
     end)
   end
   vim.api.nvim_create_user_command('Gcb', _G.create_new_branch, { nargs = '?' })
-  nmap('<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
+  vim.keymap.set('n', '<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
   -- redir @">|silent scriptnames|redir END|enew|put
 
   ----------------------
@@ -315,7 +313,7 @@ nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
   ----------------------
   -- add default git actions
   require('user.menu').add_actions('Git', vim.tbl_extend('force', actions(), diff_actions()))
-  nmap('<leader>gm', function()
+  vim.keymap.set('n', '<leader>gm', function()
     local git_actions = require('user.menu').get_actions { prefix = 'Git' }
     vim.ui.select(vim.tbl_keys(git_actions), { prompt = 'Choose git action: ' }, function(choice)
       if choice then
