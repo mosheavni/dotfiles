@@ -208,6 +208,13 @@ M.setup = function()
         schemas = vim.tbl_deep_extend('force', require('schemastore').yaml.schemas(), {
           kubernetes = '/*',
         }),
+        schemaStore = {
+          -- Must disable built-in schemaStore support to use
+          -- schemas from SchemaStore.nvim plugin
+          enable = false,
+          -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+          url = '',
+        },
       },
     },
   }
