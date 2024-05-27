@@ -657,7 +657,7 @@
 			<key>Badge Right Margin</key>
 			<real>30</real>
 			<key>Badge Text</key>
-			<string>{😈}</string>
+			<string></string>
 			<key>Badge Top Margin</key>
 			<real>10</real>
 			<key>Blinking Cursor</key>
