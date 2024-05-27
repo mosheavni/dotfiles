@@ -127,7 +127,7 @@ com! BasicGroovyFormat call s:BasicGroovyFormat()
 map('n', '<Leader><Leader>', '<C-^>', { remap = false, silent = true })
 map('n', '<tab>', '<c-w>w', { remap = false, silent = true })
 map('n', '<c-w><c-c>', '<c-w>c', { remap = false, silent = true })
-map('n', '<leader>bn', '<cmd>bn<cr>', { remap = false, silent = true })
+map('n', '<leader>bn', '<cmd>bn<cr>', { remap = false, silent = true, desc = 'Next buffer' })
 map('n', '<c-w>v', ':vnew<cr>', { remap = false, silent = true })
 map('n', '<c-w>s', ':new<cr>', { remap = false, silent = true })
 map('n', '<c-w>e', ':enew<cr>', { remap = false, silent = true })
@@ -304,10 +304,8 @@ map('n', '<leader>ep', [[:execute("vsplit " . '~/.config/nvim/lua/plugins/init.l
 map('n', '<leader>el', [[:execute("vsplit " . '~/.config/nvim/lua/user/lsp/config.lua')<cr>]], { silent = true })
 map('n', '<leader>em', [[:execute("vsplit " . '~/.config/nvim/lua/user/mappings.lua')<cr>]], { silent = true })
 
--- Delete current buffer
-map('n', '<leader>bd', '<cmd>BDelete this<cr>', { silent = true })
 -- Close current buffer
-map('n', '<leader>bc', ':close<cr>', { silent = true })
+map('n', '<leader>bc', ':close<cr>', { silent = true, desc = 'Close this buffer' })
 
 -- Abbreviations
 map('!a', 'dont', [[don't]], { remap = false })
