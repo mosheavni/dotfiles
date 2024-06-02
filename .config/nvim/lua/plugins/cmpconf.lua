@@ -23,7 +23,7 @@ local M = {
       config = function()
         vim.schedule(function()
           require('copilot').setup {
-            copilot_node_command = vim.fn.expand '~/.asdf/installs/nodejs/18.19.1/bin/node',
+            copilot_node_command = '/usr/local/bin/node',
             filetypes = { ['*'] = true },
             panel = {
               enabled = true,
