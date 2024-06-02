@@ -1,5 +1,3 @@
-local utils = require 'user.utils'
-
 local M = {
   ------------------------------------
   -- Language Server Protocol (LSP) --
@@ -18,6 +16,12 @@ local M = {
     enabled = false,
     dir = '~/Repos/asdf.nvim',
     opts = {},
+  },
+  {
+    'folke/ts-comments.nvim',
+    event = 'VeryLazy',
+    opts = {},
+    enabled = vim.fn.has 'nvim-0.10' == 1,
   },
   {
     'NStefan002/2048.nvim',
