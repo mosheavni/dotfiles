@@ -7,18 +7,14 @@ map({ 'n', 'x' }, 'k', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = true, 
 map({ 'n', 'x' }, '<Up>', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = true, silent = true })
 
 -- Select all file visually
-map('n', '<leader>sa', 'ggVG', { remap = false })
-
--- Inner word movements
-map('o', '<c-w>', 'iw', { remap = false })
-map('n', 'v<c-w>', 'viw', { remap = false })
+map('n', '<leader>sa', 'ggVG', { remap = false, desc = 'Visually select entire buffer' })
 
 -- Map 0 to first non-blank character
-map('n', '0', '^', { remap = false })
-map('v', '0', '^', { remap = false })
+map('n', '0', '^', { remap = false, desc = 'Go to the first non-blank character' })
+map('v', '0', '^', { remap = false, desc = 'Go to the first non-blank character' })
 
 -- Move to the end of the line
-map('n', 'L', '$ze10zl', { remap = false })
+map('n', 'L', '$ze10zl', { remap = false, desc = 'Go to the end of the line and move view' })
 map('v', 'L', '$', { remap = false })
 map('n', 'H', '0zs10zh', { remap = false })
 map('v', 'H', '0', { remap = false })
@@ -26,10 +22,6 @@ map('v', 'H', '0', { remap = false })
 -- indent/unindent visual mode selection with tab/shift+tab
 map('v', '<tab>', '>gv')
 map('v', '<s-tab>', '<gv')
-
--- Indent by block
-vim.cmd [[let @i="v%koj>$"]]
-vim.cmd [[let @o="v%koj<$"]]
 
 -- command line mappings
 map('c', '<c-h>', '<left>')
@@ -96,9 +88,9 @@ end
 map('n', 'mt', _G.__surround_with_interpolation)
 
 -- Indent block
-map('n', '<leader>gt', function()
-  vim.cmd [[normal v%koj$>]]
-end)
+map('n', '<leader>gt', [[:normal v%koj$><cr>]])
+vim.cmd [[let @i="v%koj>$"]]
+vim.cmd [[let @o="v%koj<$"]]
 
 -- Format groovy map
 vim.cmd [=[
@@ -128,15 +120,15 @@ map('n', '<Leader><Leader>', '<C-^>', { remap = false, silent = true })
 map('n', '<tab>', '<c-w>w', { remap = false, silent = true })
 map('n', '<c-w><c-c>', '<c-w>c', { remap = false, silent = true })
 map('n', '<leader>bn', '<cmd>bn<cr>', { remap = false, silent = true, desc = 'Next buffer' })
-map('n', '<c-w>v', ':vnew<cr>', { remap = false, silent = true })
-map('n', '<c-w>s', ':new<cr>', { remap = false, silent = true })
-map('n', '<c-w>e', ':enew<cr>', { remap = false, silent = true })
+map('n', '<c-w>v', ':vnew<cr>', { remap = false, silent = true, desc = 'New buffer vertically split' })
+map('n', '<c-w>s', ':new<cr>', { remap = false, silent = true, desc = 'New buffer horizontally split' })
+map('n', '<c-w>e', ':enew<cr>', { remap = false, silent = true, desc = 'New empty buffer' })
 
 -- Move to window using the <ctrl> hjkl keys
-map('n', '<C-h>', '<C-w>h', { desc = 'Go to Left Window', remap = true })
-map('n', '<C-j>', '<C-w>j', { desc = 'Go to Lower Window', remap = true })
-map('n', '<C-k>', '<C-w>k', { desc = 'Go to Upper Window', remap = true })
-map('n', '<C-l>', '<C-w>l', { desc = 'Go to Right Window', remap = true })
+map('n', '<C-h>', '<C-w>h', { remap = true, desc = 'Go to Left Window' })
+map('n', '<C-j>', '<C-w>j', { remap = true, desc = 'Go to Lower Window' })
+map('n', '<C-k>', '<C-w>k', { remap = true, desc = 'Go to Upper Window' })
+map('n', '<C-l>', '<C-w>l', { remap = true, desc = 'Go to Right Window' })
 
 -- Resize window using <ctrl> arrow keys
 map('n', '<M-k>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' })
