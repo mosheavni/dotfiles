@@ -15,17 +15,17 @@ local actions = function()
       actions_pretty_print 'Created a work in progress commit.'
     end,
     ['Set upstream to HAED'] = function()
-      vim.cmd('G branch --set-upstream-to=origin/' .. vim.fn.FugitiveHead())
+      vim.cmd('Git branch --set-upstream-to=origin/' .. vim.fn.FugitiveHead())
     end,
     ['Blame'] = function()
-      vim.cmd 'G blame'
+      vim.cmd 'Git blame'
     end,
     ['Pull origin master (:Gpom)'] = function()
       vim.cmd 'Gpom'
       actions_pretty_print 'Pulled from origin master.'
     end,
     ['Revert last commit (soft)'] = function()
-      vim.cmd 'G reset --soft HEAD^'
+      vim.cmd 'Git reset --soft HEAD^'
       actions_pretty_print 'Reset to HEAD^'
     end,
     ['Pull origin {branch}'] = function()
@@ -34,7 +34,7 @@ local actions = function()
           actions_pretty_print 'Canceled.'
           return
         end
-        vim.cmd('G pull origin ' .. branch_to_pull)
+        vim.cmd('Git pull origin ' .. branch_to_pull)
         actions_pretty_print('Pulled from origin ' .. branch_to_pull)
       end)
     end,
@@ -49,7 +49,7 @@ local actions = function()
       vim.cmd 'ToGithub'
     end,
     ['Log'] = function()
-      vim.cmd 'G log --all --decorate --oneline'
+      vim.cmd 'Git log --all --decorate --oneline'
     end,
     ['See all tags'] = function()
       local tags = vim.fn.FugitiveExecute('tag').stdout
@@ -68,10 +68,10 @@ local actions = function()
           actions_pretty_print 'Canceled.'
           return
         end
-        vim.cmd('G tag ' .. input)
+        vim.cmd('Git tag ' .. input)
         vim.ui.select({ 'Yes', 'No' }, { prompt = 'Push?' }, function(choice)
           if choice == 'Yes' then
-            vim.cmd 'G push --tags'
+            vim.cmd 'Git push --tags'
             actions_pretty_print('Tag ' .. input .. ' created and pushed.')
           else
             actions_pretty_print('Tag ' .. input .. ' created.')
@@ -88,11 +88,11 @@ local actions = function()
           return
         end
         actions_pretty_print('Deleting tag ' .. input .. ' locally...')
-        vim.cmd('G tag -d ' .. input)
+        vim.cmd('Git tag -d ' .. input)
         vim.ui.select({ 'Yes', 'No' }, { prompt = 'Remove from remote?' }, function(choice)
           if choice == 'Yes' then
             actions_pretty_print('Deleting tag ' .. input .. ' from remote...')
-            vim.cmd('G push origin :refs/tags/' .. input)
+            vim.cmd('Git push origin :refs/tags/' .. input)
             actions_pretty_print('Tag ' .. input .. ' deleted from local and remote.')
           else
             actions_pretty_print('Tag ' .. input .. ' deleted locally.')
@@ -118,10 +118,10 @@ local actions = function()
       vim.cmd.Gl()
     end,
     ['Add (Stage) All'] = function()
-      vim.cmd 'G add -A'
+      vim.cmd 'Git add -A'
     end,
     ['Unstage All'] = function()
-      vim.cmd 'G reset'
+      vim.cmd 'Git reset'
     end,
   }
 end
@@ -246,7 +246,7 @@ function! Enter_Wip_Moshe() abort
   let l:time_now = strftime('%c')
   let l:commit_message = l:random_emoji . ' work in progress ' . l:time_now
   echom "Committing: " . l:commit_message
-  exe "G commit --quiet -m '" . l:commit_message . "'"
+  exe "Git commit --quiet -m '" . l:commit_message . "'"
   exe 'Git push -u origin ' . FugitiveHead()
 endfunction
 
@@ -268,8 +268,8 @@ augroup moshe_fugitive
 augroup END
 
 " Git merge origin master
-command! -bang Gmom exe 'G merge origin/' . 'master'
-command! -bang Gpom exe 'G pull origin ' . 'master'
+command! -bang Gmom exe 'Git merge origin/' . 'master'
+command! -bang Gpom exe 'Git pull origin ' . 'master'
 
 function! ToggleGStatus()
   if buflisted(bufname('.git/'))
