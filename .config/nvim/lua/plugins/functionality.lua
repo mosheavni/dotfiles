@@ -60,6 +60,7 @@ local M = {
     },
     version = '1.*',
   },
+  { 'echasnovski/mini.splitjoin', version = false, opts = {} },
   {
     'danymat/neogen',
     dependencies = 'nvim-treesitter/nvim-treesitter',
