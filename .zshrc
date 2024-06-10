@@ -13,6 +13,7 @@ export PATH="$HOME/.bin:$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:${PATH}"
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/local/opt/postgresql@15/bin:$PATH"
+export XDG_CONFIG_HOME=${HOME}/.config
 
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="mosherussell"
