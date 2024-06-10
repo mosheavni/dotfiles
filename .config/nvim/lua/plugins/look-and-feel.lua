@@ -61,6 +61,10 @@ local M = {
       vim.cmd [[colorscheme tokyodark]]
     end,
   },
+
+  -----------
+  -- other --
+  -----------
   {
     'dstein64/vim-startuptime',
     cmd = 'Startup Time (:StartupTime)',
@@ -163,8 +167,16 @@ local M = {
     end,
   },
   {
-    'RRethy/vim-illuminate',
+    'echasnovski/mini.cursorword',
+    version = false,
     event = 'BufReadPost',
+    config = function()
+      require('mini.cursorword').setup {}
+      vim.cmd [[
+        highlight clear CursorWord
+        highlight CurrentWord gui=underline,bold cterm=underline,bold
+      ]]
+    end,
   },
   {
     'nvim-tree/nvim-web-devicons',
