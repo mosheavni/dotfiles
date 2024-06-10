@@ -3,10 +3,6 @@ local actions = function()
     ['Incremental Selection (vn)'] = function()
       vim.fn.feedkeys 'vn'
     end,
-
-    ['Smart Rename Symbol (grr)'] = function()
-      vim.fn.feedkeys 'grr'
-    end,
   }
 end
 local M = {
@@ -133,7 +129,7 @@ M.opts = {
   refactor = {
     highlight_current_scope = { enable = false },
     smart_rename = {
-      enable = true,
+      enable = false,
       keymaps = {
         smart_rename = 'grr',
       },
