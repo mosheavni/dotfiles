@@ -128,8 +128,8 @@ local M = {
 }
 
 M.keys = {
-  { '<leader>v', ':lua require("nvim-tree.api").tree.find_file { open = true, focus = true }<cr>' },
-  { '<c-o>', ':lua require("nvim-tree.api").tree.toggle()<cr>', silent = true },
+  { '<leader>v', ':lua require("nvim-tree.api").tree.find_file { open = true, focus = true }<cr>', silent = true, desc = 'Open Tree under current file' },
+  { '<c-o>', ':lua require("nvim-tree.api").tree.toggle()<cr>', silent = true, desc = 'Open Tree' },
 }
 
 M.config = function()
