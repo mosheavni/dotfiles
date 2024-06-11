@@ -89,10 +89,13 @@ M.config = function()
     native_menu = false,
     view = {
       entries = {
+        name = 'custom',
         follow_cursor = true,
+        selection_order = 'near_cursor',
       },
     },
     formatting = {
+      fields = { 'kind', 'abbr', 'menu' },
       format = function(entry, vim_item)
         local lspkind = require 'lspkind'
         local mode = 'symbol'
@@ -142,15 +145,10 @@ M.config = function()
         end
       end, { 'i', 's' }),
       ['<C-y>'] = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true },
-      ['<CR>'] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = false,
-      },
+      ['<CR>'] = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = false },
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
-          -- elseif luasnip.expand_or_jumpable() then
-          --   luasnip.expand_or_jump()
         elseif has_words_before() then
           cmp.complete()
         else
