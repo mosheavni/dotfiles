@@ -66,6 +66,11 @@ local M = {
   -- other --
   -----------
   {
+    'max397574/colortils.nvim',
+    cmd = 'Colortils',
+    opts = {},
+  },
+  {
     'dstein64/vim-startuptime',
     cmd = 'Startup Time (:StartupTime)',
     init = function()
