@@ -89,9 +89,7 @@ M.config = function()
     native_menu = false,
     view = {
       entries = {
-        name = 'custom',
         follow_cursor = true,
-        selection_order = 'near_cursor',
       },
     },
     formatting = {
