@@ -207,21 +207,25 @@ M.config = function()
     cond = conditions.is_yaml_ft,
   }
 
+  ins_left {
+    function()
+      local bar = require('lspsaga.symbol.winbar').get_bar()
+      return bar and bar or ''
+    end,
+    -- cond = conditions.buffer_not_empty,
+    color = { fg = colors.aqua, gui = 'bold' },
+  }
+
   --------------------
   -- Center Section --
   --------------------
   -- Insert mid section. You can make any number of sections in neovim :)
   -- for lualine it's any number greater then 2
-  ins_left {
-    function()
-      return '%='
-    end,
-  }
-  ins_left {
-    'filename',
-    cond = conditions.buffer_not_empty,
-    color = { fg = colors.aqua, gui = 'bold' },
-  }
+  -- ins_left {
+  --   function()
+  --     return '%='
+  --   end,
+  -- }
 
   -------------------
   -- Right Section --
