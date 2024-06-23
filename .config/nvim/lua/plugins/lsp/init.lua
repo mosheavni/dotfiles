@@ -42,7 +42,7 @@ M.dependencies = {
   },
   {
     'ramilito/winbar.nvim',
-    event = 'VimEnter', -- Alternatively, BufReadPre if we don't care about the empty file when starting with 'nvim'
+    event = 'BufReadPre',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {
       -- your configuration comes here, for example:
@@ -52,6 +52,7 @@ M.dependencies = {
       -- buf_modified_symbol = '[+]',
       -- or use an icon
       buf_modified_symbol = '●',
+      dir_levels = 2,
       dim_inactive = {
         enabled = false,
         highlight = 'WinbarNC',
