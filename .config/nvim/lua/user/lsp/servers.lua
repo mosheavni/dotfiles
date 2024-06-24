@@ -202,7 +202,6 @@ M.setup = function()
         },
       },
     }),
-    cmd = { 'node', vim.fn.expand '~/Repos/yaml-language-server/out/server/src/server.js', '--stdio' },
     settings = {
       yaml = {
         schemas = vim.tbl_deep_extend('force', require('schemastore').yaml.schemas(), {

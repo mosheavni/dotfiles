@@ -242,9 +242,9 @@ M.config = function()
       for _, client in ipairs(clients) do
         table.insert(all_client_names, client.name)
       end
-      return table.concat(all_client_names, ', ')
+      return 'LSP: ' .. table.concat(all_client_names, ', ')
     end,
-    icon = { ' LSP:', color = { fg = colors.green } },
+    icon = { ' ', color = { fg = colors.green } },
     color = { fg = '#ffffff' },
   }
   ins_right {
