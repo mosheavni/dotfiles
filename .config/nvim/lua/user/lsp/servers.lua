@@ -216,21 +216,25 @@ M.setup = function()
     },
   }
 
+  local all_schemas = vim.tbl_extend('force', {
+    {
+      name = 'Kubernetes 1.27.12',
+      uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.27.12-standalone-strict/all.json',
+    },
+    {
+      name = 'Kubernetes 1.26.14',
+      uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.26.14-standalone-strict/all.json',
+    },
+  },
+    -- require('schemastore').json.schemas(),
+    require('user.additional-schemas').crds_as_schemas())
+
   local yaml_cfg = require('yaml-companion').setup {
     builtin_matchers = {
       -- Detects Kubernetes files based on content
       kubernetes = { enabled = true },
     },
-    schemas = vim.tbl_extend('force', {
-      {
-        name = 'Kubernetes 1.27.12',
-        uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.27.12-standalone-strict/all.json',
-      },
-      {
-        name = 'Kubernetes 1.26.14',
-        uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.26.14-standalone-strict/all.json',
-      },
-    }, require('user.additional-schemas').crds_as_schemas(), require('schemastore').json.schemas()),
+    schemas = all_schemas,
     lspconfig = yaml_lspconfig,
   }
   require('lspconfig')['yamlls'].setup(yaml_cfg)
