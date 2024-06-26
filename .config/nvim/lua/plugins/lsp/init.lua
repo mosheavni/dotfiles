@@ -32,24 +32,6 @@ M.dependencies = {
     },
   },
   {
-    'ramilito/winbar.nvim',
-    event = 'BufReadPre',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    opts = {
-      icons = true,
-      diagnostics = false,
-      buf_modified = true,
-      buf_modified_symbol = '●',
-      dir_levels = 2,
-      dim_inactive = {
-        enabled = false,
-        highlight = 'WinbarNC',
-        icons = true, -- whether to dim the icons
-        name = true, -- whether to dim the name
-      },
-    },
-  },
-  {
     'nvimdev/lspsaga.nvim',
     opts = {
       finder = {
@@ -73,7 +55,7 @@ M.dependencies = {
       },
       symbol_in_winbar = {
         show_file = false,
-        enable = false,
+        enable = true,
         hide_keyword = false,
       },
       outline = {
