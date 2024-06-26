@@ -13,8 +13,6 @@ local default_on_attach = function(client, bufnr)
   -----------------------
   -- Plugins on-attach --
   -----------------------
-  local basics = require 'lsp_basics'
-  basics.make_lsp_commands(client, bufnr)
   require('user.lsp.formatting').setup(client, bufnr)
 
   ------------------

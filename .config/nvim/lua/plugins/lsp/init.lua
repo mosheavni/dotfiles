@@ -27,7 +27,6 @@ M.dependencies = {
     },
   },
   'williamboman/mason-lspconfig.nvim',
-  'nanotee/nvim-lsp-basics',
   {
     'j-hui/fidget.nvim',
     config = function()
