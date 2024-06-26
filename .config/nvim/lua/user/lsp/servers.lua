@@ -204,9 +204,7 @@ M.setup = function()
     }),
     settings = {
       yaml = {
-        schemas = vim.tbl_deep_extend('force', require('schemastore').yaml.schemas(), {
-          kubernetes = '/*',
-        }),
+        schemas = require('schemastore').yaml.schemas(),
         schemaStore = {
           -- Must disable built-in schemaStore support to use
           -- schemas from SchemaStore.nvim plugin
@@ -223,7 +221,7 @@ M.setup = function()
       -- Detects Kubernetes files based on content
       kubernetes = { enabled = true },
     },
-    schemas = {
+    schemas = vim.tbl_extend('force', {
       {
         name = 'Kubernetes 1.27.12',
         uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.27.12-standalone-strict/all.json',
@@ -232,7 +230,7 @@ M.setup = function()
         name = 'Kubernetes 1.26.14',
         uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.26.14-standalone-strict/all.json',
       },
-    },
+    }, require('user.additional-schemas').crds_as_schemas(), require('schemastore').json.schemas()),
     lspconfig = yaml_lspconfig,
   }
   require('lspconfig')['yamlls'].setup(yaml_cfg)

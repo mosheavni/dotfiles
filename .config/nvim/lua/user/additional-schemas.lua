@@ -23,6 +23,20 @@ M.list_github_tree = function()
   return trees
 end
 
+M.crds_as_schemas = function()
+  local all_crds = M.list_github_tree()
+  local schemas = {}
+  for _, crd in ipairs(all_crds) do
+    local crd_name = crd:match '(.+)%..+$'
+    local schema_url = {
+      uri = M.schema_url .. '/' .. crd,
+      name = crd_name,
+    }
+    table.insert(schemas, schema_url)
+  end
+  return schemas
+end
+
 M.init = function()
   local all_crds = M.list_github_tree()
   vim.ui.select(all_crds, { prompt = 'Select schema: ' }, function(selection)
