@@ -27,7 +27,7 @@ M.crds_as_schemas = function()
   local all_crds = M.list_github_tree()
   local schemas = {}
   for _, crd in ipairs(all_crds) do
-    local crd_name = crd:match '(.+)%..+$'
+    local crd_name = '[datreeio] ' .. crd:gsub('%.json$', ''):gsub('/', '-'):gsub('_', '-')
     local schema_url = {
       uri = M.schema_url .. '/' .. crd,
       name = crd_name,

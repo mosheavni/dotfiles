@@ -216,7 +216,8 @@ M.setup = function()
     },
   }
 
-  local all_schemas = vim.tbl_extend('force', {
+  -- combine all schemas
+  local k8s_schemas = {
     {
       name = 'Kubernetes 1.27.12',
       uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.27.12-standalone-strict/all.json',
@@ -225,9 +226,13 @@ M.setup = function()
       name = 'Kubernetes 1.26.14',
       uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.26.14-standalone-strict/all.json',
     },
-  },
-    -- require('schemastore').json.schemas(),
-    require('user.additional-schemas').crds_as_schemas())
+  }
+
+  -- Merge the lists
+  local all_schemas = {}
+  vim.list_extend(all_schemas, k8s_schemas)
+  vim.list_extend(all_schemas, require('schemastore').json.schemas())
+  vim.list_extend(all_schemas, require('user.additional-schemas').crds_as_schemas())
 
   local yaml_cfg = require('yaml-companion').setup {
     builtin_matchers = {
