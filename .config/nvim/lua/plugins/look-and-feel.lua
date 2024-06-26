@@ -92,6 +92,7 @@ local M = {
         desc = 'Dismiss all notifications',
       },
     },
+    cmd = 'Notifications',
     init = function()
       ---@diagnostic disable-next-line: duplicate-set-field
       vim.notify = function(...)
