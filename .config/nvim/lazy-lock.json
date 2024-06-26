@@ -1,7 +1,7 @@
 {
   "2048.nvim": { "branch": "main", "commit": "aee7c41a9a9473117465132768ae4b4da97435c3" },
   "CursorLineCurrentWindow": { "branch": "master", "commit": "b4eeea98b0d139772969fd243a8802a9883fd2a8" },
-  "LuaSnip": { "branch": "master", "commit": "50fcf17db7c75af80e6b6109acfbfb4504768780" },
+  "LuaSnip": { "branch": "master", "commit": "ba3ea5bcfd969679f38fefb1bc801cd45524045b" },
   "ReplaceWithRegister": { "branch": "master", "commit": "832efc23111d19591d495dc72286de2fb0b09345" },
   "SchemaStore.nvim": { "branch": "main", "commit": "93ccaf12b9fb6df87d13da2782d83b34a3cbb893" },
   "ansible-snippets": { "branch": "master", "commit": "ceb5a528a36c41eb55cd58b79fe4954b94929c05" },
@@ -32,7 +32,7 @@
   "indent-blankline.nvim": { "branch": "master", "commit": "4288ce8128a52650e401dda42fd7651a6038f262" },
   "iswap.nvim": { "branch": "master", "commit": "e02cc91f2a8feb5c5a595767d208c54b6e3258ec" },
   "jsonpath.nvim": { "branch": "main", "commit": "ea7e07e935f3f95deda97f9f6dc87f7bcf3fb69a" },
-  "lazy.nvim": { "branch": "main", "commit": "aa1c9572aa1916e582f9b9c3d43e272b4f23b326" },
+  "lazy.nvim": { "branch": "main", "commit": "20af3fcc4ef2fef0cb4021543c70410567fcf9aa" },
   "leap.nvim": { "branch": "main", "commit": "eca8108dcd5f41fbde2a674dceb58b81ed887dc8" },
   "linediff.vim": { "branch": "main", "commit": "ddae71ef5f94775d101c1c70032ebe8799f32745" },
   "lspkind-nvim": { "branch": "master", "commit": "1735dd5a5054c1fb7feaf8e8658dbab925f4f0cf" },
@@ -57,7 +57,7 @@
   "nvim-cmp": { "branch": "main", "commit": "a110e12d0b58eefcf5b771f533fc2cf3050680ac" },
   "nvim-colorizer.lua": { "branch": "master", "commit": "85855b38011114929f4058efc97af1059ab3e41d" },
   "nvim-dap": { "branch": "master", "commit": "6f79b822997f2e8a789c6034e147d42bc6706770" },
-  "nvim-dap-python": { "branch": "master", "commit": "ae0225d0d4a46e18e6057ab3701ef87bbbd6aaad" },
+  "nvim-dap-python": { "branch": "master", "commit": "d777c2b32ed39f61209c09bede28d7491621a631" },
   "nvim-dap-ui": { "branch": "master", "commit": "b7267003ba4dd860350be86f75b9d9ea287cedca" },
   "nvim-dap-virtual-text": { "branch": "master", "commit": "d7c695ea39542f6da94ee4d66176f5d660ab0a77" },
   "nvim-dap-vscode-js": { "branch": "main", "commit": "03bd29672d7fab5e515fc8469b7d07cc5994bbf6" },
@@ -111,7 +111,7 @@
   "vim-to-github": { "branch": "master", "commit": "9193b1497262e5a4fccdf62028940a72fc1f2aa5" },
   "winbar.nvim": { "branch": "main", "commit": "7fce9b170216fe2a03d00ff948d6550f21824962" },
   "winresizer": { "branch": "master", "commit": "9bd559a03ccec98a458e60c705547119eb5350f3" },
-  "yaml-companion.nvim": { "branch": "main", "commit": "52225d934fda804ade76b33968120e4095644bc1" },
+  "yaml-companion.nvim": { "branch": "main", "commit": "bae2337af1ac4cbf29b16ebf0d5242cbbb40a147" },
   "yaml.nvim": { "branch": "main", "commit": "77aa8812e652acc44ae16fd1dbeb5a952db937e0" },
   "yanky.nvim": { "branch": "main", "commit": "73215b77d22ebb179cef98e7e1235825431d10e4" }
 }
