@@ -5,17 +5,11 @@ local M = {
   {
     'folke/trouble.nvim',
     opts = {},
-    cmd = 'TroubleToggle',
+    cmd = 'Trouble',
   },
   {
     'sam4llis/nvim-lua-gf',
     ft = 'lua',
-  },
-  {
-    'asdf.nvim',
-    enabled = false,
-    dir = '~/Repos/asdf.nvim',
-    opts = {},
   },
   {
     'folke/ts-comments.nvim',

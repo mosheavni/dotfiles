@@ -1,11 +1,6 @@
 local M = {
   'neovim/nvim-lspconfig',
   event = { 'BufReadPre', 'BufNewFile' },
-  opts = {
-    setup = {
-      docker_compose_language_service = function() end,
-    },
-  },
 }
 
 M.init = require('user.lsp.config').init
@@ -14,7 +9,6 @@ M.config = require('user.lsp.config').setup
 
 M.dependencies = {
   'nvimtools/none-ls.nvim',
-  'folke/lsp-colors.nvim',
   {
     'williamboman/mason.nvim',
     cmd = 'Mason',
@@ -29,27 +23,22 @@ M.dependencies = {
   'williamboman/mason-lspconfig.nvim',
   {
     'j-hui/fidget.nvim',
-    config = function()
-      require('fidget').setup {
-        progress = {
-          display = {
-            progress_icon = { pattern = 'moon', period = 1 },
-          },
+    opts = {
+      progress = {
+        display = {
+          progress_icon = { pattern = 'moon', period = 1 },
         },
-      }
-    end,
+      },
+    },
   },
   {
     'ramilito/winbar.nvim',
     event = 'BufReadPre',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {
-      -- your configuration comes here, for example:
       icons = true,
       diagnostics = false,
       buf_modified = true,
-      -- buf_modified_symbol = '[+]',
-      -- or use an icon
       buf_modified_symbol = '●',
       dir_levels = 2,
       dim_inactive = {
