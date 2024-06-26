@@ -84,8 +84,6 @@ plugins=(
 # ============= #
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 fpath+=/opt/homebrew/share/zsh/site-functions
-# fpath+=$(brew --prefix)/share/zsh/site-functions
-# fpath+=$(asdf where kubectx)/completion
 
 # ============= #
 #  Autoloaders  #
