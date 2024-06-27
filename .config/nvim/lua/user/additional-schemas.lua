@@ -1,4 +1,3 @@
-local curl = require 'plenary.curl'
 local M = {
   schemas_catalog = 'datreeio/CRDs-catalog',
   schema_catalog_branch = 'main',
@@ -8,12 +7,22 @@ local M = {
     ['X-GitHub-Api-Version'] = '2022-11-28',
   },
 }
+
 M.schema_url = 'https://raw.githubusercontent.com/' .. M.schemas_catalog .. '/' .. M.schema_catalog_branch
+
+M.headers_in_curl_format = function()
+  local headers = {}
+  for key, value in pairs(M.github_headers) do
+    table.insert(headers, '-H')
+    table.insert(headers, key .. ': ' .. value)
+  end
+  return table.concat(headers, ' ')
+end
 
 M.list_github_tree = function()
   local url = M.github_base_api_url .. '/' .. M.schemas_catalog .. '/git/trees/' .. M.schema_catalog_branch
-  local response = curl.get(url, { headers = M.github_headers, query = { recursive = 1 } })
-  local body = vim.fn.json_decode(response.body)
+  local response = vim.fn.systemlist { 'curl', '--location', '--silent', '--fail', M.headers_in_curl_format(), url .. '?recursive=1' }
+  local body = vim.fn.json_decode(response)
   local trees = {}
   for _, tree in ipairs(body.tree) do
     if tree.type == 'blob' and tree.path:match '%.json$' then
@@ -23,10 +32,11 @@ M.list_github_tree = function()
   return trees
 end
 
+M.all_crds = M.list_github_tree()
+
 M.crds_as_schemas = function()
-  local all_crds = M.list_github_tree()
   local schemas = {}
-  for _, crd in ipairs(all_crds) do
+  for _, crd in ipairs(M.all_crds) do
     local crd_name = '[datreeio] ' .. crd:gsub('%.json$', ''):gsub('/', '-'):gsub('_', '-')
     local schema_url = {
       uri = M.schema_url .. '/' .. crd,
@@ -38,8 +48,7 @@ M.crds_as_schemas = function()
 end
 
 M.init = function()
-  local all_crds = M.list_github_tree()
-  vim.ui.select(all_crds, { prompt = 'Select schema: ' }, function(selection)
+  vim.ui.select(M.all_crds, { prompt = 'Select schema: ' }, function(selection)
     if not selection then
       require('user.utils').pretty_print 'Canceled.'
       return
@@ -50,4 +59,5 @@ M.init = function()
     vim.notify('Added schema modeline: ' .. schema_modeline)
   end)
 end
+
 return M
