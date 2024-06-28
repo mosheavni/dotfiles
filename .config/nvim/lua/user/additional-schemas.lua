@@ -10,18 +10,15 @@ local M = {
 
 M.schema_url = 'https://raw.githubusercontent.com/' .. M.schemas_catalog .. '/' .. M.schema_catalog_branch
 
-M.headers_in_curl_format = function()
-  local headers = {}
-  for key, value in pairs(M.github_headers) do
-    table.insert(headers, '-H')
-    table.insert(headers, key .. ': ' .. value)
-  end
-  return table.concat(headers, ' ')
-end
-
 M.list_github_tree = function()
   local url = M.github_base_api_url .. '/' .. M.schemas_catalog .. '/git/trees/' .. M.schema_catalog_branch
-  local response = vim.fn.systemlist { 'curl', '--location', '--silent', '--fail', M.headers_in_curl_format(), url .. '?recursive=1' }
+  local headers_in_curl_format = {}
+  for key, value in pairs(M.github_headers) do
+    table.insert(headers_in_curl_format, '-H')
+    table.insert(headers_in_curl_format, key .. ': ' .. value)
+  end
+  local cmd = vim.iter({ 'curl', '--location', '--silent', '--fail', headers_in_curl_format, url .. '?recursive=1' }):flatten():totable()
+  local response = vim.fn.systemlist(cmd)
   local body = vim.fn.json_decode(response)
   local trees = {}
   for _, tree in ipairs(body.tree) do
