@@ -90,6 +90,7 @@ fpath+=/opt/homebrew/share/zsh/site-functions
 # ============= #
 source $ZSH/oh-my-zsh.sh
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
+export FZF_DEFAULT_OPTS='--color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
 export FZF_CTRL_T_COMMAND='rg --color=never --files --hidden --follow -g "!.git"'
 export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,changes {}"'
 
