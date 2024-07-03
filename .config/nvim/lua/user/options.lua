@@ -145,6 +145,8 @@ vim.o.expandtab = true -- Tab changes to spaces. Format with :retab
 vim.opt.indentkeys:remove '0#'
 vim.opt.indentkeys:remove '<:>'
 
+vim.api.nvim_set_hl(0, 'WinSeparator', { fg = '#797D7D', bg = '#323232' })
+
 local kube_config_pattern = [[.*\.kube/config]]
 vim.filetype.add {
   extension = { tfvars = 'terraform' },
