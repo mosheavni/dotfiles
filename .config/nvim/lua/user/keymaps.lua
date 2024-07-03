@@ -287,7 +287,8 @@ map('v', '<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>
 map('v', '<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], { remap = false, desc = 'Yank all...', silent = true })
 
 -- print lua value of visual selection using ex-command :=
-map('v', '<leader>x', [["hy:=<c-r>h<cr>]], { silent = true })
+map('v', '<leader>xx', [["hy:lua <c-r>h<cr>]], { silent = true })
+map('v', '<leader>x=', [["hy:=<c-r>h<cr>]], { silent = true })
 
 -- Base64 dencode
 map('v', '<leader>64', [[c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>]], { remap = false, silent = true, desc = 'Base64 encode' })
