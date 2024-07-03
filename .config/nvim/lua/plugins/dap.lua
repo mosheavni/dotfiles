@@ -65,6 +65,7 @@ M.keys = {
   { '<F5>', '<cmd>lua require("dap").continue()<cr>' },
   { '<leader>bp', '<cmd>lua require("dap").toggle_breakpoint()<cr>' },
 }
+
 M.config = function()
   local cmp = require 'cmp'
   local mason_nvim_dap = require 'mason-nvim-dap'
@@ -109,7 +110,6 @@ M.config = function()
   end)
 
   -- Python
-  require('dap-python').setup '/usr/local/bin/python3'
   require('dap-python').setup(vim.fn.stdpath 'data' .. '/mason/packages/debugpy/venv/bin/python3')
 
   table.insert(dap.configurations.python, {
