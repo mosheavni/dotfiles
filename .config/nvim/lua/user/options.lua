@@ -20,7 +20,7 @@ vim.opt.listchars = {
 
 -- set lcscope=tab:┆·,trail:·,precedes:,extends:
 vim.opt.fillchars = {
-  vert = '|',
+  vert = '│',
   fold = ' ',
   foldopen = '',
   foldclose = '',
