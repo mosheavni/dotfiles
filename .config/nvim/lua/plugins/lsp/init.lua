@@ -78,7 +78,11 @@ M.dependencies = {
 }
 
 local language_specific_plugins = {
-  { 'mfussenegger/nvim-jdtls', ft = 'java' },
+  {
+    'nvim-java/nvim-java',
+    ft = 'java',
+    lazy = true,
+  },
   {
     'jose-elias-alvarez/typescript.nvim',
     ft = { 'typescript', 'typescriptreact', 'typescript.tsx', 'javascript' },

@@ -154,11 +154,20 @@ M.setup = function()
     capabilities = capabilities,
   }
 
+  require('java').setup {
+    root_markers = {
+      'settings.gradle',
+      'settings.gradle.kts',
+      'pom.xml',
+      'build.gradle',
+      'mvnw',
+      'gradlew',
+      'build.gradle',
+      'build.gradle.kts',
+    },
+  }
   require('lspconfig')['jdtls'].setup {
-    on_attach = function(c, b)
-      require('jdtls').setup_dap()
-      default_on_attach(c, b)
-    end,
+    on_attach = default_on_attach,
     capabilities = capabilities,
     settings = {
       filetypes = { 'kotlin', 'java' },
