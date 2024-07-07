@@ -28,7 +28,7 @@ local M = {
         let g:sonokai_transparent_background = 1
         colorscheme sonokai
       ]]
-      vim.api.nvim_set_hl(0, 'WinSeparator', { fg = '#797D7D', bg = '#323232' })
+      vim.api.nvim_set_hl(0, 'WinSeparator', { fg = '#797D7D' })
       require('user.menu').add_actions('Colorscheme', {
         ['Toggle Sonokai Style'] = function()
           local styles = { 'default', 'atlantis', 'andromeda', 'shusia', 'maia', 'espresso' }
