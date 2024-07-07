@@ -147,9 +147,7 @@ local M = {
   },
   {
     'max397574/better-escape.nvim',
-    opts = {
-      mapping = { 'jk' },
-    },
+    opts = {},
     event = 'InsertEnter',
   },
   {
