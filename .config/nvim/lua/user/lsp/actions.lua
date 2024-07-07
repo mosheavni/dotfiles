@@ -22,8 +22,11 @@ M.actions = function()
     ['Show Implementation (gi)'] = function()
       vim.lsp.buf.implementation()
     end,
-    ['Find References (gr)'] = function()
+    ['Find References - lspsaga (grR)'] = function()
       vim.cmd 'Lspsaga finder'
+    end,
+    ['Find References (grr)'] = function()
+      vim.lsp.buf.references { includeDeclaration = false }
     end,
     ['Signature Help (<leader>lk)'] = function()
       vim.lsp.buf.signature_help()
