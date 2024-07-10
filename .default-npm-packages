@@ -1,11 +1,7 @@
-@fsouza/prettierd
-@johnnymorganz/stylua-bin
 compare-versions
 eslint
 eslint-config-react-app
 neovim
 npm
-prettier
-semver
 typescript
 yarn
