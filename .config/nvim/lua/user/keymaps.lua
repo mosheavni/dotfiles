@@ -88,9 +88,15 @@ end
 map('n', 'mt', _G.__surround_with_interpolation)
 
 -- Indent block
-map('n', '<leader>gt', [[:normal v%koj$><cr>]])
-vim.cmd [[let @i="v%koj>$"]]
-vim.cmd [[let @o="v%koj<$"]]
+vim.cmd[[
+function! g:__align_based_on_indent(_)
+  normal v%koj$>
+endfunction
+]]
+map('n', '<leader>gt', function()
+  vim.go.operatorfunc = '__align_based_on_indent'
+  return 'g@l'
+end, { expr = true })
 
 -- Format groovy map
 vim.cmd [=[
@@ -166,8 +172,20 @@ map('n', '[b', ':bprev<cr>', { remap = false, silent = true })
 map('n', '<leader>=', 'yypVr=', { remap = false })
 
 -- Map dp and dg with leader for diffput and diffget
-map('n', '<leader>dp', ':diffput<cr>', { remap = false, silent = true })
-map('n', '<leader>dg', ':diffget<cr>', { remap = false, silent = true })
+_G.__diffput = function()
+  vim.cmd [[diffput]]
+end
+map('n', '<leader>dp', function()
+  vim.go.operatorfunc = 'v:lua.__diffput'
+  return 'g@l'
+end, { expr = true })
+_G.__diffget = function()
+  vim.cmd [[diffget]]
+end
+map('n', '<leader>dg', function()
+  vim.go.operatorfunc = 'v:lua.__diffget'
+  return 'g@l'
+end, { expr = true })
 map('n', '<leader>dn', ':windo diffthis<cr>', { remap = false, silent = true })
 map('n', '<leader>df', ':windo diffoff<cr>', { remap = false, silent = true })
 
