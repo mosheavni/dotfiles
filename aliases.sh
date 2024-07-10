@@ -130,7 +130,9 @@ function argocd_web () {
 
   # port forward
   if [[ -n $1 ]] && [[ $1 == "-f" ]];then
+    set -x
     kubectl port-forward -n argocd svc/argocd-server 8080:443 & CMDPID=$!
+    set +x
     ingress_host="http://localhost:8080"
     echo "waiting for port-forward to start"
     while ! lsof -nP -iTCP:8080 | grep LISTEN;do
