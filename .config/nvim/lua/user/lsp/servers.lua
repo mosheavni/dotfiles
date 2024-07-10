@@ -104,6 +104,7 @@ M.setup = function()
       require('treesitter-terraform-doc').setup {}
       default_on_attach(c, b)
       c.server_capabilities.semanticTokensProvider = {}
+      vim.o.commentstring = '# %s'
     end,
     capabilities = capabilities,
   }
@@ -192,6 +193,7 @@ M.setup = function()
   }
 
   local yaml_lspconfig = {
+    cmd = { '/opt/homebrew/bin/yaml-language-server', '--stdio' },
     on_attach = function(c, b)
       local filetype = vim.api.nvim_get_option_value('filetype', { buf = b })
       local buftype = vim.api.nvim_get_option_value('buftype', { buf = b })
