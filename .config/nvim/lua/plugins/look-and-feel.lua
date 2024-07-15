@@ -219,6 +219,23 @@ local M = {
     end,
     event = 'BufReadPost',
   },
+  {
+    'echasnovski/mini.hipatterns',
+    version = false,
+    config = function()
+      local hipatterns = require 'mini.hipatterns'
+      hipatterns.setup {
+        highlighters = {
+          -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+          hiri = { pattern = '%f[%w]()hiri()%f[%W]', group = 'MiniHipatternsFixme' },
+          todo = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsNote' },
+
+          -- Highlight hex color strings (`#rrggbb`) using that color
+          hex_color = hipatterns.gen_highlighter.hex_color(),
+        },
+      }
+    end,
+  },
 }
 
 return M
