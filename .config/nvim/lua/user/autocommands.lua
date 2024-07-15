@@ -176,12 +176,14 @@ autocmd({ 'FileType' }, {
     end, { buffer = true })
 
     local function remove_qf_item()
-      local curqfidx = vim.fn.line '.'
-      local qfall = vim.fn.getqflist()
-      table.remove(qfall, curqfidx)
-      vim.fn.setqflist(qfall, 'r')
-      vim.cmd(curqfidx + 1 .. 'cfirst')
-      vim.cmd 'copen'
+      local qf_list = vim.fn.getqflist()
+      if #qf_list > 0 then
+        local curqfidx = vim.fn.line '.'
+        table.remove(qf_list, curqfidx)
+        vim.fn.setqflist(qf_list, 'r')
+        vim.cmd(curqfidx .. 'cfirst')
+        vim.cmd 'copen'
+      end
     end
     vim.api.nvim_create_user_command('RemoveQFItem', remove_qf_item, {})
     vim.keymap.set('n', 'dd', '<CMD>RemoveQFItem<CR>', { remap = false, buffer = true })
