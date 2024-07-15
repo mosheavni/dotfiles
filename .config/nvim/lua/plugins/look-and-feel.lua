@@ -222,6 +222,7 @@ local M = {
   {
     'echasnovski/mini.hipatterns',
     version = false,
+    event = { 'BufNewFile', 'BufReadPre', 'VeryLazy' },
     config = function()
       local hipatterns = require 'mini.hipatterns'
       hipatterns.setup {
