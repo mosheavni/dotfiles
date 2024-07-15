@@ -76,6 +76,7 @@ M.config = function()
     nvim_lsp = '[LSP]',
     nvim_lua = '[Vim]',
     path = '[Path]',
+    calc = '[Calc]',
     ['vim-dadbod-completion'] = '[DB]',
   }
   local custom_kinds = {
