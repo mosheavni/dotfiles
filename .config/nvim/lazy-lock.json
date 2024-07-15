@@ -46,6 +46,7 @@
   "mason.nvim": { "branch": "main", "commit": "f96a31855fa8aea55599cea412fe611b85a874ed" },
   "mini.cursorword": { "branch": "main", "commit": "7a9f1ec73c52124abc39f0309d332ababefc68b2" },
   "mini.diff": { "branch": "main", "commit": "d58f9cb13400aedc5b5a0ef70fcdf31871ba2ee6" },
+  "mini.hipatterns": { "branch": "main", "commit": "aa68eb143ce77a57b6416fb4bd71ee0adba5a517" },
   "mini.indentscope": { "branch": "main", "commit": "1222393d9c5e8d92b913ccab6701a7164b21781c" },
   "mini.splitjoin": { "branch": "main", "commit": "3e92f6764e770ba392325cad3a4497adcada695f" },
   "neodev.nvim": { "branch": "main", "commit": "46aa467dca16cf3dfe27098042402066d2ae242d" },
