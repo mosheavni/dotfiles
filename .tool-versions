@@ -1,7 +1,7 @@
 ag 2.2.0
 argocd 2.9.2
 aws-sso-cli 1.9.9
-awscli 2.15.48
+awscli 2.17.13
 fd 9.0.0
 golang 1.21.3
 helm 3.14.4
