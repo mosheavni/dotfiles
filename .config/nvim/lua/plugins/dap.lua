@@ -53,7 +53,7 @@ local M = {
   dependencies = {
     'nvim-neotest/nvim-nio',
     'rcarriga/nvim-dap-ui',
-    'mfussenegger/nvim-dap-python',
+    { 'mfussenegger/nvim-dap-python', lazy = true },
     'rcarriga/cmp-dap',
     'mxsdev/nvim-dap-vscode-js',
     'theHamsta/nvim-dap-virtual-text',
