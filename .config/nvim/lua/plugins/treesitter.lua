@@ -18,6 +18,7 @@ local M = {
     {
       'windwp/nvim-ts-autotag',
       ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml' },
+      opts = {},
     },
     'RRethy/nvim-treesitter-endwise',
   },
@@ -77,9 +78,6 @@ M.opts = {
     enable = true,
   },
   endwise = {
-    enable = true,
-  },
-  autotag = {
     enable = true,
   },
   highlight = {
