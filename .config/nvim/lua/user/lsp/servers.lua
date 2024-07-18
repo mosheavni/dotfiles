@@ -6,11 +6,6 @@ M.setup = function()
   local configs = require 'lspconfig.configs'
   local util = require 'lspconfig.util'
 
-  require('lspconfig')['ansiblels'].setup {
-    on_attach = default_on_attach,
-    capabilities = capabilities,
-  }
-
   require('lspconfig')['bashls'].setup {
     on_attach = default_on_attach,
     capabilities = capabilities,

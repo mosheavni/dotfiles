@@ -46,13 +46,6 @@ local M = {
         end)
       end,
     },
-    {
-      'phenomenes/ansible-snippets',
-      ft = { 'ansible', 'yaml.ansible' },
-      config = function()
-        vim.g['ansible_goto_role_paths'] = '.;,roles;'
-      end,
-    },
   },
 }
 
