@@ -69,8 +69,8 @@ main() {
       instance_details=$(aws ec2 describe-instances --instance-ids $instance_id)
     fi
     instance_name=$(jq -r '.Reservations[].Instances[].Tags[] | select(.Key == "Name").Value' <<<"$instance_details")
-    green "Instance ID: " "$instance_id"
     green "Instance Name: " "$instance_name"
+    green "Instance ID: " "$instance_id"
   fi
 
   if [[ $description == "ELB"* ]]; then
@@ -86,8 +86,17 @@ main() {
       fi
       dns_name=$(jq -r '.LoadBalancers[].DNSName' <<<"$elb_details")
       elb_name=$(jq -r '.LoadBalancers[].LoadBalancerName' <<<"$elb_details")
+      blue "Getting ELBv2 tags..."
+      if $debug; then
+        blue "using cache..."
+        alb_tags=$(<~/temp/investigate-aws-ip-cache/elbv2-tags.json)
+      else
+        alb_tags=$(aws elbv2 describe-tags --resource-arns "$elb_arn")
+      fi
+      alb_tags_formatted="$(jq -r '.TagDescriptions[].Tags[] | "\(.Key): \(.Value)"' <<<"$alb_tags" | sort | column -t)"
       green "ELBv2 Name: " "$elb_name"
       green "ELBv2 DNS Name: " "$dns_name"
+      green "ELBv2 Tags" "\n$alb_tags_formatted"
       blue "Getting ELBv2 listeners details..."
       if $debug; then
         blue "using cache..."
@@ -99,8 +108,8 @@ main() {
       port=$(jq -r '.Listeners[].Port' <<<"$listeners" | fzf \
         --prompt 'Select listener> ')
       listener_arn=$(jq -r '.Listeners[] | select(.Port == '$port').ListenerArn' <<<"$listeners")
-      green 'Listener Port: ' "$port"
-      green 'Listener ARN: ' "$listener_arn"
+      green "Listener Port: " "$port"
+      green "Listener ARN: " "$listener_arn"
       blue "Getting ELBv2 listeners rules details..."
       if $debug; then
         blue "using cache..."
@@ -167,14 +176,22 @@ main() {
       fi
       dns_name=$(jq -r '.LoadBalancerDescriptions[].DNSName' <<<"$elb_details")
       healthcheck=$(jq -r '.LoadBalancerDescriptions[].HealthCheck.Target' <<<"$elb_details" | cut -d: -f2-)
+      blue "Getting ELB tags..."
+      if $debug; then
+        blue "using cache..."
+        elb_tags=$(<~/temp/investigate-aws-ip-cache/elb-tags.json)
+      else
+        elb_tags=$(aws elb describe-tags --load-balancer-names "$elb_name")
+      fi
+      elb_tags_formatted="$(jq -r '.TagDescriptions[].Tags[] | "\(.Key): \(.Value)"' <<<"$elb_tags" | sort | column -t)"
       green "ELB Name: " "$elb_name"
       green "ELB DNS Name: " "$dns_name"
+      green "ELB Tags" "\n$elb_tags_formatted"
       useful_links+=("ELB: https://${account_region}.console.aws.amazon.com/ec2/home?region=${account_region}#LoadBalancer:loadBalancerArn=$elb_name;tab=listeners")
       useful_links+=("Healthcheck: curl -L -v http://${dns_name}:${healthcheck}")
     fi
   fi
-  green "Useful links"
-  printf "%s\n" "${useful_links[@]}"
+  green "Useful links" "$(printf "\n%s" "${useful_links[@]}")"
 }
 
 main
