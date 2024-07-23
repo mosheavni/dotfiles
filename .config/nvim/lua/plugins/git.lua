@@ -250,6 +250,14 @@ function! Enter_Wip_Moshe() abort
   exe 'Git push -u origin ' . FugitiveHead()
 endfunction
 
+function! First_Commit_Moshe() abort
+  let l:head = FugitiveHead()
+  echom "Committing: " . l:head
+  execute "Git commit --quiet -m " . l:head
+  Gp
+  silent! !cpr
+endfunction
+
 " Autocmd
 function! s:ftplugin_fugitive() abort
   " resize 20
@@ -257,8 +265,10 @@ function! s:ftplugin_fugitive() abort
   nnoremap <buffer> <silent> cc :Git commit --quiet<CR>
   nnoremap <buffer> <silent> gl :Gl<CR>
   nnoremap <buffer> <silent> gp :Gp<CR>
+  nnoremap <buffer> <silent> gf :Git fetch --all --tags<CR>
   nnoremap <buffer> <silent> pr :silent! !cpr<CR>
   nnoremap <buffer> <silent> wip :call Enter_Wip_Moshe()<cr>
+  nnoremap <buffer> <silent> fc :call First_Commit_Moshe()<cr>
   nnoremap <buffer> <silent> R :e<cr>
 
 endfunction
