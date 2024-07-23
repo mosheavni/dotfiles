@@ -36,6 +36,7 @@ M.opts = {
     'gitcommit',
     'gitignore',
     'go',
+    'gotmpl',
     'graphql',
     'groovy',
     'hcl',
@@ -141,16 +142,6 @@ M.opts = {
 
 M.config = function(_, opts)
   require('user.menu').add_actions('TreeSitter', actions())
-  local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
-  ---@diagnostic disable-next-line: inject-field
-  parser_config.gotmpl = {
-    install_info = {
-      url = 'https://github.com/ngalaiko/tree-sitter-go-template',
-      files = { 'src/parser.c' },
-    },
-    filetype = 'gotmpl',
-    used_by = { 'gohtmltmpl', 'gotexttmpl', 'gotmpl' },
-  }
 
   ---@diagnostic disable-next-line: missing-fields
   require('nvim-treesitter.configs').setup(opts)

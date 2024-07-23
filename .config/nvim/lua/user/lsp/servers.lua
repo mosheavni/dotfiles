@@ -171,20 +171,10 @@ M.setup = function()
     },
   }
 
-  if not configs.helm_ls then
-    configs.helm_ls = {
-      default_config = {
-        cmd = { 'helm_ls', 'serve' },
-        filetypes = { 'helm', 'gotmpl' },
-        root_dir = function(fname)
-          return util.root_pattern 'Chart.yaml'(fname)
-        end,
-      },
-    }
-  end
   require('lspconfig')['helm_ls'].setup {
     on_attach = default_on_attach,
     capabilities = capabilities,
+    filetypes = { 'helm', 'gotmpl' },
   }
 
   require('user.lsp.yaml').setup {
