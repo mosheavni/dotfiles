@@ -2,6 +2,28 @@ local actions_pretty_print = function(message)
   require('user.utils').pretty_print(message, 'Git Actions', '')
 end
 
+local function get_remotes(cb)
+  local remotes = vim.fn.FugitiveExecute('remote').stdout
+  if #remotes == 2 then
+    cb(remotes[1])
+  else
+    -- remove empty items of the remotes
+    for i = #remotes, 1, -1 do
+      if remotes[i] == '' then
+        table.remove(remotes, i)
+      end
+    end
+
+    vim.ui.select(remotes, { prompt = 'Select remote: ' }, function(selection)
+      if not selection then
+        actions_pretty_print 'Canceled.'
+        return
+      end
+      cb(selection)
+    end)
+  end
+end
+
 local actions = function()
   return {
     ['Change branch (F4)'] = function()
@@ -17,8 +39,10 @@ local actions = function()
     ['First commit of a new branch'] = function()
       vim.cmd 'call First_Commit_Moshe()'
     end,
-    ['Set upstream to HAED'] = function()
-      vim.cmd('Git branch --set-upstream-to=origin/' .. vim.fn.FugitiveHead())
+    ['Set upstream to HEAD'] = function()
+      get_remotes(function(remote)
+        vim.cmd('Git branch --set-upstream-to=' .. remote .. '/' .. vim.fn.FugitiveHead())
+      end)
     end,
     ['Blame'] = function()
       vim.cmd 'Git blame'
@@ -34,14 +58,28 @@ local actions = function()
       vim.cmd 'Git reset --soft HEAD^'
       actions_pretty_print 'Reset to HEAD^'
     end,
-    ['Pull origin {branch}'] = function()
-      vim.ui.input({ default = 'main', prompt = 'Enter branch to pull from: ' }, function(branch_to_pull)
-        if not branch_to_pull then
-          actions_pretty_print 'Canceled.'
-          return
-        end
-        vim.cmd('Git pull origin ' .. branch_to_pull)
-        actions_pretty_print('Pulled from origin ' .. branch_to_pull)
+    ['Pull {remote} {branch}'] = function()
+      get_remotes(function(remote)
+        vim.ui.input({ default = 'main', prompt = 'Enter branch to pull from: ' }, function(branch_to_pull)
+          if not branch_to_pull then
+            actions_pretty_print 'Canceled.'
+            return
+          end
+          vim.cmd('Git pull ' .. remote .. ' ' .. branch_to_pull)
+          actions_pretty_print('Pulled from ' .. remote .. ' ' .. branch_to_pull)
+        end)
+      end)
+    end,
+    ['Merge {remote} {branch}'] = function()
+      get_remotes(function(remote)
+        vim.ui.input({ default = 'main', prompt = 'Enter branch to merge with: ' }, function(branch_to_merge)
+          if not branch_to_merge then
+            actions_pretty_print 'Canceled.'
+            return
+          end
+          vim.cmd('Git merge ' .. remote .. '/' .. branch_to_merge)
+          actions_pretty_print('Merged with ' .. remote .. '/' .. branch_to_merge)
+        end)
       end)
     end,
     ['Merge origin/master (:Gmom)'] = function()
