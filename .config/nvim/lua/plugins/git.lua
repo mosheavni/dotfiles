@@ -14,11 +14,17 @@ local actions = function()
       vim.cmd 'call Enter_Wip_Moshe()'
       actions_pretty_print 'Created a work in progress commit.'
     end,
+    ['First commit of a new branch'] = function()
+      vim.cmd 'call First_Commit_Moshe()'
+    end,
     ['Set upstream to HAED'] = function()
       vim.cmd('Git branch --set-upstream-to=origin/' .. vim.fn.FugitiveHead())
     end,
     ['Blame'] = function()
       vim.cmd 'Git blame'
+    end,
+    ['Fetch (all remotes and tags)'] = function()
+      vim.cmd 'Git fetch --all --tags'
     end,
     ['Pull origin master (:Gpom)'] = function()
       vim.cmd 'Gpom'
