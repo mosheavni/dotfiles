@@ -6,6 +6,7 @@ zmodload zsh/zprof
 
 # Additional PATHs
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+export PATH="/opt/homebrew/opt/make/libexec/gnubin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
