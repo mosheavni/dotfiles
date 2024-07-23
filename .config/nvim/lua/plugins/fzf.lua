@@ -10,42 +10,64 @@ return {
       function()
         require('fzf-lua').git_branches {
           actions = {
-            ['ctrl-r'] = function(selected)
-              vim.ui.input({ prompt = 'Rename branch: ', default = selected[1] }, function(new_name)
-                if new_name == '' then
-                  require('fzf-lua.utils').warn 'Action aborted'
-                  return
-                end
-                -- Rename the branch
-                local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
-                local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'branch', '-m', selected[1], new_name }, toplevel)
-                if ret == 0 then
-                  require('fzf-lua.utils').info('Renamed branch ' .. selected[1] .. ' to ' .. new_name)
-                  return
-                else
-                  local msg = string.format('Error when renaming branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
-                  require('fzf-lua.utils').err(msg)
-                end
-              end)
-            end,
-            ['ctrl-d'] = function(selected)
-              vim.ui.select({ 'Yes', 'No' }, { prompt = 'Are you sure you want to delete the branch ' .. selected[1] }, function(yes_or_no)
-                if yes_or_no == 'No' then
-                  require('fzf-lua.utils').warn 'Action aborted'
-                  return
-                end
-                -- Delete the branch
-                local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
-                local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'branch', '-D', selected[1] }, toplevel)
-                if ret == 0 then
-                  require('fzf-lua.utils').info('Deleted branch ' .. selected[1])
-                  return
-                else
-                  local msg = string.format('Error when deleting branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
-                  require('fzf-lua.utils').err(msg)
-                end
-              end)
-            end,
+            ['ctrl-r'] = {
+              fn = function(selected)
+                vim.ui.input({ prompt = 'Rename branch: ', default = selected[1] }, function(new_name)
+                  if new_name == '' then
+                    require('fzf-lua.utils').warn 'Action aborted'
+                    return
+                  end
+                  -- Rename the branch
+                  local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
+                  local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'branch', '-m', selected[1], new_name }, toplevel)
+                  if ret == 0 then
+                    require('fzf-lua.utils').info('Renamed branch ' .. selected[1] .. ' to ' .. new_name)
+                    return
+                  else
+                    local msg = string.format('Error when renaming branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
+                    require('fzf-lua.utils').err(msg)
+                  end
+                end)
+              end,
+              reload = true,
+            },
+            ['ctrl-x'] = {
+              fn = function(selected)
+                vim.ui.select({ 'Yes', 'No' }, { prompt = 'Are you sure you want to delete the branch ' .. selected[1] }, function(yes_or_no)
+                  if yes_or_no == 'No' then
+                    require('fzf-lua.utils').warn 'Action aborted'
+                    return
+                  end
+                  -- Delete the branch
+                  local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
+                  local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'branch', '-D', selected[1] }, toplevel)
+                  if ret == 0 then
+                    require('fzf-lua.utils').info('Deleted branch ' .. selected[1])
+                    vim.ui.select({ 'Yes', 'No' }, { prompt = 'Delete also from remote?' }, function(yes_or_no_remote)
+                      if yes_or_no_remote == 'No' then
+                        return
+                      end
+                      -- Delete the branch from remote
+                      local _, ret_remote, stderr_remote =
+                        require('user.utils').get_os_command_output({ 'git', 'push', 'origin', '--delete', selected[1] }, toplevel)
+                      if ret_remote == 0 then
+                        require('fzf-lua.utils').info('Deleted branch ' .. selected[1] .. ' from remote')
+                        return
+                      else
+                        local msg =
+                          string.format('Error when deleting branch from remote: %s. Git returned:\n%s', branch, table.concat(stderr_remote or {}, '\n'))
+                        require('fzf-lua.utils').err(msg)
+                      end
+                    end)
+                    return
+                  else
+                    local msg = string.format('Error when deleting branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
+                    require('fzf-lua.utils').err(msg)
+                  end
+                end)
+              end,
+              reload = true,
+            },
           },
           cmd = [=[git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2]=],
         }
