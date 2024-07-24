@@ -58,6 +58,7 @@ local M = {
     'mxsdev/nvim-dap-vscode-js',
     'theHamsta/nvim-dap-virtual-text',
     'jay-babu/mason-nvim-dap.nvim',
+    { 'leoluz/nvim-dap-go', lazy = true },
   },
 }
 
@@ -129,6 +130,9 @@ M.config = function()
     ---@diagnostic disable-next-line: undefined-field
     callback { type = 'server', host = config.host or '127.0.0.1', port = config.port or 8086 }
   end
+
+  -- go
+  require('dap-go').setup()
 
   -------------
   -- Set CMP --
