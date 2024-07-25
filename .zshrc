@@ -22,6 +22,7 @@ ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 DISABLE_AUTO_UPDATE="true"
+zstyle ':omz:update' mode reminder # just remind me to update when it's time
 unset ZSH_AUTOSUGGEST_USE_ASYNC
 export GPG_TTY=$(tty)
 
@@ -51,7 +52,6 @@ setopt HIST_BEEP              # Beep when accessing nonexistent history.
 #  Plugins  #
 # ========= #
 plugins=(
-  ag
   aliases
   argocd
   asdf
@@ -64,7 +64,6 @@ plugins=(
   copybuffer
   dircycle
   docker
-  fd
   fzf
   git
   git-auto-fetch
@@ -73,7 +72,6 @@ plugins=(
   kube-ps1
   kubectl
   kubectx
-  ripgrep
   terraform
   urltools
   zsh-autosuggestions
