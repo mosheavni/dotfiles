@@ -49,16 +49,25 @@ function gitcd() {
   cd $(git rev-parse --show-toplevel)
 }
 
-function ssh2 () {
+function ssh2() {
   in_url=$(sed -E 's?ip-([0-9]*)-([0-9]*)-([0-9]*)-([0-9]*)?\1.\2.\3.\4?g' <<< "$1")
   echo $in_url
   ssh $in_url
 }
 
-function grl () { grep -rl $* . }
+function grl() { grep -rl $* . }
 
 function cnf() {
   open "https://command-not-found.com/$*"
+}
+
+function docker_build() {
+  docker build . \
+    --platform linux/amd64 $*
+}
+
+function docker_build_push() {
+  docker_build --push $*
 }
 
 ### Git functions ###
