@@ -5,7 +5,7 @@ local uname = vim.uv.os_uname()
 M.is_mac = uname.sysname == 'Darwin'
 M.is_linux = uname.sysname == 'Linux'
 M.is_windows = uname.sysname == 'Windows_NT'
-M.is_wsl = not (string.find(uname.release, 'microsoft') == nil)
+M.is_wsl = string.find(uname.release, 'microsoft') ~= nil
 
 M.url_prefix = 'https://github.com'
 M.keymap_lhs = 'gx'

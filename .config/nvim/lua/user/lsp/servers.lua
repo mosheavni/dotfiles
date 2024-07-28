@@ -3,8 +3,6 @@ M.setup = function()
   local on_attaches = require 'user.lsp.on-attach'
   local default_on_attach = on_attaches.default
   local capabilities = require('user.lsp.config').capabilities
-  local configs = require 'lspconfig.configs'
-  local util = require 'lspconfig.util'
 
   require('lspconfig')['bashls'].setup {
     on_attach = default_on_attach,

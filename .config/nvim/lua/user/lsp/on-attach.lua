@@ -1,5 +1,5 @@
-local utils = require 'user.utils'
 local user_maps = require 'user.lsp.keymaps'
+local utils = require 'user.utils'
 local autocmd = utils.autocmd
 local augroup = utils.augroup
 
@@ -58,7 +58,6 @@ local default_on_attach = function(client, bufnr)
 end
 
 local minimal_on_attach = function(_, bufnr)
-  P 'minimal on_attach'
   -- Add mappings
   user_maps(bufnr)
 end

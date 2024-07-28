@@ -36,7 +36,7 @@ local M = {
           local index = require('user.utils').tbl_get_next(styles, current_value)
           vim.g.sonokai_style = styles[index]
           vim.cmd [[colorscheme sonokai]]
-          P('Set sonokai_style to ' .. styles[index])
+          require('user.utils').pretty_print('Set sonokai_style to ' .. styles[index])
         end,
       })
     end,

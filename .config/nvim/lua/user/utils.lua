@@ -86,10 +86,6 @@ M.country_os_to_emoji = function(iso)
   local python_file = vim.fn.tempname() .. '.py'
   local python_file_content = [[import sys; print("".join(chr(ord(c) + 127397) for c in sys.argv[1].upper()), end='')]]
   local python_file_handle = io.open(python_file, 'w')
-  if f ~= nil then
-    python_file_handle:close()
-    return ''
-  end
   python_file_handle:write(python_file_content)
   python_file_handle:close()
   local emoji = vim.system({ 'python3', python_file, iso }, { text = true }):wait().stdout

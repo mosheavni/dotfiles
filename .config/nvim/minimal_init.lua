@@ -21,6 +21,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.runtimepath:prepend(lazypath)
 
+---@diagnostic disable-next-line: global_usage
 _G.load_config = function()
   vim.lsp.set_log_level 'trace'
   require('vim.lsp.log').set_format_func(vim.inspect)
@@ -99,7 +100,7 @@ _G.load_config = function()
   if not name then
     print 'You have not defined a server name, please edit minimal_init.lua'
   end
-  if not nvim_lsp[name].document_config.default_config.cmd and not cmd then
+  if not nvim_lsp[name].document_config.default_config.cmd then
     print [[You have not defined a server default cmd for a server
       that requires it please edit minimal_init.lua]]
   end

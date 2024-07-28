@@ -19,7 +19,7 @@ local function on_attach(bufnr)
       sort_current = sort_current + 1
     end
     api.tree.reload()
-    P('Sort Method: ' .. SORT_METHODS[sort_current])
+    require('user.utils').pretty_print('Sort Method: ' .. SORT_METHODS[sort_current])
   end
 
   -- mark operation
