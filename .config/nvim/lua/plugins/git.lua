@@ -2,6 +2,22 @@ local actions_pretty_print = function(message)
   require('user.utils').pretty_print(message, 'Git Actions', '')
 end
 
+local function create_new_branch(branch_opts)
+  if branch_opts.args ~= '' then
+    return vim.cmd('Git checkout -b ' .. branch_opts.args)
+  end
+  vim.ui.input({ prompt = 'Enter new branch name: ' }, function(input)
+    if not input then
+      return
+    end
+    -- validate branch name regex in lua
+    if not string.match(input, '^[a-zA-Z0-9_-]+$') then
+      return vim.notify('Invalid branch name', vim.log.levels.ERROR)
+    end
+    vim.cmd('Git checkout -b ' .. input)
+  end)
+end
+
 local function get_remotes(cb)
   local remotes = vim.fn.FugitiveExecute('remote').stdout
   if #remotes == 2 then
@@ -30,7 +46,7 @@ local actions = function()
       vim.fn.feedkeys(vim.keycode '<F4>')
     end,
     ['Checkout new branch (:Gcb {new_branch})'] = function()
-      _G.create_new_branch { args = '' }
+      create_new_branch { args = '' }
     end,
     ['Work in Progress commit (on git window - wip)'] = function()
       vim.cmd 'call Enter_Wip_Moshe()'
@@ -343,22 +359,7 @@ nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
   -------------------------
   -- Create a new branch --
   -------------------------
-  function _G.create_new_branch(branch_opts)
-    if branch_opts.args ~= '' then
-      return vim.cmd('Git checkout -b ' .. branch_opts.args)
-    end
-    vim.ui.input({ prompt = 'Enter new branch name: ' }, function(input)
-      if not input then
-        return
-      end
-      -- validate branch name regex in lua
-      if not string.match(input, '^[a-zA-Z0-9_-]+$') then
-        return vim.notify('Invalid branch name', vim.log.levels.ERROR)
-      end
-      vim.cmd('Git checkout -b ' .. input)
-    end)
-  end
-  vim.api.nvim_create_user_command('Gcb', _G.create_new_branch, { nargs = '?' })
+  vim.api.nvim_create_user_command('Gcb', create_new_branch, { nargs = '?' })
   vim.keymap.set('n', '<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
   -- redir @">|silent scriptnames|redir END|enew|put
 
@@ -463,11 +464,6 @@ local M = {
           vim.cmd 'GitConflictListQf'
         end,
       })
-      local function opts(desc)
-        return { remap = false, silent = true, buffer = bufnr, desc = 'Git Conflict: ' .. desc }
-      end
-      vim.keymap.set('n', ']x', '<Plug>(git-conflict-next-conflict)', opts 'Next Conflict')
-      vim.keymap.set('n', '[x', '<Plug>(git-conflict-prev-conflict)', opts 'Previous Conflict')
     end,
   },
   {
