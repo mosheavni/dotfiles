@@ -12,12 +12,6 @@ local M = {
     ft = 'lua',
   },
   {
-    'folke/ts-comments.nvim',
-    event = 'VeryLazy',
-    opts = {},
-    enabled = vim.fn.has 'nvim-0.10' == 1,
-  },
-  {
     'NStefan002/2048.nvim',
     cmd = 'Play2048',
     config = true,
@@ -39,41 +33,10 @@ local M = {
     },
   },
   {
-    'mosheavni/vim-kubernetes',
-    ft = 'yaml',
-    config = function()
-      require('user.menu').add_actions('Kubernetes', {
-        ['Apply (:KubeApply)'] = function()
-          vim.cmd [[KubeApply]]
-        end,
-        ['Apply Directory (:KubeApplyDir)'] = function()
-          vim.cmd [[KubeApplyDir]]
-        end,
-        ['Create (:KubeCreate)'] = function()
-          vim.cmd [[KubeCreate]]
-        end,
-        ['Decode Secret (:KubeDecodeSecret)'] = function()
-          vim.cmd [[KubeDecodeSecret]]
-        end,
-        ['Delete (:KubeDelete)'] = function()
-          vim.cmd [[KubeDelete]]
-        end,
-        ['Delete Dir (:KubeDeleteDir)'] = function()
-          vim.cmd [[KubeDeleteDir]]
-        end,
-        ['Encode Secret (:KubeEncodeSecret)'] = function()
-          vim.cmd [[KubeEncodeSecret]]
-        end,
-        ['Recreate (:KubeRecreate)'] = function()
-          vim.cmd [[KubeRecreate]]
-        end,
-      })
-    end,
-  },
-  {
     'chrisbra/vim-sh-indent',
     ft = { 'sh', 'bash', 'zsh' },
   },
+  { 'Bilal2453/luvit-meta', lazy = true },
 
   --------------
   -- Quickfix --

@@ -22,6 +22,7 @@ M.config = function()
       require 'none-ls-shellcheck.code_actions',
       null_ls.builtins.diagnostics.hadolint,
       null_ls.builtins.diagnostics.markdownlint,
+      null_ls.builtins.diagnostics.selene,
       null_ls.builtins.diagnostics.vint,
       null_ls.builtins.formatting.black,
       null_ls.builtins.formatting.markdownlint,

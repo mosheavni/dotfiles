@@ -15,6 +15,7 @@ local M = {
     'nvim-treesitter/nvim-treesitter-context',
     'nvim-treesitter/nvim-treesitter-refactor',
     'nvim-treesitter/nvim-treesitter-textobjects',
+    { 'folke/ts-comments.nvim', opts = {} },
     {
       'windwp/nvim-ts-autotag',
       ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml' },
