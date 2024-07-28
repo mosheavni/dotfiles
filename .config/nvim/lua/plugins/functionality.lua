@@ -15,6 +15,38 @@ local M = {
     keys = { '<C-a>', '<C-x>' },
   },
   {
+    'mosheavni/vim-kubernetes',
+    ft = 'yaml',
+    config = function()
+      require('user.menu').add_actions('Kubernetes', {
+        ['Apply (:KubeApply)'] = function()
+          vim.cmd [[KubeApply]]
+        end,
+        ['Apply Directory (:KubeApplyDir)'] = function()
+          vim.cmd [[KubeApplyDir]]
+        end,
+        ['Create (:KubeCreate)'] = function()
+          vim.cmd [[KubeCreate]]
+        end,
+        ['Decode Secret (:KubeDecodeSecret)'] = function()
+          vim.cmd [[KubeDecodeSecret]]
+        end,
+        ['Delete (:KubeDelete)'] = function()
+          vim.cmd [[KubeDelete]]
+        end,
+        ['Delete Dir (:KubeDeleteDir)'] = function()
+          vim.cmd [[KubeDeleteDir]]
+        end,
+        ['Encode Secret (:KubeEncodeSecret)'] = function()
+          vim.cmd [[KubeEncodeSecret]]
+        end,
+        ['Recreate (:KubeRecreate)'] = function()
+          vim.cmd [[KubeRecreate]]
+        end,
+      })
+    end,
+  },
+  {
     'voldikss/vim-floaterm',
     keys = { '<F6>', '<F7>', '<F8>' },
     cmd = {
@@ -128,6 +160,40 @@ local M = {
         end,
       })
     end,
+  },
+  {
+    'desdic/greyjoy.nvim',
+    cmd = { 'Greyjoy' },
+    init = function()
+      require('user.menu').add_actions('Greyjoy', {
+        ['Run command (:Greyjoy)'] = function()
+          vim.cmd.Greyjoy()
+        end,
+      })
+    end,
+    config = function(_, opts)
+      local greyjoy = require 'greyjoy'
+      greyjoy.setup(opts)
+      greyjoy.load_extension 'generic'
+      greyjoy.load_extension 'makefile'
+      greyjoy.load_extension 'docker_compose'
+    end,
+    opts = {
+      extensions = {
+        generic = {
+          commands = {
+            ['run python {filename}'] = {
+              command = { 'python3', '{filename}' },
+              filetype = 'python',
+            },
+            ['run go {filename}'] = {
+              command = { 'go', 'run', '{filename}' },
+              filetype = 'go',
+            },
+          },
+        },
+      },
+    },
   },
   {
     'iamcco/markdown-preview.nvim',
