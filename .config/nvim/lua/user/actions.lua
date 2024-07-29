@@ -84,7 +84,6 @@ return {
     require('lazy').load { plugins = { 'vim-fugitive' } }
     local scan_dir = require 'plenary.scandir'
     local terraform_repo = vim.fn.FugitiveExecute({ 'rev-parse', '--show-toplevel' }).stdout
-    require('user.utils').pretty_print(terraform_repo)
     scan_dir.scan_dir(terraform_repo, {
       add_dirs = false,
       respect_gitignore = false,

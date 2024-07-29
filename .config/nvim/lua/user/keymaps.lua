@@ -1,3 +1,4 @@
+---@diagnostic disable: global_usage
 local map = vim.keymap.set
 
 -- better up/down
@@ -88,7 +89,7 @@ end
 map('n', 'mt', _G.__surround_with_interpolation)
 
 -- Indent block
-vim.cmd[[
+vim.cmd [[
 function! g:__align_based_on_indent(_)
   normal v%koj$>
 endfunction
