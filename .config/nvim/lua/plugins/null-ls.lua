@@ -30,6 +30,7 @@ M.config = function()
       null_ls.builtins.formatting.prettierd,
       null_ls.builtins.formatting.stylua,
       null_ls.builtins.formatting.terraform_fmt,
+      null_ls.builtins.formatting.xmllint,
       null_ls.builtins.formatting.shfmt.with {
         extra_filetypes = sh_extra_fts,
       },
