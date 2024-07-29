@@ -274,6 +274,11 @@ seq 100 | parallel -k dowork &gt;results.txt
 				<content>curl \
   &quot;https://sts.${AWS_REGION}.amazonaws.com/?Action=AssumeRoleWithWebIdentity&amp;DurationSeconds=3600&amp;RoleArn=$AWS_ROLE_ARN&amp;WebIdentityToken=$(&lt; $AWS_WEB_IDENTITY_TOKEN_FILE)&amp;Version=2011-06-15&amp;RoleSessionName=spotinst-monitor&quot;</content>
 			</snippet>
+			<snippet>
+				<title>get latest eks ami</title>
+				<content>aws ssm get-parameter --name /aws/service/eks/optimized-ami/1.30/amazon-linux-2023/x86_64/standard/recommended/image_id \
+    --region us-west-2 --query &quot;Parameter.Value&quot; --output text</content>
+			</snippet>
 		</snippets>
 	</folder>
 	<folder>
