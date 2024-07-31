@@ -16,7 +16,7 @@ M.setup = function(opts)
   local capabilities = opts.capabilities or require('user.lsp.config').capabilities
   local on_attach = opts.on_attach or require('user.lsp.on-attach').default
   local yaml_lspconfig = {
-    cmd = { '/opt/homebrew/bin/yaml-language-server', '--stdio' },
+    cmd = { 'yaml-language-server', '--stdio' },
     on_attach = function(c, b)
       local filetype = vim.api.nvim_get_option_value('filetype', { buf = b })
       local buftype = vim.api.nvim_get_option_value('buftype', { buf = b })
