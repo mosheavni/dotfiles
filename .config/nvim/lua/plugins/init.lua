@@ -94,6 +94,7 @@ local M = {
         vim.fn['switch#NormalizedCase'] { 'up', 'down' },
         vim.fn['switch#NormalizedCase'] { 'enable', 'disable' },
         vim.fn['switch#NormalizedCase'] { 'Always', 'Never' },
+        vim.fn['switch#NormalizedCase'] { 'debug', 'info', 'warning', 'error', 'critical' },
         { '==', '!=' },
         {
           [fk] = [=[\=toupper(submatch(1)) . submatch(2)]=],
