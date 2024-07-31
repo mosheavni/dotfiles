@@ -18,6 +18,7 @@ M.config = function()
     sources = {
       require('user.lsp.code-actions').revision_branch_comment,
       require('user.lsp.code-actions').toggle_function_params,
+      require('user.lsp.formatters').hclfmt,
       require 'typescript.extensions.null-ls.code-actions',
       require 'none-ls-shellcheck.code_actions',
       null_ls.builtins.diagnostics.hadolint,
