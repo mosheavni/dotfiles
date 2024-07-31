@@ -1,5 +1,11 @@
+vim.g.disabled_plugins = vim.split(os.getenv 'DISABLED_PLUGINS' or '', ',')
 return {
   config = {
+    defaults = {
+      cond = function(a)
+        return not vim.tbl_contains(vim.g.disabled_plugins or {}, a.name)
+      end,
+    },
     change_detection = {
       notify = false,
     },
