@@ -148,6 +148,11 @@ M.setup = function()
     capabilities = capabilities,
   }
 
+  require('lspconfig')['taplo'].setup {
+    on_attach = default_on_attach,
+    capabilities = capabilities,
+  }
+
   require('java').setup {
     root_markers = {
       'settings.gradle',
