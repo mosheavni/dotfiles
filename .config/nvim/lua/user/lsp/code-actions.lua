@@ -6,18 +6,31 @@ M.revision_branch_comment = {
   filetypes = { 'yaml' },
   generator = {
     fn = function(context)
-      local row = context.range.row
-      local current_line = context.content[row]
+      local is_argo_app = vim.iter(context.content):find(function(v)
+        return string.find(v, 'kind: Application')
+      end)
+
       -- check if current line has the substring 'targetRevision: '
-      if string.find(current_line, 'targetRevision: ') then
+      if is_argo_app then
+        local target_revision_line_number = vim.fn.search('targetRevision: ', 'nw')
+        local target_revision_line = context.content[target_revision_line_number]
         return {
           {
             title = 'Change branch to current',
             action = function()
               -- get indentation of current_line
-              local indent = string.match(current_line, '^%s*')
+              local indent = string.match(target_revision_line, '^%s*')
               local new_lines = { indent .. 'targetRevision: ' .. vim.fn.FugitiveHead() .. ' # TODO: Change to HEAD before merging' }
-              vim.api.nvim_buf_set_lines(context.bufnr, row - 1, row, false, new_lines)
+              vim.api.nvim_buf_set_lines(context.bufnr, target_revision_line_number - 1, target_revision_line_number, false, new_lines)
+            end,
+          },
+          {
+            title = 'Change branch to HEAD',
+            action = function()
+              -- get indentation of current_line
+              local indent = string.match(target_revision_line, '^%s*')
+              local new_lines = { indent .. 'targetRevision: HEAD' }
+              vim.api.nvim_buf_set_lines(context.bufnr, target_revision_line_number - 1, target_revision_line_number, false, new_lines)
             end,
           },
         }
