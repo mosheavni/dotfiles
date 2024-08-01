@@ -16,6 +16,7 @@ M.config = function()
     on_attach = default_on_attach,
     debug = true,
     sources = {
+      null_ls.builtins.code_actions.gitsigns,
       require('user.lsp.code-actions').revision_branch_comment,
       require('user.lsp.code-actions').toggle_function_params,
       require 'typescript.extensions.null-ls.code-actions',
