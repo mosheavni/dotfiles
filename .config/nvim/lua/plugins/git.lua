@@ -1,3 +1,4 @@
+local T = vim.keycode
 local actions_pretty_print = function(message)
   require('user.utils').pretty_print(message, 'Git Actions', '')
 end
@@ -62,6 +63,13 @@ local actions = function()
     end,
     ['Blame'] = function()
       vim.cmd 'Git blame'
+    end,
+    ['Print current branch to buffer (<leader>gb)'] = function()
+      vim.fn.feedkeys(T '<leader>' .. 'gb')
+    end,
+    ['Copy current branch to clipboard (<leader>gB)'] = function()
+      vim.fn.feedkeys(T '<leader>' .. 'gB')
+      actions_pretty_print('Copied current branch "' .. vim.fn.FugitiveHead() .. '" to clipboard.')
     end,
     ['Fetch (all remotes and tags)'] = function()
       vim.cmd 'Git fetch --all --tags'
@@ -185,6 +193,7 @@ local actions = function()
     end,
   }
 end
+
 local diff_actions = function()
   return {
     ['[Diffview] Diff File History'] = function()
@@ -361,6 +370,7 @@ nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
   -------------------------
   vim.api.nvim_create_user_command('Gcb', create_new_branch, { nargs = '?' })
   vim.keymap.set('n', '<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
+  vim.keymap.set('n', '<leader>gB', '<cmd>let @+ = FugitiveHead()<cr>')
   -- redir @">|silent scriptnames|redir END|enew|put
 
   ----------------------
@@ -384,6 +394,7 @@ local M = {
     config = fugitive_config,
     keys = {
       '<leader>gb',
+      '<leader>gB',
       '<leader>gc',
       '<leader>gf',
       '<leader>gg',
