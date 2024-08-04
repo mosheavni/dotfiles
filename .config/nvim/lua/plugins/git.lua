@@ -69,7 +69,6 @@ local actions = function()
     end,
     ['Copy current branch to clipboard (<leader>gB)'] = function()
       vim.fn.feedkeys(T '<leader>' .. 'gB')
-      actions_pretty_print('Copied current branch "' .. vim.fn.FugitiveHead() .. '" to clipboard.')
     end,
     ['Fetch (all remotes and tags)'] = function()
       vim.cmd 'Git fetch --all --tags'
@@ -370,7 +369,10 @@ nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
   -------------------------
   vim.api.nvim_create_user_command('Gcb', create_new_branch, { nargs = '?' })
   vim.keymap.set('n', '<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
-  vim.keymap.set('n', '<leader>gB', '<cmd>let @+ = FugitiveHead()<cr>')
+  vim.keymap.set('n', '<leader>gB', function()
+    vim.cmd 'let @+ = FugitiveHead()'
+    actions_pretty_print('Copied current branch "' .. vim.fn.FugitiveHead() .. '" to clipboard.')
+  end)
   -- redir @">|silent scriptnames|redir END|enew|put
 
   ----------------------
