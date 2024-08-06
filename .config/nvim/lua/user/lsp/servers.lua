@@ -185,6 +185,7 @@ M.setup = function()
     on_attach = default_on_attach,
   }
 
+  -- golang
   require('lspconfig').gopls.setup {
     capabilities = capabilities,
     on_attach = default_on_attach,
