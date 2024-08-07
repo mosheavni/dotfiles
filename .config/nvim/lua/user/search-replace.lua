@@ -1,17 +1,25 @@
 vim.cmd [[
+function! FindUniqueChar(chars, str)
+    " Iterate through each character in the list
+    for char in a:chars
+        " Check if the character is not in the string
+        if stridx(a:str, char) == -1
+            return char
+        endif
+    endfor
+
+    " If all characters are found in the string, return an appropriate value
+    return ''
+endfunction
 function! PopulateSearchline(mode)
   if a:mode == 'n'
     let cword = expand('<cword>')
   else
     let cword = GetMotion('gv')
   endif
-  let g:search_and_replace_separator = '/'
-  if cword =~# '/'
-    let g:search_and_replace_separator = '?'
-  endif
-  if cword =~# '\?'
-    let g:search_and_replace_separator = '#'
-  endif
+  " Define a list of characters
+  let char_list = ['/', '?', '#', ':', '@']
+  let g:search_and_replace_separator = FindUniqueChar(char_list, cword)
   let cmd = '.,$s' . g:search_and_replace_separator
     \ . '\V' . cword . g:search_and_replace_separator
     \ . cword . g:search_and_replace_separator
