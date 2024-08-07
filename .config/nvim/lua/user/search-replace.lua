@@ -9,7 +9,7 @@ function! PopulateSearchline(mode)
   if cword =~# '/'
     let g:search_and_replace_separator = '?'
   endif
-  if cword =~# '[\?/]'
+  if cword =~# '\?'
     let g:search_and_replace_separator = '#'
   endif
   let cmd = '.,$s' . g:search_and_replace_separator
@@ -60,8 +60,31 @@ func DeleteReplaceTerm()
   endif
   let sep = get(g:, 'search_and_replace_separator')
   let cmd_splitted = split(cmd, sep, 1)
-  let cmd_splitted[-2] = ''
   let cmd_pos = getcmdpos()
+  let cmd_splitted[-2] = ''
+
+  let cmd = join(cmd_splitted, sep)
+  call setcmdpos(len(cmd) - len(cmd_splitted[-1]))
+  return cmd
+endfunc
+
+func ToggleAllFile()
+  let cmd = getcmdline()
+  if getcmdtype() !=# ':'
+    return cmd
+  endif
+  let sep = get(g:, 'search_and_replace_separator')
+  let cmd_splitted = split(cmd, sep, 1)
+  let cmd_pos = getcmdpos()
+  let all_file = cmd_splitted[0]
+  if all_file == '%s'
+    let all_file = '.,$s'
+  elseif all_file == '.,$s'
+    let all_file = '0,.s'
+  else
+    let all_file = '%s'
+  endif
+  let cmd_splitted[0] = all_file
 
   let cmd = join(cmd_splitted, sep)
   call setcmdpos(len(cmd) - len(cmd_splitted[-1]))
@@ -71,4 +94,5 @@ cmap <M-g> <C-\>eToggleChar('g')<CR>
 cmap <M-c> <C-\>eToggleChar('c')<CR>
 cmap <M-i> <C-\>eToggleChar('i')<CR>
 cmap <M-d> <C-\>eDeleteReplaceTerm()<CR>
+cmap <M-5> <C-\>eToggleAllFile()<CR>
 ]]
