@@ -246,10 +246,6 @@ local M = {
       'nvim-tree/nvim-web-devicons',
     },
   },
-  {
-    'OXY2DEV/helpview.nvim',
-    ft = 'help',
-  },
 }
 
 return M
