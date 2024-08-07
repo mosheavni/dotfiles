@@ -297,9 +297,7 @@ map('n', '<leader>ct<space>', ':retab<cr>', { silent = true })
 -- Change every " -" with " \<cr> -" to break long lines of bash
 map('n', [[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], { silent = true })
 
--- Search and Replace
-map('n', '<Leader>r', ':.,$s?\\V<C-r><C-w>?<C-r><C-w>?gc<Left><Left><Left>', { silent = true })
-map('v', '<leader>r', '"hy:.,$s?\\V<C-r>h?<C-r>h?gc<left><left><left>', { remap = false, silent = true })
+-- global yanks and deletes
 map('v', '<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], { remap = false, desc = 'Delete all but...', silent = true })
 map('v', '<leader>daa', [["hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], { remap = false, desc = 'Delete all ...', silent = true })
 map('v', '<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], { remap = false, desc = 'Yank all but...', silent = true })
@@ -626,3 +624,8 @@ end, {})
 vim.api.nvim_create_user_command('PluginsReload', function()
   require('user.plugins-mgmt').reload_plugin()
 end, {})
+
+------------------------
+-- Search and Replace --
+------------------------
+require('user.search-replace')
