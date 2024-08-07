@@ -27,7 +27,8 @@ func ToggleChar(char)
   if getcmdtype() !=# ':'
     return cmd
   endif
-  let cmd_splitted = split(cmd, get('g', 'search_and_replace_separator', '/\zs'), 1)
+  let sep = get(g:, 'search_and_replace_separator', '/')
+  let cmd_splitted = split(cmd, sep, 1)
   let cmd_flags = cmd_splitted[-1]
   let cmd_pos = getcmdpos()
   let available_flags = ['g', 'c', 'i']
@@ -57,7 +58,7 @@ func DeleteReplaceTerm()
   if getcmdtype() !=# ':'
     return cmd
   endif
-  let sep = get('g', 'search_and_replace_separator', '/')
+  let sep = get(g:, 'search_and_replace_separator')
   let cmd_splitted = split(cmd, sep, 1)
   let cmd_splitted[-2] = ''
   let cmd_pos = getcmdpos()
