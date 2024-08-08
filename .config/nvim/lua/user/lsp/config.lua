@@ -36,6 +36,7 @@ M.diagnostics = function()
   -----------------
   -- show icons in the sidebar
   vim.diagnostic.config {
+    jump = { float = true },
     signs = { text = M.diagnostic_signs },
     update_in_insert = false,
     virtual_text = {
