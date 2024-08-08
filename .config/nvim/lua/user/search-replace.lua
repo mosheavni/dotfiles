@@ -13,16 +13,17 @@ function! FindUniqueChar(chars, str)
 endfunction
 function! PopulateSearchline(mode)
   if a:mode == 'n'
-    let cword = expand('<cword>')
+    let g:sar_cword = expand('<cword>')
   else
-    let cword = GetMotion('gv')
+    let g:sar_cword = GetMotion('gv')
   endif
   " Define a list of characters
   let char_list = ['/', '?', '#', ':', '@']
-  let g:search_and_replace_separator = FindUniqueChar(char_list, cword)
-  let cmd = '.,$s' . g:search_and_replace_separator
-    \ . '\V' . cword . g:search_and_replace_separator
-    \ . cword . g:search_and_replace_separator
+  let g:sar_sep = FindUniqueChar(char_list, g:sar_cword)
+  let g:sar_magic = '\V'
+  let cmd = '.,$s' . g:sar_sep
+    \ . g:sar_magic . g:sar_cword . g:sar_sep
+    \ . g:sar_cword . g:sar_sep
     \ . 'gc'
   call setcmdpos(strlen(cmd) - 2)
   return cmd
@@ -35,7 +36,7 @@ func ToggleChar(char)
   if getcmdtype() !=# ':'
     return cmd
   endif
-  let sep = get(g:, 'search_and_replace_separator', '/')
+  let sep = get(g:, 'sar_sep', '/')
   let cmd_splitted = split(cmd, sep, 1)
   let cmd_flags = cmd_splitted[-1]
   let cmd_pos = getcmdpos()
@@ -54,22 +55,35 @@ func ToggleChar(char)
     endfor
   endif
 
-  let cmd = cmd[:-len(cmd_flags) - 1] . new_flags
+  let cmd_splitted[-1] = new_flags
+  let cmd = join(cmd_splitted, sep)
+  " let cmd = cmd[:-len(cmd_flags) - 1] . new_flags
 
   " place the cursor on the )
   call setcmdpos(cmd_pos)
   return cmd
 endfunc
 
-func DeleteReplaceTerm()
+func ToggleReplaceTerm()
   let cmd = getcmdline()
   if getcmdtype() !=# ':'
     return cmd
   endif
-  let sep = get(g:, 'search_and_replace_separator')
+  let sep = get(g:, 'sar_sep', '/')
   let cmd_splitted = split(cmd, sep, 1)
+  let sar_cword = get(g:, 'sar_cword')
+  if empty(sar_cword)
+    let sar_cword = cmd_splitted[1]
+    let g:sar_cword = sar_cword
+  endif
   let cmd_pos = getcmdpos()
-  let cmd_splitted[-2] = ''
+  let replace_term = cmd_splitted[-2]
+  if replace_term == ''
+    let replace_term = g:sar_cword
+  else
+    let replace_term = ''
+  endif
+  let cmd_splitted[-2] = replace_term
 
   let cmd = join(cmd_splitted, sep)
   call setcmdpos(len(cmd) - len(cmd_splitted[-1]))
@@ -81,7 +95,7 @@ func ToggleAllFile()
   if getcmdtype() !=# ':'
     return cmd
   endif
-  let sep = get(g:, 'search_and_replace_separator')
+  let sep = get(g:, 'sar_sep', '/')
   let cmd_splitted = split(cmd, sep, 1)
   let cmd_pos = getcmdpos()
   let all_file = cmd_splitted[0]
@@ -98,9 +112,65 @@ func ToggleAllFile()
   call setcmdpos(len(cmd) - len(cmd_splitted[-1]))
   return cmd
 endfunc
+
+func ToggleSeparator()
+  let cmd = getcmdline()
+  if getcmdtype() !=# ':'
+    return cmd
+  endif
+  let sep = get(g:, 'sar_sep', '/')
+  let cmd_splitted = split(cmd, sep, 1)
+  let cmd_pos = getcmdpos()
+  let char_list = ['/', '?', '#', ':', '@']
+  let new_char_idx = index(char_list, sep) + 1
+  let new_sep = new_char_idx >= len(char_list) ? char_list[0] : char_list[new_char_idx]
+  let g:sar_sep = new_sep
+  let cmd = join(cmd_splitted, new_sep)
+  call setcmdpos(cmd_pos)
+  return cmd
+endfunc
+
+func ToggleMagic()
+  let cmd = getcmdline()
+  if getcmdtype() !=# ':'
+    return cmd
+  endif
+  let magic_list = ['\v', '\m', '\M', '\V', '']
+  let sep = get(g:, 'sar_sep', '/')
+  let cmd_splitted = split(cmd, sep, 1)
+  let cmd_pos = getcmdpos()
+
+  " cword
+  let sar_cword = get(g:, 'sar_cword')
+  for magic_str in magic_list
+    if cmd_splitted[1] =~ magic_str
+      let sar_cword = substitute(cmd_splitted[1], magic_str, '', '')
+      let g:sar_cword = sar_cword
+      break
+    endif
+  endfor
+  if empty(sar_cword)
+    let sar_cword = cmd_splitted[1]
+    let g:sar_cword = sar_cword
+  endif
+
+  " magic
+  let magic = get(g:, 'sar_magic', '\V')
+  let new_magic_idx = index(magic_list, magic) + 1
+  let new_magic = new_magic_idx >= len(magic_list) ? magic_list[0] : magic_list[new_magic_idx]
+  let g:sar_magic = new_magic
+
+
+  let cmd_splitted[1] = new_magic . sar_cword
+  let cmd = join(cmd_splitted, sep)
+  call setcmdpos(cmd_pos)
+  return cmd
+endfunc
 cmap <M-g> <C-\>eToggleChar('g')<CR>
 cmap <M-c> <C-\>eToggleChar('c')<CR>
 cmap <M-i> <C-\>eToggleChar('i')<CR>
-cmap <M-d> <C-\>eDeleteReplaceTerm()<CR>
+cmap <M-d> <C-\>eToggleReplaceTerm()<CR>
 cmap <M-5> <C-\>eToggleAllFile()<CR>
+cmap <M-/> <C-\>eToggleSeparator()<CR>
+cmap <M-m> <C-\>eToggleMagic()<CR>
 ]]
