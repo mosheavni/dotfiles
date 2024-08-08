@@ -175,12 +175,15 @@ local M = {
     config = true,
   },
   {
-    'mizlan/iswap.nvim',
-    cmd = { 'ISwap', 'ISwapWith' },
+    'machakann/vim-swap',
     keys = {
-      { '<leader>sw', '<cmd>ISwap<CR>' },
+      { '<leader>sw', '<Plug>(swap-interactive)', mode = { 'n', 'v' } },
+      { 'g<', '<Plug>(swap-prev)' },
+      { 'g>', '<Plug>(swap-next)' },
     },
-    opts = {},
+    init = function()
+      vim.g.swap_no_default_key_mappings = true
+    end,
   },
   {
     'vim-scripts/ReplaceWithRegister',
