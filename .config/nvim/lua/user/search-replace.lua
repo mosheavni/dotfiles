@@ -7,7 +7,6 @@ function! FindUniqueChar(chars, str)
             return char
         endif
     endfor
-
     " If all characters are found in the string, return an appropriate value
     return ''
 endfunction
@@ -142,13 +141,6 @@ func ToggleMagic()
 
   " cword
   let sar_cword = get(g:, 'sar_cword')
-  for magic_str in magic_list
-    if cmd_splitted[1] =~ magic_str
-      let sar_cword = substitute(cmd_splitted[1], magic_str, '', '')
-      let g:sar_cword = sar_cword
-      break
-    endif
-  endfor
   if empty(sar_cword)
     let sar_cword = cmd_splitted[1]
     let g:sar_cword = sar_cword
