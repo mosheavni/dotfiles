@@ -106,6 +106,7 @@ unsetopt CASE_GLOB
 setopt GLOB_COMPLETE
 eval "$(zoxide init --cmd cd zsh)"
 export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
+source ${HOME}/.asdf/plugins/golang/set-env.zsh
 
 # ===================== #
 # Aliases and Functions #
