@@ -52,6 +52,7 @@ setopt HIST_BEEP              # Beep when accessing nonexistent history.
 #  Plugins  #
 # ========= #
 plugins=(
+  alias-tips
   aliases
   argocd
   asdf
@@ -109,7 +110,12 @@ unsetopt CASE_GLOB
 setopt GLOB_COMPLETE
 eval "$(zoxide init --cmd cd zsh)"
 export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
-source ${HOME}/.asdf/plugins/golang/set-env.zsh
+[[ -f ~/.asdf/plugins/golang/set-env.zsh ]] && {
+  source ~/.asdf/plugins/golang/set-env.zsh
+  asdf_update_golang_env
+  export PATH="$GOPATH/bin:$PATH"
+  export ASDF_GOLANG_MOD_VERSION_ENABLED=true
+}
 bindkey '^[|' zsh_gh_copilot_explain # bind Alt+shift+\ to explain
 bindkey '^[\' zsh_gh_copilot_suggest # bind Alt+\ to suggest
 
