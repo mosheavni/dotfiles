@@ -73,6 +73,10 @@
    git clone \
       https://github.com/zsh-users/zsh-autosuggestions \
       ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+
+   git clone \
+       https://github.com/loiccoyle/zsh-github-copilot \
+       ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-github-copilot
    ```
 
 7. Install [effuse](https://github.com/jeromelefeuvre/effuse):
@@ -102,9 +106,21 @@
     $(brew --prefix)/opt/fzf/install
     ```
 
-12. ???
+12. Install gh [github cli copilot extension](https://github.com/github/gh-copilot)
 
-13. PROFIT
+    ```bash
+    gh extension install github/gh-copilot --force
+    ```
+
+13. Login to gh cli
+
+    ```bash
+    gh auth login --web -h github.com
+    ```
+
+14. ???
+
+15. PROFIT
 
 ## Additional stuff
 

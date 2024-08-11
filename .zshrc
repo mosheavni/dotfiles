@@ -65,8 +65,10 @@ plugins=(
   dircycle
   docker
   fzf
+  gh
   git
   git-auto-fetch
+  github
   golang
   helm
   kube-ps1
@@ -75,6 +77,7 @@ plugins=(
   terraform
   urltools
   zsh-autosuggestions
+  zsh-github-copilot
   zsh-syntax-highlighting
 )
 
@@ -107,6 +110,8 @@ setopt GLOB_COMPLETE
 eval "$(zoxide init --cmd cd zsh)"
 export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
 source ${HOME}/.asdf/plugins/golang/set-env.zsh
+bindkey '^[|' zsh_gh_copilot_explain # bind Alt+shift+\ to explain
+bindkey '^[\' zsh_gh_copilot_suggest # bind Alt+\ to suggest
 
 # ===================== #
 # Aliases and Functions #
