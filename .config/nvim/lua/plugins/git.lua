@@ -3,6 +3,17 @@ local actions_pretty_print = function(message)
   require('user.utils').pretty_print(message, 'Git Actions', '')
 end
 
+local function get_branches(remote_name)
+  local cmd_output = vim.system({ 'git', 'ls-remote', '--heads', remote_name }):wait()
+  -- split cmd_output.stdout by new line
+  cmd_output = vim.split(cmd_output.stdout, '\n')
+  local branches = {}
+  for _, line in ipairs(cmd_output) do
+    table.insert(branches, string.match(line, 'heads/(.*)$'))
+  end
+  return branches
+end
+
 local function create_new_branch(branch_opts)
   if branch_opts.args ~= '' then
     return vim.cmd('Git checkout -b ' .. branch_opts.args)
@@ -83,7 +94,7 @@ local actions = function()
     end,
     ['Pull {remote} {branch}'] = function()
       get_remotes(function(remote)
-        vim.ui.input({ default = 'main', prompt = 'Enter branch to pull from: ' }, function(branch_to_pull)
+        vim.ui.select(get_branches(remote), { prompt = 'Select branch to pull from: ' }, function(branch_to_pull)
           if not branch_to_pull then
             actions_pretty_print 'Canceled.'
             return
@@ -95,7 +106,7 @@ local actions = function()
     end,
     ['Merge {remote} {branch}'] = function()
       get_remotes(function(remote)
-        vim.ui.input({ default = 'main', prompt = 'Enter branch to merge with: ' }, function(branch_to_merge)
+        vim.ui.select(get_branches(remote), { prompt = 'Select branch to merge with: ' }, function(branch_to_merge)
           if not branch_to_merge then
             actions_pretty_print 'Canceled.'
             return
