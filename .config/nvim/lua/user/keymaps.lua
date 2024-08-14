@@ -628,4 +628,4 @@ end, {})
 ------------------------
 -- Search and Replace --
 ------------------------
-require('user.search-replace')
+require 'user.search-replace'

@@ -2,6 +2,10 @@ local M = {
   actions = require 'user.actions',
 }
 
+---Add a prefix to all actions
+---@param actions table<string, string>
+---@param prefix string
+---@return table<string, string>
 local function add_prefix(actions, prefix)
   local prefixed_actions = {}
   for k, v in pairs(actions) do
@@ -10,6 +14,9 @@ local function add_prefix(actions, prefix)
   return prefixed_actions
 end
 
+---Add actions to the existing actions table
+---@param prefix? string optional prefix to add to all actions
+---@param actions table<string, string> Actions table
 M.add_actions = function(prefix, actions)
   local actions_prefixed = actions
   if prefix ~= nil then
@@ -18,6 +25,10 @@ M.add_actions = function(prefix, actions)
   M.actions = vim.tbl_extend('force', M.actions, actions_prefixed)
 end
 
+---Get all actions or filter by prefix
+---@param opts table|nil optional filter options
+---  * {prefix: string} filter actions by prefix
+---@return table<string, string>
 M.get_actions = function(opts)
   if opts and opts.prefix then
     -- filter only for actions starting with [prefix]
@@ -32,6 +43,8 @@ M.get_actions = function(opts)
   return M.actions
 end
 
+---Setup the menu
+---@return nil
 M.setup = function()
   vim.keymap.set('n', '<leader>a', function()
     vim.ui.select(vim.tbl_keys(M.actions), { prompt = 'Choose action❯ ' }, function(choice)

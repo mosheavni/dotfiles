@@ -1,9 +1,9 @@
----@diagnostic disable: need-check-nil
 local M = {}
 M.autocmd = vim.api.nvim_create_autocmd
 
---Creates an augroup while clearing previous
---- @param name string #The name of the augroup.
+---Creates an augroup while clearing previous
+--- @param name string The name of the augroup.
+---@return number The augroup id
 M.augroup = function(name)
   return vim.api.nvim_create_augroup(name, { clear = true })
 end
@@ -79,7 +79,7 @@ M.pretty_print = function(message, title, icon, level)
   vim.notify(message, level, { title = title, icon = icon })
 end
 
---- Converts country code to emoji of the country flag
+---Converts country code to emoji of the country flag
 ---@param iso string: The country code
 ---@return string: emoji of the country flag
 M.country_os_to_emoji = function(iso)
