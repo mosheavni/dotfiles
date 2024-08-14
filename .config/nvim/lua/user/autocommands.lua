@@ -252,7 +252,7 @@ autocmd('User', {
     }
 
     local success, process = pcall(function()
-      return vim.system(cmd):wait()
+      return vim.system(cmd, {cwd = repo_dir}):wait()
     end)
 
     if process and process.code == 0 then

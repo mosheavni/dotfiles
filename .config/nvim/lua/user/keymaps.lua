@@ -91,7 +91,7 @@ map('n', 'mt', _G.__surround_with_interpolation)
 -- Indent block
 vim.cmd [[
 function! g:__align_based_on_indent(_)
-  normal v%koj$>
+  normal! v%koj$>
 endfunction
 ]]
 map('n', '<leader>gt', function()
