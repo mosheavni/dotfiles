@@ -119,5 +119,5 @@
   "yaml-companion.nvim": { "branch": "main", "commit": "1944149e6ec14508a8c81235e000bf333e790e40" },
   "yaml.nvim": { "branch": "main", "commit": "615985c1886644a4b2c0eebf985c1d1ae8257dd1" },
   "yanky.nvim": { "branch": "main", "commit": "73215b77d22ebb179cef98e7e1235825431d10e4" },
-  "yazi.nvim": { "branch": "main", "commit": "e3d4c782a12bced97bf8824527cdc82c383a88b6" }
+  "yazi.nvim": { "branch": "main", "commit": "8e0b696fce9582e634cccc862892687a9cb0c1cd" }
 }
