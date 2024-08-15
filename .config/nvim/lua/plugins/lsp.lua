@@ -66,15 +66,15 @@ M.dependencies = {
     },
     config = true,
   },
-  {
-    'folke/neodev.nvim',
-    opts = {
-      override = function(_, library)
-        library.enabled = true
-        library.plugins = true
-      end,
-    },
-  },
+  -- {
+  --   'folke/neodev.nvim',
+  --   opts = {
+  --     override = function(_, library)
+  --       library.enabled = true
+  --       library.plugins = true
+  --     end,
+  --   },
+  -- },
 }
 
 local language_specific_plugins = {
@@ -113,6 +113,21 @@ local language_specific_plugins = {
     end,
   },
   { 'b0o/SchemaStore.nvim', lazy = true },
+  {
+    'folke/lazydev.nvim',
+    ft = 'lua', -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+      },
+    },
+    -- config = function(_,opts)
+    --   require("lazydev").setup(opts)
+    --   require('cmp').register_source('lazydev', )
+    -- end
+  },
   {
     'ray-x/go.nvim',
     dependencies = { -- optional packages
