@@ -1,12 +1,12 @@
 local handler = function(virtText, lnum, endLnum, width, truncate)
-  local log = require 'ufo.lib.log'
   local newVirtText = {}
+  local _end = endLnum - 1
+  local final_text = vim.trim(vim.api.nvim_buf_get_text(0, _end, 0, _end, -1, {})[1])
   local suffix = (' 󰁂 %d '):format(endLnum - lnum)
   local sufWidth = vim.fn.strdisplaywidth(suffix)
   local targetWidth = width - sufWidth
   local curWidth = 0
   for _, chunk in ipairs(virtText) do
-    log.error('chunk', chunk)
     local chunkText = chunk[1]
     local chunkWidth = vim.fn.strdisplaywidth(chunkText)
     if targetWidth > curWidth + chunkWidth then
@@ -24,9 +24,8 @@ local handler = function(virtText, lnum, endLnum, width, truncate)
     end
     curWidth = curWidth + chunkWidth
   end
-  local _end = endLnum - 1
-  local final_text = vim.trim(vim.api.nvim_buf_get_text(0, _end, 0, _end, -1, {})[1])
-  table.insert(newVirtText, { ' ⋯ ' .. final_text })
+  table.insert(newVirtText, { ' ⋯ ' })
+  table.insert(newVirtText, { final_text, 'UfoFoldedFg' })
   table.insert(newVirtText, { suffix, 'MoreMsg' })
   return newVirtText
 end
