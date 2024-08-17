@@ -3,7 +3,7 @@ local handler = function(virtText, lnum, endLnum, width, truncate)
   local _end = endLnum - 1
   local final_text = vim.trim(vim.api.nvim_buf_get_text(0, _end, 0, _end, -1, {})[1])
   local suffix = (' 󰁂 %d '):format(endLnum - lnum)
-  local sufWidth = vim.fn.strdisplaywidth(suffix)
+  local sufWidth = vim.fn.strdisplaywidth(suffix .. final_text .. '...')
   local targetWidth = width - sufWidth
   local curWidth = 0
   for _, chunk in ipairs(virtText) do
