@@ -52,7 +52,6 @@ setopt HIST_BEEP              # Beep when accessing nonexistent history.
 #  Plugins  #
 # ========= #
 plugins=(
-  alias-tips
   aliases
   argocd
   asdf

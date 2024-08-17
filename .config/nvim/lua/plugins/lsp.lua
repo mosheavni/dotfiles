@@ -66,15 +66,6 @@ M.dependencies = {
     },
     config = true,
   },
-  -- {
-  --   'folke/neodev.nvim',
-  --   opts = {
-  --     override = function(_, library)
-  --       library.enabled = true
-  --       library.plugins = true
-  --     end,
-  --   },
-  -- },
 }
 
 local language_specific_plugins = {
