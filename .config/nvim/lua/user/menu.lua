@@ -16,7 +16,7 @@ end
 
 ---Add actions to the existing actions table
 ---@param prefix? string optional prefix to add to all actions
----@param actions table<string, string> Actions table
+---@param actions table<string, function> Actions table
 M.add_actions = function(prefix, actions)
   local actions_prefixed = actions
   if prefix ~= nil then
