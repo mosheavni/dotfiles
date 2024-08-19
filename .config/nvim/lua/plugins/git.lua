@@ -94,7 +94,7 @@ local actions = function()
     end,
     ['Pull {remote} {branch}'] = function()
       get_remotes(function(remote)
-        vim.ui.select(get_branches(remote), { prompt = 'Select branch to pull from: ' }, function(branch_to_pull)
+        vim.ui.select(get_branches(remote), { prompt = 'Select branch to pull from on ' .. remote .. 'remote: ' }, function(branch_to_pull)
           if not branch_to_pull then
             actions_pretty_print 'Canceled.'
             return
@@ -106,7 +106,7 @@ local actions = function()
     end,
     ['Merge {remote} {branch}'] = function()
       get_remotes(function(remote)
-        vim.ui.select(get_branches(remote), { prompt = 'Select branch to merge with: ' }, function(branch_to_merge)
+        vim.ui.select(get_branches(remote), { prompt = 'Select branch to merge with on ' .. remote .. ' remote: ' }, function(branch_to_merge)
           if not branch_to_merge then
             actions_pretty_print 'Canceled.'
             return
