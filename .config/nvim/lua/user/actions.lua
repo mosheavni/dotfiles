@@ -103,7 +103,7 @@ return {
   ['Where am I?'] = function()
     vim.cmd.Whereami()
   end,
-  ['Autocommand to reload the file'] = function()
+  ['Autocommand to reload the lua file nvim'] = function()
     if vim.api.nvim_get_option_value('filetype', { buf = 0 }) ~= 'lua' then
       ---@diagnostic disable-next-line: param-type-mismatch
       pretty_print('Filetype is not lua!', [[🖥️]], vim.log.levels.ERROR)
@@ -112,10 +112,16 @@ return {
 
     local text = [[
 -- Reload the file when it changes on disk
-vim.api.nvim_create_autocmd('BufWritePost', {
-  buffer = 0,
-  command = 'luafile %'
+local group = vim.api.nvim_create_augroup("ReloadModule", {clear = true})
+vim.api.nvim_create_autocmd("BufWritePost", {
+	buffer = 0,
+	group = group,
+	callback = function()
+		vim.cmd("luafile %")
+		vim.notify("Module reloaded")
+	end,
 })
+
 vim.keymap.set('n', 'bla', function()
   vim.notify('hello!')
 end)
