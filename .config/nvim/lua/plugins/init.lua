@@ -77,7 +77,7 @@ local M = {
   {
     'AndrewRadev/switch.vim',
     keys = {
-      { 'gs', nil, { 'n', 'v' } },
+      { 'gs', nil, { 'n', 'v' }, desc = 'Switch' },
     },
     config = function()
       local fk = [=[\<\(\l\)\(\l\+\(\u\l\+\)\+\)\>]=]

@@ -259,7 +259,7 @@ map('v', 'J', [[:m '>+1<CR>gv=gv]], { remap = false, silent = true })
 map('v', 'K', [[:m '<-2<CR>gv=gv]], { remap = false, silent = true })
 
 -- Select last inserted text
-map('n', 'gV', '`[v`]', { remap = false })
+map('n', 'gV', '`[v`]', { remap = false, desc = 'Visually select last insert' })
 
 -- Convert all tabs to spaces
 map('n', '<leader>ct<space>', ':retab<cr>', { remap = false, silent = true })

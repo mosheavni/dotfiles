@@ -419,6 +419,9 @@ local M = {
   },
   {
     'mosheavni/vim-to-github',
+    keys = {
+      { '<leader>gh', ':ToGithub<cr>', mode = { 'n', 'v' }, desc = 'Open GitHub on this line' },
+    },
     cmd = { 'ToGithub' },
   },
   {
