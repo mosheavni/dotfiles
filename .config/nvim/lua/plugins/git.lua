@@ -123,7 +123,7 @@ local actions = function()
     ['Open Status / Menu (<leader>gg / :G)'] = function()
       vim.cmd 'Git'
     end,
-    ['Open GitHub on this line (:ToGithub)'] = function()
+    ['Open GitHub on this line (<leader>gh or :ToGithub)'] = function()
       vim.cmd 'ToGithub'
     end,
     ['Log'] = function()
