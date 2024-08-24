@@ -49,7 +49,6 @@
   "mason-null-ls.nvim": { "branch": "main", "commit": "de19726de7260c68d94691afb057fa73d3cc53e7" },
   "mason-nvim-dap.nvim": { "branch": "main", "commit": "8b9363d83b5d779813cdd2819b8308651cec2a09" },
   "mason.nvim": { "branch": "main", "commit": "e2f7f9044ec30067bc11800a9e266664b88cda22" },
-  "mini.clue": { "branch": "main", "commit": "847376b3a044129348cea9eedb841106379e0796" },
   "mini.cursorword": { "branch": "main", "commit": "7a9f1ec73c52124abc39f0309d332ababefc68b2" },
   "mini.hipatterns": { "branch": "main", "commit": "1811b0661721285fc83494d2e687d538fb3ddac8" },
   "mini.indentscope": { "branch": "main", "commit": "d2e7b5f0260789c325f92ab3421ff9884ea01842" },
