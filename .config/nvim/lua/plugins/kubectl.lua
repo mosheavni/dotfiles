@@ -7,8 +7,8 @@ return {
     --   level = 'trace',
     -- },
     notifications = {
-      enabled = true,
-      verbose = true,
+      enabled = false,
+      verbose = false,
       blend = 0,
     },
   },

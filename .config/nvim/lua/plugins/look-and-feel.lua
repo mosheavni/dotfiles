@@ -119,7 +119,7 @@ local M = {
     },
     config = function(_, opts)
       require('mini.indentscope').setup(opts)
-      vim.cmd 'highlight! MiniIndentscopeSymbol ctermfg=109 guifg=#7daea3'
+      vim.cmd 'highlight! MiniIndentscopeSymbol ctermfg=109 guifg=#76D1A3'
     end,
     init = function()
       vim.api.nvim_create_autocmd('FileType', {
@@ -196,7 +196,7 @@ local M = {
   {
     'NvChad/nvim-colorizer.lua',
     opts = {
-      filetypes = { '*', '!packer', '!dashboard', '!NvimTree', '!Trouble', '!trouble', '!lazy', '!mason', '!notify', '!floaterm', '!lazyterm' },
+      filetypes = { '*', '!fugitive', '!packer', '!dashboard', '!NvimTree', '!Trouble', '!trouble', '!lazy', '!mason', '!notify', '!floaterm', '!lazyterm' },
       user_default_options = { mode = 'virtualtext', names = false },
     },
     config = function(_, opts)
