@@ -9,9 +9,24 @@ return {
       '<F4>',
       function()
         local utils = require 'fzf-lua.utils'
-        local path = require 'fzf-lua.path'
         require('fzf-lua').git_branches {
           actions = {
+            -- perform checkout instead of switch
+            ['ctrl-s'] = {
+              fn = function(selected)
+                local branch = selected[1]
+                local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'checkout', branch }, vim.fn.getcwd())
+                if ret == 0 then
+                  utils.info('Switched to branch ' .. branch)
+                  return
+                else
+                  local msg = string.format('Error when switching to branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
+                  utils.err(msg)
+                end
+              end,
+              reload = true,
+              header = 'switch',
+            },
             ['ctrl-r'] = {
               fn = function(selected)
                 local branch = selected[1]
