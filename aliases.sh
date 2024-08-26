@@ -303,6 +303,7 @@ alias kg='kubectl get '
 alias kd='kubectl describe '
 alias ke='kubectl edit '
 alias kdelrs='kubectl delete rs '
+alias k8s='nvim +"lua require(\"kubectl\").open()"'
 
 # Kubectl Persistent Volume
 alias kgpv='kubectl get persistentvolume'
