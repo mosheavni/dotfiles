@@ -151,6 +151,7 @@ local M = {
       { 'S', '<Plug>(leap-backward-to)' },
     },
   },
+  { 'stevearc/profile.nvim', lazy = true },
   {
     'atusy/treemonkey.nvim',
     keys = {

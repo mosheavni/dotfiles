@@ -4,4 +4,5 @@ require 'core.lazy-bootstrap' -- bootstraps folke/lazy
 require 'user.options'
 require 'user.keymaps'
 require('lazy').setup('plugins', require('user.lazy').config)
+require 'core.profile'
 require 'user.autocommands'
