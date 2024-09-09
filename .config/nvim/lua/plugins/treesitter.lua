@@ -13,7 +13,6 @@ local M = {
   dependencies = {
     'Afourcat/treesitter-terraform-doc.nvim',
     'nvim-treesitter/nvim-treesitter-context',
-    'nvim-treesitter/nvim-treesitter-refactor',
     'nvim-treesitter/nvim-treesitter-textobjects',
     { 'folke/ts-comments.nvim', opts = {} },
     {
@@ -127,19 +126,6 @@ M.opts = {
         ['[M'] = '@function.outer',
         ['[]'] = '@block.outer',
       },
-    },
-  },
-  refactor = {
-    highlight_current_scope = { enable = false },
-    smart_rename = {
-      enable = false,
-      keymaps = {
-        smart_rename = 'grr',
-      },
-    },
-    highlight_definitions = {
-      enable = true,
-      clear_on_cursor_move = true,
     },
   },
 }
