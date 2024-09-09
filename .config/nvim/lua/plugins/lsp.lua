@@ -69,10 +69,6 @@ M.dependencies = {
 }
 
 local language_specific_plugins = {
-  {
-    'jose-elias-alvarez/typescript.nvim',
-    ft = { 'typescript', 'typescriptreact', 'typescript.tsx', 'javascript' },
-  },
   { 'cuducos/yaml.nvim', ft = 'yaml' },
   {
     'phelipetls/jsonpath.nvim',

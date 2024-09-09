@@ -102,47 +102,6 @@ M.setup = function()
     capabilities = capabilities,
   }
 
-  require('typescript').setup {
-    server = {
-      settings = {
-        preferences = {
-          allowRenameOfImportPath = true,
-          disableSuggestions = false,
-          importModuleSpecifierEnding = 'auto',
-          importModuleSpecifierPreference = 'non-relative',
-          includeCompletionsForImportStatements = true,
-          includeCompletionsForModuleExports = true,
-          quotePreference = 'single',
-        },
-        -- specify some or all of the following settings if you want to adjust the default behavior
-        javascript = {
-          inlayHints = {
-            includeInlayEnumMemberValueHints = true,
-            includeInlayFunctionLikeReturnTypeHints = true,
-            includeInlayFunctionParameterTypeHints = true,
-            includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-            includeInlayPropertyDeclarationTypeHints = true,
-            includeInlayVariableTypeHints = true,
-          },
-        },
-        typescript = {
-          inlayHints = {
-            includeInlayEnumMemberValueHints = true,
-            includeInlayFunctionLikeReturnTypeHints = true,
-            includeInlayFunctionParameterTypeHints = true,
-            includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-            includeInlayPropertyDeclarationTypeHints = true,
-            includeInlayVariableTypeHints = true,
-          },
-        },
-      },
-      on_attach = default_on_attach,
-      capabilities = capabilities,
-    },
-  }
-
   require('lspconfig')['vimls'].setup {
     on_attach = default_on_attach,
     capabilities = capabilities,
