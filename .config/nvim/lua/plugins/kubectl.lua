@@ -11,6 +11,10 @@ return {
       verbose = false,
       blend = 0,
     },
+    namespace_fallback = {
+      'default',
+      'kube-system',
+    },
   },
   cmd = { 'Kubectl', 'Kubectx', 'Kubens' },
   keys = {
