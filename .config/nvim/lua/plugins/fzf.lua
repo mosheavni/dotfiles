@@ -24,8 +24,17 @@ return {
                   utils.err(msg)
                 end
               end,
-              reload = true,
+              reload = false,
               header = 'switch',
+            },
+            ['ctrl-y'] = {
+              fn = function(selected)
+                local branch = selected[1]
+                vim.fn.setreg('+', branch)
+                utils.info('Yanked branch name ' .. branch)
+              end,
+              reload = false,
+              header = 'yank branch name',
             },
             ['ctrl-r'] = {
               fn = function(selected)
