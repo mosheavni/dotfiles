@@ -187,14 +187,6 @@ local M = {
     end,
   },
   {
-    'vim-scripts/ReplaceWithRegister',
-    keys = {
-      { '<leader>p', '<Plug>ReplaceWithRegisterOperator' },
-      { '<leader>P', '<Plug>ReplaceWithRegisterLine' },
-      { '<leader>p', '<Plug>ReplaceWithRegisterVisual', mode = { 'x' } },
-    },
-  },
-  {
     'vidocqh/auto-indent.nvim',
     event = 'InsertEnter',
     opts = {},

@@ -15,6 +15,24 @@ local M = {
     keys = { '<C-a>', '<C-x>' },
   },
   {
+    'gbprod/substitute.nvim',
+    keys = {
+      { '<leader>p' },
+      { '<leader>P' },
+    },
+    dependencies = 'yanky.nvim',
+    config = function()
+      require('substitute').setup {
+        on_substitute = require('yanky.integration').substitute(),
+      }
+      -- Lua
+      vim.keymap.set('n', '<leader>p', require('substitute').operator, { noremap = true })
+      vim.keymap.set('n', '<leader>P', require('substitute').line, { noremap = true })
+      -- vim.keymap.set('n', 'S', require('substitute').eol, { noremap = true })
+      vim.keymap.set('x', '<leader>p', require('substitute').visual, { noremap = true })
+    end,
+  },
+  {
     'mosheavni/vim-kubernetes',
     ft = 'yaml',
     config = function()
