@@ -80,7 +80,12 @@ return {
   ['[Folds] Close all folds (<leader>fc)'] = function()
     vim.cmd 'normal! zM'
   end,
-  ['Remove terragrunt files'] = function()
+  ['[Terraform] Add -target macro to register q'] = function()
+    -- set q register to -target
+    vim.fn.setreg('q', [[yss'I-target=A \j]])
+    pretty_print('Macro q set to -target', 'Terraform')
+  end,
+  ['[Terraform] Remove terragrunt files'] = function()
     require('lazy').load { plugins = { 'vim-fugitive' } }
     local scan_dir = require 'plenary.scandir'
     local terraform_repo = vim.fn.FugitiveExecute({ 'rev-parse', '--show-toplevel' }).stdout
