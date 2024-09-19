@@ -20,7 +20,6 @@ local M = {
       ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml' },
       opts = {},
     },
-    'RRethy/nvim-treesitter-endwise',
   },
   event = 'BufReadPost',
 }
@@ -79,9 +78,6 @@ M.opts = {
     },
   },
   matchup = {
-    enable = true,
-  },
-  endwise = {
     enable = true,
   },
   highlight = {
