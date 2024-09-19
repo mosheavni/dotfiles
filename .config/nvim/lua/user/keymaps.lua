@@ -169,6 +169,12 @@ map('n', '[t', ':tabprev<cr>zz', { remap = false, silent = true })
 map('n', ']b', ':bnext<cr>', { remap = false, silent = true })
 map('n', '[b', ':bprev<cr>', { remap = false, silent = true })
 
+-- tabs
+map('n', '<leader>tn', ':tabnew<cr>', { remap = false, silent = true })
+map('n', '<leader>tc', ':tabclose<cr>', { remap = false, silent = true })
+map('n', '<leader>th', ':-tabmove<cr>', { remap = false, silent = true })
+map('n', '<leader>tl', ':+tabmove<cr>', { remap = false, silent = true })
+
 -- This creates a new line of '=' signs the same length of the line
 map('n', '<leader>=', 'yypVr=', { remap = false })
 
@@ -255,8 +261,8 @@ map('n', 'cp', '"+y')
 map('n', 'cv', '"+p')
 
 -- Move visually selected block
-map('v', 'J', [[:m '>+1<CR>gv=gv]], { remap = false, silent = true })
-map('v', 'K', [[:m '<-2<CR>gv=gv]], { remap = false, silent = true })
+-- map('v', 'J', [[:m '>+1<CR>gv=gv]], { remap = false, silent = true })
+-- map('v', 'K', [[:m '<-2<CR>gv=gv]], { remap = false, silent = true })
 
 -- Select last inserted text
 map('n', 'gV', '`[v`]', { remap = false, desc = 'Visually select last insert' })
