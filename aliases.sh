@@ -156,6 +156,13 @@ function argocd_web () {
   open "${ingress_host}"
 }
 
+function argocd_login() {
+  argocd_ingress=$(kubectl get ingress -n argocd --no-headers -o custom-columns=":metadata.name" | grep argocd-server)
+  ingress_host=$(kubectl get ingress -n argocd "${argocd_ingress}" -ojson | jq -r '.spec.rules[].host')
+  pass=$(kubectl get secret -n argocd argocd-initial-admin-secret -ojson | jq -r '.data | with_entries(.value |= @base64d) | .password')
+  argocd login "${ingress_host}" --username admin --password "${pass}"
+}
+
 function kgres() {
   kubectl get pod $* \
     -ojsonpath='{range .items[*]}{.spec.containers[*].name}{" memory: "}{.spec.containers..resources.requests.memory}{"/"}{.spec.containers..resources.limits.memory}{" | cpu: "}{.spec.containers..resources.requests.cpu}{"/"}{.spec.containers..resources.limits.cpu}{"\n"}{end}' | sort \
