@@ -169,9 +169,11 @@ local actions = function()
         vim.cmd('Git tag -d ' .. input)
         vim.ui.select({ 'Yes', 'No' }, { prompt = 'Remove from remote?' }, function(choice)
           if choice == 'Yes' then
-            actions_pretty_print('Deleting tag ' .. input .. ' from remote...')
-            vim.cmd('Git push origin :refs/tags/' .. input)
-            actions_pretty_print('Tag ' .. input .. ' deleted from local and remote.')
+            get_remotes(function(remote)
+              actions_pretty_print('Deleting tag ' .. input .. ' from remote ' .. remote .. '...')
+              vim.cmd('Git push ' .. remote .. ' :refs/tags/' .. input)
+              actions_pretty_print('Tag ' .. input .. ' deleted from local and remote.')
+            end)
           else
             actions_pretty_print('Tag ' .. input .. ' deleted locally.')
           end
@@ -216,21 +218,14 @@ local diff_actions = function()
       end)
     end,
     ['[Diffview] Diff with branch'] = function()
-      vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
-        if not branch_to_diff then
-          actions_pretty_print 'Canceled.'
-          return
-        end
-        vim.cmd('DiffviewOpen origin/' .. branch_to_diff .. '..HEAD')
-      end)
-    end,
-    ['[Diffview] Diff file with branch'] = function()
-      vim.ui.input({ prompt = 'Enter branch to diff with: ' }, function(branch_to_diff)
-        if not branch_to_diff then
-          actions_pretty_print 'Canceled.'
-          return
-        end
-        vim.cmd('DiffviewFileHistory ' .. branch_to_diff)
+      get_remotes(function(remote)
+        vim.ui.select(get_branches(remote), { prompt = 'Select branch to diff with on ' .. remote .. 'remote: ' }, function(branch_to_diff)
+          if not branch_to_diff then
+            actions_pretty_print 'Canceled.'
+            return
+          end
+          vim.cmd('DiffviewOpen ' .. remote .. '/' .. branch_to_diff .. '..HEAD')
+        end)
       end)
     end,
     ['[Diffview] Diff close'] = function()
