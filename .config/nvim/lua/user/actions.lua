@@ -105,7 +105,7 @@ return {
   ['[Terraform] leave "will be" on plan'] = function()
     vim.cmd [[
       v? will be ?d
-      %s?\v^\s*#\s*(.*) will be (.*)?'\1' \2?
+      %s?\v^\s*#\s*(.*) will be (.*)?\1 \2?
     ]]
   end,
   ['Basic groovy format'] = function()

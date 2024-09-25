@@ -19,6 +19,6 @@ return {
   cmd = { 'Kubectl', 'Kubectx', 'Kubens' },
   keys = {
     { '<leader>k', '<cmd>lua require("kubectl").toggle()<cr>' },
-    { '<C-k>', '<Plug>(kubectl.kill)' },
+    { '<C-k>', '<Plug>(kubectl.kill)', ft = 'k8s_*' },
   },
 }

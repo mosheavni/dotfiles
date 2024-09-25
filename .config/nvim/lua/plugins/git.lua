@@ -219,7 +219,7 @@ local diff_actions = function()
     end,
     ['[Diffview] Diff with branch'] = function()
       get_remotes(function(remote)
-        vim.ui.select(get_branches(remote), { prompt = 'Select branch to diff with on ' .. remote .. 'remote: ' }, function(branch_to_diff)
+        vim.ui.select(get_branches(remote), { prompt = 'Select branch to diff with on ' .. remote .. ' remote: ' }, function(branch_to_diff)
           if not branch_to_diff then
             actions_pretty_print 'Canceled.'
             return
