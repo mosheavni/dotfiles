@@ -124,7 +124,6 @@ local M = {
   'nvim-tree/nvim-tree.lua',
   cmd = { 'NvimTreeToggle', 'NvimTreeOpen', 'NvimTreeFocus', 'NvimTreeRefresh' },
   keys = { '<c-o>', '<leader>v' },
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
 }
 
 M.keys = {
@@ -139,15 +138,6 @@ M.config = function()
   local sort_by = function()
     return SORT_METHODS[sort_current]
   end
-
-  require('nvim-web-devicons').set_icon {
-    hcl = {
-      icon = '',
-      color = '#7182D0',
-      cterm_color = '93',
-      name = 'HCL',
-    },
-  }
 
   nvim_tree.setup {
     live_filter = {
