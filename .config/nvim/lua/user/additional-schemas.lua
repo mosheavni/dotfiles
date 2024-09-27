@@ -10,26 +10,30 @@ local M = {
 
 M.schema_url = 'https://raw.githubusercontent.com/' .. M.schemas_catalog .. '/' .. M.schema_catalog_branch
 
-M.list_github_tree = function()
+--- Get all trees from GitHub
+---@param cb function
+M.list_github_tree = function(cb)
   local url = M.github_base_api_url .. '/' .. M.schemas_catalog .. '/git/trees/' .. M.schema_catalog_branch
+  local trees = {}
   local headers_in_curl_format = {}
   for key, value in pairs(M.github_headers) do
     table.insert(headers_in_curl_format, '-H')
     table.insert(headers_in_curl_format, key .. ': ' .. value)
   end
   local cmd = vim.iter({ 'curl', '--location', '--silent', '--fail', headers_in_curl_format, url .. '?recursive=1' }):flatten():totable()
-  local response = vim.fn.systemlist(cmd)
-  local body = vim.fn.json_decode(response)
-  local trees = {}
-  for _, tree in ipairs(body.tree) do
-    if tree.type == 'blob' and tree.path:match '%.json$' then
-      table.insert(trees, tree.path)
-    end
-  end
-  return trees
+  vim.system(cmd, { text = true }, function(data)
+    vim.schedule(function()
+      vim.print(vim.inspect(data))
+      local body = vim.fn.json_decode(data.stdout)
+      for _, tree in ipairs(body.tree) do
+        if tree.type == 'blob' and tree.path:match '%.json$' then
+          table.insert(trees, tree.path)
+        end
+      end
+      cb(trees)
+    end)
+  end)
 end
-
-M.all_crds = M.list_github_tree()
 
 M.crds_as_schemas = function()
   local schemas = {}
@@ -44,7 +48,7 @@ M.crds_as_schemas = function()
   return schemas
 end
 
-M.init = function()
+M.list_schemas = function()
   vim.ui.select(M.all_crds, { prompt = 'Select schema: ' }, function(selection)
     if not selection then
       require('user.utils').pretty_print 'Canceled.'
@@ -55,6 +59,18 @@ M.init = function()
     vim.api.nvim_buf_set_lines(0, 0, 0, false, { schema_modeline })
     vim.notify('Added schema modeline: ' .. schema_modeline)
   end)
+end
+
+M.init = function()
+  if not M.all_crds or #M.all_crds == 0 then
+    M.list_github_tree(function(trees)
+      M.all_crds = trees
+      M.list_schemas()
+    end)
+    return
+  else
+    M.list_schemas()
+  end
 end
 
 return M
