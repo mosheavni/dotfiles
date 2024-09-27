@@ -6,14 +6,12 @@ return {
     -- logging = {
     --   level = 'trace',
     -- },
-    notifications = {
-      enabled = false,
-      verbose = false,
-      blend = 0,
-    },
-    namespace_fallback = {
-      'default',
-      'kube-system',
+    -- namespace_fallback = {
+    --   'default',
+    --   'kube-system',
+    -- },
+    filter = {
+      apply_on_select_from_history = false,
     },
   },
   cmd = { 'Kubectl', 'Kubectx', 'Kubens' },
