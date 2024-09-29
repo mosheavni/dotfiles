@@ -158,6 +158,7 @@ M.config = function()
           fallback()
         end
       end, { 'i', 's' }),
+      ['<C-/>'] = cmp.mapping.close(),
     },
     sorting = {
       priority_weight = 2,
