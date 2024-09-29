@@ -3,7 +3,17 @@ local actions_pretty_print = function(message)
   require('user.utils').pretty_print(message, 'Git Actions', '')
 end
 
-local function get_branches(remote_name)
+local function with_ui_select(items, opts, cb)
+  vim.ui.select(items, opts, function(selection)
+    if not selection then
+      actions_pretty_print 'Canceled.'
+      return
+    end
+    cb(selection)
+  end)
+end
+
+local function get_branches(remote_name, cb)
   local cmd_output = vim.system({ 'git', 'ls-remote', '--heads', remote_name }):wait()
   -- split cmd_output.stdout by new line
   cmd_output = vim.split(cmd_output.stdout, '\n')
@@ -11,7 +21,33 @@ local function get_branches(remote_name)
   for _, line in ipairs(cmd_output) do
     table.insert(branches, string.match(line, 'heads/(.*)$'))
   end
-  return branches
+  with_ui_select(branches, { prompt = 'Select branch: ' }, cb)
+end
+
+local function get_remotes(cb)
+  local remotes = vim.fn.FugitiveExecute('remote').stdout
+  if #remotes == 2 then
+    cb(remotes[1])
+  else
+    -- remove empty items of the remotes
+    for i = #remotes, 1, -1 do
+      if remotes[i] == '' then
+        table.remove(remotes, i)
+      end
+    end
+
+    with_ui_select(remotes, { prompt = 'Select remote: ' }, cb)
+  end
+end
+
+local function get_tags(cb)
+  local tags = vim
+    .iter(vim.fn.FugitiveExecute('tag').stdout)
+    :map(function(tag)
+      return tag and tag ~= '' and tag or nil
+    end)
+    :totable()
+  with_ui_select(tags, { prompt = 'Select tag: ' }, cb)
 end
 
 local function create_new_branch(branch_opts)
@@ -28,28 +64,6 @@ local function create_new_branch(branch_opts)
     end
     vim.cmd('Git checkout -b ' .. input)
   end)
-end
-
-local function get_remotes(cb)
-  local remotes = vim.fn.FugitiveExecute('remote').stdout
-  if #remotes == 2 then
-    cb(remotes[1])
-  else
-    -- remove empty items of the remotes
-    for i = #remotes, 1, -1 do
-      if remotes[i] == '' then
-        table.remove(remotes, i)
-      end
-    end
-
-    vim.ui.select(remotes, { prompt = 'Select remote: ' }, function(selection)
-      if not selection then
-        actions_pretty_print 'Canceled.'
-        return
-      end
-      cb(selection)
-    end)
-  end
 end
 
 local actions = function()
@@ -94,25 +108,26 @@ local actions = function()
     end,
     ['Pull {remote} {branch}'] = function()
       get_remotes(function(remote)
-        vim.ui.select(get_branches(remote), { prompt = 'Select branch to pull from on ' .. remote .. 'remote: ' }, function(branch_to_pull)
-          if not branch_to_pull then
-            actions_pretty_print 'Canceled.'
-            return
-          end
-          vim.cmd('Git pull ' .. remote .. ' ' .. branch_to_pull)
-          actions_pretty_print('Pulled from ' .. remote .. ' ' .. branch_to_pull)
+        get_branches(remote, function(branch)
+          vim.cmd('Git pull ' .. remote .. ' ' .. branch)
+          actions_pretty_print('Pulled from ' .. remote .. ' ' .. branch)
         end)
       end)
     end,
     ['Merge {remote} {branch}'] = function()
       get_remotes(function(remote)
-        vim.ui.select(get_branches(remote), { prompt = 'Select branch to merge with on ' .. remote .. ' remote: ' }, function(branch_to_merge)
-          if not branch_to_merge then
-            actions_pretty_print 'Canceled.'
-            return
-          end
-          vim.cmd('Git merge ' .. remote .. '/' .. branch_to_merge)
-          actions_pretty_print('Merged with ' .. remote .. '/' .. branch_to_merge)
+        get_branches(remote, function(branch)
+          with_ui_select({ 'Yes', 'No' }, { prompt = 'Squash? ' }, function(choice)
+            if choice == 'No' then
+              vim.cmd('Git merge ' .. remote .. '/' .. branch)
+              actions_pretty_print('Merged with ' .. remote .. '/' .. branch)
+              return
+            end
+            local commit_msg = string.format('"Squashed commits from %s/%s" ', remote, branch)
+            vim.cmd('Git merge --squash ' .. remote .. '/' .. branch)
+            vim.cmd('Git commit -m ' .. commit_msg)
+            actions_pretty_print('Squashed and merged with ' .. remote .. '/' .. branch)
+          end)
         end)
       end)
     end,
@@ -130,52 +145,41 @@ local actions = function()
       vim.cmd 'Git log --all --decorate --oneline'
     end,
     ['See all tags'] = function()
-      local tags = vim.fn.FugitiveExecute('tag').stdout
-      vim.ui.select(tags, { prompt = 'Select tag to copy to clipboard' }, function(selection)
-        if not selection then
-          actions_pretty_print 'Canceled.'
-          return
-        end
-        vim.fn.setreg('+', selection)
-        actions_pretty_print('Copied ' .. selection .. ' to clipboard.')
+      get_tags(function(tag)
+        vim.fn.setreg('+', tag)
+        actions_pretty_print('Copied ' .. tag .. ' to clipboard.')
       end)
     end,
     ['Create tag'] = function()
-      vim.ui.input({ prompt = 'Enter tag name to create: ' }, function(input)
-        if not input then
+      vim.ui.input({ prompt = 'Enter tag name to create: ' }, function(tag)
+        if not tag then
           actions_pretty_print 'Canceled.'
           return
         end
-        vim.cmd('Git tag ' .. input)
-        vim.ui.select({ 'Yes', 'No' }, { prompt = 'Push?' }, function(choice)
+        vim.cmd('Git tag ' .. tag)
+        with_ui_select({ 'Yes', 'No' }, { prompt = 'Push?' }, function(choice)
           if choice == 'Yes' then
             vim.cmd 'Git push --tags'
-            actions_pretty_print('Tag ' .. input .. ' created and pushed.')
+            actions_pretty_print('Tag ' .. tag .. ' created and pushed.')
           else
-            actions_pretty_print('Tag ' .. input .. ' created.')
+            actions_pretty_print('Tag ' .. tag .. ' created.')
           end
         end)
       end)
     end,
     ['Delete tag'] = function()
-      local tags = vim.fn.FugitiveExecute('tag').stdout
-
-      vim.ui.select(tags, { prompt = 'Enter tag name to delete' }, function(input)
-        if not input then
-          actions_pretty_print 'Canceled.'
-          return
-        end
-        actions_pretty_print('Deleting tag ' .. input .. ' locally...')
-        vim.cmd('Git tag -d ' .. input)
-        vim.ui.select({ 'Yes', 'No' }, { prompt = 'Remove from remote?' }, function(choice)
+      get_tags(function(tag)
+        actions_pretty_print('Deleting tag ' .. tag .. ' locally...')
+        vim.cmd('Git tag -d ' .. tag)
+        with_ui_select({ 'Yes', 'No' }, { prompt = 'Delete tag ' .. tag .. ' from remote?' }, function(choice)
           if choice == 'Yes' then
             get_remotes(function(remote)
-              actions_pretty_print('Deleting tag ' .. input .. ' from remote ' .. remote .. '...')
-              vim.cmd('Git push ' .. remote .. ' :refs/tags/' .. input)
-              actions_pretty_print('Tag ' .. input .. ' deleted from local and remote.')
+              actions_pretty_print('Deleting tag ' .. tag .. ' from remote ' .. remote .. '...')
+              vim.cmd('Git push ' .. remote .. ' :refs/tags/' .. tag)
+              actions_pretty_print('Tag ' .. tag .. ' deleted from local and remote.')
             end)
           else
-            actions_pretty_print('Tag ' .. input .. ' deleted locally.')
+            actions_pretty_print('Tag ' .. tag .. ' deleted only locally.')
           end
         end)
       end)
@@ -219,11 +223,7 @@ local diff_actions = function()
     end,
     ['[Diffview] Diff with branch'] = function()
       get_remotes(function(remote)
-        vim.ui.select(get_branches(remote), { prompt = 'Select branch to diff with on ' .. remote .. ' remote: ' }, function(branch_to_diff)
-          if not branch_to_diff then
-            actions_pretty_print 'Canceled.'
-            return
-          end
+        get_branches(remote, function(branch_to_diff)
           vim.cmd('DiffviewOpen ' .. remote .. '/' .. branch_to_diff .. '..HEAD')
         end)
       end)
@@ -388,10 +388,8 @@ nnoremap <leader>gc :Gcd <bar> echom "Changed directory to Git root"<bar>pwd<cr>
   require('user.menu').add_actions('Git', vim.tbl_extend('force', actions(), diff_actions()))
   vim.keymap.set('n', '<leader>gm', function()
     local git_actions = require('user.menu').get_actions { prefix = 'Git' }
-    vim.ui.select(vim.tbl_keys(git_actions), { prompt = 'Choose git action: ' }, function(choice)
-      if choice then
-        git_actions[choice]()
-      end
+    with_ui_select(vim.tbl_keys(git_actions), { prompt = 'Choose git action: ' }, function(choice)
+      git_actions[choice]()
     end)
   end)
 end
