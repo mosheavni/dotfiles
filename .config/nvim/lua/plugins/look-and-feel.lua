@@ -72,6 +72,12 @@ local M = {
     opts = {},
   },
   {
+    'eandrju/cellular-automaton.nvim',
+    keys = {
+      { '<Leader>fml', '<cmd>CellularAutomaton make_it_rain<CR>' },
+    },
+  },
+  {
     'dstein64/vim-startuptime',
     cmd = 'Startup Time (:StartupTime)',
     init = function()
