@@ -76,13 +76,6 @@ local actions = function()
     ['Checkout new branch (:Gcb {new_branch})'] = function()
       create_new_branch { args = '' }
     end,
-    ['Work in Progress commit (on git window - wip)'] = function()
-      vim.cmd 'call Enter_Wip_Moshe()'
-      actions_pretty_print 'Created a work in progress commit.'
-    end,
-    ['First commit of a new branch'] = function()
-      vim.cmd 'call First_Commit_Moshe()'
-    end,
     ['Set upstream to HEAD'] = function()
       ui_select_remotes(function(remote)
         vim.cmd('Git branch --set-upstream-to=' .. remote .. '/' .. vim.fn.FugitiveHead())
