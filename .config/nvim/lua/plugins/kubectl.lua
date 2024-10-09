@@ -4,7 +4,10 @@ return {
   opts = {
     log_level = vim.log.levels.DEBUG,
     diff = { bin = 'kdiff' },
+    hints = true,
     context = true,
+    heartbeat = true,
+    kubernetes_versions = true,
     filter = {
       apply_on_select_from_history = false,
     },

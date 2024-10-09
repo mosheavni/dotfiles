@@ -19,7 +19,7 @@ vim.schedule(function()
       local _, buf_name = pcall(vim.api.nvim_buf_get_var, 0, 'buf_name')
       local lower_buf_name = string.lower(buf_name)
 
-      if lower_buf_name == 'applications.argoproj.io' then
+      if lower_buf_name == 'applications' or lower_buf_name == 'applications.argoproj.io' then
         local name = tables.getCurrentSelection(2)
         if not name then
           return
