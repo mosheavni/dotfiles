@@ -411,11 +411,18 @@ local M = {
     cmd = { 'G', 'Git', 'Gcb', 'Gl', 'Gp', 'Gmom', 'Gpom', 'Gread' },
   },
   {
-    'mosheavni/vim-to-github',
+    'linrongbin16/gitlinker.nvim',
+    cmd = { 'GitLink', 'ToGithub' },
+    config = function()
+      require('gitlinker').setup {}
+      vim.api.nvim_create_user_command('ToGithub', function()
+        vim.cmd 'GitLink!'
+      end, {})
+    end,
     keys = {
-      { '<leader>gh', ':ToGithub<cr>', mode = { 'n', 'v' }, desc = 'Open GitHub on this line' },
+      { '<leader>gy', '<cmd>GitLink<cr>', mode = { 'n', 'v' }, desc = 'Yank git link' },
+      { '<leader>gh', '<cmd>GitLink!<cr>', mode = { 'n', 'v' }, desc = 'Open git link' },
     },
-    cmd = { 'ToGithub' },
   },
   {
     'moyiz/git-dev.nvim',
