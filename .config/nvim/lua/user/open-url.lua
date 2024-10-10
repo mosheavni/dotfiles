@@ -1,31 +1,8 @@
 local M = {}
 
-local uname = vim.uv.os_uname()
-
-M.is_mac = uname.sysname == 'Darwin'
-M.is_linux = uname.sysname == 'Linux'
-M.is_windows = uname.sysname == 'Windows_NT'
-M.is_wsl = string.find(uname.release, 'microsoft') ~= nil
-
 M.url_prefix = 'https://github.com'
 M.keymap_lhs = 'gx'
 M.open_cmd = nil
-
-M.open_url = function(url)
-  if M.open_cmd ~= nil then
-    vim.cmd('silent !' .. M.open_cmd .. ' ' .. url)
-  elseif M.is_windows then
-    vim.cmd([[:execute 'silent !start ]] .. url .. "'")
-  elseif M.is_wsl then
-    vim.cmd([[:execute 'silent !powershell.exe start ]] .. url .. "'")
-  elseif M.is_mac then
-    vim.cmd([[:execute 'silent !open ]] .. url .. "'")
-  elseif M.is_linux then
-    vim.cmd([[:execute 'silent !xdg-open ]] .. url .. "'")
-  else
-    print 'Unknown platform. Cannot open url'
-  end
-end
 
 M.open_url_under_cursor = function()
   local cword = vim.fn.expand '<cfile>'
@@ -48,7 +25,7 @@ M.open_url_under_cursor = function()
       url = string.gsub(url, [[(.*)@.*]], '%1')
     end
 
-    return M.open_url(M.url_prefix .. '/' .. url .. suffix)
+    return vim.ui.open(M.url_prefix .. '/' .. url .. suffix)
   end
 end
 
