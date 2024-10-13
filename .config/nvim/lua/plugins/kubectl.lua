@@ -4,12 +4,21 @@ return {
   opts = {
     log_level = vim.log.levels.DEBUG,
     diff = { bin = 'kdiff' },
+    headers = true,
     hints = true,
     context = true,
     heartbeat = true,
     kubernetes_versions = true,
     filter = {
       apply_on_select_from_history = false,
+    },
+    logs = {
+      since = '30s',
+      timestamps = false,
+      prefix = false,
+    },
+    lineage = {
+      enabled = true,
     },
   },
   cmd = { 'Kubectl', 'Kubectx', 'Kubens' },
