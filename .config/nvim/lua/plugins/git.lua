@@ -234,12 +234,16 @@ local fugitive_config = function()
   -- Pull / Push --
   -----------------
   vim.api.nvim_create_user_command('Gp', function()
+    local head = vim.fn.FugitiveHead()
+    actions_pretty_print('Pushing to ' .. head .. '...')
     vim.cmd 'Git push'
-    actions_pretty_print('Pushed to ' .. vim.fn.FugitiveHead())
+    actions_pretty_print('Pushed to ' .. head)
   end, {})
   vim.api.nvim_create_user_command('Gl', function()
+    local head = vim.fn.FugitiveHead()
+    actions_pretty_print('Pulling from ' .. head .. '...')
     vim.cmd 'Git pull'
-    actions_pretty_print('Pulled from ' .. vim.fn.FugitiveHead())
+    actions_pretty_print('Pulled from ' .. head)
   end, {})
   vim.keymap.set('n', '<leader>gp', '<cmd>Gp<cr>')
   vim.keymap.set('n', '<leader>gl', '<cmd>Gl<cr>')
@@ -334,7 +338,7 @@ local M = {
       require('gitlinker').setup {}
       vim.api.nvim_create_user_command('ToGithub', function()
         vim.cmd 'GitLink!'
-      end, {})
+      end, { range = true })
     end,
     keys = {
       { '<leader>gy', '<cmd>GitLink<cr>', mode = { 'n', 'v' }, desc = 'Yank git link' },
