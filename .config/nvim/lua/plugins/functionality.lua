@@ -230,11 +230,6 @@ local M = {
     end,
   },
   {
-    'max397574/better-escape.nvim',
-    opts = {},
-    event = 'InsertEnter',
-  },
-  {
     'AndrewRadev/linediff.vim',
     cmd = { 'Linediff' },
   },
