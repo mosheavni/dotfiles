@@ -270,4 +270,39 @@ end)
   ['[Diff] unsaved with saved file (<leader>ds)'] = function()
     vim.fn.feedkeys(T '<leader>' .. 'ds')
   end,
+  ['Ask AI (preplexity)'] = function()
+    local buf = utils.create_buffer('Ask AI', 'prompt')
+    -- Clear the buffer content
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, {})
+
+    local win = vim.api.nvim_open_win(buf, true, {
+      relative = 'editor',
+      style = 'minimal',
+      width = 100,
+      height = 5,
+      col = (vim.api.nvim_win_get_width(0) - 100 + 2) * 0.5,
+      row = (vim.api.nvim_win_get_height(0) - 20) * 0.5,
+      border = 'rounded',
+      title = 'preplexity',
+    })
+
+    vim.fn.prompt_setcallback(buf, function(input)
+      vim.notify(input)
+      vim.cmd 'stopinsert'
+      vim.api.nvim_set_option_value('modified', false, { buf = buf })
+      vim.api.nvim_win_close(win, true)
+      vim.api.nvim_buf_delete(buf, { force = true })
+    end)
+
+    vim.cmd 'startinsert'
+
+    -- vim.ui.input({ prompt = 'Ask AI: ' }, function(question)
+    --   if not question then
+    --     pretty_print 'Canceled.'
+    --     return
+    --   end
+    --   vim.notify('Asking AI: ' .. question)
+    --   vim.ui.open('https://www.perplexity.ai/search?q=' .. vim.uri_encode(question))
+    -- end)
+  end,
 }

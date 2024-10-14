@@ -130,4 +130,44 @@ M.filetype_to_extension = {
   zsh = 'sh',
 }
 
+M.get_buffer_by_name = function(bufname)
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    local name = vim.api.nvim_buf_get_name(buf)
+    local filename = vim.fs.basename(name)
+    if filename == bufname then
+      return buf
+    end
+  end
+  return nil
+end
+
+--- Creates a buffer with a given name and type.
+M.create_buffer = function(bufname, buftype, filetype, syntax, modifiable)
+  local buf = M.get_buffer_by_name(bufname)
+
+  if not buf then
+    buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_name(buf, bufname)
+
+    -- buffer options
+    if buftype then
+      vim.api.nvim_set_option_value('buftype', buftype, { buf = buf })
+    end
+    if filetype then
+      vim.api.nvim_set_option_value('filetype', filetype, { buf = buf })
+    end
+    if syntax then
+      vim.api.nvim_set_option_value('syntax', syntax, { buf = buf })
+    end
+    if type(modifiable) == 'boolean' then
+      vim.api.nvim_set_option_value('modifiable', modifiable, { buf = buf })
+    end
+
+    vim.api.nvim_set_option_value('bufhidden', 'wipe', { scope = 'local' })
+    vim.api.nvim_buf_set_var(buf, 'buf_name', bufname)
+  end
+
+  return buf
+end
+
 return M
