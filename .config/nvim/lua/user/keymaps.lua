@@ -153,12 +153,6 @@ for _, key in pairs { 'Q', 'X' } do
   map('n', '<leader>' .. key, ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>", { remap = false })
 end
 
--- keymap('n', 'Q', '@q', opts.no_remap)
--- keymap('n', '<leader>Q', ":<c-u><c-r><c-r>='let @q = '. string(getreg('q'))<cr><c-f><left>", opts.no_remap)
-
--- Paste in insert mode
-map('i', '<c-v>', '<c-r>"', { remap = false })
-
 -- Quickfix and tabs
 map('n', ']q', ':cnext<cr>zz', { remap = false, silent = true })
 map('n', '[q', ':cprev<cr>zz', { remap = false, silent = true })
