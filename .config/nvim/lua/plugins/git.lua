@@ -335,7 +335,9 @@ local M = {
     'linrongbin16/gitlinker.nvim',
     cmd = { 'GitLink', 'ToGithub' },
     config = function()
-      require('gitlinker').setup {}
+      require('gitlinker').setup {
+        add_current_line_on_normal_mode = false,
+      }
       vim.api.nvim_create_user_command('ToGithub', function()
         vim.cmd 'GitLink!'
       end, { range = true })

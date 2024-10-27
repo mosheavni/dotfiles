@@ -9,8 +9,12 @@ return {
     context = true,
     heartbeat = true,
     kubernetes_versions = true,
+    auto_refresh = {
+      enabled = true,
+    },
     filter = {
       apply_on_select_from_history = false,
+      max_history = 100,
     },
     logs = {
       since = '30s',

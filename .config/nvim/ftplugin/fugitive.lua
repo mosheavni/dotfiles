@@ -1,3 +1,7 @@
+local actions_pretty_print = function(message)
+  require('user.utils').pretty_print(message, 'Git Actions', '')
+end
+
 local function random_emoji()
   local emojis = {
     '🤩',
@@ -25,8 +29,8 @@ end
 local function first_commit()
   local head = vim.fn.FugitiveHead()
   vim.notify('Committing: ' .. head)
-  vim.cmd('Git commit --quiet -m ' .. head)
-  vim.cmd('Git push -u origin ' .. head)
+  vim.cmd('silent! Git commit --quiet -m ' .. head)
+  vim.cmd('silent! Git push -u origin ' .. head)
   vim.cmd 'silent! !cpr'
 end
 
@@ -63,6 +67,7 @@ vim.schedule(function()
     silent = true,
     desc = 'Pull',
     callback = function()
+      actions_pretty_print 'Pulling...'
       vim.cmd.Git 'pull --quiet'
     end,
   })
@@ -72,6 +77,7 @@ vim.schedule(function()
     silent = true,
     desc = 'Push',
     callback = function()
+      actions_pretty_print 'Pushing...'
       vim.cmd.Git('push -u origin ' .. vim.fn.FugitiveHead())
     end,
   })
@@ -81,6 +87,7 @@ vim.schedule(function()
     silent = true,
     desc = 'Fetch',
     callback = function()
+      actions_pretty_print 'Fetching...'
       vim.cmd.Git 'fetch --all --tags'
     end,
   })
@@ -88,7 +95,7 @@ vim.schedule(function()
   vim.api.nvim_buf_set_keymap(0, 'n', 'pr', '', {
     noremap = true,
     silent = true,
-    desc = 'Pull rebase',
+    desc = 'Pull request',
     callback = function()
       vim.cmd 'silent! !cpr'
     end,
