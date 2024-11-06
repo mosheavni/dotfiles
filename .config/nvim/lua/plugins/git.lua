@@ -91,7 +91,7 @@ local actions = function()
       vim.fn.feedkeys(T '<leader>' .. 'gB')
     end,
     ['Fetch (all remotes and tags)'] = function()
-      vim.cmd 'Git fetch --all --tags'
+      vim.cmd 'silent Git fetch --all --tags'
     end,
     ['Pull origin master (:Gpom)'] = function()
       vim.cmd 'Gpom'
@@ -104,7 +104,7 @@ local actions = function()
     ['Pull {remote} {branch}'] = function()
       ui_select_remotes(function(remote)
         ui_select_branches(remote, function(branch)
-          vim.cmd('Git pull ' .. remote .. ' ' .. branch)
+          vim.cmd('silent Git pull ' .. remote .. ' ' .. branch)
           actions_pretty_print('Pulled from ' .. remote .. ' ' .. branch)
         end)
       end)
@@ -114,7 +114,7 @@ local actions = function()
         ui_select_branches(remote, function(branch)
           with_ui_select({ 'Yes', 'No' }, { prompt = 'Squash? ' }, function(choice)
             if choice == 'No' then
-              vim.cmd('Git merge ' .. remote .. '/' .. branch)
+              vim.cmd('silent Git merge ' .. remote .. '/' .. branch)
               actions_pretty_print('Merged with ' .. remote .. '/' .. branch)
               return
             end
@@ -236,17 +236,19 @@ local fugitive_config = function()
   vim.api.nvim_create_user_command('Gp', function()
     local head = vim.fn.FugitiveHead()
     actions_pretty_print('Pushing to ' .. head .. '...')
-    vim.cmd 'Git push'
+    vim.cmd 'silent Git push'
     actions_pretty_print('Pushed to ' .. head)
   end, {})
   vim.api.nvim_create_user_command('Gl', function()
     local head = vim.fn.FugitiveHead()
     actions_pretty_print('Pulling from ' .. head .. '...')
-    vim.cmd 'Git pull'
+    vim.cmd 'silent Git pull'
     actions_pretty_print('Pulled from ' .. head)
   end, {})
   vim.keymap.set('n', '<leader>gp', '<cmd>Gp<cr>')
   vim.keymap.set('n', '<leader>gl', '<cmd>Gl<cr>')
+  vim.keymap.set('n', '<leader>gl', '<cmd>Gl<cr>')
+  vim.keymap.set('n', '<leader>gf', 'silent Git fetch --all --tags')
 
   ---------------------
   -- Toggle fugitive --
@@ -269,10 +271,10 @@ local fugitive_config = function()
   -- Pull / Merge origin master --
   --------------------------------
   vim.api.nvim_create_user_command('Gmom', function()
-    vim.cmd 'Git merge origin/master'
+    vim.cmd 'silent Git merge origin/master'
   end, {})
   vim.api.nvim_create_user_command('Gpom', function()
-    vim.cmd 'Git pull origin master'
+    vim.cmd 'silent Git pull origin master'
   end, {})
 
   -------------------------

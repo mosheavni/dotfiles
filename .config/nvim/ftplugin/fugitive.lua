@@ -39,8 +39,8 @@ local function enter_wip()
   local now = vim.fn.strftime '%c'
   local msg = string.format('%s work in progress %s', emoji, now)
   vim.notify('Committing: ' .. msg)
-  vim.cmd.Git('commit --quiet -m "' .. msg .. '"')
-  vim.cmd.Git('push -u origin ' .. vim.fn.FugitiveHead())
+  vim.cmd('silent Git commit --quiet -m "' .. msg .. '"')
+  vim.cmd('silent Git push -u origin ' .. vim.fn.FugitiveHead())
 end
 
 vim.schedule(function()
@@ -58,7 +58,7 @@ vim.schedule(function()
     silent = true,
     desc = 'Commit',
     callback = function()
-      vim.cmd.Git 'commit --quiet'
+      vim.cmd 'silent Git commit --quiet'
     end,
   })
 
@@ -68,7 +68,7 @@ vim.schedule(function()
     desc = 'Pull',
     callback = function()
       actions_pretty_print 'Pulling...'
-      vim.cmd.Git 'pull --quiet'
+      vim.cmd 'silent Git pull --quiet'
     end,
   })
 
@@ -78,7 +78,7 @@ vim.schedule(function()
     desc = 'Push',
     callback = function()
       actions_pretty_print 'Pushing...'
-      vim.cmd.Git('push -u origin ' .. vim.fn.FugitiveHead())
+      vim.cmd('silent Git push -u origin ' .. vim.fn.FugitiveHead())
     end,
   })
 
@@ -88,7 +88,7 @@ vim.schedule(function()
     desc = 'Fetch',
     callback = function()
       actions_pretty_print 'Fetching...'
-      vim.cmd.Git 'fetch --all --tags'
+      vim.cmd 'silent Git fetch --all --tags'
     end,
   })
 
