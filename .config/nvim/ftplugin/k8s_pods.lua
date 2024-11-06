@@ -17,11 +17,11 @@ vim.schedule(function()
         cmd = { 'delete', 'pod', name, '-n', ns },
       }
       local data = {
-        { text = 'cascade:', enum = { 'background', 'orphan', 'foreground' }, cmd = '--cascade' },
-        { text = 'dry run:', enum = { 'none', 'server', 'client' }, cmd = '--dry-run' },
-        { text = 'grade period:', value = '-1', cmd = '--grace-period' },
-        { text = 'timeout:', value = '0s', cmd = '--timeout' },
-        { text = 'force:', enum = { 'false', 'true' }, cmd = '--force' },
+        { text = 'cascade:', value = 'background', options = { 'background', 'orphan', 'foreground' }, cmd = '--cascade', type = 'option' },
+        { text = 'dry run:', value = 'none', options = { 'none', 'server', 'client' }, cmd = '--dry-run', type = 'option' },
+        { text = 'grade period:', value = '-1', cmd = '--grace-period', type = 'option' },
+        { text = 'timeout:', value = '0s', cmd = '--timeout', type = 'option' },
+        { text = 'force:', value = 'false', options = { 'false', 'true' }, cmd = '--force', type = 'flag' },
       }
 
       builder:action_view(pod_def, data, function(args)
