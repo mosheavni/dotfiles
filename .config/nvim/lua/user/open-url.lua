@@ -13,7 +13,7 @@ M.open_url_under_cursor = function()
 
   -- If string starts with https://
   if string.match(url, [[^https://.*]]) then
-    return M.open_url(url)
+    return vim.ui.open(url)
   end
 
   -- If string matches `user/repo`
