@@ -248,7 +248,7 @@ local fugitive_config = function()
   vim.keymap.set('n', '<leader>gp', '<cmd>Gp<cr>')
   vim.keymap.set('n', '<leader>gl', '<cmd>Gl<cr>')
   vim.keymap.set('n', '<leader>gl', '<cmd>Gl<cr>')
-  vim.keymap.set('n', '<leader>gf', '<cmd>silent Git fetch --all --tags<cr>')
+  vim.keymap.set('n', '<leader>gf', ':silent Git fetch --all --tags<cr>')
 
   ---------------------
   -- Toggle fugitive --
