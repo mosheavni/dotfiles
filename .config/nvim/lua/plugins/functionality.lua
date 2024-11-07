@@ -15,6 +15,16 @@ local M = {
     keys = { '<C-a>', '<C-x>' },
   },
   {
+    'yarospace/lua-console.nvim',
+    lazy = true,
+    keys = '<leader>c',
+    opts = {
+      mappings = {
+        toggle = '<leader>c',
+      },
+    },
+  },
+  {
     'gbprod/substitute.nvim',
     keys = {
       { '<leader>p' },
@@ -110,6 +120,7 @@ local M = {
     },
     version = '1.*',
   },
+  { 'echasnovski/mini.splitjoin', version = false, opts = {}, keys = { 'gS' } },
   {
     'danymat/neogen',
     dependencies = 'nvim-treesitter/nvim-treesitter',
