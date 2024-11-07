@@ -13,7 +13,6 @@ local M = {
   dependencies = {
     'Afourcat/treesitter-terraform-doc.nvim',
     'nvim-treesitter/nvim-treesitter-context',
-    'nvim-treesitter/nvim-treesitter-textobjects',
     { 'folke/ts-comments.nvim', opts = {} },
     {
       'windwp/nvim-ts-autotag',
@@ -87,42 +86,6 @@ M.opts = {
   indent = {
     enable = true,
     disable = { 'yaml' },
-  },
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true,
-      keymaps = {
-        ['ab'] = '@block.outer',
-        ['ib'] = '@block.inner',
-        ['ac'] = '@class.outer',
-        ['ic'] = '@class.inner',
-        ['af'] = '@function.outer',
-        ['if'] = '@function.inner',
-        ['ao'] = '@object.outer',
-        ['io'] = '@object.inner',
-      },
-    },
-    move = {
-      enable = true,
-      set_jumps = true, -- whether to set jumps in the jumplist
-      goto_next_start = {
-        [']m'] = '@function.outer',
-        [']]'] = '@block.outer',
-      },
-      goto_next_end = {
-        [']M'] = '@function.outer',
-        [']['] = '@block.outer',
-      },
-      goto_previous_start = {
-        ['[m'] = '@function.outer',
-        ['[['] = '@class.outer',
-      },
-      goto_previous_end = {
-        ['[M'] = '@function.outer',
-        ['[]'] = '@block.outer',
-      },
-    },
   },
 }
 

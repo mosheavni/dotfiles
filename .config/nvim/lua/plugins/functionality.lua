@@ -110,7 +110,6 @@ local M = {
     },
     version = '1.*',
   },
-  { 'echasnovski/mini.splitjoin', version = false, opts = {}, keys = { 'gS' } },
   {
     'danymat/neogen',
     dependencies = 'nvim-treesitter/nvim-treesitter',
