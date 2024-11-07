@@ -24,6 +24,9 @@ return {
     lineage = {
       enabled = true,
     },
+    completion = {
+      follow_cursor = true,
+    },
   },
   cmd = { 'Kubectl', 'Kubectx', 'Kubens' },
   keys = {
