@@ -7,7 +7,14 @@ local color = 'Catppuccin Mocha'
 config.color_scheme = color
 
 -- font
-config.harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1' }
+config.harfbuzz_features = {
+  'calt=1',
+  'clig=1',
+  'liga=1',
+  'zero=1',
+  'ss02=1',
+  'ss19=1',
+}
 config.font = wez.font_with_fallback { { family = 'Cascadia Code', weight = 'DemiBold' } }
 config.font_size = 15
 config.freetype_load_target = 'Normal'
@@ -24,7 +31,7 @@ config.inactive_pane_hsb = {
   brightness = 0.5,
 }
 config.window_padding = {
-  left = 59,
+  left = 0,
   right = 0,
   top = 0,
   bottom = 0,
@@ -73,6 +80,9 @@ config.keys = {
   -- enter full screen with cmd+enter
   { key = 'Enter', mods = 'CMD', action = act.ToggleFullScreen },
 
+  -- kill pane
+  { key = 'w', mods = 'CMD', action = act.CloseCurrentPane { confirm = true } },
+
   -- Open the configuration file with Cmd+,
   {
     key = ',',
@@ -114,47 +124,5 @@ end
 for i = 1, 9 do
   table.insert(config.keys, { key = tostring(i), mods = 'CMD', action = act.ActivateTab(i - 1) })
 end
-
--------------
--- Plugins --
--------------
-local tabline = wez.plugin.require 'https://github.com/michaelbrusegard/tabline.wez'
-tabline.setup {
-  options = {
-    icons_enabled = true,
-    theme = color,
-    -- color_overrides = {
-    --   normal_mode = {
-    --     a = { fg = '#181825', bg = '#89b4fa' },
-    --     b = { fg = '#89b4fa', bg = '#313244' },
-    --     c = { fg = '#cdd6f4', bg = '#181825' },
-    --   },
-    --   tab = {
-    --     active = { fg = '#89b4fa', bg = '#313244' },
-    --     inactive = { fg = '#cdd6f4', bg = '#181825' },
-    --     inactive_hover = { fg = '#f5c2e7', bg = '#313244' },
-    --   },
-    -- },
-  },
-  sections = {
-    tabline_a = { ' MOSH ' },
-    tabline_b = { 'battery' },
-    tabline_c = {},
-    -- iri == biri
-    tab_active = {
-      'index',
-      { 'parent', padding = 0 },
-      '/',
-      { 'cwd', padding = { left = 0, right = 1 } },
-      { 'zoomed', padding = 0 },
-    },
-    tab_inactive = { 'index', { 'process', padding = { left = 0, right = 1 } } },
-    tabline_x = { 'ram', 'cpu' },
-    tabline_y = { 'datetime' },
-    tabline_z = { 'hostname' },
-  },
-  extensions = {},
-}
-tabline.apply_to_config(config)
 
 return config
