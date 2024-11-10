@@ -17,8 +17,8 @@ export PATH="/usr/local/opt/postgresql@15/bin:$PATH"
 export XDG_CONFIG_HOME=${HOME}/.config
 
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="mosherussell"
-ENABLE_CORRECTION="true"
+# ZSH_THEME="mosherussell"
+ENABLE_CORRECTION="false"
 COMPLETION_WAITING_DOTS="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 DISABLE_AUTO_UPDATE="true"
@@ -140,3 +140,5 @@ if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Downloa
 
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"; fi
+
+eval "$(starship init zsh)"

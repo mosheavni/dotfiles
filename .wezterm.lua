@@ -3,15 +3,14 @@ local act = wez.action
 local config = wez.config_builder()
 local HOME = os.getenv 'HOME'
 
-local color = 'Batman'
+local color = 'Catppuccin Mocha'
 config.color_scheme = color
 
 -- font
 config.harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1' }
-config.font = wez.font_with_fallback {
-  { family = 'Cascadia Code NF' },
-}
+config.font = wez.font_with_fallback { { family = 'Cascadia Code', weight = 'DemiBold' } }
 config.font_size = 15
+config.freetype_load_target = 'Normal'
 config.custom_block_glyphs = false
 config.window_frame = {
   font_size = 13,
@@ -19,124 +18,47 @@ config.window_frame = {
 
 -- window
 config.window_decorations = 'TITLE | RESIZE'
-config.macos_window_background_blur = 30
-config.window_background_opacity = 0.80
 config.window_decorations = 'RESIZE'
 config.inactive_pane_hsb = {
-  saturation = 0.4, -- Adjust the saturation (0.0 to 1.0)
-  brightness = 0.5, -- Adjust the brightness (0.0 to 1.0)
+  saturation = 0.4,
+  brightness = 0.5,
 }
 config.window_padding = {
-  left = 0,
+  left = 59,
   right = 0,
   top = 0,
   bottom = 0,
 }
--- wallpaper
--- The art is a bit too bright and colorful to be useful as a backdrop
--- for text, so we're going to dim it down to 10% of its normal brightness
-local dimmer = { brightness = 0.1 }
-
 config.enable_scroll_bar = true
 config.min_scroll_bar_height = '2cell'
+config.native_macos_fullscreen_mode = true
 config.colors = {
   scrollbar_thumb = 'white',
 }
+
+-- background
 config.background = {
-  -- This is the deepest/back-most layer. It will be rendered first
   {
     source = {
-      File = '/Alien_Ship_bg_vert_images/Backgrounds/spaceship_bg_1.png',
+      File = '/Users/mavni/Pictures/wallpaperflare1.jpg',
     },
-    -- The texture tiles vertically but not horizontally.
-    -- When we repeat it, mirror it so that it appears "more seamless".
-    -- An alternative to this is to set `width = "100%"` and have
-    -- it stretch across the display
-    repeat_x = 'Mirror',
-    hsb = dimmer,
-    -- When the viewport scrolls, move this layer 10% of the number of
-    -- pixels moved by the main viewport. This makes it appear to be
-    -- further behind the text.
-    attachment = { Parallax = 0.1 },
-  },
-  -- Subsequent layers are rendered over the top of each other
-  {
-    source = {
-      File = '/Alien_Ship_bg_vert_images/Overlays/overlay_1_spines.png',
+    repeat_y = 'NoRepeat',
+    hsb = {
+      brightness = 0.16,
+      hue = 1.0,
+      saturation = 1.0,
     },
-    width = '100%',
-    repeat_x = 'NoRepeat',
-
-    -- position the spins starting at the bottom, and repeating every
-    -- two screens.
-    vertical_align = 'Bottom',
-    repeat_y_size = '200%',
-    hsb = dimmer,
-
-    -- The parallax factor is higher than the background layer, so this
-    -- one will appear to be closer when we scroll
-    attachment = { Parallax = 0.2 },
-  },
-  {
-    source = {
-      File = '/Alien_Ship_bg_vert_images/Overlays/overlay_2_alienball.png',
-    },
-    width = '100%',
-    repeat_x = 'NoRepeat',
-
-    -- start at 10% of the screen and repeat every 2 screens
-    vertical_offset = '10%',
-    repeat_y_size = '200%',
-    hsb = dimmer,
-    attachment = { Parallax = 0.3 },
-  },
-  {
-    source = {
-      File = '/Alien_Ship_bg_vert_images/Overlays/overlay_3_lobster.png',
-    },
-    width = '100%',
-    repeat_x = 'NoRepeat',
-
-    vertical_offset = '30%',
-    repeat_y_size = '200%',
-    hsb = dimmer,
-    attachment = { Parallax = 0.4 },
-  },
-  {
-    source = {
-      File = '/Alien_Ship_bg_vert_images/Overlays/overlay_4_spiderlegs.png',
-    },
-    width = '100%',
-    repeat_x = 'NoRepeat',
-
-    vertical_offset = '50%',
-    repeat_y_size = '150%',
-    hsb = dimmer,
-    attachment = { Parallax = 0.5 },
+    height = 'Cover',
+    width = 'Contain',
+    opacity = 0.92,
   },
 }
+config.macos_window_background_blur = 100
 
 -- keys
 config.keys = {
   -- Unmap Option+Enter
   { key = 'Enter', mods = 'OPT', action = act.DisableDefaultAssignment },
-
-  -- Sends ESC + b and ESC + f sequence, which is used
-  -- for telling your shell to jump back/forward.
-  {
-    key = 'LeftArrow',
-    mods = 'OPT',
-    action = act.SendString '\x1bb',
-  },
-  {
-    key = 'RightArrow',
-    mods = 'OPT',
-    action = act.SendString '\x1bf',
-  },
-
-  -- Move to the left/right tab
-  { key = 'LeftArrow', mods = 'CMD', action = act.ActivateTabRelative(-1) },
-  { key = 'RightArrow', mods = 'CMD', action = act.ActivateTabRelative(1) },
 
   -- split pane
   { key = 'd', mods = 'CMD', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
@@ -150,10 +72,6 @@ config.keys = {
 
   -- enter full screen with cmd+enter
   { key = 'Enter', mods = 'CMD', action = act.ToggleFullScreen },
-
-  -- rotate panes
-  { key = 'LeftArrow', mods = 'CTRL|SHIFT', action = act.Multiple { act.RotatePanes 'CounterClockwise', act.ActivatePaneDirection 'Left' } },
-  { key = 'RightArrow', mods = 'CTRL|SHIFT', action = act.Multiple { act.RotatePanes 'Clockwise', act.ActivatePaneDirection 'Right' } },
 
   -- Open the configuration file with Cmd+,
   {
@@ -169,8 +87,32 @@ config.keys = {
 for _, direction in ipairs { 'Left', 'Right', 'Up', 'Down' } do
   -- move between panes
   table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CMD|OPT', action = act.ActivatePaneDirection(direction) })
+
   -- resize panes
   table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CTRL|CMD', action = act.AdjustPaneSize { direction, 3 } })
+
+  if direction == 'Left' or direction == 'Right' then
+    -- Sends ESC + b and ESC + f sequence, which is used
+    -- for telling your shell to jump back/forward.
+    local letter = direction == 'Left' and 'b' or 'f'
+    table.insert(config.keys, {
+      key = direction .. 'Arrow',
+      mods = 'OPT',
+      action = act.SendString('\x1b' .. letter),
+    })
+
+    -- Move to the left/right tab
+    local relative = direction == 'Left' and -1 or 1
+    table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CMD', action = act.ActivateTabRelative(relative) })
+
+    -- rotate panes
+    local rotate = direction == 'Left' and 'CounterClockwise' or 'Clockwise'
+    table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CTRL|SHIFT', action = act.RotatePanes(rotate) })
+  end
+end
+
+for i = 1, 9 do
+  table.insert(config.keys, { key = tostring(i), mods = 'CMD', action = act.ActivateTab(i - 1) })
 end
 
 -------------
@@ -181,6 +123,18 @@ tabline.setup {
   options = {
     icons_enabled = true,
     theme = color,
+    -- color_overrides = {
+    --   normal_mode = {
+    --     a = { fg = '#181825', bg = '#89b4fa' },
+    --     b = { fg = '#89b4fa', bg = '#313244' },
+    --     c = { fg = '#cdd6f4', bg = '#181825' },
+    --   },
+    --   tab = {
+    --     active = { fg = '#89b4fa', bg = '#313244' },
+    --     inactive = { fg = '#cdd6f4', bg = '#181825' },
+    --     inactive_hover = { fg = '#f5c2e7', bg = '#313244' },
+    --   },
+    -- },
   },
   sections = {
     tabline_a = { ' MOSH ' },

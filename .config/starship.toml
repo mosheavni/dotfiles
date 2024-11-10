@@ -3,22 +3,18 @@ format = "$directory$all"
 [directory]
 style = "blue"
 
-[character]
-success_symbol = "[❯](purple)"
-error_symbol = "[❯](red)"
-vicmd_symbol = "[❮](green)"
 
 [kubernetes]
 disabled = false
 format = '\([⎈](bold fg:33) [$cluster](fg:166):[$namespace](dimmed green)\) '
 
 [aws]
-disabled = false
+disabled = true
 force_display = true
 style = 'yellow'
 
 [python]
-disabled = false
+disabled = true
 
 [battery]
-disabled = false
+disabled = true
