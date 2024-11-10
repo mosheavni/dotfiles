@@ -24,4 +24,5 @@ ohmyzsh/ohmyzsh path:plugins/kubectx
 ohmyzsh/ohmyzsh path:plugins/terraform
 ohmyzsh/ohmyzsh path:plugins/urltools
 zsh-users/zsh-autosuggestions
+zsh-users/zsh-history-substring-search
 zdharma-continuum/fast-syntax-highlighting
