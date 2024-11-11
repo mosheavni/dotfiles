@@ -4,19 +4,35 @@ zmodload zsh/zprof
 # Basic ZSH Config #
 # ================ #
 
+[[ -n "$ZSH" ]] || export ZSH="${${(%):-%x}:a:h}"
+[[ -n "$ZSH_CUSTOM" ]] || ZSH_CUSTOM="$ZSH/custom"
+[[ -n "$ZSH_CACHE_DIR" ]] || ZSH_CACHE_DIR="$ZSH/cache"
+if [[ ! -w "$ZSH_CACHE_DIR" ]]; then
+  ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/antidote"
+fi
+mkdir -p "$ZSH_CACHE_DIR/completions"
+
 # Ensure path arrays do not contain duplicates.
 typeset -gU path fpath
 
 # Additional PATHs
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
-export PATH="/opt/homebrew/opt/make/libexec/gnubin:$PATH"
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-export PATH="/usr/local/opt/curl/bin:$PATH"
-export PATH="/usr/local/opt/ruby/bin:$PATH"
-export PATH="$HOME/.bin:$HOME/.local/bin:$PATH"
-export PATH="$HOME/.cargo/bin:${PATH}"
-export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/local/opt/postgresql@15/bin:$PATH"
+path=(
+  /opt/homebrew/bin
+  /opt/homebrew/sbin
+  /opt/homebrew/opt/make/libexec/gnubin
+  ${KREW_ROOT:-$HOME/.krew}/bin
+  /usr/local/opt/curl/bin
+  /usr/local/opt/ruby/bin
+  $HOME/.bin
+  $HOME/.local/bin
+  $HOME/.cargo/bin
+  /usr/local/sbin
+  /usr/local/opt/postgresql@15/bin
+  $path
+)
+
+# Export PATH
+export PATH
 export XDG_CONFIG_HOME=${HOME}/.config
 
 unset ZSH_AUTOSUGGEST_USE_ASYNC
@@ -47,6 +63,7 @@ setopt HIST_BEEP              # Beep when accessing nonexistent history.
 # ============= #
 #  Autoloaders  #
 # ============= #
+fpath+=($ZSH_CACHE_DIR/completions)
 source $HOME/.antidote/antidote.zsh
 antidote load
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
@@ -57,15 +74,18 @@ export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,changes {}
 # ================ #
 #  PS1 and Random  #
 # ================ #
-complete -o nospace -C terragrunt -C terraform terragrunt
+# complete -o nospace -C terragrunt -C terraform terragrunt
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 export EDITOR="nvim"
 export AWS_PAGER=""
+export WORDCHARS=""
 setopt MENU_COMPLETE
 unsetopt AUTO_MENU
 unsetopt CASE_GLOB
 setopt GLOB_COMPLETE
 eval "$(zoxide init --cmd cd zsh)"
+
+# ASDF
 export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
 [[ -f ~/.asdf/plugins/golang/set-env.zsh ]] && {
   source ~/.asdf/plugins/golang/set-env.zsh
