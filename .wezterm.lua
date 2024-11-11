@@ -83,6 +83,10 @@ config.keys = {
   -- kill pane
   { key = 'w', mods = 'CMD', action = act.CloseCurrentPane { confirm = true } },
 
+  -- end and home keys
+  { key = 'ArrowRight', mods = 'CMD', action = act.SendString '\x05' },
+  { key = 'ArrowLeft', mods = 'CMD', action = act.SendString '\x01' },
+
   -- Open the configuration file with Cmd+,
   {
     key = ',',
@@ -118,6 +122,9 @@ for _, direction in ipairs { 'Left', 'Right', 'Up', 'Down' } do
     -- rotate panes
     local rotate = direction == 'Left' and 'CounterClockwise' or 'Clockwise'
     table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CTRL|SHIFT', action = act.RotatePanes(rotate) })
+
+    -- move tab to the left/right with cmd+shift+left/right
+    table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CMD|SHIFT', action = act.MoveTabRelative(relative) })
   end
 end
 

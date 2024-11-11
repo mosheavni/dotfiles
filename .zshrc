@@ -63,29 +63,36 @@ setopt HIST_BEEP              # Beep when accessing nonexistent history.
 # ============= #
 #  Autoloaders  #
 # ============= #
-fpath+=($ZSH_CACHE_DIR/completions)
+fpath+=($ZSH_CACHE_DIR/completions /opt/homebrew/share/zsh/site-functions)
 source $HOME/.antidote/antidote.zsh
 antidote load
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
-export FZF_DEFAULT_OPTS='--color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108 --color info:108,prompt:109,spinner:108,pointer:168,marker:168'
-export FZF_CTRL_T_COMMAND='rg --color=never --files --hidden --follow -g "!.git"'
-export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,changes {}"'
 
 # ================ #
 #  PS1 and Random  #
 # ================ #
-# complete -o nospace -C terragrunt -C terraform terragrunt
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+# fzf
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
+export FZF_CTRL_T_COMMAND='rg --color=never --files --hidden --follow -g "!.git"'
+export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,changes {}"'
+
 export EDITOR="nvim"
 export AWS_PAGER=""
+
+# zsh
 export WORDCHARS=""
-setopt MENU_COMPLETE
-unsetopt AUTO_MENU
-unsetopt CASE_GLOB
-setopt GLOB_COMPLETE
+setopt menu_complete
+unsetopt auto_menu
+unsetopt case_glob
+setopt glob_complete
+setopt multios              # enable redirect to multiple streams: echo >file1 >file2
+setopt long_list_jobs       # show long list format job notifications
+setopt interactivecomments  # recognize comments
+zstyle ':completion:*:*:*:*:*' menu select
+
 eval "$(zoxide init --cmd cd zsh)"
 
-# ASDF
+
+# asdf
 export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
 [[ -f ~/.asdf/plugins/golang/set-env.zsh ]] && {
   source ~/.asdf/plugins/golang/set-env.zsh
@@ -97,11 +104,6 @@ export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
 # zsh gh copilot configuration
 bindkey '^[|' zsh_gh_copilot_explain # bind Alt+shift+\ to explain
 bindkey '^[\' zsh_gh_copilot_suggest # bind Alt+\ to suggest
-
-# zsh-history-substring-search configuration
-bindkey '^[[A' history-substring-search-up # or '\eOA'
-bindkey '^[[B' history-substring-search-down # or '\eOB'
-HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
 
 # ===================== #
 # Aliases and Functions #
@@ -127,3 +129,6 @@ if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Downloa
 if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"; fi
 
 eval "$(starship init zsh)"
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /Users/mavni/.asdf/installs/terragrunt/0.64.4/bin/terragrunt terragrunt
