@@ -19,8 +19,25 @@ config.font = wez.font_with_fallback { { family = 'Cascadia Code', weight = 'Dem
 config.font_size = 15
 config.freetype_load_target = 'Normal'
 config.custom_block_glyphs = false
+
+-- tab bar
+config.use_fancy_tab_bar = true
 config.window_frame = {
-  font_size = 13,
+  font = wez.font { family = 'Roboto', weight = 'Bold' },
+  font_size = 13.0,
+}
+config.colors = {
+  scrollbar_thumb = 'white',
+  tab_bar = {
+    active_tab = {
+      bg_color = '#5B5B5A',
+      fg_color = '#D6D6D6',
+    },
+    inactive_tab = {
+      bg_color = '#1B1B1B',
+      fg_color = '#808080',
+    },
+  },
 }
 
 -- window
@@ -39,9 +56,6 @@ config.window_padding = {
 config.enable_scroll_bar = true
 config.min_scroll_bar_height = '2cell'
 config.native_macos_fullscreen_mode = true
-config.colors = {
-  scrollbar_thumb = 'white',
-}
 
 -- background
 config.background = {
@@ -51,7 +65,7 @@ config.background = {
     },
     repeat_y = 'NoRepeat',
     hsb = {
-      brightness = 0.16,
+      brightness = 0.36,
       hue = 1.0,
       saturation = 1.0,
     },
