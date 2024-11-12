@@ -112,7 +112,7 @@ for _, direction in ipairs { 'Left', 'Right', 'Up', 'Down' } do
     table.insert(config.keys, {
       key = direction .. 'Arrow',
       mods = 'OPT',
-      action = act.SendString('\x1b' .. letter),
+      action = act.SendString { key = letter, mods = 'OPT' },
     })
 
     -- Move to the left/right tab
