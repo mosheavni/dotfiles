@@ -549,15 +549,17 @@ vim.api.nvim_create_user_command('Titleize', function(options)
     title_char = options.args
   end
   local current_line = vim.api.nvim_get_current_line()
+  local indent = string.match(current_line, '^%s*')
+  current_line = vim.trim(current_line)
   local r, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
   -- delete line
   vim.api.nvim_del_current_line()
 
-  local top_bottom = title_char:rep(#current_line + 6)
+  local top_bottom = indent .. title_char:rep(#current_line + 6)
   vim.api.nvim_buf_set_lines(0, r - 1, r - 1, false, {
     top_bottom,
-    title_char:rep(2) .. ' ' .. current_line .. ' ' .. title_char:rep(2),
+    indent .. title_char:rep(2) .. ' ' .. current_line .. ' ' .. title_char:rep(2),
     top_bottom,
   })
 end, { nargs = '?' })
