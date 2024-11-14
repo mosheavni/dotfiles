@@ -10,7 +10,7 @@ zmodload zsh/zprof
 if [[ ! -w "$ZSH_CACHE_DIR" ]]; then
   ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/antidote"
 fi
-mkdir -p "$ZSH_CACHE_DIR/completions"
+[[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p "$ZSH_CACHE_DIR/completions"
 
 # Ensure path arrays do not contain duplicates.
 typeset -gU path fpath
@@ -30,13 +30,9 @@ path=(
   /usr/local/opt/postgresql@15/bin
   $path
 )
-
-# Export PATH
 export PATH
 export XDG_CONFIG_HOME=${HOME}/.config
-
 unset ZSH_AUTOSUGGEST_USE_ASYNC
-export GPG_TTY=$(tty)
 
 # Set Locale
 export LANG=en_US
@@ -66,6 +62,14 @@ setopt HIST_BEEP              # Beep when accessing nonexistent history.
 fpath+=($ZSH_CACHE_DIR/completions /opt/homebrew/share/zsh/site-functions)
 source $HOME/.antidote/antidote.zsh
 antidote load
+source <(fzf --zsh)
+
+autoload -U +X bashcompinit && bashcompinit
+
+zsh-defer complete -o nospace -C terraform terraform
+zsh-defer complete -o nospace -C terragrunt terragrunt
+zsh-defer complete -C 'aws_completer' aws
+[[ -f $ZSH_CACHE_DIR/completions/_docker ]] || docker completion zsh > $ZSH_CACHE_DIR/completions/_docker
 
 # ================ #
 #  PS1 and Random  #
@@ -88,9 +92,6 @@ setopt multios              # enable redirect to multiple streams: echo >file1 >
 setopt long_list_jobs       # show long list format job notifications
 setopt interactivecomments  # recognize comments
 zstyle ':completion:*:*:*:*:*' menu select
-
-eval "$(zoxide init --cmd cd zsh)"
-
 
 # asdf
 export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
@@ -116,19 +117,9 @@ fi
 # ================ #
 # Kubectl Contexts #
 # ================ #
-
 # Load all contexts
 export KUBECONFIG=$HOME/.kube/config
 export KUBECTL_EXTERNAL_DIFF="kdiff"
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"; fi
-
 eval "$(starship init zsh)"
-
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /Users/mavni/.asdf/installs/terragrunt/0.64.4/bin/terragrunt terragrunt

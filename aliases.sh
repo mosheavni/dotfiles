@@ -1,6 +1,7 @@
 #!/bin/zsh
 
-
+function take() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
+compdef _directories take
 alias ls='eza --icons --group-directories-first'
 alias ll='eza --icons --group-directories-first -l'
 ### Helper functions ###
