@@ -107,6 +107,11 @@ local M = {
           require('lazy').load { plugins = { 'nvim-notify' } }
         end
         require 'notify'(...)
+        vim.print(os.getenv 'SAY')
+        if os.getenv 'SAY' == 'true' then
+          local msg = select(1, ...)
+          vim.system({ 'say', msg }, { text = true })
+        end
       end
     end,
     opts = {

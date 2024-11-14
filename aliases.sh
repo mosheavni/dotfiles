@@ -1,9 +1,15 @@
 #!/bin/zsh
 
 function take() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
-compdef _directories take
-alias ls='eza --icons --group-directories-first'
-alias ll='eza --icons --group-directories-first -l'
+
+function say-hebrew() {
+  # check if there's params
+  if [[ -z $* ]]; then
+    dialog -t "Say in hebrew" -m "Enter a sentence in hebrew" --bannertext Say --textfield message,required 2>/dev/null | awk -F: '{print $2}' | xargs say -v 'Carmit (Enhanced)'
+  else
+    echo $* | say -v 'Carmit (Enhanced)'
+  fi
+}
 ### Helper functions ###
 function _alias_parser() {
   parsed_alias=`alias -- "$1"`
