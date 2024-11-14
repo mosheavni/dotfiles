@@ -25,7 +25,7 @@ return {
       enabled = true,
     },
     completion = {
-      follow_cursor = true,
+      follow_cursor = false,
     },
   },
   cmd = { 'Kubectl', 'Kubectx', 'Kubens' },
