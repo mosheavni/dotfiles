@@ -12,6 +12,7 @@ belak/zsh-utils path:history
 zsh-users/zsh-autosuggestions kind:defer
 ohmyzsh/ohmyzsh path:plugins/git kind:defer
 zsh-users/zsh-syntax-highlighting kind:defer
+wez/wezterm path:assets/shell-integration/wezterm.sh kind:defer
 
 # this is last
 belak/zsh-utils path:completion kind:autoload post:compstyle_zshzoo_setup

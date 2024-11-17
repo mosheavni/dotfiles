@@ -19,6 +19,10 @@ config.font = wez.font_with_fallback { { family = 'Cascadia Code', weight = 'Dem
 config.font_size = 15
 config.freetype_load_target = 'Normal'
 config.custom_block_glyphs = false
+config.default_cursor_style = 'BlinkingBar'
+config.cursor_blink_rate = 500
+config.cursor_thickness = 2
+config.line_height = 0.9
 
 -- tab bar
 config.use_fancy_tab_bar = true
