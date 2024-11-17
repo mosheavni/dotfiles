@@ -27,6 +27,7 @@ config.window_frame = {
   font_size = 13.0,
 }
 config.colors = {
+  background = '#000000',
   scrollbar_thumb = 'white',
   tab_bar = {
     active_tab = {
@@ -61,11 +62,11 @@ config.native_macos_fullscreen_mode = true
 config.background = {
   {
     source = {
-      File = '/Users/mavni/Pictures/wallpaperflare1.jpg',
+      File = HOME .. '/Pictures/wallpaperflare4.jpg',
     },
     repeat_y = 'NoRepeat',
     hsb = {
-      brightness = 0.36,
+      brightness = 0.13,
       hue = 1.0,
       saturation = 1.0,
     },
@@ -108,6 +109,7 @@ config.keys = {
   },
 }
 
+-- arrow keys keybindings
 for _, direction in ipairs { 'Left', 'Right', 'Up', 'Down' } do
   -- move between panes
   table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CMD|OPT', action = act.ActivatePaneDirection(direction) })

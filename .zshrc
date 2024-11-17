@@ -42,18 +42,9 @@ export LC_ALL=en_US.UTF-8
 # ============= #
 #  Autoloaders  #
 # ============= #
-fpath+=($ZSH_CACHE_DIR/completions /opt/homebrew/share/zsh/site-functions)
 source $HOME/.antidote/antidote.zsh
 antidote load
 
-#################
-## Completions ##
-#################
-autoload -U +X bashcompinit && bashcompinit
-zsh-defer complete -o nospace -C terraform terraform
-zsh-defer complete -o nospace -C terragrunt terragrunt
-zsh-defer complete -C 'aws_completer' aws
-[[ -f $ZSH_CACHE_DIR/completions/_docker ]] || docker completion zsh > $ZSH_CACHE_DIR/completions/_docker
 
 # ================ #
 #  PS1 and Random  #
@@ -77,8 +68,8 @@ setopt glob_complete
 setopt multios              # enable redirect to multiple streams: echo >file1 >file2
 setopt long_list_jobs       # show long list format job notifications
 setopt interactivecomments  # recognize comments
+setopt autocd
 zstyle ':completion:*:*:*:*:*' menu select
-zstyle ':zsh-utils:*:*' use-xdg-basedirs 'no'
 
 # asdf
 export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
@@ -90,10 +81,15 @@ bindkey '^[\' zsh_gh_copilot_suggest # bind Alt+\ to suggest
 # ===================== #
 # Aliases and Functions #
 # ===================== #
-if [[ -f $HOME/aliases.sh ]]; then
-  source $HOME/aliases.sh
-fi
+export ASDF_DIR="$HOME/.asdf"
+[[ -d $HOME/.asdf ]] && source $HOME/.asdf/asdf.sh
+[[ -f $HOME/completions.zsh ]] && source $HOME/completions.zsh
+[[ -f $HOME/aliases.sh ]] && source $HOME/aliases.sh
+[[ -f $HOME/functions.sh ]] && source $HOME/functions.sh
 [[ -f $HOME/corp-aliases.sh ]] && source $HOME/corp-aliases.sh
+
+source $HOME/grep.zsh
+source $HOME/kubectl.zsh
 
 # ================ #
 # Kubectl Contexts #
