@@ -60,9 +60,10 @@ zsh-defer complete -C 'aws_completer' aws
 # ================ #
 # fzf
 source <(fzf --zsh)
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
+# export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -l -g ""'
 export FZF_CTRL_T_COMMAND='rg --color=never --files --hidden --follow -g "!.git"'
 export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers,changes {}"'
+export FZF_CTRL_R_OPTS="--ansi --color=hl:underline,hl+:underline --height 80% --preview 'echo {2..} | bat --color=always -pl bash' --preview-window 'down:4:wrap' --bind 'ctrl-/:toggle-preview'"
 
 export EDITOR="nvim"
 export AWS_PAGER=""

@@ -13,9 +13,9 @@ belak/zsh-utils path:utility
 romkatv/zsh-bench kind:path
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-history-substring-search
+belak/zsh-utils path:history
 
 # deferred
-belak/zsh-utils path:history kind:defer
 ohmyzsh/ohmyzsh path:plugins/asdf kind:defer
 ohmyzsh/ohmyzsh path:plugins/common-aliases kind:defer
 ohmyzsh/ohmyzsh path:plugins/git-auto-fetch kind:defer
