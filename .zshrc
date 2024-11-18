@@ -58,6 +58,7 @@ export FZF_CTRL_R_OPTS="--ansi --color=hl:underline,hl+:underline --height 80% -
 
 export EDITOR="nvim"
 export AWS_PAGER=""
+export TERM=wezterm
 
 # zsh
 export WORDCHARS=""

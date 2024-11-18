@@ -6,6 +6,12 @@ local HOME = os.getenv 'HOME'
 local color = 'Catppuccin Mocha'
 config.color_scheme = color
 
+-- performance
+config.max_fps = 120
+config.animation_fps = 240
+config.front_end = 'WebGpu'
+config.webgpu_power_preference = 'HighPerformance'
+
 -- font
 config.harfbuzz_features = {
   'calt=1',
@@ -46,7 +52,6 @@ config.colors = {
 }
 
 -- window
-config.window_decorations = 'TITLE | RESIZE'
 config.window_decorations = 'RESIZE'
 config.inactive_pane_hsb = {
   saturation = 0.4,
