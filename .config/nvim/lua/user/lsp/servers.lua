@@ -24,6 +24,12 @@ M.setup = function()
     capabilities = capabilities,
   }
 
+  -- typescript
+  require('lspconfig')['vtsls'].setup {
+    on_attach = default_on_attach,
+    capabilities = capabilities,
+  }
+
   require('lspconfig')['docker_compose_language_service'].setup {
     on_attach = default_on_attach,
     capabilities = capabilities,
