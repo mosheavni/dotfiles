@@ -146,6 +146,9 @@ for _, direction in ipairs { 'Left', 'Right', 'Up', 'Down' } do
 
     -- move tab to the left/right with cmd+shift+left/right
     table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CMD|SHIFT', action = act.MoveTabRelative(relative) })
+  else
+    -- scroll up using option+arrow
+    table.insert(config.keys, { key = direction .. 'Arrow', mods = 'OPT', action = act.ScrollByPage(direction == 'Up' and -0.2 or 0.2) })
   end
 end
 
