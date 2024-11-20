@@ -4,6 +4,7 @@ zmodload zsh/zprof
 # Basic ZSH Config #
 # ================ #
 
+export ZDOTDIR=$HOME
 [[ -n "$ZSH" ]] || export ZSH="${${(%):-%x}:a:h}"
 [[ -n "$ZSH_CUSTOM" ]] || ZSH_CUSTOM="$ZSH/custom"
 [[ -n "$ZSH_CACHE_DIR" ]] || ZSH_CACHE_DIR="$ZSH/cache"
@@ -59,18 +60,8 @@ export FZF_CTRL_R_OPTS="--ansi --color=hl:underline,hl+:underline --height 80% -
 export EDITOR="nvim"
 export AWS_PAGER=""
 export TERM=wezterm
+export cdpath=(. ~ ~/Repos)
 
-# zsh
-export WORDCHARS=""
-setopt menu_complete
-unsetopt auto_menu
-unsetopt case_glob
-setopt glob_complete
-setopt multios              # enable redirect to multiple streams: echo >file1 >file2
-setopt long_list_jobs       # show long list format job notifications
-setopt interactivecomments  # recognize comments
-setopt autocd
-zstyle ':completion:*:*:*:*:*' menu select
 
 # asdf
 export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
@@ -84,13 +75,10 @@ bindkey '^[\' zsh_gh_copilot_suggest # bind Alt+\ to suggest
 # ===================== #
 export ASDF_DIR="$HOME/.asdf"
 [[ -d $HOME/.asdf ]] && source $HOME/.asdf/asdf.sh
-[[ -f $HOME/completions.zsh ]] && source $HOME/completions.zsh
-[[ -f $HOME/aliases.sh ]] && source $HOME/aliases.sh
-[[ -f $HOME/functions.sh ]] && source $HOME/functions.sh
-[[ -f $HOME/corp-aliases.sh ]] && source $HOME/corp-aliases.sh
 
-source $HOME/grep.zsh
-source $HOME/kubectl.zsh
+for ZSH_FILE in "${ZDOTDIR:-$HOME}"/zsh.d/*.zsh(N); do
+    source "${ZSH_FILE}"
+done
 
 # ================ #
 # Kubectl Contexts #

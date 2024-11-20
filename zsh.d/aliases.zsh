@@ -1,4 +1,7 @@
 #!/bin/zsh
+if [[ -n $LOADED_ALIASES ]]; then
+  return
+fi
 
 alias rm='rm -i'
 alias cp='cp -i'
@@ -18,9 +21,13 @@ alias grep=ggrep
 alias sort=gsort
 alias awk=gawk
 alias myip='curl ipv4.icanhazip.com'
+alias tf='terraform'
+alias tg='terragrunt'
 
 alias dotfiles='cd ~/Repos/dotfiles'
 alias dc='cd '
+alias pj='fdf ~/Repos'
+alias repos="~/Repos"
 
 # global aliases
 alias -g Wt='while :;do '
@@ -39,11 +46,12 @@ alias -g BAD='| grep -v "1/1\|2/2\|3/3\|4/4\|5/5\|6/6\|Completed\|Evicted"'
 alias -g IP='-ojsonpath="{.spec.nodeName}"'
 alias -g dollar_1_line='$(awk "{print \$1}"<<<"${line}")'
 alias -g dollar_2_line='$(awk "{print \$2}"<<<"${line}")'
-## Command line head / tail shortcuts
+
 alias -g H='| head'
 alias -g T='| tail'
 alias -g G='| grep'
 alias -g L="| less"
+alias -g P="| pbcopy"
 alias -g NE="2> /dev/null"
 alias -g NUL="> /dev/null 2>&1"
 
@@ -51,14 +59,8 @@ alias -g NUL="> /dev/null 2>&1"
 # alias gb="git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads | fzf | xargs git checkout && git pull"
 alias gb='git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2 | fzf | xargs git checkout'
 
-### Shortcuts to directories ###
-alias repos="~/Repos"
-alias difff='code --diff'
-
-# Common Used tools:
-alias tf='terraform'
-alias tg='terragrunt'
-
 alias kgevents='kubectl get event --sort-by=.metadata.creationTimestamp | grep -E -v "(Successfully (pulled|assigned)|(Started|Created) container|(Deleted|Created) pod)"'
 
 alias update-nvim-nightly='asdf uninstall neovim nightly && asdf install neovim nightly'
+
+export LOADED_ALIASES=true

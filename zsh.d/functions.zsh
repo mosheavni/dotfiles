@@ -1,4 +1,8 @@
 #!/bin/zsh
+if [[ -n $LOADED_FUNCTIONS ]]; then
+  return
+fi
+
 function take() {
   [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"
 }
@@ -78,6 +82,57 @@ function docker_build() {
 
 function docker_build_push() {
   docker_build --push $*
+}
+
+function docker_copy_between_regions() {
+  # Function to copy Docker images between AWS ECR regions
+  # Help message
+  function print_help() {
+    echo "Usage: docker_copy_between_regions -n IMAGE_NAME -t IMAGE_TAG -s SRC_REGION -d DEST_REGION"
+    echo "  -n  IMAGE_NAME   Name of the Docker image"
+    echo "  -t  IMAGE_TAG    Tag of the Docker image"
+    echo "  -s  SRC_REGION   Source AWS region"
+    echo "  -d  DEST_REGION  Destination AWS region"
+  }
+
+  # Parse parameters
+  while getopts "n:t:s:d:h" opt; do
+    case ${opt} in
+    n) IMAGE_NAME=$OPTARG ;;
+    t) IMAGE_TAG=$OPTARG ;;
+    s) SRC_REGION=$OPTARG ;;
+    d) DEST_REGION=$OPTARG ;;
+    h)
+      print_help
+      return
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      print_help
+      return
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      print_help
+      return
+      ;;
+    esac
+  done
+
+  # Validate parameters
+  if [ -z "$IMAGE_NAME" ] || [ -z "$IMAGE_TAG" ] || [ -z "$SRC_REGION" ] || [ -z "$DEST_REGION" ]; then
+    echo "Error: All parameters are required."
+    print_help
+    return
+  fi
+
+  # Get AWS account ID
+  ACC_ID=$(aws sts get-caller-identity | jq -r ".Account")
+
+  # Copy Docker image between regions
+  echo "FROM $ACC_ID.dkr.ecr.${SRC_REGION}.amazonaws.com/spotinst-production/${IMAGE_NAME}:${IMAGE_TAG}" | docker_build_push \
+    -t $ACC_ID.dkr.ecr.${DEST_REGION}.amazonaws.com/spotinst-production/${IMAGE_NAME}:${IMAGE_TAG} \
+    -f -
 }
 
 # Open the github page of the repo you're in, in the browser
@@ -266,7 +321,6 @@ fdf() {
   dir_to_enter=$(sed "s?$dir_clean/??g" <<<$all_files | fzf)
   cd "$dir_clean/$dir_to_enter" && nvim
 }
-alias pj='fdf ~/Repos'
 
 mkdp() {
   kubectl get pod --no-headers | fzf | awk '{print $1}' | xargs -n 1 kubectl describe pod
@@ -310,3 +364,14 @@ zip-code() {
   echo "$ZIP_CODE"
   echo "$ZIP_CODE" | pbcopy
 }
+
+matrix() {
+  echo -e "\e[1;40m"
+  clear
+  while :; do
+    echo $LINES $COLUMNS $(($RANDOM % $COLUMNS)) $(($RANDOM % 72))
+    sleep 0.05
+  done | awk '{ letters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()"; c=$4;        letter=substr(letters,c,1);a[$3]=0;for (x in a) {o=a[x];a[x]=a[x]+1; printf "\033[%s;%sH\033[2;32m%s",o,x,letter; printf "\033[%s;%sH\033[1;37m%s\033[0;0H",a[x],x,letter;if (a[x] >= $1) { a[x]=0; } }}'
+}
+
+export LOADED_FUNCTIONS=true
