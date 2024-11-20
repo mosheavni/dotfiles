@@ -80,7 +80,7 @@ config.background = {
       saturation = 1.0,
     },
     height = 'Cover',
-    width = 'Contain',
+    width = 'Cover',
     opacity = 0.92,
   },
 }
