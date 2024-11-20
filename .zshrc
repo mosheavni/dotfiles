@@ -77,6 +77,7 @@ bindkey '^[\' zsh_gh_copilot_suggest # bind Alt+\ to suggest
 for ZSH_FILE in "${ZDOTDIR:-$HOME}"/zsh.d/*.zsh(N); do
     source "${ZSH_FILE}"
 done
+[[ -f $HOME/corp-aliases.sh ]] && source $HOME/corp-aliases.sh
 
 # ================ #
 # Kubectl Contexts #
