@@ -70,7 +70,6 @@ vim.opt.completeopt = 'menu,menuone,noselect,fuzzy'
 vim.o.previewheight = 15
 vim.o.title = true -- Changes the iterm title
 vim.o.laststatus = 3 -- Global statusline, only one for all buffers
-vim.o.titlestring = "nvim: %{substitute(getcwd(), $HOME, '~', '')}"
 vim.o.showcmd = true
 vim.o.guifont = 'Fira Code,Hack Nerd Font'
 vim.o.mouse = 'a'
