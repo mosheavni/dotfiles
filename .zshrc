@@ -43,9 +43,13 @@ export LC_ALL=en_US.UTF-8
 # ============= #
 #  Autoloaders  #
 # ============= #
+# asdf
+export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
+export ASDF_DIR="$HOME/.asdf"
+[[ -d $HOME/.asdf ]] && source $HOME/.asdf/asdf.sh
+
 source $HOME/.antidote/antidote.zsh
 antidote load
-
 
 # ================ #
 #  PS1 and Random  #
@@ -62,10 +66,6 @@ export AWS_PAGER=""
 export TERM=wezterm
 export cdpath=(. ~ ~/Repos)
 
-
-# asdf
-export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
-
 # zsh gh copilot configuration
 bindkey '^[|' zsh_gh_copilot_explain # bind Alt+shift+\ to explain
 bindkey '^[\' zsh_gh_copilot_suggest # bind Alt+\ to suggest
@@ -73,8 +73,6 @@ bindkey '^[\' zsh_gh_copilot_suggest # bind Alt+\ to suggest
 # ===================== #
 # Aliases and Functions #
 # ===================== #
-export ASDF_DIR="$HOME/.asdf"
-[[ -d $HOME/.asdf ]] && source $HOME/.asdf/asdf.sh
 
 for ZSH_FILE in "${ZDOTDIR:-$HOME}"/zsh.d/*.zsh(N); do
     source "${ZSH_FILE}"

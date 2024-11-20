@@ -244,8 +244,13 @@ function kubedebug() {
     fi
 
     case $1 in
-    -h)
+    -h | --help)
       echo "Usage: $0 [-e executable] [-p pod_name] [-i image] [-s service_account] [-- kubernetes_arguments]"
+      echo "  -e  executable        Executable to run in the pod"
+      echo "  -p  pod_name          Pod name"
+      echo "  -i  image             Docker image to run"
+      echo "  -s  service_account   Service account to use"
+      echo "  --  kubectl arguments"
       return
       ;;
       # exe provided
@@ -372,6 +377,18 @@ matrix() {
     echo $LINES $COLUMNS $(($RANDOM % $COLUMNS)) $(($RANDOM % 72))
     sleep 0.05
   done | awk '{ letters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()"; c=$4;        letter=substr(letters,c,1);a[$3]=0;for (x in a) {o=a[x];a[x]=a[x]+1; printf "\033[%s;%sH\033[2;32m%s",o,x,letter; printf "\033[%s;%sH\033[1;37m%s\033[0;0H",a[x],x,letter;if (a[x] >= $1) { a[x]=0; } }}'
+}
+
+man() {
+  env \
+    LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+    LESS_TERMCAP_md=$(printf "\e[1;31m") \
+    LESS_TERMCAP_me=$(printf "\e[0m") \
+    LESS_TERMCAP_se=$(printf "\e[0m") \
+    LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+    LESS_TERMCAP_ue=$(printf "\e[0m") \
+    LESS_TERMCAP_us=$(printf "\e[1;32m") \
+    man "$@"
 }
 
 export LOADED_FUNCTIONS=true

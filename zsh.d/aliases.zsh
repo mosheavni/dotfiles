@@ -6,7 +6,7 @@ fi
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
-alias ll='ls -lh'
+alias ll='ls -lah'
 
 ### General aliases ###
 alias zshrc='${=EDITOR} ${ZDOTDIR:-$HOME}/.zshrc' # Quick access to the .zshrc file
@@ -23,6 +23,7 @@ alias awk=gawk
 alias myip='curl ipv4.icanhazip.com'
 alias tf='terraform'
 alias tg='terragrunt'
+alias ls='eza '
 
 alias dotfiles='cd ~/Repos/dotfiles'
 alias dc='cd '

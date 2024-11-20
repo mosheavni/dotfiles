@@ -3,7 +3,7 @@ load_completion_from_cmd() {
   shift
   local args=$@
   local completion_file=$ZSH_CACHE_DIR/completions/_$cmd
-  if ! command -v $cmd &>/dev/null; then
+  if ! (( $+commands[$cmd] )); then
     return
   fi
   if [[ ! -f $completion_file ]]; then
@@ -14,6 +14,7 @@ load_completion_from_cmd() {
   eval "$cmd ${args[*]}" >| $completion_file &|
 }
 
+GENCOMPL_FPATH=$HOME/.zsh/complete
 autoload -U +X bashcompinit && bashcompinit
 fpath+=(
   $ZSH_CACHE_DIR/completions
@@ -21,11 +22,11 @@ fpath+=(
   $ASDF_DIR/completions
 )
 
-zsh-defer complete -o nospace -C terraform terraform
-zsh-defer complete -o nospace -C terragrunt terragrunt
-zsh-defer complete -o nospace -C 'aws_completer' aws
-zsh-defer load_completion_from_cmd docker completion zsh
-zsh-defer load_completion_from_cmd argocd completion zsh
-zsh-defer load_completion_from_cmd helm completion zsh
-zsh-defer load_completion_from_cmd gh completion --shell zsh
-zsh-defer load_completion_from_cmd kubectl completion zsh
+complete -o nospace -C terraform terraform
+complete -o nospace -C terragrunt terragrunt
+complete -o nospace -C 'aws_completer' aws
+load_completion_from_cmd docker completion zsh
+load_completion_from_cmd argocd completion zsh
+load_completion_from_cmd helm completion zsh
+load_completion_from_cmd gh completion --shell zsh
+load_completion_from_cmd kubectl completion zsh

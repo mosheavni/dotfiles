@@ -16,4 +16,4 @@ setopt SHARE_HISTORY          # Share history between all sessions.
 HISTSIZE=10000 # The maximum number of events to save in the internal history.
 SAVEHIST=10000 # The maximum number of events to save in the history file.
 
-alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
+alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head -50"
