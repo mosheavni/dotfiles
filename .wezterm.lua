@@ -149,6 +149,9 @@ for _, direction in ipairs { 'Left', 'Right', 'Up', 'Down' } do
   else
     -- scroll up using option+arrow
     table.insert(config.keys, { key = direction .. 'Arrow', mods = 'OPT', action = act.ScrollByPage(direction == 'Up' and -0.2 or 0.2) })
+
+    -- scroll to last command
+    table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CMD', action = act.ScrollToPrompt(direction == 'Up' and -1 or 1) })
   end
 end
 
