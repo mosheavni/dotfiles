@@ -1,3 +1,4 @@
+local utils = require 'user.utils'
 local actions_pretty_print = function(message)
   require('user.utils').pretty_print(message, 'Git Actions', '')
 end
@@ -68,7 +69,14 @@ vim.schedule(function()
     desc = 'Pull',
     callback = function()
       actions_pretty_print 'Pulling...'
-      vim.cmd 'silent Git pull --quiet'
+      utils.system('git', { 'pull', '--rebase' }, function(c, _, e)
+        if c ~= 0 then
+          actions_pretty_print('Failed to pull\nstderr: ' .. (e or ''))
+          return
+        else
+          actions_pretty_print 'Pulled'
+        end
+      end)
     end,
   })
 
@@ -78,7 +86,14 @@ vim.schedule(function()
     desc = 'Push',
     callback = function()
       actions_pretty_print 'Pushing...'
-      vim.cmd('silent Git push -u origin ' .. vim.fn.FugitiveHead())
+      utils.system('git', { 'push', '-u', 'origin', vim.fn.FugitiveHead() }, function(c, _, e)
+        if c ~= 0 then
+          actions_pretty_print('Failed to push\nstderr: ' .. (e or ''))
+          return
+        else
+          actions_pretty_print 'Pushed'
+        end
+      end)
     end,
   })
 

@@ -111,7 +111,7 @@ local actions = function()
     end,
     ['Set upstream to HEAD'] = function()
       ui_select_remotes(function(remote)
-        vim.cmd('Git branch --set-upstream-to=' .. remote .. '/' .. vim.fn.FugitiveHead())
+        vim.system({ 'git', 'branch', '--set-upstream-to', remote .. '/' .. vim.fn.FugitiveHead() }, {})
       end)
     end,
     ['Blame'] = function()
@@ -124,21 +124,31 @@ local actions = function()
       vim.fn.feedkeys(T '<leader>' .. 'gB')
     end,
     ['Fetch (all remotes and tags)'] = function()
-      vim.cmd 'silent Git fetch --all --tags'
+      vim.system({ 'git', 'fetch', '--all', '--tags' }, {}, function()
+        vim.schedule(function()
+          actions_pretty_print 'Fetched all remotes and tags.'
+        end)
+      end)
     end,
     ['Pull origin master (:Gpom)'] = function()
       vim.cmd 'Gpom'
       actions_pretty_print 'Pulled from origin master.'
     end,
     ['Revert last commit (soft)'] = function()
-      vim.cmd 'Git reset --soft HEAD^'
-      actions_pretty_print 'Reset to HEAD^'
+      vim.system({ 'git', 'reset', '--soft', 'HEAD^' }, {}, function()
+        vim.schedule(function()
+          actions_pretty_print 'Reset to HEAD^'
+        end)
+      end)
     end,
     ['Pull {remote} {branch}'] = function()
       ui_select_remotes(function(remote)
         ui_select_branches(remote, function(branch)
-          vim.cmd('silent Git pull ' .. remote .. ' ' .. branch)
-          actions_pretty_print('Pulled from ' .. remote .. ' ' .. branch)
+          vim.system({ 'git', 'pull', remote, branch }, {}, function()
+            vim.schedule(function()
+              actions_pretty_print('Pulled from ' .. remote .. ' ' .. branch)
+            end)
+          end)
         end)
       end)
     end,
@@ -147,14 +157,21 @@ local actions = function()
         ui_select_branches(remote, function(branch)
           with_ui_select({ 'Yes', 'No' }, { prompt = 'Squash? ' }, function(choice)
             if choice == 'No' then
-              vim.cmd('silent Git merge ' .. remote .. '/' .. branch)
-              actions_pretty_print('Merged with ' .. remote .. '/' .. branch)
+              vim.system({ 'git', 'merge', remote .. '/' .. branch }, {}, function()
+                vim.schedule(function()
+                  actions_pretty_print('Merged with ' .. remote .. '/' .. branch)
+                end)
+              end)
               return
             end
             local commit_msg = string.format('"Squashed commits from %s/%s" ', remote, branch)
-            vim.cmd('Git merge --squash ' .. remote .. '/' .. branch)
-            vim.cmd('Git commit -m ' .. commit_msg)
-            actions_pretty_print('Squashed and merged with ' .. remote .. '/' .. branch)
+            vim.system({ 'git', 'merge', '--squash', remote .. '/' .. branch }, {}, function()
+              vim.system({ 'git', 'commit', '-m', commit_msg }, {}, function()
+                vim.schedule(function()
+                  actions_pretty_print('Squashed and merged with ' .. remote .. '/' .. branch)
+                end)
+              end)
+            end)
           end)
         end)
       end)
@@ -184,14 +201,22 @@ local actions = function()
           actions_pretty_print 'Canceled.'
           return
         end
-        vim.cmd('Git tag ' .. tag)
-        with_ui_select({ 'Yes', 'No' }, { prompt = 'Push?' }, function(choice)
-          if choice == 'Yes' then
-            vim.cmd 'Git push --tags'
-            actions_pretty_print('Tag ' .. tag .. ' created and pushed.')
-          else
-            actions_pretty_print('Tag ' .. tag .. ' created.')
-          end
+        vim.system({ 'git', 'tag', tag }, {}, function()
+          vim.schedule(function()
+            with_ui_select({ 'Yes', 'No' }, { prompt = 'Push tag to remote?' }, function(choice)
+              if choice == 'Yes' then
+                ui_select_remotes(function(remote)
+                  vim.system({ 'git', 'push', remote, tag }, {}, function()
+                    vim.schedule(function()
+                      actions_pretty_print('Tag ' .. tag .. ' created and pushed.')
+                    end)
+                  end)
+                end)
+              else
+                actions_pretty_print('Tag ' .. tag .. ' created.')
+              end
+            end)
+          end)
         end)
       end)
     end,

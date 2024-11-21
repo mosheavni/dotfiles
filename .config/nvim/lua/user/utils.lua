@@ -130,6 +130,12 @@ M.filetype_to_extension = {
   zsh = 'sh',
 }
 
+M.system = function(cmd, args, on_exit)
+  vim.system({ cmd, unpack(args) }, { text = true }, function(obj)
+    on_exit(obj.code, obj.stdout, obj.stderr)
+  end)
+end
+
 M.get_buffer_by_name = function(bufname)
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     local name = vim.api.nvim_buf_get_name(buf)
