@@ -457,7 +457,6 @@ nnoremap <leader>ds :DiffSaved<cr>
 augroup special_filetype
   au!
   autocmd FileType json syntax match Comment +\/\/.\+$+
-  autocmd BufNewFile,BufRead aliases.sh setf zsh
   autocmd BufNewFile,BufRead .eslintrc setf json
   " autocmd BufNewFile,BufRead *.hcl setf terraform
   autocmd BufRead,BufNewFile */templates/*.yaml,*/templates/*.tpl,*.gotmpl,helmfile.yaml set ft=helm
