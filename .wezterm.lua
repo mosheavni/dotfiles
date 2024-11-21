@@ -80,7 +80,7 @@ config.background = {
       saturation = 1.0,
     },
     height = 'Cover',
-    width = 'Contain',
+    width = 'Cover',
     opacity = 0.92,
   },
 }
@@ -146,6 +146,12 @@ for _, direction in ipairs { 'Left', 'Right', 'Up', 'Down' } do
 
     -- move tab to the left/right with cmd+shift+left/right
     table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CMD|SHIFT', action = act.MoveTabRelative(relative) })
+  else
+    -- scroll up using option+arrow
+    table.insert(config.keys, { key = direction .. 'Arrow', mods = 'OPT', action = act.ScrollByPage(direction == 'Up' and -0.2 or 0.2) })
+
+    -- scroll to last command
+    table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CMD', action = act.ScrollToPrompt(direction == 'Up' and -1 or 1) })
   end
 end
 
