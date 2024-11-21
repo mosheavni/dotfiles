@@ -65,8 +65,9 @@ end
 ---@param title? string: The title of the notification
 ---@param icon? string: The icon of the notification
 ---@param level? number: The log level of the notification (vim.log.levels.INFO by default)
+---@param timeout? number: The timeout of the notification
 ---@return nil
-M.pretty_print = function(message, title, icon, level)
+M.pretty_print = function(message, title, icon, level, timeout)
   if not icon then
     icon = ''
   end
@@ -76,7 +77,10 @@ M.pretty_print = function(message, title, icon, level)
   if not level then
     level = vim.log.levels.INFO
   end
-  vim.notify(message, level, { title = title, icon = icon })
+  if not timeout then
+    timeout = 3000
+  end
+  vim.notify(message, level, { title = title, icon = icon, timeout = timeout })
 end
 
 ---Converts country code to emoji of the country flag
@@ -129,6 +133,30 @@ M.filetype_to_extension = {
   typescriptreact = 'tsx',
   zsh = 'sh',
 }
+
+M.random_emoji = function()
+  local emojis = {
+    '🤩',
+    '👻',
+    '😈',
+    '✨',
+    '👰',
+    '👑',
+    '💯',
+    '💖',
+    '🌒',
+    '🇮🇱',
+    '★',
+    '⚓️',
+    '🙉',
+    '☘️',
+    '🌍',
+    '🥨',
+    '🔥',
+    '🚀',
+  }
+  return emojis[math.random(#emojis)]
+end
 
 M.get_buffer_by_name = function(bufname)
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do

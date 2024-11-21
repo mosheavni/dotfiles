@@ -24,6 +24,7 @@ alias myip='curl ipv4.icanhazip.com'
 alias tf='terraform'
 alias tg='terragrunt'
 alias ls='eza '
+alias git_current_branch='git branch --show-current'
 
 alias dotfiles='cd ~/Repos/dotfiles'
 alias dc='cd '

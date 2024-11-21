@@ -1,102 +1,5 @@
 local T = vim.keycode
-
-local actions_pretty_print = function(message)
-  require('user.utils').pretty_print(message, 'Git Actions', '')
-end
-
-local function get_remotes()
-  return vim.split(vim.trim(vim.system({ 'git', 'remote' }):wait().stdout), '\n')
-end
-
-local function get_branches(remote_name)
-  if not remote_name then
-    remote_name = 'origin'
-  end
-  local cmd_output = vim.system({ 'git', 'ls-remote', '--heads', remote_name }):wait()
-  cmd_output = vim.split(cmd_output.stdout, '\n')
-  local branches = {}
-  for _, line in ipairs(cmd_output) do
-    table.insert(branches, string.match(line, 'heads/(.*)$'))
-  end
-  return branches
-end
-
-local function get_tags()
-  return vim.split(vim.trim(vim.system({ 'git', 'tag' }):wait().stdout), '\n')
-end
-
-local function with_ui_select(items, opts, cb)
-  vim.ui.select(items, opts, function(selection)
-    if not selection then
-      actions_pretty_print 'Canceled.'
-      return
-    end
-    cb(selection)
-  end)
-end
-
-local function ui_select_branches(remote_name, cb)
-  with_ui_select(get_branches(remote_name), { prompt = 'Select branch: ' }, cb)
-end
-
-local function ui_select_remotes(cb)
-  local remotes = get_remotes()
-  if #remotes == 1 then
-    cb(remotes[1])
-  else
-    with_ui_select(remotes, { prompt = 'Select remote: ' }, cb)
-  end
-end
-
-local function ui_select_tags(cb)
-  with_ui_select(get_tags(), { prompt = 'Select tag: ' }, cb)
-end
-
-local function create_new_branch(branch_opts)
-  if branch_opts.args ~= '' then
-    return vim.cmd('Git checkout -b ' .. branch_opts.args)
-  end
-  vim.ui.input({ prompt = 'Enter new branch name: ' }, function(input)
-    if not input then
-      return
-    end
-    -- validate branch name regex in lua
-    if not string.match(input, '^[a-zA-Z0-9_-]+$') then
-      return vim.notify('Invalid branch name', vim.log.levels.ERROR)
-    end
-    vim.cmd('Git checkout -b ' .. input)
-  end)
-end
-
-local function create_pull_request()
-  local function get_git_remote(callback)
-    vim.system({ 'git', 'remote', '-v' }, { text = true }, function(obj)
-      callback(obj.stdout:match '(.-)%s+%(fetch%)')
-    end)
-  end
-
-  local function get_branch_name(callback)
-    vim.system({ 'git', 'branch', '--show-current' }, { text = true }, function(obj)
-      callback(obj.stdout:gsub('%s+', ''))
-    end)
-  end
-
-  get_git_remote(function(git_remote)
-    local git_remote_name = 'origin'
-    local git_remote_url = git_remote:match(git_remote_name .. '%s+(%S+)')
-    local prefix = git_remote_url:match '^%w+'
-    prefix = prefix == 'git' and 'git@' or 'https://'
-    local git_name, project, repo, _ = git_remote_url:match(('^' .. prefix .. '(%w+).com[:/](.+)/(.+)%.git'))
-    local pr_link = git_name == 'gitlab' and '-/merge_requests/new?merge_request[source_branch]=' or 'pull/new/'
-
-    get_branch_name(function(branch_name)
-      vim.print('git_name: ' .. git_name .. ' project: ' .. project .. ' repo: ' .. repo .. ' pr_link: ' .. pr_link .. ' branch_name: ' .. branch_name)
-      local url = string.format('https://%s.com/%s/%s/%s%s', git_name, project, repo, pr_link, branch_name)
-      vim.print('Opening ' .. url)
-      vim.ui.open(url)
-    end)
-  end)
-end
+local git_funcs = require 'user.git'
 
 local actions = function()
   return {
@@ -104,15 +7,13 @@ local actions = function()
       vim.fn.feedkeys(vim.keycode '<F4>')
     end,
     ['Create Pull Request'] = function()
-      create_pull_request()
+      git_funcs.create_pull_request()
     end,
     ['Checkout new branch (:Gcb {new_branch})'] = function()
-      create_new_branch { args = '' }
+      git_funcs.create_new_branch { args = '' }
     end,
     ['Set upstream to HEAD'] = function()
-      ui_select_remotes(function(remote)
-        vim.cmd('Git branch --set-upstream-to=' .. remote .. '/' .. vim.fn.FugitiveHead())
-      end)
+      git_funcs.set_upstream_head()
     end,
     ['Blame'] = function()
       vim.cmd 'Git blame'
@@ -124,44 +25,22 @@ local actions = function()
       vim.fn.feedkeys(T '<leader>' .. 'gB')
     end,
     ['Fetch (all remotes and tags)'] = function()
-      vim.cmd 'silent Git fetch --all --tags'
+      git_funcs.fetch_all()
     end,
     ['Pull origin master (:Gpom)'] = function()
-      vim.cmd 'Gpom'
-      actions_pretty_print 'Pulled from origin master.'
+      git_funcs.pull_remote_branch('origin', 'master')
     end,
     ['Revert last commit (soft)'] = function()
-      vim.cmd 'Git reset --soft HEAD^'
-      actions_pretty_print 'Reset to HEAD^'
+      git_funcs.soft_revert()
     end,
     ['Pull {remote} {branch}'] = function()
-      ui_select_remotes(function(remote)
-        ui_select_branches(remote, function(branch)
-          vim.cmd('silent Git pull ' .. remote .. ' ' .. branch)
-          actions_pretty_print('Pulled from ' .. remote .. ' ' .. branch)
-        end)
-      end)
+      git_funcs.ui_select_pull_remote_branch()
     end,
     ['Merge {remote} {branch}'] = function()
-      ui_select_remotes(function(remote)
-        ui_select_branches(remote, function(branch)
-          with_ui_select({ 'Yes', 'No' }, { prompt = 'Squash? ' }, function(choice)
-            if choice == 'No' then
-              vim.cmd('silent Git merge ' .. remote .. '/' .. branch)
-              actions_pretty_print('Merged with ' .. remote .. '/' .. branch)
-              return
-            end
-            local commit_msg = string.format('"Squashed commits from %s/%s" ', remote, branch)
-            vim.cmd('Git merge --squash ' .. remote .. '/' .. branch)
-            vim.cmd('Git commit -m ' .. commit_msg)
-            actions_pretty_print('Squashed and merged with ' .. remote .. '/' .. branch)
-          end)
-        end)
-      end)
+      git_funcs.ui_select_merge_remote_branch()
     end,
     ['Merge origin/master (:Gmom)'] = function()
-      vim.cmd 'Gmom'
-      actions_pretty_print 'Merged with origin/master. (might need to fetch new commits)'
+      git_funcs.merge_remote_branch('origin', 'master')
     end,
     ['Open Status / Menu (<leader>gg / :G)'] = function()
       vim.cmd 'Git'
@@ -173,58 +52,30 @@ local actions = function()
       vim.cmd 'Git log --all --decorate --oneline'
     end,
     ['See all tags'] = function()
-      ui_select_tags(function(tag)
+      git_funcs.ui_select_tags(function(tag)
         vim.fn.setreg('+', tag)
-        actions_pretty_print('Copied ' .. tag .. ' to clipboard.')
+        git_funcs.prnt('Copied ' .. tag .. ' to clipboard.')
       end)
     end,
     ['Create tag'] = function()
-      vim.ui.input({ prompt = 'Enter tag name to create: ' }, function(tag)
-        if not tag then
-          actions_pretty_print 'Canceled.'
-          return
-        end
-        vim.cmd('Git tag ' .. tag)
-        with_ui_select({ 'Yes', 'No' }, { prompt = 'Push?' }, function(choice)
-          if choice == 'Yes' then
-            vim.cmd 'Git push --tags'
-            actions_pretty_print('Tag ' .. tag .. ' created and pushed.')
-          else
-            actions_pretty_print('Tag ' .. tag .. ' created.')
-          end
-        end)
-      end)
+      git_funcs.ui_select_create_tag()
     end,
     ['Delete tag'] = function()
-      ui_select_tags(function(tag)
-        actions_pretty_print('Deleting tag ' .. tag .. ' locally...')
-        vim.cmd('Git tag -d ' .. tag)
-        with_ui_select({ 'Yes', 'No' }, { prompt = 'Delete tag ' .. tag .. ' from remote?' }, function(choice)
-          if choice == 'Yes' then
-            ui_select_remotes(function(remote)
-              actions_pretty_print('Deleting tag ' .. tag .. ' from remote ' .. remote .. '...')
-              vim.cmd('Git push ' .. remote .. ' :refs/tags/' .. tag)
-              actions_pretty_print('Tag ' .. tag .. ' deleted from local and remote.')
-            end)
-          else
-            actions_pretty_print('Tag ' .. tag .. ' deleted only locally.')
-          end
-        end)
-      end)
+      git_funcs.ui_select_delete_tag()
     end,
     ['Find in all commits'] = function()
       local rev_list = vim.fn.FugitiveExecute({ 'rev-list', '--all' }).stdout
       vim.ui.input({ prompt = 'Enter search term: ' }, function(search_term)
         if not search_term then
-          actions_pretty_print 'Canceled.'
+          git_funcs.prnt 'Canceled.'
           return
         end
-        actions_pretty_print('Searching for ' .. search_term .. ' in all commits...')
+        git_funcs.prnt('Searching for ' .. search_term .. ' in all commits...')
         vim.cmd('silent Ggrep ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
       end)
     end,
     ['Push (:Gp)'] = function()
-      vim.cmd.Gp()
+      git_funcs.push()
     end,
     ['Pull (:Gl)'] = function()
       vim.cmd.Gl()
@@ -250,8 +101,8 @@ local diff_actions = function()
       end)
     end,
     ['[Diffview] Diff with branch'] = function()
-      ui_select_remotes(function(remote)
-        ui_select_branches(remote, function(branch_to_diff)
+      git_funcs.ui_select_remotes(function(remote)
+        git_funcs.ui_select_branches(remote, function(branch_to_diff)
           vim.cmd('DiffviewOpen ' .. remote .. '/' .. branch_to_diff .. '..HEAD')
         end)
       end)
@@ -266,22 +117,13 @@ local fugitive_config = function()
   -----------------
   -- Pull / Push --
   -----------------
-  vim.api.nvim_create_user_command('Gp', function()
-    local head = vim.fn.FugitiveHead()
-    actions_pretty_print('Pushing to ' .. head .. '...')
-    vim.cmd 'silent Git push'
-    actions_pretty_print('Pushed to ' .. head)
-  end, {})
-  vim.api.nvim_create_user_command('Gl', function()
-    local head = vim.fn.FugitiveHead()
-    actions_pretty_print('Pulling from ' .. head .. '...')
-    vim.cmd 'silent Git pull'
-    actions_pretty_print('Pulled from ' .. head)
-  end, {})
+  vim.api.nvim_create_user_command('Gp', git_funcs.push, {})
+  vim.api.nvim_create_user_command('Gl', git_funcs.pull, {})
+  vim.api.nvim_create_user_command('Gf', git_funcs.fetch_all, {})
   vim.keymap.set('n', '<leader>gp', '<cmd>Gp<cr>')
   vim.keymap.set('n', '<leader>gl', '<cmd>Gl<cr>')
   vim.keymap.set('n', '<leader>gl', '<cmd>Gl<cr>')
-  vim.keymap.set('n', '<leader>gf', ':silent Git fetch --all --tags<cr>')
+  vim.keymap.set('n', '<leader>gf', '<cmd>Gf<cr>')
 
   ---------------------
   -- Toggle fugitive --
@@ -304,29 +146,46 @@ local fugitive_config = function()
   -- Pull / Merge origin master --
   --------------------------------
   vim.api.nvim_create_user_command('Gmom', function()
-    vim.cmd 'silent Git merge origin/master'
+    git_funcs.merge_remote_branch('origin', 'master')
   end, {})
   vim.api.nvim_create_user_command('Gpom', function()
-    vim.cmd 'silent Git pull origin master'
+    git_funcs.pull_remote_branch('origin', 'master')
   end, {})
 
   -------------------------
   -- Create a new branch --
   -------------------------
-  vim.api.nvim_create_user_command('Gcb', create_new_branch, { nargs = '?' })
-  vim.keymap.set('n', '<leader>gb', '<cmd>call append(".",FugitiveHead())<cr>')
+  vim.api.nvim_create_user_command('Gcb', git_funcs.create_new_branch, { nargs = '?' })
+  vim.keymap.set('n', '<leader>gb', function()
+    git_funcs.get_branch(function(branch)
+      -- Set the new line
+      vim.schedule(function()
+        local current_line = vim.api.nvim_get_current_line()
+        local new_line = current_line .. branch
+        vim.api.nvim_set_current_line(new_line)
+      end)
+    end)
+  end)
   vim.keymap.set('n', '<leader>gB', function()
-    vim.cmd 'let @+ = FugitiveHead()'
-    actions_pretty_print('Copied current branch "' .. vim.fn.FugitiveHead() .. '" to clipboard.')
+    git_funcs.get_branch(function(branch)
+      vim.schedule(function()
+        vim.fn.setreg('+', branch)
+        git_funcs.prnt('Copied current branch "' .. branch .. '" to clipboard.')
+      end)
+    end)
   end)
 
   ------------------
   -- Git checkout --
   ------------------
-  -- TODO: completion not working
   vim.api.nvim_create_user_command('Gco', function(d)
     vim.cmd('Git checkout ' .. d.args)
-  end, { nargs = '+', complete = get_branches })
+  end, {
+    nargs = '+',
+    complete = function()
+      return git_funcs.get_branches_sync()
+    end,
+  })
 
   ----------------------------
   -- Git cd to root of repo --
@@ -334,13 +193,13 @@ local fugitive_config = function()
   vim.keymap.set('n', '<leader>gc', function()
     vim.cmd 'Gcd'
     local cwd = vim.fn.getcwd()
-    actions_pretty_print('Changed directory to Git root' .. cwd)
+    git_funcs.prnt('Changed directory to Git root' .. cwd)
   end)
 
   -------------------------
   -- Create Pull Request --
   -------------------------
-  vim.api.nvim_create_user_command('Cpr', create_pull_request, {})
+  vim.api.nvim_create_user_command('Cpr', git_funcs.create_pull_request, {})
 
   ----------------------
   -- Git actions menu --
@@ -349,7 +208,12 @@ local fugitive_config = function()
   require('user.menu').add_actions('Git', vim.tbl_extend('force', actions(), diff_actions()))
   vim.keymap.set('n', '<leader>gm', function()
     local git_actions = require('user.menu').get_actions { prefix = 'Git' }
-    with_ui_select(vim.tbl_keys(git_actions), { prompt = 'Choose git action: ' }, function(choice)
+
+    vim.ui.select(vim.tbl_keys(git_actions), { prompt = 'Choose git action: ' }, function(choice)
+      if not choice then
+        utils.pretty_print('Canceled.', 'Git Actions', '')
+        return
+      end
       git_actions[choice]()
     end)
   end)
@@ -369,7 +233,18 @@ local M = {
       '<leader>gm',
       '<leader>gp',
     },
-    cmd = { 'G', 'Git', 'Gcb', 'Gl', 'Gp', 'Gmom', 'Gpom', 'Gread' },
+    cmd = {
+      'G',
+      'Gco',
+      'Git',
+      'Gcb',
+      'Gl',
+      'Gp',
+      'Gmom',
+      'Gpom',
+      'Gread',
+      'Cpr',
+    },
   },
   {
     'linrongbin16/gitlinker.nvim',
