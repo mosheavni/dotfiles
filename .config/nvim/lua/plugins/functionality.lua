@@ -15,16 +15,6 @@ local M = {
     keys = { '<C-a>', '<C-x>' },
   },
   {
-    'yarospace/lua-console.nvim',
-    lazy = true,
-    keys = '<leader>c',
-    opts = {
-      mappings = {
-        toggle = '<leader>c',
-      },
-    },
-  },
-  {
     'gbprod/substitute.nvim',
     keys = {
       { '<leader>p' },
