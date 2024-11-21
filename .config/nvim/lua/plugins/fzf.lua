@@ -9,13 +9,20 @@ return {
       '<F4>',
       function()
         local utils = require 'fzf-lua.utils'
+        local actions = require 'fzf-lua.actions'
+
         require('fzf-lua').git_branches {
           actions = {
+            ['default'] = function(selected)
+              actions.git_switch(selected)
+              require('user.git').reload_fugitive_index()
+            end,
             -- perform checkout instead of switch
             ['ctrl-s'] = {
               fn = function(selected)
                 local branch = selected[1]
                 local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'checkout', branch }, vim.fn.getcwd())
+                require('user.git').reload_fugitive_index()
                 if ret == 0 then
                   utils.info('Switched to branch ' .. branch)
                   return
