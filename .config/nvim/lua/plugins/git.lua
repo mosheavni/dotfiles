@@ -68,10 +68,43 @@ local function create_new_branch(branch_opts)
   end)
 end
 
+local function create_pull_request()
+  local function get_git_remote(callback)
+    vim.system({ 'git', 'remote', '-v' }, { text = true }, function(obj)
+      callback(obj.stdout:match '(.-)%s+%(fetch%)')
+    end)
+  end
+
+  local function get_branch_name(callback)
+    vim.system({ 'git', 'branch', '--show-current' }, { text = true }, function(obj)
+      callback(obj.stdout:gsub('%s+', ''))
+    end)
+  end
+
+  get_git_remote(function(git_remote)
+    local git_remote_name = 'origin'
+    local git_remote_url = git_remote:match(git_remote_name .. '%s+(%S+)')
+    local prefix = git_remote_url:match '^%w+'
+    prefix = prefix == 'git' and 'git@' or 'https://'
+    local git_name, project, repo, _ = git_remote_url:match(('^' .. prefix .. '(%w+).com[:/](.+)/(.+)%.git'))
+    local pr_link = git_name == 'gitlab' and '-/merge_requests/new?merge_request[source_branch]=' or 'pull/new/'
+
+    get_branch_name(function(branch_name)
+      vim.print('git_name: ' .. git_name .. ' project: ' .. project .. ' repo: ' .. repo .. ' pr_link: ' .. pr_link .. ' branch_name: ' .. branch_name)
+      local url = string.format('https://%s.com/%s/%s/%s%s', git_name, project, repo, pr_link, branch_name)
+      vim.print('Opening ' .. url)
+      vim.ui.open(url)
+    end)
+  end)
+end
+
 local actions = function()
   return {
     ['Change branch (F4)'] = function()
       vim.fn.feedkeys(vim.keycode '<F4>')
+    end,
+    ['Create Pull Request'] = function()
+      create_pull_request()
     end,
     ['Checkout new branch (:Gcb {new_branch})'] = function()
       create_new_branch { args = '' }
@@ -303,6 +336,11 @@ local fugitive_config = function()
     local cwd = vim.fn.getcwd()
     actions_pretty_print('Changed directory to Git root' .. cwd)
   end)
+
+  -------------------------
+  -- Create Pull Request --
+  -------------------------
+  vim.api.nvim_create_user_command('Cpr', create_pull_request, {})
 
   ----------------------
   -- Git actions menu --

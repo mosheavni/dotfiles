@@ -31,7 +31,7 @@ local function first_commit()
   vim.notify('Committing: ' .. head)
   vim.cmd('silent! Git commit --quiet -m ' .. head)
   vim.cmd('silent! Git push -u origin ' .. head)
-  vim.cmd 'silent! !cpr'
+  vim.cmd 'silent! Cpr'
 end
 
 local function enter_wip()
@@ -97,7 +97,7 @@ vim.schedule(function()
     silent = true,
     desc = 'Pull request',
     callback = function()
-      vim.cmd 'silent! !cpr'
+      vim.cmd 'silent! Cpr'
     end,
   })
 
