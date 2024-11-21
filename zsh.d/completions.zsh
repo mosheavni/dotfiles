@@ -20,6 +20,7 @@ fpath+=(
   $ZSH_CACHE_DIR/completions
   /opt/homebrew/share/zsh/site-functions
   $ASDF_DIR/completions
+  $GENCOMPL_FPATH
 )
 
 complete -o nospace -C terraform terraform
