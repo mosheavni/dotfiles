@@ -70,8 +70,8 @@ local function run_git(args, msg, cb)
     end
     if cb then
       cb(stdout)
-      M.reload_fugitive_index()
     end
+    M.reload_fugitive_index()
   end)
 end
 
@@ -216,7 +216,9 @@ end
 M.first_commit = function()
   M.get_branch(function(branch)
     run_git({ 'commit', '--quiet', '-m', branch }, 'Committing: ' .. branch, function()
-      run_git({ 'push', '-u', 'origin', branch }, 'Pushing: ' .. branch)
+      run_git({ 'push', '-u', 'origin', branch }, 'Pushing: ' .. branch, function()
+        M.create_pull_request()
+      end)
     end)
   end)
 end
