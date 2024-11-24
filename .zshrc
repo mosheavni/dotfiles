@@ -64,6 +64,7 @@ export FZF_CTRL_R_OPTS="--ansi --color=hl:underline,hl+:underline --height 80% -
 export EDITOR="nvim"
 export AWS_PAGER=""
 export TERM=wezterm
+export WEZTERM_SHELL_INTEGRATION=1
 export cdpath=(. ~ ~/Repos)
 
 # zsh gh copilot configuration

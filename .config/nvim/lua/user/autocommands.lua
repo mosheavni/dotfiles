@@ -119,6 +119,15 @@ vim.api.nvim_create_autocmd('BufReadPost', {
   end,
 })
 
+vim.api.nvim_create_autocmd('DirChanged', {
+  group = buffer_settings,
+  callback = function()
+    local cwd = vim.fn.getcwd()
+    local hostname = vim.fn.hostname()
+    os.execute('printf "\\033]7;file://' .. hostname .. cwd .. '\\033\\\\"')
+  end,
+})
+
 -- Special filetypes
 local special_filetypes = augroup 'SpecialFiletype'
 autocmd({ 'FileType' }, {

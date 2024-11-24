@@ -86,6 +86,15 @@ config.background = {
 }
 config.macos_window_background_blur = 100
 
+-- mouse
+config.mouse_bindings = {
+  {
+    event = { Down = { streak = 3, button = 'Left' } },
+    action = wez.action.SelectTextAtMouseCursor 'SemanticZone',
+    mods = 'NONE',
+  },
+}
+
 -- keys
 config.keys = {
   -- Unmap Option+Enter
