@@ -89,6 +89,10 @@ local M = {
     end,
   },
   {
+    'sphamba/smear-cursor.nvim',
+    opts = {},
+  },
+  {
     'rcarriga/nvim-notify',
     keys = {
       {
