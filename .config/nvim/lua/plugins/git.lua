@@ -118,11 +118,10 @@ local fugitive_config = function()
   -- Pull / Push --
   -----------------
   vim.api.nvim_create_user_command('Gp', git_funcs.push, {})
-  vim.api.nvim_create_user_command('Gl', git_funcs.pull, {})
-  vim.api.nvim_create_user_command('Gf', git_funcs.fetch_all, {})
   vim.keymap.set('n', '<leader>gp', '<cmd>Gp<cr>')
+  vim.api.nvim_create_user_command('Gl', git_funcs.pull, {})
   vim.keymap.set('n', '<leader>gl', '<cmd>Gl<cr>')
-  vim.keymap.set('n', '<leader>gl', '<cmd>Gl<cr>')
+  vim.api.nvim_create_user_command('Gf', git_funcs.fetch_all, {})
   vim.keymap.set('n', '<leader>gf', '<cmd>Gf<cr>')
 
   ---------------------
