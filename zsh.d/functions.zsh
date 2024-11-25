@@ -15,6 +15,12 @@ function say-hebrew() {
     echo $* | say -v 'Carmit (Enhanced)'
   fi
 }
+
+function set-tab-title() {
+  title=$(dialog -t "Set tab title" -m "Enter the title for the tab" --bannertext Set --textfield title,required 2>/dev/null | awk -F: '{print $2}')
+  echo -e "\033]0;${title}\a"
+}
+
 ### Helper functions ###
 function _alias_parser() {
   parsed_alias=$(alias -- "$1")
@@ -309,7 +315,7 @@ function kgel() {
   kubectl get pod $* -ojson | jq -r '.metadata.labels | to_entries | .[] | "\(.key)=\(.value)"'
 }
 
-asdf-kubectl-version() {
+function asdf-kubectl-version() {
   K8S_VERSION=$(kubectl version -ojson | jq -r '.serverVersion | "\(.major).\(.minor)"' | sed 's/\+$//')
   TO_INSTALL=$(asdf list-all kubectl | grep "${K8S_VERSION}" | tail -1)
   if ! asdf list kubectl "${TO_INSTALL}" &>/dev/null; then
@@ -319,7 +325,7 @@ asdf-kubectl-version() {
 }
 
 # fzf
-fdf() {
+function fdf() {
   # remove trailing / from $1
   dir_clean=${1%/}
   all_files=$(find $dir_clean/* -maxdepth 0 -type d -print 2>/dev/null)
@@ -327,11 +333,11 @@ fdf() {
   cd "$dir_clean/$dir_to_enter" && nvim
 }
 
-mkdp() {
+function mkdp() {
   kubectl get pod --no-headers | fzf | awk '{print $1}' | xargs -n 1 kubectl describe pod
 }
 
-mklf() {
+function mklf() {
   substring=$1
   if [[ -z $substring ]]; then
     substring='.*'
@@ -364,13 +370,13 @@ function nvim-startuptime() {
   cat /dev/null >startuptime.txt && nvim --startuptime startuptime.txt "$@"
 }
 
-zip-code() {
+function zip-code() {
   ZIP_CODE=$(curl -s 'https://www.zipy.co.il/api/findzip/getZip' -H 'content-type: text/plain;charset=UTF-8' -H 'referer: https://www.zipy.co.il/%D7%9E%D7%99%D7%A7%D7%95%D7%93/' --data-raw '{"city":"תל אביב","street":"פלורנטין","house":"2","remote":true}' | jq -r '.result.zip')
   echo "$ZIP_CODE"
   echo "$ZIP_CODE" | pbcopy
 }
 
-matrix() {
+function matrix() {
   echo -e "\e[1;40m"
   clear
   while :; do
@@ -379,7 +385,7 @@ matrix() {
   done | awk '{ letters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()"; c=$4;        letter=substr(letters,c,1);a[$3]=0;for (x in a) {o=a[x];a[x]=a[x]+1; printf "\033[%s;%sH\033[2;32m%s",o,x,letter; printf "\033[%s;%sH\033[1;37m%s\033[0;0H",a[x],x,letter;if (a[x] >= $1) { a[x]=0; } }}'
 }
 
-man() {
+function man() {
   env \
     LESS_TERMCAP_mb=$(printf "\e[1;31m") \
     LESS_TERMCAP_md=$(printf "\e[1;31m") \
@@ -389,6 +395,17 @@ man() {
     LESS_TERMCAP_ue=$(printf "\e[0m") \
     LESS_TERMCAP_us=$(printf "\e[1;32m") \
     man "$@"
+}
+
+function _urlencode() {
+  local length="${#1}"
+  for (( i = 0; i < length; i++ )); do
+    local c="${1:$i:1}"
+    case $c in
+      %) printf '%%%02X' "'$c" ;;
+      *) printf "%s" "$c" ;;
+    esac
+  done
 }
 
 export LOADED_FUNCTIONS=true
