@@ -224,6 +224,10 @@ local M = {
     opts = {
       model = 'claude-3.5-sonnet',
     },
+    keys = {
+      { '<leader>ccc', '<cmd>CopilotChat<CR>' },
+      { '<leader>ccs', '<cmd>CopilotChatStop<CR>' },
+    },
   },
 
   -- DONE ✅
