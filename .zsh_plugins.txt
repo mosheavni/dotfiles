@@ -9,7 +9,6 @@ zsh-users/zsh-history-substring-search
 peterhurford/git-it-on.zsh
 hlissner/zsh-autopair
 agkozak/zhooks
-wez/wezterm path:assets/shell-integration/wezterm.sh
 RobSis/zsh-completion-generator
 
 # deferred

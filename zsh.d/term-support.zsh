@@ -1,21 +1,11 @@
-function _urlencode() {
-  local length="${#1}"
-  for (( i = 0; i < length; i++ )); do
-    local c="${1:$i:1}"
-    case $c in
-      %) printf '%%%02X' "'$c" ;;
-      *) printf "%s" "$c" ;;
-    esac
-  done
-}
-
-export TERM=wezterm
+source /Applications/WezTerm.app/Contents/Resources/wezterm.sh
+export TERM=xterm-256color
 export WEZTERM_SHELL_INTEGRATION=1
 
 # Emits the control sequence to notify many terminal emulators
 # of the cwd
 function termsupport_cwd {
-  printf '\e]7;file://%s%s\e\\' "$HOSTNAME" "$(_urlencode "$PWD")"
+  print -Pn "\e]0;$(basename $(pwd))\a"
 }
 
 # Use a precmd hook instead of a chpwd hook to avoid contaminating output
