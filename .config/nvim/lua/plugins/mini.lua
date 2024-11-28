@@ -107,6 +107,9 @@ local M = {
       -- gm Multiply (duplicate) text
       -- gr Replace text with register
       -- gs Sort text
+      exchange = {
+        prefix = 'ge',
+      },
       sort = {
         prefix = '<leader>so',
         func = function(content)
