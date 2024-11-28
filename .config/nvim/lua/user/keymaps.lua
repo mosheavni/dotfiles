@@ -515,13 +515,13 @@ endfunction
 command! -range JsonSortArrayByKey call <SID>JsonSortArrayByKey()
 ]]
 
-----------
+--------------
 -- Titleize --
 --------------
-vim.api.nvim_create_user_command('Titleize', function(options)
+vim.api.nvim_create_user_command('Titleize', function(opts)
   local title_char = '-'
-  if options.args ~= '' then
-    title_char = options.args
+  if opts.args ~= '' then
+    title_char = opts.args
   end
   local current_line = vim.api.nvim_get_current_line()
   local indent = string.match(current_line, '^%s*')
@@ -588,17 +588,6 @@ vim.api.nvim_create_user_command('AutoRun', function()
 end, {})
 
 ------------------------
--- Plugins Management --
-------------------------
-vim.api.nvim_create_user_command('PluginsList', function()
-  require('user.plugins-mgmt').display_awesome_plugins()
-end, {})
-
-vim.api.nvim_create_user_command('PluginsReload', function()
-  require('user.plugins-mgmt').reload_plugin()
-end, {})
-
-------------------------
 -- Search and Replace --
 ------------------------
-require 'user.search-replace'
+vim.cmd('source ' .. vim.fn.stdpath 'config' .. '/lua/user/search-replace.vim')
