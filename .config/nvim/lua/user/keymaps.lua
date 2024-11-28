@@ -282,18 +282,18 @@ map('v', '<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>
 map('v', '<leader>64', [[c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>]], { remap = false, silent = true, desc = 'Base64 encode' })
 map('v', '<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>]], { remap = false, silent = true, desc = 'Base64 decode' })
 
--- Vimrc edit mappings
-map('n', '<leader>ev', [[:execute("vsplit " . '~/.config/nvim/lua/user/options.lua')<cr>]], { silent = true })
-map('n', '<leader>ep', [[:execute("vsplit " . '~/.config/nvim/lua/plugins/init.lua')<cr>]], { silent = true })
-map('n', '<leader>el', [[:execute("vsplit " . '~/.config/nvim/lua/user/lsp/config.lua')<cr>]], { silent = true })
-map('n', '<leader>em', [[:execute("vsplit " . '~/.config/nvim/lua/user/mappings.lua')<cr>]], { silent = true })
-
 -- Close current buffer
 map('n', '<leader>bc', ':close<cr>', { silent = true, desc = 'Close this buffer' })
 
 -- Abbreviations
 map('!a', 'dont', [[don't]], { remap = false })
-map('!a', 'seperate', [[separate]], { remap = false })
+map('!a', 'seperate', 'separate', { remap = false })
+map('!a', 'adn', 'and', { remap = false })
+map('!a', 'waht', 'what', { remap = false })
+map('!a', 'tehn', 'then', { remap = false })
+map('!a', 'taht', 'that', { remap = false })
+map('!a', 'cehck', 'check', { remap = false })
+
 map('!a', 'rbm', [[# TODO: remove before merging]], { remap = false })
 map('!a', 'cbm', [[# TODO: change before merging]], { remap = false })
 map('!a', 'ubm', [[# TODO: uncomment before merging]], { remap = false })
