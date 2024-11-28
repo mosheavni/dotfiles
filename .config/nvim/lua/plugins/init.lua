@@ -225,7 +225,7 @@ local M = {
       model = 'claude-3.5-sonnet',
     },
     keys = {
-      { '<leader>ccc', '<cmd>CopilotChat<CR>' },
+      { '<leader>ccc', '<cmd>CopilotChat<CR>', mode = { 'n', 'v' } },
       { '<leader>ccs', '<cmd>CopilotChatStop<CR>' },
     },
   },
