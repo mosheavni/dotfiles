@@ -44,31 +44,6 @@ map('i', '<C-b>', '<C-o>db', { remap = false })
 -- Search for string within the visual selection
 map('x', '/', '<Esc>/\\%V', { remap = false })
 
--- Copy number of lines and paste below
-function _G.__duplicate_lines(motion)
-  local count = vim.api.nvim_get_vvar 'count'
-  local start = {}
-  local finish = {}
-  if count ~= 0 then
-    start = vim.api.nvim_win_get_cursor(0)
-    finish = { start[1] + count, 0 }
-  elseif motion == nil then
-    vim.o.operatorfunc = 'v:lua.__duplicate_lines'
-    return vim.fn.feedkeys 'g@'
-  elseif motion == 'char' then
-    return
-  elseif motion == 'line' then
-    start = vim.api.nvim_buf_get_mark(0, '[')
-    finish = vim.api.nvim_buf_get_mark(0, ']')
-  end
-  local text = vim.api.nvim_buf_get_lines(0, start[1] - 1, finish[1], false)
-  table.insert(text, 1, '')
-  vim.api.nvim_buf_set_lines(0, finish[1], finish[1], false, text)
-  vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { finish[1] + 1, finish[2] })
-end
-
-map('n', '<leader>cp', _G.__duplicate_lines)
-
 -- surround with string interpolation with motion
 function _G.__surround_with_interpolation(motion)
   local start = {}

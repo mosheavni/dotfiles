@@ -107,6 +107,24 @@ local M = {
       -- gm Multiply (duplicate) text
       -- gr Replace text with register
       -- gs Sort text
+      sort = {
+        prefix = '<leader>so',
+        func = function(content)
+          local lines_extended = vim.tbl_map(function(l)
+            local line = l or ''
+            local lower = string.lower(line)
+            -- Convert number strings to actual numbers for proper sorting
+            local num = tonumber(line)
+            return { line, num or lower }
+          end, content.lines)
+          table.sort(lines_extended, function(a, b)
+            return a[2] < b[2]
+          end)
+          return vim.tbl_map(function(x)
+            return x[1]
+          end, lines_extended)
+        end,
+      },
     },
   },
 }
