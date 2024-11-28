@@ -13,16 +13,29 @@ M.prnt = function(message, error)
   end)
 end
 
+--- Gets the buffer number of the active fugitive buffer
+--- A fugitive buffer is a buffer that starts with 'fugitive://' and contains '.git//'
+--- @return number|nil buffer number of the fugitive buffer if found, nil otherwise
+M.get_fugitive_buffer = function()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    local bufname = vim.api.nvim_buf_get_name(buf)
+    if vim.startswith(bufname, 'fugitive://') and string.find(bufname, '.git//') then
+      return buf
+    end
+  end
+  return nil
+end
+
 M.reload_fugitive_index = function()
   vim.schedule(function()
-    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-      local bufname = vim.api.nvim_buf_get_name(buf)
-      if vim.startswith(bufname, 'fugitive://') and string.find(bufname, '.git//') then
-        vim.api.nvim_buf_call(buf, function()
-          vim.cmd.edit() -- refresh the buffer
-        end)
-      end
+    local buf = M.get_fugitive_buffer()
+    -- check if buf is valid
+    if not buf or not vim.api.nvim_buf_is_valid(buf) then
+      return
     end
+    vim.api.nvim_buf_call(buf, function()
+      vim.cmd.edit() -- refresh the buffer
+    end)
   end)
 end
 

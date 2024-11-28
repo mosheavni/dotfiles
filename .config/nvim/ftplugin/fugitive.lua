@@ -1,7 +1,8 @@
 local git_funcs = require 'user.git'
 
 vim.schedule(function()
-  vim.api.nvim_buf_set_keymap(0, 'n', '<leader>t', '', {
+  local buf = git_funcs.get_fugitive_buffer()
+  vim.api.nvim_buf_set_keymap(buf, 'n', '<leader>t', '', {
     noremap = true,
     silent = true,
     desc = 'Open terminal',
@@ -10,7 +11,7 @@ vim.schedule(function()
     end,
   })
 
-  vim.api.nvim_buf_set_keymap(0, 'n', 'cc', '', {
+  vim.api.nvim_buf_set_keymap(buf, 'n', 'cc', '', {
     noremap = true,
     silent = true,
     desc = 'Commit',
@@ -19,28 +20,28 @@ vim.schedule(function()
     end,
   })
 
-  vim.api.nvim_buf_set_keymap(0, 'n', 'gl', '', {
+  vim.api.nvim_buf_set_keymap(buf, 'n', 'gl', '', {
     noremap = true,
     silent = true,
     desc = 'Pull',
     callback = git_funcs.pull,
   })
 
-  vim.api.nvim_buf_set_keymap(0, 'n', 'gp', '', {
+  vim.api.nvim_buf_set_keymap(buf, 'n', 'gp', '', {
     noremap = true,
     silent = true,
     desc = 'Push',
     callback = git_funcs.push,
   })
 
-  vim.api.nvim_buf_set_keymap(0, 'n', 'gf', '', {
+  vim.api.nvim_buf_set_keymap(buf, 'n', 'gf', '', {
     noremap = true,
     silent = true,
     desc = 'Fetch',
     callback = git_funcs.fetch_all,
   })
 
-  vim.api.nvim_buf_set_keymap(0, 'n', 'pr', '', {
+  vim.api.nvim_buf_set_keymap(buf, 'n', 'pr', '', {
     noremap = true,
     silent = true,
     desc = 'Pull request',
@@ -49,14 +50,14 @@ vim.schedule(function()
     end,
   })
 
-  vim.api.nvim_buf_set_keymap(0, 'n', 'fc', '', {
+  vim.api.nvim_buf_set_keymap(buf, 'n', 'fc', '', {
     noremap = true,
     silent = true,
     desc = 'First commit',
     callback = git_funcs.first_commit,
   })
 
-  vim.api.nvim_buf_set_keymap(0, 'n', 'R', '', {
+  vim.api.nvim_buf_set_keymap(buf, 'n', 'R', '', {
     noremap = true,
     silent = true,
     desc = 'Reload',
@@ -65,7 +66,7 @@ vim.schedule(function()
     end,
   })
 
-  vim.api.nvim_buf_set_keymap(0, 'n', 'wip', '', {
+  vim.api.nvim_buf_set_keymap(buf, 'n', 'wip', '', {
     noremap = true,
     silent = true,
     desc = 'Enter work in progress',
