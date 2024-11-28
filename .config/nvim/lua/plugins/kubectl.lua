@@ -50,4 +50,14 @@ return {
       desc = 'Toggle faults',
     },
   },
+  init = function()
+    local group = vim.api.nvim_create_augroup('kubectl_user', { clear = true })
+    vim.api.nvim_create_autocmd('FileType', {
+      group = group,
+      pattern = 'k8s_*',
+      callback = function()
+        vim.opt.titlestring = 'k8s: %t'
+      end,
+    })
+  end,
 }

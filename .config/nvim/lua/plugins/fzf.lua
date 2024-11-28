@@ -6,6 +6,15 @@ return {
     { '<leader>hh', ':FzfLua help_tags<cr>', silent = true },
     { '<leader>i', ':FzfLua oldfiles<cr>', silent = true },
     {
+      '<leader>ccp',
+      function()
+        local actions = require 'CopilotChat.actions'
+        require('CopilotChat.integrations.fzflua').pick(actions.prompt_actions())
+      end,
+      desc = 'CopilotChat - Prompt actions',
+      mode = { 'n', 'v' },
+    },
+    {
       '<F4>',
       function()
         local utils = require 'fzf-lua.utils'

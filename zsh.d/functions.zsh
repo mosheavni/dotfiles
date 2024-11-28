@@ -7,6 +7,11 @@ function take() {
   [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"
 }
 
+function delete-zcompdump() {
+  rm -f ~/.cache/zsh/zcomp*
+  rm -f ~/.zcompdump*
+}
+
 function say-hebrew() {
   # check if there's params
   if [[ -z $* ]]; then
@@ -395,17 +400,6 @@ function man() {
     LESS_TERMCAP_ue=$(printf "\e[0m") \
     LESS_TERMCAP_us=$(printf "\e[1;32m") \
     man "$@"
-}
-
-function _urlencode() {
-  local length="${#1}"
-  for (( i = 0; i < length; i++ )); do
-    local c="${1:$i:1}"
-    case $c in
-      %) printf '%%%02X' "'$c" ;;
-      *) printf "%s" "$c" ;;
-    esac
-  done
 }
 
 export LOADED_FUNCTIONS=true

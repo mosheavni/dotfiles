@@ -68,7 +68,7 @@ local function run_git(args, msg, cb)
       end
       M.prnt(new_msg)
     end
-    if cb then
+    if cb and type(cb) == 'function' then
       cb(stdout)
     end
     M.reload_fugitive_index()

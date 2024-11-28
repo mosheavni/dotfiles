@@ -7,7 +7,7 @@ local color = 'Catppuccin Mocha'
 config.color_scheme = color
 
 -- performance
-config.max_fps = 120
+config.max_fps = 240
 config.animation_fps = 240
 config.front_end = 'WebGpu'
 config.webgpu_power_preference = 'HighPerformance'
@@ -52,7 +52,7 @@ config.colors = {
 }
 
 -- window
-config.window_decorations = 'RESIZE'
+config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE'
 config.inactive_pane_hsb = {
   saturation = 0.4,
   brightness = 0.5,
@@ -115,16 +115,6 @@ config.keys = {
 
   -- kill pane
   { key = 'w', mods = 'CMD', action = act.CloseCurrentPane { confirm = true } },
-
-  -- Open the configuration file with Cmd+,
-  {
-    key = ',',
-    mods = 'SUPER',
-    action = act.SpawnCommandInNewTab {
-      cwd = wez.home_dir,
-      args = { HOME .. '/.asdf/shims/nvim', wez.config_file },
-    },
-  },
 }
 
 -- arrow keys keybindings

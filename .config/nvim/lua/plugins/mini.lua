@@ -88,7 +88,26 @@ local M = {
   {
     'echasnovski/mini.ai',
     version = false,
-    opts = {},
+    config = function()
+      local gen_spec = require('mini.ai').gen_spec
+      require('mini.ai').setup {
+        custom_textobjects = {
+          -- Function definition (needs treesitter queries with these captures)
+          F = gen_spec.treesitter { a = '@function.outer', i = '@function.inner' },
+        },
+      }
+    end,
+  },
+  {
+    'echasnovski/mini.operators',
+    version = false,
+    opts = {
+      -- g= Evaluate text and replace with output
+      -- gx Exchange text regions
+      -- gm Multiply (duplicate) text
+      -- gr Replace text with register
+      -- gs Sort text
+    },
   },
 }
 return M

@@ -3,6 +3,14 @@ return function(bufnr)
     return { remap = false, buffer = bufnr, silent = true, desc = description }
   end
 
+  -- rename
+  vim.keymap.set('n', '<leader>lr', vim.lsp.buf.rename, returnOpts 'Rename')
+  -- goto definition/declaration
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, returnOpts 'Go to definition')
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, returnOpts 'Go to declaration')
+  -- hover doc
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, returnOpts 'Show hover doc')
+
   -- GoTo code navigation
   vim.keymap.set('n', 'gp', '<cmd>Lspsaga peek_definition<CR>', returnOpts 'Peek definition')
   vim.keymap.set('n', 'gy', vim.lsp.buf.type_definition, returnOpts 'Go to type definition')
