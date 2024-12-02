@@ -76,6 +76,9 @@ local function run_git(args, msg, cb)
     end
     if msg then
       local new_msg = 'Success!'
+      if stderr then
+        new_msg = new_msg .. '\n' .. stderr
+      end
       if stdout then
         new_msg = new_msg .. '\n' .. stdout
       end
@@ -152,11 +155,7 @@ end
 
 M.push = function(cb)
   M.get_branch(function(branch)
-    run_git({ 'push', 'origin', branch }, 'Pushing to ' .. branch .. '...', function(obj)
-      if cb then
-        cb(obj)
-      end
-    end)
+    run_git({ 'push', 'origin', branch }, 'Pushing to ' .. branch .. '...', cb)
   end)
 end
 

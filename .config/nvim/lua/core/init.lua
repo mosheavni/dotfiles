@@ -22,6 +22,10 @@ function _G.P(v, r)
   end
   return v
 end
+local original_vim_print = vim.print
+vim.print = function(...)
+  original_vim_print(vim.inspect(...))
+end
 
 -- Write a temporary file, optionally delete on exit, set filetype and open in a
 -- new buffer
