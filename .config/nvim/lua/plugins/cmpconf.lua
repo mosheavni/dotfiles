@@ -249,7 +249,7 @@ M.config = function()
     check_ts = true, -- treesitter integration
     enable_check_bracket_line = false,
     disable_in_macro = true,
-    disable_filetype = { 'TelescopePrompt', 'guihua', 'guihua_rust', 'clap_input' },
+    disable_filetype = { 'fzf', 'guihua', 'guihua_rust', 'clap_input' },
   }
   -- If you want insert `(` after select function or method item
   local cmp_autopairs = require 'nvim-autopairs.completion.cmp'

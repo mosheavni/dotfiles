@@ -38,6 +38,12 @@ function! ReplaceMotion(motion, text)
 endfunction
 ]]
 
+---Execute a shell command and return its output
+---@param cmd table The command to execute as a table where the first element is the command and the rest are arguments
+---@param cwd? string The working directory to execute the command in (optional)
+---@return table stdout The standard output as a table of lines
+---@return number? ret The return code of the command
+---@return table stderr The standard error as a table of lines
 M.get_os_command_output = function(cmd, cwd)
   local Job = require 'plenary.job'
   if not cwd then
@@ -97,6 +103,10 @@ M.country_os_to_emoji = function(iso)
   return emoji or ''
 end
 
+--- Get the next index in a table after the current element
+--- @param tbl table The table to search in
+--- @param cur any The current element to find
+--- @return number index The next index in the table (loops back to 1)
 M.tbl_get_next = function(tbl, cur)
   local idx = 1
   for i, v in ipairs(tbl) do

@@ -161,40 +161,6 @@ local M = {
     end,
   },
   {
-    'desdic/greyjoy.nvim',
-    cmd = { 'Greyjoy' },
-    init = function()
-      require('user.menu').add_actions('Greyjoy', {
-        ['Run command (:Greyjoy)'] = function()
-          vim.cmd.Greyjoy()
-        end,
-      })
-    end,
-    config = function(_, opts)
-      local greyjoy = require 'greyjoy'
-      greyjoy.setup(opts)
-      greyjoy.load_extension 'generic'
-      greyjoy.load_extension 'makefile'
-      greyjoy.load_extension 'docker_compose'
-    end,
-    opts = {
-      extensions = {
-        generic = {
-          commands = {
-            ['run python {filename}'] = {
-              command = { 'python3', '{filename}' },
-              filetype = 'python',
-            },
-            ['run go {filename}'] = {
-              command = { 'go', 'run', '{filename}' },
-              filetype = 'go',
-            },
-          },
-        },
-      },
-    },
-  },
-  {
     'iamcco/markdown-preview.nvim',
     build = 'cd app && yarn install',
     config = function()

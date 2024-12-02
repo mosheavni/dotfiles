@@ -25,11 +25,15 @@ alias tf='terraform'
 alias tg='terragrunt'
 alias ls='eza '
 alias git_current_branch='git branch --show-current'
+alias server='python -m http.server 3030'
 
 alias dotfiles='cd ~/Repos/dotfiles'
 alias dc='cd '
 alias pj='fdf ~/Repos'
 alias repos="~/Repos"
+
+# file aliases
+alias -s {lua,yml,yaml}=nvim
 
 # global aliases
 alias -g Wt='while :;do '
