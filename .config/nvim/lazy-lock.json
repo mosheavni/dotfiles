@@ -89,7 +89,7 @@
   "rose-pine": { "branch": "main", "commit": "07a887a7bef4aacea8c7caebaf8cbf808cdc7a8e" },
   "sonokai": { "branch": "master", "commit": "fd42b20963c34dfc1744ac31f6a6efe78f4edad2" },
   "sqlite.lua": { "branch": "master", "commit": "d0ffd703b56d090d213b497ed4eb840495f14a11" },
-  "statuscol.nvim": { "branch": "main", "commit": "8822f76e105549620ef9c0d96e7b95aedf14c490" },
+  "statuscol.nvim": { "branch": "0.10", "commit": "b0de00dfcf583bdd94284d844aac1b134d47c578" },
   "switch.vim": { "branch": "main", "commit": "21defb202ebb8406b8ed63183a43ea026f2645b3" },
   "template-string.nvim": { "branch": "main", "commit": "419bfb2e4d5f0e6ddd0d4435f85b69da0d88d524" },
   "term-edit.nvim": { "branch": "master", "commit": "b190a91178ef98beefac2ec0823db047978ea327" },
