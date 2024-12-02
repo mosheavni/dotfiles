@@ -183,7 +183,6 @@ M.create_pull_request = function()
     local pr_link = git_name == 'gitlab' and '-/merge_requests/new?merge_request[source_branch]=' or 'pull/new/'
 
     M.get_branch(function(branch_name)
-      vim.print('git_name: ' .. git_name .. ' project: ' .. project .. ' repo: ' .. repo .. ' pr_link: ' .. pr_link .. ' branch_name: ' .. branch_name)
       local url = string.format('https://%s.com/%s/%s/%s%s', git_name, project, repo, pr_link, branch_name)
       vim.print('Opening ' .. url)
       vim.ui.open(url)
