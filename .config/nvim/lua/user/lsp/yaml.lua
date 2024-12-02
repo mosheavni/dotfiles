@@ -38,6 +38,9 @@ M.setup = function(opts)
     }),
     settings = {
       yaml = {
+        format = {
+          bracketSpacing = false,
+        },
         schemas = require('schemastore').yaml.schemas(),
         schemaStore = {
           -- Must disable built-in schemaStore support to use

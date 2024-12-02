@@ -1,5 +1,8 @@
 {
   "options": {
     "editorconfig": true
+  },
+  "yaml": {
+    "bracketSpacing": false
   }
 }

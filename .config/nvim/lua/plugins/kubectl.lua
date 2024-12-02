@@ -22,7 +22,7 @@ return {
       prefix = false,
     },
     lineage = {
-      enabled = true,
+      enabled = false,
     },
     completion = {
       follow_cursor = false,

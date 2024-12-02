@@ -24,7 +24,8 @@ function _G.P(v, r)
 end
 local original_vim_print = vim.print
 vim.print = function(...)
-  original_vim_print(vim.inspect(...))
+  local str = type(...) == 'table' and vim.inspect(...) or ...
+  original_vim_print(str)
 end
 
 -- Write a temporary file, optionally delete on exit, set filetype and open in a
