@@ -142,25 +142,6 @@ local M = {
     end,
   },
   {
-    'kazhala/close-buffers.nvim',
-    opts = {},
-    cmd = { 'BDelete', 'BWipeout' },
-    keys = {
-      { '<leader>bd', '<cmd>BDelete this<cr>' },
-      { '<leader>bh', '<cmd>BDelete hidden<cr>' },
-    },
-    init = function()
-      require('user.menu').add_actions(nil, {
-        ['Delete Buffer'] = function()
-          vim.cmd.BDelete 'this'
-        end,
-        ['Delete all hidden buffers (:BDelete hidden)'] = function()
-          vim.cmd.BDelete 'hidden'
-        end,
-      })
-    end,
-  },
-  {
     'iamcco/markdown-preview.nvim',
     build = 'cd app && yarn install',
     config = function()
