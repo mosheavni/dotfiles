@@ -92,6 +92,21 @@ M.opts = {
   endwise = {
     enable = true,
   },
+  textobjects = {
+    enable = false,
+    select = {
+      enable = false,
+    },
+    lsp_interop = {
+      enable = false,
+    },
+    move = {
+      enable = false,
+    },
+    swap = {
+      enable = false,
+    },
+  },
 }
 
 M.config = function(_, opts)
