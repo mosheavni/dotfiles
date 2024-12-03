@@ -80,6 +80,20 @@ local M = {
     end,
   },
   {
+    'echasnovski/mini.notify',
+    version = false,
+    lazy = false,
+    keys = {
+      { '<leader>x', '<cmd>lua require("mini.notify").clear()<cr>', { silent = true, desc = 'Dismiss all notifications' } },
+      { '<leader>n', '<cmd>lua require("mini.notify").show_history()<cr>', { silent = true, desc = 'Show notifications history' } },
+    },
+    init = function()
+      local mnotify = require 'mini.notify'
+      mnotify.setup()
+      vim.notify = mnotify.make_notify()
+    end,
+  },
+  {
     'echasnovski/mini.splitjoin',
     version = false,
     opts = {},
