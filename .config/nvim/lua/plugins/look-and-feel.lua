@@ -81,11 +81,6 @@ local M = {
   -----------
   -- other --
   -----------
-  -- {
-  --   'max397574/colortils.nvim',
-  --   cmd = 'Colortils',
-  --   opts = {},
-  -- },
   {
     'eero-lehtinen/oklch-color-picker.nvim',
     opts = {
@@ -171,38 +166,6 @@ local M = {
     'vim-scripts/CursorLineCurrentWindow',
     event = 'BufReadPost',
   },
-  -- {
-  --   'NvChad/nvim-colorizer.lua',
-  --   event = 'BufReadPost',
-  --   cmd = {
-  --     'ColorizerToggle',
-  --     'ColorizerAttachToBuffer',
-  --     'ColorizerDetachFromBuffer',
-  --     'ColorizerReloadAllBuffers',
-  --   },
-  --   opts = {
-  --     filetypes = { '*', '!fugitive', '!packer', '!dashboard', '!NvimTree', '!Trouble', '!trouble', '!lazy', '!mason', '!notify', '!floaterm', '!lazyterm' },
-  --     user_default_options = { mode = 'virtualtext', names = false },
-  --   },
-  --   config = function(_, opts)
-  --     require('colorizer').setup(opts)
-  --     require('colorizer').attach_to_buffer(0, { mode = 'virtualtext', css = true })
-  --     require('user.menu').add_actions('Colorizer', {
-  --       ['Attach to Buffer (:ColorizerAttachToBuffer)'] = function()
-  --         vim.cmd 'ColorizerAttachToBuffer'
-  --       end,
-  --       ['Toggle (:ColorizerToggle)'] = function()
-  --         vim.cmd 'ColorizerToggle'
-  --       end,
-  --       ['Detach from Buffer (:ColorizerDetachFromBuffer)'] = function()
-  --         vim.cmd 'ColorizerDetachFromBuffer'
-  --       end,
-  --       ['Reload All Buffers (:ColorizerReloadAllBuffers)'] = function()
-  --         vim.cmd 'ColorizerReloadAllBuffers'
-  --       end,
-  --     })
-  --   end,
-  -- },
 }
 
 return M
