@@ -229,6 +229,8 @@ map('n', 'cP', '"+yy')
 map('n', 'cp', '"+y')
 map('n', 'cv', '"+p')
 
+map('n', '<C-c>', 'ciw')
+
 -- Move visually selected block
 -- map('v', 'J', [[:m '>+1<CR>gv=gv]], { remap = false, silent = true })
 -- map('v', 'K', [[:m '<-2<CR>gv=gv]], { remap = false, silent = true })
@@ -284,6 +286,9 @@ map('v', '<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$',
 
 -- Close current buffer
 map('n', '<leader>bc', ':close<cr>', { silent = true, desc = 'Close this buffer' })
+
+-- Duplicate a line and comment out the first line
+map('n', 'yc', 'yygccp', { remap = true })
 
 -- Abbreviations
 map('!a', 'dont', [[don't]], { remap = false })

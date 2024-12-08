@@ -1,15 +1,11 @@
 format = "$directory$all"
 
-[directory]
-style = "blue"
-
-
 [kubernetes]
 disabled = false
-format = '\([⎈](bold fg:33) [$cluster](fg:166):[$namespace](dimmed green)\) '
+format = '\([⎈](bold fg:33)[$cluster](fg:166):[$namespace](dimmed green)\) '
 
 [aws]
-disabled = true
+disabled = false
 force_display = true
 style = 'yellow'
 
@@ -17,4 +13,4 @@ style = 'yellow'
 disabled = true
 
 [battery]
-disabled = true
+disabled = false

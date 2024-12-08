@@ -5,7 +5,7 @@ vim.g.python3_host_prog = 'python3'
 -- vim.g.do_filetype_lua = 1
 -- vim.g.did_load_filetypes = 0
 
-vim.o.titlestring = "%{substitute(getcwd(), $HOME . '/Repos/', '', '')}"
+vim.o.titlestring = "nvim: %{substitute(getcwd(), $HOME . '/Repos/', '', '')}"
 vim.o.cursorcolumn = true
 vim.o.cursorline = true -- Add highlight behind current line
 vim.opt.shortmess:append { c = true, l = false, q = false, S = false, C = true, I = true }

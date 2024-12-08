@@ -12,11 +12,9 @@ return function(bufnr)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, returnOpts 'Show hover doc')
 
   -- GoTo code navigation
-  vim.keymap.set('n', 'gp', '<cmd>Lspsaga peek_definition<CR>', returnOpts 'Peek definition')
   vim.keymap.set('n', 'gy', vim.lsp.buf.type_definition, returnOpts 'Go to type definition')
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, returnOpts 'Go to implementation')
-  vim.keymap.set('n', 'gR', '<cmd>lua vim.lsp.buf.references({ includeDeclaration = false })<CR>', returnOpts 'Go to references (native)')
-  vim.keymap.set('n', 'grR', '<cmd>Lspsaga finder<CR>', returnOpts 'Go to references')
+  vim.keymap.set('n', 'gR', vim.lsp.buf.references, returnOpts 'Go to references (native)')
 
   -- Workspace
   vim.keymap.set('n', '<leader>lwa', vim.lsp.buf.add_workspace_folder, returnOpts 'Add workspace folder')

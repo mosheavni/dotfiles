@@ -10,3 +10,10 @@ setopt autocd
 zstyle ':completion:*:*:*:*:*' menu select
 
 bindkey '^q' push-line
+
+copy-line-to-clipboard() {
+    echo -n "$BUFFER" | pbcopy
+}
+zle -N copy-line-to-clipboard
+bindkey '^Y' copy-line-to-clipboard
+

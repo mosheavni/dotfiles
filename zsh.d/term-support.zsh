@@ -5,7 +5,7 @@ export WEZTERM_SHELL_INTEGRATION=1
 # Emits the control sequence to notify many terminal emulators
 # of the cwd
 function termsupport_cwd {
-  print -Pn "\e]0;$(basename $(pwd))\a"
+  print -Pn "\e]0;zsh: $(basename $(pwd))\a"
 }
 
 # Use a precmd hook instead of a chpwd hook to avoid contaminating output
