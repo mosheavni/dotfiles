@@ -126,6 +126,12 @@ local M = {
     end,
   },
   {
+    the_king .. 'pairs',
+    version = false,
+    event = "InsertEnter",
+    opts = {}
+  },
+  {
     the_king .. 'operators',
     version = false,
     event = "VeryLazy",

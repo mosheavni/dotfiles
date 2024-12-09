@@ -18,7 +18,6 @@ local M = {
     'hrsh7th/cmp-path',
     'petertriho/cmp-git',
     'hrsh7th/cmp-nvim-lsp-signature-help',
-    'windwp/nvim-autopairs',
     {
       'zbirenbaum/copilot.lua',
       config = function()
@@ -244,16 +243,6 @@ M.config = function()
       { name = 'cmdline' },
     }),
   })
-
-  require('nvim-autopairs').setup {
-    check_ts = true, -- treesitter integration
-    enable_check_bracket_line = false,
-    disable_in_macro = true,
-    disable_filetype = { 'fzf', 'guihua', 'guihua_rust', 'clap_input' },
-  }
-  -- If you want insert `(` after select function or method item
-  local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
-  cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done { map_char = { tex = '' } })
 
   require('luasnip.loaders.from_vscode').lazy_load()
 end
