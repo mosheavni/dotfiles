@@ -3,45 +3,81 @@ if [[ -n $LOADED_ALIASES ]]; then
   return
 fi
 
+#------------------------------------------------------------------------------
+# Core System Command Overrides
+#------------------------------------------------------------------------------
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
-alias ll='ls -lah'
+alias sed=gsed
+alias grep=ggrep
+alias sort=gsort
+alias awk=gawk
 
-### General aliases ###
-alias zshrc='${=EDITOR} ${ZDOTDIR:-$HOME}/.zshrc' # Quick access to the .zshrc file
-alias watch='watch --color '
+#------------------------------------------------------------------------------
+# File Navigation & Management
+#------------------------------------------------------------------------------
+alias ll='ls -lah'
+alias ls='eza '
+alias dc='cd '
+alias dotfiles='cd ~/Repos/dotfiles'
+alias pj='fdf ~/Repos'
+alias repos="~/Repos"
+
+#------------------------------------------------------------------------------
+# Editor Related
+#------------------------------------------------------------------------------
 alias vim="nvim"
 alias v='nvim'
 alias vi='nvim'
 alias sudoedit="nvim"
 alias lvim='NVIM_APPNAME=LazyVim nvim'
-alias sed=gsed
-alias grep=ggrep
-alias sort=gsort
-alias awk=gawk
-alias myip='curl ipv4.icanhazip.com'
+alias zshrc='${=EDITOR} ${ZDOTDIR:-$HOME}/.zshrc'
+
+#------------------------------------------------------------------------------
+# Development Tools
+#------------------------------------------------------------------------------
 alias tf='terraform'
 alias tg='terragrunt'
-alias ls='eza '
 alias git_current_branch='git branch --show-current'
+alias gb='git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2 | fzf | xargs git checkout'
+alias update-nvim-nightly='asdf uninstall neovim nightly && asdf install neovim nightly'
+
+#------------------------------------------------------------------------------
+# Network & System Utils
+#------------------------------------------------------------------------------
+alias watch='watch --color '
+alias myip='curl ipv4.icanhazip.com'
 alias server='python -m http.server 3030'
+alias kgevents='kubectl get event --sort-by=.metadata.creationTimestamp | grep -E -v "(Successfully (pulled|assigned)|(Started|Created) container|(Deleted|Created) pod)"'
 
-alias dotfiles='cd ~/Repos/dotfiles'
-alias dc='cd '
-alias pj='fdf ~/Repos'
-alias repos="~/Repos"
-
-# file aliases
+#------------------------------------------------------------------------------
+# File Type Associations
+#------------------------------------------------------------------------------
 alias -s {lua,yml,yaml}=nvim
 
-# global aliases
+#------------------------------------------------------------------------------
+# Global Aliases (Pipe Operations)
+#------------------------------------------------------------------------------
+# Loop Controls
 alias -g Wt='while :;do '
 alias -g Wr=' | while read -r line;do echo "=== $line ==="; '
 alias -g D=';done'
-alias -g S='| sort'
+
+# Text Processing
+alias -g H='| head'
+alias -g T='| tail'
+alias -g G='| grep'
+alias -g L="| less"
+alias -g P="| pbcopy"
 alias -g V='| nvim'
-alias -g SRT='+short | sort'
+alias -g S='| sort'
+
+# Output Redirection
+alias -g NE="2> /dev/null"
+alias -g NUL="> /dev/null 2>&1"
+
+# Kubernetes Specific
 alias -g Sa='--sort-by=.metadata.creationTimestamp'
 alias -g Srt='--sort-by=.metadata.creationTimestamp'
 alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
@@ -51,23 +87,10 @@ alias -g NM=' --no-headers -o custom-columns=":metadata.name"'
 alias -g RC='--sort-by=".status.containerStatuses[0].restartCount" -A | grep -v "\s0\s"'
 alias -g BAD='| grep -v "1/1\|2/2\|3/3\|4/4\|5/5\|6/6\|Completed\|Evicted"'
 alias -g IP='-ojsonpath="{.spec.nodeName}"'
+alias -g SRT='+short | sort'
+
+# Shell Processing
 alias -g dollar_1_line='$(awk "{print \$1}"<<<"${line}")'
 alias -g dollar_2_line='$(awk "{print \$2}"<<<"${line}")'
-
-alias -g H='| head'
-alias -g T='| tail'
-alias -g G='| grep'
-alias -g L="| less"
-alias -g P="| pbcopy"
-alias -g NE="2> /dev/null"
-alias -g NUL="> /dev/null 2>&1"
-
-# see recently pushed branches
-# alias gb="git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads | fzf | xargs git checkout && git pull"
-alias gb='git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2 | fzf | xargs git checkout'
-
-alias kgevents='kubectl get event --sort-by=.metadata.creationTimestamp | grep -E -v "(Successfully (pulled|assigned)|(Started|Created) container|(Deleted|Created) pod)"'
-
-alias update-nvim-nightly='asdf uninstall neovim nightly && asdf install neovim nightly'
 
 export LOADED_ALIASES=true
