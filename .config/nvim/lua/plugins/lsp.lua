@@ -32,39 +32,13 @@ M.dependencies = {
     },
   },
   {
-    'nvimdev/lspsaga.nvim',
-    opts = {
-      finder = {
-        keys = {
-          edit = '<CR>',
-          vsplit = '<C-v>',
-          split = '<C-x>',
-        },
-      },
-      definition = {
-        keys = {
-          edit = '<CR>',
-          vsplit = '<C-v>',
-          split = '<C-x>',
-        },
-      },
-
-      lightbulb = {
-        enable = false,
-        sign = false,
-      },
-      symbol_in_winbar = {
-        show_file = false,
-        enable = true,
-        hide_keyword = false,
-      },
-      outline = {
-        keys = {
-          toggle_or_jump = '<CR>',
-        },
-      },
-    },
-    config = true,
+    'Bekaboo/dropbar.nvim',
+    config = function()
+      local dropbar_api = require 'dropbar.api'
+      vim.keymap.set('n', '<Leader>;', dropbar_api.pick, { desc = 'Pick symbols in winbar' })
+      vim.keymap.set('n', '[;', dropbar_api.goto_context_start, { desc = 'Go to start of current context' })
+      vim.keymap.set('n', '];', dropbar_api.select_next_context, { desc = 'Select next context' })
+    end,
   },
 }
 

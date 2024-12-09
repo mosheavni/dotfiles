@@ -35,7 +35,4 @@ return function(bufnr)
   -- Code action
   vim.keymap.set('n', '<leader>la', vim.lsp.buf.code_action, returnOpts 'Code action')
   vim.keymap.set('n', '<leader>lx', vim.lsp.codelens.run, returnOpts 'Code lens')
-
-  -- code outline
-  vim.keymap.set('n', '<leader>o', ':Lspsaga outline<CR>', returnOpts 'Code outline')
 end
