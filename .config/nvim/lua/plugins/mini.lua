@@ -1,6 +1,7 @@
+local the_king = 'echasnovski/mini.'
 local M = {
   {
-    'echasnovski/mini.indentscope',
+    the_king .. 'indentscope',
     version = false,
     event = 'BufReadPost',
     opts = {
@@ -39,7 +40,7 @@ local M = {
     end,
   },
   {
-    'echasnovski/mini.cursorword',
+    the_king .. 'cursorword',
     version = false,
     event = 'BufReadPost',
     config = function()
@@ -51,7 +52,7 @@ local M = {
     end,
   },
   {
-    'echasnovski/mini.icons',
+    the_king .. 'icons',
     lazy = true,
     opts = {},
     init = function()
@@ -62,7 +63,7 @@ local M = {
     end,
   },
   {
-    'echasnovski/mini.hipatterns',
+    the_king .. 'hipatterns',
     version = false,
     event = { 'BufNewFile', 'BufReadPre', 'VeryLazy' },
     config = function()
@@ -80,11 +81,11 @@ local M = {
     end,
   },
   {
-    'echasnovski/mini.notify',
+    the_king .. 'notify',
     version = false,
     lazy = false,
     keys = {
-      { '<leader>x', '<cmd>lua require("mini.notify").clear()<cr>', { silent = true, desc = 'Dismiss all notifications' } },
+      { '<leader>x', '<cmd>lua require("mini.notify").clear()<cr>',        { silent = true, desc = 'Dismiss all notifications' } },
       { '<leader>n', '<cmd>lua require("mini.notify").show_history()<cr>', { silent = true, desc = 'Show notifications history' } },
     },
     init = function()
@@ -94,14 +95,26 @@ local M = {
     end,
   },
   {
-    'echasnovski/mini.splitjoin',
+    the_king .. 'splitjoin',
     version = false,
     opts = {},
     keys = { 'gS' },
   },
   {
-    'echasnovski/mini.ai',
+    the_king .. 'surround',
     version = false,
+    opts = {
+      mappings = {
+        add = 'ys',
+        delete = 'ds',
+        replace = "cs",
+      }
+    }
+  },
+  {
+    the_king .. 'ai',
+    version = false,
+    event = "VeryLazy",
     config = function()
       local gen_spec = require('mini.ai').gen_spec
       require('mini.ai').setup {
@@ -113,8 +126,9 @@ local M = {
     end,
   },
   {
-    'echasnovski/mini.operators',
+    the_king .. 'operators',
     version = false,
+    event = "VeryLazy",
     opts = {
       -- g= Evaluate text and replace with output
       -- gx Exchange text regions

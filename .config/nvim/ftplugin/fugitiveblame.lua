@@ -11,7 +11,12 @@ end
 -- set winbar to empty string
 -- vim.api.nvim_win_set_option(0, 'winbar', '-')
 vim.schedule(function()
-  vim.api.nvim_set_option_value('winbar', 'Git blame', { win = 0 })
+  vim.api.nvim_set_option_value(
+    'winbar',
+    'Git blame (<CR> to open commit in diffview | yy to copy commit hash to clipboard | <leader>gh to open commit in GitHub)',
+    { win = 0 }
+  )
+
   vim.api.nvim_buf_set_keymap(0, 'n', '<CR>', '', {
     noremap = true,
     silent = true,

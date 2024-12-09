@@ -1,4 +1,5 @@
-source /Applications/WezTerm.app/Contents/Resources/wezterm.sh
+[[ -f /Applications/WezTerm.app/Contents/Resources/wezterm.sh ]] && \
+  source /Applications/WezTerm.app/Contents/Resources/wezterm.sh
 export TERM=xterm-256color
 export WEZTERM_SHELL_INTEGRATION=1
 

@@ -11,10 +11,6 @@ local M = {
     end,
   },
   {
-    'tpope/vim-speeddating',
-    keys = { '<C-a>', '<C-x>' },
-  },
-  {
     'mosheavni/vim-kubernetes',
     ft = 'yaml',
     config = function()

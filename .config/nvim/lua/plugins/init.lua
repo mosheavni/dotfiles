@@ -61,16 +61,6 @@ local M = {
   -- Text Manipulation --
   -----------------------
   {
-    'tpope/vim-repeat',
-    event = 'VeryLazy',
-  },
-  {
-    'kylechui/nvim-surround',
-    version = '*', -- Use for stability; omit to use `main` branch for the latest features
-    keys = { 'ds', 'cs', 'ys', { 'S', nil, mode = 'v' } },
-    opts = {},
-  },
-  {
     'junegunn/vim-easy-align',
     keys = { { 'ga', '<Plug>(EasyAlign)', mode = { 'v', 'n' } } },
   },
@@ -217,9 +207,9 @@ local M = {
     },
     dependencies = {
       { 'zbirenbaum/copilot.lua' }, -- or github/copilot.vim
-      { 'nvim-lua/plenary.nvim' },  -- for curl, log wrapper
+      { 'nvim-lua/plenary.nvim' }, -- for curl, log wrapper
     },
-    build = 'make tiktoken',        -- Only on MacOS or Linux
+    build = 'make tiktoken', -- Only on MacOS or Linux
     opts = {
       model = 'claude-3.5-sonnet',
       question_header = '  User ', -- Header to use for user questions
@@ -227,7 +217,7 @@ local M = {
       error_header = '  Error ', -- Header to use for errors
     },
     keys = {
-      { '<leader>ccc', '<cmd>CopilotChat<CR>',    mode = { 'n', 'v' } },
+      { '<leader>ccc', '<cmd>CopilotChat<CR>', mode = { 'n', 'v' } },
       { '<leader>ccs', '<cmd>CopilotChatStop<CR>' },
     },
   },

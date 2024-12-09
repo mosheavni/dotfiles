@@ -166,6 +166,15 @@ local M = {
     'vim-scripts/CursorLineCurrentWindow',
     event = 'BufReadPost',
   },
+  {
+    'OXY2DEV/markview.nvim',
+    ft = 'markdown', -- If you decide to lazy-load anyway
+    opts = { initial_state = false },
+
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+    },
+  },
 }
 
 return M
