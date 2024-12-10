@@ -115,6 +115,9 @@ config.keys = {
 
   -- kill pane
   { key = 'w', mods = 'CMD', action = act.CloseCurrentPane { confirm = true } },
+
+  -- increase/decrease font size by cmd+/-/=
+  { key = '+', mods = 'CMD', action = act.IncreaseFontSize },
 }
 
 -- arrow keys keybindings
