@@ -3,6 +3,8 @@ return {
   keys = {
     { '<c-p>', ':FzfLua files<cr>', silent = true },
     { '<c-b>', ':FzfLua buffers<cr>', silent = true },
+    { '<leader>el', ':FzfLua files cwd=' .. vim.fs.joinpath(vim.fn.stdpath 'data', 'lazy') .. '<cr>', silent = true },
+    { '<leader>ee', ':FzfLua builtin<cr>', silent = true },
     { '<leader>hh', ':FzfLua help_tags<cr>', silent = true },
     { '<leader>i', ':FzfLua oldfiles<cr>', silent = true },
     {
@@ -133,6 +135,14 @@ return {
   cmd = 'FzfLua',
   config = function()
     require('fzf-lua').setup {
+      previewers = {
+        builtin = {
+          extensions = {
+            png = { 'viu', '-b' },
+            jpg = { 'viu', '-b' },
+          },
+        },
+      },
       oldfiles = {
         cwd_only = true,
       },
