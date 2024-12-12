@@ -1,9 +1,11 @@
 local null_ls = require 'null-ls'
+local git = require 'user.git'
 
 local M = {}
 M.revision_branch_comment = {
   method = null_ls.methods.CODE_ACTION,
   filetypes = { 'yaml' },
+  name = 'Revision branch comment',
   generator = {
     fn = function(context)
       local is_argo_app = vim.iter(context.content):find(function(v)
@@ -14,26 +16,34 @@ M.revision_branch_comment = {
       if is_argo_app then
         local target_revision_line_number = vim.fn.search('targetRevision: ', 'nw')
         local target_revision_line = context.content[target_revision_line_number]
-        return {
-          {
-            title = 'Change branch to current',
-            action = function()
-              -- get indentation of current_line
-              local indent = string.match(target_revision_line, '^%s*')
-              local new_lines = { indent .. 'targetRevision: ' .. vim.fn.FugitiveHead() .. ' # TODO: Change to HEAD before merging' }
-              vim.api.nvim_buf_set_lines(context.bufnr, target_revision_line_number - 1, target_revision_line_number, false, new_lines)
-            end,
-          },
-          {
-            title = 'Change branch to HEAD',
-            action = function()
-              -- get indentation of current_line
-              local indent = string.match(target_revision_line, '^%s*')
-              local new_lines = { indent .. 'targetRevision: HEAD' }
-              vim.api.nvim_buf_set_lines(context.bufnr, target_revision_line_number - 1, target_revision_line_number, false, new_lines)
-            end,
-          },
-        }
+        if string.find(target_revision_line, 'targetRevision: HEAD') then
+          return {
+            {
+              title = 'Change branch to current',
+              action = function()
+                -- get indentation of current_line
+                local indent = string.match(target_revision_line, '^%s*')
+                local new_lines = { indent ..
+                'targetRevision: ' .. git.get_branch_sync() .. ' # TODO: Change to HEAD before merging' }
+                vim.api.nvim_buf_set_lines(context.bufnr, target_revision_line_number - 1, target_revision_line_number,
+                  false, new_lines)
+              end,
+            },
+          }
+        else
+          return {
+            {
+              title = 'Change branch to HEAD',
+              action = function()
+                -- get indentation of current_line
+                local indent = string.match(target_revision_line, '^%s*')
+                local new_lines = { indent .. 'targetRevision: HEAD' }
+                vim.api.nvim_buf_set_lines(context.bufnr, target_revision_line_number - 1, target_revision_line_number,
+                  false, new_lines)
+              end,
+            },
+          }
+        end
       end
     end,
   },
@@ -42,6 +52,7 @@ M.revision_branch_comment = {
 M.toggle_function_params = {
   method = null_ls.methods.CODE_ACTION,
   filetypes = { 'groovy', 'Jenkinsfile' },
+  name = 'Toggle function positional params to map args',
   generator = {
     fn = function(context)
       local row = context.range.row
@@ -70,6 +81,41 @@ M.toggle_function_params = {
             end,
           },
         }
+      end
+    end,
+  },
+}
+
+M.library_current_branch = {
+  method = null_ls.methods.CODE_ACTION,
+  filetypes = { 'groovy', 'Jenkinsfile' },
+  name = 'Toggle library current branch',
+  generator = {
+    fn = function(context)
+      local first_line = context.content[1]
+      if string.find(first_line, [[@Library%(['"]utils]]) then
+        if string.find(first_line, [[@Library%(['"]utils@]]) then
+          return {
+            {
+              title = 'Remove current branch from library',
+              action = function()
+                vim.api.nvim_buf_set_lines(context.bufnr, 0, 1, false, { "@Library('utils') _" })
+              end,
+            },
+          }
+        else
+          return {
+            {
+              title = 'Change library to current branch',
+              action = function()
+                local new_line = string.format("@Library('utils@%s') _ // TODO: remove library before merging",
+                  git.get_branch_sync())
+                vim.print(vim.inspect(new_line))
+                vim.api.nvim_buf_set_lines(context.bufnr, 0, 1, false, { new_line })
+              end,
+            },
+          }
+        end
       end
     end,
   },
