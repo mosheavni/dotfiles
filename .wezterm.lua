@@ -21,8 +21,8 @@ config.harfbuzz_features = {
   'ss02=1',
   'ss19=1',
 }
-config.font = wez.font_with_fallback { { family = 'Cascadia Code', weight = 'DemiBold' } }
-config.font_size = 15
+config.font = wez.font_with_fallback { { family = 'CaskaydiaCove Nerd Font', weight = 'DemiBold' } }
+config.font_size = 16
 config.freetype_load_target = 'Normal'
 config.custom_block_glyphs = false
 config.default_cursor_style = 'BlinkingBar'
@@ -71,20 +71,20 @@ config.native_macos_fullscreen_mode = true
 config.background = {
   {
     source = {
-      File = HOME .. '/Pictures/wallpaperflare4.jpg',
+      File = HOME .. '/Pictures/wallpaperflare1.jpg',
     },
     repeat_y = 'NoRepeat',
     hsb = {
-      brightness = 0.13,
+      brightness = 0.17,
       hue = 1.0,
       saturation = 1.0,
     },
     height = 'Cover',
-    width = 'Cover',
-    opacity = 0.92,
+    width = 'Contain',
+    opacity = 1.0,
   },
 }
-config.macos_window_background_blur = 100
+config.macos_window_background_blur = 50
 
 -- mouse
 config.mouse_bindings = {
