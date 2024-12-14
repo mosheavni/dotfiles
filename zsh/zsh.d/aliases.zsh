@@ -20,7 +20,7 @@ alias awk=gawk
 alias ll='ls -lah'
 alias ls='eza '
 alias dc='cd '
-alias dotfiles='cd ~/Repos/dotfiles'
+alias dotfiles='cd ~/.dotfiles'
 alias pj='fdf ~/Repos'
 alias repos="~/Repos"
 

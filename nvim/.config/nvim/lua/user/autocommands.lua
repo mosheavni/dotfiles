@@ -203,7 +203,7 @@ autocmd('BufWritePost', {
 autocmd('User', {
   pattern = 'LazyUpdate',
   callback = function()
-    local repo_dir = vim.env.HOME .. '/Repos/dotfiles'
+    local repo_dir = vim.env.HOME .. '/.dotfiles'
     if vim.fn.isdirectory(repo_dir) ~= 1 then
       return
     end

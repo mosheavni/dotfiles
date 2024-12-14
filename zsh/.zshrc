@@ -44,7 +44,7 @@ export LC_ALL=en_US.UTF-8
 #  Autoloaders  #
 # ============= #
 # asdf
-export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/Repos/dotfiles/requirements.txt
+export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/.dotfiles/requirements.txt
 export ASDF_DIR="$HOME/.asdf"
 [[ -d $HOME/.asdf ]] && source $HOME/.asdf/asdf.sh
 

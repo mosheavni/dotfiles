@@ -1,0 +1,8 @@
+--ignore=.stowrc
+--ignore=Brewfile
+--ignore=Brewfile.lock.json
+--ignore=BACKUP.md
+--ignore=.github
+--ignore=requirements.txt
+--ignore=snippets.xml
+--ignore=start.sh
