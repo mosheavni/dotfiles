@@ -23,7 +23,7 @@
 
    ```bash
    [[ -d ~/Repos ]] || mkdir ~/Repos
-   cd ~/Repos && git clone git@github.com:mosheavni/dotfiles.git && cd dotfiles
+   cd ~ && git clone git@github.com:mosheavni/dotfiles.git .dotfiles && cd .dotfiles
    ```
 
 3. Install brew dependencies (generated with `brew bundle dump`)
@@ -44,89 +44,57 @@
    ```bash
    while read -r plugin_line;do
      asdf plugin-add $(awk '{print $1}' <<<"$plugin_line")
-   done < .tool-versions
+   done < asdf/.tool-versions
    asdf install
    ```
 
-5. Open [iTerm2](https://www.iterm2.com/) and start using a real terminal.
-   Also, install shell intergrations
+5. Open [Wezterm](https://wezfurlong.org/wezterm/index.html) and start using a real terminal.
+
+6. Install [antidote](https://antidote.sh/)
 
    ```bash
-   cd ~/Repos/dotfiles
-   curl -L https://iterm2.com/misc/install_shell_integration.sh | bash
+   git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
    ```
 
-6. Install [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh) and its plugins
+7. Run `./start.sh` to create the symlinks between the repo dir and the home dir:
+
+8. Install npm packages
 
    ```bash
-   sh -c \
-     "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-
-   git clone \
-     https://github.com/TamCore/autoupdate-oh-my-zsh-plugins \
-     ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate
-
-   git clone \
-     https://github.com/zsh-users/zsh-syntax-highlighting.git \
-     ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-
-   git clone \
-      https://github.com/zsh-users/zsh-autosuggestions \
-      ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-
-   git clone \
-       https://github.com/loiccoyle/zsh-github-copilot \
-       ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-github-copilot
+   npm install -g $(printf "%s " $(<node/.default-npm-packages))
    ```
 
-7. Install [effuse](https://github.com/jeromelefeuvre/effuse):
-
-   ```bash
-   sudo gem install effuse
-   ```
-
-8. Run effuse to create the symlinks between the repo dir and the home dir:
-   `effuse`
-
-9. Install npm packages
-
-   ```bash
-   npm install -g $(printf "%s " $(<.default-npm-packages))
-   ```
-
-10. Install pip dependencies
+9. Install pip dependencies
 
     ```bash
     pip3 install -r requirements.txt
     ```
 
-11. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
+10. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
 
     ```bash
     $(brew --prefix)/opt/fzf/install
     ```
 
-12. Install gh [github cli copilot extension](https://github.com/github/gh-copilot)
+11. Install gh [github cli copilot extension](https://github.com/github/gh-copilot)
 
     ```bash
     gh extension install github/gh-copilot --force
     ```
 
-13. Login to gh cli
+12. Login to gh cli
 
     ```bash
     gh auth login --web -h github.com
     ```
 
-14. ???
+13. ???
 
-15. PROFIT
+14. PROFIT
 
 ## Additional stuff
 
 - Adjust dock and keyboard settings
-
-- Link iTerm2 and Karabiner profiles
 
 - Download and install [docker](https://www.docker.com/products/docker-desktop)
 
