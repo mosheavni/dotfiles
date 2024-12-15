@@ -85,12 +85,14 @@ local M = {
     version = false,
     lazy = false,
     keys = {
-      { '<leader>x', '<cmd>lua require("mini.notify").clear()<cr>',        { silent = true, desc = 'Dismiss all notifications' } },
+      { '<leader>x', '<cmd>lua require("mini.notify").clear()<cr>', { silent = true, desc = 'Dismiss all notifications' } },
       { '<leader>n', '<cmd>lua require("mini.notify").show_history()<cr>', { silent = true, desc = 'Show notifications history' } },
     },
     init = function()
       local mnotify = require 'mini.notify'
-      mnotify.setup()
+      mnotify.setup {
+        lsp_progress = { enable = true },
+      }
       vim.notify = mnotify.make_notify()
     end,
   },
@@ -132,7 +134,7 @@ local M = {
   {
     the_king .. 'ai',
     version = false,
-    event = "VeryLazy",
+    event = 'VeryLazy',
     config = function()
       local gen_spec = require('mini.ai').gen_spec
       require('mini.ai').setup {
@@ -147,13 +149,13 @@ local M = {
   {
     the_king .. 'pairs',
     version = false,
-    event = "InsertEnter",
-    opts = {}
+    event = 'InsertEnter',
+    opts = {},
   },
   {
     the_king .. 'operators',
     version = false,
-    event = "VeryLazy",
+    event = 'VeryLazy',
     opts = {
       -- g= Evaluate text and replace with output
       -- gx Exchange text regions

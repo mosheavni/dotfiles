@@ -110,34 +110,6 @@ local M = {
     end,
   },
   {
-    'rcarriga/nvim-notify',
-    enabled = false,
-    keys = {
-      {
-        '<Leader>x',
-        function()
-          require('notify').dismiss { pending = true, silent = true }
-        end,
-        desc = 'Dismiss all notifications',
-      },
-    },
-    cmd = 'Notifications',
-    init = function()
-      ---@diagnostic disable-next-line: duplicate-set-field
-      vim.notify = function(...)
-        if not require('lazy.core.config').plugins['nvim-notify']._.loaded then
-          require('lazy').load { plugins = { 'nvim-notify' } }
-        end
-        require 'notify'(...)
-      end
-    end,
-    opts = {
-      render = 'compact',
-      stages = 'static',
-      timeout = 3000,
-    },
-  },
-  {
     'folke/twilight.nvim',
     cmd = { 'Twilight', 'TwilightEnable', 'TwilightDisable' },
     opts = {},
