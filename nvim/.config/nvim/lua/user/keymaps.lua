@@ -41,6 +41,8 @@ map('i', ';;', '<C-O>A;', { remap = false })
 map('i', '<C-e>', '<C-o>de', { remap = false })
 map('i', '<C-b>', '<C-o>db', { remap = false })
 
+map('n', 'gx', require('user.open-url').open_url_under_cursor, { remap = false, desc = 'Open url under cursor' })
+
 -- Search for string within the visual selection
 map('x', '/', '<Esc>/\\%V', { remap = false })
 

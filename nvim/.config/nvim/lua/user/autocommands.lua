@@ -145,11 +145,6 @@ autocmd({ 'FileType' }, {
   pattern = 'nginx',
   command = 'setlocal iskeyword+=$',
 })
-autocmd({ 'BufRead' }, {
-  group = special_filetypes,
-  pattern = { '*/plugins/*.lua', '.github/workflows/*.y*ml' },
-  command = 'lua require("user.open-url").setup()',
-})
 
 -- Quickfix
 local quickfix_au = augroup 'QuickFix'

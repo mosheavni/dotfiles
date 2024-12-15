@@ -12,7 +12,6 @@ local M = {
   end,
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    'RRethy/nvim-treesitter-endwise',
     'Afourcat/treesitter-terraform-doc.nvim',
     'nvim-treesitter/nvim-treesitter-context',
     { 'folke/ts-comments.nvim', opts = {} },
@@ -88,9 +87,6 @@ M.opts = {
   indent = {
     enable = true,
     disable = { 'yaml' },
-  },
-  endwise = {
-    enable = true,
   },
 }
 

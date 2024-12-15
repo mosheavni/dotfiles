@@ -17,4 +17,4 @@ ohmyzsh/ohmyzsh path:plugins/git kind:defer
 zsh-users/zsh-syntax-highlighting kind:defer
 
 # this is last
-belak/zsh-utils path:completion kind:autoload post:compstyle_zshzoo_setup
+belak/zsh-utils path:completion kind:autoload post:compstyle_prez_setup

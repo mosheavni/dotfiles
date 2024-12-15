@@ -17,6 +17,12 @@ load_completion_from_cmd() {
 # Constants at the top
 GENCOMPL_FPATH="${HOME}/.zsh/complete"
 
+# zstyles
+zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*' completer _complete _prefix _match _approximate
+zstyle ':completion:*' matcher-list 'r:[[:ascii:]]||[[:ascii:]]=** r:|=* m:{a-z\-}={A-Z\_}'
+zstyle ':completion:*:approximate:*' max-errors 3 numeric
+
 # Initialize completion system
 autoload -U +X bashcompinit && bashcompinit
 

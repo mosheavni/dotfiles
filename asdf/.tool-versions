@@ -21,3 +21,4 @@ gradle 8.5
 pre-commit 3.7.0
 maven 3.6.3
 lua 5.1.5
+rust stable

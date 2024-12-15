@@ -7,7 +7,7 @@ setopt multios             # enable redirect to multiple streams: echo >file1 >f
 setopt long_list_jobs      # show long list format job notifications
 setopt interactivecomments # recognize comments
 setopt autocd
-zstyle ':completion:*:*:*:*:*' menu select
+setopt complete_in_word
 
 bindkey '^q' push-line
 
