@@ -91,7 +91,7 @@ local M = {
     init = function()
       local mnotify = require 'mini.notify'
       mnotify.setup {
-        lsp_progress = { enable = true },
+        lsp_progress = { enable = false },
       }
       vim.notify = mnotify.make_notify()
     end,

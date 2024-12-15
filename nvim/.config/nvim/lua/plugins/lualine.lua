@@ -99,6 +99,7 @@ M.config = function()
   }
 
   -- lualine
+  local navic = require 'nvim-navic'
   local config = {
     options = {
       -- Disable sections and component separators
@@ -129,10 +130,10 @@ M.config = function()
       -- these are to remove the defaults
       lualine_a = {},
       lualine_b = {},
-      lualine_y = {},
-      lualine_z = {},
       lualine_c = {},
       lualine_x = {},
+      lualine_y = {},
+      lualine_z = {},
     },
     extensions = {
       'fugitive',
@@ -141,6 +142,52 @@ M.config = function()
       'quickfix',
       'trouble',
       my_extensions.nvimtree_self,
+    },
+    winbar = {
+      lualine_a = {},
+      lualine_b = {},
+      lualine_c = {
+        {
+          function()
+            local location = navic.get_location()
+            return navic.is_available() and location ~= '' and location or '󰊕'
+          end,
+          color = { fg = colors.aqua },
+        },
+      },
+      lualine_x = {},
+      lualine_y = {},
+      lualine_z = {},
+    },
+    inactive_winbar = {
+      lualine_a = {
+        {
+          function()
+            return '<'
+          end,
+          color = { fg = colors.bg },
+        },
+      },
+      lualine_b = {},
+      lualine_c = {
+        function()
+          return '%='
+        end,
+        {
+          'filename',
+          color = { fg = colors.magenta, gui = 'bold' },
+        },
+      },
+      lualine_x = {
+        {
+          function()
+            return '>'
+          end,
+          color = { fg = colors.bg },
+        },
+      },
+      lualine_y = {},
+      lualine_z = {},
     },
   }
 

@@ -14,6 +14,9 @@ local default_on_attach = function(client, bufnr)
   -- Plugins on-attach --
   -----------------------
   require('user.lsp.formatting').setup(client, bufnr)
+  if client.server_capabilities.documentSymbolProvider then
+    require('nvim-navic').attach(client, bufnr)
+  end
 
   ------------------
   -- AutoCommands --
