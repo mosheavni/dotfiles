@@ -166,7 +166,11 @@ local term_au = augroup 'MosheTerm'
 autocmd({ 'TermOpen' }, {
   group = term_au,
   pattern = '*',
-  command = 'startinsert',
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.cmd.startinsert()
+  end,
 })
 
 -- custom settings

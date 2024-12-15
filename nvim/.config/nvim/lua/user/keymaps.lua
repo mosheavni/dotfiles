@@ -473,35 +473,27 @@ end, { remap = false, expr = true })
 ------------------------
 -- Run current buffer --
 ------------------------
-vim.cmd [[
-" Will attempt to execute the current file based on the `&filetype`
-" You need to manually map the filetypes you use most commonly to the
-" correct shell command.
-function! ExecuteFile()
-  let l:filetype_to_command = {
-        \   'javascript': 'node',
-        \   'python': 'python3',
-        \   'html': 'open',
-        \   'sh': 'bash'
-        \ }
-  call inputsave()
-  let sure = input('Are you sure you want to run the current file? (y/n): ')
-  call inputrestore()
-  if sure !=# 'y'
-    return ''
-  endif
-  echo ''
-  let l:cmd = get(l:filetype_to_command, &filetype, 'bash')
-  :%y
-  new | 0put
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
-  exe '%!'.l:cmd
-  normal! ggO
-  call setline(1, 'Output of ' . l:cmd . ' command:')
-  normal! yypVr=o
-endfunction
-]]
-map('n', '<F3>', ':call ExecuteFile()<CR>', { remap = false, silent = true })
+local job_id = 0
+local function execute_file()
+  local filetype_to_command = {
+    javascript = 'node',
+    python = 'python3',
+    html = 'open',
+    sh = 'bash',
+  }
+
+  local cmd = filetype_to_command[vim.bo.filetype] or 'bash'
+  local file_name = vim.fn.expand '%'
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd 'J'
+  job_id = vim.bo.channel
+  vim.schedule(function()
+    vim.fn.chansend(job_id, cmd .. ' ' .. file_name)
+  end)
+end
+
+map('n', '<F3>', execute_file, { remap = false, silent = true })
 
 ----------------------------
 -- Sort Json Array by key --
