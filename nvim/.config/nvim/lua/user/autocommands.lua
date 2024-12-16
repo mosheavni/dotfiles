@@ -1,10 +1,10 @@
 local utils = require 'user.utils'
-local autocmd = utils.autocmd
+local autocmd = vim.api.nvim_create_autocmd
 local augroup = utils.augroup
 
 -- Check if we need to reload the file when it changed
 local reload_file_group = augroup 'ReloadFile'
-vim.api.nvim_create_autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
+autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
   group = reload_file_group,
   callback = function()
     if vim.o.buftype ~= 'nofile' then
@@ -92,7 +92,7 @@ autocmd('TextYankPost', {
 })
 
 -- resize splits if window got resized
-vim.api.nvim_create_autocmd({ 'VimResized' }, {
+autocmd({ 'VimResized' }, {
   group = buffer_settings,
   callback = function()
     local current_tab = vim.fn.tabpagenr()
@@ -101,7 +101,7 @@ vim.api.nvim_create_autocmd({ 'VimResized' }, {
   end,
 })
 
-vim.api.nvim_create_autocmd('BufReadPost', {
+autocmd('BufReadPost', {
   desc = 'go to last loc when opening a buffer',
   group = buffer_settings,
   callback = function(event)
@@ -119,7 +119,7 @@ vim.api.nvim_create_autocmd('BufReadPost', {
   end,
 })
 
-vim.api.nvim_create_autocmd('DirChanged', {
+autocmd('DirChanged', {
   group = buffer_settings,
   callback = function()
     local cwd = vim.fn.getcwd()
@@ -196,44 +196,4 @@ autocmd('BufWritePost', {
     vim.uv.fs_chmod(filename, bit.bor(fileinfo.mode, 493))
   end,
   once = false,
-})
-
--- Automatically commit lockfile after running Lazy Update (or Sync)
-autocmd('User', {
-  pattern = 'LazyUpdate',
-  callback = function()
-    local repo_dir = vim.env.HOME .. '/.dotfiles'
-    if vim.fn.isdirectory(repo_dir) ~= 1 then
-      return
-    end
-
-    local lockfile = repo_dir .. '/.config/nvim/lazy-lock.json'
-
-    local cmd = {
-      'git',
-      '-C',
-      repo_dir,
-      'commit',
-      lockfile,
-      '-m',
-      'Update lazy-lock.json',
-    }
-
-    local success, process = pcall(function()
-      return vim.system(cmd, { cwd = repo_dir }):wait()
-    end)
-
-    if process and process.code == 0 then
-      vim.notify 'Committed lazy-lock.json'
-      vim.notify(process.stdout)
-    else
-      if not success then
-        vim.notify("Failed to run command '" .. table.concat(cmd, ' ') .. "':", vim.log.levels.WARN, {})
-        vim.notify(tostring(process), vim.log.levels.WARN, {})
-      else
-        vim.notify 'git ran but failed to commit:'
-        vim.notify(process.stderr, vim.log.levels.WARN, {})
-      end
-    end
-  end,
 })

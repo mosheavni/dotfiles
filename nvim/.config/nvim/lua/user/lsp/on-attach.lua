@@ -1,6 +1,6 @@
 local user_maps = require 'user.lsp.keymaps'
 local utils = require 'user.utils'
-local autocmd = utils.autocmd
+local autocmd = vim.api.nvim_create_autocmd
 local augroup = utils.augroup
 
 local on_attach_aug = augroup 'OnAttachAu'
