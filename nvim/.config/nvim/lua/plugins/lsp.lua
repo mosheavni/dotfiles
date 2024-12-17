@@ -47,6 +47,7 @@ local language_specific_plugins = {
     ft = 'json',
     config = function()
       vim.api.nvim_buf_create_user_command(0, 'JsonPath', function()
+        ---@diagnostic disable-next-line: missing-parameter
         local json_path = require('jsonpath').get()
         local register = '+'
         vim.fn.setreg(register, json_path)
@@ -75,11 +76,15 @@ local language_specific_plugins = {
   {
     'folke/lazydev.nvim',
     ft = 'lua', -- only load on lua files
+    dependencies = {
+      'justinsgithub/wezterm-types',
+    },
     opts = {
       library = {
         -- See the configuration section for more details
         -- Load luvit types when the `vim.uv` word is found
         { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+        { path = 'wezterm-types', mods = { 'wezterm' } },
       },
     },
     -- config = function(_,opts)
