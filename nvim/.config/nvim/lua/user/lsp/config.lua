@@ -19,6 +19,7 @@ M.setup_capabilities = function()
   -- Capabilities --
   ------------------
   local cmp_default_capabilities = require('cmp_nvim_lsp').default_capabilities()
+  -- local cmp_default_capabilities = require('blink.cmp').get_lsp_capabilities()
 
   M.capabilities = vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), cmp_default_capabilities, M.capabilities or {}, {})
 end

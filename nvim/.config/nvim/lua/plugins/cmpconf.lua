@@ -2,6 +2,7 @@
 local M = {
   'hrsh7th/nvim-cmp',
   version = false, -- last release is way too old
+  enabled = true,
   event = { 'InsertEnter', 'CmdlineEnter' },
   dependencies = {
     'rafamadriz/friendly-snippets',
