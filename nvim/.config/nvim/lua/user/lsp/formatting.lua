@@ -32,18 +32,23 @@ local function select_client(callback)
   end)
 end
 
-M.format = function(client)
+M.format = function(client, async)
+  -- check if async is specified
+  if async == nil then
+    async = true
+  end
   M.format_changedtick = vim.api.nvim_buf_get_changedtick(M.bufnr)
   vim.lsp.buf.format {
     timeout_ms = 20000,
-    filter = function(s_client)
-      return s_client.name == client.name
-    end,
+    async = async,
+    id = client.id,
   }
 
-  if M.format_changedtick ~= vim.api.nvim_buf_get_changedtick(M.bufnr) then
-    vim.notify('Formatted using ' .. client.name)
-  end
+  vim.schedule(function()
+    if M.format_changedtick ~= vim.api.nvim_buf_get_changedtick(M.bufnr) then
+      vim.notify('Formatted using ' .. client.name .. ' async: ' .. tostring(async))
+    end
+  end)
 end
 
 M.format_select = function()
@@ -57,7 +62,14 @@ M.format_on_save = function()
   if #clients == 0 then
     return
   end
-  M.format(clients[1])
+  -- prefer null-ls
+  for _, client in ipairs(clients) do
+    if client.name == 'null-ls' then
+      M.format(client, false)
+      return
+    end
+  end
+  M.format(clients[1], false)
 end
 
 M.setup = function(client, bufnr)
