@@ -52,17 +52,6 @@ local M = {
     end,
   },
   {
-    the_king .. 'icons',
-    lazy = true,
-    opts = {},
-    init = function()
-      package.preload['nvim-web-devicons'] = function()
-        require('mini.icons').mock_nvim_web_devicons()
-        return package.loaded['nvim-web-devicons']
-      end
-    end,
-  },
-  {
     the_king .. 'hipatterns',
     version = false,
     event = { 'BufNewFile', 'BufReadPre', 'VeryLazy' },
@@ -86,7 +75,7 @@ local M = {
     lazy = false,
     keys = {
       { '<leader>x', '<cmd>lua require("mini.notify").clear()<cr>', { silent = true, desc = 'Dismiss all notifications' } },
-      { '<leader>n', '<cmd>lua require("mini.notify").show_history()<cr>', { silent = true, desc = 'Show notifications history' } },
+      { '<leader>n', '<cmd>tabnew|lua require("mini.notify").show_history()<cr>', { silent = true, desc = 'Show notifications history' } },
     },
     init = function()
       local mnotify = require 'mini.notify'

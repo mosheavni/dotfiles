@@ -22,6 +22,7 @@ zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' completer _complete _prefix _match _approximate
 zstyle ':completion:*' matcher-list 'r:[[:ascii:]]||[[:ascii:]]=** r:|=* m:{a-z\-}={A-Z\_}'
 zstyle ':completion:*:approximate:*' max-errors 3 numeric
+zstyle :plugin:zsh-completion-generator programs ggrep kubedebug docker_copy_between_regions ab
 
 # Initialize completion system
 autoload -U +X bashcompinit && bashcompinit

@@ -135,6 +135,7 @@ return {
   cmd = 'FzfLua',
   config = function()
     require('fzf-lua').setup {
+      'default-title',
       previewers = {
         builtin = {
           extensions = {

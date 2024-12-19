@@ -150,7 +150,7 @@ M.config = function()
         {
           function()
             local location = navic.get_location()
-            return navic.is_available() and location ~= '' and location or '󰊕'
+            return navic.is_available() and location ~= '' and location or vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
           end,
           color = { fg = colors.aqua },
         },

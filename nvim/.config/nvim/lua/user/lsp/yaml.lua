@@ -1,12 +1,8 @@
 local M = {
   k8s_schemas = {
     {
-      name = 'Kubernetes 1.27.12',
-      uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.27.12-standalone-strict/all.json',
-    },
-    {
-      name = 'Kubernetes 1.26.14',
-      uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.26.14-standalone-strict/all.json',
+      name = 'Kubernetes 1.29.9',
+      uri = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.29.9-standalone-strict/all.json',
     },
   },
   all_schemas = {},

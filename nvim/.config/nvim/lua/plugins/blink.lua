@@ -67,7 +67,13 @@ return {
     ---@type blink.cmp.Config
     opts = {
       fuzzy = {
-        sorts = { 'score', require 'cmp_tabnine.compare', 'sort_text' },
+        sorts = {
+          'score',
+          function()
+            require 'cmp_tabnine.compare'
+          end,
+          'sort_text',
+        },
       },
 
       appearance = {

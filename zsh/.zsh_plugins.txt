@@ -2,6 +2,7 @@ mattmc3/ez-compinit
 
 # completions
 zsh-users/zsh-completions kind:fpath path:src
+RobSis/zsh-completion-generator kind:defer
 
 loiccoyle/zsh-github-copilot
 ohmyzsh/ohmyzsh path:lib/key-bindings.zsh
@@ -9,7 +10,6 @@ zsh-users/zsh-history-substring-search
 peterhurford/git-it-on.zsh
 hlissner/zsh-autopair
 agkozak/zhooks
-RobSis/zsh-completion-generator
 
 # deferred
 zsh-users/zsh-autosuggestions kind:defer

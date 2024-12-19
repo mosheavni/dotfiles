@@ -161,7 +161,7 @@ M.create_new_branch = function(branch_opts)
       return
     end
     if not input:match '^[a-zA-Z0-9_-]+$' then
-      return vim.notify('Invalid branch name', vim.log.levels.ERROR)
+      return M.prnt('Invalid branch name', vim.log.levels.ERROR)
     end
     run_git({ 'checkout', '-b', input }, 'Creating new branch: ' .. input)
   end)

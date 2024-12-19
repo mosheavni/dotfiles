@@ -82,6 +82,10 @@ local M = {
   -- other --
   -----------
   {
+    'nvim-tree/nvim-web-devicons',
+    lazy = true,
+  },
+  {
     'eero-lehtinen/oklch-color-picker.nvim',
     opts = {
       highlight = {

@@ -55,7 +55,7 @@ config.colors = {
 config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE'
 config.inactive_pane_hsb = {
   saturation = 0.4,
-  brightness = 0.5,
+  brightness = 0.7,
 }
 config.window_padding = {
   left = 0,
