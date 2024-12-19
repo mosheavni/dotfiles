@@ -228,7 +228,6 @@ local M = {
       '<leader>gp',
     },
     cmd = {
-      'G',
       'Gco',
       'Git',
       'Gcb',
@@ -237,6 +236,7 @@ local M = {
       'Gmom',
       'Gpom',
       'Gread',
+      'Gvsplit',
       'Cpr',
     },
   },
