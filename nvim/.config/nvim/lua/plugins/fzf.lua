@@ -125,7 +125,6 @@ return {
       '<leader>/',
       function()
         require('fzf-lua').live_grep {
-          keymap = { fzf = { ['ctrl-q'] = 'select-all+accept' } },
           multiprocess = true,
           rg_opts = [=[--column --line-number --hidden --no-heading --color=always --smart-case --max-columns=4096 -g '!.git' -e]=],
         }
@@ -138,6 +137,7 @@ return {
       'default-title',
       previewers = {
         builtin = {
+          syntax_limit_b = 1024 * 100, -- 100KB
           extensions = {
             png = { 'viu', '-b' },
             jpg = { 'viu', '-b' },
@@ -146,7 +146,20 @@ return {
       },
       oldfiles = {
         cwd_only = true,
+        include_current_session = true,
       },
+      grep = {
+        -- One thing I missed from Telescope was the ability to live_grep and the
+        -- run a filter on the filenames.
+        -- Ex: Find all occurrences of "enable" but only in the "plugins" directory.
+        -- With this change, I can sort of get the same behaviour in live_grep.
+        -- ex: > enable --*/plugins/*
+        -- I still find this a bit cumbersome. There's probably a better way of doing this.
+        rg_glob = true, -- enable glob parsing
+        glob_flag = '--iglob', -- case insensitive globs
+        glob_separator = '%s%-%-', -- query separator pattern (lua): ' --'
+      },
+      keymap = { fzf = { ['ctrl-q'] = 'select-all+accept' } },
     }
     require('fzf-lua').register_ui_select(function(_, items)
       local min_h, max_h = 0.15, 0.70
