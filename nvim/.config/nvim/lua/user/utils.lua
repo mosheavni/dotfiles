@@ -117,16 +117,6 @@ M.tbl_get_next = function(tbl, cur)
   return idx
 end
 
--- borders
-M.borders = {
-  double_rounded = { '╔', '═', '╗', '║', '╝', '═', '╚', '║' },
-  single_rounded = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
-  double_sharp = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' },
-  single_sharp = { '┌', '─', '┐', '│', '┘', '─', '└', '│' },
-}
--- M.float_border = M.single_border_rounded
-M.float_border = M.borders.single_rounded
-
 M.filetype_to_extension = {
   bash = 'sh',
   javascript = 'js',

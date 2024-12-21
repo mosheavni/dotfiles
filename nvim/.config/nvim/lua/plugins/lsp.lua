@@ -16,7 +16,7 @@ M.dependencies = {
     build = ':MasonUpdate',
     opts = {
       ui = {
-        border = require('user.utils').float_border,
+        border = 'rounded',
       },
     },
   },

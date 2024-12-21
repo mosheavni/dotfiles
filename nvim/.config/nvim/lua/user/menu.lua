@@ -3,9 +3,9 @@ local M = {
 }
 
 ---Add a prefix to all actions
----@param actions table<string, string>
+---@param actions table<string, function>
 ---@param prefix string
----@return table<string, string>
+---@return table<string, function>
 local function add_prefix(actions, prefix)
   local prefixed_actions = {}
   for k, v in pairs(actions) do

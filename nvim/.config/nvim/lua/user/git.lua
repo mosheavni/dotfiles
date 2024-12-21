@@ -75,7 +75,7 @@ M.get_branch = function(cb)
   end)
 end
 
-M.get_branch_sync = function(cb)
+M.get_branch_sync = function()
   return vim.trim(run_git_sync({ 'branch', '--show-current' }, nil).stdout)
 end
 

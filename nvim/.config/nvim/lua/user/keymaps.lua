@@ -1,4 +1,3 @@
----@diagnostic disable: global_usage
 local map = vim.keymap.set
 
 -- better up/down

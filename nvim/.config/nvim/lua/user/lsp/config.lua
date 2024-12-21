@@ -43,7 +43,7 @@ M.diagnostics = function()
     virtual_text = {
       severity = { min = vim.diagnostic.severity.WARN },
     },
-    float = { border = require('user.utils').float_border },
+    float = { border = 'rounded' },
   }
 end
 
@@ -64,10 +64,6 @@ end
 
 M.setup = function()
   require('user.lsp.actions').setup()
-  require('user.lsp.handlers').setup()
-
-  -- set lsp window border style
-  require('lspconfig.ui.windows').default_options.border = require('user.utils').borders.single_rounded
 
   -- Set formatting of lsp log
   require('vim.lsp.log').set_format_func(vim.inspect)

@@ -10,7 +10,7 @@ return {
       notify = false,
     },
     ui = {
-      border = require('user.utils').float_border,
+      border = 'rounded',
       custom_keys = {
         -- open a terminal for the plugin dir
         ['<localleader>t'] = function(plugin)
