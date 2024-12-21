@@ -7,6 +7,19 @@ local function notify_format(err, did_format)
     vim.notify 'Formatted'
   end
 end
+
+local function get_lsp_formatters(bufnr)
+  local method = 'textDocument/formatting'
+  local clients = vim.tbl_values(vim.lsp.get_clients { bufnr = bufnr })
+  local formatting_clients = {}
+  for _, client in ipairs(clients) do
+    if client.supports_method(method) then
+      table.insert(formatting_clients, { name = client.name, type = 'lsp' })
+    end
+  end
+  return formatting_clients
+end
+
 return {
   'stevearc/conform.nvim',
   event = { 'BufWritePre' },
@@ -16,7 +29,28 @@ return {
       -- Customize or remove this keymap to your liking
       '<leader>lp',
       function()
-        require('conform').format({ async = true }, notify_format)
+        local conform_fmts = require('conform').list_formatters()
+        local lsp_fmts = get_lsp_formatters(vim.api.nvim_get_current_buf())
+        local merged = vim.list_extend(lsp_fmts, conform_fmts)
+        return vim.ui.select(merged, {
+          prompt = 'Select LSP client',
+          format_item = function(client)
+            return client.name
+          end,
+        }, function(client)
+          if client == nil then
+            return
+          end
+          local conform_opts = {
+            callback = notify_format,
+            formatters = { client.name },
+            stop_after_first = true,
+          }
+          if client.type and client.type == 'lsp' then
+            conform_opts = { formatters = {}, lsp_format = 'prefer' }
+          end
+          require('conform').format(conform_opts)
+        end)
       end,
       mode = '',
       desc = 'Format buffer',
@@ -67,7 +101,12 @@ return {
     -- Set up format-on-save
     format_on_save = function()
       ---@diagnostic disable-next-line: redundant-return-value
-      return { timeout_ms = 5000 }, notify_format
+      return {
+        lsp_format = 'fallback',
+        timeout_ms = 5000,
+        ---@diagnostic disable-next-line: redundant-return-value
+      },
+        notify_format
     end,
     -- Customize formatters
     formatters = {},
