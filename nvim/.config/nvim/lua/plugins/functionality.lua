@@ -1,3 +1,4 @@
+local leet_arg = 'leetcode.nvim'
 local M = {
   -------------------------
   -- Functionality Tools --
@@ -158,6 +159,43 @@ local M = {
         end,
       })
     end,
+  },
+  {
+    'stevearc/oil.nvim',
+    cmd = { 'Oil' },
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+  },
+  {
+    'kawre/leetcode.nvim',
+    build = ':TSUpdate html',
+    lazy = leet_arg ~= vim.fn.argv(0, -1),
+
+    dependencies = {
+      'ibhagwan/fzf-lua',
+      'nvim-lua/plenary.nvim',
+      'MunifTanjim/nui.nvim',
+    },
+    opts = {
+      lang = 'python3',
+      arg = leet_arg,
+      hooks = {
+        enter = function()
+          vim.keymap.set('n', '<leader>l', '<cmd>Leet<cr>')
+          vim.keymap.set('n', '<leader>lr', function()
+            vim.ui.select({ 'easy', 'medium', 'hard' }, { prompt = 'Choose difficulty for a random leet: ' }, function(level)
+              vim.cmd('Leet random difficulty=' .. level)
+            end)
+          end, { remap = false })
+          require('lazy').load { plugins = { 'copilot.lua' } }
+        end,
+        ['question_enter'] = function(q)
+          vim.keymap.set('n', '<c-cr>', '<cmd>Leet run<CR>', { buffer = true })
+          require('copilot.command').disable()
+        end,
+      },
+    },
   },
 }
 
