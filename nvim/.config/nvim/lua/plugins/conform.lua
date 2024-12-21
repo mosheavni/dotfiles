@@ -31,14 +31,34 @@ return {
     formatters_by_ft = {
       lua = { 'stylua' },
       python = { 'isort', 'black' },
-      javascript = { 'prettierd', stop_after_first = true },
-      groovy = { 'npm-groovy-lint' },
-      markdown = { 'markdownlint' },
+      markdown = { 'injected', 'markdownlint' },
       terraform = { 'terraform_fmt' },
       hcl = { 'terragrunt_hclfmt' },
       xml = { 'xmllint' },
       sh = { 'shfmt' },
-      json = { 'prettierd', stop_after_first = true },
+
+      groovy = { 'npm-groovy-lint' },
+      Jenkinsfile = { 'npm-groovy-lint' },
+
+      -- prettierd
+      javascript = { 'prettierd' },
+      javascriptreact = { 'prettierd' },
+      typescript = { 'prettierd' },
+      typescriptreact = { 'prettierd' },
+      vue = { 'prettierd' },
+      css = { 'prettierd' },
+      scss = { 'prettierd' },
+      less = { 'prettierd' },
+      html = { 'prettierd' },
+      json = { 'prettierd' },
+      jsonc = { 'prettierd' },
+      yaml = { 'prettierd' },
+      ['markdown.mdx'] = { 'prettierd' },
+      graphql = { 'prettierd' },
+      handlebars = { 'prettierd' },
+      svelte = { 'prettierd' },
+      astro = { 'prettierd' },
+      htmlangular = { 'prettierd' },
     },
     -- Set default options
     default_format_opts = {
@@ -50,12 +70,7 @@ return {
       return { timeout_ms = 5000 }, notify_format
     end,
     -- Customize formatters
-    formatters = {
-      -- ['npm-groovy-lint'] = {
-      --   stdin = true,
-      --   args = { '--failon', 'none', '--format', '-' },
-      -- },
-    },
+    formatters = {},
   },
   init = function()
     -- If you want the formatexpr, here is the place to set it
