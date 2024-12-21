@@ -1,10 +1,24 @@
+_G.fmt_lsp = ''
 local function notify_format(err, did_format)
+  local formatter_names
+  if _G.fmt_lsp ~= '' then
+    formatter_names = _G.fmt_lsp
+    _G.fmt_lsp = ''
+  else
+    local fmts = require('conform').list_formatters_to_run()
+    formatter_names = table.concat(
+      vim.tbl_map(function(fmt)
+        return fmt.name
+      end, fmts),
+      ', '
+    )
+  end
   if err then
-    vim.notify('Error formatting: ' .. err)
+    vim.notify('Error formatting: ' .. err .. ' (' .. formatter_names .. ')')
     return
   end
   if did_format then
-    vim.notify 'Formatted'
+    vim.notify('Formatted using ' .. formatter_names)
   end
 end
 
@@ -42,14 +56,14 @@ return {
             return
           end
           local conform_opts = {
-            callback = notify_format,
             formatters = { client.name },
             stop_after_first = true,
           }
           if client.type and client.type == 'lsp' then
             conform_opts = { formatters = {}, lsp_format = 'prefer' }
+            _G.fmt_lsp = client.name
           end
-          require('conform').format(conform_opts)
+          require('conform').format(conform_opts, notify_format)
         end)
       end,
       mode = '',
@@ -75,24 +89,37 @@ return {
       Jenkinsfile = { 'npm-groovy-lint' },
 
       -- prettierd
+      -- ansible
+      -- css
+      -- html
+      -- javascript
+      -- javascriptreact
+      -- less
+      -- mdx
+      -- mongo
+      -- postcss
+      -- scss
+      -- typescript
+      -- typescriptreact
+      -- vue
+      -- yaml
+      astro = { 'prettierd' },
+      css = { 'prettierd' },
+      graphql = { 'prettierd' },
+      handlebars = { 'prettierd' },
+      html = { 'prettierd' },
+      htmlangular = { 'prettierd' },
       javascript = { 'prettierd' },
       javascriptreact = { 'prettierd' },
+      json = { 'prettierd' },
+      jsonc = { 'prettierd' },
+      less = { 'prettierd' },
+      scss = { 'prettierd' },
+      svelte = { 'prettierd' },
       typescript = { 'prettierd' },
       typescriptreact = { 'prettierd' },
       vue = { 'prettierd' },
-      css = { 'prettierd' },
-      scss = { 'prettierd' },
-      less = { 'prettierd' },
-      html = { 'prettierd' },
-      json = { 'prettierd' },
-      jsonc = { 'prettierd' },
       yaml = { 'prettierd' },
-      ['markdown.mdx'] = { 'prettierd' },
-      graphql = { 'prettierd' },
-      handlebars = { 'prettierd' },
-      svelte = { 'prettierd' },
-      astro = { 'prettierd' },
-      htmlangular = { 'prettierd' },
     },
     -- Set default options
     default_format_opts = {
@@ -100,12 +127,11 @@ return {
     },
     -- Set up format-on-save
     format_on_save = function()
-      ---@diagnostic disable-next-line: redundant-return-value
       return {
         lsp_format = 'fallback',
         timeout_ms = 5000,
-        ---@diagnostic disable-next-line: redundant-return-value
       },
+        ---@diagnostic disable-next-line: redundant-return-value
         notify_format
     end,
     -- Customize formatters
