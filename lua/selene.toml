@@ -1,6 +1,6 @@
 std = "vim"
 
-[rules]
+[lints]
 global_usage = "allow"
 multiple_statements = "allow"
 incorrect_standard_library_use = "allow"
