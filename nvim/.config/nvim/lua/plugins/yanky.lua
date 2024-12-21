@@ -19,10 +19,10 @@ local M = {
     },
   },
   init = function()
-    require('user.menu').add_actions('Yanky',{
+    require('user.menu').add_actions('Yanky', {
       ['Yank history'] = function()
-        vim.cmd('YankyRingHistory')
-      end
+        vim.cmd 'YankyRingHistory'
+      end,
     })
   end,
 }

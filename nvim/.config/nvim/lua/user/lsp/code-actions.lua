@@ -1,5 +1,5 @@
-local null_ls = require 'null-ls'
 local git = require 'user.git'
+local null_ls = require 'null-ls'
 
 local M = {}
 M.revision_branch_comment = {
@@ -23,10 +23,10 @@ M.revision_branch_comment = {
               action = function()
                 -- get indentation of current_line
                 local indent = string.match(target_revision_line, '^%s*')
-                local new_lines = { indent ..
-                'targetRevision: ' .. git.get_branch_sync() .. ' # TODO: Change to HEAD before merging' }
-                vim.api.nvim_buf_set_lines(context.bufnr, target_revision_line_number - 1, target_revision_line_number,
-                  false, new_lines)
+                local new_lines = {
+                  indent .. 'targetRevision: ' .. git.get_branch_sync() .. ' # TODO: Change to HEAD before merging',
+                }
+                vim.api.nvim_buf_set_lines(context.bufnr, target_revision_line_number - 1, target_revision_line_number, false, new_lines)
               end,
             },
           }
@@ -38,8 +38,7 @@ M.revision_branch_comment = {
                 -- get indentation of current_line
                 local indent = string.match(target_revision_line, '^%s*')
                 local new_lines = { indent .. 'targetRevision: HEAD' }
-                vim.api.nvim_buf_set_lines(context.bufnr, target_revision_line_number - 1, target_revision_line_number,
-                  false, new_lines)
+                vim.api.nvim_buf_set_lines(context.bufnr, target_revision_line_number - 1, target_revision_line_number, false, new_lines)
               end,
             },
           }
@@ -108,8 +107,7 @@ M.library_current_branch = {
             {
               title = 'Change library to current branch',
               action = function()
-                local new_line = string.format("@Library('utils@%s') _ // TODO: remove library before merging",
-                  git.get_branch_sync())
+                local new_line = string.format("@Library('utils@%s') _ // TODO: remove library before merging", git.get_branch_sync())
                 vim.print(vim.inspect(new_line))
                 vim.api.nvim_buf_set_lines(context.bufnr, 0, 1, false, { new_line })
               end,

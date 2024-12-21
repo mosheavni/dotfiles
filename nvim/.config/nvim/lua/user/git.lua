@@ -178,8 +178,11 @@ end
 M.set_upstream_head = function()
   M.ui_select_remotes(function(remote_name)
     M.get_branch(function(branch_name)
-      run_git({ 'branch', '--set-upstream-to', remote_name .. '/' .. branch_name },
-        'Setting upstream to ' .. remote_name .. '/' .. branch_name)
+      run_git({
+        'branch',
+        '--set-upstream-to',
+        remote_name .. '/' .. branch_name,
+      }, 'Setting upstream to ' .. remote_name .. '/' .. branch_name)
     end)
   end)
 end

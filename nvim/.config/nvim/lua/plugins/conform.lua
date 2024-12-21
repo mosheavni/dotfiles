@@ -3,7 +3,7 @@ local function get_lsp_formatters(bufnr)
   for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do
     ---@diagnostic disable-next-line: param-type-mismatch
     if client.supports_method('textDocument/formatting', bufnr) then
-      formatting_clients[#formatting_clients + 1] = { name = client.name, type = 'lsp' }
+      table.insert(formatting_clients, { name = client.name, type = 'lsp' })
     end
   end
   return formatting_clients
