@@ -20,6 +20,9 @@ end
 
 _G.fmt_lsp = ''
 local function notify_format(err, did_format)
+  if not did_format then
+    return
+  end
   local formatter_names
   if _G.fmt_lsp ~= '' then
     formatter_names = _G.fmt_lsp
@@ -37,9 +40,7 @@ local function notify_format(err, did_format)
     return
   end
 
-  if did_format then
-    vim.notify(string.format('Formatted using %s', formatter_names))
-  end
+  vim.notify(string.format('Formatted using %s', formatter_names))
 end
 
 return {
