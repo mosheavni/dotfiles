@@ -26,7 +26,7 @@ vim.opt.fillchars = {
   foldopen = '',
   foldclose = '',
   foldsep = ' ',
-  diff = '╱',
+  diff = ' ',
   eob = ' ',
 }
 -- vim.opt.foldcolumn = '1'
