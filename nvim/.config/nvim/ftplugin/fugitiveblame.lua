@@ -1,15 +1,9 @@
---- @param s string
---- @param t string
-local function string_endswith(s, t)
-  return string.len(s) >= string.len(t) and string.sub(s, #s - #t + 1) == t
-end
-
+-- return 7 chars commit hash
 local function get_commit_hash()
   local line = vim.api.nvim_get_current_line()
-  return string.match(line, '(%x+)')
+  return string.sub(line, 1, 7)
 end
--- set winbar to empty string
--- vim.api.nvim_win_set_option(0, 'winbar', '-')
+
 vim.schedule(function()
   vim.api.nvim_set_option_value(
     'winbar',
@@ -46,23 +40,10 @@ vim.schedule(function()
     callback = function()
       local commit_hash = get_commit_hash()
       vim.cmd 'wincmd p'
-      require('gitlinker').link {
-        action = function(url)
-          vim.ui.open(url)
-        end,
-        router = function(lk)
-          local builder = 'https://'
-            .. lk.host
-            .. '/'
-            .. lk.org
-            .. '/'
-            .. (string_endswith(lk.repo, '.git') and lk.repo:sub(1, #lk.repo - 4) or lk.repo)
-            .. '/'
-            .. 'commit/'
-            .. lk.rev
-          return builder
-        end,
-        rev = commit_hash,
+      -- selene: allow(undefined_variable)
+      Snacks.gitbrowse.open {
+        what = 'commit',
+        branch = commit_hash,
       }
     end,
   })

@@ -241,22 +241,6 @@ local M = {
     },
   },
   {
-    'linrongbin16/gitlinker.nvim',
-    cmd = { 'GitLink', 'ToGithub' },
-    config = function()
-      require('gitlinker').setup {
-        add_current_line_on_normal_mode = false,
-      }
-      vim.api.nvim_create_user_command('ToGithub', function()
-        vim.cmd 'GitLink!'
-      end, { range = true })
-    end,
-    keys = {
-      { '<leader>gy', '<cmd>GitLink<cr>', mode = { 'n', 'v' }, desc = 'Yank git link' },
-      { '<leader>gh', '<cmd>GitLink!<cr>', mode = { 'n', 'v' }, desc = 'Open git link' },
-    },
-  },
-  {
     'moyiz/git-dev.nvim',
     opts = {
       ephemeral = false,
@@ -297,6 +281,7 @@ local M = {
     version = '*',
     event = 'BufReadPre',
     config = function()
+      ---@diagnostic disable-next-line: missing-fields
       require('git-conflict').setup {
         default_mappings = true,
       }

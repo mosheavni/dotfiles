@@ -190,7 +190,7 @@ local M = {
           end, { remap = false })
           require('lazy').load { plugins = { 'copilot.lua' } }
         end,
-        ['question_enter'] = function(q)
+        ['question_enter'] = function()
           vim.keymap.set('n', '<c-cr>', '<cmd>Leet run<CR>', { buffer = true })
           require('copilot.command').disable()
         end,
