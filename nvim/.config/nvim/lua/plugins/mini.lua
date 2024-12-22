@@ -18,7 +18,6 @@ local M = {
           'help',
           'fugitive',
           'dashboard',
-          'NvimTree',
           'Trouble',
           'trouble',
           'lazy',
@@ -108,7 +107,7 @@ local M = {
         suffix_last = '',
         suffix_next = '',
       },
-      search_method = 'cover_or_next',
+      search_method = 'nearest',
     },
     config = function(_, opts)
       require('mini.surround').setup(opts)
