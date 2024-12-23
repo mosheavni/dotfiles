@@ -477,10 +477,10 @@ local function execute_file()
     return
   end
   local utils = require 'user.utils'
+  local ft = vim.bo.filetype ~= '' and vim.bo.filetype or 'sh'
+  local opts = {}
 
   -- check if current buffer is a valid file
-  local ft = vim.bo.filetype
-  ft = ft == '' and 'sh' or ft
   local file_name = vim.fn.expand '%:p'
   if file_name == '' then
     vim.api.nvim_set_option_value('filetype', ft, { buf = 0 })
@@ -490,28 +490,55 @@ local function execute_file()
   -- check if there's a shebang to determine cmd
   local cmd = utils.filetype_to_command[ft] or 'bash'
   local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ''
-  if first_line:match '^#!' then
-    cmd = ''
+  if ft == 'terraform' then
+    opts.cwd = vim.fn.expand '%:p:h'
+    cmd = 'terragrunt plan'
+  elseif first_line:match '^#!' then
+    cmd = file_name
   else
-    cmd = cmd .. ' '
+    cmd = cmd .. ' ' .. file_name
   end
 
   -- open and focus terminal
-  local term, created = Snacks.terminal.get()
+  -- selene: allow(undefined_variable)
+  local term, created = Snacks.terminal.get(nil, opts)
   vim.api.nvim_set_current_win(term.win)
-
-  -- handle command
   local job_id = vim.bo[term.buf].channel
+
+  -- clear terminal input if already open
   if not created then
-    -- clear terminal input if already open
     vim.fn.chansend(job_id, vim.api.nvim_replace_termcodes('<C-c>', true, true, true))
   end
+  -- send command
   vim.schedule(function()
-    vim.fn.chansend(job_id, cmd .. file_name)
+    vim.fn.chansend(job_id, cmd)
   end)
 end
 
 map('n', '<F3>', execute_file, { remap = false, silent = true })
+
+--------------------
+-- Clear Terminal --
+--------------------
+-- selene: allow(unused_variable)
+function ClearTerm(reset)
+  local scrollback = vim.opt_local.scrollback
+  vim.opt_local.scrollback = 1
+
+  vim.api.nvim_command 'startinsert'
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<c-c>', true, false, true), 't', true)
+  if reset == 1 then
+    vim.api.nvim_feedkeys('reset', 't', false)
+  else
+    vim.api.nvim_feedkeys('clear', 't', false)
+  end
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<cr>', true, false, true), 't', true)
+
+  vim.opt_local.scrollback = scrollback
+end
+vim.api.nvim_create_user_command('ClearTerm', 'lua ClearTerm(<args>)', { nargs = 1 })
+map('t', '<C-l><C-l>', [[<C-\><C-N>:ClearTerm 0<CR>]], { remap = false, silent = true })
+map('t', '<C-l><C-l><C-l>', [[<C-\><C-N>:ClearTerm 1<CR>]], { remap = false, silent = true })
 
 ----------------------------
 -- Sort Json Array by key --
