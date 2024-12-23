@@ -472,19 +472,31 @@ end, { remap = false, expr = true })
 ------------------------
 -- Run current buffer --
 ------------------------
-local job_id = 0
 local function execute_file()
-  local filetype_to_command = {
-    javascript = 'node',
-    python = 'python3',
-    html = 'open',
-    sh = 'bash',
-  }
+  local utils = require 'user.utils'
+  local ft = vim.bo.filetype
+  if ft == '' then
+    ft = 'sh'
+  end
+  local cmd = utils.filetype_to_command[ft] or 'bash'
 
-  local cmd = filetype_to_command[vim.bo.filetype] or 'bash'
+  -- check if current buffer is a valid file
   local file_name = vim.fn.expand '%'
-  Snacks.terminal()
-  job_id = vim.bo.channel
+  if vim.bo.buftype == '' or file_name == '' then
+    vim.api.nvim_set_option_value('filetype', ft, { buf = 0 })
+    file_name = _G.start_ls()
+  end
+
+  -- open and focus terminal
+  local term, created = Snacks.terminal.get()
+  vim.api.nvim_set_current_win(term.win)
+
+  -- handle command
+  local job_id = vim.bo[term.buf].channel
+  if not created then
+    -- clear terminal input if already open
+    vim.fn.chansend(job_id, vim.api.nvim_replace_termcodes('<C-c>', true, true, true))
+  end
   vim.schedule(function()
     vim.fn.chansend(job_id, cmd .. ' ' .. file_name)
   end)

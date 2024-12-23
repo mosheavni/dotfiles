@@ -71,6 +71,7 @@ function _G.tmp_write(opts)
       command = 'delete("' .. tmp .. '")',
     })
   end
+  return tmp
 end
 
 -- leader key - before mapping lsp maps

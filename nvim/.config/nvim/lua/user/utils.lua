@@ -133,6 +133,14 @@ M.filetype_to_extension = {
   zsh = 'sh',
 }
 
+M.filetype_to_command = {
+  javascript = 'node',
+  python = 'python3',
+  html = 'open',
+  sh = 'bash',
+  zsh = 'zsh',
+}
+
 M.random_emoji = function()
   local emojis = {
     '🤩',

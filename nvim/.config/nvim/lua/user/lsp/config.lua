@@ -48,16 +48,17 @@ M.diagnostics = function()
 end
 
 M.init = function()
-  local start_ls = function()
+  _G.start_ls = function()
     local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
-    _G.tmp_write { should_delete = false, new = false, ft = ft }
+    local file_name = _G.tmp_write { should_delete = false, new = false, ft = ft }
     -- load lsp
     require 'lspconfig'
+    return file_name
   end
-  vim.keymap.set('n', '<leader>ls', start_ls)
+  vim.keymap.set('n', '<leader>ls', _G.start_ls)
   require('user.menu').add_actions('LSP', {
     ['Start LSP (<leader>ls)'] = function()
-      start_ls()
+      _G.start_ls()
     end,
   })
 end
