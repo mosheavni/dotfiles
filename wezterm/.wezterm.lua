@@ -3,7 +3,7 @@ local act = wez.action
 local config = wez.config_builder()
 local HOME = os.getenv 'HOME'
 
-local color = 'Rose Pine'
+local color = 'Rosé Pine Moon (Gogh)'
 config.color_scheme = color
 
 -- performance

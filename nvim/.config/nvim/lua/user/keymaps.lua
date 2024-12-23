@@ -472,13 +472,39 @@ end, { remap = false, expr = true })
 ------------------------
 -- Run current buffer --
 ------------------------
+local function open_tab(cmd, opts)
+  local spawn = vim.system({ 'wezterm', 'cli', 'spawn', '--cwd=' .. opts.cwd }, { text = true }):wait()
+  local spawn_stdout = vim.trim(spawn.stdout)
+  if spawn.code == 0 and spawn_stdout ~= '' then
+    local send_text = { 'wezterm', 'cli', 'send-text', '--pane-id', spawn_stdout, cmd }
+    local send_text_out = vim.system(send_text, {}):wait()
+    if send_text_out.code ~= 0 then
+      vim.notify('Error running command in wezterm: ' .. send_text_out.stdout .. ' ' .. send_text_out.stderr, vim.log.levels.ERROR)
+    end
+  end
+end
+local function open_terminal(cmd, opts)
+  -- selene: allow(undefined_variable)
+  local term, created = Snacks.terminal.get(nil, opts)
+  vim.api.nvim_set_current_win(term.win)
+  local job_id = vim.bo[term.buf].channel
+
+  -- clear terminal input if already open
+  if not created then
+    vim.fn.chansend(job_id, vim.api.nvim_replace_termcodes('<C-c>', true, true, true))
+  end
+  -- send command
+  vim.schedule(function()
+    vim.fn.chansend(job_id, cmd)
+  end)
+end
 local function execute_file()
   if vim.bo.buftype == 'terminal' then
     return
   end
   local utils = require 'user.utils'
   local ft = vim.bo.filetype ~= '' and vim.bo.filetype or 'sh'
-  local opts = {}
+  local opts = { cwd = vim.fn.getcwd() }
 
   -- check if current buffer is a valid file
   local file_name = vim.fn.expand '%:p'
@@ -499,19 +525,15 @@ local function execute_file()
     cmd = cmd .. ' ' .. file_name
   end
 
-  -- open and focus terminal
-  -- selene: allow(undefined_variable)
-  local term, created = Snacks.terminal.get(nil, opts)
-  vim.api.nvim_set_current_win(term.win)
-  local job_id = vim.bo[term.buf].channel
-
-  -- clear terminal input if already open
-  if not created then
-    vim.fn.chansend(job_id, vim.api.nvim_replace_termcodes('<C-c>', true, true, true))
-  end
-  -- send command
-  vim.schedule(function()
-    vim.fn.chansend(job_id, cmd)
+  vim.ui.select({ 'terminal', 'tab' }, { prompt = 'Where to run?' }, function(choice)
+    if not choice then
+      return
+    end
+    if choice == 'tab' then
+      open_tab(cmd, opts)
+    else
+      open_terminal(cmd, opts)
+    end
   end)
 end
 
