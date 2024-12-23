@@ -515,6 +515,13 @@ local function execute_file(where)
   -- check if there's a shebang to determine cmd
   local cmd = utils.filetype_to_command[ft] or 'bash'
   local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ''
+  if cmd == 'open' then
+    return vim.ui.open(file_name)
+  end
+  if ft == 'lua' then
+    vim.cmd 'luafile %'
+    return
+  end
   if ft == 'terraform' then
     opts.cwd = vim.fn.expand '%:p:h'
     cmd = 'terragrunt plan'

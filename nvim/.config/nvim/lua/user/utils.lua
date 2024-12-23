@@ -135,10 +135,15 @@ M.filetype_to_extension = {
 
 M.filetype_to_command = {
   javascript = 'node',
+  typescript = 'node',
+  typescriptreact = 'node',
   python = 'python3',
   html = 'open',
   sh = 'bash',
   zsh = 'zsh',
+  go = 'go',
+  yaml = 'yq',
+  json = 'jq',
 }
 
 M.random_emoji = function()
