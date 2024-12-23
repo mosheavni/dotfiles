@@ -483,9 +483,7 @@ local function execute_file()
 
   local cmd = filetype_to_command[vim.bo.filetype] or 'bash'
   local file_name = vim.fn.expand '%'
-  vim.cmd.vnew()
-  vim.cmd.term()
-  vim.cmd.wincmd 'J'
+  Snacks.terminal()
   job_id = vim.bo.channel
   vim.schedule(function()
     vim.fn.chansend(job_id, cmd .. ' ' .. file_name)
