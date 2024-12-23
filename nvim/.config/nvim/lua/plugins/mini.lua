@@ -107,7 +107,7 @@ local M = {
         suffix_last = '',
         suffix_next = '',
       },
-      search_method = 'nearest',
+      search_method = 'cover_or_next',
     },
     config = function(_, opts)
       require('mini.surround').setup(opts)

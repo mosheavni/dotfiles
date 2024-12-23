@@ -473,6 +473,9 @@ end, { remap = false, expr = true })
 -- Run current buffer --
 ------------------------
 local function execute_file()
+  if vim.bo.buftype == 'terminal' then
+    return
+  end
   local utils = require 'user.utils'
   local ft = vim.bo.filetype
   if ft == '' then
@@ -481,8 +484,9 @@ local function execute_file()
   local cmd = utils.filetype_to_command[ft] or 'bash'
 
   -- check if current buffer is a valid file
-  local file_name = vim.fn.expand '%'
-  if vim.bo.buftype == '' or file_name == '' then
+  local file_name = vim.fn.expand '%:p'
+  if file_name == '' then
+    vim.print 'in if'
     vim.api.nvim_set_option_value('filetype', ft, { buf = 0 })
     file_name = _G.start_ls()
   end
