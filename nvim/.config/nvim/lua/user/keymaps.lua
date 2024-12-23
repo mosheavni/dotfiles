@@ -473,6 +473,9 @@ end, { remap = false, expr = true })
 -- Run current buffer --
 ------------------------
 local function open_tab(cmd, opts)
+  if not opts.cwd then
+    opts.cwd = vim.fn.getcwd()
+  end
   local spawn = vim.system({ 'wezterm', 'cli', 'spawn', '--cwd=' .. opts.cwd }, { text = true }):wait()
   local spawn_stdout = vim.trim(spawn.stdout)
   if spawn.code == 0 and spawn_stdout ~= '' then
@@ -483,28 +486,14 @@ local function open_tab(cmd, opts)
     end
   end
 end
-local function open_terminal(cmd, opts)
-  -- selene: allow(undefined_variable)
-  local term, created = Snacks.terminal.get(nil, opts)
-  vim.api.nvim_set_current_win(term.win)
-  local job_id = vim.bo[term.buf].channel
 
-  -- clear terminal input if already open
-  if not created then
-    vim.fn.chansend(job_id, vim.api.nvim_replace_termcodes('<C-c>', true, true, true))
-  end
-  -- send command
-  vim.schedule(function()
-    vim.fn.chansend(job_id, cmd)
-  end)
-end
-local function execute_file()
+local function execute_file(where)
   if vim.bo.buftype == 'terminal' then
     return
   end
   local utils = require 'user.utils'
   local ft = vim.bo.filetype ~= '' and vim.bo.filetype or 'sh'
-  local opts = { cwd = vim.fn.getcwd() }
+  local opts = {}
 
   -- check if current buffer is a valid file
   local file_name = vim.fn.expand '%:p'
@@ -519,25 +508,44 @@ local function execute_file()
   if ft == 'terraform' then
     opts.cwd = vim.fn.expand '%:p:h'
     cmd = 'terragrunt plan'
+  ---@diagnostic disable-next-line: undefined-field
   elseif first_line:match '^#!' then
     cmd = file_name
   else
     cmd = cmd .. ' ' .. file_name
   end
 
-  vim.ui.select({ 'terminal', 'tab' }, { prompt = 'Where to run?' }, function(choice)
-    if not choice then
-      return
+  if not where or where == 'terminal' then
+    -- selene: allow(undefined_variable)
+    local term, created = Snacks.terminal.get(nil, opts)
+    local job_id = vim.bo[term.buf].channel
+
+    -- clear terminal input if already open
+    if not created then
+      if not term:valid() then
+        term:show()
+      end
+      vim.api.nvim_set_current_win(term.win)
+      vim.schedule(function()
+        vim.fn.chansend(job_id, vim.api.nvim_replace_termcodes('<C-c>', true, true, true))
+      end)
     end
-    if choice == 'tab' then
-      open_tab(cmd, opts)
-    else
-      open_terminal(cmd, opts)
-    end
-  end)
+    -- send command
+    vim.schedule(function()
+      vim.fn.chansend(job_id, cmd)
+    end)
+  else
+    open_tab(cmd, opts)
+  end
 end
 
 map('n', '<F3>', execute_file, { remap = false, silent = true })
+vim.api.nvim_create_user_command('RunInTerminal', function()
+  execute_file 'terminal'
+end, {})
+vim.api.nvim_create_user_command('RunInTab', function()
+  execute_file 'tab'
+end, {})
 
 --------------------
 -- Clear Terminal --
@@ -604,54 +612,6 @@ vim.api.nvim_create_user_command('Titleize', function(opts)
     top_bottom,
   })
 end, { nargs = '?' })
-
--------------
--- AutoRun --
--------------
-local attach_to_buffer = function(output_bufnr, pattern, command)
-  vim.api.nvim_create_autocmd('BufWritePost', {
-    group = vim.api.nvim_create_augroup('AutoRun', { clear = true }),
-    pattern = pattern,
-    callback = function()
-      local append_data = function(_, data)
-        if data then
-          vim.api.nvim_buf_set_lines(output_bufnr, -1, -1, false, data)
-        end
-      end
-      vim.api.nvim_buf_set_lines(output_bufnr, 0, -1, false, { table.concat(command, ' ') .. ' output:' })
-      vim.fn.jobstart(command, {
-        stdout_buffered = true,
-        on_stdout = append_data,
-        on_stderr = append_data,
-      })
-    end,
-  })
-end
-vim.api.nvim_create_user_command('AutoRun', function()
-  local pattern = vim.fn.expand '%:p'
-  vim.ui.input({ prompt = 'Command: ' }, function(command_text)
-    if command_text == nil then
-      return
-    end
-    if command_text:find [[%%]] then
-      command_text = command_text:gsub('%%', vim.fn.expand '%')
-    end
-    local command = vim.split(command_text, ' ')
-    print 'AutoRun starts now...'
-    -- Open split and focus on it
-    vim.cmd 'vsplit'
-    local win = vim.api.nvim_get_current_win()
-    local buf = vim.api.nvim_create_buf(true, true)
-    vim.api.nvim_win_set_buf(win, buf)
-
-    -- Resize
-    local win_width = vim.o.columns
-    local split_size = 25 * win_width / 100
-    vim.cmd('vertical resize ' .. tostring(split_size))
-
-    attach_to_buffer(tonumber(buf), pattern, command)
-  end)
-end, {})
 
 ------------------------
 -- Search and Replace --
