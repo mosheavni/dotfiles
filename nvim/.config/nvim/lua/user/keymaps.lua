@@ -477,18 +477,23 @@ local function execute_file()
     return
   end
   local utils = require 'user.utils'
-  local ft = vim.bo.filetype
-  if ft == '' then
-    ft = 'sh'
-  end
-  local cmd = utils.filetype_to_command[ft] or 'bash'
 
   -- check if current buffer is a valid file
+  local ft = vim.bo.filetype
+  ft = ft == '' and 'sh' or ft
   local file_name = vim.fn.expand '%:p'
   if file_name == '' then
-    vim.print 'in if'
     vim.api.nvim_set_option_value('filetype', ft, { buf = 0 })
     file_name = _G.start_ls()
+  end
+
+  -- check if there's a shebang to determine cmd
+  local cmd = utils.filetype_to_command[ft] or 'bash'
+  local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ''
+  if first_line:match '^#!' then
+    cmd = ''
+  else
+    cmd = cmd .. ' '
   end
 
   -- open and focus terminal
@@ -502,7 +507,7 @@ local function execute_file()
     vim.fn.chansend(job_id, vim.api.nvim_replace_termcodes('<C-c>', true, true, true))
   end
   vim.schedule(function()
-    vim.fn.chansend(job_id, cmd .. ' ' .. file_name)
+    vim.fn.chansend(job_id, cmd .. file_name)
   end)
 end
 
