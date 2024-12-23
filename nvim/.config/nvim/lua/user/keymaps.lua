@@ -502,6 +502,16 @@ local function execute_file(where)
     file_name = _G.start_ls()
   end
 
+  -- check if file has changed and prompt the user if should save
+  if vim.bo.modified then
+    local save = vim.fn.confirm(('Save changes to %q before running?'):format(vim.fn.bufname()), '&Yes\n&No\n&Cancel')
+    if save == 3 then
+      return
+    elseif save == 1 then
+      vim.cmd.write()
+    end
+  end
+
   -- check if there's a shebang to determine cmd
   local cmd = utils.filetype_to_command[ft] or 'bash'
   local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ''
