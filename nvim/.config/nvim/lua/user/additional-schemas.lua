@@ -23,7 +23,6 @@ M.list_github_tree = function(cb)
   local cmd = vim.iter({ 'curl', '--location', '--silent', '--fail', headers_in_curl_format, url .. '?recursive=1' }):flatten():totable()
   vim.system(cmd, { text = true }, function(data)
     vim.schedule(function()
-      vim.print(vim.inspect(data))
       local body = vim.fn.json_decode(data.stdout)
       for _, tree in ipairs(body.tree) do
         if tree.type == 'blob' and tree.path:match '%.json$' then
