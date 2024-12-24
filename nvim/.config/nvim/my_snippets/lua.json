@@ -41,5 +41,10 @@
       "})"
     ],
     "description": "Create a user command"
+  },
+  "print_inspect": {
+    "prefix": "pi",
+    "body": ["vim.print(vim.inspect('${1:value}: ' .. ${2:$1}))$0"],
+    "description": "Print with vim.inspect"
   }
 }
