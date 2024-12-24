@@ -44,46 +44,8 @@ local M = {
     end,
   },
   {
-    'voldikss/vim-floaterm',
-    keys = { '<F6>', '<F7>', '<F8>' },
-    cmd = {
-      'FloatermFirst',
-      'FloatermHide',
-      'FloatermKill',
-      'FloatermLast',
-      'FloatermNew',
-      'FloatermNext',
-      'FloatermPrev',
-      'FloatermSend',
-      'FloatermShow',
-      'FloatermToggle',
-      'FloatermUpdate',
-    },
-    init = function()
-      vim.g['floaterm_height'] = 0.9
-      vim.g['floaterm_keymap_new'] = '<F7>'
-      vim.g['floaterm_keymap_next'] = '<F8>'
-      vim.g['floaterm_keymap_toggle'] = '<F6>'
-      vim.g['floaterm_width'] = 0.7
-      require('user.menu').add_actions('Terminal', {
-        ['Toggle (<F6>)'] = function()
-          vim.cmd.FloatermToggle()
-        end,
-        ['Create a new window (<F7>)'] = function()
-          vim.cmd.FloatermNew()
-        end,
-        ['Move to next window (<F8>)'] = function()
-          vim.cmd.FloatermNext()
-        end,
-        ['Move to previous window'] = function()
-          vim.cmd.FloatermPrev()
-        end,
-      })
-    end,
-  },
-  {
     'chomosuke/term-edit.nvim',
-    ft = 'floaterm',
+    event = 'TermOpen',
     opts = {
       prompt_end = '%$ ',
     },

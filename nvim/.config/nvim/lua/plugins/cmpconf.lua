@@ -159,6 +159,13 @@ M.config = function()
         end
       end, { 'i', 's' }),
       ['<C-/>'] = cmp.mapping.close(),
+      ['<C-e>'] = cmp.mapping(function(fallback)
+        if luasnip.choice_active() then
+          luasnip.change_choice(1)
+        else
+          fallback()
+        end
+      end, { 'i', 's' }),
     },
     sorting = {
       priority_weight = 2,
@@ -246,6 +253,7 @@ M.config = function()
   })
 
   require('luasnip.loaders.from_vscode').lazy_load()
+  require('luasnip.loaders.from_vscode').lazy_load { paths = '~/.config/nvim/my_snippets' }
 end
 
 return M

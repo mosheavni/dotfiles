@@ -143,52 +143,6 @@ M.config = function()
       'trouble',
       my_extensions.nvimtree_self,
     },
-    winbar = {
-      lualine_a = {},
-      lualine_b = {},
-      lualine_c = {
-        {
-          function()
-            local location = navic.get_location()
-            return navic.is_available() and location ~= '' and location or vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
-          end,
-          color = { fg = colors.aqua },
-        },
-      },
-      lualine_x = {},
-      lualine_y = {},
-      lualine_z = {},
-    },
-    inactive_winbar = {
-      lualine_a = {
-        {
-          function()
-            return '<'
-          end,
-          color = { fg = colors.bg },
-        },
-      },
-      lualine_b = {},
-      lualine_c = {
-        function()
-          return '%='
-        end,
-        {
-          'filename',
-          color = { fg = colors.magenta, gui = 'bold' },
-        },
-      },
-      lualine_x = {
-        {
-          function()
-            return '>'
-          end,
-          color = { fg = colors.bg },
-        },
-      },
-      lualine_y = {},
-      lualine_z = {},
-    },
   }
 
   -- Inserts a component in lualine_c at left section

@@ -69,6 +69,7 @@ return {
       function()
         Snacks.terminal()
       end,
+      mode = { 'n', 't' },
       desc = 'Toggle Terminal',
     },
     {

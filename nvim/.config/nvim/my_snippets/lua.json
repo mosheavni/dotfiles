@@ -1,0 +1,45 @@
+{
+  "autocmd": {
+    "prefix": "autoc",
+    "body": [
+      "vim.api.nvim_create_autocmd(\"${1:BufEnter}\", {",
+      "\tpattern = \"${2:*.lua}\",",
+      "\tdesc = \"${3:desc}\",",
+      "\tgroup = ${4:my_group},",
+      "\tonce = ${5:false},",
+      "\tcallback = function(${6:event})",
+      "\t\tvim.print(${7:$6})",
+      "\t\t$0",
+      "\tend",
+      "})"
+    ],
+    "description": "Create an autocmd"
+  },
+  "keymap": {
+    "prefix": "kmap",
+    "body": [
+      "vim.keymap.set('${1|n,i,v,x,s,o,t,c|}', '${2:lhs}', ${3|function()\n\t$0\nend,''|}, {",
+      "\tdesc = '${4:description}',",
+      "\tsilent = ${5:true},",
+      "\tremap = ${6:false},",
+      "\tbuffer = ${7:false}",
+      "})"
+    ],
+    "description": "Create a keymap"
+  },
+  "command": {
+    "prefix": "cmd",
+    "body": [
+      "vim.api.nvim_create_user_command('${1:CommandName}', function(${2:opts})",
+      "\t${3:-- Command implementation\n\tvim.print(vim.inspect(${4:$2}))}",
+      "\t$0",
+      "end, {",
+      "\tdesc = '${5:Command description}',",
+      "\tnargs = '${6|*,?,+,0,1|}',",
+      "\tbang = ${7:false},",
+      "\tforce = ${8:true}",
+      "})"
+    ],
+    "description": "Create a user command"
+  }
+}

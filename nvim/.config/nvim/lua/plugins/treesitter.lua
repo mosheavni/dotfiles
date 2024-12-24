@@ -49,6 +49,7 @@ M.opts = {
     'json',
     'jsonc',
     'lua',
+    'luadoc',
     'make',
     'markdown',
     'markdown_inline',
