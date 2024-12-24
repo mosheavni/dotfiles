@@ -19,7 +19,7 @@ local function execute_file(where)
   end
   local utils = require 'user.utils'
   local ft = vim.bo.filetype ~= '' and vim.bo.filetype or 'sh'
-  local opts = {}
+  local opts = { cwd = vim.fn.expand '%:p:h' }
 
   -- check if current buffer is a valid file
   local file_name = vim.fn.expand '%:p'
@@ -49,7 +49,6 @@ local function execute_file(where)
     return
   end
   if ft == 'terraform' then
-    opts.cwd = vim.fn.expand '%:p:h'
     cmd = 'terragrunt plan'
   ---@diagnostic disable-next-line: undefined-field
   elseif first_line:match '^#!' then

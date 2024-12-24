@@ -1,8 +1,8 @@
+--# selene: allow(undefined_variable)
 return {
   'folke/snacks.nvim',
   priority = 1000,
   lazy = false,
-  ---@type snacks.Config
   opts = {
     bigfile = { enabled = true },
     dashboard = { enabled = false },
@@ -67,7 +67,13 @@ return {
     {
       '<c-/>',
       function()
-        Snacks.terminal()
+        -- check if mode is `t` (terminal)
+        if vim.api.nvim_get_mode().mode == 't' then
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-\\><C-n>', true, true, true), 'n', true)
+          vim.cmd.q()
+        else
+          Snacks.terminal()
+        end
       end,
       mode = { 'n', 't' },
       desc = 'Toggle Terminal',
