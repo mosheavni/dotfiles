@@ -67,12 +67,11 @@ return {
     {
       '<c-/>',
       function()
-        -- check if mode is `t` (terminal)
         if vim.api.nvim_get_mode().mode == 't' then
           vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-\\><C-n>', true, true, true), 'n', true)
           vim.cmd.q()
         else
-          Snacks.terminal()
+          Snacks.terminal.toggle(nil, { cwd = vim.fn.expand '%:p:h' })
         end
       end,
       mode = { 'n', 't' },
