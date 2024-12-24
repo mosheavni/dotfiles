@@ -19,7 +19,6 @@ local function execute_file(where)
   end
   local utils = require 'user.utils'
   local ft = vim.bo.filetype ~= '' and vim.bo.filetype or 'sh'
-  local opts = { cwd = vim.fn.expand '%:p:h' }
 
   -- check if current buffer is a valid file
   local file_name = vim.fn.expand '%:p'
@@ -57,6 +56,7 @@ local function execute_file(where)
     cmd = cmd .. ' ' .. file_name
   end
 
+  local opts = { cwd = vim.fn.expand '%:p:h' }
   if not where or where == 'terminal' then
     -- selene: allow(undefined_variable)
     local term, created = Snacks.terminal.get(nil, opts)
