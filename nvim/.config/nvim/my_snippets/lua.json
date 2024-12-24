@@ -18,7 +18,9 @@
   "keymap": {
     "prefix": "kmap",
     "body": [
-      "vim.keymap.set('${1|n,i,v,x,s,o,t,c|}', '${2:lhs}', ${3|function()\n\t$0\nend,''|}, {",
+      "vim.keymap.set('${1|n,i,v,x,s,o,t,c|}', '${2:lhs}', ${3:function()",
+      "\t${0}",
+      "end}, {",
       "\tdesc = '${4:description}',",
       "\tsilent = ${5:true},",
       "\tremap = ${6:false},",

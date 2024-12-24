@@ -7,6 +7,13 @@
           "lua"
         ],
         "path": "./lua.json"
+      },
+      {
+        "language": [
+          "groovy",
+          "Jenkinsfile"
+        ],
+        "path": "./groovy.json"
       }
     ]
   }

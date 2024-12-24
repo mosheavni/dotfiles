@@ -1,0 +1,63 @@
+{
+  "pipeline": {
+    "prefix": "pipeline",
+    "body": [
+      "pipeline {",
+      "\tagent {",
+      "\t\tkubernetes {",
+      "\t\t\tdefaultContainer '${1:jnlp}'",
+      "\t\t\tyaml ${2:pod}",
+      "\t\t}",
+      "\t}",
+      "\tstages {",
+      "\t\tstage(\"${3}\") {",
+      "\t\t\tsteps {",
+      "\t\t\t\techo \"======== executing ${4:$3} ========\"",
+      "\t\t\t}",
+      "\t\t\tpost {",
+      "\t\t\t\talways {",
+      "\t\t\t\t\techo \"======== always ========\"",
+      "\t\t\t\t}",
+      "\t\t\t\tsuccess {",
+      "\t\t\t\t\techo \"======== ${5:$3} executed successfully ========\"",
+      "\t\t\t\t}",
+      "\t\t\t\tfailure {",
+      "\t\t\t\t\techo \"======== ${6:$3} execution failed ========\"",
+      "\t\t\t\t}",
+      "\t\t\t}",
+      "\t\t}",
+      "\t}",
+      "\tpost {",
+      "\t\talways {",
+      "\t\t\techo \"======== always ========\"",
+      "\t\t}",
+      "\t\tsuccess {",
+      "\t\t\techo \"======== pipeline executed successfully ========\"",
+      "\t\t}",
+      "\t\tfailure {",
+      "\t\t\techo \"======== pipeline execution failed ========\"",
+      "\t\t}",
+      "\t}",
+      "}"
+    ],
+    "description": "pipeline"
+  },
+  "Jenkins Stage Block": {
+    "prefix": "stage",
+    "body": [
+      "stage('${1:stage_name}') {",
+      "\tsteps {",
+      "\t\tscript {",
+      "\t\t\t${0:// your code here}",
+      "\t\t}",
+      "\t}",
+      "}"
+    ],
+    "description": "Jenkins pipeline stage block with script"
+  },
+  "echo": {
+    "prefix": "echo",
+    "body": ["echoMsg.info \"====++++ ${1:text} ++++====\""],
+    "description": "echo"
+  }
+}
