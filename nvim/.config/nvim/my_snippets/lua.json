@@ -46,7 +46,7 @@
   },
   "print_inspect": {
     "prefix": "pi",
-    "body": ["vim.print(vim.inspect('${1:value}: ' .. ${2:$1}))$0"],
+    "body": ["vim.print('${1:value}: ' .. vim.inspect(${2:$1}))$0"],
     "description": "Print with vim.inspect"
   }
 }
