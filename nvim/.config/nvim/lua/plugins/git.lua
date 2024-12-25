@@ -7,15 +7,11 @@ local actions = function()
     ['Change branch (F4)'] = function()
       vim.fn.feedkeys(vim.keycode '<F4>')
     end,
-    ['Create Pull Request'] = function()
-      git_funcs.create_pull_request()
-    end,
+    ['Create Pull Request (pr in git buffer)'] = git_funcs.create_pull_request,
     ['Checkout new branch (:Gcb {new_branch})'] = function()
       git_funcs.create_new_branch { args = '' }
     end,
-    ['Set upstream to HEAD'] = function()
-      git_funcs.set_upstream_head()
-    end,
+    ['Set upstream to HEAD'] = git_funcs.set_upstream_head,
     ['Blame'] = function()
       vim.cmd 'Git blame'
     end,
@@ -25,25 +21,17 @@ local actions = function()
     ['Copy current branch to clipboard (<leader>gB)'] = function()
       vim.fn.feedkeys(T '<leader>' .. 'gB')
     end,
-    ['Fetch (all remotes and tags)'] = function()
-      git_funcs.fetch_all()
-    end,
+    ['Fetch (all remotes and tags)'] = git_funcs.fetch_all,
     ['Pull origin master (:Gpom)'] = function()
       git_funcs.pull_remote_branch('origin', 'master')
     end,
-    ['Revert last commit (soft)'] = function()
-      git_funcs.soft_revert()
-    end,
-    ['Pull {remote} {branch}'] = function()
-      git_funcs.ui_select_pull_remote_branch()
-    end,
-    ['Merge {remote} {branch}'] = function()
-      git_funcs.ui_select_merge_remote_branch()
-    end,
+    ['Revert last commit (soft)'] = git_funcs.soft_revert,
+    ['Pull {remote} {branch}'] = git_funcs.ui_select_pull_remote_branch,
+    ['Merge {remote} {branch}'] = git_funcs.ui_select_merge_remote_branch,
     ['Merge origin/master (:Gmom)'] = function()
       git_funcs.merge_remote_branch('origin', 'master')
     end,
-    ['Open Status / Menu (<leader>gg / :G)'] = function()
+    ['Open Status / Menu (<leader>gg / :Git)'] = function()
       vim.cmd 'Git'
     end,
     ['Open GitHub on this line (<leader>gh or :ToGithub)'] = function()
@@ -58,12 +46,8 @@ local actions = function()
         git_funcs.prnt('Copied ' .. tag .. ' to clipboard.')
       end)
     end,
-    ['Create tag'] = function()
-      git_funcs.ui_select_create_tag()
-    end,
-    ['Delete tag'] = function()
-      git_funcs.ui_select_delete_tag()
-    end,
+    ['Create tag'] = git_funcs.ui_select_create_tag,
+    ['Delete tag'] = git_funcs.ui_select_delete_tag,
     ['Find in all commits'] = function()
       local rev_list = vim.fn.FugitiveExecute({ 'rev-list', '--all' }).stdout
       vim.ui.input({ prompt = 'Enter search term: ' }, function(search_term)
@@ -75,12 +59,8 @@ local actions = function()
         vim.cmd('silent Ggrep ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
       end)
     end,
-    ['Push (:Gp)'] = function()
-      git_funcs.push()
-    end,
-    ['Pull (:Gl)'] = function()
-      vim.cmd.Gl()
-    end,
+    ['Push (:Gp)'] = git_funcs.push,
+    ['Pull (:Gl)'] = git_funcs.pull,
     ['Add (Stage) All'] = function()
       vim.cmd 'Git add -A'
     end,

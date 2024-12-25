@@ -7,7 +7,7 @@ return {
     bigfile = { enabled = true },
     dashboard = { enabled = false },
     indent = { enabled = false },
-    input = { enabled = false },
+    input = { enabled = true },
     notifier = {
       enabled = false,
       timeout = 3000,
@@ -69,7 +69,7 @@ return {
       function()
         if vim.api.nvim_get_mode().mode == 't' or vim.bo.buftype == 'terminal' then
           vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-\\><C-n>', true, true, true), 'n', true)
-          vim.cmd.q()
+          vim.cmd.close()
         else
           Snacks.terminal.toggle(nil, { cwd = vim.fn.expand '%:p:h' })
         end

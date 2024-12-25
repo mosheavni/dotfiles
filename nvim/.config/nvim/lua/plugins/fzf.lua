@@ -57,23 +57,26 @@ return {
             },
             ['ctrl-r'] = {
               fn = function(selected)
+                require('fzf-lua.utils').fzf_exit()
                 local branch = selected[1]
-                vim.ui.input({ prompt = 'Rename branch: ', default = selected[1] }, function(new_name)
-                  if new_name == '' then
-                    utils.warn 'Action aborted'
-                    return
-                  end
-                  -- Rename the branch
-                  local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
-                  local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'branch', '-m', branch, new_name }, toplevel)
-                  if ret == 0 then
-                    utils.info('Renamed branch ' .. branch .. ' to ' .. new_name)
-                    return
-                  else
-                    local msg = string.format('Error when renaming branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
-                    utils.err(msg)
-                  end
-                end)
+                vim.defer_fn(function()
+                  vim.ui.input({ prompt = 'Rename branch: ', default = selected[1] }, function(new_name)
+                    if not new_name or new_name == '' then
+                      utils.warn 'Action aborted'
+                      return
+                    end
+                    -- Rename the branch
+                    local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
+                    local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'branch', '-m', branch, new_name }, toplevel)
+                    if ret == 0 then
+                      utils.info('Renamed branch ' .. branch .. ' to ' .. new_name)
+                      return
+                    else
+                      local msg = string.format('Error when renaming branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
+                      utils.err(msg)
+                    end
+                  end)
+                end, 100)
               end,
               reload = true,
               header = 'rename',

@@ -219,7 +219,7 @@ end
 
 M.ui_select_branches = function(remote_name, cb)
   M.get_branches(remote_name, function(branches)
-    with_ui_select(branches, { prompt = 'Select branch: ' }, cb)
+    with_ui_select(branches, { prompt = 'Select branch: ' }, cb, false)
   end)
 end
 
@@ -240,23 +240,26 @@ M.ui_select_merge_remote_branch = function()
 end
 
 M.ui_select_create_tag = function()
-  vim.ui.input({ prompt = 'Enter tag name: ' }, function(tag_name)
-    if not tag_name then
-      return M.prnt 'Canceled.'
-    end
-    run_git({ 'tag', tag_name }, 'Creating tag: ' .. tag_name, function()
-      with_ui_select({ 'Yes', 'No' }, { prompt = 'Push?' }, function(choice)
-        if choice == 'Yes' then
-          M.prnt('Pushing tag ' .. tag_name .. '...')
-          run_git({ 'push', '--tags' }, nil, function()
-            M.prnt('Tag ' .. tag_name .. ' created and pushed.')
-          end)
-        else
-          M.prnt('Tag ' .. tag_name .. ' created.')
-        end
+  require('fzf-lua.utils').fzf_exit()
+  vim.defer_fn(function()
+    vim.ui.input({ prompt = 'Enter tag name: ' }, function(tag_name)
+      if not tag_name then
+        return M.prnt 'Canceled.'
+      end
+      run_git({ 'tag', tag_name }, 'Creating tag: ' .. tag_name, function()
+        with_ui_select({ 'Yes', 'No' }, { prompt = 'Push?' }, function(choice)
+          if choice == 'Yes' then
+            M.prnt('Pushing tag ' .. tag_name .. '...')
+            run_git({ 'push', '--tags' }, nil, function()
+              M.prnt('Tag ' .. tag_name .. ' created and pushed.')
+            end)
+          else
+            M.prnt('Tag ' .. tag_name .. ' created.')
+          end
+        end)
       end)
     end)
-  end)
+  end, 100)
 end
 
 M.ui_select_delete_tag = function()
