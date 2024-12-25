@@ -327,7 +327,7 @@ vim.api.nvim_create_user_command('Whereami', function()
   if not emoji then
     emoji = '🌎'
   end
-  local msg = [[You're in ]] .. country
+  local msg = string.format([[You're in %s %s]], country, emoji)
   vim.notify(msg, vim.log.levels.INFO, { title = 'Where am I?', icon = emoji })
 end, {})
 

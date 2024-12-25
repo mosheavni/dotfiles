@@ -31,7 +31,7 @@ vim.opt.fillchars = {
 }
 vim.o.shada = [[!,'100,<1000,s100,h]]
 -- vim.opt.foldcolumn = '1'
-vim.o.emoji = false
+vim.o.emoji = true
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
 -- opt.whichwrap:append '<>[]hl'

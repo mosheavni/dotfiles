@@ -50,7 +50,7 @@ M.get_os_command_output = function(cmd, cwd)
   end
   if type(cmd) ~= 'table' then
     M.pretty_print('cmd has to be a table', vim.log.leger.ERROR, [[🖥️]])
-    return {}
+    return {}, -1, {}
   end
   local command = table.remove(cmd, 1)
   local stderr = {}
@@ -89,17 +89,29 @@ M.pretty_print = function(message, title, icon, level, timeout)
 end
 
 ---Converts country code to emoji of the country flag
----@param iso string: The country code
+---@param country_iso string: The country code in 2 uppercase letters
 ---@return string: emoji of the country flag
-M.country_os_to_emoji = function(iso)
-  local python_file = vim.fn.tempname() .. '.py'
-  local python_file_content = [[import sys; print("".join(chr(ord(c) + 127397) for c in sys.argv[1].upper()), end='')]]
-  local python_file_handle = io.open(python_file, 'w')
-  python_file_handle:write(python_file_content)
-  python_file_handle:close()
-  local emoji = vim.system({ 'python3', python_file, iso }, { text = true }):wait().stdout
-  vim.fn.delete(python_file)
-  return emoji or ''
+M.country_os_to_emoji = function(country_iso)
+  local flag_icon = ''
+  for i = 1, #country_iso do
+    local code_point = country_iso:byte(i) + 127397
+    if code_point <= 0x7F then
+      flag_icon = flag_icon .. string.char(code_point)
+    elseif code_point <= 0x7FF then
+      flag_icon = flag_icon .. string.char(0xC0 + math.floor(code_point / 0x40), 0x80 + code_point % 0x40)
+    elseif code_point <= 0xFFFF then
+      flag_icon = flag_icon .. string.char(0xE0 + math.floor(code_point / 0x1000), 0x80 + math.floor((code_point % 0x1000) / 0x40), 0x80 + code_point % 0x40)
+    elseif code_point <= 0x10FFFF then
+      flag_icon = flag_icon
+        .. string.char(
+          0xF0 + math.floor(code_point / 0x40000),
+          0x80 + math.floor((code_point % 0x40000) / 0x1000),
+          0x80 + math.floor((code_point % 0x1000) / 0x40),
+          0x80 + code_point % 0x40
+        )
+    end
+  end
+  return flag_icon
 end
 
 --- Get the next index in a table after the current element
