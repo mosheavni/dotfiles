@@ -362,36 +362,56 @@ nnoremap <silent> <leader>( :call SplitParamLines()<cr>
 -- Diff with last save --
 -------------------------
 vim.api.nvim_create_user_command('DiffWithSaved', function()
-  -- Get start buffer
-  local start = vim.api.nvim_get_current_buf()
-  local filetype = vim.api.nvim_get_option_value('filetype', { buf = start })
+  -- Get current buffer info
+  local cur_buf = vim.api.nvim_get_current_buf()
+  local filename = vim.api.nvim_buf_get_name(cur_buf)
 
-  -- `vnew` - Create empty vertical split window
-  -- `set buftype=nofile` - Buffer is not related to a file, will not be written
-  -- `0d_` - Remove an extra empty start row
-  -- `diffthis` - Set diff mode to a new vertical split
-  vim.cmd 'vnew | set buftype=nofile | read ++edit # | 0d_ | diffthis'
-
-  -- Get scratch buffer
-  local scratch = vim.api.nvim_get_current_buf()
-
-  -- Set filetype of scratch buffer to be the same as start
-  vim.api.nvim_set_option_value('filetype', filetype, { buf = scratch })
-
-  -- `wincmd p` - Go to the start window
-  -- `diffthis` - Set diff mode to a start window
-  vim.cmd 'wincmd p | diffthis'
-
-  -- Map `q` for both buffers to exit diff view and delete scratch buffer
-  for _, buf in ipairs { scratch, start } do
-    map('n', 'q', function()
-      vim.api.nvim_buf_delete(scratch, { force = true })
-      vim.keymap.del('n', 'q', { buffer = start })
-    end, { buffer = buf })
+  -- Check if file exists on disk
+  if filename == '' or not vim.fn.filereadable(filename) then
+    vim.notify('File not saved on disk!', vim.log.levels.ERROR)
+    return
   end
-end, {})
-map('n', '<leader>ds', ':DiffWithSaved<cr>', { remap = false, silent = true })
 
+  local ft = vim.bo.filetype
+  local cur_lines = vim.api.nvim_buf_get_lines(cur_buf, 0, -1, false)
+  local saved_lines = vim.fn.readfile(filename)
+
+  -- Create new tab
+  vim.cmd 'tabnew'
+
+  -- Function to create and setup a scratch buffer
+  local function create_scratch_buffer(lines, title)
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+    vim.api.nvim_set_option_value('filetype', ft, { buf = buf })
+    vim.api.nvim_set_option_value('buftype', 'nofile', { buf = buf })
+    vim.api.nvim_set_current_buf(buf)
+    vim.api.nvim_set_option_value('winbar', title, { scope = 'local' })
+    return buf
+  end
+
+  -- Create first scratch buffer with current content
+  local buf1 = create_scratch_buffer(cur_lines, 'Unsaved changes')
+
+  -- Create vertical split
+  vim.cmd 'vsplit'
+
+  -- Create second scratch buffer with saved content
+  local buf2 = create_scratch_buffer(saved_lines, 'File on disk')
+
+  -- Enable diff mode for both windows
+  vim.cmd 'windo diffthis'
+
+  -- Add keymapping to close diff view
+  local function close_diff()
+    vim.cmd 'tabclose'
+  end
+
+  vim.keymap.set('n', 'q', close_diff, { buffer = buf1, silent = true })
+  vim.keymap.set('n', 'q', close_diff, { buffer = buf2, silent = true })
+end, {})
+
+map('n', '<leader>ds', ':DiffWithSaved<cr>', { remap = false, silent = true })
 -----------------------
 -- Visual calculator --
 -----------------------
