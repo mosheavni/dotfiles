@@ -343,21 +343,6 @@ map('n', 'cii', function()
   end)
 end)
 
--------------------------------
--- Split parameters to lines --
--------------------------------
-vim.cmd [[
-function! SplitParamLines() abort
-  let f_line_num = line('.')
-  let indent_length = indent(f_line_num)
-  exe "normal! 0f(a\<cr>\<esc>"
-  exe ".s/\s*,/,\r" . repeat(' ', indent_length + &shiftwidth - 1) . '/g'
-  nohlsearch
-  exe "normal! 0t)a\<cr>\<esc>"
-endfunction
-nnoremap <silent> <leader>( :call SplitParamLines()<cr>
-]]
-
 -------------------------
 -- Diff with last save --
 -------------------------
