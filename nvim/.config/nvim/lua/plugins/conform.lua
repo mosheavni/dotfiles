@@ -19,6 +19,7 @@ local function get_lsp_names(clients)
 end
 
 _G.fmt_lsp = ''
+_G.fmt_conform = ''
 local function notify_format(err, did_format)
   if not did_format then
     return
@@ -32,7 +33,8 @@ local function notify_format(err, did_format)
     if is_lsp then
       formatter_names = get_lsp_names(get_lsp_formatters())
     else
-      formatter_names = get_lsp_names(fmts)
+      formatter_names = _G.fmt_conform ~= '' and _G.fmt_conform or get_lsp_names(fmts)
+      _G.fmt_conform = ''
     end
   end
   if err then
@@ -72,6 +74,8 @@ return {
           if client.type == 'lsp' then
             conform_opts = { formatters = {}, lsp_format = 'prefer' }
             _G.fmt_lsp = client.name
+          else
+            _G.fmt_conform = client.name
           end
 
           require('conform').format(conform_opts, notify_format)
@@ -101,7 +105,7 @@ return {
       jsonc = { 'prettierd' },
       less = { 'prettierd' },
       lua = { 'stylua' },
-      markdown = { 'injected', 'markdownlint' },
+      markdown = { 'cbfmt', 'injected', 'markdownlint' },
       python = { 'isort', 'black' },
       scss = { 'prettierd' },
       sh = { 'shfmt' },
