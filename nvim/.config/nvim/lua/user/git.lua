@@ -26,8 +26,9 @@ M.reload_fugitive_index = function()
   end)
 end
 
-local function with_ui_select(items, opts, cb)
-  if #items == 1 then
+local function with_ui_select(items, opts, cb, auto_select)
+  auto_select = auto_select == nil and true or auto_select
+  if #items == 1 and auto_select then
     return cb(items[1])
   end
   vim.schedule(function()
@@ -212,7 +213,7 @@ end
 
 M.ui_select_tags = function(cb)
   M.get_tags(function(tags)
-    with_ui_select(tags, { prompt = 'Select tag: ' }, cb)
+    with_ui_select(tags, { prompt = 'Select tag: ' }, cb, false)
   end)
 end
 
