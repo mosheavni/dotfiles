@@ -14,7 +14,6 @@ local M = {
     'hrsh7th/cmp-calc',
     'hrsh7th/cmp-cmdline',
     'hrsh7th/cmp-nvim-lsp',
-    'Snikimonkd/cmp-go-pkgs',
     'hrsh7th/cmp-nvim-lua',
     'hrsh7th/cmp-path',
     'petertriho/cmp-git',
@@ -71,7 +70,6 @@ M.config = function()
     nvim_lua = '[Vim]',
     path = '[Path]',
     calc = '[Calc]',
-    go_pkgs = '[Go]',
     ['vim-dadbod-completion'] = '[DB]',
   }
   local custom_kinds = {
@@ -191,7 +189,6 @@ M.config = function()
       },
       { name = 'nvim_lsp_signature_help' },
       { name = 'cmp_tabnine' },
-      { name = 'go_pkgs' },
       { name = 'path' },
       { name = 'buffer', keyword_length = 4 },
       { name = 'calc' },
