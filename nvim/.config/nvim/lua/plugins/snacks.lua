@@ -118,4 +118,11 @@ return {
       end,
     },
   },
+  init = function()
+    vim.api.nvim_create_user_command('Rename', function()
+      Snacks.rename.rename_file()
+    end, {
+      desc = 'Rename file',
+    })
+  end,
 }
