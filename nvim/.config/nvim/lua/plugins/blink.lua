@@ -11,12 +11,6 @@ return {
         lazy = true,
         opts = {},
       },
-      {
-        'onsails/lspkind-nvim',
-        config = function()
-          require('lspkind').init {}
-        end,
-      },
       'rafamadriz/friendly-snippets',
       {
         'tzachar/cmp-tabnine',
@@ -30,8 +24,6 @@ return {
           }
         end,
       },
-      { 'L3MON4D3/LuaSnip', version = 'v2.*', build = 'make install_jsregexp' },
-      'hrsh7th/cmp-nvim-lua',
       {
         'zbirenbaum/copilot.lua',
         config = function()
@@ -66,94 +58,80 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
-      fuzzy = {
-        sorts = {
-          'score',
-          function()
-            require 'cmp_tabnine.compare'
-          end,
-          'sort_text',
-        },
-      },
 
       appearance = {
         use_nvim_cmp_as_default = false,
         nerd_font_variant = 'normal',
       },
 
-      sources = {
-        -- adding any nvim-cmp sources here will enable them
-        default = { 'cmp_tabnine', 'lsp', 'luasnip', 'path', 'buffer', 'lazydev' },
-        -- cmdline = {},
-        providers = {
-          lsp = { fallbacks = { 'lazydev' } },
-          lazydev = { name = 'LazyDev', module = 'lazydev.integrations.blink' },
-          nvim_lua = {
-            name = 'nvim_lua',
-            module = 'blink.compat.source',
-          },
-          cmp_tabnine = {
-            name = 'cmp_tabnine',
-            module = 'blink.compat.source',
-          },
-        },
-      },
-
       completion = {
-        accept = {
-          -- experimental auto-brackets support
-          auto_brackets = { enabled = true },
+
+        accept = { auto_brackets = { enabled = true } },
+
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 250,
+          treesitter_highlighting = true,
+          window = { border = 'rounded' },
         },
+
         ghost_text = { enabled = false },
+
+        list = {
+          selection = function(ctx)
+            return ctx.mode == 'cmdline' and 'auto_insert' or ''
+          end,
+        },
+
         menu = {
+          border = 'rounded',
+
+          cmdline_position = function()
+            if vim.g.ui_cmdline_pos ~= nil then
+              local pos = vim.g.ui_cmdline_pos -- (1, 0)-indexed
+              return { pos[1] - 1, pos[2] }
+            end
+            local height = (vim.o.cmdheight == 0) and 1 or vim.o.cmdheight
+            return { vim.o.lines - height, 0 }
+          end,
+
           draw = {
-            treesitter = { 'lsp' },
-            columns = { { 'kind_icon', gap = 1, 'label', 'label_description' }, { 'source_name' } },
-            components = {
-              kind_icon = {
-                ellipsis = false,
-                text = function(ctx)
-                  return require('lspkind').symbolic(ctx.kind, {
-                    mode = 'symbol',
-                  })
-                end,
-              },
+            columns = {
+              { 'kind_icon', 'label', gap = 1 },
+              { 'label_description', gap = 1 },
+              { 'source_name' },
             },
           },
         },
-        documentation = {
-          auto_show = true,
-          auto_show_delay_ms = 200,
-        },
-      },
-
-      -- experimental signature help support
-      signature = { enabled = true },
-
-      snippets = {
-        expand = function(snippet)
-          require('luasnip').lsp_expand(snippet)
-        end,
-        active = function(filter)
-          if filter and filter.direction then
-            return require('luasnip').jumpable(filter.direction)
-          end
-          return require('luasnip').in_snippet()
-        end,
-        jump = function(direction)
-          require('luasnip').jump(direction)
-        end,
       },
 
       keymap = {
-        preset = 'default',
-        ['<CR>'] = { 'select_and_accept', 'fallback' },
+        ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+        ['<CR>'] = { 'accept', 'fallback' },
         ['<Tab>'] = { 'snippet_forward', 'show', 'select_next', 'fallback' },
         ['<S-Tab>'] = { 'snippet_backward', 'show', 'select_prev', 'fallback' },
         ['<C-y>'] = { 'select_and_accept' },
         ['<C-u>'] = { 'scroll_documentation_up', 'fallback' },
         ['<C-d>'] = { 'scroll_documentation_down', 'fallback' },
-        ['<C-/>'] = { 'hide' },
+        ['<C-/>'] = { 'hide', 'fallback' },
+      },
+
+      signature = {
+        enabled = true,
+        window = { border = 'rounded' },
+      },
+
+      sources = {
+        default = { 'cmp_tabnine', 'lsp', 'snippets', 'path', 'buffer', 'lazydev' },
+        -- cmdline = {},
+        providers = {
+          lsp = { fallbacks = { 'lazydev' } },
+          lazydev = { name = 'LazyDev', module = 'lazydev.integrations.blink' },
+          cmp_tabnine = {
+            name = 'cmp_tabnine',
+            module = 'blink.compat.source',
+          },
+        },
       },
     },
   },
