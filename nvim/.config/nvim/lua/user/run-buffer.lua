@@ -105,7 +105,7 @@ local function cmd_or_break(ft, file_name)
     cmd = cmd .. ' ' .. file_name
   end
 
-  if cmd == 'open' then
+  if vim.startswith(cmd, 'open') then
     vim.ui.open(file_name)
     return nil, true
   end
@@ -120,16 +120,15 @@ local function cmd_or_break(ft, file_name)
     return nil, true
   end
 
-  if ft == 'terraform' then
-    cmd = 'terragrunt plan'
-    ---@diagnostic disable-next-line: undefined-field
-  end
-
   if ft == 'make' then
     cmd = get_make(file_name)
     if not cmd then
       return nil, true
     end
+  end
+
+  if ft == 'terraform' then
+    cmd = 'terragrunt plan'
   end
 
   return cmd, false
