@@ -29,7 +29,7 @@ vim.opt.fillchars = {
   diff = ' ',
   eob = ' ',
 }
-vim.o.shada = [[!,'100,<1000,s100,h]]
+vim.o.shada = [[!,'1000,s10000,h]]
 -- vim.opt.foldcolumn = '1'
 vim.o.emoji = true
 -- go to previous/next line with h,l,left arrow and right arrow
@@ -86,7 +86,7 @@ vim.o.conceallevel = 0
 vim.o.showmode = false -- Redundant as lighline takes care of that
 vim.opt.cpoptions:append '>'
 vim.o.equalalways = true -- When splitting window, make new window same size
-vim.o.history = 1000
+vim.o.history = 10000
 vim.o.termguicolors = true
 vim.o.signcolumn = 'yes'
 -- require 'user.winbar'
