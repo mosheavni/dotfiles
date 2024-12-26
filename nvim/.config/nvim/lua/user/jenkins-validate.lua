@@ -88,6 +88,12 @@ local validate_job = vim.schedule_wrap(function(crumb_job)
 end)
 
 local onepass_creds = function()
+  local is_op_exists = vim.fn.executable 'op' == 1
+  if not is_op_exists then
+    vim.notify('1Password CLI is not installed', vim.log.levels.ERROR)
+    vim.notify('Install with brew install 1password-cli', vim.log.levels.INFO)
+    return false
+  end
   local onepass = vim
     .system({
       'op',
