@@ -52,6 +52,10 @@ local function execute_file(where)
     vim.notify('Reloading lua file', vim.log.levels.INFO)
     return
   end
+  if ft == 'groovy' then
+    require('user.jenkins-validate').validate()
+    return
+  end
   if ft == 'terraform' then
     cmd = 'terragrunt plan'
   ---@diagnostic disable-next-line: undefined-field
