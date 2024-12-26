@@ -122,6 +122,7 @@ return {
     end
 
     local text = [[
+--# selene: allow(undefined_variable)
 -- Reload the file when it changes on disk
 local group = vim.api.nvim_create_augroup("ReloadModule", {clear = true})
 vim.api.nvim_create_autocmd("BufWritePost", {
