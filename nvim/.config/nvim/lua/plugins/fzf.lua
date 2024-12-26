@@ -25,26 +25,21 @@ return {
 
         require('fzf-lua').git_branches {
           actions = {
-            ['default'] = function(selected)
-              actions.git_switch(selected)
-              require('user.git').reload_fugitive_index()
-            end,
+            ['default'] = {
+              fn = function(selected)
+                actions.git_switch(selected)
+                require('user.git').reload_fugitive_index()
+              end,
+              header = 'switch',
+            },
             -- perform checkout instead of switch
             ['ctrl-s'] = {
               fn = function(selected)
                 local branch = selected[1]
-                local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'checkout', branch }, vim.fn.getcwd())
-                require('user.git').reload_fugitive_index()
-                if ret == 0 then
-                  utils.info('Switched to branch ' .. branch)
-                  return
-                else
-                  local msg = string.format('Error when switching to branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
-                  utils.err(msg)
-                end
+                require('user.git').checkout(branch)
               end,
               reload = false,
-              header = 'switch',
+              header = 'checkout',
             },
             ['ctrl-y'] = {
               fn = function(selected)

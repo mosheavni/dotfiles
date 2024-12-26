@@ -119,6 +119,10 @@ M.get_branches_sync = function(remote_name)
   return branches
 end
 
+M.checkout = function(branch_name)
+  run_git({ 'checkout', branch_name }, 'Checking out ' .. branch_name)
+end
+
 M.push = function(cb)
   M.get_branch(function(branch)
     run_git({ 'push', 'origin', branch }, 'Pushing to ' .. branch .. '...', cb)
