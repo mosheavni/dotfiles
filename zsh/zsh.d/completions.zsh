@@ -50,3 +50,4 @@ load_completion_from_cmd helm completion zsh
 load_completion_from_cmd gh completion --shell zsh
 load_completion_from_cmd argocd completion zsh
 load_completion_from_cmd wezterm shell-completion --shell zsh
+load_completion_from_cmd op completion zsh

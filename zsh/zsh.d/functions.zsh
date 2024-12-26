@@ -1,8 +1,4 @@
 #!/bin/zsh
-if [[ -n $LOADED_FUNCTIONS ]]; then
-  return
-fi
-
 function take() {
   [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"
 }
