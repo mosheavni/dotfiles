@@ -134,14 +134,10 @@ local function cmd_or_break(ft, file_name)
   return cmd, false
 end
 
-local function execute_file(where)
-  if vim.bo.buftype == 'terminal' then
-    return
-  end
+local function filename_and_ft()
   local ft = vim.bo.filetype ~= '' and vim.bo.filetype or 'sh'
-
-  -- check if current buffer is a valid file
   local file_name = vim.fn.expand '%:p'
+  -- check if current buffer is a valid file
   if file_name == '' then
     vim.api.nvim_set_option_value('filetype', ft, { buf = 0 })
     file_name = _G.start_ls()
@@ -149,12 +145,23 @@ local function execute_file(where)
 
   -- check if file has changed and prompt the user if should save
   if vim.bo.modified then
-    local save = vim.fn.confirm(('Save changes to %q before running?'):format(vim.fn.bufname()), '&Yes\n&No\n&Cancel')
+    local save = vim.fn.confirm(('Save changes to %q before running?'):format(file_name), '&Yes\n&No\n&Cancel')
     if save == 3 then
       return
     elseif save == 1 then
       vim.cmd.write()
     end
+  end
+  return file_name, ft
+end
+
+local function execute_file(where)
+  if vim.bo.buftype == 'terminal' then
+    return
+  end
+  local file_name, ft = filename_and_ft()
+  if not file_name or not ft then
+    return
   end
 
   local cmd, should_break = cmd_or_break(ft, file_name)
