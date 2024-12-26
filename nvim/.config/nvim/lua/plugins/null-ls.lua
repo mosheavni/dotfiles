@@ -1,6 +1,5 @@
 local M = {
-  -- 'nvimtools/none-ls.nvim',
-  dir = os.getenv 'HOME' .. '/Repos/none-ls.nvim',
+  'nvimtools/none-ls.nvim',
   lazy = true,
   dependencies = {
     'gbprod/none-ls-shellcheck.nvim',
