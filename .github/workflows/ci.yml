@@ -22,7 +22,8 @@ jobs:
 
       - name: Prepare
         run: |
-          git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ../plenary.nvim
+          cd nvim/.config/nvim
+          make prepare
 
       - name: Run tests
         run: |
