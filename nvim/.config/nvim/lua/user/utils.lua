@@ -37,12 +37,16 @@ function! ReplaceMotion(motion, text)
 endfunction
 ]]
 
----Execute a shell command and return its output
----@param cmd table The command to execute as a table where the first element is the command and the rest are arguments
----@param cwd? string The working directory to execute the command in (optional)
----@return table stdout The standard output as a table of lines
----@return number? ret The return code of the command
----@return table stderr The standard error as a table of lines
+M.get_visual_selection = function()
+  local mode = vim.api.nvim_get_mode().mode
+  local opts = {}
+  -- \22 is an escaped version of <c-v>
+  if mode == 'v' or mode == 'V' or mode == '\22' then
+    opts.type = mode
+  end
+  return vim.fn.getregion(vim.fn.getpos 'v', vim.fn.getpos '.', opts)
+end
+
 M.get_os_command_output = function(cmd, cwd)
   local Job = require 'plenary.job'
   if not cwd then
@@ -50,10 +54,11 @@ M.get_os_command_output = function(cmd, cwd)
   end
   if type(cmd) ~= 'table' then
     M.pretty_print('cmd has to be a table', vim.log.leger.ERROR, [[🖥️]])
-    return {}, -1, {}
+    return '', -1, ''
   end
   local command = table.remove(cmd, 1)
   local stderr = {}
+  ---@diagnostic disable-next-line: missing-fields
   local stdout, ret = Job:new({
     command = command,
     args = cmd,

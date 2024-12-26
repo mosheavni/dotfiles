@@ -8,6 +8,16 @@ local M = {
     cmd = 'Trouble',
   },
   {
+    'nvim-lua/plenary.nvim',
+    cmd = {
+      'PlenaryBustedFile',
+      'PlenaryBustedDirectory',
+    },
+    keys = {
+      { '<leader>tf', '<cmd>PlenaryBustedFile %<CR>', mode = 'n' },
+    },
+  },
+  {
     'sam4llis/nvim-lua-gf',
     ft = 'lua',
   },
