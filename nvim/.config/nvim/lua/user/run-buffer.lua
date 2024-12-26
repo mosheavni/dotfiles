@@ -52,6 +52,9 @@ local function run_lua(file_name)
   vim.notify('Reloading lua file', vim.log.levels.INFO)
 end
 
+---Open a new tab in wezterm and write the command
+---@param cmd string command to write
+---@param opts table options
 local function open_tab(cmd, opts)
   if not opts.cwd then
     opts.cwd = vim.fn.getcwd()
