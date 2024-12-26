@@ -1,3 +1,57 @@
+--- Given a path, open the file, extract all the Makefile keys,
+--  and return them as a list.
+---@param path string
+---@return table options A telescope options list like
+--{ { text: "1 - all", value="all" }, { text: "2 - hello", value="hello" } ...}
+local function get_makefile_options(path)
+  local options = {}
+
+  -- Open the Makefile for reading
+  local file = io.open(path, 'r')
+
+  if file then
+    local in_target = false
+    local count = 0
+
+    -- Iterate through each line in the Makefile
+    for line in file:lines() do
+      -- Check for lines starting with a target rule (e.g., "target: dependencies")
+      local target = line:match '^(.-):'
+      if target then
+        in_target = true
+        count = count + 1
+        -- Exclude the ":" and add the option to the list with text and value fields
+        table.insert(options, { text = count .. ' - ' .. target, value = target })
+      elseif in_target then
+        -- If we're inside a target block, stop adding options
+        in_target = false
+      end
+    end
+
+    -- Close the Makefile
+    file:close()
+  else
+    vim.notify('Unable to open a Makefile in the current working dir.', vim.log.levels.ERROR, {
+      title = 'Makeit.nvim',
+    })
+  end
+
+  return options
+end
+
+local function run_lua(file_name)
+  local path = file_name:match 'nvim/lua/(.*)%.lua'
+  if path then
+    path = path:gsub('/', '.')
+    if package.loaded[path] then
+      package.loaded[path] = nil
+      vim.notify('Unloaded package.path: ' .. path, vim.log.levels.INFO)
+    end
+  end
+  vim.cmd 'luafile %'
+  vim.notify('Reloading lua file', vim.log.levels.INFO)
+end
+
 local function open_tab(cmd, opts)
   if not opts.cwd then
     opts.cwd = vim.fn.getcwd()
@@ -13,11 +67,75 @@ local function open_tab(cmd, opts)
   end
 end
 
+---Get make command
+---@param file_name string file name
+---@return string make command
+local function get_make(file_name)
+  local options = get_makefile_options(file_name)
+  local opts_for_select = vim.tbl_map(function(option)
+    return option.text
+  end, options)
+
+  local choice = vim.fn.inputlist {
+    'Select a target to run:',
+    table.concat(opts_for_select, '\n'),
+  }
+  if choice < 1 or choice > #options then
+    return ''
+  end
+  return 'make ' .. options[choice].value
+end
+
+--- Get cmd or break
+---@param ft string filetype
+---@param file_name string file name
+---@return string|nil cmd
+---@return boolean should_break
+local function cmd_or_break(ft, file_name)
+  local utils = require 'user.utils'
+  local cmd = utils.filetype_to_command[ft] or 'bash'
+  local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ''
+
+  if first_line:match '^#!' then
+    cmd = file_name
+  else
+    cmd = cmd .. ' ' .. file_name
+  end
+
+  if cmd == 'open' then
+    vim.ui.open(file_name)
+    return nil, true
+  end
+
+  if ft == 'lua' then
+    run_lua(file_name)
+    return nil, true
+  end
+
+  if ft == 'groovy' then
+    require('user.jenkins-validate').validate()
+    return nil, true
+  end
+
+  if ft == 'terraform' then
+    cmd = 'terragrunt plan'
+    ---@diagnostic disable-next-line: undefined-field
+  end
+
+  if ft == 'make' then
+    cmd = get_make(file_name)
+    if not cmd then
+      return nil, true
+    end
+  end
+
+  return cmd, false
+end
+
 local function execute_file(where)
   if vim.bo.buftype == 'terminal' then
     return
   end
-  local utils = require 'user.utils'
   local ft = vim.bo.filetype ~= '' and vim.bo.filetype or 'sh'
 
   -- check if current buffer is a valid file
@@ -37,32 +155,9 @@ local function execute_file(where)
     end
   end
 
-  -- check if there's a shebang to determine cmd
-  local cmd = utils.filetype_to_command[ft] or 'bash'
-  local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ''
-  if cmd == 'open' then
-    return vim.ui.open(file_name)
-  end
-  if ft == 'lua' then
-    local path = vim.fn.expand('%:p'):match('nvim/lua/(.*)%.lua'):gsub('/', '.')
-    if package.loaded[path] then
-      package.loaded[path] = nil
-    end
-    vim.cmd 'luafile %'
-    vim.notify('Reloading lua file', vim.log.levels.INFO)
+  local cmd, should_break = cmd_or_break(ft, file_name)
+  if should_break or not cmd then
     return
-  end
-  if ft == 'groovy' then
-    require('user.jenkins-validate').validate()
-    return
-  end
-  if ft == 'terraform' then
-    cmd = 'terragrunt plan'
-  ---@diagnostic disable-next-line: undefined-field
-  elseif first_line:match '^#!' then
-    cmd = file_name
-  else
-    cmd = cmd .. ' ' .. file_name
   end
 
   local opts = { cwd = vim.fn.expand '%:p:h' }
@@ -91,9 +186,11 @@ local function execute_file(where)
 end
 
 vim.keymap.set('n', '<F3>', execute_file, { remap = false, silent = true })
+
 vim.api.nvim_create_user_command('RunInTerminal', function()
   execute_file 'terminal'
 end, {})
+
 vim.api.nvim_create_user_command('RunInTab', function()
   execute_file 'tab'
 end, {})

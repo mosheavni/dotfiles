@@ -27,8 +27,5 @@ jobs:
       - name: Run tests
         run: |
           nvim --version
-          nvim \
-            --headless \
-            --noplugin \
-            -u nvim/.config/nvim/scripts/minimal_init.vim \
-            -c "PlenaryBustedDirectory nvim/.config/nvim/lua/tests/ { minimal_init = './nvim/.config/nvim/scripts/minimal_init.vim' }"
+          cd nvim/.config/nvim
+          make test
