@@ -12,7 +12,7 @@ local function format_number(number_str)
   local int_part, dec_part = number_str:match '([^.]*)(.?.*)'
 
   -- Format integer part with spaces every 3 digits from the right
-  local formatted = int_part:reverse():gsub('(%d%d%d)', '%1,'):reverse():gsub('^%s+', '')
+  local formatted = int_part:reverse():gsub('(%d%d%d)', '%1,'):reverse():gsub('^,', ''):gsub('^%s+', '')
 
   return sign .. formatted .. dec_part
 end
