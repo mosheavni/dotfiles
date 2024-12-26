@@ -44,7 +44,12 @@ local function execute_file(where)
     return vim.ui.open(file_name)
   end
   if ft == 'lua' then
+    local path = vim.fn.expand('%:p'):match('nvim/lua/(.*)%.lua'):gsub('/', '.')
+    if package.loaded[path] then
+      package.loaded[path] = nil
+    end
     vim.cmd 'luafile %'
+    vim.notify('Reloading lua file', vim.log.levels.INFO)
     return
   end
   if ft == 'terraform' then
