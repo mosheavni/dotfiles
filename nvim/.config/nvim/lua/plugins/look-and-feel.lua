@@ -147,6 +147,25 @@ local M = {
     ft = 'markdown', -- If you decide to lazy-load anyway
     opts = { initial_state = false },
   },
+  {
+    'alanfortlink/animatedbg.nvim',
+    cmd = { 'Matrix' },
+    config = function()
+      local animated_bg = require 'animatedbg-nvim'
+      animated_bg.setup {
+        fps = 60, -- default
+      }
+      vim.api.nvim_create_user_command('Matrix', function(opts)
+        animated_bg.stop_all()
+        if opts.bang then
+          return
+        end
+        vim.defer_fn(function()
+          animated_bg.play { animation = 'matrix', duration = 500 } --
+        end, 100)
+      end, { desc = 'Matrix animation', bang = true })
+    end,
+  },
 }
 
 return M
