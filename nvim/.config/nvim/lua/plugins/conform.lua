@@ -106,7 +106,13 @@ return {
       less = { 'prettierd' },
       lua = { 'stylua' },
       markdown = { 'cbfmt', 'injected', 'markdownlint' },
-      python = { 'isort', 'black' },
+      python = function(bufnr)
+        if require('conform').get_formatter_info('ruff_format', bufnr).available then
+          return { 'ruff_format' }
+        else
+          return { 'isort', 'black' }
+        end
+      end,
       scss = { 'prettierd' },
       sh = { 'shfmt' },
       svelte = { 'prettierd' },
