@@ -50,14 +50,16 @@ local actions = function()
     ['Delete tag'] = git_funcs.ui_select_delete_tag,
     ['Find in all commits'] = function()
       local rev_list = vim.fn.FugitiveExecute({ 'rev-list', '--all' }).stdout
-      vim.ui.input({ prompt = 'Enter search term: ' }, function(search_term)
-        if not search_term then
-          git_funcs.prnt 'Canceled.'
-          return
-        end
-        git_funcs.prnt('Searching for ' .. search_term .. ' in all commits...')
-        vim.cmd('silent Ggrep ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
-      end)
+      vim.defer_fn(function()
+        vim.ui.input({ prompt = 'Enter search term: ' }, function(search_term)
+          if not search_term then
+            git_funcs.prnt 'Canceled.'
+            return
+          end
+          git_funcs.prnt('Searching for ' .. search_term .. ' in all commits...')
+          vim.cmd('silent Ggrep ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
+        end)
+      end, 100)
     end,
     ['Push (:Gp)'] = git_funcs.push,
     ['Pull (:Gl)'] = git_funcs.pull,
