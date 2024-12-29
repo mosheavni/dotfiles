@@ -6,6 +6,7 @@ RobSis/zsh-completion-generator kind:defer
 
 loiccoyle/zsh-github-copilot
 ohmyzsh/ohmyzsh path:lib/key-bindings.zsh
+ohmyzsh/ohmyzsh path:plugins/git
 zsh-users/zsh-history-substring-search
 peterhurford/git-it-on.zsh
 hlissner/zsh-autopair
@@ -13,7 +14,6 @@ agkozak/zhooks
 
 # deferred
 zsh-users/zsh-autosuggestions kind:defer
-ohmyzsh/ohmyzsh path:plugins/git kind:defer
 zsh-users/zsh-syntax-highlighting kind:defer
 
 # this is last
