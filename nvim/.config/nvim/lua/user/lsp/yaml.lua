@@ -13,18 +13,7 @@ M.setup = function(opts)
   local on_attach = opts.on_attach or require('user.lsp.on-attach').default
   local yaml_lspconfig = {
     cmd = { 'yaml-language-server', '--stdio' },
-    on_attach = function(c, b)
-      local filetype = vim.api.nvim_get_option_value('filetype', { buf = b })
-      local buftype = vim.api.nvim_get_option_value('buftype', { buf = b })
-      local disabled_fts = { 'helm', 'yaml.gotexttmpl', 'gotmpl' }
-      if buftype ~= '' or filetype == '' or vim.tbl_contains(disabled_fts, filetype) then
-        vim.diagnostic.enable(false, b)
-        vim.defer_fn(function()
-          vim.diagnostic.reset(nil, b)
-        end, 1000)
-      end
-      on_attach(c, b)
-    end,
+    on_attach = on_attach,
     capabilities = vim.tbl_deep_extend('force', capabilities, {
       textDocument = {
         foldingRange = {

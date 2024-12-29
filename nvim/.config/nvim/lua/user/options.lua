@@ -160,5 +160,15 @@ vim.filetype.add {
     },
     ['.*Jenkinsfile.*'] = 'groovy',
     [kube_config_pattern] = 'yaml',
+    ['.*'] = function()
+      -- loop through the first 20 lines of the file and search a line
+      -- that starts with kind: or apiVersion: to determine the filetype is yaml
+      for i = 1, 20 do
+        local line = vim.fn.getline(i)
+        if line:match '^kind:' or line:match '^apiVersion:' then
+          return 'yaml'
+        end
+      end
+    end,
   },
 }
