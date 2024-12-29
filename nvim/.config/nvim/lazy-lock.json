@@ -109,7 +109,7 @@
   "vim-swap": { "branch": "master", "commit": "9358bfdc5e377aa13e7c2c2dd8699ba32b0dcf83" },
   "wezterm-types": { "branch": "main", "commit": "1518752906ba3fac0060d9efab6e4d3ec15d4b5a" },
   "winresizer": { "branch": "master", "commit": "9bd559a03ccec98a458e60c705547119eb5350f3" },
-  "yaml-companion.nvim": { "branch": "main", "commit": "8088feaaaa6c13895afe4615c6a9cc69206162c3" },
+  "yaml-companion.nvim": { "branch": "main", "commit": "a29451f081c78e60dd321e0a1d264671aad501b5" },
   "yaml.nvim": { "branch": "main", "commit": "01e643a35ad91cc096ec148c7d1aab5701a03a4b" },
   "yanky.nvim": { "branch": "main", "commit": "f9b905994cccf3c55f41af3a0a1f4c76c844e411" }
 }

@@ -42,9 +42,9 @@
    > **_NOTE:_** Reload shell
 
    ```bash
-   while read -r plugin_line;do
+   while read -r plugin_line; do
      asdf plugin-add $(awk '{print $1}' <<<"$plugin_line")
-   done < asdf/.tool-versions
+   done <asdf/.tool-versions
    asdf install
    ```
 

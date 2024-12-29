@@ -130,10 +130,10 @@ M.setup = function()
   }
 
   -- golang
-  require('lspconfig').gopls.setup {
-    capabilities = capabilities,
-    on_attach = default_on_attach,
-  }
+  -- require('lspconfig').gopls.setup {
+  --   capabilities = capabilities,
+  --   on_attach = default_on_attach,
+  -- }
 end
 
 return M
