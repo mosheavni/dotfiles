@@ -8,37 +8,43 @@ local find_in_project = function(opts)
   }
   local bang = opts.literal_search and '' or '!'
   local noautocmd_str = opts.noautocmd and 'noautocmd ' or ''
-  vim.ui.input({ prompt = 'Enter search term (blank for word under cursor): ' }, function(search_term)
-    local original_search_term = search_term
-    if search_term then
-      search_term = ' ' .. search_term
-    end
+  vim.defer_fn(function()
+    vim.ui.input({ prompt = 'Enter search term (blank for word under cursor): ' }, function(search_term)
+      local original_search_term = search_term
+      if search_term then
+        search_term = ' ' .. search_term
+      end
 
-    vim.cmd(noautocmd_str .. 'RipGrepCWORD' .. bang .. search_term)
-    opts.callback(original_search_term)
-  end)
+      vim.cmd(noautocmd_str .. 'RipGrepCWORD' .. bang .. search_term)
+      opts.callback(original_search_term)
+    end)
+  end, 100)
 end
 
 local search_and_replace = function(literal_search)
   find_in_project {
     literal_search = literal_search,
     callback = function(search_term)
-      vim.ui.input({ prompt = 'Enter Replace term: ' }, function(replace_term)
-        if not replace_term then
-          pretty_print 'Canceled.'
-          return
-        end
-        vim.ui.input({
-          prompt = 'Enter flags (g=global, c=confirm, i=case insensitive, e=ignore errors, n=only count): ',
-          default = 'gce',
-        }, function(flags)
-          if not flags then
+      vim.defer_fn(function()
+        vim.ui.input({ prompt = 'Enter Replace term: ' }, function(replace_term)
+          if not replace_term then
             pretty_print 'Canceled.'
             return
           end
-          vim.cmd('silent noautocmd cdo %s?' .. search_term .. '?' .. replace_term .. '?' .. flags)
+          vim.defer_fn(function()
+            vim.ui.input({
+              prompt = 'Enter flags (g=global, c=confirm, i=case insensitive, e=ignore errors, n=only count): ',
+              default = 'gce',
+            }, function(flags)
+              if not flags then
+                pretty_print 'Canceled.'
+                return
+              end
+              vim.cmd('silent noautocmd cdo %s?' .. search_term .. '?' .. replace_term .. '?' .. flags)
+            end)
+          end, 100)
         end)
-      end)
+      end, 100)
     end,
     noautocmd = true,
   }
@@ -53,10 +59,10 @@ return {
   ['Find in pwd (regex search) (<C-f>)'] = function()
     find_in_project { literal_search = false }
   end,
-  ['Search and Replace in pwd (literal search)'] = function()
+  ['Search and Replace in cwd (literal search)'] = function()
     search_and_replace(true)
   end,
-  ['Search and Replace in pwd (regex search)'] = function()
+  ['Search and Replace in cwd (regex search)'] = function()
     search_and_replace(false)
   end,
   ['Replace word under cursor (<leader>r)'] = function()

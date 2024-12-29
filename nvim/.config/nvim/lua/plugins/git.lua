@@ -9,7 +9,9 @@ local actions = function()
     end,
     ['Create Pull Request (pr in git buffer)'] = git_funcs.create_pull_request,
     ['Checkout new branch (:Gcb {new_branch})'] = function()
-      git_funcs.create_new_branch { args = '' }
+      vim.defer_fn(function()
+        git_funcs.create_new_branch { args = '' }
+      end, 100)
     end,
     ['Set upstream to HEAD'] = git_funcs.set_upstream_head,
     ['Blame'] = function()
@@ -74,9 +76,11 @@ end
 
 local diff_actions = {
   ['[Diffview] Diff File History'] = function()
-    vim.ui.input({ prompt = 'Enter file path (empty for all files, % for current): ' }, function(file_to_check)
-      vim.cmd('DiffviewFileHistory ' .. file_to_check)
-    end)
+    vim.defer_fn(function()
+      vim.ui.input({ prompt = 'Enter file path (empty for all files, % for current): ' }, function(file_to_check)
+        vim.cmd('DiffviewFileHistory ' .. file_to_check)
+      end)
+    end, 100)
   end,
   ['[Diffview] Diff with branch'] = function()
     git_funcs.ui_select_remotes(function(remote)
@@ -246,12 +250,14 @@ local M = {
     config = function(_, opts)
       require('user.menu').add_actions('Git', {
         ['Open a remote git repository (<leader>go)'] = function()
-          vim.ui.input({ prompt = 'Enter git repository URL: ' }, function(url)
-            if not url then
-              return
-            end
-            require('git-dev').open(url)
-          end)
+          vim.defer_fn(function()
+            vim.ui.input({ prompt = 'Enter git repository URL: ' }, function(url)
+              if not url then
+                return
+              end
+              require('git-dev').open(url)
+            end)
+          end, 100)
         end,
       })
       require('git-dev').setup(opts)

@@ -163,7 +163,7 @@ M.create_new_branch = function(branch_opts)
   end
   vim.ui.input({ prompt = 'Enter new branch name: ' }, function(input)
     if not input then
-      return
+      return M.prnt 'Canceled.'
     end
     if not input:match '^[a-zA-Z0-9_-]+$' then
       return M.prnt('Invalid branch name', vim.log.levels.ERROR)
