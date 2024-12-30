@@ -18,10 +18,6 @@ local M = {
     },
   },
   {
-    'sam4llis/nvim-lua-gf',
-    ft = 'lua',
-  },
-  {
     'NStefan002/2048.nvim',
     cmd = 'Play2048',
     config = true,
@@ -30,23 +26,11 @@ local M = {
     'milisims/nvim-luaref',
     ft = 'lua',
   },
+  { 'Bilal2453/luvit-meta', lazy = true },
   {
     'chr4/nginx.vim',
     ft = 'nginx',
   },
-  {
-    'ton/vim-bufsurf',
-    event = { 'BufReadPre', 'BufNewFile' },
-    keys = {
-      { ']b', '<Plug>(buf-surf-forward)' },
-      { '[b', '<Plug>(buf-surf-back)' },
-    },
-  },
-  {
-    'chrisbra/vim-sh-indent',
-    ft = { 'sh', 'bash', 'zsh' },
-  },
-  { 'Bilal2453/luvit-meta', lazy = true },
 
   --------------
   -- Quickfix --

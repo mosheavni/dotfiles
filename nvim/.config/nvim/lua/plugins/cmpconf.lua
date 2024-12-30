@@ -14,7 +14,6 @@ local M = {
     'hrsh7th/cmp-calc',
     'hrsh7th/cmp-cmdline',
     'hrsh7th/cmp-nvim-lsp',
-    'hrsh7th/cmp-nvim-lua',
     'hrsh7th/cmp-path',
     'petertriho/cmp-git',
     'hrsh7th/cmp-nvim-lsp-signature-help',
@@ -67,7 +66,6 @@ M.config = function()
     git = '[Git]',
     luasnip = '[Snpt]',
     nvim_lsp = '[LSP]',
-    nvim_lua = '[Vim]',
     path = '[Path]',
     calc = '[Calc]',
     ['vim-dadbod-completion'] = '[DB]',
@@ -182,7 +180,6 @@ M.config = function()
     sources = cmp.config.sources {
       { name = 'nvim_lsp', priority = 100 },
       { name = 'luasnip' },
-      { name = 'nvim_lua' },
       {
         name = 'lazydev',
         group_index = 0, -- set group index to 0 to skip loading LuaLS completions
