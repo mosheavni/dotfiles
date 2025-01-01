@@ -22,11 +22,7 @@ local M = {
 
 M.setup = function()
   require('user.lsp.actions').setup()
-
-  -- Set formatting of lsp log
   require('vim.lsp.log').set_format_func(vim.inspect)
-
-  -- set up capabilities
   local cmp_default_capabilities = require('cmp_nvim_lsp').default_capabilities()
   M.capabilities = vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), cmp_default_capabilities, M.capabilities or {}, {})
 
@@ -34,17 +30,11 @@ M.setup = function()
   vim.diagnostic.config {
     jump = { float = true },
     signs = { text = M.diagnostic_signs },
-    update_in_insert = false,
-    virtual_text = {
-      severity = { min = vim.diagnostic.severity.WARN },
-    },
-    float = { border = 'rounded' },
+    virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
+    float = { border = 'rounded', source = 'if_many' },
   }
 
-  -- set up mason to install lsp servers
   require('mason-lspconfig').setup { automatic_installation = true }
-
-  -- setup lsp servers
   require('user.lsp.servers').setup()
 
   -- on attach

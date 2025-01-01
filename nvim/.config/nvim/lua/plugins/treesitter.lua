@@ -20,6 +20,23 @@ local M = {
       ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml' },
       opts = {},
     },
+    {
+      'atusy/treemonkey.nvim',
+      keys = {
+        {
+          'm',
+          function()
+            require 'nvim-treesitter.configs'
+            ---@diagnostic disable-next-line: missing-fields
+            require('treemonkey').select {
+              ignore_injections = false,
+              action = require('treemonkey.actions').unite_selection,
+            }
+          end,
+          mode = { 'x', 'o' },
+        },
+      },
+    },
   },
   event = 'BufReadPost',
 }

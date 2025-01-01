@@ -1,7 +1,4 @@
 local M = {
-  ------------------------------------
-  -- Language Server Protocol (LSP) --
-  ------------------------------------
   {
     'folke/trouble.nvim',
     opts = {},
@@ -31,10 +28,6 @@ local M = {
     'chr4/nginx.vim',
     ft = 'nginx',
   },
-
-  --------------
-  -- Quickfix --
-  --------------
   {
     'yorickpeterse/nvim-pqf',
     opts = {},
@@ -50,10 +43,6 @@ local M = {
     'kevinhwang91/nvim-bqf',
     ft = 'qf',
   },
-
-  -----------------------
-  -- Text Manipulation --
-  -----------------------
   {
     'junegunn/vim-easy-align',
     keys = { { 'ga', '<Plug>(EasyAlign)', mode = { 'v', 'n' } } },
@@ -136,23 +125,6 @@ local M = {
     },
   },
   {
-    'atusy/treemonkey.nvim',
-    keys = {
-      {
-        'm',
-        function()
-          require 'nvim-treesitter.configs'
-          ---@diagnostic disable-next-line: missing-fields
-          require('treemonkey').select {
-            ignore_injections = false,
-            action = require('treemonkey.actions').unite_selection,
-          }
-        end,
-        mode = { 'x', 'o' },
-      },
-    },
-  },
-  {
     'axelvc/template-string.nvim',
     ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
     event = 'InsertEnter',
@@ -172,7 +144,7 @@ local M = {
   {
     'vidocqh/auto-indent.nvim',
     event = 'InsertEnter',
-    opts = {},
+    opts = { lightmode = true },
   },
   {
     'CopilotC-Nvim/CopilotChat.nvim',
