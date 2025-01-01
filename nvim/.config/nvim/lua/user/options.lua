@@ -35,7 +35,7 @@ vim.o.emoji = true
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
 -- opt.whichwrap:append '<>[]hl'
-vim.opt.diffopt:append { linematch = 50 }
+vim.opt.diffopt:append 'linematch:60'
 vim.opt.diffopt:append 'vertical'
 vim.o.splitkeep = 'screen'
 

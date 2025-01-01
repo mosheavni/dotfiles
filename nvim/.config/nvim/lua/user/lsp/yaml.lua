@@ -10,10 +10,8 @@ local M = {
 
 M.setup = function(opts)
   local capabilities = opts.capabilities or require('user.lsp.config').capabilities
-  local on_attach = opts.on_attach or require('user.lsp.on-attach').default
   local yaml_lspconfig = {
     cmd = { 'yaml-language-server', '--stdio' },
-    on_attach = on_attach,
     capabilities = vim.tbl_deep_extend('force', capabilities, {
       textDocument = {
         foldingRange = {

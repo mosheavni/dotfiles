@@ -3,7 +3,21 @@ local M = {
   event = { 'BufReadPre', 'BufNewFile' },
 }
 
-M.init = require('user.lsp.config').init
+M.init = function()
+  _G.start_ls = function()
+    local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
+    local file_name = _G.tmp_write { should_delete = false, new = false, ft = ft }
+    -- load lsp
+    require 'lspconfig'
+    return file_name
+  end
+  vim.keymap.set('n', '<leader>ls', _G.start_ls)
+  require('user.menu').add_actions('LSP', {
+    ['Start LSP (<leader>ls)'] = function()
+      _G.start_ls()
+    end,
+  })
+end
 
 M.config = require('user.lsp.config').setup
 

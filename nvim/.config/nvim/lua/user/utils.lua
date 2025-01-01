@@ -2,7 +2,7 @@ local M = {}
 
 ---Creates an augroup while clearing previous
 --- @param name string The name of the augroup.
----@return number The augroup id
+---@return number id The augroup id
 M.augroup = function(name)
   return vim.api.nvim_create_augroup(name, { clear = true })
 end

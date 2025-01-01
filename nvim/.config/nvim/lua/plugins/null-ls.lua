@@ -8,11 +8,9 @@ local M = {
 }
 M.config = function()
   local null_ls = require 'null-ls'
-  local default_on_attach = require('user.lsp.on-attach').default
 
   -- null-ls
   null_ls.setup {
-    on_attach = default_on_attach,
     debug = true,
     sources = {
       null_ls.builtins.code_actions.gitsigns,
