@@ -17,34 +17,6 @@ local M = {
     'hrsh7th/cmp-path',
     'petertriho/cmp-git',
     'hrsh7th/cmp-nvim-lsp-signature-help',
-    {
-      'zbirenbaum/copilot.lua',
-      config = function()
-        vim.schedule(function()
-          require('copilot').setup {
-            copilot_node_command = '/usr/local/bin/node',
-            filetypes = { ['*'] = true },
-            panel = {
-              enabled = true,
-              auto_refresh = false,
-              keymap = {
-                jump_prev = '[[',
-                jump_next = ']]',
-                accept = '<CR>',
-                refresh = 'gr',
-                open = '<M-l>',
-              },
-            },
-            suggestion = {
-              auto_trigger = true,
-              keymap = {
-                accept = '<M-Enter>',
-              },
-            },
-          }
-        end)
-      end,
-    },
   },
 }
 
@@ -178,13 +150,13 @@ M.config = function()
       },
     },
     sources = cmp.config.sources {
+      { name = 'nvim_lsp_signature_help', priority = 101 },
       { name = 'nvim_lsp', priority = 100 },
       { name = 'luasnip' },
       {
         name = 'lazydev',
         group_index = 0, -- set group index to 0 to skip loading LuaLS completions
       },
-      { name = 'nvim_lsp_signature_help' },
       { name = 'cmp_tabnine' },
       { name = 'path' },
       { name = 'buffer', keyword_length = 4 },

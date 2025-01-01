@@ -49,14 +49,14 @@ M.setup = function()
         require('nvim-navic').attach(client, bufnr)
       end
 
-      -- if client.server_capabilities.code_lens then
-      --   autocmd({ 'BufEnter', 'InsertLeave', 'InsertEnter' }, {
-      --     desc = 'Auto show code lenses',
-      --     group = on_attach_aug,
-      --     buffer = bufnr,
-      --     command = 'silent! lua vim.lsp.codelens.refresh({bufnr=' .. bufnr .. '})',
-      --   })
-      -- end
+      if client.server_capabilities.code_lens then
+        vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'InsertEnter' }, {
+          desc = 'Auto show code lenses',
+          group = on_attach_aug,
+          buffer = bufnr,
+          command = 'silent! lua vim.lsp.codelens.refresh({bufnr=' .. bufnr .. '})',
+        })
+      end
       -- if client.server_capabilities.document_highlight then
       --   -- Highlight text at cursor position
       --   vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {

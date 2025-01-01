@@ -147,6 +147,33 @@ local M = {
     opts = { lightmode = true },
   },
   {
+    'zbirenbaum/copilot.lua',
+    event = { 'InsertEnter' },
+    config = function()
+      require('copilot').setup {
+        copilot_node_command = 'node',
+        filetypes = { ['*'] = true },
+        panel = {
+          enabled = true,
+          auto_refresh = false,
+          keymap = {
+            jump_prev = '[[',
+            jump_next = ']]',
+            accept = '<CR>',
+            refresh = 'gr',
+            open = '<M-l>',
+          },
+        },
+        suggestion = {
+          auto_trigger = true,
+          keymap = {
+            accept = '<M-Enter>',
+          },
+        },
+      }
+    end,
+  },
+  {
     'CopilotC-Nvim/CopilotChat.nvim',
     cmd = {
       'CopilotChat',
@@ -171,15 +198,15 @@ local M = {
       'CopilotChatToggle',
     },
     dependencies = {
-      { 'zbirenbaum/copilot.lua' }, -- or github/copilot.vim
-      { 'nvim-lua/plenary.nvim' }, -- for curl, log wrapper
+      { 'zbirenbaum/copilot.lua' },
+      { 'nvim-lua/plenary.nvim' },
     },
-    build = 'make tiktoken', -- Only on MacOS or Linux
+    build = 'make tiktoken',
     opts = {
       model = 'claude-3.5-sonnet',
-      question_header = '  User ', -- Header to use for user questions
-      answer_header = '  Copilot ', -- Header to use for AI answers
-      error_header = '  Error ', -- Header to use for errors
+      question_header = '  User ',
+      answer_header = '  Copilot ',
+      error_header = '  Error ',
     },
     keys = {
       { '<leader>ccc', '<cmd>CopilotChat<CR>', mode = { 'n', 'v' } },

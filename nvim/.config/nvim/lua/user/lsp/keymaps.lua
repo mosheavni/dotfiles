@@ -8,13 +8,11 @@ return function(bufnr)
   -- goto definition/declaration
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, returnOpts 'Go to definition')
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, returnOpts 'Go to declaration')
-  -- hover doc
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, returnOpts 'Show hover doc')
 
   -- GoTo code navigation
   vim.keymap.set('n', 'gy', vim.lsp.buf.type_definition, returnOpts 'Go to type definition')
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, returnOpts 'Go to implementation')
-  vim.keymap.set('n', 'gR', vim.lsp.buf.references, returnOpts 'Go to references (native)')
+  vim.keymap.set('n', 'gR', vim.lsp.buf.references, returnOpts 'Go to references')
 
   -- Workspace
   vim.keymap.set('n', '<leader>lwa', vim.lsp.buf.add_workspace_folder, returnOpts 'Add workspace folder')
