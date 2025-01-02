@@ -22,6 +22,7 @@ function _G.P(v, r)
   end
   return v
 end
+
 local original_vim_print = vim.print
 vim.print = function(...)
   local str = type(...) == 'table' and vim.inspect(...) or ...

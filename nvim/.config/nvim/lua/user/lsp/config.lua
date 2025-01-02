@@ -23,8 +23,8 @@ local M = {
 M.setup = function()
   require('user.lsp.actions').setup()
   require('vim.lsp.log').set_format_func(vim.inspect)
-  local cmp_default_capabilities = require('cmp_nvim_lsp').default_capabilities()
-  M.capabilities = vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), cmp_default_capabilities, M.capabilities or {}, {})
+  M.capabilities =
+    vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), require('cmp_nvim_lsp').default_capabilities(), M.capabilities or {}, {})
 
   -- Diagnostics
   vim.diagnostic.config {
@@ -34,6 +34,7 @@ M.setup = function()
     float = { border = 'rounded', source = 'if_many' },
   }
 
+  ---@diagnostic disable-next-line: missing-fields
   require('mason-lspconfig').setup { automatic_installation = true }
   require('user.lsp.servers').setup()
 
@@ -48,24 +49,6 @@ M.setup = function()
       if client and client.server_capabilities.documentSymbolProvider then
         require('nvim-navic').attach(client, bufnr)
       end
-
-      if client.server_capabilities.code_lens then
-        vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'InsertEnter' }, {
-          desc = 'Auto show code lenses',
-          group = on_attach_aug,
-          buffer = bufnr,
-          command = 'silent! lua vim.lsp.codelens.refresh({bufnr=' .. bufnr .. '})',
-        })
-      end
-      -- if client.server_capabilities.document_highlight then
-      --   -- Highlight text at cursor position
-      --   vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-      --     desc = 'Highlight references to current symbol under cursor',
-      --     group = on_attach_aug,
-      --     buffer = bufnr,
-      --     command = 'silent! lua vim.lsp.buf.document_highlight()',
-      --   })
-      -- end
     end,
   })
 end

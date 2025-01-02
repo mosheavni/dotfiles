@@ -10,13 +10,14 @@ map({ 'n', 'x' }, '<Up>', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = tru
 map('n', '<leader>sa', 'ggVG', { remap = false, desc = 'Visually select entire buffer' })
 
 -- Map 0 to first non-blank character
-map('n', '0', '^', { remap = false, desc = 'Go to the first non-blank character' })
-map('v', '0', '^', { remap = false, desc = 'Go to the first non-blank character' })
+map({ 'n', 'v' }, '0', '^', { remap = false, desc = 'Go to the first non-blank character' })
 
--- Move to the end of the line
-map('n', 'L', '$ze10zl', { remap = false, desc = 'Go to the end of the line and move view' })
+------------------------------------------ --------------------------------------- --------------------------------------- --------------------------------------- --------------------------------------- ---------------------------------------
+
+-- Move view left or right
+map('n', 'L', '5zl', { remap = false })
 map('v', 'L', '$', { remap = false })
-map('n', 'H', '0zs10zh', { remap = false })
+map('n', 'H', '5zh', { remap = false })
 map('v', 'H', '0', { remap = false })
 
 -- indent/unindent visual mode selection with tab/shift+tab
@@ -33,8 +34,13 @@ map('c', '<c-l>', '<right>')
 map('i', ',', ',<c-g>u', { remap = false })
 map('i', '.', '.<c-g>u', { remap = false })
 map('i', ';', ';<c-g>u', { remap = false })
+map('i', '!', '!<c-g>u', { remap = false })
+map('i', '?', '?<c-g>u', { remap = false })
+map('i', '(', '(<c-g>u', { remap = false })
+map('i', ')', ')<c-g>u', { remap = false })
 
 map('i', ';;', '<C-O>A;', { remap = false })
+map('i', ',,', '<C-O>A,', { remap = false })
 
 -- delete word on insert mode
 map('i', '<C-e>', '<C-o>de', { remap = false })
@@ -47,16 +53,12 @@ map('x', '/', '<Esc>/\\%V', { remap = false })
 
 -- surround with string interpolation with motion
 function _G.__surround_with_interpolation(motion)
-  local start = {}
-  local finish = {}
   if motion == nil or motion == 'line' then
     vim.o.operatorfunc = 'v:lua.__surround_with_interpolation'
     return vim.fn.feedkeys 'g@'
   end
-  if motion == 'char' then
-    start = vim.api.nvim_buf_get_mark(0, '[')
-    finish = vim.api.nvim_buf_get_mark(0, ']')
-  end
+  local start = vim.api.nvim_buf_get_mark(0, '[')
+  local finish = vim.api.nvim_buf_get_mark(0, ']')
   local line = vim.api.nvim_buf_get_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, {})[1]
   local new_text = { '"${' .. line .. '}"' }
   vim.api.nvim_buf_set_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, new_text)
@@ -169,24 +171,11 @@ map('n', '<leader>df', ':windo diffoff<cr>', { remap = false, silent = true })
 -- Map enter to no highlight
 map('n', '<CR>', '<Esc>:nohlsearch<CR><CR>', { remap = false, silent = true })
 
--- Set mouse=v mapping
-map('n', '<leader>ma', ':set mouse=a<cr>', { remap = false, silent = true })
-map('n', '<leader>mv', ':set mouse=v<cr>', { remap = false, silent = true })
-
 -- Exit mappings
 map('i', 'jk', '<esc>', { remap = false })
+map('i', 'kj', '<esc>', { remap = false })
 map('n', '<leader>qq', ':qall<cr>', { remap = false, silent = true })
 
--- Search mappings
-map('n', '*', ':execute "normal! *N"<cr>', { remap = false, silent = true })
-map('n', '#', ':execute "normal! #n"<cr>', { remap = false, silent = true })
--- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
-map('n', 'n', "'Nn'[v:searchforward].'zv'", { expr = true, desc = 'Next Search Result' })
-map('x', 'n', "'Nn'[v:searchforward]", { expr = true, desc = 'Next Search Result' })
-map('o', 'n', "'Nn'[v:searchforward]", { expr = true, desc = 'Next Search Result' })
-map('n', 'N', "'nN'[v:searchforward].'zv'", { expr = true, desc = 'Prev Search Result' })
-map('x', 'N', "'nN'[v:searchforward]", { expr = true, desc = 'Prev Search Result' })
-map('o', 'N', "'nN'[v:searchforward]", { expr = true, desc = 'Prev Search Result' })
 -- Search visually selected text with // or * or #
 vim.cmd [[
 function! StarSearch(cmdtype) abort
@@ -198,22 +187,16 @@ function! StarSearch(cmdtype) abort
   call setreg('"', old_reg, old_regtype)
 endfunction
 ]]
+map('v', '*', ":call StarSearch('/')<CR>/<C-R>=@/<CR><CR>", { remap = false, silent = true })
+map('v', '#', ":call StarSearch('?')<CR>?<C-R>=@/<CR><CR>", { remap = false, silent = true })
 
 -- Terminal
 map('t', '<Esc>', [[<C-\><C-n>]], { remap = false })
 
-map('v', '*', ":call StarSearch('/')<CR>/<C-R>=@/<CR><CR>", { remap = false, silent = true })
-map('v', '#', ":call StarSearch('?')<CR>?<C-R>=@/<CR><CR>", { remap = false, silent = true })
-
 -- Map - to move a line down and _ a line up
+
 map('n', '-', [["ldd$"lp==]], { remap = false })
 map('n', '_', [["ldd2k"lp==]], { remap = false })
-
--- Allow clipboard copy paste in neovim
-map('', '<D-v>', '+p<CR>', { remap = false, silent = true })
-map('!', '<D-v>', '<C-R>+', { remap = false, silent = true })
-map('t', '<D-v>', '<C-R>+', { remap = false, silent = true })
-map('v', '<D-v>', '<C-R>+', { remap = false })
 
 -- Copy entire file to clipboard
 map('n', 'Y', ':%y+<cr>', { remap = false, silent = true })
@@ -232,10 +215,6 @@ map('n', 'cv', '"+p')
 
 map('n', '<C-c>', 'ciw')
 
--- Move visually selected block
--- map('v', 'J', [[:m '>+1<CR>gv=gv]], { remap = false, silent = true })
--- map('v', 'K', [[:m '<-2<CR>gv=gv]], { remap = false, silent = true })
-
 -- Select last inserted text
 map('n', 'gV', '`[v`]', { remap = false, desc = 'Visually select last insert' })
 
@@ -252,10 +231,6 @@ map('n', '<leader>fl', 'zazczA', { remap = false })
 -- Change \n to new lines
 map('n', '<leader><cr>', [[:silent! %s?\\n?\r?g<bar>silent! %s?\\t?\t?g<bar>silent! %s?\\r?\r?g<cr>:noh<cr>]], { silent = true })
 
--- Move vertically by visual line (don't skip wrapped lines)
--- nmap('k', "v:count == 0 ? 'gk' : 'k'", opts.expr_silent)
--- nmap('j', "v:count == 0 ? 'gj' : 'j'", opts.expr_silent)
-
 -- toggle wrap
 map('n', '<leader>ww', ':set wrap!<cr>', { remap = false, silent = true })
 
@@ -270,8 +245,6 @@ map('n', '<C-d>', '<C-d>zz', { remap = false })
 -- Change working directory based on open file
 map('n', '<leader>cd', ':cd %:p:h<CR>:pwd<CR>', { remap = false, silent = true })
 
--- Convert all tabs to spaces
-map('n', '<leader>ct<space>', ':retab<cr>', { silent = true })
 -- Change every " -" with " \<cr> -" to break long lines of bash
 map('n', [[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], { silent = true })
 
@@ -282,8 +255,33 @@ map('v', '<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>
 map('v', '<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], { remap = false, desc = 'Yank all...', silent = true })
 
 -- Base64 dencode
-map('v', '<leader>64', [[c<c-r>=substitute(system('base64', @"), '\n$', '', 'g')<cr><esc>]], { remap = false, silent = true, desc = 'Base64 encode' })
-map('v', '<leader>46', [[c<c-r>=substitute(system('base64 --decode', @"), '\n$', '', 'g')<cr><esc>]], { remap = false, silent = true, desc = 'Base64 decode' })
+local function b64(action)
+  local start = vim.api.nvim_buf_get_mark(0, '[')
+  local finish = vim.api.nvim_buf_get_mark(0, ']')
+  local line = vim.api.nvim_buf_get_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, {})[1]
+  local b64_action = action == 'encode' and vim.base64.encode or vim.base64.decode
+  local new_text = { b64_action(line) }
+  vim.api.nvim_buf_set_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, new_text)
+  vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { finish[1], finish[2] })
+end
+function _G.__base64_encode(motion)
+  if motion == nil or motion == 'line' then
+    vim.o.operatorfunc = 'v:lua.__base64_encode'
+    return vim.fn.feedkeys 'g@'
+  end
+  b64 'encode'
+end
+function _G.__base64_decode(motion)
+  if motion == nil or motion == 'line' then
+    vim.o.operatorfunc = 'v:lua.__base64_decode'
+    return vim.fn.feedkeys 'g@'
+  end
+  b64 'decode'
+end
+map('n', '<leader>64', _G.__base64_encode)
+map('n', '<leader>46', _G.__base64_decode)
+map('v', '<leader>64', _G.__base64_encode)
+map('v', '<leader>46', _G.__base64_decode)
 
 -- Close current buffer
 map('n', '<leader>bc', ':close<cr>', { silent = true, desc = 'Close this buffer' })

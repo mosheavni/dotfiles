@@ -7,7 +7,7 @@ end
 local temp_dir = vim.uv.os_getenv 'TEMP' or '/tmp'
 local package_root = join_paths(temp_dir, 'nvim', 'site', 'lazy')
 local lazypath = join_paths(temp_dir, 'nvim', 'site') .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim
     .system({
       'git',

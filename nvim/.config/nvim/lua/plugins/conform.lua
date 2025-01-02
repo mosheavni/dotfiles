@@ -137,6 +137,6 @@ return {
     formatters = {},
   },
   init = function()
-    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+    vim.o.formatexpr = "v:lua.require'conform'.formatexpr({timeout_ms=5000})"
   end,
 }
