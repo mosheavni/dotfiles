@@ -1,5 +1,6 @@
 # General
 theme = rose-pine
+macos-option-as-alt = true
 
 # Font configuration
 font-family = CaskaydiaCove Nerd Font
@@ -25,6 +26,7 @@ window-padding-y = 0
 background-opacity = 0.7
 background-blur-radius = 35
 unfocused-split-opacity = 0.7
+window-padding-color = extend
 
 # keybinds
 keybind = super+ctrl+left=resize_split:left,3
