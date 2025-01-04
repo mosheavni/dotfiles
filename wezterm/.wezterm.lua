@@ -32,6 +32,7 @@ config.line_height = 0.9
 
 -- tab bar
 config.use_fancy_tab_bar = true
+config.tab_max_width = 999
 config.window_frame = {
   font = wez.font { family = 'Roboto', weight = 'Bold' },
   font_size = 13.0,
@@ -90,7 +91,7 @@ config.macos_window_background_blur = 50
 config.mouse_bindings = {
   {
     event = { Down = { streak = 3, button = 'Left' } },
-    action = wez.action.SelectTextAtMouseCursor 'SemanticZone',
+    action = act.SelectTextAtMouseCursor 'SemanticZone',
     mods = 'NONE',
   },
 }

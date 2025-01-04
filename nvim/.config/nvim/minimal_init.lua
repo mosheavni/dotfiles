@@ -21,7 +21,6 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.runtimepath:prepend(lazypath)
 
----@diagnostic disable-next-line: global_usage
 _G.load_config = function()
   vim.lsp.set_log_level 'trace'
   require('vim.lsp.log').set_format_func(vim.inspect)
