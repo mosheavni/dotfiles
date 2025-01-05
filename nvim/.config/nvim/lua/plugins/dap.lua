@@ -5,16 +5,19 @@ local actions = function()
     ['continue (F5)'] = function()
       dap.continue()
     end,
-    ['step over'] = function()
+    ['step over (<leader>do)'] = function()
       dap.step_over()
     end,
-    ['step into'] = function()
+    ['step into (<leader>di)'] = function()
       dap.step_into()
     end,
-    ['step out'] = function()
+    ['step out (<leader>dO)'] = function()
       dap.step_out()
     end,
-    ['toggle breakpoint'] = function()
+    ['terminate (<leader>dq)'] = function()
+      dap.terminate()
+    end,
+    ['toggle breakpoint (<leader>db)'] = function()
       dap.toggle_breakpoint()
     end,
     ['clear all breakpoints'] = function()
@@ -26,7 +29,7 @@ local actions = function()
     ['run last'] = function()
       dap.run_last()
     end,
-    ['ui'] = function()
+    ['ui (<leader>du)'] = function()
       dapui.toggle()
     end,
     ['log level trace'] = function()
@@ -63,7 +66,7 @@ local M = {
 
 M.keys = {
   { '<F5>', '<cmd>lua require("dap").continue()<cr>' },
-  { '<leader>bp', '<cmd>lua require("dap").toggle_breakpoint()<cr>' },
+  { '<leader>db', '<cmd>lua require("dap").toggle_breakpoint()<cr>' },
 }
 
 M.config = function()
@@ -144,11 +147,6 @@ M.config = function()
   -------------
   local opts = { noremap = true, silent = true, buffer = true }
 
-  -- Toggle breakpoint
-  vim.keymap.set('n', '<leader>db', function()
-    dap.toggle_breakpoint()
-  end, opts)
-
   -- Continue / Start
   vim.keymap.set('n', '<leader>dc', function()
     dap.continue()
@@ -171,7 +169,7 @@ M.config = function()
 
   -- Keymap to terminate debugging
   vim.keymap.set('n', '<leader>dq', function()
-    require('dap').terminate()
+    dap.terminate()
   end, opts)
 
   -- Toggle DAP UI
