@@ -77,6 +77,15 @@ M.config = function()
   local mason_nvim_dap = require 'mason-nvim-dap'
 
   dapui.setup()
+  dap.listeners.after.event_initialized['dapui_config'] = function()
+    dapui.open {}
+  end
+  dap.listeners.before.event_terminated['dapui_config'] = function()
+    dapui.close {}
+  end
+  dap.listeners.before.event_exited['dapui_config'] = function()
+    dapui.close {}
+  end
 
   ---@diagnostic disable-next-line: missing-fields
   require('nvim-dap-virtual-text').setup {
@@ -104,15 +113,38 @@ M.config = function()
   }
 
   dap_python.setup 'python3'
+  dap.adapters.bashdb = {
+    type = 'executable',
+    command = vim.fn.stdpath 'data' .. '/mason/packages/bash-debug-adapter/bash-debug-adapter',
+    name = 'bashdb',
+  }
+  local dap_conf_sh = {
+    {
+      type = 'bashdb',
+      request = 'launch',
+      name = 'Launch file',
+      showDebugOutput = true,
+      pathBashdb = vim.fn.stdpath 'data' .. '/mason/packages/bash-debug-adapter/extension/bashdb_dir/bashdb',
+      pathBashdbLib = vim.fn.stdpath 'data' .. '/mason/packages/bash-debug-adapter/extension/bashdb_dir',
+      trace = true,
+      file = '${file}',
+      program = '${file}',
+      cwd = '${workspaceFolder}',
+      pathCat = 'cat',
+      pathBash = '/opt/homebrew/bin/bash',
+      pathMkfifo = 'mkfifo',
+      pathPkill = 'pkill',
+      args = {},
+      env = {},
+      terminalKind = 'integrated',
+    },
+  }
+  dap.configurations.sh = dap_conf_sh
+  dap.configurations.bash = dap_conf_sh
 
   vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'DiagnosticSignError', linehl = '', numhl = '' })
   vim.fn.sign_define('DapBreakpointRejected', { text = '', texthl = 'DiagnosticSignError', linehl = '', numhl = '' })
   vim.fn.sign_define('DapStopped', { text = '', texthl = 'DiagnosticSignWarn', linehl = 'Visual', numhl = 'DiagnosticSignWarn' })
-
-  -- Automatically open/close DAP UI
-  dap.listeners.after.event_initialized['dapui_config'] = function()
-    dapui.open()
-  end
 
   -- Actions
   local the_actions = actions()
