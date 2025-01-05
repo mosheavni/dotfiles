@@ -1,12 +1,12 @@
 ansicolor
 boto3
 botocore
+debugpy
 docutils
 isort
 jedi
 jmespath
 msgpack
-iterm2
 neovim
 pathspec
 protobuf
