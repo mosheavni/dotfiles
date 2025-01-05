@@ -98,6 +98,7 @@ return {
       function()
         Snacks.gitbrowse.open()
       end,
+      mode = { 'n', 'v' },
     },
     {
       '<leader>N',
