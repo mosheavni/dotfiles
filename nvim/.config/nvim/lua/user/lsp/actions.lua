@@ -11,7 +11,7 @@ M.actions = function()
       vim.lsp.codelens.run()
     end,
     ['Show Definition (gd)'] = function()
-      vim.cmd 'Lspsaga peek_definition'
+      vim.lsp.buf.definition()
     end,
     ['Show Declaration (gD)'] = function()
       vim.lsp.buf.declaration()
@@ -22,21 +22,26 @@ M.actions = function()
     ['Show Implementation (gi)'] = function()
       vim.lsp.buf.implementation()
     end,
-    ['Find References - lspsaga (grR)'] = function()
-      vim.cmd 'Lspsaga finder'
-    end,
-    ['Find References (grr)'] = function()
+    ['Find References (gR)'] = function()
       vim.lsp.buf.references { includeDeclaration = false }
+    end,
+    ['Add workspace folder'] = function()
+      vim.lsp.buf.add_workspace_folder()
+    end,
+    ['Remove workspace folder'] = function()
+      vim.lsp.buf.remove_workspace_folder()
+    end,
+    ['List workspace folders'] = function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end,
     ['Signature Help (<leader>lk)'] = function()
       vim.lsp.buf.signature_help()
     end,
     ['Signature Documentation (K)'] = function()
-      -- vim.lsp.buf.hover()
-      vim.cmd 'Lspsaga hover_doc'
+      vim.lsp.buf.hover()
     end,
-    ['Rename symbol (<leader>lrn)'] = function()
-      vim.cmd 'Lspsaga rename ++project'
+    ['Rename symbol (<leader>lr)'] = function()
+      vim.lsp.buf.rename()
     end,
     ['Diagnostics quickfix list (<leader>lq)'] = function()
       vim.diagnostic.setqflist()

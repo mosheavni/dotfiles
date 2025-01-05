@@ -8,6 +8,7 @@ return function(bufnr)
   -- goto definition/declaration
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, returnOpts 'Go to definition')
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, returnOpts 'Go to declaration')
+  vim.keymap.set('n', '<leader>lk', vim.lsp.buf.signature_help, returnOpts 'Signature help')
 
   -- GoTo code navigation
   vim.keymap.set('n', 'gy', vim.lsp.buf.type_definition, returnOpts 'Go to type definition')
