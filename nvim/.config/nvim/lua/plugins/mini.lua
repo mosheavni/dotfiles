@@ -93,6 +93,13 @@ local M = {
   {
     the_king .. 'surround',
     version = false,
+    keys = {
+      { 'S', '<cmd>lua MiniSurround.add("visual")<CR>', mode = 'v' },
+      { 'yss' },
+      { 'ys' },
+      { 'ds' },
+      { 'cs' },
+    },
     opts = {
       mappings = {
         add = 'ys',
