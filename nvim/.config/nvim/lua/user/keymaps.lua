@@ -51,6 +51,9 @@ map('n', 'gx', require('user.open-url').open_url_under_cursor, { remap = false, 
 -- Search for string within the visual selection
 map('x', '/', '<Esc>/\\%V', { remap = false })
 
+-- open github in browser
+map({ 'v', 'n' }, '<leader>gh', require('user.gitbrowse').open, { remap = false, desc = 'Open github in browser' })
+
 -- surround with string interpolation with motion
 function _G.__surround_with_interpolation(motion)
   if motion == nil or motion == 'line' then

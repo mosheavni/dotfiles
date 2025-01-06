@@ -94,13 +94,6 @@ return {
       mode = { 'n', 't' },
     },
     {
-      '<leader>gh',
-      function()
-        Snacks.gitbrowse.open()
-      end,
-      mode = { 'n', 'v' },
-    },
-    {
       '<leader>N',
       desc = 'Neovim News',
       function()

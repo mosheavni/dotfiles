@@ -41,7 +41,7 @@ vim.schedule(function()
       local commit_hash = get_commit_hash()
       vim.cmd 'wincmd p'
       -- selene: allow(undefined_variable)
-      Snacks.gitbrowse.open {
+      require('user.gitbrowse').open {
         what = 'commit',
         branch = commit_hash,
       }
