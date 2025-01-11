@@ -189,7 +189,7 @@ local fugitive_config = function()
   vim.keymap.set('n', '<leader>gm', function()
     local git_actions = require('user.menu').get_actions { prefix = 'Git' }
 
-    vim.ui.select(vim.tbl_keys(git_actions), { prompt = 'Choose git action: ' }, function(choice)
+    vim.ui.select(vim.tbl_keys(git_actions), { title = 'Git actions', prompt = 'Choose git action: ' }, function(choice)
       if not choice then
         utils.pretty_print('Canceled.', 'Git Actions', '')
         return

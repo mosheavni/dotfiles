@@ -211,19 +211,19 @@ end
 M.ui_select_remotes = function(cb)
   M.get_remotes(function(remotes)
     local remote_list = vim.tbl_keys(remotes)
-    with_ui_select(remote_list, { prompt = 'Select remote: ' }, cb)
+    with_ui_select(remote_list, { title = 'Remotes', prompt = 'Select remote: ' }, cb)
   end)
 end
 
 M.ui_select_tags = function(cb)
   M.get_tags(function(tags)
-    with_ui_select(tags, { prompt = 'Select tag: ' }, cb, false)
+    with_ui_select(tags, { title = 'Tags', prompt = 'Select tag: ' }, cb, false)
   end)
 end
 
 M.ui_select_branches = function(remote_name, cb)
   M.get_branches(remote_name, function(branches)
-    with_ui_select(branches, { prompt = 'Select branch: ' }, cb, false)
+    with_ui_select(branches, { title = 'Branches', prompt = 'Select branch: ' }, cb, false)
   end)
 end
 

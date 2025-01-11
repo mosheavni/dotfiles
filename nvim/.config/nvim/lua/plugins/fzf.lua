@@ -134,15 +134,6 @@ return {
   config = function()
     require('fzf-lua').setup {
       'default-title',
-      previewers = {
-        builtin = {
-          syntax_limit_b = 1024 * 100, -- 100KB
-          extensions = {
-            png = { 'viu', '-b' },
-            jpg = { 'viu', '-b' },
-          },
-        },
-      },
       oldfiles = {
         cwd_only = true,
         include_current_session = true,
@@ -160,15 +151,18 @@ return {
       },
       keymap = { fzf = { ['ctrl-q'] = 'select-all+accept' } },
     }
-    require('fzf-lua').register_ui_select(function(_, items)
-      local min_h, max_h = 0.30, 0.70
+
+    require('fzf-lua').register_ui_select(function(opts, items)
+      local min_h, max_h = 0.15, 0.70
       local h = (#items + 4) / vim.o.lines
       if h < min_h then
         h = min_h
       elseif h > max_h then
         h = max_h
       end
-      return { winopts = { height = h, width = 0.60, row = 0.40 } }
+      opts.title = opts.title or 'Select'
+
+      return { winopts = { title = opts.title, height = h, width = 0.60, row = 0.40 } }
     end)
   end,
 }

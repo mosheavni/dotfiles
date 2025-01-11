@@ -211,6 +211,7 @@ function M._open(opts)
 
   vim.ui.select(remotes, {
     prompt = 'Select remote to browse',
+    title = 'Git remotes',
     format_item = function(item)
       return item.name .. (' '):rep(8 - #item.name) .. ' 🔗 ' .. item.url
     end,

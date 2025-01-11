@@ -58,6 +58,7 @@ return {
 
         vim.ui.select(vim.list_extend(lsp_fmts, conform_fmts), {
           prompt = 'Select LSP client',
+          title = 'LSP clients',
           format_item = function(client)
             return client.name
           end,

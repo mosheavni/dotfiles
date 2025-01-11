@@ -47,7 +47,7 @@ end
 ---@return nil
 M.setup = function()
   vim.keymap.set('n', '<leader>a', function()
-    vim.ui.select(vim.tbl_keys(M.actions), { prompt = 'Choose action❯ ' }, function(choice)
+    vim.ui.select(vim.tbl_keys(M.actions), { title = 'Actions', prompt = 'Choose action❯ ' }, function(choice)
       if choice then
         M.actions[choice]()
       end
