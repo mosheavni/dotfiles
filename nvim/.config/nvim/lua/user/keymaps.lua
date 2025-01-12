@@ -119,10 +119,7 @@ map('n', '<C-k>', '<C-w>k', { remap = true, desc = 'Go to Upper Window' })
 map('n', '<C-l>', '<C-w>l', { remap = true, desc = 'Go to Right Window' })
 
 -- Resize window using <ctrl> arrow keys
-map('n', '<M-k>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' })
-map('n', '<M-j>', '<cmd>resize -2<cr>', { desc = 'Decrease Window Height' })
-map('n', '<M-h>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease Window Width' })
-map('n', '<M-l>', '<cmd>vertical resize +2<cr>', { desc = 'Increase Window Width' })
+require('user.winresizer').setup()
 
 -- entire file text-object
 map('o', 'ae', '<cmd>normal! ggVG<CR>', { remap = false })

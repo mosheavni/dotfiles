@@ -12,46 +12,6 @@ local M = {
     end,
   },
   {
-    'mosheavni/vim-kubernetes',
-    ft = 'yaml',
-    config = function()
-      require('user.menu').add_actions('Kubernetes', {
-        ['Apply (:KubeApply)'] = function()
-          vim.cmd [[KubeApply]]
-        end,
-        ['Apply Directory (:KubeApplyDir)'] = function()
-          vim.cmd [[KubeApplyDir]]
-        end,
-        ['Create (:KubeCreate)'] = function()
-          vim.cmd [[KubeCreate]]
-        end,
-        ['Decode Secret (:KubeDecodeSecret)'] = function()
-          vim.cmd [[KubeDecodeSecret]]
-        end,
-        ['Delete (:KubeDelete)'] = function()
-          vim.cmd [[KubeDelete]]
-        end,
-        ['Delete Dir (:KubeDeleteDir)'] = function()
-          vim.cmd [[KubeDeleteDir]]
-        end,
-        ['Encode Secret (:KubeEncodeSecret)'] = function()
-          vim.cmd [[KubeEncodeSecret]]
-        end,
-        ['Recreate (:KubeRecreate)'] = function()
-          vim.cmd [[KubeRecreate]]
-        end,
-      })
-    end,
-  },
-  {
-    'chomosuke/term-edit.nvim',
-    event = 'TermOpen',
-    opts = {
-      prompt_end = '%$ ',
-    },
-    version = '1.*',
-  },
-  {
     'mosheavni/vim-dirdiff',
     cmd = { 'DirDiff' },
     init = function()
@@ -80,21 +40,6 @@ local M = {
     end,
   },
   {
-    'simeji/winresizer',
-    keys = { '<C-e>' },
-    config = function()
-      vim.g.winresizer_vert_resize = 4
-      vim.g.winresizer_start_key = '<C-e>'
-    end,
-    init = function()
-      require('user.menu').add_actions(nil, {
-        ['Resize window (<C-e>)'] = function()
-          vim.fn.feedkeys(vim.keycode '<C-e>')
-        end,
-      })
-    end,
-  },
-  {
     'iamcco/markdown-preview.nvim',
     build = 'cd app && yarn install',
     config = function()
@@ -111,20 +56,36 @@ local M = {
     end,
   },
   {
-    'AndrewRadev/linediff.vim',
-    cmd = { 'Linediff' },
-  },
-  {
-    'ellisonleao/carbon-now.nvim',
-    cmd = 'CarbonNow',
-    opts = { open_cmd = 'open' },
+    'gbprod/yanky.nvim',
+    dependencies = { 'kkharji/sqlite.lua' },
+    cmd = { 'YankyRingHistory' },
+    keys = {
+      'yy',
+      { 'p', '<Plug>(YankyPutAfter)', mode = { 'n', 'x' } },
+      { 'P', '<Plug>(YankyPutBefore)', mode = { 'n', 'x' } },
+      { '<c-n>', '<Plug>(YankyCycleForward)' },
+      { '<c-m>', '<Plug>(YankyCycleBackward)' },
+      { '<leader>y', '<Cmd>YankyRingHistory<cr>' },
+    },
+    opts = {
+      ring = {
+        history_length = 100,
+        storage = 'sqlite',
+        sync_with_numbered_registers = true,
+        cancel_event = 'update',
+      },
+    },
     init = function()
-      require('user.menu').add_actions('Carbon', {
-        ['Create a beautiful image of the code'] = function()
-          vim.cmd.CarbonNow()
+      require('user.menu').add_actions('Yanky', {
+        ['Yank history'] = function()
+          vim.cmd 'YankyRingHistory'
         end,
       })
     end,
+  },
+  {
+    'AndrewRadev/linediff.vim',
+    cmd = { 'Linediff' },
   },
   {
     'stevearc/oil.nvim',

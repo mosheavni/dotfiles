@@ -1,10 +1,5 @@
 local M = {
   {
-    'folke/trouble.nvim',
-    opts = {},
-    cmd = 'Trouble',
-  },
-  {
     'nvim-lua/plenary.nvim',
     cmd = {
       'PlenaryBustedFile',
@@ -13,11 +8,6 @@ local M = {
     keys = {
       { '<leader>tf', '<cmd>PlenaryBustedFile %<CR>', mode = 'n' },
     },
-  },
-  {
-    'NStefan002/2048.nvim',
-    cmd = 'Play2048',
-    config = true,
   },
   {
     'milisims/nvim-luaref',
@@ -131,6 +121,19 @@ local M = {
     config = true,
   },
   {
+    'kevinhwang91/nvim-hlslens',
+    keys = {
+      { 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>zz]] },
+      { 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>zz]] },
+      { '*', [[*<Cmd>lua require('hlslens').start()<CR>N]] },
+      { '#', [[#<Cmd>lua require('hlslens').start()<CR>n]] },
+      { 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]] },
+      { 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]] },
+    },
+    event = 'CmdlineEnter',
+    opts = {},
+  },
+  {
     'machakann/vim-swap',
     keys = {
       { '<leader>sw', '<Plug>(swap-interactive)', mode = { 'n', 'v' } },
@@ -140,11 +143,6 @@ local M = {
     init = function()
       vim.g.swap_no_default_key_mappings = true
     end,
-  },
-  {
-    'vidocqh/auto-indent.nvim',
-    event = 'InsertEnter',
-    opts = { lightmode = true },
   },
   {
     'zbirenbaum/copilot.lua',

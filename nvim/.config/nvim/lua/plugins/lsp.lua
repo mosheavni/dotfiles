@@ -54,12 +54,7 @@ M.dependencies = {
     config = function(_, opts)
       local navic = require 'nvim-navic'
       navic.setup(opts)
-      _G.get_winbar = function()
-        return vim.api.nvim_win_get_config(0).relative == '' and require('nvim-navic').get_location() or vim.fn.expand '%:~:.'
-      end
-
-      -- vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
-      vim.o.winbar = '%{%v:lua._G.get_winbar()%}'
+      vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
     end,
   },
 }
@@ -111,10 +106,6 @@ local language_specific_plugins = {
         { path = 'wezterm-types', mods = { 'wezterm' } },
       },
     },
-    -- config = function(_,opts)
-    --   require("lazydev").setup(opts)
-    --   require('cmp').register_source('lazydev', )
-    -- end
   },
 }
 

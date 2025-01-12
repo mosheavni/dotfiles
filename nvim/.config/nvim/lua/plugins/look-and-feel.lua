@@ -97,12 +97,6 @@ local M = {
     },
   },
   {
-    'eandrju/cellular-automaton.nvim',
-    keys = {
-      { '<Leader>fml', '<cmd>CellularAutomaton make_it_rain<CR>' },
-    },
-  },
-  {
     'dstein64/vim-startuptime',
     cmd = 'Startup Time (:StartupTime)',
     init = function()
@@ -112,11 +106,6 @@ local M = {
         end,
       })
     end,
-  },
-  {
-    'folke/twilight.nvim',
-    cmd = { 'Twilight', 'TwilightEnable', 'TwilightDisable' },
-    opts = {},
   },
   {
     'luukvbaal/statuscol.nvim',
@@ -139,32 +128,32 @@ local M = {
     end,
   },
   {
+    'kevinhwang91/nvim-ufo',
+    dependencies = { 'kevinhwang91/promise-async' },
+    event = 'BufReadPost',
+    keys = {
+      { '<leader>fo', '<cmd>lua require("ufo").openAllFolds()<cr>' },
+      { '<leader>fc', '<cmd>lua require("ufo").closeAllFolds()<cr>' },
+      { '<leader>fp', '<cmd>lua require("ufo").peekFoldedLinesUnderCursor()<cr>' },
+    },
+    opts = {
+      open_fold_hl_timeout = 0,
+    },
+
+    init = function()
+      ---@diagnostic disable-next-line: inject-field
+      vim.o.foldcolumn = '1' -- '0' is not bad
+      ---@diagnostic disable-next-line: inject-field
+      vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+      ---@diagnostic disable-next-line: inject-field
+      vim.o.foldlevelstart = 99
+      ---@diagnostic disable-next-line: inject-field
+      vim.o.foldenable = true
+    end,
+  },
+  {
     'vim-scripts/CursorLineCurrentWindow',
     event = 'BufReadPost',
-  },
-  {
-    'OXY2DEV/markview.nvim',
-    ft = 'markdown', -- If you decide to lazy-load anyway
-    opts = { initial_state = false },
-  },
-  {
-    'alanfortlink/animatedbg.nvim',
-    cmd = { 'Matrix' },
-    config = function()
-      local animated_bg = require 'animatedbg-nvim'
-      animated_bg.setup {
-        fps = 60, -- default
-      }
-      vim.api.nvim_create_user_command('Matrix', function(opts)
-        animated_bg.stop_all()
-        if opts.bang then
-          return
-        end
-        vim.defer_fn(function()
-          animated_bg.play { animation = 'matrix', duration = 500 } --
-        end, 100)
-      end, { desc = 'Matrix animation', bang = true })
-    end,
   },
 }
 
