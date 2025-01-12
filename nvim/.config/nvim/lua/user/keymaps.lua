@@ -12,8 +12,6 @@ map('n', '<leader>sa', 'ggVG', { remap = false, desc = 'Visually select entire b
 -- Map 0 to first non-blank character
 map({ 'n', 'v' }, '0', '^', { remap = false, desc = 'Go to the first non-blank character' })
 
------------------------------------------- --------------------------------------- --------------------------------------- --------------------------------------- --------------------------------------- ---------------------------------------
-
 -- Move view left or right
 map('n', 'L', '5zl', { remap = false })
 map('v', 'L', '$', { remap = false })
