@@ -1,4 +1,12 @@
-local M = {}
+local M = {
+  jump_size = 2,
+  mappings = {
+    ['<M-h>'] = 'h',
+    ['<M-j>'] = 'j',
+    ['<M-k>'] = 'k',
+    ['<M-l>'] = 'l',
+  },
+}
 
 local function can_move_cursor(dir)
   local from = vim.fn.winnr()
@@ -15,17 +23,10 @@ local function resize_window(dir, amount)
 end
 
 M.setup = function()
-  local mappings = {
-    ['<M-h>'] = 'h',
-    ['<M-j>'] = 'j',
-    ['<M-k>'] = 'k',
-    ['<M-l>'] = 'l',
-  }
-
-  for key, dir in pairs(mappings) do
+  for key, dir in pairs(M.mappings) do
     vim.keymap.set('n', key, function()
-      resize_window(dir, 2)
-    end)
+      resize_window(dir, M.jump_size)
+    end, { desc = 'Resize window ' .. dir })
   end
 end
 
