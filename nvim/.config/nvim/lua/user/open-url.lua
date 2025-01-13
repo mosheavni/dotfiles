@@ -11,7 +11,7 @@ M.open_url_under_cursor = function()
   url = string.gsub(url, [[^["'](.*)["']$]], '%1')
 
   -- If string starts with https://
-  if string.match(url, [[^https://.*]]) then
+  if string.match(url, [[^https?://.*]]) then
     return vim.ui.open(url)
   end
 
