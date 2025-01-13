@@ -116,7 +116,7 @@ return {
               header = 'delete',
             },
           },
-          cmd = 'branches.sh',
+          cmd = 'git-branches.zsh',
         }
       end,
     },
