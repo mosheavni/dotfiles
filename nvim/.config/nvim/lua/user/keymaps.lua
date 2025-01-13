@@ -331,7 +331,7 @@ end, {})
 -- Change indentation --
 ------------------------
 map('n', 'cii', function()
-  vim.ui.input({ prompt = 'Enter new indent: ' }, function(indent_size)
+  vim.ui.input({ prompt = 'Enter new indent❯ ' }, function(indent_size)
     local indent_size_normalized = tonumber(indent_size)
     vim.opt_local.shiftwidth = indent_size_normalized
     vim.opt_local.softtabstop = indent_size_normalized

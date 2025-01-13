@@ -9,7 +9,7 @@ local find_in_project = function(opts)
   local bang = opts.literal_search and '' or '!'
   local noautocmd_str = opts.noautocmd and 'noautocmd ' or ''
   vim.defer_fn(function()
-    vim.ui.input({ prompt = 'Enter search term (blank for word under cursor): ' }, function(search_term)
+    vim.ui.input({ prompt = 'Enter search term (blank for word under cursor)❯ ' }, function(search_term)
       local original_search_term = search_term
       if search_term then
         search_term = ' ' .. search_term
@@ -26,14 +26,14 @@ local search_and_replace = function(literal_search)
     literal_search = literal_search,
     callback = function(search_term)
       vim.defer_fn(function()
-        vim.ui.input({ prompt = 'Enter Replace term: ' }, function(replace_term)
+        vim.ui.input({ prompt = 'Enter Replace term❯ ' }, function(replace_term)
           if not replace_term then
             pretty_print 'Canceled.'
             return
           end
           vim.defer_fn(function()
             vim.ui.input({
-              prompt = 'Enter flags (g=global, c=confirm, i=case insensitive, e=ignore errors, n=only count): ',
+              prompt = 'Enter flags (g=global, c=confirm, i=case insensitive, e=ignore errors, n=only count)❯ ',
               default = 'gce',
             }, function(flags)
               if not flags then

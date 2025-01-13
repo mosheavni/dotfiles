@@ -48,7 +48,7 @@ M.crds_as_schemas = function()
 end
 
 M.list_schemas = function()
-  vim.ui.select(M.all_crds, { title = 'Schemas', prompt = 'Select schema: ' }, function(selection)
+  vim.ui.select(M.all_crds, { title = 'Schemas', prompt = 'Select schema❯ ' }, function(selection)
     if not selection then
       require('user.utils').pretty_print 'Canceled.'
       return

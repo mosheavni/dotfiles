@@ -79,7 +79,7 @@ return {
             ['ctrl-x'] = {
               fn = function(selected)
                 local branch = selected[1]
-                vim.ui.select({ 'Yes', 'No' }, { prompt = 'Are you sure you want to delete the branch ' .. branch }, function(yes_or_no)
+                vim.ui.select({ 'Yes', 'No' }, { prompt = 'Are you sure you want to delete the branch ' .. branch .. '?' }, function(yes_or_no)
                   if yes_or_no == 'No' then
                     utils.warn 'Action aborted'
                     return
