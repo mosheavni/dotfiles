@@ -26,8 +26,8 @@ return {
         require('fzf-lua').git_branches {
           actions = {
             ['default'] = {
-              fn = function(selected)
-                actions.git_switch(selected)
+              fn = function(selected, opts)
+                actions.git_switch(selected, opts)
                 require('user.git').reload_fugitive_index()
               end,
               header = 'switch',
@@ -116,7 +116,7 @@ return {
               header = 'delete',
             },
           },
-          cmd = [=[git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2]=],
+          cmd = 'branches.sh',
         }
       end,
     },
