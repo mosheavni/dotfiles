@@ -48,7 +48,12 @@ vim.schedule(function()
             'json',
           }
           commands.shell_command_async('aws', aws_cmd, function(aws_output)
-            aws_output = vim.json.decode(aws_output)
+            local ok
+            ok, aws_output = pcall(vim.json.decode, aws_output)
+            if not ok then
+              vim.notify('Failed to parse AWS output\n' .. aws_output)
+              return
+            end
             if vim.tbl_count(aws_output) == 0 then
               vim.notify('ALB not found for DNS ' .. ingress_dns)
               return
