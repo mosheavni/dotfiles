@@ -28,6 +28,7 @@ local defaults = {
   ---@type "repo" | "branch" | "file" | "commit"
   what = 'file', -- what to open. not all remotes support all types
   branch = nil, ---@type string?
+  commit = nil, ---@type string?
   line_start = nil, ---@type number?
   line_end = nil, ---@type number?
   -- patterns to transform remotes to an actual URL
@@ -143,18 +144,16 @@ function M._open(opts)
   file = file and (uv.fs_stat(file) or {}).type == 'file' and vim.fs.normalize(file) or nil
   local cwd = file and vim.fn.fnamemodify(file, ':h') or vim.fn.getcwd()
   local word = vim.fn.expand '<cword>'
-  local is_commit = is_valid_commit_hash(word, cwd)
-  if not is_commit and opts.what == 'commit' and is_valid_commit_hash(opts.branch, cwd) then
-    is_commit = is_valid_commit_hash(opts.branch, cwd)
-    word = opts.branch
-  end
+  local commit_to_check = opts.commit or word
+  local is_commit = commit_to_check and is_valid_commit_hash(commit_to_check, cwd)
+
   ---@type user.gitbrowse.Fields
   local fields = {
     branch = opts.branch or system({ 'git', '-C', cwd, 'rev-parse', 'HEAD' }, 'Failed to get current branch')[1],
     file = file and system({ 'git', '-C', cwd, 'ls-files', '--full-name', file }, 'Failed to get git file path')[1],
     line_start = opts.line_start,
     line_end = opts.line_end,
-    commit = is_commit and word or nil,
+    commit = is_commit and commit_to_check or nil,
   }
 
   -- Get visual selection range if in visual mode
