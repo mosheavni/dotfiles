@@ -19,7 +19,6 @@ M.config = function()
       require('user.lsp.code-actions').toggle_function_params,
       require('user.lsp.code-actions').library_current_branch,
       require 'none-ls-shellcheck.code_actions',
-      null_ls.builtins.diagnostics.golangci_lint,
       null_ls.builtins.diagnostics.hadolint,
       null_ls.builtins.diagnostics.markdownlint,
       null_ls.builtins.diagnostics.proselint,

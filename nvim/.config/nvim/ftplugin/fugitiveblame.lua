@@ -43,7 +43,7 @@ vim.schedule(function()
       -- selene: allow(undefined_variable)
       require('user.gitbrowse').open {
         what = 'commit',
-        branch = commit_hash,
+        commit = commit_hash,
       }
     end,
   })
