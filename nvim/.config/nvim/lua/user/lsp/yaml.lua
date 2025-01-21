@@ -48,6 +48,7 @@ M.setup = function(opts)
     lspconfig = yaml_lspconfig,
   }
   require('lspconfig')['yamlls'].setup(yaml_cfg)
+  return yaml_cfg
 end
 
 return M
