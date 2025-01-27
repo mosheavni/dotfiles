@@ -599,18 +599,17 @@ done</content>
     <snippets>
       <snippet>
         <title>get+post+doctype+http</title>
-        <content>tcpdump -iany -s0 -A \
+        <content>tcpdump -iany -s0 -nn -A \
 'tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x47455420 or tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x504F5354 or tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x48545450 or tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x3C21444F'</content>
       </snippet>
       <snippet>
         <title>post</title>
-        <content>tcpdump -iany -s0 -A 'tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x504F5354'</content>
+        <content>tcpdump -iany -s0 -nn -A 'tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x504F5354'</content>
       </snippet>
       <snippet>
         <title>get</title>
-        <content>tcpdump -iany -s0 -A 'tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x47455420'</content>
+        <content>tcpdump -iany -s0 -nn -A 'tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x47455420'</content>
       </snippet>
     </snippets>
   </folder>
 </folders>
-
