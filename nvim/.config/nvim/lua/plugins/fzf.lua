@@ -35,7 +35,7 @@ return {
             -- perform checkout instead of switch
             ['ctrl-s'] = {
               fn = function(selected)
-                local branch = selected[1]
+                local branch = vim.trim(selected[1])
                 require('user.git').checkout(branch)
               end,
               reload = false,
@@ -43,7 +43,7 @@ return {
             },
             ['ctrl-y'] = {
               fn = function(selected)
-                local branch = selected[1]
+                local branch = vim.trim(selected[1])
                 vim.fn.setreg('+', branch)
                 utils.info('Yanked branch name ' .. branch)
               end,
@@ -53,9 +53,9 @@ return {
             ['ctrl-r'] = {
               fn = function(selected)
                 require('fzf-lua.utils').fzf_exit()
-                local branch = selected[1]
+                local branch = vim.trim(selected[1])
                 vim.defer_fn(function()
-                  vim.ui.input({ prompt = 'Rename branch: ', default = selected[1] }, function(new_name)
+                  vim.ui.input({ prompt = 'Rename branch: ', default = branch }, function(new_name)
                     if not new_name or new_name == '' then
                       utils.warn 'Action aborted'
                       return
@@ -78,7 +78,7 @@ return {
             },
             ['ctrl-x'] = {
               fn = function(selected)
-                local branch = selected[1]
+                local branch = vim.trim(selected[1])
                 vim.ui.select({ 'Yes', 'No' }, { prompt = 'Are you sure you want to delete the branch ' .. branch .. '?' }, function(yes_or_no)
                   if yes_or_no == 'No' then
                     utils.warn 'Action aborted'
