@@ -1,486 +1,484 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <folders>
-	<folder>
-		<title>Jenkins</title>
-		<snippets>
-			<snippet>
-				<title>decrypt jenkins string</title>
-				<content>println(hudson.util.Secret.decrypt(&apos;&apos;))</content>
-			</snippet>
-			<snippet>
-				<title>Jenkins cancel queue</title>
-				<content>Jenkins.instance.queue.clear()</content>
-			</snippet>
-			<snippet>
-				<title>abort job</title>
-				<content>Jenkins.instance.getItemByFullName(&quot;Monitor_Production_Images&quot;).getBuildByNumber(3515).finish(
-	hudson.model.Result.ABORTED, new java.io.IOException(&quot;Aborting build&quot;)
+  <folder>
+    <title>Jenkins</title>
+    <snippets>
+      <snippet>
+        <title>decrypt jenkins string</title>
+        <content>println(hudson.util.Secret.decrypt(''))</content>
+      </snippet>
+      <snippet>
+        <title>Jenkins cancel queue</title>
+        <content>Jenkins.instance.queue.clear()</content>
+      </snippet>
+      <snippet>
+        <title>abort job</title>
+        <content>Jenkins.instance.getItemByFullName("Monitor_Production_Images").getBuildByNumber(3515).finish(
+	hudson.model.Result.ABORTED, new java.io.IOException("Aborting build")
 );</content>
-			</snippet>
-			<snippet>
-				<title>all plugins</title>
-				<content>def allPlugins = []
+      </snippet>
+      <snippet>
+        <title>all plugins</title>
+        <content>def allPlugins = []
 Jenkins.instance.pluginManager.plugins.each{
  plugin -&gt;
-   allPlugins &lt;&lt; &quot;${plugin.getShortName()}:${plugin.getVersion()}&quot;
+   allPlugins &lt;&lt; "${plugin.getShortName()}:${plugin.getVersion()}"
 }
 println allPlugins.sort().each {
     println it
 }</content>
-			</snippet>
-			<snippet>
-				<title>approve scripts</title>
-				<content>import org.jenkinsci.plugins.scriptsecurity.scripts.*
+      </snippet>
+      <snippet>
+        <title>approve scripts</title>
+        <content>import org.jenkinsci.plugins.scriptsecurity.scripts.*
 toApprove = ScriptApproval.get().getPendingScripts().collect()
 toApprove.each {pending -&gt; ScriptApproval.get().approveScript(pending.getHash())}</content>
-			</snippet>
-			<snippet>
-				<title>Delete series of builds</title>
-				<content>Jenkins.instance.getItemByFullName(&apos;JobName&apos;).builds.findAll { it.number &gt; 10 &amp;&amp; it.number &lt; 1717 }.each { it.delete() }</content>
-			</snippet>
-			<snippet>
-				<title>get all successful builds of job</title>
-				<content>return jenkins.model.Jenkins.instance.getJob(System.getenv(&apos;JOB_NAME&apos;)).builds.findAll{ it.result == hudson.model.Result.SUCCESS }.collect{ &quot;$it.number&quot; }</content>
-			</snippet>
-			<snippet>
-				<title>get all users</title>
-				<content>import hudson.model.User
+      </snippet>
+      <snippet>
+        <title>Delete series of builds</title>
+        <content>Jenkins.instance.getItemByFullName('JobName').builds.findAll { it.number &gt; 10 &amp;&amp; it.number &lt; 1717 }.each { it.delete() }</content>
+      </snippet>
+      <snippet>
+        <title>get all successful builds of job</title>
+        <content>return jenkins.model.Jenkins.instance.getJob(System.getenv('JOB_NAME')).builds.findAll{ it.result == hudson.model.Result.SUCCESS }.collect{ "$it.number" }</content>
+      </snippet>
+      <snippet>
+        <title>get all users</title>
+        <content>import hudson.model.User
 
 User.getAll().each { user -&gt;
    println user
 }</content>
-			</snippet>
-			<snippet>
-				<title>delete all offline nodes</title>
-				<content>for (aSlave in hudson.model.Hudson.instance.slaves) {
+      </snippet>
+      <snippet>
+        <title>delete all offline nodes</title>
+        <content>for (aSlave in hudson.model.Hudson.instance.slaves) {
     if (aSlave.getComputer().isOffline()) {
         aSlave.getComputer().setTemporarilyOffline(true,null);
         aSlave.getComputer().doDoDelete();
     }
 }</content>
-			</snippet>
-			<snippet>
-				<title>delete parameters</title>
-				<content>def all_jobs = [
-  &quot;spotinst/spot-aws-ec2-market-predictions-v2/main&quot;,
+      </snippet>
+      <snippet>
+        <title>delete parameters</title>
+        <content>def all_jobs = [
+  "spotinst/spot-aws-ec2-market-predictions-v2/main",
 ]
 for (job in all_jobs) {
   def props = Jenkins.instance.getItemByFullName(job).getProperty(ParametersDefinitionProperty.class)
   if (props != null) {
-    def bntt_result = props.getParameterDefinitions().removeAll { &apos;BUILD_NUM_TO_TAG&apos; == it.name }
-    def dp_result   = props.getParameterDefinitions().removeAll { &apos;DEPLOY_PROD&apos; == it.name }
-    def bla_tests   = props.getParameterDefinitions().removeAll { &apos;ADD_TESTS_TO_RUN&apos; == it.name }
-    println &quot;bntt_result: ${bntt_result}\ndp_result: ${dp_result}\nbla_tests: ${bla_tests}&quot;
+    def bntt_result = props.getParameterDefinitions().removeAll { 'BUILD_NUM_TO_TAG' == it.name }
+    def dp_result   = props.getParameterDefinitions().removeAll { 'DEPLOY_PROD' == it.name }
+    def bla_tests   = props.getParameterDefinitions().removeAll { 'ADD_TESTS_TO_RUN' == it.name }
+    println "bntt_result: ${bntt_result}\ndp_result: ${dp_result}\nbla_tests: ${bla_tests}"
   }
 }</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>Bash</title>
-		<snippets>
-			<snippet>
-				<title>curl with format</title>
-				<content>curl \
--I -L -k -H &apos;Cache-Control: no-cache&apos; https://10.60.4.6 \
--H &apos;host: www.top10datingsites.com.au&apos; \
--w &apos;lookup:        %{time_namelookup}\nconnect:       %{time_connect}\nappconnect:    %{time_appconnect}\npretransfer:   %{time_pretransfer}\nredirect:      %{time_redirect}\nstarttransfer (TTFB): %{time_starttransfer}\ntotal:         %{time_total}\n&apos;</content>
-			</snippet>
-			<snippet>
-				<title>shorten url</title>
-				<content>curl -s http://tinyurl.com/api-create.php?url=https://www.google.com | pbcopy</content>
-			</snippet>
-			<snippet>
-				<title>share text</title>
-				<content>cat file.ext | curl -F &apos;f:1=&lt;-&apos; ix.io | pbcopy</content>
-			</snippet>
-			<snippet>
-				<title>ps1</title>
-				<content>arrow_ec() { [[ $? == &quot;0&quot; ]] &amp;&amp; (echo -e &quot;\e[32m➜\e[m&quot;) || (echo -e &quot;\e[31m➜\e[m&quot;) }
-export PS1=&apos;\[$(arrow_ec)\]  \[\e[36m\]\w\[\e[m\] \[\e[34m\]\u\[\e[m\]@\[\e[32m\]\h\[\e[m\]
- » &apos;
-alias ll=&apos;ls -l&apos;</content>
-			</snippet>
-			<snippet>
-				<title>ps1-simple</title>
-				<content>export PS1=&apos;\[\e[36m\]\w\[\e[m\] \[\e[34m\]\u\[\e[m\]@\[\e[32m\]\h\[\e[m\] &apos;
-alias ll=&apos;ls -l --color&apos;</content>
-			</snippet>
-			<snippet>
-				<title>default editor vim</title>
-				<content>sudo update-alternatives --config editor &lt;&lt;&lt; /usr/bin/vim.basic</content>
-			</snippet>
-			<snippet>
-				<title>decrypt with openssl</title>
-				<content>openssl enc -aes-256-cbc -d -in credentials.xml.encrypted -out credentials.xml</content>
-			</snippet>
-			<snippet>
-				<title>pablo</title>
-				<content>Pablo3mili03sc0barGaviria</content>
-			</snippet>
-			<snippet>
-				<title>print proc cmdline or environ</title>
-				<content>xargs -0 printf &apos;%s\n&apos; &lt;/proc/1/cmdline</content>
-			</snippet>
-			<snippet>
-				<title>python http server</title>
-				<content>python3 -m http.server 9000</content>
-			</snippet>
-			<snippet>
-				<title>find java home</title>
-				<content>dirname $(dirname $(readlink -f $(which javac)))</content>
-			</snippet>
-			<snippet>
-				<title>ps alternative on docke</title>
-				<content>for i in /proc/*; do
+      </snippet>
+    </snippets>
+  </folder>
+  <folder>
+    <title>Bash</title>
+    <snippets>
+      <snippet>
+        <title>curl with format</title>
+        <content>curl \
+-I -L -k -H 'Cache-Control: no-cache' https://10.60.4.6 \
+-H 'host: www.top10datingsites.com.au' \
+-w 'lookup:        %{time_namelookup}\nconnect:       %{time_connect}\nappconnect:    %{time_appconnect}\npretransfer:   %{time_pretransfer}\nredirect:      %{time_redirect}\nstarttransfer (TTFB): %{time_starttransfer}\ntotal:         %{time_total}\n'</content>
+      </snippet>
+      <snippet>
+        <title>shorten url</title>
+        <content>curl -s http://tinyurl.com/api-create.php?url=https://www.google.com | pbcopy</content>
+      </snippet>
+      <snippet>
+        <title>share text</title>
+        <content>cat file.ext | curl -F 'f:1=&lt;-' ix.io | pbcopy</content>
+      </snippet>
+      <snippet>
+        <title>ps1</title>
+        <content>arrow_ec() { [[ $? == "0" ]] &amp;&amp; (echo -e "\e[32m➜\e[m") || (echo -e "\e[31m➜\e[m") }
+export PS1='\[$(arrow_ec)\]  \[\e[36m\]\w\[\e[m\] \[\e[34m\]\u\[\e[m\]@\[\e[32m\]\h\[\e[m\]
+ » '
+alias ll='ls -l'</content>
+      </snippet>
+      <snippet>
+        <title>ps1-simple</title>
+        <content>export PS1='\[\e[36m\]\w\[\e[m\] \[\e[34m\]\u\[\e[m\]@\[\e[32m\]\h\[\e[m\] '
+alias ll='ls -l --color'</content>
+      </snippet>
+      <snippet>
+        <title>default editor vim</title>
+        <content>sudo update-alternatives --config editor &lt;&lt;&lt; /usr/bin/vim.basic</content>
+      </snippet>
+      <snippet>
+        <title>decrypt with openssl</title>
+        <content>openssl enc -aes-256-cbc -d -in credentials.xml.encrypted -out credentials.xml</content>
+      </snippet>
+      <snippet>
+        <title>pablo</title>
+        <content>Pablo3mili03sc0barGaviria</content>
+      </snippet>
+      <snippet>
+        <title>print proc cmdline or environ</title>
+        <content>xargs -0 printf '%s\n' &lt;/proc/1/cmdline</content>
+      </snippet>
+      <snippet>
+        <title>python http server</title>
+        <content>python3 -m http.server 9000</content>
+      </snippet>
+      <snippet>
+        <title>find java home</title>
+        <content>dirname $(dirname $(readlink -f $(which javac)))</content>
+      </snippet>
+      <snippet>
+        <title>ps alternative on docke</title>
+        <content>for i in /proc/*; do
   [[ $i =~ /proc/[0-9] ]] || continue
-  echo &quot;==== $i ====&quot;
-  xargs -0 printf &apos;%s\n&apos; &lt;$i/cmdline
+  echo "==== $i ===="
+  xargs -0 printf '%s\n' &lt;$i/cmdline
 done</content>
-			</snippet>
-			<snippet>
-				<title>fancy_print</title>
-				<content>function fancy_print() {
+      </snippet>
+      <snippet>
+        <title>fancy_print</title>
+        <content>function fancy_print() {
   str=$1
   str_len=${#str}
-  eval printf &apos;=%.0s&apos; {1..$((str_len + 6))}
-  echo -e &quot;\n== $str ==&quot;
-  eval printf &apos;=%.0s&apos; {1..$((str_len + 6))}
-  echo &quot;&quot;
+  eval printf '=%.0s' {1..$((str_len + 6))}
+  echo -e "\n== $str =="
+  eval printf '=%.0s' {1..$((str_len + 6))}
+  echo ""
 }</content>
-			</snippet>
-			<snippet>
-				<title>colors</title>
-				<content># Colors
-black() { echo -e &quot;\033[30m${*}\033[0m&quot;; }
-red() { echo -e &quot;\033[31m${*}\033[0m&quot;; }
-green() { echo -e &quot;\033[32m${*}\033[0m&quot;; }
-yellow() { echo -e &quot;\033[33m${*}\033[0m&quot;; }
-blue() { echo -e &quot;\033[34m${*}\033[0m&quot;; }
-magenta() { echo -e &quot;\033[35m${*}\033[0m&quot;; }
-cyan() { echo -e &quot;\033[0;36m${*}\033[0m&quot;; }
-gray() { echo -e &quot;\033[90m${*}\033[0m&quot;; }
-warn() { yellow &quot;$(date) [WARNING] - $*&quot;; }
+      </snippet>
+      <snippet>
+        <title>colors</title>
+        <content># Colors
+black() { echo -e "\033[30m${*}\033[0m"; }
+red() { echo -e "\033[31m${*}\033[0m"; }
+green() { echo -e "\033[32m${*}\033[0m"; }
+yellow() { echo -e "\033[33m${*}\033[0m"; }
+blue() { echo -e "\033[34m${*}\033[0m"; }
+magenta() { echo -e "\033[35m${*}\033[0m"; }
+cyan() { echo -e "\033[0;36m${*}\033[0m"; }
+gray() { echo -e "\033[90m${*}\033[0m"; }
+warn() { yellow "$(date) [WARNING] - $*"; }
 err() {
-  red &quot;$(date) [ERROR] - $*&quot;
+  red "$(date) [ERROR] - $*"
   exit 1
 }
-info() { cyan &quot;$(date) [INFO] - $*&quot;; }</content>
-			</snippet>
-			<snippet>
-				<title>fancy_print</title>
-				<content>function fancy_print() {
+info() { cyan "$(date) [INFO] - $*"; }</content>
+      </snippet>
+      <snippet>
+        <title>fancy_print</title>
+        <content>function fancy_print() {
   str=$1
   str_len=${#str}
-  eval printf &apos;=%.0s&apos; {1..$((str_len + 6))}
-  echo -e &quot;\n== $str ==&quot;
-  eval printf &apos;=%.0s&apos; {1..$((str_len + 6))}
-  echo &quot;&quot;
-}
-</content>
-			</snippet>
-			<snippet>
-				<title>parallel function</title>
-				<content>#!/bin/bash
+  eval printf '=%.0s' {1..$((str_len + 6))}
+  echo -e "\n== $str =="
+  eval printf '=%.0s' {1..$((str_len + 6))}
+  echo ""
+}</content>
+      </snippet>
+      <snippet>
+        <title>parallel function</title>
+        <content>#!/bin/bash
 cat /dev/null &gt;results.txt
 dowork() {
 	i=$1
-	echo &quot;### trigger $i&quot;
+	echo "### trigger $i"
 	curl -L https://google.com
-	echo &quot;&quot;
+	echo ""
 }
 export -f dowork
 
-seq 100 | parallel -k dowork &gt;results.txt
-</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>Docker</title>
-		<snippets>
-			<snippet>
-				<title>mongo rs</title>
-				<content>docker run --rm -it --name &quot;test-mongo&quot; mongo mongo \
---host &quot;mongodb://host1,host2,host3/rs0&quot; \
--udbroot -p&apos;pass&apos; --authenticationDatabase admin</content>
-			</snippet>
-			<snippet>
-				<title>redis-cli</title>
-				<content>docker run -it --rm redis redis-cli -h host -p port</content>
-			</snippet>
-			<snippet>
-				<title>remove all containers</title>
-				<content>docker ps -aq | xargs docker rm -f</content>
-			</snippet>
-			<snippet>
-				<title>run trivy</title>
-				<content>docker run -v /var/run/docker.sock:/var/run/docker.sock -v ~/.cache/trivy:/root/.cache/ aquasec/trivy image 109311601880.dkr.ecr.us-west-2.amazonaws.com/rnd/controller:1.0.93-alpha</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>sql</title>
-		<snippets>
-			<snippet>
-				<title>find user</title>
-				<content>select User,Host from mysql.user where lower(User) like &apos;%%&apos;;</content>
-			</snippet>
-			<snippet>
-				<title>grant all priv</title>
-				<content>grant all on .* to &apos;&apos;@&apos;%&apos; identified by password &apos;&apos;;</content>
-			</snippet>
-			<snippet>
-				<title>grant select</title>
-				<content>grant select on.* to &apos;&apos;@&apos;%&apos; identified by &apos;&apos;;</content>
-			</snippet>
-			<snippet>
-				<title>flush priviliges</title>
-				<content>FLUSH PRIVILEGES;</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>AWS cli</title>
-		<snippets>
-			<snippet>
-				<title>ssm get all params</title>
-				<content>aws ssm describe-parameters | jq -r &apos;.Parameters[].Name&apos; | grep &quot;&quot;</content>
-			</snippet>
-			<snippet>
-				<title>ssm get param value</title>
-				<content>aws ssm get-parameters --with-decryption --names &quot;cred_article-bos_firehose-access-key-id_development&quot; | jq -c &quot;.Parameters[] | {key: .Name, value: .Value}&quot;</content>
-			</snippet>
-			<snippet>
-				<title>add security group rule</title>
-				<content>aws ec2 update-security-group-rule-descriptions-ingress --group-id sg-01b4d94542c5b90e8 --ip-permissions \
-&apos;[{&quot;IpProtocol&quot;: &quot;tcp&quot;, &quot;FromPort&quot;: 3306, &quot;ToPort&quot;: 3306, &quot;IpRanges&quot;: [{&quot;CidrIp&quot;: &quot;35.170.223.65/32&quot;, &quot;Description&quot;: &quot;BoomiFlow Public IP&quot;}]}]&apos;</content>
-			</snippet>
-			<snippet>
-				<title>get params by path as env vars</title>
-				<content>/usr/local/bin/aws ssm get-parameters-by-path \
-  --path &quot;/spotinst-gateway&quot;  \
+seq 100 | parallel -k dowork &gt;results.txt</content>
+      </snippet>
+    </snippets>
+  </folder>
+  <folder>
+    <title>Docker</title>
+    <snippets>
+      <snippet>
+        <title>mongo rs</title>
+        <content>docker run --rm -it --name "test-mongo" mongo mongo \
+--host "mongodb://host1,host2,host3/rs0" \
+-udbroot -p'pass' --authenticationDatabase admin</content>
+      </snippet>
+      <snippet>
+        <title>redis-cli</title>
+        <content>docker run -it --rm redis redis-cli -h host -p port</content>
+      </snippet>
+      <snippet>
+        <title>remove all containers</title>
+        <content>docker ps -aq | xargs docker rm -f</content>
+      </snippet>
+      <snippet>
+        <title>run trivy</title>
+        <content>docker run -v /var/run/docker.sock:/var/run/docker.sock -v ~/.cache/trivy:/root/.cache/ aquasec/trivy image 109311601880.dkr.ecr.us-west-2.amazonaws.com/rnd/controller:1.0.93-alpha</content>
+      </snippet>
+    </snippets>
+  </folder>
+  <folder>
+    <title>sql</title>
+    <snippets>
+      <snippet>
+        <title>find user</title>
+        <content>select User,Host from mysql.user where lower(User) like '%%';</content>
+      </snippet>
+      <snippet>
+        <title>grant all priv</title>
+        <content>grant all on .* to ''@'%' identified by password '';</content>
+      </snippet>
+      <snippet>
+        <title>grant select</title>
+        <content>grant select on.* to ''@'%' identified by '';</content>
+      </snippet>
+      <snippet>
+        <title>flush priviliges</title>
+        <content>FLUSH PRIVILEGES;</content>
+      </snippet>
+    </snippets>
+  </folder>
+  <folder>
+    <title>AWS cli</title>
+    <snippets>
+      <snippet>
+        <title>ssm get all params</title>
+        <content>aws ssm describe-parameters | jq -r '.Parameters[].Name' | grep ""</content>
+      </snippet>
+      <snippet>
+        <title>ssm get param value</title>
+        <content>aws ssm get-parameters --with-decryption --names "cred_article-bos_firehose-access-key-id_development" | jq -c ".Parameters[] | {key: .Name, value: .Value}"</content>
+      </snippet>
+      <snippet>
+        <title>add security group rule</title>
+        <content>aws ec2 update-security-group-rule-descriptions-ingress --group-id sg-01b4d94542c5b90e8 --ip-permissions \
+'[{"IpProtocol": "tcp", "FromPort": 3306, "ToPort": 3306, "IpRanges": [{"CidrIp": "35.170.223.65/32", "Description": "BoomiFlow Public IP"}]}]'</content>
+      </snippet>
+      <snippet>
+        <title>get params by path as env vars</title>
+        <content>/usr/local/bin/aws ssm get-parameters-by-path \
+  --path "/spotinst-gateway"  \
   --region us-east-1 \
-  --query &quot;Parameters[*].[Name,Value]&quot; \
+  --query "Parameters[*].[Name,Value]" \
   --with-decryption | jq \
-  -r &apos;.[] | .[0] |= (split(&quot;/&quot;)|.[2]) | &quot;export \(.[0])=\&quot;\(.[1])\&quot;&quot;&apos; | tr &apos;&quot;&apos; &quot;&apos;&quot;</content>
-			</snippet>
-			<snippet>
-				<title>find acm certificate</title>
-				<content>export CERT_SUBSTRING=internal &amp;&amp; aws acm list-certificates --query &apos;CertificateSummaryList[].{domain: DomainName,arn: CertificateArn}&apos; | jq -c &apos;.[] | select(.domain | contains($ENV.CERT_SUBSTRING))&apos; | column -t -s,</content>
-			</snippet>
-			<snippet>
-				<title>assume role with web identity (curl)</title>
-				<content>curl \
-  &quot;https://sts.${AWS_REGION}.amazonaws.com/?Action=AssumeRoleWithWebIdentity&amp;DurationSeconds=3600&amp;RoleArn=$AWS_ROLE_ARN&amp;WebIdentityToken=$(&lt; $AWS_WEB_IDENTITY_TOKEN_FILE)&amp;Version=2011-06-15&amp;RoleSessionName=spotinst-monitor&quot;</content>
-			</snippet>
-			<snippet>
-				<title>get latest eks ami</title>
-				<content>aws ssm get-parameter --name /aws/service/eks/optimized-ami/1.30/amazon-linux-2023/x86_64/standard/recommended/image_id \
-    --region us-west-2 --query &quot;Parameter.Value&quot; --output text</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>nlb</title>
-		<snippets>
-			<snippet>
-				<title>us</title>
-				<content>nlb-us-prod-674c2381d56d1e9c.elb.us-east-1.amazonaws.com</content>
-			</snippet>
-			<snippet>
-				<title>usw</title>
-				<content>nlb-usw-prod-2d7848a08eeaba48.elb.us-west-1.amazonaws.com</content>
-			</snippet>
-			<snippet>
-				<title>uk</title>
-				<content>nlb-uk-prd-f601ad9dc57d5532.elb.eu-west-2.amazonaws.com</content>
-			</snippet>
-			<snippet>
-				<title>sp</title>
-				<content>nlb-sp-prod-b76000c3c84d35c8.elb.sa-east-1.amazonaws.com</content>
-			</snippet>
-			<snippet>
-				<title>au</title>
-				<content>nlb-au-prod-ccb789623870fd4f.elb.ap-southeast-2.amazonaws.com</content>
-			</snippet>
-			<snippet>
-				<title>in</title>
-				<content>nlb-in-prd-c926c17b3ae18219.elb.ap-south-1.amazonaws.com</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>k8s</title>
-		<snippets>
-			<snippet>
-				<title>get bastion dns</title>
-				<content>aws elb --region eu-west-2 describe-load-balancers --query &apos;LoadBalancerDescriptions[?starts_with(DNSName, `bastion`)].DNSName&apos; | jq -r &apos;.[]&apos;</content>
-			</snippet>
-			<snippet>
-				<title>get jenkins secret</title>
-				<content>kgsec -n jenkins jenkins -o jsonpath=&quot;{.data.jenkins-admin-password}&quot; | base64 --decode | pbcopy</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>redislabs</title>
-		<snippets>
-			<snippet>
-				<title>US-Writer</title>
-				<content>redis-11111.internal.c106.us-east-1-mz.ec2.cloud.redislabs.com</content>
-			</snippet>
-			<snippet>
-				<title>US</title>
-				<content>redis-11111.internal.c107.us-east-1-mz.ec2.cloud.redislabs.com</content>
-			</snippet>
-			<snippet>
-				<title>US-Cache</title>
-				<content>renderer-req-cache.yojcdq.0001.use1.cache.amazonaws.com</content>
-			</snippet>
-			<snippet>
-				<title>USW</title>
-				<content>redis-11111.internal.c151.us-west-1-1.ec2.cloud.redislabs.com</content>
-			</snippet>
-			<snippet>
-				<title>USW-Cache</title>
-				<content>renderer-req-cache.um34hq.ng.0001.usw1.cache.amazonaws.com</content>
-			</snippet>
-			<snippet>
-				<title>UK</title>
-				<content>redis-11111.internal.c108.eu-west-2-mz.ec2.cloud.redislabs.com</content>
-			</snippet>
-			<snippet>
-				<title>UK-Cache</title>
-				<content>renderer-req-cache.knc5ke.0001.euw2.cache.amazonaws.com</content>
-			</snippet>
-			<snippet>
-				<title>SP</title>
-				<content>redis-11111.internal.c109.sa-east-1-1.ec2.cloud.redislabs.com</content>
-			</snippet>
-			<snippet>
-				<title>SP-Cache</title>
-				<content>renderer-req-cache.4ad2kq.0001.sae1.cache.amazonaws.com</content>
-			</snippet>
-			<snippet>
-				<title>AU</title>
-				<content>redis-11111.internal.c110.ap-southeast-2-mz.ec2.cloud.redislabs.com</content>
-			</snippet>
-			<snippet>
-				<title>AU-Cache</title>
-				<content>renderer-req-cache.r3qcrm.0001.apse2.cache.amazonaws.com</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>Javascript</title>
-		<snippets>
-			<snippet>
-				<title>vide arrow keys</title>
-				<content>let theVideo = document.querySelector(&apos;video&apos;)
+  -r '.[] | .[0] |= (split("/")|.[2]) | "export \(.[0])=\"\(.[1])\""' | tr '"' "'"</content>
+      </snippet>
+      <snippet>
+        <title>find acm certificate</title>
+        <content>export CERT_SUBSTRING=internal &amp;&amp; aws acm list-certificates --query 'CertificateSummaryList[].{domain: DomainName,arn: CertificateArn}' | jq -c '.[] | select(.domain | contains($ENV.CERT_SUBSTRING))' | column -t -s,</content>
+      </snippet>
+      <snippet>
+        <title>assume role with web identity (curl)</title>
+        <content>curl \
+  "https://sts.${AWS_REGION}.amazonaws.com/?Action=AssumeRoleWithWebIdentity&amp;DurationSeconds=3600&amp;RoleArn=$AWS_ROLE_ARN&amp;WebIdentityToken=$(&lt; $AWS_WEB_IDENTITY_TOKEN_FILE)&amp;Version=2011-06-15&amp;RoleSessionName=spotinst-monitor"</content>
+      </snippet>
+      <snippet>
+        <title>get latest eks ami</title>
+        <content>aws ssm get-parameter --name /aws/service/eks/optimized-ami/1.30/amazon-linux-2023/x86_64/standard/recommended/image_id \
+    --region us-west-2 --query "Parameter.Value" --output text</content>
+      </snippet>
+    </snippets>
+  </folder>
+  <folder>
+    <title>nlb</title>
+    <snippets>
+      <snippet>
+        <title>us</title>
+        <content>nlb-us-prod-674c2381d56d1e9c.elb.us-east-1.amazonaws.com</content>
+      </snippet>
+      <snippet>
+        <title>usw</title>
+        <content>nlb-usw-prod-2d7848a08eeaba48.elb.us-west-1.amazonaws.com</content>
+      </snippet>
+      <snippet>
+        <title>uk</title>
+        <content>nlb-uk-prd-f601ad9dc57d5532.elb.eu-west-2.amazonaws.com</content>
+      </snippet>
+      <snippet>
+        <title>sp</title>
+        <content>nlb-sp-prod-b76000c3c84d35c8.elb.sa-east-1.amazonaws.com</content>
+      </snippet>
+      <snippet>
+        <title>au</title>
+        <content>nlb-au-prod-ccb789623870fd4f.elb.ap-southeast-2.amazonaws.com</content>
+      </snippet>
+      <snippet>
+        <title>in</title>
+        <content>nlb-in-prd-c926c17b3ae18219.elb.ap-south-1.amazonaws.com</content>
+      </snippet>
+    </snippets>
+  </folder>
+  <folder>
+    <title>k8s</title>
+    <snippets>
+      <snippet>
+        <title>get bastion dns</title>
+        <content>aws elb --region eu-west-2 describe-load-balancers --query 'LoadBalancerDescriptions[?starts_with(DNSName, `bastion`)].DNSName' | jq -r '.[]'</content>
+      </snippet>
+      <snippet>
+        <title>get jenkins secret</title>
+        <content>kgsec -n jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode | pbcopy</content>
+      </snippet>
+    </snippets>
+  </folder>
+  <folder>
+    <title>redislabs</title>
+    <snippets>
+      <snippet>
+        <title>US-Writer</title>
+        <content>redis-11111.internal.c106.us-east-1-mz.ec2.cloud.redislabs.com</content>
+      </snippet>
+      <snippet>
+        <title>US</title>
+        <content>redis-11111.internal.c107.us-east-1-mz.ec2.cloud.redislabs.com</content>
+      </snippet>
+      <snippet>
+        <title>US-Cache</title>
+        <content>renderer-req-cache.yojcdq.0001.use1.cache.amazonaws.com</content>
+      </snippet>
+      <snippet>
+        <title>USW</title>
+        <content>redis-11111.internal.c151.us-west-1-1.ec2.cloud.redislabs.com</content>
+      </snippet>
+      <snippet>
+        <title>USW-Cache</title>
+        <content>renderer-req-cache.um34hq.ng.0001.usw1.cache.amazonaws.com</content>
+      </snippet>
+      <snippet>
+        <title>UK</title>
+        <content>redis-11111.internal.c108.eu-west-2-mz.ec2.cloud.redislabs.com</content>
+      </snippet>
+      <snippet>
+        <title>UK-Cache</title>
+        <content>renderer-req-cache.knc5ke.0001.euw2.cache.amazonaws.com</content>
+      </snippet>
+      <snippet>
+        <title>SP</title>
+        <content>redis-11111.internal.c109.sa-east-1-1.ec2.cloud.redislabs.com</content>
+      </snippet>
+      <snippet>
+        <title>SP-Cache</title>
+        <content>renderer-req-cache.4ad2kq.0001.sae1.cache.amazonaws.com</content>
+      </snippet>
+      <snippet>
+        <title>AU</title>
+        <content>redis-11111.internal.c110.ap-southeast-2-mz.ec2.cloud.redislabs.com</content>
+      </snippet>
+      <snippet>
+        <title>AU-Cache</title>
+        <content>renderer-req-cache.r3qcrm.0001.apse2.cache.amazonaws.com</content>
+      </snippet>
+    </snippets>
+  </folder>
+  <folder>
+    <title>Javascript</title>
+    <snippets>
+      <snippet>
+        <title>vide arrow keys</title>
+        <content>let theVideo = document.querySelector('video')
 document.onkeydown = function(event) {
     switch (event.keyCode) {
        case 37:
             event.preventDefault();
-            
+
             vid_currentTime = theVideo.currentTime;
             theVideo.currentTime = vid_currentTime - 5;
           break;
-       
+
        case 39:
             event.preventDefault();
-            
+
             vid_currentTime = theVideo.currentTime;
             theVideo.currentTime = vid_currentTime + 5;
           break;
-       
+
     }
 };</content>
-			</snippet>
-			<snippet>
-				<title>get iframe src</title>
-				<content>document.querySelector(&apos;iframe&apos;).src</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>AWS cli queries</title>
-		<snippets>
-			<snippet>
-				<title>describe all volumes that has tag</title>
-				<content>aws ec2 describe-volumes --query &apos;Volumes[?Tags[?Key == `kubernetes.io/cluster/spot-dev-us-east-2`]].VolumeId&apos;</content>
-			</snippet>
-			<snippet>
-				<title>print all certificates alt names and expiry</title>
-				<content>aws acm list-certificates --query &apos;CertificateSummaryList[*].CertificateArn&apos; | jq -r &apos;.[]&apos; Wr aws acm describe-certificate --query &apos;Certificate.{arn: CertificateArn, altNames: SubjectAlternativeNames, notAfter: NotAfter}&apos; --certificate-arn &quot;$line&quot; D</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>java</title>
-		<snippets>
-			<snippet>
-				<title>jpsstat.sh</title>
-				<content>#!/bin/bash
+      </snippet>
+      <snippet>
+        <title>get iframe src</title>
+        <content>document.querySelector('iframe').src</content>
+      </snippet>
+    </snippets>
+  </folder>
+  <folder>
+    <title>AWS cli queries</title>
+    <snippets>
+      <snippet>
+        <title>describe all volumes that has tag</title>
+        <content>aws ec2 describe-volumes --query 'Volumes[?Tags[?Key == `kubernetes.io/cluster/spot-dev-us-east-2`]].VolumeId'</content>
+      </snippet>
+      <snippet>
+        <title>print all certificates alt names and expiry</title>
+        <content>aws acm list-certificates --query 'CertificateSummaryList[*].CertificateArn' | jq -r '.[]' Wr aws acm describe-certificate --query 'Certificate.{arn: CertificateArn, altNames: SubjectAlternativeNames, notAfter: NotAfter}' --certificate-arn "$line" D</content>
+      </snippet>
+    </snippets>
+  </folder>
+  <folder>
+    <title>java</title>
+    <snippets>
+      <snippet>
+        <title>jpsstat.sh</title>
+        <content>#!/bin/bash
 #
 # MIT License
 #
 # Copyright (c) 2017 Amarjeet Anand
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy 
-# of this software and associated documentation files (the &quot;Software&quot;), to deal 
-# in the Software without restriction, including without limitation the rights 
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-# copies of the Software, and to permit persons to whom the Software is furnished 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is furnished
 # to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all 
+# The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS 
-# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
-# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
-# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 RUNONCE=0
 SHOW_HEADERS=1
-commandline_args=(&quot;$@&quot;)
+commandline_args=("$@")
 
 parse_options() {
-  for var in &quot;${commandline_args[@]}&quot;; do
-      if [ $var = &quot;-h&quot; ] || [ $var = &quot;-help&quot; ]
+  for var in "${commandline_args[@]}"; do
+      if [ $var = "-h" ] || [ $var = "-help" ]
       then
-          echo &quot;usage: ./jpsstat.sh [options]&quot;
-          echo &quot;&quot;
-          echo &quot;[OPTIONS] :&quot;
-          echo &quot;    -l&quot;
-          echo &quot;        Displays the full package name for the application&apos;s main class or the full path name to the application&apos;s JAR file.&quot;
-          echo &quot;&quot;
-          echo &quot;    -1 | --once&quot;
-          echo &quot;        Just run the script once, do not continuously refresh&quot;
-          echo &quot;&quot;
-          echo &quot;    -H | --no-headers&quot;
-          echo &quot;        Do not display the text header with the field names&quot;
-          echo &quot;&quot;
-          echo &quot;    -h | -help&quot;
-          echo &quot;        Display this help menu&quot;
-          echo &quot;&quot;
-          echo &quot;/********* Output Format *****************&quot;
-          echo &quot; * PID    : Process Id&quot;
-          echo &quot; * Name   : Process Name&quot;
-          echo &quot; * CurHeap: Heap memory(MB) currently in use&quot;
-          echo &quot; * MaxHeap: Max Heap memory(MB) used by now&quot;
-          echo &quot; * CurRAM : Current RAM(MB) used&quot;
-          echo &quot; * MaxRAM : Max RAM(MB) used by now&quot;
-          echo &quot; * %_CPU  : Current CPU use by PID&quot;
-          echo &quot; */&quot;
+          echo "usage: ./jpsstat.sh [options]"
+          echo ""
+          echo "[OPTIONS] :"
+          echo "    -l"
+          echo "        Displays the full package name for the application's main class or the full path name to the application's JAR file."
+          echo ""
+          echo "    -1 | --once"
+          echo "        Just run the script once, do not continuously refresh"
+          echo ""
+          echo "    -H | --no-headers"
+          echo "        Do not display the text header with the field names"
+          echo ""
+          echo "    -h | -help"
+          echo "        Display this help menu"
+          echo ""
+          echo "/********* Output Format *****************"
+          echo " * PID    : Process Id"
+          echo " * Name   : Process Name"
+          echo " * CurHeap: Heap memory(MB) currently in use"
+          echo " * MaxHeap: Max Heap memory(MB) used by now"
+          echo " * CurRAM : Current RAM(MB) used"
+          echo " * MaxRAM : Max RAM(MB) used by now"
+          echo " * %_CPU  : Current CPU use by PID"
+          echo " */"
           exit 0
-      elif [ $var = &quot;-1&quot; ] || [ $var = &quot;--once&quot; ]
+      elif [ $var = "-1" ] || [ $var = "--once" ]
       then
           RUNONCE=1
-      elif [ $var = &quot;-H&quot; ] || [ $var = &quot;--no-headers&quot; ]
+      elif [ $var = "-H" ] || [ $var = "--no-headers" ]
       then
           SHOW_HEADERS=0
       fi
@@ -490,85 +488,85 @@ parse_options() {
 parse_options
 
 if [ $SHOW_HEADERS -eq 1 ]; then
-    echo &quot;=====  ==============================  =======  =======  ======  ======  =====&quot;
-    echo &quot; PID                Name               CurHeap  MaxHeap  CurRAM  MaxRAM  %_CPU&quot;
-    echo &quot;=====  ==============================  =======  =======  ======  ======  =====&quot;
+    echo "=====  ==============================  =======  =======  ======  ======  ====="
+    echo " PID                Name               CurHeap  MaxHeap  CurRAM  MaxRAM  %_CPU"
+    echo "=====  ==============================  =======  =======  ======  ======  ====="
 fi
 
 declare -A prev_pid_max_heap=()
 declare -A prev_pid_max_ram=()
 
 while true
-do  
+do
 
     declare -A curr_pid_name=()
     declare -A curr_pid_max_heap=()
     declare -A curr_pid_max_ram=()
-    
-    IFS=$&apos;\n&apos;
+
+    IFS=$'\n'
     DATA=
     ## check if -l option is given
-    for var in &quot;$@&quot;
+    for var in "$@"
     do
-        if [ $var = &quot;-l&quot; ]
+        if [ $var = "-l" ]
         then
             DATA=($(jps -l))
         fi
     done
 
-    if [ -z &quot;$DATA&quot; ]
+    if [ -z "$DATA" ]
     then
-        DATA=($(&quot;jps&quot;))
+        DATA=($("jps"))
     fi
-    
+
     # put curser up with # of prev processes
     if (( ${#prev_pid_max_heap[@]} &gt; 0 ));
     then
-        tput cuu $(( ${#prev_pid_max_heap[@]} )) 
+        tput cuu $(( ${#prev_pid_max_heap[@]} ))
     fi
 
-    # for each process line we get in jps 
-    IFS=$&apos; &apos;
-    for LINE in &quot;${DATA[@]}&quot;
+    # for each process line we get in jps
+    IFS=$' '
+    for LINE in "${DATA[@]}"
     do
-        read -ra TOKENS &lt;&lt;&lt; &quot;$LINE&quot;
+        read -ra TOKENS &lt;&lt;&lt; "$LINE"
         # if -l option is given, get the last element of the jar file/class name
         TOKENS[1]=${TOKENS[1]##*[\\ /]}
 
-        # skip the process if its Jps or Jstat itself 
-        if [ &quot;${TOKENS[1]}&quot; == &quot;Jps&quot; ] || [ &quot;${TOKENS[1]}&quot; == &quot;sun.tools.jps.Jps&quot; ] || [ &quot;${TOKENS[1]}&quot; == &quot;Jstat&quot; ] || [ &quot;${TOKENS[1]}&quot; == &quot;sun.tools.jstat.Jstat&quot; ]
+        # skip the process if its Jps or Jstat itself
+        if [ "${TOKENS[1]}" == "Jps" ] || [ "${TOKENS[1]}" == "sun.tools.jps.Jps" ] || [ "${TOKENS[1]}" == "Jstat" ] || [ "${TOKENS[1]}" == "sun.tools.jstat.Jstat" ]
         then
             continue
         fi
         pid=${TOKENS[0]}
         # insert to associative array
-        curr_pid_name[&quot;$pid&quot;]=${TOKENS[1]:-&quot;&lt;no name&gt;&quot;}
+        curr_pid_name["$pid"]=${TOKENS[1]:-"&lt;no name&gt;"}
 
         # compare current heap with previous to get max_heap
-        HEAP_MEMORY=$( (jstat -gc $pid 2&gt;/dev/null || echo &quot;0 0 0 0 0 0 0 0 0&quot;) | tail -n 1 | awk &apos;{split($0,a,&quot; &quot;); sum=a[3]+a[4]+a[6]+a[8]; print sum/1024}&apos; ) 2&gt;/dev/null
+        HEAP_MEMORY=$( (jstat -gc $pid 2&gt;/dev/null || echo "0 0 0 0 0 0 0 0 0") | tail -n 1 | awk '{split($0,a," "); sum=a[3]+a[4]+a[6]+a[8]; print sum/1024}' ) 2&gt;/dev/null
         HEAP_MEMORY=${HEAP_MEMORY%.*}
-        if [ ${prev_pid_max_heap[&quot;$pid&quot;]+_} ] &amp;&amp; [ $HEAP_MEMORY -lt ${prev_pid_max_heap[$pid]} ]; then
-            curr_pid_max_heap[&quot;$pid&quot;]=${prev_pid_max_heap[&quot;$pid&quot;]}
+        if [ ${prev_pid_max_heap["$pid"]+_} ] &amp;&amp; [ $HEAP_MEMORY -lt ${prev_pid_max_heap[$pid]} ]; then
+            curr_pid_max_heap["$pid"]=${prev_pid_max_heap["$pid"]}
         else
-            curr_pid_max_heap[&quot;$pid&quot;]=$HEAP_MEMORY
+            curr_pid_max_heap["$pid"]=$HEAP_MEMORY
         fi
-        
+
         # compare current ram with previous to get max_ram
-        RAM_MEMORY=$(( ` cut -d&apos; &apos; -f2 &lt;&lt;&lt;cat /proc/$pid/statm 2&gt;/dev/null || echo &quot;0&quot; ` / 1024 ))
+        RAM_MEMORY=$(( ` cut -d' ' -f2 &lt;&lt;&lt;cat /proc/$pid/statm 2&gt;/dev/null || echo "0" ` / 1024 ))
         RAM_MEMORY=${RAM_MEMORY%.*}
-        if [ ${prev_pid_max_ram[&quot;$pid&quot;]+_} ] &amp;&amp; [ $RAM_MEMORY -lt ${prev_pid_max_ram[$pid]} ]; then
-            curr_pid_max_ram[&quot;$pid&quot;]=${prev_pid_max_ram[&quot;$pid&quot;]}
+        if [ ${prev_pid_max_ram["$pid"]+_} ] &amp;&amp; [ $RAM_MEMORY -lt ${prev_pid_max_ram[$pid]} ]; then
+            curr_pid_max_ram["$pid"]=${prev_pid_max_ram["$pid"]}
         else
-            curr_pid_max_ram[&quot;$pid&quot;]=$RAM_MEMORY
+            curr_pid_max_ram["$pid"]=$RAM_MEMORY
         fi
 
         #output for current pid
-        cpuuse=$( (ps -p $pid -o %cpu 2&gt;/dev/null || echo &quot;0&quot;) | tail -n 1 )
+        cpuuse=$( (ps -p $pid -o %cpu 2&gt;/dev/null || echo "0") | tail -n 1 )
         cpuuse=${cpuuse%.*}
-        printf &quot;%-6s %-30s %8i %8i %7d %7d  %5i\n&quot; $pid ${curr_pid_name[&quot;$pid&quot;]:0:30} $HEAP_MEMORY ${curr_pid_max_heap[&quot;$pid&quot;]} $RAM_MEMORY ${curr_pid_max_ram[&quot;$pid&quot;]} $cpuuse | sort 
+        printf "%-6s %-30s %8i %8i %7d %7d  %5i\n" $pid ${curr_pid_name["$pid"]:0:30} $HEAP_MEMORY ${curr_pid_max_heap["$pid"]} $RAM_MEMORY ${curr_pid_max_ram["$pid"]} $cpuuse | sort
     done
 
-    
+
     # clean stuff of previous iteration
     unset prev_pid_max_heap
     declare -A prev_pid_max_heap
@@ -576,12 +574,12 @@ do
     declare -A prev_pid_max_ram
 
     # put all current pid and max_memory into prev_associative_array
-    for pid in &quot;${!curr_pid_max_heap[@]}&quot;;
+    for pid in "${!curr_pid_max_heap[@]}";
     do
         prev_pid_max_heap[$pid]=${curr_pid_max_heap[$pid]}
     done
     # put all current pid, max_ram_memory into prev associative array
-    for pid in &quot;${!curr_pid_max_ram[@]}&quot;;
+    for pid in "${!curr_pid_max_ram[@]}";
     do
         prev_pid_max_ram[$pid]=${curr_pid_max_ram[$pid]}
     done
@@ -593,7 +591,26 @@ do
 
     sleep 0.3
 done</content>
-			</snippet>
-		</snippets>
-	</folder>
+      </snippet>
+    </snippets>
+  </folder>
+  <folder>
+    <title>tcpdump</title>
+    <snippets>
+      <snippet>
+        <title>get+post+doctype+http</title>
+        <content>tcpdump -iany -s0 -A \
+'tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x47455420 or tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x504F5354 or tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x48545450 or tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x3C21444F'</content>
+      </snippet>
+      <snippet>
+        <title>post</title>
+        <content>tcpdump -iany -s0 -A 'tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x504F5354'</content>
+      </snippet>
+      <snippet>
+        <title>get</title>
+        <content>tcpdump -iany -s0 -A 'tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x47455420'</content>
+      </snippet>
+    </snippets>
+  </folder>
 </folders>
+
