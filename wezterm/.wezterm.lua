@@ -32,6 +32,7 @@ config.line_height = 0.9
 
 -- tab bar
 config.use_fancy_tab_bar = true
+config.show_close_tab_button_in_tabs = true
 config.tab_max_width = 999
 config.window_frame = {
   font = wez.font { family = 'Roboto', weight = 'Bold' },

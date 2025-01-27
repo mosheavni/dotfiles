@@ -134,6 +134,11 @@ return {
   config = function()
     require('fzf-lua').setup {
       'default-title',
+      files = {
+        git_icons = true,
+        rg_opts = [[--color=never --files --hidden --follow -g "!.git"]],
+        fd_opts = [[--color=never --type f --type l --hidden --follow --exclude .git]],
+      },
       oldfiles = {
         cwd_only = true,
         include_current_session = true,

@@ -14,6 +14,12 @@
           "Jenkinsfile"
         ],
         "path": "./groovy.json"
+      },
+      {
+        "language": [
+          "yaml"
+        ],
+        "path": "./yaml.json"
       }
     ]
   }

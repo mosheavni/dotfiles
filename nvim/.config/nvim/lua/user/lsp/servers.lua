@@ -72,12 +72,17 @@ M.setup = function()
     capabilities = capabilities,
   }
 
+  local yaml_cfg = require('user.lsp.yaml').setup { capabilities = capabilities }
+
   lspconfig['helm_ls'].setup {
     capabilities = capabilities,
     filetypes = { 'helm', 'gotmpl' },
+    settings = {
+      yamlls = {
+        config = yaml_cfg.settings,
+      },
+    },
   }
-
-  require('user.lsp.yaml').setup { capabilities = capabilities }
 end
 
 return M

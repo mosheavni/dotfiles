@@ -11,12 +11,10 @@ function termsupport_cwd {
 
 function termsupport_cwd_preexec {
   emulate -L zsh
-  print -Pn "\e]0;${1:-%N}: ${ZSH_TAB_TITLE}\a" # set tab name
+  local CMD="${2%% *}"
+  print -Pn "\e]0;${CMD}: ${ZSH_TAB_TITLE}\a" # set tab name
 }
 
-# Use a precmd hook instead of a chpwd hook to avoid contaminating output
-# i.e. when a script or function changes directory without `cd -q`, chpwd
-# will be called the output may be swallowed by the script or function.
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd termsupport_cwd
 add-zsh-hook preexec termsupport_cwd_preexec

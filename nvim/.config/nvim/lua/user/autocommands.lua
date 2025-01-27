@@ -14,7 +14,7 @@ autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
 })
 
 autocmd('FileChangedShellPost', {
-  desc = 'Actions when the file is changed outside of Neovim',
+  desc = 'Reload when the file is changed outside of Neovim',
   group = reload_file_group,
   callback = function()
     vim.notify('File changed, reloading the buffer', vim.log.levels.WARN)
@@ -41,6 +41,7 @@ autocmd('UIEnter', {
   end,
 })
 
+-- VeryLazy
 autocmd('User', {
   desc = 'Setup non-critical stuff after lazy has loaded',
   group = first_load,

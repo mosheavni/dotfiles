@@ -73,7 +73,6 @@ vim.opt.completeopt = 'menu,menuone,noselect,noinsert,popup'
 vim.o.previewheight = 15
 vim.o.laststatus = 3 -- Global statusline, only one for all buffers
 vim.o.showcmd = true
-vim.o.guifont = 'Fira Code,Hack Nerd Font'
 vim.o.mouse = 'a'
 vim.o.undofile = true -- Enables saving undo history to a file
 vim.o.undolevels = 10000
