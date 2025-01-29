@@ -125,10 +125,10 @@ config.keys = {
 -- arrow keys keybindings
 for _, direction in ipairs { 'Left', 'Right', 'Up', 'Down' } do
   -- move between panes
-  table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CMD|OPT', action = act.ActivatePaneDirection(direction) })
+  -- table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CMD|OPT', action = act.ActivatePaneDirection(direction) })
 
   -- resize panes
-  table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CTRL|CMD', action = act.AdjustPaneSize { direction, 3 } })
+  -- table.insert(config.keys, { key = direction .. 'Arrow', mods = 'CTRL|CMD', action = act.AdjustPaneSize { direction, 3 } })
 
   if direction == 'Left' or direction == 'Right' then
     -- Sends ESC + b and ESC + f sequence, which is used
@@ -162,5 +162,28 @@ end
 for i = 1, 9 do
   table.insert(config.keys, { key = tostring(i), mods = 'CMD', action = act.ActivateTab(i - 1) })
 end
+
+local smart_splits = wez.plugin.require 'https://github.com/mrjones2014/smart-splits.nvim'
+smart_splits.apply_to_config(config, {
+  -- the default config is here, if you'd like to use the default keys,
+  -- you can omit this configuration table parameter and just use
+  -- smart_splits.apply_to_config(config)
+
+  -- directional keys to use in order of: left, down, up, right
+  direction_keys = { 'h', 'j', 'k', 'l' },
+  -- if you want to use separate direction keys for move vs. resize, you
+  -- can also do this:
+  -- direction_keys = {
+  --   move = { 'h', 'j', 'k', 'l' },
+  --   resize = { 'LeftArrow', 'DownArrow', 'UpArrow', 'RightArrow' },
+  -- },
+  -- modifier keys to combine with direction_keys
+  modifiers = {
+    move = 'CTRL', -- modifier to use for pane movement, e.g. CTRL+h to move left
+    resize = 'META', -- modifier to use for pane resize, e.g. META+h to resize to the left
+  },
+  -- log level to use: info, warn, error
+  log_level = 'info',
+})
 
 return config
