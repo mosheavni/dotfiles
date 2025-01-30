@@ -1,6 +1,5 @@
 return {
-  dir = '/Users/mavni/Repos/kubectl.nvim',
-  -- 'Ramilito/kubectl.nvim',
+  'Ramilito/kubectl.nvim',
   opts = {
     log_level = vim.log.levels.DEBUG,
     diff = { bin = 'kdiff' },
