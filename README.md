@@ -1,8 +1,28 @@
 # Moshe Avni's DotFiles
 
-(also, how to bootstrap a brand new Mac laptop)
+<a href="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim"><img src="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim/badges/plugins?style=flat" /></a>
+<a href="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim"><img src="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim/badges/leaderkey?style=flat" /></a>
+<a href="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim"><img src="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim/badges/plugin-manager?style=flat" /></a>
+
+## Usage (just NVIM)
+
+ > Install requires Neovim 0.10+. Always review the code before installing a configuration.
+
+Clone the repository and install the plugins:
+
+```sh
+git clone git@github.com:mosheavni/dotfiles ~/.config/mosheavni/dotfiles
+```
+
+Open Neovim with this config:
+
+```sh
+NVIM_APPNAME=mosheavni/dotfiles/nvim/.config/nvim nvim
+```
 
 ## Usage
+
+### (also, how to bootstrap a brand new Mac laptop)
 
 0. Install xcode-select (for basically everything...)
 
