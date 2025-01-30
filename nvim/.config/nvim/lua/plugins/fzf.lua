@@ -151,6 +151,7 @@ return {
         rg_glob = true, -- enable glob parsing
         glob_flag = '--iglob', -- case insensitive globs
         glob_separator = '%s%-%-', -- query separator pattern (lua): ' --'
+        hidden = true,
       },
       keymap = { fzf = { ['ctrl-q'] = 'select-all+accept' } },
     }

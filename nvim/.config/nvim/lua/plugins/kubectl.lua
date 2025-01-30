@@ -48,6 +48,7 @@ return {
         state.setFilter(faults_filter)
       end,
       desc = 'Toggle faults',
+      ft = 'k8s_*',
     },
   },
   init = function()
