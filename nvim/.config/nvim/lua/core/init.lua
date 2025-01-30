@@ -15,7 +15,7 @@ function _G.P(v, r)
   if r then
     print(vim.inspect(v))
   else
-    vim.notify(vim.inspect(v), 2, {
+    vim.notify(vim.inspect(v), vim.log.levels.WARN, {
       title = 'P debug',
       icon = '✎',
     })
@@ -23,58 +23,53 @@ function _G.P(v, r)
   return v
 end
 
-local original_vim_print = vim.print
+local original_print = vim.print
 vim.print = function(...)
-  local str = type(...) == 'table' and vim.inspect(...) or ...
-  original_vim_print(str)
+  local args = { ... }
+  if #args == 1 and type(args[1]) == 'table' then
+    original_print(vim.inspect(args[1]))
+  else
+    original_print(...)
+  end
 end
 
--- Write a temporary file, optionally delete on exit, set filetype and open in a
--- new buffer
--- @param should_delete boolean whether to delete the file on exit
--- @param ft string filetype to set
--- @params new boolean whether to open in a new buffer
--- @params vertical boolean whether to open in a vertical split (only if new is true)
--- @returns nil
+---Write a temporary file with specified options
+---@param opts? {should_delete?: boolean, ft?: string, new?: boolean, vertical?: boolean}
+---@return string tmp The path to the temporary file
 function _G.tmp_write(opts)
-  local defaults = {
+  opts = opts or {}
+  local final_opts = vim.tbl_deep_extend('force', {
     should_delete = true,
     ft = nil,
     new = true,
     vertical = false,
-  }
-  local final_opts = vim.tbl_extend('force', defaults, opts)
-  local should_delete = final_opts.should_delete
-  local ft = final_opts.ft
-  local new = final_opts.new
-  local vertical = final_opts.vertical
+  }, opts)
+
   local tmp = vim.fn.tempname()
-  if new then
-    if vertical then
-      vim.cmd 'vnew'
-    else
-      vim.cmd 'new'
-    end
+
+  if final_opts.new then
+    vim.cmd(final_opts.vertical and 'vnew' or 'new')
   end
 
-  if ft then
-    local extension = require('user.utils').filetype_to_extension[ft] or ft
-    vim.api.nvim_set_option_value('filetype', ft, { buf = 0 })
+  if final_opts.ft then
+    local extension = require('user.utils').filetype_to_extension[final_opts.ft] or final_opts.ft
+    vim.bo.filetype = final_opts.ft
     tmp = tmp .. '.' .. extension
   end
-  vim.cmd(string.format('write %s', tmp))
+
+  vim.cmd('write ' .. vim.fn.fnameescape(tmp))
   vim.cmd 'edit'
 
-  -- Create autocmd to delete the file on exit
-  if should_delete then
-    vim.api.nvim_create_autocmd({ 'VimLeavePre' }, {
+  if final_opts.should_delete then
+    vim.api.nvim_create_autocmd('VimLeavePre', {
       buffer = 0,
-      command = 'delete("' .. tmp .. '")',
+      callback = function()
+        vim.fn.delete(tmp)
+      end,
     })
   end
   return tmp
 end
 
--- leader key - before mapping lsp maps
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
