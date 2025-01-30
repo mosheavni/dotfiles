@@ -23,14 +23,10 @@ function _G.P(v, r)
   return v
 end
 
-local original_print = vim.print
+local original_vim_print = vim.print
 vim.print = function(...)
-  local args = { ... }
-  if #args == 1 and type(args[1]) == 'table' then
-    original_print(vim.inspect(args[1]))
-  else
-    original_print(...)
-  end
+  local str = type(...) == 'table' and vim.inspect(...) or ...
+  original_vim_print(str)
 end
 
 ---Write a temporary file with specified options
