@@ -31,7 +31,6 @@ autoload -U +X bashcompinit && bashcompinit
 fpath+=(
   "${ZSH_CACHE_DIR}/completions"
   "/opt/homebrew/share/zsh/site-functions"
-  "${ASDF_DIR}/completions"
   "${GENCOMPL_FPATH}"
 )
 
@@ -45,6 +44,7 @@ complete -o nospace -C 'aws_completer' aws
 load_completion_from_cmd docker completion zsh
 load_completion_from_cmd kubectl completion zsh
 load_completion_from_cmd helm completion zsh
+load_completion_from_cmd asdf completion zsh
 
 # CLI tools
 load_completion_from_cmd gh completion --shell zsh
