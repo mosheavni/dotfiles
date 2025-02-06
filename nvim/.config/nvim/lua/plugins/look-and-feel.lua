@@ -109,7 +109,6 @@ local M = {
   },
   {
     'luukvbaal/statuscol.nvim',
-    branch = '0.10',
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local builtin = require 'statuscol.builtin'
