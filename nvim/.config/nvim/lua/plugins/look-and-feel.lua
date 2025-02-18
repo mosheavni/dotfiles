@@ -84,6 +84,15 @@ local M = {
   {
     'nvim-tree/nvim-web-devicons',
     lazy = true,
+    opts = {
+      override_by_extension = {
+        hcl = {
+          icon = '',
+          color = '#7182D0',
+          name = 'HCL',
+        },
+      },
+    },
   },
   {
     'eero-lehtinen/oklch-color-picker.nvim',
