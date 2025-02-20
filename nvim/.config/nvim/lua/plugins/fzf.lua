@@ -122,12 +122,7 @@ return {
     },
     {
       '<leader>/',
-      function()
-        require('fzf-lua').live_grep {
-          multiprocess = true,
-          rg_opts = [=[--column --line-number --hidden --no-heading --color=always --smart-case --max-columns=4096 -g '!.git' -e]=],
-        }
-      end,
+      require('fzf-lua').live_grep,
     },
   },
   cmd = { 'FzfLua', 'ListFilesFromBranch' },
@@ -142,6 +137,8 @@ return {
         include_current_session = true,
       },
       grep = {
+        multiprocess = true,
+        RIPGREP_CONFIG_PATH = vim.env.HOME .. '/.ripgreprc',
         -- One thing I missed from Telescope was the ability to live_grep and the
         -- run a filter on the filenames.
         -- Ex: Find all occurrences of "enable" but only in the "plugins" directory.

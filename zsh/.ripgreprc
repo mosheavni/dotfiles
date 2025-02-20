@@ -1,0 +1,8 @@
+# Exclude directories.
+--glob=!{.git,.svn,node_modules,tealdeer,Trash,vendor}
+
+# Exclude file types.
+--glob=!*.{lock}
+
+# Exclude files.
+--glob=!{package-lock.json}

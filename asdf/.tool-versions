@@ -23,3 +23,4 @@ maven 3.6.3
 lua 5.1.5
 rust stable
 vim 9.1.0958
+ripgrep 14.1.1
