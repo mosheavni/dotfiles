@@ -4,6 +4,7 @@ local mappings = require 'kubectl.mappings'
 
 local cluster_to_profile = {
   ['spot-prod'] = 'default',
+  ['spot-prod-bi-billing'] = 'default',
   ['spot-dev-us-east-2'] = 'dev',
 }
 
