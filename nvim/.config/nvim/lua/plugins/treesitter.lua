@@ -59,6 +59,7 @@ M.opts = {
     'graphql',
     'groovy',
     'hcl',
+    'helm',
     'hjson',
     'html',
     'http',

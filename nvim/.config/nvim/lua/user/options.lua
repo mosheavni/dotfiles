@@ -152,7 +152,7 @@ vim.filetype.add {
     ['.*/templates/.*%.yaml'] = {
       function()
         if vim.fn.search('{{.+}}', 'nw') then
-          return 'gotmpl'
+          return 'helm'
         end
       end,
       { priority = 200 },
