@@ -2,7 +2,7 @@
 
 setopt LOCAL_OPTIONS PIPE_FAIL ERR_EXIT
 
-current_branch=$(git symbolic-ref --short HEAD)
+current_branch=$(git symbolic-ref -q --short HEAD || :)
 
 print_remote_or_local() {
   local branch_name=$1
@@ -22,7 +22,7 @@ all_branches=("${(@f)$(git branch --all --sort=-committerdate | grep -v "^\*\|HE
 local_branches=("${(@f)$(git branch --format="%(refname:short)")}")
 
 print_remote_or_local $all_branches[1]
-print -P "%F{green}*%f $current_branch"
+[[ -n "$current_branch" ]] && print -P "%F{green}*%f $current_branch"
 
 # Process remaining branches without parallel
 for branch in "${(@)all_branches[@]:1}"; do
