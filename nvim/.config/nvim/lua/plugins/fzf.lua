@@ -9,6 +9,14 @@ return {
     { '<leader>hh', ':FzfLua help_tags<cr>', silent = true },
     { '<leader>i', ':FzfLua oldfiles<cr>', silent = true },
     {
+      '<C-x><C-f>',
+      require('fzf-lua').complete_path,
+      mode = 'i',
+      silent = true,
+      desc = 'Fuzzy complete path',
+    },
+
+    {
       '<leader>ccp',
       function()
         local actions = require 'CopilotChat.actions'
