@@ -5,3 +5,4 @@
 - [ ] `~/corp-aliases.sh`
 - [ ] `~/.aws`
 - [ ] `~/.zsh_history`
+- [ ] `~/.kube`
