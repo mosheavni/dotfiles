@@ -1,7 +1,7 @@
 local git_funcs = require 'user.git'
 
 vim.schedule(function()
-  local buf = git_funcs.get_fugitive_buffer()
+  local buf = git_funcs.get_fugitive_buffer() or 0
   vim.api.nvim_buf_set_keymap(buf, 'n', '<leader>t', '', {
     noremap = true,
     silent = true,
