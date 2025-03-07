@@ -53,8 +53,9 @@ antidote load
 # ================ #
 #  PS1 and Random  #
 # ================ #
-export EDITOR="nvim"
+export EDITOR='nvim'
 export AWS_PAGER=""
+export MANPAGER='nvim +Man!'
 export cdpath=(. ~ ~/Repos)
 
 # zsh gh copilot configuration

@@ -33,7 +33,7 @@ return {
           'getscriptPlugin',
           'gzip',
           'logipat',
-          'man',
+          -- 'man',
           'matchit',
           'matchparen',
           'netrw',
