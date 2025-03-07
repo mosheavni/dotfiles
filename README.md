@@ -63,7 +63,7 @@ NVIM_APPNAME=mosheavni/dotfiles/nvim/.config/nvim nvim
 
    ```bash
    while read -r plugin_line; do
-     asdf plugin-add $(awk '{print $1}' <<<"$plugin_line")
+     asdf plugin add $(awk '{print $1}' <<<"$plugin_line")
    done <asdf/.tool-versions
    asdf install
    ```
@@ -78,39 +78,27 @@ NVIM_APPNAME=mosheavni/dotfiles/nvim/.config/nvim nvim
 
 7. Run `./start.sh` to create the symlinks between the repo dir and the home dir:
 
-8. Install npm packages
-
-   ```bash
-   npm install -g $(printf "%s " $(<node/.default-npm-packages))
-   ```
-
-9. Install pip dependencies
-
-    ```bash
-    pip3 install -r requirements.txt
-    ```
-
-10. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
+8. Add support for recently-installed [fzf](https://github.com/junegunn/fzf)
 
     ```bash
     $(brew --prefix)/opt/fzf/install
     ```
 
-11. Install gh [github cli copilot extension](https://github.com/github/gh-copilot)
-
-    ```bash
-    gh extension install github/gh-copilot --force
-    ```
-
-12. Login to gh cli
+9. Login to gh cli
 
     ```bash
     gh auth login --web -h github.com
     ```
 
-13. ???
+10. Install gh [github cli copilot extension](https://github.com/github/gh-copilot)
 
-14. PROFIT
+    ```bash
+    gh extension install github/gh-copilot --force
+    ```
+
+11. ???
+
+12. PROFIT
 
 ## Additional stuff
 
