@@ -1,8 +1,9 @@
+---@class Utils
 local M = {}
 
----Creates an augroup while clearing previous
----@param name string The name of the augroup.
----@return number id The augroup id
+---Creates an augroup while clearing previous autocmds
+---@param name string The name of the augroup
+---@return number augroup_id The augroup id
 function M.augroup(name)
   return vim.api.nvim_create_augroup(name, { clear = true })
 end
@@ -37,19 +38,26 @@ function! ReplaceMotion(motion, text)
 endfunction
 ]]
 
--- Cache commonly used vim.fn calls
-local getpos = vim.fn.getpos
-local getregion = vim.fn.getregion
-local getcwd = vim.fn.getcwd
-
--- Consolidated VimL functions into Lua
-function M.get_visual_selection()
+---Returns the current visual selection without leaving visual mode
+---@return string[] lines Array of selected lines
+function M.get_visual_selection_stay_in_visual()
   local mode = vim.api.nvim_get_mode().mode
+  local opts = {}
   -- \22 is an escaped version of <c-v>
   if mode == 'v' or mode == 'V' or mode == '\22' then
-    return getregion(getpos 'v', getpos '.', { type = mode })
+    opts.type = mode
   end
-  return getregion(getpos 'v', getpos '.')
+  return vim.fn.getregion(vim.fn.getpos 'v', vim.fn.getpos '.', opts)
+end
+
+---Returns the current visual selection and exits visual mode
+---@return string text The selected text
+function M.get_visual_selection()
+  local esc = vim.api.nvim_replace_termcodes('<esc>', true, false, true)
+  vim.api.nvim_feedkeys(esc, 'x', false)
+  local vstart = vim.fn.getpos "'<"
+  local vend = vim.fn.getpos "'>"
+  return table.concat(vim.fn.getregion(vstart, vend), '\n')
 end
 
 function M.get_os_command_output(cmd, cwd)
@@ -66,7 +74,7 @@ function M.get_os_command_output(cmd, cwd)
   local stdout, ret = Job:new({
     command = command,
     args = cmd,
-    cwd = cwd or getcwd(),
+    cwd = cwd or vim.fn.getcwd(),
     on_stderr = function(_, data)
       table.insert(stderr, data)
     end,
@@ -77,11 +85,11 @@ end
 
 ---Pretty print using vim.notify
 ---@param message string The message to print
+---@param level? integer The log level (vim.log.levels)
 ---@param title? string The title of the notification
 ---@param icon? string The icon of the notification
----@param level? number The log level of the notification
----@param timeout? number The timeout of the notification
-function M.pretty_print(message, title, icon, level, timeout)
+---@param timeout? integer The timeout in milliseconds
+function M.pretty_print(message, level, title, icon, timeout)
   vim.notify(message, level or vim.log.levels.INFO, {
     title = title or 'Neovim',
     icon = icon or '',
@@ -93,8 +101,8 @@ end
 local COUNTRY_CODE_OFFSET = 127397
 
 ---Converts country code to emoji of the country flag
----@param country_iso string The country code in 2 uppercase letters
----@return string emoji of the country flag
+---@param country_iso string The country code in 2 uppercase letters (e.g. "US", "GB")
+---@return string emoji The country flag emoji
 function M.country_os_to_emoji(country_iso)
   local flag_icon = {}
   for i = 1, #country_iso do
@@ -121,9 +129,9 @@ function M.country_os_to_emoji(country_iso)
 end
 
 ---Get the next index in a table after the current element
----@param tbl table The table to search in
+---@param tbl any[] The table to search in
 ---@param cur any The current element to find
----@return number index The next index in the table (loops back to 1)
+---@return integer index The next index in the table (loops back to 1)
 function M.tbl_get_next(tbl, cur)
   for i, v in ipairs(tbl) do
     if v == cur then
@@ -185,6 +193,8 @@ local EMOJIS = {
   '🚀',
 }
 
+---Returns a random emoji from the predefined list
+---@return string emoji The random emoji
 function M.random_emoji()
   return EMOJIS[math.random(#EMOJIS)]
 end

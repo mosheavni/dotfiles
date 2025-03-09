@@ -1,3 +1,6 @@
+---@class PluginSpec[]
+--- Plugin specifications for Lazy.nvim plugin manager
+--- This file contains the core plugin configurations for Neovim
 local M = {
   {
     'nvim-lua/plenary.nvim',
