@@ -85,11 +85,11 @@ end
 
 ---Pretty print using vim.notify
 ---@param message string The message to print
----@param level? integer The log level (vim.log.levels)
 ---@param title? string The title of the notification
 ---@param icon? string The icon of the notification
+---@param level? integer The log level (vim.log.levels)
 ---@param timeout? integer The timeout in milliseconds
-function M.pretty_print(message, level, title, icon, timeout)
+function M.pretty_print(message, title, icon, level, timeout)
   vim.notify(message, level or vim.log.levels.INFO, {
     title = title or 'Neovim',
     icon = icon or '',
