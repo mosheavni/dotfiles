@@ -1,11 +1,18 @@
+---@class DiffLayout
+---@field left_win integer|nil Window handle for left diff
+---@field right_win integer|nil Window handle for right diff
+
+---@class DiffToolModule
 local M = {}
 
+---@type DiffLayout
 local layout = {
   left_win = nil,
   right_win = nil,
 }
 
 -- Set up a consistent layout with two diff windows and quickfix at bottom
+---@return boolean setup_needed True if new layout needed to be created
 local function setup_layout()
   if layout.left_win and vim.api.nvim_win_is_valid(layout.left_win) then
     return false
@@ -17,8 +24,11 @@ local function setup_layout()
   -- Create right window
   vim.cmd 'vsplit'
   layout.right_win = vim.api.nvim_get_current_win()
+  return true
 end
 
+---@param winnr integer Window handle
+---@param file string File path
 local function edit_in(winnr, file)
   vim.api.nvim_win_call(winnr, function()
     local current = vim.fs.abspath(vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(winnr)))
@@ -34,74 +44,87 @@ local function edit_in(winnr, file)
 end
 
 -- Diff two files
+---@param left_file string Path to left file
+---@param right_file string Path to right file
 local function diff_files(left_file, right_file)
   setup_layout()
-
   edit_in(layout.left_win, left_file)
   edit_in(layout.right_win, right_file)
 
+  -- Apply diff settings efficiently
   vim.cmd 'diffoff!'
-  vim.api.nvim_win_call(layout.left_win, vim.cmd.diffthis)
-  vim.api.nvim_win_call(layout.right_win, vim.cmd.diffthis)
+  local diffthis = vim.cmd.diffthis
+  vim.api.nvim_win_call(layout.left_win, diffthis)
+  vim.api.nvim_win_call(layout.right_win, diffthis)
 end
 
--- Diff two directories
+---@class FileMapping
+---@field left string|nil
+---@field right string|nil
+
+---@param dir string Directory path
+---@param is_left boolean Whether this is the left directory
+---@param all_paths table<string, FileMapping> Accumulated path mappings
+local function process_directory(dir, is_left, all_paths)
+  local files = vim.fs.find(function()
+    return true
+  end, {
+    limit = math.huge,
+    path = dir,
+    follow = false,
+  })
+
+  for _, full_path in ipairs(files) do
+    if vim.fn.isdirectory(full_path) == 0 then
+      local rel_path = full_path:sub(#dir + 1)
+      full_path = vim.fn.resolve(full_path)
+      all_paths[rel_path] = all_paths[rel_path] or { left = nil, right = nil }
+      if is_left then
+        all_paths[rel_path].left = full_path
+      else
+        all_paths[rel_path].right = full_path
+      end
+    end
+  end
+end
+
+---@param left_dir string Left directory path
+---@param right_dir string Right directory path
 local function diff_directories(left_dir, right_dir)
   setup_layout()
 
-  -- Create a map of all relative paths
+  ---@type table<string, FileMapping>
   local all_paths = {}
 
-  -- Process left files
-  local left_files = vim.fs.find(function()
-    return true
-  end, { limit = math.huge, path = left_dir, follow = false })
-  for _, full_path in ipairs(left_files) do
-    local rel_path = full_path:sub(#left_dir + 1)
-    full_path = vim.fn.resolve(full_path)
-
-    if vim.fn.isdirectory(full_path) == 0 then
-      all_paths[rel_path] = all_paths[rel_path] or { left = nil, right = nil }
-      all_paths[rel_path].left = full_path
-    end
-  end
-
-  -- Process right files
-  local right_files = vim.fs.find(function()
-    return true
-  end, { limit = math.huge, path = right_dir, follow = false })
-  for _, full_path in ipairs(right_files) do
-    local rel_path = full_path:sub(#right_dir + 1)
-    full_path = vim.fn.resolve(full_path)
-
-    if vim.fn.isdirectory(full_path) == 0 then
-      all_paths[rel_path] = all_paths[rel_path] or { left = nil, right = nil }
-      all_paths[rel_path].right = full_path
-    end
-  end
+  -- Process both directories
+  process_directory(left_dir, true, all_paths)
+  process_directory(right_dir, false, all_paths)
 
   -- Convert to quickfix entries
+  ---@type table[] Quickfix entries
   local qf_entries = {}
+
   for rel_path, files in pairs(all_paths) do
-    local status = 'M' -- Modified (both files exist)
-    if not files.left then
+    local status, left_file, right_file = 'M', files.left, files.right
+
+    if not left_file then
       status = 'A' -- Added (only in right)
-      files.left = left_dir .. rel_path
-    elseif not files.right then
+      left_file = left_dir .. rel_path
+    elseif not right_file then
       status = 'D' -- Deleted (only in left)
-      files.right = right_dir .. rel_path
+      right_file = right_dir .. rel_path
     end
 
-    table.insert(qf_entries, {
-      filename = files.right,
+    qf_entries[#qf_entries + 1] = {
+      filename = right_file,
       text = status,
       user_data = {
         diff = true,
         rel = rel_path,
-        left = files.left,
-        right = files.right,
+        left = left_file,
+        right = right_file,
       },
-    })
+    }
   end
 
   -- Sort entries by filename for consistency
@@ -117,9 +140,9 @@ local function diff_directories(left_dir, right_dir)
     quickfixtextfunc = function(info)
       local items = vim.fn.getqflist({ id = info.id, items = 1 }).items
       local out = {}
-      for item = info.start_idx, info.end_idx do
-        local entry = items[item]
-        table.insert(out, entry.text .. ' ' .. entry.user_data.rel)
+      for i = info.start_idx, info.end_idx do
+        local entry = items[i]
+        out[#out + 1] = entry.text .. ' ' .. entry.user_data.rel
       end
       return out
     end,
@@ -129,13 +152,27 @@ local function diff_directories(left_dir, right_dir)
   vim.cmd.cfirst()
 end
 
+---Setup the difftool with highlighting and commands
 function M.setup()
   local ns_id = vim.api.nvim_create_namespace 'difftool_qf'
 
-  -- Define the highlight groups in the namespace
-  vim.api.nvim_set_hl(ns_id, 'DiffToolAdd', { link = 'DiffAdd' })
-  vim.api.nvim_set_hl(ns_id, 'DiffToolDelete', { link = 'DiffDelete' })
-  vim.api.nvim_set_hl(ns_id, 'DiffToolText', { link = 'DiffText' })
+  -- Pre-compile patterns for performance
+  local patterns = {
+    add = '^A ',
+    delete = '^D ',
+    modify = '^M ',
+  }
+
+  -- Define highlight groups
+  local highlights = {
+    DiffToolAdd = { link = 'DiffAdd' },
+    DiffToolDelete = { link = 'DiffDelete' },
+    DiffToolText = { link = 'DiffText' },
+  }
+
+  for group, def in pairs(highlights) do
+    vim.api.nvim_set_hl(ns_id, group, def)
+  end
 
   vim.api.nvim_create_autocmd('BufWinEnter', {
     pattern = 'quickfix',
@@ -146,11 +183,11 @@ function M.setup()
       local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
       for i, line in ipairs(lines) do
         local hl_group
-        if line:match '^A ' then
+        if line:match(patterns.add) then
           hl_group = 'DiffToolAdd'
-        elseif line:match '^D ' then
+        elseif line:match(patterns.delete) then
           hl_group = 'DiffToolDelete'
-        elseif line:match '^M ' then
+        elseif line:match(patterns.modify) then
           hl_group = 'DiffToolText'
         end
 
@@ -173,7 +210,7 @@ function M.setup()
       local entry = qf_list[qf_info.idx]
 
       -- Check if the entry is a diff entry
-      if not entry or not entry.user_data or not entry.user_data.diff or args.buf ~= entry.bufnr then
+      if not (entry and entry.user_data and entry.user_data.diff and args.buf == entry.bufnr) then
         return
       end
 
@@ -184,19 +221,21 @@ function M.setup()
   })
 
   vim.api.nvim_create_user_command('DiffTool', function(opts)
-    if #opts.fargs >= 2 then
-      local left = opts.fargs[1]
-      local right = opts.fargs[2]
-
-      if vim.fn.isdirectory(left) == 1 and vim.fn.isdirectory(right) == 1 then
-        diff_directories(left, right)
-      elseif vim.fn.filereadable(left) == 1 and vim.fn.filereadable(right) == 1 then
-        diff_files(left, right)
-      else
-        vim.notify('Both arguments must be files or directories', vim.log.levels.ERROR)
-      end
-    else
+    if #opts.fargs < 2 then
       vim.notify('Usage: DiffTool <left> <right>', vim.log.levels.ERROR)
+      return
+    end
+
+    local left, right = opts.fargs[1], opts.fargs[2]
+    local is_dir = vim.fn.isdirectory(left) == 1 and vim.fn.isdirectory(right) == 1
+    local is_file = vim.fn.filereadable(left) == 1 and vim.fn.filereadable(right) == 1
+
+    if is_dir then
+      diff_directories(left, right)
+    elseif is_file then
+      diff_files(left, right)
+    else
+      vim.notify('Both arguments must be files or directories', vim.log.levels.ERROR)
     end
   end, { nargs = '*', force = true })
 end
