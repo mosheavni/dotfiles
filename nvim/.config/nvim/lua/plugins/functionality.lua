@@ -12,7 +12,7 @@ local M = {
     end,
   },
   {
-    'mosheavni/vim-dirdiff',
+    'mosheavni/vim-dirdiff', -- todo convert to difftool
     cmd = { 'DirDiff' },
     init = function()
       require('user.menu').add_actions('Diff', {

@@ -1,2 +1,2 @@
 #!/bin/bash
-nvim -c "DirDiff $1 $2"
+nvim -c "DiffTool $1 $2"

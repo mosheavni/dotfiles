@@ -391,6 +391,11 @@ vmap <c-r> :VisualCalculator<cr>
 ----------
 require('user.grep').setup()
 
+--------------
+-- DiffTool --
+--------------
+require('user.difftool').setup()
+
 ------------------------
 -- Run current buffer --
 ------------------------
