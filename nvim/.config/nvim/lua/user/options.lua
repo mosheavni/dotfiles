@@ -36,8 +36,15 @@ vim.o.emoji = true
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
 -- opt.whichwrap:append '<>[]hl'
-vim.opt.diffopt:append 'linematch:60'
-vim.opt.diffopt:append 'vertical'
+vim.opt.diffopt = {
+  'internal',
+  'filler',
+  'closeoff',
+  'indent-heuristic',
+  'linematch:60',
+  'vertical',
+  'algorithm:histogram',
+}
 vim.o.splitkeep = 'screen'
 
 vim.o.number = true -- Show current line number
