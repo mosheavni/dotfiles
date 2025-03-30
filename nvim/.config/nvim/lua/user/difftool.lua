@@ -193,9 +193,10 @@ function M.setup()
 
         if hl_group then
           vim.api.nvim_buf_set_extmark(bufnr, ns_id, i - 1, 0, {
-            line = i - 1,
             hl_group = hl_group,
-            end_line = i,
+            end_row = i,
+            end_col = 0,
+            strict = false,
           })
         end
       end
@@ -237,7 +238,11 @@ function M.setup()
     else
       vim.notify('Both arguments must be files or directories', vim.log.levels.ERROR)
     end
-  end, { nargs = '*', force = true })
+  end, {
+    nargs = '*',
+    force = true,
+    complete = 'file',
+  })
 end
 
 return M
