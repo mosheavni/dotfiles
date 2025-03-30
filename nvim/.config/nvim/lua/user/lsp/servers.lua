@@ -13,6 +13,7 @@ M.setup = function()
   lspconfig['html'].setup { capabilities = capabilities }
   lspconfig['vimls'].setup { capabilities = capabilities }
   lspconfig['taplo'].setup { capabilities = capabilities }
+  lspconfig['jinja_lsp'].setup { capabilities = capabilities }
   lspconfig['jsonls'].setup {
     capabilities = capabilities,
     settings = {
