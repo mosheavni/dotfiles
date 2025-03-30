@@ -31,6 +31,7 @@ M.setup = function()
     jump = { float = true },
     signs = { text = M.diagnostic_signs },
     virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
+    virtual_lines = { current_line = true },
     float = { border = 'rounded', source = 'if_many' },
   }
 
