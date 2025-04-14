@@ -47,7 +47,7 @@ M.setup = function(opts)
     schemas = M.all_schemas,
     lspconfig = yaml_lspconfig,
   }
-  require('lspconfig')['yamlls'].setup(yaml_cfg)
+  vim.lsp.config('yamlls', yaml_cfg)
   return yaml_cfg
 end
 
