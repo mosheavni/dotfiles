@@ -1,31 +1,38 @@
 return {
   'Ramilito/kubectl.nvim',
+  dir = '~/Repos/kubectl.nvim',
   opts = {
-    log_level = vim.log.levels.DEBUG,
-    diff = { bin = 'kdiff' },
-    headers = true,
-    hints = true,
-    context = true,
-    heartbeat = true,
-    kubernetes_versions = true,
-    auto_refresh = {
+    headers = {
       enabled = true,
+      hints = true,
+      context = true,
+      heartbeat = true,
     },
-    filter = {
-      apply_on_select_from_history = false,
-      max_history = 100,
-    },
-    logs = {
-      since = '30s',
-      timestamps = false,
-      prefix = false,
-    },
-    lineage = {
-      enabled = false,
-    },
-    completion = {
-      follow_cursor = false,
-    },
+    -- log_level = vim.log.levels.DEBUG,
+    -- diff = { bin = 'kdiff' },
+    -- headers = true,
+    -- hints = true,
+    -- context = true,
+    -- heartbeat = true,
+    -- kubernetes_versions = true,
+    -- auto_refresh = {
+    --   enabled = true,
+    -- },
+    -- filter = {
+    --   apply_on_select_from_history = false,
+    --   max_history = 100,
+    -- },
+    -- logs = {
+    --   since = '30s',
+    --   timestamps = false,
+    --   prefix = false,
+    -- },
+    -- lineage = {
+    --   enabled = false,
+    -- },
+    -- completion = {
+    --   follow_cursor = false,
+    -- },
   },
   cmd = { 'Kubectl', 'Kubectx', 'Kubens' },
   keys = {
