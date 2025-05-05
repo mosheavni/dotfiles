@@ -125,7 +125,7 @@ end
 
 M.push = function(cb)
   M.get_branch(function(branch)
-    run_git({ 'push', 'origin', branch }, 'Pushing to ' .. branch .. '...', cb)
+    run_git({ 'push', '-u', 'origin', branch }, 'Pushing to ' .. branch .. '...', cb)
   end)
 end
 
@@ -244,7 +244,6 @@ M.ui_select_merge_remote_branch = function()
 end
 
 M.ui_select_create_tag = function()
-  require('fzf-lua.utils').fzf_exit()
   vim.defer_fn(function()
     vim.ui.input({ prompt = 'Enter tag name❯ ' }, function(tag_name)
       if not tag_name then
@@ -262,6 +261,18 @@ M.ui_select_create_tag = function()
           end
         end)
       end)
+    end)
+  end, 100)
+end
+
+M.ui_select_rename_branch = function(branch_name, cb)
+  -- require('fzf-lua.utils').fzf_exit()
+  vim.defer_fn(function()
+    vim.ui.input({ prompt = 'Enter new branch name❯ ', default = branch_name }, function(new_name)
+      if not new_name then
+        return M.prnt 'Canceled.'
+      end
+      run_git({ 'branch', '-m', branch_name, new_name }, 'Renaming branch: ' .. branch_name .. ' to ' .. new_name, cb)
     end)
   end, 100)
 end
