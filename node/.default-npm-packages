@@ -3,5 +3,6 @@ eslint
 eslint-config-react-app
 neovim
 npm
+quicktype
 typescript
 yarn
