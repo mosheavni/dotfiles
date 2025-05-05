@@ -108,6 +108,11 @@ local language_specific_plugins = {
       },
     },
   },
+  {
+    'crispgm/nvim-go',
+    ft = 'go',
+    opts = {},
+  },
 }
 
 return {
