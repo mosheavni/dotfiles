@@ -9,6 +9,7 @@ M.setup = function()
     'cssmodules_ls',
     'docker_compose_language_service',
     'dockerls',
+    'gopls',
     'groovyls',
     'helm_ls',
     'html',
