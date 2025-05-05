@@ -6,6 +6,7 @@ local M = {
     Accept = 'application/vnd.github+json',
     ['X-GitHub-Api-Version'] = '2022-11-28',
   },
+  schema_modeline = '# yaml-language-server: $schema=',
 }
 
 M.schema_url = 'https://raw.githubusercontent.com/' .. M.schemas_catalog .. '/' .. M.schema_catalog_branch
@@ -54,7 +55,7 @@ M.list_schemas = function()
       return
     end
     local schema_url = M.schema_url .. '/' .. selection
-    local schema_modeline = '# yaml-language-server: $schema=' .. schema_url
+    local schema_modeline = M.schema_modeline .. schema_url
     vim.api.nvim_buf_set_lines(0, 0, 0, false, { schema_modeline })
     vim.notify('Added schema modeline: ' .. schema_modeline)
   end)
