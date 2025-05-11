@@ -239,7 +239,7 @@ seq 100 | parallel -k dowork &gt;results.txt</content>
     </snippets>
   </folder>
   <folder>
-    <title>AWS cli</title>
+    <title>AWS</title>
     <snippets>
       <snippet>
         <title>ssm get all params</title>
@@ -276,6 +276,28 @@ seq 100 | parallel -k dowork &gt;results.txt</content>
         <title>get latest eks ami</title>
         <content>aws ssm get-parameter --name /aws/service/eks/optimized-ami/1.30/amazon-linux-2023/x86_64/standard/recommended/image_id \
     --region us-west-2 --query "Parameter.Value" --output text</content>
+      </snippet>
+      <snippet>
+        <title>ec2-instance-selector table formatted</title>
+        <content>ec2-instance-selector \
+  --cpu-architecture x86_64 \
+  --cpu-architecture amd64 \
+  --memory-min 4 \
+  --memory-max 32 \
+  --network-performance-min 25 \
+  --max-results 555 \
+  -v \
+  --gpus 0 2&gt;/dev/null | \
+jq -r '
+  ["type", "memory", "cpu", "network"],
+  (.[] | [
+    .InstanceType,
+    (.MemoryInfo.SizeInMiB / 1024 | tostring),
+    (.VCpuInfo.DefaultVCpus | tostring),
+    .NetworkInfo.NetworkCards[0].NetworkPerformance
+  ])
+  | @tsv
+' | column -t -s $'\t'</content>
       </snippet>
     </snippets>
   </folder>
@@ -613,3 +635,4 @@ done</content>
     </snippets>
   </folder>
 </folders>
+
