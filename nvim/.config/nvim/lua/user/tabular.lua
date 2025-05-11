@@ -3,6 +3,7 @@ local M = {
   headers = {},
   lines = {},
   delimiter = '\t',
+  pattern_delimiter = nil,
   current_filter = nil,
   sort_column = nil,
   sort_direction = 1, -- 1 for ascending, -1 for descending
@@ -14,38 +15,47 @@ local M = {
 function M.parse_buffer()
   vim.ui.input({
     prompt = 'Enter delimiter: ',
-    default = '\t',
+    default = M.delimiter,
   }, function(input)
-    if input then
-      M.delimiter = input
-      local bufnr = vim.api.nvim_get_current_buf()
-      M.raw_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-
-      -- Parse headers
-      M.headers = {}
-      for word in string.gmatch(M.raw_lines[1], '[^' .. M.delimiter .. ']+') do
-        table.insert(M.headers, vim.trim(word))
-      end
-
-      -- Parse data lines
-      M.lines = {}
-      for i = 2, #M.raw_lines do
-        local line = M.raw_lines[i]
-        local row = {}
-        for word in string.gmatch(line, '[^' .. M.delimiter .. ']+') do
-          table.insert(row, vim.trim(word))
-        end
-        table.insert(M.lines, row)
-      end
-
-      M.display_table()
+    if not input then
+      return
     end
-  end)
-end
 
-function M.set_delimiter(new_delimiter)
-  M.delimiter = new_delimiter
-  M.parse_buffer()
+    M.delimiter = input
+    -- For two spaces, we need a special pattern
+    if M.delimiter == '  ' then
+      M.pattern_delimiter = '  +'
+    else
+      -- Escape special pattern characters in delimiter
+      M.pattern_delimiter = M.delimiter:gsub('[%(%)%.%%%+%-%*%?%[%]%^%$]', '%%%1')
+    end
+
+    vim.print('M.pattern_delimiter: ' .. vim.inspect(M.pattern_delimiter))
+    local bufnr = vim.api.nvim_get_current_buf()
+    M.raw_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+    -- Parse headers
+    M.headers = {}
+    local header_line = M.raw_lines[1]
+    local header_words = vim.split(header_line, M.pattern_delimiter)
+    for _, word in ipairs(header_words) do
+      table.insert(M.headers, vim.trim(word))
+    end
+
+    -- Parse data lines
+    M.lines = {}
+    for i = 2, #M.raw_lines do
+      local line = M.raw_lines[i]
+      local row = {}
+      local words = vim.split(line, M.pattern_delimiter)
+      for _, word in ipairs(words) do
+        table.insert(row, vim.trim(word))
+      end
+      table.insert(M.lines, row)
+    end
+
+    M.display_table()
+  end)
 end
 
 function M.sort_by_column(col_index)
