@@ -475,3 +475,5 @@ end, { nargs = '?' })
 -- Search and Replace --
 ------------------------
 vim.cmd('source ' .. vim.fn.stdpath 'config' .. '/lua/user/search-replace.vim')
+
+require('user.tabular').setup {}
