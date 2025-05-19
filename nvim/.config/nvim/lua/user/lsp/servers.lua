@@ -73,6 +73,33 @@ M.setup = function()
     end,
   })
 
+  -- local yaml_cfg = {
+  --   yaml = {
+  --     format = {
+  --       bracketSpacing = false,
+  --     },
+  --     -- schemas = require('schemastore').yaml.schemas(),
+  --     -- schemas = vim.tbl_deep_extend('force', { [require('kubernetes').yamlls_schema()] = '*.yaml' }, require('schemastore').yaml.schemas()),
+  --     schemaStore = {
+  --       -- Must disable built-in schemaStore support to use
+  --       -- schemas from SchemaStore.nvim plugin
+  --       enable = false,
+  --       -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+  --       url = '',
+  --     },
+  --     schemas = {},
+  --   },
+  -- }
+  -- vim.lsp.config('yamlls', {
+  --   capabilities = vim.tbl_deep_extend('force', capabilities, {
+  --     textDocument = {
+  --       foldingRange = {
+  --         dynamicRegistration = true,
+  --       },
+  --     },
+  --   }),
+  -- })
+
   local yaml_cfg = require('user.lsp.yaml').setup { capabilities = capabilities }
 
   vim.lsp.config('helm_ls', {
