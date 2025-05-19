@@ -18,10 +18,13 @@ local function get_makefile_options(path)
       -- Check for lines starting with a target rule (e.g., "target: dependencies")
       local target = line:match '^(.-):'
       if target then
-        in_target = true
-        count = count + 1
-        -- Exclude the ":" and add the option to the list with text and value fields
-        table.insert(options, { text = count .. ' - ' .. target, value = target })
+        -- Skip .PHONY declarations and empty targets
+        if not target:match '^%.PHONY' and not target:match '^%s*$' then
+          in_target = true
+          count = count + 1
+          -- Exclude the ":" and add the option to the list with text and value fields
+          table.insert(options, { text = count .. ' - ' .. target, value = target })
+        end
       elseif in_target then
         -- If we're inside a target block, stop adding options
         in_target = false
