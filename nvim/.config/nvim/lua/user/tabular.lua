@@ -30,7 +30,6 @@ function M.parse_buffer()
       M.pattern_delimiter = M.delimiter:gsub('[%(%)%.%%%+%-%*%?%[%]%^%$]', '%%%1')
     end
 
-    vim.print('M.pattern_delimiter: ' .. vim.inspect(M.pattern_delimiter))
     local bufnr = vim.api.nvim_get_current_buf()
     M.raw_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 
@@ -206,6 +205,10 @@ function M.display_table()
 
   -- Switch to the new buffer
   vim.api.nvim_set_current_buf(bufnr)
+
+  -- set no wrap
+  local winnr = vim.api.nvim_get_current_win()
+  vim.api.nvim_set_option_value('wrap', false, { win = winnr })
 
   -- Set up keymaps
   local opts = { noremap = true, silent = true }
