@@ -72,7 +72,7 @@ end
 -- enable_number_separators()
 
 -- Add command to toggle the feature
-vim.api.nvim_create_user_command('ToggleNumberSeparators', function()
+vim.api.nvim_create_user_command('NumberSeparatorsToggle', function()
   if vim.b.number_separators_enabled then
     disable_number_separators()
     vim.notify 'Number separators disabled'
