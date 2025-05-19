@@ -1,5 +1,6 @@
 local commands = require 'kubectl.actions.commands'
 local tables = require 'kubectl.utils.tables'
+vim.print 'in here'
 
 vim.schedule(function()
   vim.api.nvim_buf_set_keymap(0, 'n', '<Plug>(kubectl.select)', '', {
