@@ -139,8 +139,9 @@ function M.display_table()
   -- Format and insert headers
   local formatted_headers = {}
   for i, header in ipairs(M.headers) do
-    local fmt = string.format('%-' .. M.col_widths[i] .. 's', header)
-    table.insert(formatted_headers, fmt)
+    -- Pad the header with spaces to match column width
+    local padded_header = header .. string.rep(' ', M.col_widths[i] - #header)
+    table.insert(formatted_headers, padded_header)
   end
   local header_line = table.concat(formatted_headers, '    ')
 
@@ -168,8 +169,9 @@ function M.display_table()
     if should_display then
       local formatted_row = {}
       for i, cell in ipairs(row) do
-        local fmt = string.format('%-' .. M.col_widths[i] .. 's', cell or '')
-        table.insert(formatted_row, fmt)
+        local value = cell or ''
+        local padded_cell = value .. string.rep(' ', M.col_widths[i] - #value)
+        table.insert(formatted_row, padded_cell)
       end
       table.insert(display_lines, table.concat(formatted_row, '    '))
     end
