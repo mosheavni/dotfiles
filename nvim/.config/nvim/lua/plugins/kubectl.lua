@@ -69,6 +69,9 @@ return {
       pattern = 'k8s_*',
       callback = function()
         vim.opt.titlestring = 'k8s: %t'
+        if vim.bo.filetype == 'k8s_yaml' then
+          vim.bo.filetype = 'yaml'
+        end
       end,
     })
   end,
