@@ -11,6 +11,7 @@ config.max_fps = 240
 config.animation_fps = 240
 config.front_end = 'WebGpu'
 config.webgpu_power_preference = 'HighPerformance'
+config.scrollback_lines = 10000
 
 -- font
 config.harfbuzz_features = {
