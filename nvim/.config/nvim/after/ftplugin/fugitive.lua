@@ -1,4 +1,5 @@
 local git_funcs = require 'user.git'
+print 'this happened'
 
 vim.schedule(function()
   local buf = git_funcs.get_fugitive_buffer() or 0
