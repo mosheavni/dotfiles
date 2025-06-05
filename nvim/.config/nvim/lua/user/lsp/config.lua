@@ -36,7 +36,6 @@ M.setup = function()
   }
 
   ---@diagnostic disable-next-line: missing-fields
-  require('mason-lspconfig').setup { automatic_installation = true }
   require('user.lsp.servers').setup()
 
   -- on attach
