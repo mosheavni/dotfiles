@@ -7,6 +7,7 @@ local M = {
   current_filter = nil,
   sort_column = nil,
   sort_direction = 1, -- 1 for ascending, -1 for descending
+  spacing = 2, -- Number of spaces between columns
   col_widths = {}, -- Add this line to store column widths
   ns_headers = vim.api.nvim_create_namespace 'tabular_headers',
   ns_sort = vim.api.nvim_create_namespace 'tabular_sort',
@@ -86,6 +87,19 @@ function M.sort_by_column(col_index)
       end
     end
 
+    -- check if there is a number in the string
+    local str_num_a = val_a:match '(%d+)' or false
+    local str_num_b = val_b:match '(%d+)' or false
+    if str_num_a and str_num_b then
+      str_num_a = tonumber(str_num_a)
+      str_num_b = tonumber(str_num_b)
+      if M.sort_direction == 1 then
+        return str_num_a < str_num_b
+      else
+        return str_num_a > str_num_b
+      end
+    end
+
     -- Otherwise compare as strings
     if M.sort_direction == 1 then
       return val_a < val_b
@@ -143,14 +157,14 @@ function M.display_table()
     local padded_header = header .. string.rep(' ', M.col_widths[i] - #header)
     table.insert(formatted_headers, padded_header)
   end
-  local header_line = table.concat(formatted_headers, '    ')
+  local header_line = table.concat(formatted_headers, string.rep(' ', M.spacing))
 
   -- Create separator line with proper spacing
   local separator_parts = {}
   for _, width in ipairs(M.col_widths) do
     table.insert(separator_parts, string.rep('-', width))
   end
-  local separator_line = table.concat(separator_parts, '----')
+  local separator_line = table.concat(separator_parts, string.rep('-', M.spacing))
   local display_lines = { header_line, separator_line }
 
   -- Format and insert data lines
@@ -173,7 +187,7 @@ function M.display_table()
         local padded_cell = value .. string.rep(' ', M.col_widths[i] - #value)
         table.insert(formatted_row, padded_cell)
       end
-      table.insert(display_lines, table.concat(formatted_row, '    '))
+      table.insert(display_lines, table.concat(formatted_row, string.rep(' ', M.spacing)))
     end
   end
 
@@ -198,7 +212,7 @@ function M.display_table()
       })
     end
 
-    pos = pos + width + 4 -- Change from +2 to +4 for the four-space separator
+    pos = pos + width + M.spacing
   end
 
   -- Set buffer options
@@ -233,7 +247,7 @@ function M.sort_by_current_column()
   for i, width in ipairs(M.col_widths) do
     local next_pos = current_pos + width
     if i < #M.col_widths then
-      next_pos = next_pos + 2 -- Add space for the two-space separator
+      next_pos = next_pos + M.spacing
     end
 
     if col >= current_pos and col < next_pos then
