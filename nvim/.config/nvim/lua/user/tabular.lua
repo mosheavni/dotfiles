@@ -11,6 +11,7 @@ local M = {
   col_widths = {}, -- Add this line to store column widths
   ns_headers = vim.api.nvim_create_namespace 'tabular_headers',
   ns_sort = vim.api.nvim_create_namespace 'tabular_sort',
+  ns_filter = vim.api.nvim_create_namespace 'tabular_filter',
 }
 
 function M.raw_parse()
@@ -223,7 +224,7 @@ function M.display_table()
   -- Format and insert data lines
   for _, row in ipairs(M.lines) do
     local should_display = true
-    if M.current_filter then
+    if M.current_filter and M.current_filter ~= '' then
       should_display = false
       for _, cell in ipairs(row) do
         if string.find(string.lower(cell), M.current_filter) then
@@ -245,6 +246,18 @@ function M.display_table()
   end
 
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, display_lines)
+
+  -- Clear any existing filter indicators
+  vim.api.nvim_buf_clear_namespace(bufnr, M.ns_filter, 0, -1)
+
+  -- Add filter indicator if there's an active filter
+  if M.current_filter and M.current_filter ~= '' then
+    vim.api.nvim_buf_set_extmark(bufnr, M.ns_filter, 1, 0, {
+      virt_text = { { '🔍 Filter: ' .. M.current_filter .. ' ', 'Comment' } },
+      virt_text_pos = 'overlay',
+    })
+  end
+
   -- Add header highlighting and sort indicator
   local pos = 0
   for i, width in ipairs(M.col_widths) do
