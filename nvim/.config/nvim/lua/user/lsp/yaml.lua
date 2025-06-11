@@ -137,17 +137,8 @@ M.setup = function(opts)
   vim.list_extend(M.all_schemas, M.k8s_schemas)
   -- vim.list_extend(M.all_schemas, require('schemastore').json.schemas())
   -- vim.list_extend(M.all_schemas, require('user.additional-schemas').crds_as_schemas())
-  local yaml_cfg = require('yaml-companion').setup {
-    -- log_level = 'debug',
-    builtin_matchers = {
-      -- Detects Kubernetes files based on content
-      kubernetes = { enabled = true },
-    },
-    -- schemas = M.all_schemas,
-    lspconfig = yaml_lspconfig,
-  }
+  local yaml_cfg = require('schema-companion').setup_client(yaml_lspconfig)
   vim.lsp.config('yamlls', yaml_cfg)
-  -- require('lspconfig')['yamlls'].setup(yaml_cfg)
   M.yaml_cfg = yaml_cfg
   return yaml_cfg
 end
