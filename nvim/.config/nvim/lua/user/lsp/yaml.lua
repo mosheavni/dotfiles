@@ -9,7 +9,7 @@ local M = {
   yaml_cfg = {},
 }
 
-M.on_attach = function(client, bufnr)
+M.add_crds = function(bufnr)
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   local resources = {}
   local current = { line = nil }
@@ -67,24 +67,31 @@ M.on_attach = function(client, bufnr)
     })
   end
 
-  -- Define CRDs
-  local crd = {
-    'ExternalSecret',
+  -- Define core Kubernetes API groups
+  local core_api_groups = {
+    [''] = true, -- core group (v1)
+    ['apps'] = true,
+    ['batch'] = true,
+    ['autoscaling'] = true,
+    ['networking.k8s.io'] = true,
+    ['policy'] = true,
+    ['rbac.authorization.k8s.io'] = true,
+    ['storage.k8s.io'] = true,
   }
 
   -- Add comments before CRD resources
   local lines_to_add = {}
   for _, resource in ipairs(resources) do
-    for _, v in ipairs(crd) do
-      if resource.kind == v then
-        -- Construct URL based on apiGroup and version
-        local url = string.format(
-          'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/%s/%s_%s.json',
-          resource.apiGroup,
-          resource.kind:lower(),
-          resource.version
-        )
-        lines_to_add[resource.line] = string.format('# yaml-language-server: $schema=%s', url)
+    -- If the API group is not in core_api_groups, it's likely a CRD
+    if resource.apiGroup ~= '' and not core_api_groups[resource.apiGroup] then
+      -- Construct URL based on apiGroup and version
+      local url =
+        string.format('https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/%s/%s_%s.json', resource.apiGroup, resource.kind:lower(), resource.version)
+      local modeline = string.format('# yaml-language-server: $schema=%s', url)
+      -- Check if the modeline already exists in the previous line
+      local prev_line = vim.api.nvim_buf_get_lines(bufnr, resource.line - 2, resource.line - 1, false)[1]
+      if not prev_line or not prev_line:match '# yaml%-language%-server: %$schema=' then
+        lines_to_add[resource.line] = modeline
       end
     end
   end
@@ -95,16 +102,6 @@ M.on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_lines(bufnr, line_num - 1 + offset, line_num - 1 + offset, false, { comment })
     offset = offset + 1
   end
-
-  -- add schema to yaml
-  local schemas = require('schemastore').yaml.schemas()
-
-  if #resources > 0 then
-    -- schemas = vim.tbl_deep_extend('force', schemas, { [require('kubernetes').yamlls_schema()] = results })
-    schemas = vim.tbl_deep_extend('force', schemas, { kubernetes = vim.uri_from_bufnr(bufnr) })
-  end
-  client.config.settings = M.yaml_cfg
-  client.config.settings.yaml.schemas = schemas
 end
 
 M.setup = function(opts)
