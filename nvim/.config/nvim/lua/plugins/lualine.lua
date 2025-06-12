@@ -209,10 +209,11 @@ M.config = function()
 
   ins_left {
     function()
-      local schema = require('yaml-companion').get_buf_schema(0)
-      if schema then
-        return 'YAML Schema: ' .. schema.result[1].name
-      end
+      -- local schema = require('schema-companion').get_buffer_schema()
+      -- if schema then
+      --   return 'YAML Schema: ' .. schema.result[1].name
+      -- end
+      return 'YAML Schema: '
     end,
     cond = conditions.is_yaml_ft,
   }

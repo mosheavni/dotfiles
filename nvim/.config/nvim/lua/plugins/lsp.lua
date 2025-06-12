@@ -87,7 +87,7 @@ local language_specific_plugins = {
     end,
   },
   {
-    'mosheavni/yaml-companion.nvim',
+    'cenk1cenk2/schema-companion.nvim',
     ft = 'yaml',
     config = function()
       vim.keymap.set('n', '<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", { remap = false, silent = true })
@@ -96,6 +96,14 @@ local language_specific_plugins = {
           require('yaml-companion').open_ui_select()
         end,
       })
+
+      require('schema-companion').setup {
+        log_level = vim.log.levels.DEBUG,
+        enable_telescope = false,
+        matchers = {
+          require('schema-companion.matchers.kubernetes').setup { version = 'v1.31.0' },
+        },
+      }
     end,
   },
   { 'b0o/SchemaStore.nvim', lazy = true },
