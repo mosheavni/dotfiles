@@ -1,4 +1,6 @@
-local M = {}
+local M = {
+  icon = '',
+}
 
 -- Helper function to get all directories in the given paths
 local function get_directories(paths)
@@ -80,7 +82,7 @@ function M.pick_project()
   local display_to_path = {}
   for _, dir in ipairs(all_dirs) do
     local name = vim.fn.fnamemodify(dir, ':t')
-    local display_name = active_projects[name] and '󰣞 ' .. name or '  ' .. name
+    local display_name = active_projects[name] and M.icon .. ' ' .. name or '  ' .. name
     formatted_dirs[#formatted_dirs + 1] = display_name
     display_to_path[display_name] = dir
   end

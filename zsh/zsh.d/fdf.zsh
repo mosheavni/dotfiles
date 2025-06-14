@@ -20,11 +20,10 @@ function fdf() {
   # Process each directory
   for dir in $dirs; do
     dir_name=${dir:t}
-    icon=${pane_map[$dir_name]:+󰏘 }
+    icon=${pane_map[$dir_name]:+ }
     icon=${icon:-  }
     print -f "%s%s\t%s\t%s\n" $icon $dir_name $dir ${pane_map[$dir_name]:-}
   done | fzf -d $'\t' --with-nth 1 | while IFS=$'\t' read -r _ full_dir tab_pane; do
-    print "full_dir: $full_dir tab_pane: $tab_pane"
     if [[ -n $tab_pane ]]; then
       tab_id=$(echo $tab_pane | cut -d'~' -f1)
       pane_id=$(echo $tab_pane | cut -d'~' -f2)
