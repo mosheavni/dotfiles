@@ -8,19 +8,35 @@ M.config = function()
 
   -- Color table for highlights
   -- stylua: ignore
+  -- local colors = {
+  --   bg       = '#202328',
+  --   fg       = '#bbc2cf',
+  --   aqua     = '#6EB0A3',
+  --   yellow   = '#ECBE7B',
+  --   cyan     = '#008080',
+  --   darkblue = '#081633',
+  --   green    = '#a9b665',
+  --   orange   = '#FF8800',
+  --   violet   = '#a9a1e1',
+  --   magenta  = '#c678dd',
+  --   blue     = '#51afef',
+  --   red      = '#ec5f67',
+  -- }
+
+local palette = require("rose-pine.palette")
   local colors = {
-    bg       = '#202328',
-    fg       = '#bbc2cf',
-    aqua     = '#6EB0A3',
-    yellow   = '#ECBE7B',
-    cyan     = '#008080',
-    darkblue = '#081633',
-    green    = '#a9b665',
-    orange   = '#FF8800',
-    violet   = '#a9a1e1',
-    magenta  = '#c678dd',
-    blue     = '#51afef',
-    red      = '#ec5f67',
+    bg = palette.base,
+    fg = palette.text,
+    aqua = palette.rose, -- Changed to rose for better contrast
+    yellow = palette.gold,
+    cyan = palette.foam, -- Changed to foam for better visibility
+    darkblue = palette.surface,
+    green = palette.pine,
+    orange = palette.iris, -- Changed to iris for better distinction
+    violet = palette.iris,
+    magenta = palette.rose, -- Changed to rose for consistency
+    blue = palette.foam,
+    red = palette.love,
   }
 
   local conditions = {
@@ -40,7 +56,7 @@ M.config = function()
     end,
   }
 
-  local my_branch = { 'branch', icon = '', color = { fg = colors.violet, gui = 'bold' } }
+  local my_branch = { 'branch', icon = '', color = { fg = colors.aqua, gui = 'bold' } }
 
   local borders = {
     left = {
@@ -99,7 +115,6 @@ M.config = function()
   }
 
   -- lualine
-  local navic = require 'nvim-navic'
   local config = {
     options = {
       -- Disable sections and component separators
@@ -163,25 +178,25 @@ M.config = function()
     icon = '',
     color = function()
       local mode_color = {
-        n = colors.red,
-        i = colors.green,
-        v = colors.blue,
-        [''] = colors.blue,
-        V = colors.blue,
-        c = colors.magenta,
-        no = colors.red,
-        s = colors.orange,
-        S = colors.orange,
-        ic = colors.yellow,
-        R = colors.violet,
-        Rv = colors.violet,
-        cv = colors.red,
-        ce = colors.red,
-        r = colors.cyan,
-        rm = colors.cyan,
-        ['r?'] = colors.cyan,
-        ['!'] = colors.red,
-        t = colors.cyan,
+        n = palette.rose, -- Normal mode
+        i = palette.pine, -- Insert mode
+        v = palette.foam, -- Visual mode
+        [''] = palette.foam, -- Visual block
+        V = palette.foam, -- Visual line
+        c = palette.love, -- Command mode
+        no = palette.love, -- Normal operator pending
+        s = palette.gold, -- Select mode
+        S = palette.gold, -- Select line
+        ic = palette.iris, -- Insert completion
+        R = palette.iris, -- Replace mode
+        Rv = palette.iris, -- Virtual replace
+        cv = palette.love, -- Ex mode
+        ce = palette.love, -- Normal ex
+        r = palette.foam, -- Hit-enter prompt
+        rm = palette.foam, -- More prompt
+        ['r?'] = palette.foam, -- Confirm
+        ['!'] = palette.love, -- Shell
+        t = palette.pine, -- Terminal
       }
       return { fg = mode_color[vim.fn.mode()] }
     end,
@@ -201,9 +216,9 @@ M.config = function()
     sources = { 'nvim_diagnostic' },
     symbols = { error = ' ', warn = ' ', info = ' ' },
     diagnostics_color = {
-      color_error = { fg = colors.red },
-      color_warn = { fg = colors.yellow },
-      color_info = { fg = colors.cyan },
+      color_error = { fg = palette.love },
+      color_warn = { fg = palette.gold },
+      color_info = { fg = palette.foam },
     },
   }
 
@@ -230,7 +245,7 @@ M.config = function()
   ins_left {
     'filename',
     cond = conditions.buffer_not_empty,
-    color = { fg = colors.aqua, gui = 'bold' },
+    color = { fg = 'subtle', gui = 'bold' },
   }
 
   -------------------

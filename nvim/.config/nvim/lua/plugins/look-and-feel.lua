@@ -23,10 +23,15 @@ local M = {
     'rose-pine/neovim',
     name = 'rose-pine',
     opts = {
+      variant = 'moon', -- auto, main, moon, dawn
       styles = {
         bold = true,
         italic = true,
         transparency = true,
+      },
+      highlight_groups = {
+        StatusLine = { fg = 'love', bg = 'love', blend = 10 },
+        StatusLineNC = { fg = 'subtle', bg = 'surface' },
       },
     },
     config = function(_, opts)
