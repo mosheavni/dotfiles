@@ -7,6 +7,16 @@ local M = {
   },
   all_schemas = {},
   yaml_cfg = {},
+  core_api_groups = {
+    [''] = true, -- core group (v1)
+    ['apps'] = true,
+    ['batch'] = true,
+    ['autoscaling'] = true,
+    ['networking.k8s.io'] = true,
+    ['policy'] = true,
+    ['rbac.authorization.k8s.io'] = true,
+    ['storage.k8s.io'] = true,
+  },
 }
 
 M.add_crds = function(bufnr)
@@ -48,7 +58,7 @@ M.add_crds = function(bufnr)
     end
   end
 
-  -- Don't forget to check the last section
+  -- check the last section
   if current.apiVersion and current.kind then
     local group, version
     if current.apiVersion:find '/' then
@@ -67,24 +77,12 @@ M.add_crds = function(bufnr)
     })
   end
 
-  -- Define core Kubernetes API groups
-  local core_api_groups = {
-    [''] = true, -- core group (v1)
-    ['apps'] = true,
-    ['batch'] = true,
-    ['autoscaling'] = true,
-    ['networking.k8s.io'] = true,
-    ['policy'] = true,
-    ['rbac.authorization.k8s.io'] = true,
-    ['storage.k8s.io'] = true,
-  }
-
   -- Add comments before CRD resources
   local lines_to_add = {}
   local added_kinds = {}
   for _, resource in ipairs(resources) do
-    -- If the API group is not in core_api_groups, it's likely a CRD
-    if resource.apiGroup ~= '' and not core_api_groups[resource.apiGroup] then
+    -- If the API group is not in M.core_api_groups, it's likely a CRD
+    if resource.apiGroup ~= '' and not M.core_api_groups[resource.apiGroup] then
       -- Construct URL based on apiGroup and version
       local url =
         string.format('https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/%s/%s_%s.json', resource.apiGroup, resource.kind:lower(), resource.version)
@@ -93,8 +91,8 @@ M.add_crds = function(bufnr)
       local prev_line = vim.api.nvim_buf_get_lines(bufnr, resource.line - 2, resource.line - 1, false)[1]
       if not prev_line or not prev_line:match '# yaml%-language%-server: %$schema=' then
         lines_to_add[resource.line] = modeline
-        if not added_kinds[resource.kind] then
-          vim.list_extend(added_kinds, { resource.kind })
+        if not vim.list_contains(added_kinds, resource.kind) then
+          table.insert(added_kinds, resource.kind)
         end
       end
     end
