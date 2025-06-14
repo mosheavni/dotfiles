@@ -325,22 +325,6 @@ function asdf-kubectl-version() {
   asdf global kubectl "${TO_INSTALL}"
 }
 
-# fzf
-function fdf() {
-  # remove trailing / from $1
-  dir_clean=${1%/}
-  all_files=$(find $dir_clean/* -maxdepth 0 -type d -print 2>/dev/null)
-  dir_to_enter=$(sed "s?$dir_clean/??g" <<<$all_files | fzf)
-  tab_pane=$(wezterm cli list --format json | jq -r --arg pj "$dir_to_enter" '.[] | select(.title | contains("nvim: " + $pj)) | "\(.tab_id)~\(.pane_id)"')
-  if [[ -n $tab_pane ]]; then
-    tab_id=$(echo $tab_pane | cut -d'~' -f1)
-    pane_id=$(echo $tab_pane | cut -d'~' -f2)
-    wezterm cli activate-tab --tab-id "$tab_id"
-    wezterm cli activate-pane --pane-id "$pane_id"
-    return
-  fi
-  cd "$dir_clean/$dir_to_enter" && nvim
-}
 
 function mkdp() {
   kubectl get pod --no-headers | fzf | awk '{print $1}' | xargs -n 1 kubectl describe pod
