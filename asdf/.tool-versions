@@ -9,9 +9,9 @@ kubectl 1.31.7
 kubectx 0.9.5
 minikube 1.32.0
 mysql 8.0.34
-neovim nightly
+neovim stable
 nodejs 20.17.0
-python 3.11.8
+python 3.12.11
 semver 3.4.0
 terraform 1.5.5
 terragrunt 0.64.4
