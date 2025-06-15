@@ -32,7 +32,7 @@ M.config = require('user.lsp.config').setup
 M.dependencies = {
   'nvimtools/none-ls.nvim',
   {
-    'williamboman/mason.nvim',
+    'mason-org/mason.nvim',
     cmd = 'Mason',
     keys = { { '<leader>cm', '<cmd>Mason<cr>', desc = 'Mason' } },
     build = ':MasonUpdate',
