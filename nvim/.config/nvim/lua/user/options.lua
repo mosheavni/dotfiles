@@ -8,10 +8,7 @@ vim.g.python3_host_prog = 'python3'
 -- titlestring
 vim.cmd [[
   function! CleanTitle()
-    let l:path = getcwd()
-    let l:path = substitute(l:path, $HOME . '/Repos/', '', '')
-    let l:path = substitute(l:path, $HOME . '/', '', '')
-    return "nvim: " . l:path
+    return "nvim: " . substitute(getcwd(), $HOME . '/\(Repos/\)\?', '', '')
   endfunction
 ]]
 vim.o.titlestring = '%{CleanTitle()}'
