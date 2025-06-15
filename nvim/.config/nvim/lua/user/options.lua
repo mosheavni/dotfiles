@@ -5,7 +5,17 @@ vim.g.python3_host_prog = 'python3'
 -- vim.g.do_filetype_lua = 1
 -- vim.g.did_load_filetypes = 0
 
-vim.o.titlestring = "nvim: %{substitute('~' . substitute(getcwd(), $HOME, '', ''), '\\~/Repos/', '', '')}"
+-- titlestring
+vim.cmd [[
+  function! CleanTitle()
+    let l:path = getcwd()
+    let l:path = substitute(l:path, $HOME . '/Repos', '', '')
+    let l:path = substitute(l:path, $HOME . '/', '', '')
+    return "nvim: " . l:path
+  endfunction
+]]
+vim.o.titlestring = '%{CleanTitle()}'
+
 vim.o.title = true -- Changes the wezterm title
 vim.o.cursorcolumn = true
 vim.o.cursorline = true -- Add highlight behind current line
@@ -95,6 +105,7 @@ vim.o.equalalways = true -- When splitting window, make new window same size
 vim.o.history = 10000
 vim.o.termguicolors = true
 vim.o.signcolumn = 'yes'
+vim.o.virtualedit = 'block' -- Allow cursor to move to the end of the line
 -- require 'user.winbar'
 -- opt.winbar = "%{%v:lua.require'user.winbar'.eval()%}"
 -- vim.o.statuscolumn = '%=%{v:wrap?"":v:relnum?v:relnum:v:lnum} %s%C'
@@ -114,7 +125,7 @@ vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.o.foldlevel = 999
 vim.o.foldlevelstart = 99
 vim.o.foldcolumn = '1' -- '0' is not bad
-vim.o.foldenable = true
+vim.o.foldtext = 'substitute(getline(v:foldstart),"\t",repeat(" ",&tabstop),"g")."...".trim(getline(v:foldend))'
 
 -- Support undercurl
 vim.cmd [[
