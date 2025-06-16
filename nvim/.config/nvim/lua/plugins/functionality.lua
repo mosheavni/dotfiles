@@ -162,6 +162,12 @@ local M = {
       vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
     end,
   },
+  {
+    'nvzone/typr',
+    dependencies = 'nvzone/volt',
+    opts = {},
+    cmd = { 'Typr', 'TyprStats' },
+  },
 }
 
 return M
