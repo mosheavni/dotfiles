@@ -15,6 +15,7 @@ local M = {
     'hrsh7th/cmp-cmdline',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-path',
+    'petertriho/cmp-git',
     'hrsh7th/cmp-nvim-lsp-signature-help',
   },
 }
@@ -34,6 +35,7 @@ M.config = function()
     cmdline = '[Cmd]',
     cmp_tabnine = '[TN]',
     copilot = '[CP]',
+    git = '[Git]',
     luasnip = '[Snpt]',
     nvim_lsp = '[LSP]',
     path = '[Path]',
@@ -170,6 +172,15 @@ M.config = function()
       documentation = cmp.config.window.bordered(),
     },
   }
+
+  cmp.setup.filetype({ 'gitcommit', 'octo' }, {
+    sources = cmp.config.sources({
+      { name = 'git' },
+    }, {
+      { name = 'buffer' },
+    }),
+  })
+  require('cmp_git').setup()
 
   local db_fts = { 'sql', 'mysql', 'plsql' }
   for _, ft in ipairs(db_fts) do
