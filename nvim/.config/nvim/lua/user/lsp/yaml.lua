@@ -114,9 +114,7 @@ M.setup = function(opts)
   local yaml_lspconfig = {
     on_attach = function(_, bufnr)
       local modeline_added = M.add_crds(bufnr)
-      if modeline_added then
-        -- vim.notify('Added YAML modeline for CRDs', vim.log.levels.INFO, { title = 'YAML LSP' })
-        -- print the CRDs that were added
+      if not vim.tbl_isempty(modeline_added) then
         local crds = table.concat(modeline_added, ', ')
         vim.notify('Added YAML modeline for CRDs: ' .. crds, vim.log.levels.INFO, { title = 'YAML LSP' })
       end
