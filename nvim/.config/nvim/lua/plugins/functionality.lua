@@ -168,25 +168,6 @@ local M = {
     opts = {},
     cmd = { 'Typr', 'TyprStats' },
   },
-  {
-    'pwntester/octo.nvim',
-    keys = { { '<leader>o', '<cmd>Octo<cr>' } },
-    cmd = 'Octo',
-    opts = {
-      use_local_fs = false, -- use local files on right side of reviews
-      enable_builtin = true, -- shows a list of builtin actions when no action is provided
-      default_merge_method = 'squash',
-      default_delete_branch = true, -- whether to delete branch when merging pull request with either `Octo pr merge` or from picker (can be overridden with `delete`/`nodelete` argument to `Octo pr merge`)
-      picker = 'fzf-lua',
-      picker_config = {
-        use_emojis = true,
-      },
-      users = 'assignable', -- Users for assignees or reviewers. Values: "search" | "mentionable" | "assignable"
-      pull_requests = {
-        use_branch_name_as_title = true, -- sets branch name to be the name for the PR
-      },
-    },
-  },
 }
 
 return M
