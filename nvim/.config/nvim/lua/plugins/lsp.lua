@@ -123,8 +123,11 @@ local language_specific_plugins = {
       'nvim-treesitter/nvim-treesitter',
     },
     opts = {
-      -- lsp_keymaps = false,
-      -- other options
+      lsp_cfg = true,
+      lsp_gofumpt = true,
+      lsp_inlay_hints = {
+        enable = false,
+      },
     },
     config = function(_, opts)
       require('go').setup(opts)
