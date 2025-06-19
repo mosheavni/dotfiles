@@ -128,6 +128,7 @@ local language_specific_plugins = {
       lsp_inlay_hints = {
         enable = false,
       },
+      dap_vt = true,
     },
     config = function(_, opts)
       require('go').setup(opts)
