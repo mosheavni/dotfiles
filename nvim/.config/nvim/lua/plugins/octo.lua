@@ -1,9 +1,10 @@
 return {
   'pwntester/octo.nvim',
+  dir = '~/Repos/octo.nvim',
   keys = { { '<leader>o', '<cmd>Octo<cr>' } },
   cmd = 'Octo',
   opts = {
-    use_local_fs = false, -- use local files on right side of reviews
+    use_local_fs = true, -- use local files on right side of reviews
     enable_builtin = true, -- shows a list of builtin actions when no action is provided
     default_merge_method = 'squash',
     default_delete_branch = true, -- whether to delete branch when merging pull request with either `Octo pr merge` or from picker (can be overridden with `delete`/`nodelete` argument to `Octo pr merge`)

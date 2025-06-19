@@ -115,6 +115,7 @@ M.config = function(_, opts)
 
   ---@diagnostic disable-next-line: missing-fields
   require('nvim-treesitter.configs').setup(opts)
+  vim.treesitter.language.register('markdown', 'octo')
 
   vim.opt.foldmethod = 'expr'
   vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
