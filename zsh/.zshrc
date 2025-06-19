@@ -81,3 +81,9 @@ export KUBECTL_EXTERNAL_DIFF="kdiff"
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
 
 eval "$(starship init zsh)"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/mosheavni/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/mosheavni/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/mosheavni/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/mosheavni/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
