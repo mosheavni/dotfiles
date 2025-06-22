@@ -9,7 +9,7 @@ kubectl 1.31.7
 kubectx 0.9.5
 minikube 1.32.0
 mysql 8.0.34
-neovim stable
+neovim nightly
 nodejs 20.17.0
 python 3.12.11
 semver 3.4.0

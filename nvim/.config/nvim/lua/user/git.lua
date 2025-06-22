@@ -74,8 +74,9 @@ M.get_branch = function(cb)
   run_git({ 'branch', '--show-current' }, nil, function(branch)
     local branch = vim.trim(branch)
     if branch == '' then
-      run_git({ 'rev-parse', '--short', 'HEAD' }, nil, function(commit_hash)
-        cb(vim.trim(commit_hash))
+      M.get_short_commit(function(commit_hash)
+        M.prnt('No branch found, using commit hash: ' .. commit_hash)
+        cb(commit_hash)
       end)
     else
       cb(vim.trim(branch))
@@ -84,7 +85,22 @@ M.get_branch = function(cb)
 end
 
 M.get_branch_sync = function()
-  return vim.trim(run_git_sync({ 'branch', '--show-current' }, nil).stdout)
+  local branch = vim.trim(run_git_sync({ 'branch', '--show-current' }, nil).stdout)
+  if branch == '' then
+    return M.get_short_commit_sync()
+  else
+    return branch
+  end
+end
+
+M.get_short_commit = function(cb)
+  run_git({ 'rev-parse', '--short', 'HEAD' }, nil, function(commit_hash)
+    cb(vim.trim(commit_hash))
+  end)
+end
+
+M.get_short_commit_sync = function()
+  return vim.trim(run_git_sync({ 'rev-parse', '--short', 'HEAD' }, nil).stdout)
 end
 
 M.get_remotes = function(cb)

@@ -93,8 +93,6 @@ local M = {
     keys = {
       { '<c-e>', "<cmd>lua require('oil').open_float()<cr>" },
     },
-    ---@module 'oil'
-    ---@type oil.SetupOpts
     opts = {
       -- Configuration for the floating window in oil.open_float
       float = {
