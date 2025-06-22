@@ -72,7 +72,14 @@ end
 
 M.get_branch = function(cb)
   run_git({ 'branch', '--show-current' }, nil, function(branch)
-    cb(vim.trim(branch))
+    local branch = vim.trim(branch)
+    if branch == '' then
+      run_git({ 'rev-parse', '--short', 'HEAD' }, nil, function(commit_hash)
+        cb(vim.trim(commit_hash))
+      end)
+    else
+      cb(vim.trim(branch))
+    end
   end)
 end
 
