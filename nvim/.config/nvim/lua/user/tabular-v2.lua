@@ -97,6 +97,13 @@ function M.raw_parse(buf_lines, delimiter)
     pattern_delimiter = delimiter:gsub('[%(%)%.%%%+%-%*%?%[%]%^%$]', '%%%1')
   end
 
+  -- clear empty lines
+  for i = #buf_lines, 1, -1 do
+    if vim.trim(buf_lines[i]) == '' then
+      table.remove(buf_lines, i)
+    end
+  end
+
   -- Parse headers
   local headers = {}
   local header_line = buf_lines[1]
