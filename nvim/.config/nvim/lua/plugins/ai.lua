@@ -70,12 +70,12 @@ return {
   },
   {
     'yetone/avante.nvim',
-    event = 'VeryLazy',
     version = false, -- Never set this value to "*"! Never!
     keys = {
       { '<leader>ccc', '<cmd>AvanteChat<CR>', mode = { 'n', 'v' } },
       { '<leader>ccs', '<cmd>AvanteStop<CR>' },
     },
+    cmd = { 'AvanteChat' },
     opts = {
       provider = 'copilot',
     },
