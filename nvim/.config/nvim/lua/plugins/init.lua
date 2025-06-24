@@ -140,8 +140,6 @@ local M = {
     'machakann/vim-swap',
     keys = {
       { '<leader>sw', '<Plug>(swap-interactive)', mode = { 'n', 'v' } },
-      { 'g<', '<Plug>(swap-prev)' },
-      { 'g>', '<Plug>(swap-next)' },
     },
     init = function()
       vim.g.swap_no_default_key_mappings = true
