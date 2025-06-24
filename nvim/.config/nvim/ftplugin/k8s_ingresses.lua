@@ -82,8 +82,6 @@ vim.schedule(function()
       end)
     end,
   })
-end)
 
-vim.schedule(function()
   mappings.map_if_plug_not_set('n', 'gi', '<Plug>(kubectl.ingress_aws)')
 end)
