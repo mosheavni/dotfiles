@@ -79,10 +79,19 @@ end
 ---@param buf_lines string[] The lines from the buffer to be parsed.
 ---@param delimiter string The delimiter used to split the lines into columns.
 ---@return table A table containing parsed headers, lines, and column widths.
-M.raw_parse = function(buf_lines, delimiter)
+function M.raw_parse(buf_lines, delimiter)
   local pattern_delimiter
+  local tab = vim.api.nvim_replace_termcodes('\t', true, true, true)
   if delimiter == '  ' then
     pattern_delimiter = '  +'
+  elseif delimiter == tab then
+    -- check if buf_lines has tab characters
+    if buf_lines[1]:find(tab) then
+      pattern_delimiter = tab
+    else
+      -- If no tabs, use spaces as fallback
+      pattern_delimiter = '  +'
+    end
   else
     -- Escape special pattern characters in delimiter
     pattern_delimiter = delimiter:gsub('[%(%)%.%%%+%-%*%?%[%]%^%$]', '%%%1')
@@ -130,7 +139,7 @@ M.raw_parse = function(buf_lines, delimiter)
   }
 end
 
-M.set_buf_win_options = function(bufnr)
+function M.set_buf_win_options(bufnr)
   vim.api.nvim_set_option_value('filetype', 'tabular', { buf = bufnr })
   vim.api.nvim_set_option_value('buftype', 'nofile', { buf = bufnr })
   vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = bufnr })
@@ -159,7 +168,7 @@ M.set_buf_win_options = function(bufnr)
   end, k_opts)
 end
 
-M.set_lines_and_highlight = function(opts)
+function M.set_lines_and_highlight(opts)
   -- Validate bufnr and ns_filter before proceeding
   if not opts.bufnr or not vim.api.nvim_buf_is_valid(opts.bufnr) then
     print('Error: Invalid buffer number: ' .. tostring(opts.bufnr))
@@ -168,8 +177,9 @@ M.set_lines_and_highlight = function(opts)
 
   vim.api.nvim_buf_set_lines(opts.bufnr, 0, -1, false, opts.display_lines)
 
-  -- Clear any existing filter indicators
+  -- Clear any existing filter and sort indicators
   vim.api.nvim_buf_clear_namespace(opts.bufnr, opts.ns_filter, 0, -1)
+  vim.api.nvim_buf_clear_namespace(opts.bufnr, opts.ns_sort, 0, -1)
 
   -- Add filter indicator if there's an active filter
   if opts.current_filter and opts.current_filter ~= '' then
@@ -426,11 +436,12 @@ function M.parse_command(existing_command)
     interval = { prompt = 'Enter interval (in seconds): ', default = tostring(tab_state and tab_state.interval or M.default_interval) },
     delimiter = { prompt = 'Enter delimiter: ', default = tostring(tab_state and tab_state.delimiter or M.default_delimiter) },
   }
-  vim.ui.input(inputs.command, function(command)
-    if not command or command == '' then
+  vim.ui.input(inputs.command, function(full_command)
+    if not full_command or full_command == '' then
       print 'Invalid command'
       return
     end
+    local command = vim.fs.basename(full_command)
     print('Command set: ' .. command)
 
     vim.ui.input(inputs.interval, function(interval)
@@ -471,7 +482,7 @@ function M.parse_command(existing_command)
           return
         end
         tab_state.timer:start(0, tab_state.interval * 1000, function()
-          local cmd_args = vim.split(command, ' ', { trimempty = true })
+          local cmd_args = vim.split(full_command, ' ', { trimempty = true })
           vim.system(cmd_args, { text = true }, function(result)
             local output = result.stdout
             if not output or output == '' then
@@ -482,11 +493,11 @@ function M.parse_command(existing_command)
               return
             end
             tab_state.raw_lines = vim.split(output, '\n')
-            local raw_parse_res = M.raw_parse(tab_state.raw_lines, tab_state.delimiter)
-            tab_state.headers = raw_parse_res.headers
-            tab_state.lines = raw_parse_res.lines
-            tab_state.col_widths = raw_parse_res.col_widths
             vim.schedule(function()
+              local raw_parse_res = M.raw_parse(tab_state.raw_lines, tab_state.delimiter)
+              tab_state.headers = raw_parse_res.headers
+              tab_state.lines = raw_parse_res.lines
+              tab_state.col_widths = raw_parse_res.col_widths
               if tab_state.sort_column then
                 M.sort_by_column(tab_state.sort_column, tab_state.sort_direction)
               else
