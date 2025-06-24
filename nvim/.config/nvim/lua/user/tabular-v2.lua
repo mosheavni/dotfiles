@@ -1,6 +1,8 @@
 local M = {
   spacing = 4, -- Number of spaces between columns
   default_delimiter = '\t', -- Default delimiter fallback
+  default_interval = 5, -- Default refresh interval in seconds
+  bufname_suffix = 'Tabular', -- Suffix for buffer names
 }
 
 ---@class TabStateV2
@@ -59,7 +61,7 @@ end
 --- @param title string: The buffer title
 --- @return integer: The buffer number
 function M.buffer(title)
-  local bufname = title .. ' - Tabular'
+  local bufname = title .. ' - ' .. M.bufname_suffix
   local buf = M.get_buffer_by_name(bufname)
 
   if not buf then
@@ -146,6 +148,14 @@ M.set_buf_win_options = function(bufnr)
   end, k_opts)
   vim.keymap.set('n', '<C-f>', function()
     M.filter_table()
+  end, k_opts)
+  vim.keymap.set('n', 'ge', function()
+    local tab_state = M.find_tab_state_by_bufnr(bufnr)
+    if not tab_state then
+      print 'No tabular state found for current buffer.'
+      return
+    end
+    M.parse_command(tab_state.command)
   end, k_opts)
 end
 
@@ -409,37 +419,50 @@ function M.sort_by_current_column()
 end
 
 --- Function to parse the current buffer and display the table
-function M.parse_command()
-  vim.ui.input({ prompt = 'Enter command to run: ' }, function(command)
+function M.parse_command(existing_command)
+  local tab_state = M.tabs_state[existing_command]
+  local inputs = {
+    command = { prompt = 'Enter command to run: ', default = existing_command or '' },
+    interval = { prompt = 'Enter interval (in seconds): ', default = tostring(tab_state and tab_state.interval or M.default_interval) },
+    delimiter = { prompt = 'Enter delimiter: ', default = tostring(tab_state and tab_state.delimiter or M.default_delimiter) },
+  }
+  vim.ui.input(inputs.command, function(command)
     if not command or command == '' then
       print 'Invalid command'
       return
     end
+    print('Command set: ' .. command)
 
-    local tabular_command = command
-    print('Command set: ' .. tabular_command)
-
-    vim.ui.input({ prompt = 'Enter interval (in seconds): ' }, function(interval)
+    vim.ui.input(inputs.interval, function(interval)
       interval = tonumber(interval)
       if not interval or interval <= 0 then
         print 'Invalid interval'
         return
       end
 
-      if not M.tabs_state[tabular_command] then
-        M.tabs_state[tabular_command] = vim.tbl_deep_extend('force', {}, M.default_tab_state, { command = tabular_command })
-      end
-      local tab_state = M.tabs_state[tabular_command]
-      tab_state.interval = interval
-      print('Interval set: ' .. interval .. ' seconds')
-
-      vim.ui.input({ prompt = 'Enter delimiter: ', default = M.default_delimiter }, function(delimiter)
+      vim.ui.input(inputs.delimiter, function(delimiter)
         if not delimiter or delimiter == '' or delimiter == nil then
           print 'Invalid delimiter'
           return
         end
 
+        if existing_command and tab_state then
+          if tab_state and tab_state.timer and not tab_state.timer:is_closing() and tab_state.bufnr then
+            tab_state.timer:stop()
+            tab_state.timer:close()
+            tab_state.timer = nil
+          end
+          if existing_command ~= command then
+            M.tabs_state[command] = vim.deepcopy(tab_state)
+            vim.api.nvim_buf_set_name(tab_state.bufnr, command .. ' - ' .. M.bufname_suffix)
+          end
+        else
+          M.tabs_state[command] = vim.tbl_deep_extend('force', {}, M.default_tab_state, { command = command })
+        end
+        tab_state = M.tabs_state[command]
+
         tab_state.delimiter = tostring(delimiter)
+        tab_state.interval = interval
 
         -- Start the loop
         tab_state.timer = vim.uv.new_timer()
@@ -448,11 +471,11 @@ function M.parse_command()
           return
         end
         tab_state.timer:start(0, tab_state.interval * 1000, function()
-          local cmd_args = vim.split(tabular_command, ' ', { trimempty = true })
+          local cmd_args = vim.split(command, ' ', { trimempty = true })
           vim.system(cmd_args, { text = true }, function(result)
             local output = result.stdout
             if not output or output == '' then
-              print('No output from command: ' .. tabular_command)
+              print('No output from command: ' .. command)
               if result.stderr and result.stderr ~= '' then
                 print('Error: ' .. result.stderr)
               end
@@ -468,13 +491,13 @@ function M.parse_command()
                 M.sort_by_column(tab_state.sort_column, tab_state.sort_direction)
               else
                 -- Create or update the buffer
-                M.display_table(tabular_command)
+                M.display_table(command)
               end
               -- Update winbar with last refresh timestamp only if the buffer is the current one
               local last_refresh = os.date '%Y-%m-%d %H:%M:%S'
               local current_bufnr = vim.api.nvim_get_current_buf()
               if tab_state.bufnr == current_bufnr then
-                vim.opt_local.winbar = string.format('Tabular: %s | Last refresh: %s', tabular_command, last_refresh)
+                vim.opt_local.winbar = string.format('Tabular: %s (%ss) | Last refresh: %s', command, interval, last_refresh)
               end
             end)
           end)
@@ -487,6 +510,7 @@ end
 --- Unload function to clean up resources when buffer is deleted
 function M.unload(bufnr)
   if not bufnr then
+    print 'no bufnr'
     return
   end
 
@@ -549,7 +573,7 @@ function M.setup(opts)
       local filetype = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
       local bufname = vim.api.nvim_buf_get_name(bufnr)
 
-      if filetype == 'tabular' or string.match(bufname, '.- Tabular$') then
+      if filetype == 'tabular' or string.match(bufname, '.- ' .. M.bufname_suffix .. '$') then
         M.unload(bufnr)
       end
     end,
