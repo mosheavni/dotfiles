@@ -1,8 +1,12 @@
 return {
   'pwntester/octo.nvim',
-  dir = '~/Repos/octo.nvim',
+  dev = true,
   keys = { { '<leader>o', '<cmd>Octo<cr>' } },
   cmd = 'Octo',
+  -- dependencies = {
+  --   'nvim-lua/plenary.nvim',
+  --   'nvim-telescope/telescope.nvim',
+  -- },
   opts = {
     use_local_fs = true, -- use local files on right side of reviews
     enable_builtin = true, -- shows a list of builtin actions when no action is provided
