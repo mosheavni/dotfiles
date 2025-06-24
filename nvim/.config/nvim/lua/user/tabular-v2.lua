@@ -5,8 +5,6 @@ local M = {
 
 ---@class TabStateV2
 ---@field bufnr integer|nil The ID of the buffer associated with the tab state.
----@field tab_id integer|nil The ID of the tab associated with the tab state.
----@field winnr integer|nil The ID of the window associated with the tab state.
 ---@field delimiter string The delimiter used for parsing data in this tab state.
 ---@field interval integer The interval (in seconds) for refreshing the data.
 ---@field command string The command associated with this tab state.
@@ -28,8 +26,6 @@ M.tabs_state = {}
 ---@type TabStateV2
 M.default_tab_state = {
   bufnr = nil,
-  tab_id = nil,
-  winnr = nil,
   delimiter = M.default_delimiter,
   interval = 5, -- Default refresh interval in seconds
   command = '',
@@ -45,16 +41,6 @@ M.default_tab_state = {
   timer = nil, -- Timer for periodic updates
 }
 
-function M.new_buffer(title)
-  -- Create new buffer for display and open in new tab
-  local bufnr = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_name(bufnr, title .. ' - Tabular')
-  -- create a new tab and set buffer options
-  vim.cmd 'tabnew'
-
-  return bufnr
-end
-
 --- Gets buffer number by name
 --- @param bufname string: The name of the buffer
 --- @return integer|nil: The buffer number
@@ -69,14 +55,20 @@ function M.get_buffer_by_name(bufname)
   return nil
 end
 
---- Creates or updates a buffer.
+--- Creates or gets existing buffer for tabular display
 --- @param title string: The buffer title
+--- @return integer: The buffer number
 function M.buffer(title)
-  local buf = M.get_buffer_by_name(title .. ' - Tabular')
+  local bufname = title .. ' - Tabular'
+  local buf = M.get_buffer_by_name(bufname)
 
   if not buf then
-    buf = M.new_buffer(title)
-    vim.schedule(function() end)
+    -- Create new buffer for display and open in new tab
+    buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_name(buf, bufname)
+    -- create a new tab and set the created buffer in it
+    vim.cmd 'tabnew'
+    vim.api.nvim_set_current_buf(buf)
   end
 
   return buf
@@ -136,21 +128,7 @@ M.raw_parse = function(buf_lines, delimiter)
   }
 end
 
-M.set_buf_opts = function(bufnr)
-  vim.api.nvim_set_current_buf(bufnr)
-  vim.api.nvim_set_option_value('filetype', 'tabular', { buf = bufnr })
-  vim.api.nvim_set_option_value('buftype', 'nofile', { buf = bufnr })
-  vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = bufnr })
-  vim.api.nvim_set_option_value('modifiable', true, { buf = bufnr })
-  vim.api.nvim_set_option_value('modified', false, { buf = bufnr })
-
-  -- Set no wrap
-  local winnr = vim.api.nvim_get_current_win()
-  vim.api.nvim_set_option_value('wrap', false, { win = winnr })
-end
-
 M.set_buf_win_options = function(bufnr)
-  vim.api.nvim_set_current_buf(bufnr)
   vim.api.nvim_set_option_value('filetype', 'tabular', { buf = bufnr })
   vim.api.nvim_set_option_value('buftype', 'nofile', { buf = bufnr })
   vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = bufnr })
@@ -163,17 +141,18 @@ M.set_buf_win_options = function(bufnr)
 
   -- Set up keymaps
   local k_opts = { noremap = true, silent = true, buffer = bufnr }
-  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs', [[<cmd>lua require('user.tabular').sort_by_current_column()<CR>]], k_opts)
-  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-f>', [[<cmd>lua require('user.tabular').filter_table()<CR>]], k_opts)
   vim.keymap.set('n', 'gs', function()
     M.sort_by_current_column()
+  end, k_opts)
+  vim.keymap.set('n', '<C-f>', function()
+    M.filter_table()
   end, k_opts)
 end
 
 M.set_lines_and_highlight = function(opts)
   -- Validate bufnr and ns_filter before proceeding
   if not opts.bufnr or not vim.api.nvim_buf_is_valid(opts.bufnr) then
-    print 'Error: Invalid buffer number'
+    print('Error: Invalid buffer number: ' .. tostring(opts.bufnr))
     return
   end
 
@@ -235,13 +214,13 @@ function M.display_table(tabular_command)
   -- Add numeric keymaps for column sorting
   local k_opts = { noremap = true, silent = true }
   for i = 1, #tab_state.headers do
-    vim.api.nvim_buf_set_keymap(tab_state.bufnr, 'n', tostring(i), string.format([[<cmd>lua require('user.tabular').sort_by_column(%d)<CR>]], i), k_opts)
+    vim.api.nvim_buf_set_keymap(tab_state.bufnr, 'n', tostring(i), string.format([[<cmd>lua require('user.tabular-v2').sort_by_column(%d)<CR>]], i), k_opts)
   end
 
-  -- create namespaces for highlighting
-  local ns_headers = vim.api.nvim_create_namespace('TabularHeaders' .. tab_state.bufnr)
-  local ns_sort = vim.api.nvim_create_namespace('TabularSort' .. tab_state.bufnr)
-  local ns_filter = vim.api.nvim_create_namespace('TabularFilter' .. tab_state.bufnr)
+  -- create namespaces for highlighting if they don't exist
+  tab_state.ns_headers = tab_state.ns_headers or vim.api.nvim_create_namespace('TabularHeaders' .. tab_state.bufnr)
+  tab_state.ns_sort = tab_state.ns_sort or vim.api.nvim_create_namespace('TabularSort' .. tab_state.bufnr)
+  tab_state.ns_filter = tab_state.ns_filter or vim.api.nvim_create_namespace('TabularFilter' .. tab_state.bufnr)
 
   -- Format and insert headers
   local formatted_headers = {}
@@ -266,7 +245,7 @@ function M.display_table(tabular_command)
     if tab_state.current_filter and tab_state.current_filter ~= '' then
       should_display = false
       for _, cell in ipairs(row) do
-        if string.find(string.lower(cell), tab_state.current_filter) then
+        if string.find(string.lower(cell), tab_state.current_filter, 1, true) then
           should_display = true
           break
         end
@@ -292,21 +271,17 @@ function M.display_table(tabular_command)
     headers = tab_state.headers,
     sort_column = tab_state.sort_column,
     sort_direction = tab_state.sort_direction,
-    ns_headers = ns_headers,
-    ns_sort = ns_sort,
-    ns_filter = ns_filter,
+    ns_headers = tab_state.ns_headers,
+    ns_sort = tab_state.ns_sort,
+    ns_filter = tab_state.ns_filter,
   }
 end
 
 function M.sort_by_column(col_index, direction)
   local current_bufnr = vim.api.nvim_get_current_buf()
-  -- local tab_state = vim.tbl_find(M.tabs_state, function(state)
-  --   return state.bufnr == current_bufnr
-  -- end)
   local tab_state = M.find_tab_state_by_bufnr(current_bufnr)
 
   if not tab_state then
-    print('No data associated with current buffer. Current buffer ID:', current_bufnr)
     return
   end
 
@@ -369,6 +344,26 @@ function M.sort_by_column(col_index, direction)
   end)
 
   M.display_table(tab_state.command)
+end
+
+function M.filter_table()
+  local current_bufnr = vim.api.nvim_get_current_buf()
+  local tab_state = M.find_tab_state_by_bufnr(current_bufnr)
+
+  if not tab_state then
+    print('No data associated with current buffer. Current buffer ID:', current_bufnr)
+    return
+  end
+  local input_params = { prompt = 'Filter: ' }
+  if tab_state.current_filter then
+    input_params.default = tab_state.current_filter
+  end
+  vim.ui.input(input_params, function(input)
+    if input then
+      tab_state.current_filter = string.lower(input)
+      M.display_table(tab_state.command)
+    end
+  end)
 end
 
 function M.find_tab_state_by_bufnr(bufnr)
@@ -455,7 +450,14 @@ function M.parse_command()
         tab_state.timer:start(0, tab_state.interval * 1000, function()
           local cmd_args = vim.split(tabular_command, ' ', { trimempty = true })
           vim.system(cmd_args, { text = true }, function(result)
-            local output = result.stdout or ''
+            local output = result.stdout
+            if not output or output == '' then
+              print('No output from command: ' .. tabular_command)
+              if result.stderr and result.stderr ~= '' then
+                print('Error: ' .. result.stderr)
+              end
+              return
+            end
             tab_state.raw_lines = vim.split(output, '\n')
             local raw_parse_res = M.raw_parse(tab_state.raw_lines, tab_state.delimiter)
             tab_state.headers = raw_parse_res.headers
@@ -468,12 +470,59 @@ function M.parse_command()
                 -- Create or update the buffer
                 M.display_table(tabular_command)
               end
+              -- Update winbar with last refresh timestamp only if the buffer is the current one
+              local last_refresh = os.date '%Y-%m-%d %H:%M:%S'
+              local current_bufnr = vim.api.nvim_get_current_buf()
+              if tab_state.bufnr == current_bufnr then
+                vim.opt_local.winbar = string.format('Tabular: %s | Last refresh: %s', tabular_command, last_refresh)
+              end
             end)
           end)
         end)
       end)
     end)
   end)
+end
+
+--- Unload function to clean up resources when buffer is deleted
+function M.unload(bufnr)
+  if not bufnr then
+    return
+  end
+
+  -- Find the tab state associated with this buffer
+  local tab_state = M.find_tab_state_by_bufnr(bufnr)
+  if not tab_state then
+    return
+  end
+
+  -- Stop and close the timer if it exists
+  if tab_state.timer then
+    if not tab_state.timer:is_closing() then
+      tab_state.timer:stop()
+      tab_state.timer:close()
+    end
+    tab_state.timer = nil
+  end
+
+  -- Clear namespaces if they exist
+  if tab_state.ns_headers then
+    vim.api.nvim_buf_clear_namespace(bufnr, tab_state.ns_headers, 0, -1)
+  end
+  if tab_state.ns_sort then
+    vim.api.nvim_buf_clear_namespace(bufnr, tab_state.ns_sort, 0, -1)
+  end
+  if tab_state.ns_filter then
+    vim.api.nvim_buf_clear_namespace(bufnr, tab_state.ns_filter, 0, -1)
+  end
+
+  -- Remove the tab state from our tracking table
+  local command_to_remove = tab_state.command
+  if command_to_remove then
+    M.tabs_state[command_to_remove] = nil
+  end
+
+  print('Cleaned up tabular resources for buffer ' .. bufnr)
 end
 
 function M.setup(opts)
@@ -489,6 +538,23 @@ function M.setup(opts)
   vim.api.nvim_create_user_command('TabularParseCmd', function()
     M.parse_command()
   end, {})
+
+  -- Set up autocmd to clean up resources when tabular buffers are deleted
+  local tabular_group = vim.api.nvim_create_augroup('TabularCleanup', { clear = true })
+  vim.api.nvim_create_autocmd({ 'BufDelete', 'BufWipeout' }, {
+    group = tabular_group,
+    callback = function(args)
+      local bufnr = args.buf
+      -- Check if this is a tabular buffer by checking filetype or buffer name
+      local filetype = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
+      local bufname = vim.api.nvim_buf_get_name(bufnr)
+
+      if filetype == 'tabular' or string.match(bufname, '.- Tabular$') then
+        M.unload(bufnr)
+      end
+    end,
+    desc = 'Clean up tabular resources when buffer is deleted',
+  })
 end
 
 return M
