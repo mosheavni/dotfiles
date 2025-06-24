@@ -1,10 +1,10 @@
 return {
   'Ramilito/kubectl.nvim',
-  dir = '~/Repos/kubectl.nvim',
+  dev = true,
   opts = {
     auto_refresh = {
       enabled = true,
-      interval = 500, -- milliseconds
+      interval = 300, -- milliseconds
     },
 
     headers = {
