@@ -1,5 +1,5 @@
 local commands = require 'kubectl.actions.commands'
-local ingress_view = require 'kubectl.views.ingresses'
+local ingress_view = require 'kubectl.resources.ingresses'
 local mappings = require 'kubectl.mappings'
 
 local cluster_to_profile = {

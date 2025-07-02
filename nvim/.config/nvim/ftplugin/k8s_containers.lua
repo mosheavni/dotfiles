@@ -1,5 +1,5 @@
 local mappings = require 'kubectl.mappings'
-local pod_view = require 'kubectl.views.pods'
+local pod_view = require 'kubectl.resources.pods'
 local tables = require 'kubectl.utils.tables'
 
 vim.api.nvim_buf_set_keymap(0, 'n', '<Plug>(kubectl.browse)', '', {
