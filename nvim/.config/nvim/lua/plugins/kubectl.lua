@@ -2,6 +2,9 @@ return {
   'Ramilito/kubectl.nvim',
   dev = true,
   opts = {
+    kubectl_cmd = {
+      persist_context_change = true,
+    },
     auto_refresh = {
       enabled = true,
       interval = 300, -- milliseconds
@@ -71,6 +74,16 @@ return {
         vim.opt.titlestring = 'k8s: %t'
         if vim.bo.filetype == 'k8s_yaml' then
           vim.bo.filetype = 'yaml'
+        end
+      end,
+    })
+    vim.api.nvim_create_autocmd('User', {
+      group = group,
+      pattern = 'K8sContextChanged',
+      callback = function(ctx)
+        local results = require('kubectl.actions.commands').shell_command('kubectl', { 'config', 'use-context', ctx.data.context })
+        if not results then
+          vim.notify(results, vim.log.levels.INFO)
         end
       end,
     })
