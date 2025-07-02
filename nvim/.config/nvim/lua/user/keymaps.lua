@@ -293,6 +293,7 @@ map('n', 'yc', 'yygccp', { remap = true, desc = 'Duplicate and comment line' })
 
 -- Abbreviations
 map('!a', 'dont', [[don't]], { remap = false })
+map('!a', 'ill', [[i'll]], { remap = false })
 map('!a', 'seperate', 'separate', { remap = false })
 map('!a', 'adn', 'and', { remap = false })
 map('!a', 'waht', 'what', { remap = false })
