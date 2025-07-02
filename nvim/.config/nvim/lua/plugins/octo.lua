@@ -1,7 +1,8 @@
+local octo_string = 'Octo: '
 return {
   'pwntester/octo.nvim',
   dev = true,
-  keys = { { '<leader>o', '<cmd>Octo<cr>' } },
+  keys = { { '<leader>o', '<cmd>Octo<cr>', desc = 'Octo menu' } },
   cmd = 'Octo',
   -- dependencies = {
   --   'nvim-lua/plenary.nvim',
@@ -24,7 +25,6 @@ return {
   config = function(_, opts)
     local octo_config = require 'octo.config'
     local default_opts = octo_config.get_default_values()
-    local octo_string = 'Octo: '
     for _, actions in pairs(default_opts.mappings) do
       for _, details in pairs(actions) do
         if details.desc then
@@ -35,7 +35,8 @@ return {
     -- require('octo').setup(opts)
     -- setup octo and merge opts with default opts
     require('octo').setup(vim.tbl_deep_extend('force', default_opts, opts))
-
+  end,
+  init = function()
     -- keymap <leader>gk to open fzf.lua's keymaps with a ready prompt for
     -- "Octo: " to see all octo keymaps when you press <leader>gk
     vim.keymap.set('n', '<leader>gk', function()
