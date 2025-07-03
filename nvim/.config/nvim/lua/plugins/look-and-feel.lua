@@ -168,6 +168,13 @@ local M = {
     'vim-scripts/CursorLineCurrentWindow',
     event = 'BufReadPost',
   },
+  {
+    'OXY2DEV/markview.nvim',
+    lazy = true,
+
+    -- For `nvim-treesitter` users.
+    priority = 49,
+  },
 }
 
 return M
