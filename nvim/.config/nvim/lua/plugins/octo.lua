@@ -21,6 +21,13 @@ return {
     pull_requests = {
       use_branch_name_as_title = true, -- sets branch name to be the name for the PR
     },
+    mappings = {
+      notification = {
+        read = { lhs = '<C-r>' },
+        done = { lhs = '<C-d>' },
+        unsubscribe = { lhs = '<C-u>' },
+      },
+    },
   },
   config = function(_, opts)
     local octo_config = require 'octo.config'
