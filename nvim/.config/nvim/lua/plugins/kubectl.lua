@@ -87,5 +87,18 @@ return {
         end
       end,
     })
+    vim.api.nvim_create_autocmd('User', {
+      group = group,
+      pattern = 'K8sResourceSelected',
+      callback = function(ctx)
+        local kubectl_user = require 'user.kubectl'
+        local kind = ctx.data.kind
+        if kubectl_user[kind] and kubectl_user[kind].select then
+          kubectl_user[kind].select(ctx.data.name, ctx.data.ns)
+        else
+          vim.notify('No handler for ' .. kind .. ' resource', vim.log.levels.WARN)
+        end
+      end,
+    })
   end,
 }
