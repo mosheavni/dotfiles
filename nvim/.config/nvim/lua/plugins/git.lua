@@ -92,6 +92,9 @@ local diff_actions = {
   ['[Diffview] Diff close'] = function()
     vim.cmd 'DiffviewClose'
   end,
+  ['[Diffview] stashes'] = function()
+    vim.cmd 'DiffviewFileHistory -g --range=stash'
+  end,
 }
 
 local fugitive_config = function()
@@ -274,8 +277,18 @@ local M = {
     },
     keys = {
       -- { '<leader>gd', '<cmd>DiffviewFileHistory<cr>', mode = { 'n', 'v' }, desc = 'Diffview files' },
-      { '<leader>gd', diff_actions['[Diffview] Diff File History'], mode = 'n', desc = 'Diffview files' },
-      { '<leader>gd', ':DiffviewFileHistory<cr>', mode = 'v', desc = 'Diffview selection' },
+      {
+        '<leader>gd',
+        diff_actions['[Diffview] Diff File History'],
+        mode = 'n',
+        desc = 'Diffview files',
+      },
+      {
+        '<leader>gd',
+        ':DiffviewFileHistory<cr>',
+        mode = 'v',
+        desc = 'Diffview selection',
+      },
     },
     config = function()
       require 'diffview'
