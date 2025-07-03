@@ -186,7 +186,6 @@ function M.set_lines_and_highlight(opts)
 
   -- Clear any existing filter and sort indicators
   vim.api.nvim_buf_clear_namespace(opts.bufnr, opts.ns_filter, 0, -1)
-  vim.api.nvim_buf_clear_namespace(opts.bufnr, opts.ns_sort, 0, -1)
 
   -- Add filter indicator if there's an active filter
   if opts.current_filter and opts.current_filter ~= '' then
@@ -313,6 +312,7 @@ function M.sort_by_column(col_index, direction)
   end
 
   if direction then
+    tab_state.sort_column = col_index
     tab_state.sort_direction = direction
   else
     if tab_state.sort_column == col_index then
