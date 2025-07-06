@@ -2,6 +2,9 @@ local commands = require 'kubectl.actions.commands'
 local M = {
   ingresses = {},
   ['applications.argoproj.io'] = {},
+  ['clustersecretstores.external-secrets.io'] = {},
+  ['certificates.cert-manager.io'] = {},
+  serviceaccounts = {},
 }
 
 local cluster_to_profile = {
@@ -15,7 +18,7 @@ local profile_to_onelogin = {
   dev = 'https://spotinst.onelogin.com/client/apps/select/889121822',
 }
 
-function M.ingresses.select(name, ns)
+M.ingresses.select = function(name, ns)
   commands.run_async('get_single_async', {
     kind = 'Ingress',
     namespace = ns,
@@ -74,7 +77,19 @@ function M.ingresses.select(name, ns)
   end)
 end
 
-local function app_select(name, ns)
+M.serviceaccounts.select = function(name, ns)
+  local client = require 'kubectl.client'
+  local sa = client.get_single(vim.json.encode { kind = 'ServiceAccount', namespace = ns, name = name, output = 'Json' })
+
+  local sa_decoded = vim.json.decode(sa)
+  local secret_name = sa_decoded.secrets and sa_decoded.secrets[1] and sa_decoded.secrets[1].name
+  if secret_name then
+    require('kubectl.state').filter_key = 'metadata.name=' .. secret_name .. ',metadata.namespace=' .. ns
+    require('kubectl.resources.secrets').View()
+  end
+end
+
+M['applications.argoproj.io'].select = function(name, ns)
   local ingress_host =
     commands.shell_command('kubectl', { 'get', 'ingress', '-n', ns, '-l', 'app.kubernetes.io/component=server', '-o', 'jsonpath={.items[].spec.rules[].host}' })
   local final_host = string.format('https://%s/applications/argocd/%s', ingress_host, name)
@@ -82,6 +97,14 @@ local function app_select(name, ns)
   vim.ui.open(final_host)
 end
 
-M['applications.argoproj.io'].select = app_select
+M['clustersecretstores.external-secrets.io'].select = function(name)
+  require('kubectl.state').filter_key = 'spec.secretStoreRef.name=' .. name .. ',spec.secretStoreRef.kind=ClusterSecretStore'
+  require('kubectl.resources.fallback').View(nil, 'externalsecrets.external-secrets.io')
+end
+
+M['certificates.cert-manager.io'].select = function(name, ns)
+  require('kubectl.state').filter_key = 'metadata.ownerReferences.name=' .. name .. ',metadata.ownerReferences.kind=Certificate,metadata.namespace=' .. ns
+  require('kubectl.resources.fallback').View(nil, 'certificaterequests.cert-manager.io')
+end
 
 return M

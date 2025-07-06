@@ -1,5 +1,7 @@
 return {
   'Ramilito/kubectl.nvim',
+  version = '2.*',
+  dependencies = 'saghen/blink.download',
   dev = true,
   opts = {
     kubectl_cmd = {
