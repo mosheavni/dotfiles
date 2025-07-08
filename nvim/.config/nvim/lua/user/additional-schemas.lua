@@ -37,6 +37,9 @@ end
 
 M.crds_as_schemas = function()
   local schemas = {}
+  if not M.all_crds or #M.all_crds == 0 then
+    M.init()
+  end
   for _, crd in ipairs(M.all_crds) do
     local crd_name = '[datreeio] ' .. crd:gsub('%.json$', ''):gsub('/', '-'):gsub('_', '-')
     local schema_url = {

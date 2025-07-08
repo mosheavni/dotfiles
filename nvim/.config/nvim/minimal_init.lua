@@ -225,7 +225,7 @@ require('lualine').setup {
     lualine_z = { 'location' },
   },
 }
-require('lazydev').setup({ path = "${3rd}/luv/library", words = { "vim%.uv" } },)
+require('lazydev').setup { path = '${3rd}/luv/library', words = { 'vim%.uv' } }
 -- }}}
 
 -- treesitter {{{

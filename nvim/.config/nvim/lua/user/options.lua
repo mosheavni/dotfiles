@@ -116,7 +116,6 @@ vim.opt.path:append { '**' }
 
 -- Folding
 vim.o.foldenable = true
--- vim.o.foldmethod = 'syntax'
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.o.foldlevel = 999

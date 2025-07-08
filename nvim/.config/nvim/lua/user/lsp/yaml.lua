@@ -144,7 +144,7 @@ M.setup = function(opts)
   }
   -- Merge the lists
   vim.list_extend(M.all_schemas, M.k8s_schemas)
-  -- vim.list_extend(M.all_schemas, require('schemastore').json.schemas())
+  vim.list_extend(M.all_schemas, require('schemastore').json.schemas())
   -- vim.list_extend(M.all_schemas, require('user.additional-schemas').crds_as_schemas())
   local yaml_cfg = require('yaml-companion').setup {
     -- log_level = 'debug',

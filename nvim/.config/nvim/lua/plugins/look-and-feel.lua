@@ -7,19 +7,6 @@ local M = {
   --   Colorscheme --
   -------------------
   {
-    'navarasu/onedark.nvim',
-    enabled = false,
-    config = function()
-      require('onedark').setup {
-        style = 'dark',
-        highlights = {
-          EndOfBuffer = { fg = '#61afef' },
-        },
-      }
-      require('onedark').load()
-    end,
-  },
-  {
     'rose-pine/neovim',
     name = 'rose-pine',
     opts = {
@@ -37,49 +24,6 @@ local M = {
     config = function(_, opts)
       require('rose-pine').setup(opts)
       vim.cmd [[colorscheme rose-pine]]
-    end,
-  },
-  {
-    'sainnhe/sonokai',
-    enabled = false,
-    config = function()
-      vim.cmd [[
-        let g:sonokai_style = 'shusia'
-        let g:sonokai_transparent_background = 1
-        colorscheme sonokai
-      ]]
-      vim.api.nvim_set_hl(0, 'WinSeparator', { fg = '#797D7D' })
-      require('user.menu').add_actions('Colorscheme', {
-        ['Toggle Sonokai Style'] = function()
-          local styles = { 'default', 'atlantis', 'andromeda', 'shusia', 'maia', 'espresso' }
-          local current_value = vim.g.sonokai_style
-          local index = require('user.utils').tbl_get_next(styles, current_value)
-          vim.g.sonokai_style = styles[index]
-          vim.cmd [[colorscheme sonokai]]
-          require('user.utils').pretty_print('Set sonokai_style to ' .. styles[index])
-        end,
-      })
-    end,
-  },
-  {
-    'sainnhe/gruvbox-material',
-    enabled = false,
-    config = function()
-      -- load the colorscheme here
-      vim.cmd [[
-        let g:gruvbox_material_better_performance = 1
-        let g:gruvbox_material_background = 'hard' " soft | medium | hard
-        colorscheme gruvbox-material
-      ]]
-    end,
-  },
-  {
-    'tiagovla/tokyodark.nvim',
-    enabled = false,
-    opts = {},
-    config = function(_, opts)
-      require('tokyodark').setup(opts) -- calling setup is optional
-      vim.cmd [[colorscheme tokyodark]]
     end,
   },
 
@@ -171,9 +115,14 @@ local M = {
   {
     'OXY2DEV/markview.nvim',
     lazy = true,
-
     -- For `nvim-treesitter` users.
     priority = 49,
+    opts = {
+      preview = {
+        filetypes = { 'markdown', 'codecompanion' },
+        ignore_buftypes = {},
+      },
+    },
   },
 }
 

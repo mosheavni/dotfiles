@@ -30,7 +30,7 @@ alias vi='nvim'
 alias sudoedit="nvim"
 alias lvim='NVIM_APPNAME=LazyVim nvim'
 alias zshrc='${=EDITOR} ${ZDOTDIR:-$HOME}/.zshrc'
-alias lv='nvim -nu ${HOME}/.dotfiles/nvim/.config/nvim/minimal_init.lua '
+alias lv='NVIM_APPNAME=lightvim nvim '
 
 #------------------------------------------------------------------------------
 # Development Tools
