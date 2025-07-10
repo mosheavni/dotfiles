@@ -40,6 +40,11 @@ local M = {
     end,
   },
   {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    opts = {},
+  },
+  {
     'iamcco/markdown-preview.nvim',
     build = 'cd app && yarn install',
     config = function()

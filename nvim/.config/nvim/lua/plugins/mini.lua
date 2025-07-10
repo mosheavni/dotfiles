@@ -144,8 +144,13 @@ local M = {
   {
     the_king .. 'pairs',
     version = false,
+    enabled = false, -- use nvim-autopairs instead
     event = 'InsertEnter',
-    opts = {},
+    opts = {
+      mappings = {
+        ['`'] = { action = 'closeopen', pair = '``', neigh_pattern = '[^\\`].', register = { cr = false } },
+      },
+    },
   },
   {
     the_king .. 'operators',
