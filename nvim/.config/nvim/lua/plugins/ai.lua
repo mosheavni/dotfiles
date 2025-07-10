@@ -27,6 +27,21 @@ return {
     end,
   },
   {
+    'ravitemer/mcphub.nvim',
+    cmd = { 'MCPHub' },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    build = 'npm install -g mcp-hub@latest', -- Installs `mcp-hub` node binary globally
+    opts = {
+      extensions = {
+        avante = {
+          make_slash_commands = true, -- make /slash commands from MCP server prompts
+        },
+      },
+    },
+  },
+  {
     'CopilotC-Nvim/CopilotChat.nvim',
     enabled = false,
     cmd = {
@@ -58,7 +73,7 @@ return {
     build = 'make tiktoken',
     opts = {
       -- https://docs.github.com/en/copilot/using-github-copilot/ai-models/choosing-the-right-ai-model-for-your-task
-      model = 'claude-3.5-sonnet',
+      model = 'claude-sonnet-4',
       question_header = '  User ',
       answer_header = '  Copilot ',
       error_header = '  Error ',
@@ -77,7 +92,39 @@ return {
     },
     cmd = { 'AvanteChat' },
     opts = {
+      disabled_tools = {
+        'list_files', -- Built-in file operations
+        'search_files',
+        'read_file',
+        'create_file',
+        'rename_file',
+        'delete_file',
+        'create_dir',
+        'rename_dir',
+        'delete_dir',
+        'bash', -- Built-in terminal access
+      },
       provider = 'copilot',
+      providers = {
+        copilot = {
+          -- model = 'gpt-4.1',
+          model = 'claude-sonnet-4',
+        },
+      },
+
+      -- mcphub
+      -- system_prompt as function ensures LLM always has latest MCP server state
+      -- This is evaluated for every message, even in existing chats
+      system_prompt = function()
+        local hub = require('mcphub').get_hub_instance()
+        return hub and hub:get_active_servers_prompt() or ''
+      end,
+      -- Using function prevents requiring mcphub before it's loaded
+      custom_tools = function()
+        return {
+          require('mcphub.extensions.avante').mcp_tool(),
+        }
+      end,
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = 'make',
