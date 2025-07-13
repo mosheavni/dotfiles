@@ -32,6 +32,13 @@ path=(
   /usr/local/opt/postgresql@15/bin
   $path
 )
+if [[ -d "$HOME/Repos/moshe/devops-scripts" ]];then
+  for i in $HOME/Repos/moshe/devops-scripts/*; do
+    if [[ -d "$i" && -x "$i" ]]; then
+      path+=("$i")
+    fi
+  done
+fi
 export PATH
 export XDG_CONFIG_HOME=${HOME}/.config
 unset ZSH_AUTOSUGGEST_USE_ASYNC

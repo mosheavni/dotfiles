@@ -157,6 +157,14 @@ M.setup = function(opts)
   }
   vim.lsp.config('yamlls', yaml_cfg)
   M.yaml_cfg = yaml_cfg
+
+  -- add actions
+  require('user.menu').add_actions('YAML', {
+    ['Auto add CRD schema modlines'] = function()
+      M.add_crds(0)
+    end,
+  })
+
   return yaml_cfg
 end
 
