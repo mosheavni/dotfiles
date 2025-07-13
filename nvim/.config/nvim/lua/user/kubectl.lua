@@ -4,6 +4,7 @@ local M = {
   ['applications.argoproj.io'] = {},
   ['clustersecretstores.external-secrets.io'] = {},
   ['certificates.cert-manager.io'] = {},
+  ['scaledobjects.keda.sh'] = {},
   serviceaccounts = {},
 }
 
@@ -105,6 +106,37 @@ end
 M['certificates.cert-manager.io'].select = function(name, ns)
   require('kubectl.state').filter_key = 'metadata.ownerReferences.name=' .. name .. ',metadata.ownerReferences.kind=Certificate,metadata.namespace=' .. ns
   require('kubectl.resources.fallback').View(nil, 'certificaterequests.cert-manager.io')
+end
+
+M['scaledobjects.keda.sh'].select = function(name, ns)
+  local client = require 'kubectl.client'
+  local so = client.get_single(vim.json.encode { kind = 'ScaledObject', namespace = ns, name = name, output = 'Json' })
+  local so_decoded = vim.json.decode(so)
+  local metric_name = so_decoded.status.externalMetricNames[1]
+  vim.system({
+    'kubectl',
+    'get',
+    '--raw',
+    string.format('/apis/external.metrics.k8s.io/v1beta1/namespaces/%s/%s?labelSelector=scaledobject.keda.sh%%2Fname%%3D%s', ns, metric_name, name),
+  }, { text = true }, function(result)
+    if result.code ~= 0 then
+      vim.notify('Failed to get external metric: ' .. result.stderr, vim.log.levels.ERROR)
+      return
+    end
+    local metrics = vim.json.decode(result.stdout)
+    if not metrics or not metrics.items or #metrics.items == 0 then
+      vim.notify('No metrics found for ScaledObject: ' .. name, vim.log.levels.WARN)
+      return
+    end
+    local metric_value = metrics.items[1].value
+    local num_value = metric_value
+    --remove the 'm' suffix from the metric value
+    if metric_value:sub(-1) == 'm' then
+      num_value = metric_value:sub(1, -2)
+    end
+    local real_metric = tonumber(num_value) / 1000 -- Convert from milliseconds to seconds
+    vim.notify(string.format('Current metric value for %s: %d real metric (%s)', name, real_metric, metric_value))
+  end)
 end
 
 return M
