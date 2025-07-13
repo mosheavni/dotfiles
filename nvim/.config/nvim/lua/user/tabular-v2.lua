@@ -173,6 +173,9 @@ function M.set_buf_win_options(bufnr)
     end
     M.parse_command(tab_state.command)
   end, k_opts)
+  vim.keymap.set('n', '?', function()
+    M.show_help()
+  end, k_opts)
 end
 
 function M.set_lines_and_highlight(opts)
@@ -219,7 +222,7 @@ function M.set_lines_and_highlight(opts)
   end
 end
 
-function M.display_table(tabular_command)
+function M.display_table(tabular_command, delimiter)
   if not tabular_command then
     print 'Error: tabular_command is nil'
     return
@@ -227,9 +230,10 @@ function M.display_table(tabular_command)
 
   -- Maintain state for the opened tabular commands
   if not M.tabs_state[tabular_command] then
+    delimiter = delimiter or M.default_delimiter
     M.tabs_state[tabular_command] = vim.tbl_deep_extend('force', {}, M.default_tab_state, {
       command = tabular_command,
-      delimiter = M.default_delimiter,
+      delimiter = delimiter,
     })
   end
   local tab_state = M.tabs_state[tabular_command]
@@ -435,9 +439,123 @@ function M.sort_by_current_column()
   M.sort_by_column(current_column)
 end
 
+--- Show help with available keymaps
+function M.show_help()
+  local help_lines = {
+    'Tabular Keymaps Help',
+    '=====================',
+    '',
+    'Navigation & Sorting:',
+    '  gs         - Toggle sort direction (ascending/descending)',
+    '  1-9        - Sort by column number',
+    "  <cursor>   - Position cursor on column and press 'gs' to sort",
+    '',
+    'Filtering & Editing:',
+    '  <C-f>      - Filter rows (case insensitive)',
+    '  ge         - Edit command (change command, interval, delimiter)',
+    '',
+    'Help:',
+    '  ?          - Show this help',
+    '',
+    'Sort Indicators:',
+    '  ▲          - Column sorted ascending',
+    '  ▼          - Column sorted descending',
+    '  🔍         - Active filter indicator',
+    '',
+    'Tips:',
+    '  • Sorting preserves across data refreshes',
+    '  • Filters are case insensitive and search all columns',
+    '  • Use numeric keys 1-9 for quick column sorting',
+    "  • Position cursor on any column and press 'gs' to sort",
+    '',
+    'Press any key to close help...',
+  }
+
+  -- Create a floating window for help
+  local buf = vim.api.nvim_create_buf(false, true)
+  local width = 70
+  local height = #help_lines + 2
+
+  -- Calculate center position
+  local ui = vim.api.nvim_list_uis()[1]
+  local win_width = ui.width
+  local win_height = ui.height
+  local col = math.floor((win_width - width) / 2)
+  local row = math.floor((win_height - height) / 2)
+
+  -- Create the floating window
+  local win = vim.api.nvim_open_win(buf, true, {
+    relative = 'editor',
+    width = width,
+    height = height,
+    col = col,
+    row = row,
+    style = 'minimal',
+    border = 'rounded',
+    title = ' Tabular Help ',
+    title_pos = 'center',
+  })
+
+  -- Set buffer content
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, help_lines)
+  vim.api.nvim_set_option_value('modifiable', false, { buf = buf })
+  vim.api.nvim_set_option_value('buftype', 'nofile', { buf = buf })
+
+  -- Add some highlighting
+  local ns = vim.api.nvim_create_namespace 'TabularHelp'
+  vim.api.nvim_buf_set_extmark(buf, ns, 0, 0, {
+    end_col = #help_lines[1],
+    hl_group = 'Title',
+  })
+  vim.api.nvim_buf_set_extmark(buf, ns, 1, 0, {
+    end_col = #help_lines[2],
+    hl_group = 'Title',
+  })
+
+  -- Highlight section headers
+  for i, line in ipairs(help_lines) do
+    if line:match ':$' then
+      vim.api.nvim_buf_set_extmark(buf, ns, i - 1, 0, {
+        end_col = #line,
+        hl_group = 'Special',
+      })
+    elseif line:match '^  [%w<>%-]+' then
+      -- Highlight keymaps
+      local keymap = line:match '^  ([%w<>%-]+)'
+      if keymap then
+        vim.api.nvim_buf_set_extmark(buf, ns, i - 1, 2, {
+          end_col = 2 + #keymap,
+          hl_group = 'Keyword',
+        })
+      end
+    end
+  end
+
+  -- Close on any key press
+  vim.keymap.set('n', '<Esc>', function()
+    vim.api.nvim_win_close(win, true)
+  end, { buffer = buf, nowait = true })
+
+  -- Close on any other key
+  vim.keymap.set('n', '<CR>', function()
+    vim.api.nvim_win_close(win, true)
+  end, { buffer = buf, nowait = true })
+
+  -- Set up autocommand to close on focus lost
+  vim.api.nvim_create_autocmd('BufLeave', {
+    buffer = buf,
+    callback = function()
+      if vim.api.nvim_win_is_valid(win) then
+        vim.api.nvim_win_close(win, true)
+      end
+    end,
+    once = true,
+  })
+end
+
 --- Function to parse the current buffer and display the table
 function M.parse_command(existing_command)
-  local tab_state = M.tabs_state[existing_command]
+  local tab_state = existing_command and M.tabs_state[existing_command] or nil
   local inputs = {
     command = { prompt = 'Enter command to run: ', default = existing_command or '' },
     interval = { prompt = 'Enter interval (in seconds): ', default = tostring(tab_state and tab_state.interval or M.default_interval) },
@@ -465,14 +583,16 @@ function M.parse_command(existing_command)
         end
 
         if existing_command and tab_state then
-          if tab_state and tab_state.timer and not tab_state.timer:is_closing() and tab_state.bufnr then
+          if tab_state.timer and not tab_state.timer:is_closing() and tab_state.bufnr then
             tab_state.timer:stop()
             tab_state.timer:close()
             tab_state.timer = nil
           end
           if existing_command ~= command then
             M.tabs_state[command] = vim.deepcopy(tab_state)
-            vim.api.nvim_buf_set_name(tab_state.bufnr, command .. ' - ' .. M.bufname_suffix)
+            if tab_state.bufnr then
+              vim.api.nvim_buf_set_name(tab_state.bufnr, command .. ' - ' .. M.bufname_suffix)
+            end
           end
         else
           M.tabs_state[command] = vim.tbl_deep_extend('force', {}, M.default_tab_state, { command = command })
@@ -509,7 +629,7 @@ function M.parse_command(existing_command)
                 M.sort_by_column(tab_state.sort_column, tab_state.sort_direction)
               else
                 -- Create or update the buffer
-                M.display_table(command)
+                M.display_table(tab_state.command)
               end
               -- Update winbar with last refresh timestamp only if the buffer is the current one
               local last_refresh = os.date '%Y-%m-%d %H:%M:%S'
@@ -565,6 +685,82 @@ function M.unload(bufnr)
   end
 
   print('Cleaned up tabular resources for buffer ' .. bufnr)
+end
+
+function M.ec2_instance_selector_parse(raw_lines)
+  local first_line = raw_lines[1] or ''
+  local second_line = raw_lines[2] or ''
+  local header_dashes = vim.split(second_line, '%s+', { trimempty = true })
+  local header_spaces = vim.split(second_line, '-+', { trimempty = true })
+  local dashes_lengths = vim.tbl_map(function(str)
+    return #str
+  end, header_dashes)
+  local spaces_lengths = vim.tbl_map(function(str)
+    return #str
+  end, header_spaces)
+
+  M.headers = {}
+  local start_pos = 1
+  for i, length in ipairs(dashes_lengths) do
+    local header = first_line:sub(start_pos, start_pos + length - 1)
+    table.insert(M.headers, vim.trim(header))
+    start_pos = start_pos + length + spaces_lengths[i]
+  end
+
+  -- Parse data lines
+  M.lines = {}
+  for i = 3, #raw_lines do
+    local data_start_pos = 1
+    local line = raw_lines[i]
+    local row = {}
+    table.insert(M.lines, row)
+    for j, length in ipairs(dashes_lengths) do
+      local word = line:sub(data_start_pos, data_start_pos + length - 1)
+      table.insert(row, vim.trim(word))
+      data_start_pos = data_start_pos + length + spaces_lengths[j]
+    end
+    table.insert(M.lines, row)
+  end
+end
+
+function M.parse_buffer()
+  local tabular_command = 'buffer'
+  local bufnr = vim.api.nvim_get_current_buf()
+  local buf_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  local second_line = buf_lines[2] or ''
+  -- Check if the second line contains dashes seperated by spaces
+  if second_line:match '[-=]+%s' then
+    M.ec2_instance_selector_parse(buf_lines)
+    M.display_table(tabular_command)
+  else
+    vim.ui.input({
+      prompt = 'Enter delimiter: ',
+      default = M.default_delimiter,
+    }, function(input)
+      if not input then
+        return
+      end
+
+      -- Initialize tab_state if it doesn't exist
+      if not M.tabs_state[tabular_command] then
+        M.tabs_state[tabular_command] = vim.tbl_deep_extend('force', {}, M.default_tab_state, {
+          command = tabular_command,
+          raw_lines = buf_lines,
+          delimiter = input,
+        })
+      end
+
+      local tab_state = M.tabs_state[tabular_command]
+      tab_state.raw_lines = buf_lines
+      tab_state.delimiter = input
+
+      local raw_parse_res = M.raw_parse(tab_state.raw_lines, tab_state.delimiter)
+      tab_state.headers = raw_parse_res.headers
+      tab_state.lines = raw_parse_res.lines
+      tab_state.col_widths = raw_parse_res.col_widths
+      M.display_table(tabular_command)
+    end)
+  end
 end
 
 function M.setup(opts)
