@@ -135,7 +135,7 @@ M['scaledobjects.keda.sh'].select = function(name, ns)
       num_value = metric_value:sub(1, -2)
     end
     local real_metric = tonumber(num_value) / 1000 -- Convert from milliseconds to seconds
-    vim.notify(string.format('Current metric value for %s: %d real metric (%s)', name, real_metric, metric_value))
+    vim.notify(string.format('Current metric value for %s (%s): %d real metric (%s)', name, metric_name, real_metric, metric_value))
   end)
 end
 
