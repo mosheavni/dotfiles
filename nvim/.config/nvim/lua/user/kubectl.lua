@@ -2,8 +2,11 @@ local commands = require 'kubectl.actions.commands'
 local M = {
   ingresses = {},
   ['applications.argoproj.io'] = {},
-  ['clustersecretstores.external-secrets.io'] = {},
+  ['certificaterequests.cert-manager.io'] = {},
   ['certificates.cert-manager.io'] = {},
+  ['clusterissuers.cert-manager.io'] = {},
+  ['clustersecretstores.external-secrets.io'] = {},
+  ['externalsecrets.external-secrets.io'] = {},
   ['scaledobjects.keda.sh'] = {},
   serviceaccounts = {},
 }
