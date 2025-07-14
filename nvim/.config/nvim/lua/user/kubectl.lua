@@ -30,6 +30,9 @@ M.ingresses.select = function(name, ns)
     name = name,
     output = 'Json',
   }, function(data_raw)
+    if not data_raw or data_raw == '' or data_raw == nil then
+      return
+    end
     local data = vim.json.decode(data_raw)
     local ingress_dns = vim.inspect(data.status.loadBalancer.ingress[1].hostname)
     vim.schedule(function()
