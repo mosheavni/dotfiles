@@ -12,6 +12,7 @@ local M = {
     pcall(require('nvim-treesitter.install').update { with_sync = true })
   end,
   dependencies = {
+    'OXY2DEV/markview.nvim',
     'nvim-treesitter/nvim-treesitter-textobjects',
     { 'Afourcat/treesitter-terraform-doc.nvim', ft = 'terraform', cmd = 'OpenDoc' },
     'nvim-treesitter/nvim-treesitter-context',
@@ -55,7 +56,10 @@ M.opts = {
     'gitcommit',
     'gitignore',
     'go',
+    'gomod',
+    'gosum',
     'gotmpl',
+    'gowork',
     'graphql',
     'groovy',
     'hcl',
@@ -115,6 +119,7 @@ M.config = function(_, opts)
 
   ---@diagnostic disable-next-line: missing-fields
   require('nvim-treesitter.configs').setup(opts)
+  vim.treesitter.language.register('markdown', 'octo')
 
   vim.opt.foldmethod = 'expr'
   vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'

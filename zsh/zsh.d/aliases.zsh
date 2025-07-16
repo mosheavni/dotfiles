@@ -17,7 +17,8 @@ alias ll='ls -lah'
 alias ls='eza '
 alias dc='cd '
 alias dotfiles='cd ~/.dotfiles'
-alias pj='fdf ~/Repos'
+alias pj='fdf ~/Repos/ ~/.dotfiles'
+alias lazy='fdf ~/.local/share/nvim/lazy/'
 alias repos="~/Repos"
 
 #------------------------------------------------------------------------------
@@ -29,6 +30,8 @@ alias vi='nvim'
 alias sudoedit="nvim"
 alias lvim='NVIM_APPNAME=LazyVim nvim'
 alias zshrc='${=EDITOR} ${ZDOTDIR:-$HOME}/.zshrc'
+alias lv='NVIM_APPNAME=lightvim nvim '
+alias news='nvim ~/.asdf/installs/neovim/nightly/share/nvim/runtime/doc/news.txt'
 
 #------------------------------------------------------------------------------
 # Development Tools

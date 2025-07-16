@@ -6,9 +6,6 @@ map({ 'n', 'x' }, '<Down>', "v:count == 0 ? 'gj' : 'j'", { desc = 'Down', expr =
 map({ 'n', 'x' }, 'k', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = true, silent = true })
 map({ 'n', 'x' }, '<Up>', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = true, silent = true })
 
--- Select all file visually
-map('n', '<leader>sa', 'ggVG', { remap = false, desc = 'Visually select entire buffer' })
-
 -- Map 0 to first non-blank character
 map({ 'n', 'v' }, '0', '^', { remap = false, desc = 'Go to the first non-blank character' })
 
@@ -122,6 +119,7 @@ require('user.winresizer').setup()
 -- entire file text-object
 map('o', 'ae', '<cmd>normal! ggVG<CR>', { remap = false })
 map('v', 'ae', '<esc>gg0vG$', { remap = false })
+map('n', '<leader>sa', 'ggVG', { remap = false, desc = 'Visually select entire buffer' })
 
 -- Run and edit macros
 for _, key in pairs { 'Q', 'X' } do
@@ -293,6 +291,7 @@ map('n', 'yc', 'yygccp', { remap = true, desc = 'Duplicate and comment line' })
 
 -- Abbreviations
 map('!a', 'dont', [[don't]], { remap = false })
+map('!a', 'ill', [[i'll]], { remap = false })
 map('!a', 'seperate', 'separate', { remap = false })
 map('!a', 'adn', 'and', { remap = false })
 map('!a', 'waht', 'what', { remap = false })
@@ -476,4 +475,5 @@ end, { nargs = '?' })
 ------------------------
 vim.cmd('source ' .. vim.fn.stdpath 'config' .. '/lua/user/search-replace.vim')
 
-require('user.tabular').setup {}
+require('user.tabular-v2').setup {}
+require('user.projects').setup()

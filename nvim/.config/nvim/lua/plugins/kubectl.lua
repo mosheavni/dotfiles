@@ -1,10 +1,15 @@
 return {
   'Ramilito/kubectl.nvim',
-  dir = '~/Repos/kubectl.nvim',
+  version = '2.*',
+  dependencies = 'saghen/blink.download',
+  dev = true,
   opts = {
+    kubectl_cmd = {
+      persist_context_change = true,
+    },
     auto_refresh = {
       enabled = true,
-      interval = 500, -- milliseconds
+      interval = 300, -- milliseconds
     },
 
     headers = {
@@ -71,6 +76,29 @@ return {
         vim.opt.titlestring = 'k8s: %t'
         if vim.bo.filetype == 'k8s_yaml' then
           vim.bo.filetype = 'yaml'
+        end
+      end,
+    })
+    vim.api.nvim_create_autocmd('User', {
+      group = group,
+      pattern = 'K8sContextChanged',
+      callback = function(ctx)
+        local results = require('kubectl.actions.commands').shell_command('kubectl', { 'config', 'use-context', ctx.data.context })
+        if not results then
+          vim.notify(results, vim.log.levels.INFO)
+        end
+      end,
+    })
+    vim.api.nvim_create_autocmd('User', {
+      group = group,
+      pattern = 'K8sResourceSelected',
+      callback = function(ctx)
+        local kubectl_user = require 'user.kubectl'
+        local kind = ctx.data.kind
+        if kubectl_user[kind] and kubectl_user[kind].select then
+          kubectl_user[kind].select(ctx.data.name, ctx.data.ns)
+        else
+          vim.notify('No handler for ' .. kind .. ' resource', vim.log.levels.WARN)
         end
       end,
     })

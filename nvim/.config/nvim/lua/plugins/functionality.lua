@@ -40,6 +40,11 @@ local M = {
     end,
   },
   {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    opts = {},
+  },
+  {
     'iamcco/markdown-preview.nvim',
     build = 'cd app && yarn install',
     config = function()
@@ -93,8 +98,6 @@ local M = {
     keys = {
       { '<c-e>', "<cmd>lua require('oil').open_float()<cr>" },
     },
-    ---@module 'oil'
-    ---@type oil.SetupOpts
     opts = {
       -- Configuration for the floating window in oil.open_float
       float = {
@@ -161,6 +164,12 @@ local M = {
       vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
       vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
     end,
+  },
+  {
+    'nvzone/typr',
+    dependencies = 'nvzone/volt',
+    opts = {},
+    cmd = { 'Typr', 'TyprStats' },
   },
 }
 

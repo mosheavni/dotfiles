@@ -15,7 +15,6 @@ return {
       silent = true,
       desc = 'Fuzzy complete path',
     },
-
     {
       '<leader>ccp',
       function()
@@ -137,6 +136,10 @@ return {
   config = function()
     require('fzf-lua').setup {
       'default-title',
+      fzf_opts = {
+        ['--cycle'] = true,
+        ['--history'] = vim.fn.stdpath 'data' .. '/fzf-lua-history', -- <C-n> - next, <C-p> - previous
+      },
       files = {
         git_icons = true,
       },

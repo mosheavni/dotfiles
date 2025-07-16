@@ -15,6 +15,7 @@ local M = {
     'hrsh7th/cmp-cmdline',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-path',
+    'petertriho/cmp-git',
     'hrsh7th/cmp-nvim-lsp-signature-help',
   },
 }
@@ -34,6 +35,7 @@ M.config = function()
     cmdline = '[Cmd]',
     cmp_tabnine = '[TN]',
     copilot = '[CP]',
+    git = '[Git]',
     luasnip = '[Snpt]',
     nvim_lsp = '[LSP]',
     path = '[Path]',
@@ -171,6 +173,15 @@ M.config = function()
     },
   }
 
+  cmp.setup.filetype({ 'gitcommit', 'octo' }, {
+    sources = cmp.config.sources({
+      { name = 'git' },
+    }, {
+      { name = 'buffer' },
+    }),
+  })
+  require('cmp_git').setup()
+
   local db_fts = { 'sql', 'mysql', 'plsql' }
   for _, ft in ipairs(db_fts) do
     cmp.setup.filetype(ft, {
@@ -206,6 +217,9 @@ M.config = function()
       { name = 'cmdline' },
     }),
   })
+
+  local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
+  cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
 
   require('luasnip.loaders.from_vscode').lazy_load()
   require('luasnip.loaders.from_vscode').lazy_load { paths = '~/.config/nvim/snippets' }

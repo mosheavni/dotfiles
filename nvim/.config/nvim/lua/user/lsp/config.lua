@@ -20,6 +20,30 @@ local M = {
   },
 }
 
+M.init = function()
+  _G.start_ls = function(with_file)
+    local file_name = nil
+    if with_file == true then
+      local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
+      file_name = _G.tmp_write { should_delete = false, new = false, ft = ft }
+    end
+    -- load lsp
+    require 'lspconfig'
+    return file_name
+  end
+  vim.keymap.set('n', '<leader>ls', function()
+    _G.start_ls(false)
+  end)
+  vim.keymap.set('n', '<leader>lS', function()
+    _G.start_ls(true)
+  end)
+  require('user.menu').add_actions('LSP', {
+    ['Start LSP (<leader>ls)'] = function()
+      _G.start_ls()
+    end,
+  })
+end
+
 M.setup = function()
   require('user.lsp.actions').setup()
   require('vim.lsp.log').set_format_func(vim.inspect)

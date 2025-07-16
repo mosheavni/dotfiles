@@ -78,6 +78,9 @@ local diff_actions = {
   ['[Diffview] Diff File History'] = function()
     vim.defer_fn(function()
       vim.ui.input({ prompt = 'Enter file path (empty for all files, % for current): ' }, function(file_to_check)
+        if not file_to_check then
+          return
+        end
         vim.cmd('DiffviewFileHistory ' .. file_to_check)
       end)
     end, 100)
@@ -91,6 +94,9 @@ local diff_actions = {
   end,
   ['[Diffview] Diff close'] = function()
     vim.cmd 'DiffviewClose'
+  end,
+  ['[Diffview] stashes'] = function()
+    vim.cmd 'DiffviewFileHistory -g --range=stash'
   end,
 }
 
@@ -274,8 +280,18 @@ local M = {
     },
     keys = {
       -- { '<leader>gd', '<cmd>DiffviewFileHistory<cr>', mode = { 'n', 'v' }, desc = 'Diffview files' },
-      { '<leader>gd', diff_actions['[Diffview] Diff File History'], mode = 'n', desc = 'Diffview files' },
-      { '<leader>gd', ':DiffviewFileHistory<cr>', mode = 'v', desc = 'Diffview selection' },
+      {
+        '<leader>gd',
+        diff_actions['[Diffview] Diff File History'],
+        mode = 'n',
+        desc = 'Diffview files',
+      },
+      {
+        '<leader>gd',
+        ':DiffviewFileHistory<cr>',
+        mode = 'v',
+        desc = 'Diffview selection',
+      },
     },
     config = function()
       require 'diffview'

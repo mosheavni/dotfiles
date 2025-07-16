@@ -3,36 +3,13 @@ local M = {
   event = { 'BufReadPre', 'BufNewFile' },
 }
 
-M.init = function()
-  _G.start_ls = function(with_file)
-    local file_name = nil
-    if with_file == true then
-      local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
-      file_name = _G.tmp_write { should_delete = false, new = false, ft = ft }
-    end
-    -- load lsp
-    require 'lspconfig'
-    return file_name
-  end
-  vim.keymap.set('n', '<leader>ls', function()
-    _G.start_ls(false)
-  end)
-  vim.keymap.set('n', '<leader>lS', function()
-    _G.start_ls(true)
-  end)
-  require('user.menu').add_actions('LSP', {
-    ['Start LSP (<leader>ls)'] = function()
-      _G.start_ls()
-    end,
-  })
-end
-
+M.init = require('user.lsp.config').init
 M.config = require('user.lsp.config').setup
 
 M.dependencies = {
   'nvimtools/none-ls.nvim',
   {
-    'williamboman/mason.nvim',
+    'mason-org/mason.nvim',
     cmd = 'Mason',
     keys = { { '<leader>cm', '<cmd>Mason<cr>', desc = 'Mason' } },
     build = ':MasonUpdate',
@@ -124,9 +101,34 @@ local language_specific_plugins = {
     },
   },
   {
-    'crispgm/nvim-go',
-    ft = 'go',
-    opts = {},
+    'ray-x/go.nvim',
+    dependencies = { -- optional packages
+      'ray-x/guihua.lua',
+      'neovim/nvim-lspconfig',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    opts = {
+      lsp_cfg = true,
+      lsp_gofumpt = true,
+      lsp_inlay_hints = {
+        enable = false,
+      },
+      dap_vt = true,
+    },
+    config = function(_, opts)
+      require('go').setup(opts)
+      local format_sync_grp = vim.api.nvim_create_augroup('GoFormat', {})
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        pattern = '*.go',
+        callback = function()
+          require('go.format').goimports()
+        end,
+        group = format_sync_grp,
+      })
+    end,
+    event = { 'CmdlineEnter' },
+    ft = { 'go', 'gomod' },
+    build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
   },
 }
 

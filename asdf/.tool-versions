@@ -3,7 +3,7 @@ aws-sso-cli 1.9.9
 awscli 2.17.13
 golang 1.23.1
 helm 3.14.4
-java corretto-8.422.05.1
+java corretto-21.0.7.6.1
 jq 1.6
 kubectl 1.31.7
 kubectx 0.9.5
@@ -11,7 +11,7 @@ minikube 1.32.0
 mysql 8.0.34
 neovim nightly
 nodejs 20.17.0
-python 3.11.8
+python 3.12.11
 semver 3.4.0
 terraform 1.5.5
 terragrunt 0.64.4

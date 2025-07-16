@@ -15,6 +15,14 @@ return function(bufnr)
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, returnOpts 'Go to implementation')
   vim.keymap.set('n', 'gR', vim.lsp.buf.references, returnOpts 'Go to references')
 
+  -- Hover
+  vim.keymap.set('n', 'K', function()
+    vim.lsp.buf.hover {
+      border = 'rounded',
+      max_height = 30,
+    }
+  end, returnOpts 'Hover documentation')
+
   -- Workspace
   vim.keymap.set('n', '<leader>lwa', vim.lsp.buf.add_workspace_folder, returnOpts 'Add workspace folder')
   vim.keymap.set('n', '<leader>lwr', vim.lsp.buf.remove_workspace_folder, returnOpts 'Remove workspace folder')

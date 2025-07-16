@@ -325,14 +325,6 @@ function asdf-kubectl-version() {
   asdf global kubectl "${TO_INSTALL}"
 }
 
-# fzf
-function fdf() {
-  # remove trailing / from $1
-  dir_clean=${1%/}
-  all_files=$(find $dir_clean/* -maxdepth 0 -type d -print 2>/dev/null)
-  dir_to_enter=$(sed "s?$dir_clean/??g" <<<$all_files | fzf)
-  cd "$dir_clean/$dir_to_enter" && nvim
-}
 
 function mkdp() {
   kubectl get pod --no-headers | fzf | awk '{print $1}' | xargs -n 1 kubectl describe pod

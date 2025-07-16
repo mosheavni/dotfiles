@@ -9,7 +9,7 @@ M.setup = function()
     'cssmodules_ls',
     'docker_compose_language_service',
     'dockerls',
-    'gopls',
+    'golangci_lint_ls',
     'groovyls',
     'helm_ls',
     'html',
@@ -47,20 +47,9 @@ M.setup = function()
   vim.lsp.config('lua_ls', {
     settings = {
       Lua = {
-        runtime = {
-          -- Tell the language server which version of Lua you're using (most likely LuaJIT)
-          version = 'LuaJIT',
-        },
-        completion = {
-          callSnippet = 'Replace',
-        },
-        hint = {
-          enable = true,
-        },
-        diagnostics = {
-          disable = { 'undefined-global' },
-          globals = { 'vim' },
-        },
+        runtime = { version = 'LuaJIT' },
+        completion = { callSnippet = 'Replace' },
+        hint = { enable = true },
       },
     },
   })
