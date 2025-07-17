@@ -1,5 +1,7 @@
 vim.o.compatible = false
 vim.g.python3_host_prog = 'python3'
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
 
 -- disable legacy vim filetype detection in favor of new lua based from neovim
 -- vim.g.do_filetype_lua = 1
