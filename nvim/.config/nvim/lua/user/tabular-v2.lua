@@ -370,16 +370,51 @@ function M.sort_by_column(col_index, direction)
       end
     end
 
-    -- check if there is a number in the string
-    local str_num_a = val_a:match '(%d+)' or false
-    local str_num_b = val_b:match '(%d+)' or false
-    if str_num_a and str_num_b then
-      str_num_a = tonumber(str_num_a)
-      str_num_b = tonumber(str_num_b)
-      if tab_state.sort_direction == 1 then
-        return str_num_a < str_num_b
-      else
-        return str_num_a > str_num_b
+    -- Helper function to determine if a string should be sorted numerically
+    local function should_sort_numerically(str)
+      local digits = str:gsub('%D', '')
+      local non_digits = str:gsub('%d', '')
+      
+      -- If no digits, definitely not numeric
+      if #digits == 0 then
+        return false
+      end
+      
+      -- If mostly digits (>= 50% of string), likely numeric
+      if #digits >= #str * 0.5 then
+        return true
+      end
+      
+      -- Check for common numeric patterns: number followed by unit/suffix
+      -- Examples: "1000 GiB", "5.2xlarge", "100MB", "3.5TB"
+      if str:match('^%d+%.?%d*%s*%a*$') then
+        return true
+      end
+      
+      -- If digits are at the beginning and represent a significant portion, likely numeric
+      if str:match('^%d+') and #digits >= #str * 0.3 then
+        return true
+      end
+      
+      return false
+    end
+
+    -- Check if both strings should be sorted numerically
+    local a_numeric = should_sort_numerically(val_a)
+    local b_numeric = should_sort_numerically(val_b)
+    
+    if a_numeric and b_numeric then
+      local str_num_a = val_a:match '(%d+%.?%d*)' or val_a:match '(%d+)'
+      local str_num_b = val_b:match '(%d+%.?%d*)' or val_b:match '(%d+)'
+      
+      if str_num_a and str_num_b then
+        str_num_a = tonumber(str_num_a)
+        str_num_b = tonumber(str_num_b)
+        if tab_state.sort_direction == 1 then
+          return str_num_a < str_num_b
+        else
+          return str_num_a > str_num_b
+        end
       end
     end
 
