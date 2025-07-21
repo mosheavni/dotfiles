@@ -38,10 +38,11 @@ M.ingresses.select = function(name, ns)
     vim.schedule(function()
       local cluster_name = require('kubectl.state').context['current-context']
       local aws_profile = os.getenv 'AWS_PROFILE' or cluster_to_profile[cluster_name]
-      local region = os.getenv 'AWS_REGION' or vim.trim(commands.shell_command('aws', { 'configure', 'get', 'region', '--profile', aws_profile }))
-      vim.notify(ingress_dns)
-      vim.notify('AWS_PROFILE: ' .. aws_profile .. ' AWS_REGION: ' .. region)
+      local region = os.getenv 'AWS_REGION'
+        or vim.trim(vim.system({ 'aws', 'configure', 'get', 'region', '--profile', aws_profile }, { text = true }):wait().stdout)
+      vim.notify('AWS_PROFILE: ' .. aws_profile .. ' AWS_REGION: ' .. region .. ' Ingress DNS: ' .. ingress_dns)
       local aws_cmd = {
+        'aws',
         'elbv2',
         'describe-load-balancers',
         '--query',
@@ -51,9 +52,9 @@ M.ingresses.select = function(name, ns)
         '--output',
         'json',
       }
-      commands.shell_command_async('aws', aws_cmd, function(aws_output)
+      vim.system(aws_cmd, { text = true }, function(aws_output)
         local ok
-        ok, aws_output = pcall(vim.json.decode, aws_output)
+        ok, aws_output = pcall(vim.json.decode, aws_output.stdout)
         if not ok then
           vim.notify('Failed to parse AWS output\n' .. aws_output)
           return
@@ -94,6 +95,7 @@ M.serviceaccounts.select = function(name, ns)
   local secret_name = sa_decoded.secrets and sa_decoded.secrets[1] and sa_decoded.secrets[1].name
   if secret_name then
     require('kubectl.state').filter_key = 'metadata.name=' .. secret_name .. ',metadata.namespace=' .. ns
+    require('kubectl.state').filter = ''
     require('kubectl.resources.secrets').View()
   end
 end
@@ -111,6 +113,7 @@ end
 -- view ExternalSecrets of the ClusterSecretStore
 M['clustersecretstores.external-secrets.io'].select = function(name)
   require('kubectl.state').filter_key = 'spec.secretStoreRef.name=' .. name .. ',spec.secretStoreRef.kind=ClusterSecretStore'
+  require('kubectl.state').filter = ''
   require('kubectl.resources.fallback').View(nil, 'externalsecrets.external-secrets.io')
 end
 
@@ -122,6 +125,7 @@ M['externalsecrets.external-secrets.io'].select = function(name, ns)
   local secret_name = es_decoded.status and es_decoded.status.binding and es_decoded.status.binding.name
   if secret_name then
     require('kubectl.state').filter_key = 'metadata.name=' .. secret_name .. ',metadata.namespace=' .. ns
+    require('kubectl.state').filter = ''
     require('kubectl.resources.secrets').View()
   end
 end
@@ -129,6 +133,7 @@ end
 -- view CertificateRequests of the Certificate
 M['certificates.cert-manager.io'].select = function(name, ns)
   require('kubectl.state').filter_key = 'metadata.ownerReferences.name=' .. name .. ',metadata.ownerReferences.kind=Certificate,metadata.namespace=' .. ns
+  require('kubectl.state').filter = ''
   require('kubectl.resources.fallback').View(nil, 'certificaterequests.cert-manager.io')
 end
 
