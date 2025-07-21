@@ -50,6 +50,10 @@ M.setup = function()
         runtime = { version = 'LuaJIT' },
         completion = { callSnippet = 'Replace' },
         hint = { enable = true },
+        diagnostics = {
+          disable = { 'undefined-global' },
+          globals = { 'vim' },
+        },
       },
     },
   })
