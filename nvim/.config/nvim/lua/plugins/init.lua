@@ -126,8 +126,8 @@ local M = {
   {
     'kevinhwang91/nvim-hlslens',
     keys = {
-      { 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>zz]] },
-      { 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>zz]] },
+      { 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>zzzv]] },
+      { 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>zzzv]] },
       { '*', [[*<Cmd>lua require('hlslens').start()<CR>N]] },
       { '#', [[#<Cmd>lua require('hlslens').start()<CR>n]] },
       { 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]] },
