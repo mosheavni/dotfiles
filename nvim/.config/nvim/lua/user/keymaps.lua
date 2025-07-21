@@ -198,10 +198,21 @@ map('n', '_', [["ldd2k"lp==]], { remap = false, desc = 'Move line up' })
 map('n', 'Y', ':%y+<cr>', { remap = false, silent = true, desc = 'Copy buffer content to clipboard' })
 
 -- Copy file path to clipboard
-map('n', '<leader>cfp', [[:let @+ = expand('%')<cr>:echo   "Copied relative file path " . expand('%')<cr>]], { remap = false, silent = true })
-map('n', '<leader>cfa', [[:let @+ = expand('%:p')<cr>:echo "Copied full file path " . expand('%:p')<cr>]], { remap = false, silent = true })
-map('n', '<leader>cfd', [[:let @+ = expand('%:p:h')<cr>:echo "Copied file directory path " . expand('%:p:h')<cr>]], { remap = false, silent = true })
-map('n', '<leader>cfn', [[:let @+ = expand('%:t')<cr>:echo "Copied file directory path " . expand('%:t')<cr>]], { remap = false, silent = true })
+map('n', '<leader>cfa', function()
+  local file_path = vim.fn.expand '%:p'
+  vim.fn.setreg('+', file_path)
+  print('Copied full file path  ' .. file_path)
+end, { remap = false, silent = true, desc = 'Copy absolute file path' })
+map('n', '<leader>cfd', function()
+  local dir_path = vim.fn.expand '%:p:h'
+  vim.fn.setreg('+', dir_path)
+  print('Copied file directory path ' .. dir_path)
+end, { remap = false, silent = true, desc = 'Copy file directory path' })
+map('n', '<leader>cfn', function()
+  local file_name = vim.fn.expand '%:t'
+  vim.fn.setreg('+', file_name)
+  print('Copied file name ' .. file_name)
+end, { remap = false, silent = true, desc = 'Copy file name' })
 
 -- Copy and paste to/from system clipboard
 map('v', 'cp', '"+y', { desc = 'Copy to system clipboard' })
