@@ -100,8 +100,9 @@ end
 
 -- open ArgoCD application in browser
 M['applications.argoproj.io'].select = function(name, ns)
-  local ingress_host =
-    commands.shell_command('kubectl', { 'get', 'ingress', '-n', ns, '-l', 'app.kubernetes.io/component=server', '-o', 'jsonpath={.items[].spec.rules[].host}' })
+  local ingress_host = vim
+    .system({ 'kubectl', 'get', 'ingress', '-n', ns, '-l', 'app.kubernetes.io/component=server', '-o', 'jsonpath={.items[].spec.rules[].host}' }, { text = true })
+    :wait()
   local final_host = string.format('https://%s/applications/argocd/%s', ingress_host, name)
   vim.notify('Opening ' .. final_host)
   vim.ui.open(final_host)
