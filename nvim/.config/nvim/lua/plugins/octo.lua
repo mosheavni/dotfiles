@@ -1,7 +1,7 @@
 local octo_string = 'Octo: '
 return {
   'pwntester/octo.nvim',
-  dev = true,
+  -- dev = true,
   keys = { { '<leader>o', '<cmd>Octo<cr>', desc = 'Octo menu' } },
   cmd = 'Octo',
   -- dependencies = {
