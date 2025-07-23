@@ -16,6 +16,7 @@ local M = {
     ['policy'] = true,
     ['rbac.authorization.k8s.io'] = true,
     ['storage.k8s.io'] = true,
+    ['certificates.k8s.io'] = true,
   },
 }
 
