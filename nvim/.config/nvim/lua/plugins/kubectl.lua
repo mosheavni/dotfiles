@@ -83,10 +83,11 @@ return {
       group = group,
       pattern = 'K8sContextChanged',
       callback = function(ctx)
-        local results = require('kubectl.actions.commands').shell_command('kubectl', { 'config', 'use-context', ctx.data.context })
-        if not results then
-          vim.notify(results, vim.log.levels.INFO)
-        end
+        vim.system({ 'kubectl', 'config', 'use-context', ctx.data.context }, { text = true }, function(results)
+          if not results then
+            vim.notify(results, vim.log.levels.INFO)
+          end
+        end)
       end,
     })
     vim.api.nvim_create_autocmd('User', {
