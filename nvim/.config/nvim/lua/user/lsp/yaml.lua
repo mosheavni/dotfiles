@@ -9,14 +9,16 @@ local M = {
   yaml_cfg = {},
   core_api_groups = {
     [''] = true, -- core group (v1)
+    ['admissionregistration.k8s.io'] = true,
+    ['apiextensions.k8s.io'] = true,
     ['apps'] = true,
-    ['batch'] = true,
     ['autoscaling'] = true,
+    ['batch'] = true,
+    ['certificates.k8s.io'] = true,
     ['networking.k8s.io'] = true,
     ['policy'] = true,
     ['rbac.authorization.k8s.io'] = true,
     ['storage.k8s.io'] = true,
-    ['certificates.k8s.io'] = true,
   },
 }
 
