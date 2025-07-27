@@ -1,4 +1,5 @@
 ansicolor
+black
 boto3
 botocore
 debugpy
