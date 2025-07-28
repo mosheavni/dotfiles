@@ -22,47 +22,9 @@ local M = {
   },
 }
 
-M.add_crds = function(bufnr)
-  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-  local resources = {}
-  local current = { line = nil }
-
-  for i, line in ipairs(lines) do
-    if line:match '^kind:' then
-      current.kind = line:match '^kind:%s*(.+)'
-      if not current.line then
-        current.line = i
-      end
-    elseif line:match '^apiVersion:' then
-      current.apiVersion = line:match '^apiVersion:%s*(.+)'
-      if not current.line then
-        current.line = i
-      end
-    elseif line:match '^%-%-%-' then
-      if current.apiVersion and current.kind then
-        -- Split apiVersion into group and version
-        local group, version
-        if current.apiVersion:find '/' then
-          group, version = current.apiVersion:match '(.+)/(.+)'
-        else
-          group = ''
-          version = current.apiVersion
-        end
-
-        table.insert(resources, {
-          kind = current.kind,
-          apiVersion = current.apiVersion,
-          apiGroup = group,
-          version = version,
-          line = current.line,
-        })
-      end
-      current = { line = nil }
-    end
-  end
-
-  -- check the last section
+local function split_and_add(current, resources)
   if current.apiVersion and current.kind then
+    -- Split apiVersion into group and version
     local group, version
     if current.apiVersion:find '/' then
       group, version = current.apiVersion:match '(.+)/(.+)'
@@ -79,6 +41,28 @@ M.add_crds = function(bufnr)
       line = current.line,
     })
   end
+end
+
+M.add_crds = function(bufnr)
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  if lines[1] == '---' then
+    table.remove(lines, 1)
+  end
+  local resources = {}
+  local current = { line = 1 } -- Start at line 1 for first resource
+  for i, line in ipairs(lines) do
+    if line:match '^kind:' then
+      current.kind = line:match '^kind:%s*(.+)'
+    elseif line:match '^apiVersion:' then
+      current.apiVersion = line:match '^apiVersion:%s*(.+)'
+    elseif line:match '^%-%-%-' then
+      split_and_add(current, resources)
+      current = { line = i + 1 } -- Start at line 1 for first resource
+    end
+  end
+
+  -- last section
+  split_and_add(current, resources)
 
   -- Add comments before CRD resources
   local lines_to_add = {}
@@ -91,9 +75,9 @@ M.add_crds = function(bufnr)
         string.format('https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/%s/%s_%s.json', resource.apiGroup, resource.kind:lower(), resource.version)
       local modeline = string.format('# yaml-language-server: $schema=%s', url)
       -- Check if the modeline already exists in the previous line
-      local prev_line = vim.api.nvim_buf_get_lines(bufnr, resource.line - 2, resource.line - 1, false)[1]
+      local prev_line = vim.api.nvim_buf_get_lines(bufnr, resource.line, resource.line + 1, false)[1]
       if not prev_line or not prev_line:match '# yaml%-language%-server: %$schema=' then
-        lines_to_add[resource.line] = modeline
+        table.insert(lines_to_add, { line = resource.line - 1, comment = modeline })
         if not vim.list_contains(added_kinds, resource.kind) then
           table.insert(added_kinds, resource.kind)
         end
@@ -102,9 +86,10 @@ M.add_crds = function(bufnr)
   end
 
   -- Insert the comments
-  local offset = 0
-  for line_num, comment in pairs(lines_to_add) do
-    vim.api.nvim_buf_set_lines(bufnr, line_num - 1 + offset, line_num - 1 + offset, false, { comment })
+  local offset = 1
+  for _, line in ipairs(lines_to_add) do
+    local line_num = line.line
+    vim.api.nvim_buf_set_lines(bufnr, line_num + offset, line_num + offset, false, { line.comment })
     offset = offset + 1
   end
 
