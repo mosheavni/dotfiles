@@ -488,3 +488,4 @@ vim.cmd('source ' .. vim.fn.stdpath 'config' .. '/lua/user/search-replace.vim')
 
 require('user.tabular-v2').setup {}
 require('user.projects').setup()
+require 'user.number-separators'

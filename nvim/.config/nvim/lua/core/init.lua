@@ -24,6 +24,7 @@ function _G.P(v, r)
 end
 
 local original_vim_print = vim.print
+---@diagnostic disable-next-line: duplicate-set-field
 vim.print = function(...)
   local str = type(...) == 'table' and vim.inspect(...) or ...
   original_vim_print(str)
