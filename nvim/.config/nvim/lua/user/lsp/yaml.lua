@@ -49,7 +49,7 @@ M.add_crds = function(bufnr)
     table.remove(lines, 1)
   end
   local resources = {}
-  local current = { line = 1 } -- Start at line 1 for first resource
+  local current = { line = 0 } -- Start at line 1 for first resource
   for i, line in ipairs(lines) do
     if line:match '^kind:' then
       current.kind = line:match '^kind:%s*(.+)'
@@ -140,7 +140,7 @@ M.setup = function(opts)
       -- Detects Kubernetes files based on content
       kubernetes = { enabled = true },
     },
-    -- schemas = M.all_schemas,
+    schemas = M.all_schemas,
     lspconfig = yaml_lspconfig,
   }
   vim.lsp.config('yamlls', yaml_cfg)
