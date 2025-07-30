@@ -16,15 +16,6 @@ return {
       desc = 'Fuzzy complete path',
     },
     {
-      '<leader>ccp',
-      function()
-        local actions = require 'CopilotChat.actions'
-        require('CopilotChat.integrations.fzflua').pick(actions.prompt_actions())
-      end,
-      desc = 'CopilotChat - Prompt actions',
-      mode = { 'n', 'v' },
-    },
-    {
       '<F4>',
       function()
         local utils = require 'fzf-lua.utils'

@@ -81,6 +81,15 @@ return {
     keys = {
       { '<leader>ccc', '<cmd>CopilotChat<CR>', mode = { 'n', 'v' } },
       { '<leader>ccs', '<cmd>CopilotChatStop<CR>' },
+      {
+        '<leader>ccp',
+        function()
+          local actions = require 'CopilotChat.actions'
+          require('CopilotChat.integrations.fzflua').pick(actions.prompt_actions())
+        end,
+        desc = 'CopilotChat - Prompt actions',
+        mode = { 'n', 'v' },
+      },
     },
   },
   {
