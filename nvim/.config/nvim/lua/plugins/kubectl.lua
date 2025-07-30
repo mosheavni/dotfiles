@@ -98,8 +98,6 @@ return {
         local kind = ctx.data.kind
         if kubectl_user[kind] and kubectl_user[kind].select then
           kubectl_user[kind].select(ctx.data.name, ctx.data.ns)
-        else
-          vim.notify('No handler for ' .. kind .. ' resource', vim.log.levels.WARN)
         end
       end,
     })
