@@ -88,6 +88,39 @@ local function process_directory(dir, is_left, all_paths)
   end
 end
 
+---@param left_file string|nil Path to left file
+---@param right_file string|nil Path to right file
+---@return boolean files_differ True if files have different content
+local function files_differ(left_file, right_file)
+  -- If one file doesn't exist, they differ
+  if not left_file or not right_file then
+    return true
+  end
+
+  -- Check if files exist
+  if vim.fn.filereadable(left_file) == 0 or vim.fn.filereadable(right_file) == 0 then
+    return true
+  end
+
+  -- Read and compare file contents
+  local left_lines = vim.fn.readfile(left_file)
+  local right_lines = vim.fn.readfile(right_file)
+
+  -- Quick check: different number of lines
+  if #left_lines ~= #right_lines then
+    return true
+  end
+
+  -- Compare line by line
+  for i = 1, #left_lines do
+    if left_lines[i] ~= right_lines[i] then
+      return true
+    end
+  end
+
+  return false
+end
+
 ---@param left_dir string Left directory path
 ---@param right_dir string Right directory path
 local function diff_directories(left_dir, right_dir)
@@ -115,16 +148,21 @@ local function diff_directories(left_dir, right_dir)
       right_file = right_dir .. rel_path
     end
 
-    qf_entries[#qf_entries + 1] = {
-      filename = right_file,
-      text = status,
-      user_data = {
-        diff = true,
-        rel = rel_path,
-        left = left_file,
-        right = right_file,
-      },
-    }
+    -- Only add to quickfix if files actually differ
+    if files_differ(left_file, right_file) then
+      qf_entries[#qf_entries + 1] = {
+        filename = right_file,
+        text = status,
+        user_data = {
+          diff = true,
+          rel = rel_path,
+          left = left_file,
+          right = right_file,
+          left_dir = left_dir,
+          right_dir = right_dir,
+        },
+      }
+    end
   end
 
   -- Sort entries by filename for consistency
@@ -142,7 +180,18 @@ local function diff_directories(left_dir, right_dir)
       local out = {}
       for i = info.start_idx, info.end_idx do
         local entry = items[i]
-        out[#out + 1] = entry.text .. ' ' .. entry.user_data.rel
+        local status_text = entry.text
+        local description = ''
+
+        if entry.user_data and entry.user_data.diff then
+          if status_text == 'A' then
+            description = ' (only in ' .. vim.fn.fnamemodify(entry.user_data.right_dir, ':t') .. ')'
+          elseif status_text == 'D' then
+            description = ' (missing from ' .. vim.fn.fnamemodify(entry.user_data.right_dir, ':t') .. ')'
+          end
+        end
+
+        out[#out + 1] = status_text .. description .. ' ' .. entry.user_data.rel
       end
       return out
     end,
@@ -163,16 +212,10 @@ function M.setup()
     modify = '^M ',
   }
 
-  -- Define highlight groups
-  local highlights = {
-    DiffToolAdd = { link = 'DiffAdd' },
-    DiffToolDelete = { link = 'DiffDelete' },
-    DiffToolText = { link = 'DiffText' },
-  }
-
-  for group, def in pairs(highlights) do
-    vim.api.nvim_set_hl(ns_id, group, def)
-  end
+  -- Define highlight groups globally (not in namespace)
+  vim.api.nvim_set_hl(0, 'DiffToolAdd', { link = 'GitSignsAdd' })
+  vim.api.nvim_set_hl(0, 'DiffToolDelete', { link = 'GitSignsDelete' })
+  vim.api.nvim_set_hl(0, 'DiffToolModify', { link = 'GitSignsChange' })
 
   vim.api.nvim_create_autocmd('BufWinEnter', {
     pattern = 'quickfix',
@@ -188,14 +231,14 @@ function M.setup()
         elseif line:match(patterns.delete) then
           hl_group = 'DiffToolDelete'
         elseif line:match(patterns.modify) then
-          hl_group = 'DiffToolText'
+          hl_group = 'DiffToolModify'
         end
 
         if hl_group then
           vim.api.nvim_buf_set_extmark(bufnr, ns_id, i - 1, 0, {
             hl_group = hl_group,
-            end_row = i,
-            end_col = 0,
+            end_col = #line,
+            priority = 1000,
             strict = false,
           })
         end
