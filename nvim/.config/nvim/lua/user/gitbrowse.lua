@@ -19,10 +19,6 @@ local defaults = {
   -- Handler to open the url in a browser
   ---@param url string
   open = function(url)
-    if vim.fn.has 'nvim-0.10' == 0 then
-      require('lazy.util').open(url, { system = true })
-      return
-    end
     vim.ui.open(url)
   end,
   ---@type "repo" | "branch" | "file" | "commit"

@@ -30,9 +30,9 @@ M.open_url_under_cursor = function()
   -- if not cword, find all http(s) links in the file and use vim.ui.select to choose one
   local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
   local links = {}
-  for _, line in ipairs(lines) do
+  for i, line in ipairs(lines) do
     for link in string.gmatch(line, [[(https?://[%w%.%-_/]+)]]) do
-      table.insert(links, link)
+      table.insert(links, { line = i, link = link })
     end
   end
 
@@ -43,7 +43,7 @@ M.open_url_under_cursor = function()
   vim.ui.select(links, {
     prompt = 'Select a link to open:',
     format_item = function(item)
-      return '🔗 ' .. item
+      return item.line .. ':🔗 ' .. item.link
     end,
   }, function(selected_link)
     if selected_link then
