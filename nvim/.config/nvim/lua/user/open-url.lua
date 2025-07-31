@@ -45,9 +45,9 @@ M.open_url_under_cursor = function()
     format_item = function(item)
       return item.line .. ':🔗 ' .. item.link
     end,
-  }, function(selected_link)
-    if selected_link then
-      vim.ui.open(selected_link)
+  }, function(selected)
+    if selected then
+      vim.ui.open(selected.link)
     end
   end)
 end
