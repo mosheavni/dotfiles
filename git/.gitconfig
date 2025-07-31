@@ -1,11 +1,11 @@
 [core]
   excludesfile = ~/.gitignore_global
   pager        = delta
-  editor       = vim
+  editor       = nvim
 
 [user]
-  name       = Moshe Avni
-  email      = moshe.avni@flexera.com
+  name  = Moshe Avni
+  email = moshe.avni@flexera.com
 
 [checkout]
   defaultRemote = origin
