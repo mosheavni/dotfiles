@@ -62,7 +62,12 @@ local function switch_to_project(project_path, panes)
     vim.fn.system('wezterm cli activate-pane --pane-id ' .. existing_tab.pane_id)
   else
     -- Create new tab with nvim
-    vim.fn.system(string.format('wezterm cli spawn --cwd %s -- nvim', vim.fn.shellescape(vim.fn.expand(project_path))))
+    vim.system({ 'wezterm', 'cli', 'spawn', '--cwd', vim.fn.expand(project_path) }, { text = true }, function(res)
+      local id = vim.trim(res.stdout)
+      vim.schedule(function()
+        vim.system { 'wezterm', 'cli', 'send-text', '--pane-id', id, 'nvim' .. vim.keycode '<cr>' }
+      end)
+    end)
   end
 end
 
