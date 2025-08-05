@@ -25,7 +25,7 @@ local profile_to_onelogin = {
 -- open ALB on AWS console
 M.ingresses.select = function(name, ns)
   commands.run_async('get_single_async', {
-    kind = 'Ingress',
+    gvk = { g = 'networking.k8s.io', v = 'v1', k = 'Ingress' },
     namespace = ns,
     name = name,
     output = 'Json',
@@ -102,6 +102,10 @@ end
 
 -- open ArgoCD application in browser
 M['applications.argoproj.io'].select = function(name, ns)
+  if not (name and ns) then
+    vim.notify('ArgoCD application name and namespace are required', vim.log.levels.ERROR)
+    return
+  end
   local ingress_host = vim
     .system({ 'kubectl', 'get', 'ingress', '-n', ns, '-l', 'app.kubernetes.io/component=server', '-o', 'jsonpath={.items[].spec.rules[].host}' }, { text = true })
     :wait().stdout
