@@ -2,7 +2,6 @@
 local M = {
   'hrsh7th/nvim-cmp',
   version = false, -- last release is way too old
-  enabled = true,
   event = { 'InsertEnter', 'CmdlineEnter' },
   dependencies = {
     'rafamadriz/friendly-snippets',
@@ -50,6 +49,14 @@ M.config = function()
   local custom_kinds_hl = {}
   vim.api.nvim_set_hl(0, 'CmpItemKindTabNine', { link = 'Green' })
   cmp.setup {
+    enabled = function()
+      local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
+      if ft == 'nvim_buf_get_option' then
+        vim.keymap.del('i', '<C-space>', { buffer = 0 })
+        return false
+      end
+      return true
+    end,
     native_menu = false,
     view = {
       entries = {

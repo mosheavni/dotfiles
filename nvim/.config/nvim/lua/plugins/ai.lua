@@ -1,3 +1,4 @@
+local model = 'claude-sonnet-4'
 return {
   {
     'zbirenbaum/copilot.lua',
@@ -38,12 +39,18 @@ return {
         avante = {
           make_slash_commands = true, -- make /slash commands from MCP server prompts
         },
+        copilotchat = {
+          enabled = true,
+          convert_tools_to_functions = true, -- Convert MCP tools to CopilotChat functions
+          convert_resources_to_functions = true, -- Convert MCP resources to CopilotChat functions
+          add_mcp_prefix = true, -- Add "mcp_" prefix to function names
+        },
       },
     },
   },
   {
     'CopilotC-Nvim/CopilotChat.nvim',
-    enabled = false,
+    enabled = true,
     cmd = {
       'CopilotChat',
       'CopilotChatAgents',
@@ -67,13 +74,14 @@ return {
       'CopilotChatToggle',
     },
     dependencies = {
-      { 'zbirenbaum/copilot.lua' },
-      { 'nvim-lua/plenary.nvim' },
+      'zbirenbaum/copilot.lua',
+      'nvim-lua/plenary.nvim',
+      'ravitemer/mcphub.nvim',
     },
     build = 'make tiktoken',
     opts = {
       -- https://docs.github.com/en/copilot/using-github-copilot/ai-models/choosing-the-right-ai-model-for-your-task
-      model = 'claude-sonnet-4',
+      model = model,
       question_header = '  User ',
       answer_header = '  Copilot ',
       error_header = '  Error ',
@@ -94,6 +102,7 @@ return {
   },
   {
     'yetone/avante.nvim',
+    enabled = false,
     version = false, -- Never set this value to "*"! Never!
     keys = {
       { '<leader>ccc', '<cmd>AvanteChat<CR>', mode = { 'n', 'v' } },
@@ -117,7 +126,7 @@ return {
       providers = {
         copilot = {
           -- model = 'gpt-4.1',
-          model = 'claude-sonnet-4',
+          model = model,
         },
       },
 
