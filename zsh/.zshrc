@@ -56,6 +56,7 @@ export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/.dotfiles/requirements.txt
 
 source $HOME/.antidote/antidote.zsh
 antidote load
+eval "$(zoxide init zsh)"
 
 # ================ #
 #  PS1 and Random  #
