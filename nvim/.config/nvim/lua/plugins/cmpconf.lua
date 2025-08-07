@@ -51,8 +51,7 @@ M.config = function()
   cmp.setup {
     enabled = function()
       local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
-      if ft == 'nvim_buf_get_option' then
-        vim.keymap.del('i', '<C-space>', { buffer = 0 })
+      if string.find(ft, 'k8s_') then
         return false
       end
       return true
