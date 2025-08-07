@@ -8,6 +8,8 @@ local M = {
   ['clustersecretstores.external-secrets.io'] = {},
   ['externalsecrets.external-secrets.io'] = {},
   ['scaledobjects.keda.sh'] = {},
+  ['targetgroupbindings.elbv2.k8s.aws'] = {},
+  ['prometheuses.monitoring.coreos.com'] = {},
   serviceaccounts = {},
 }
 
@@ -22,10 +24,42 @@ local profile_to_onelogin = {
   dev = 'https://spotinst.onelogin.com/client/apps/select/889121822',
 }
 
+local get_profile_and_region = function()
+  local cluster_name = require('kubectl.state').context['current-context']
+  local aws_profile = os.getenv 'AWS_PROFILE' or cluster_to_profile[cluster_name]
+  local region = os.getenv 'AWS_REGION'
+    or vim.trim(vim.system({ 'aws', 'configure', 'get', 'region', '--profile', aws_profile }, { text = true }):wait().stdout)
+  return aws_profile, region
+end
+
+local prompt_onelogin = function(aws_profile, cb)
+  local onelogin_url = profile_to_onelogin[aws_profile]
+  if not onelogin_url then
+    vim.notify('No OneLogin URL configured for AWS_PROFILE: ' .. aws_profile, vim.log.levels.ERROR)
+    return
+  end
+  vim.schedule(function()
+    vim.ui.select({ 'Yes', 'No' }, { title = 'Open OneLogin before?' }, function(choice)
+      if not choice then
+        return
+      end
+      if choice == 'No' then
+        cb()
+        return
+      end
+      vim.ui.open(profile_to_onelogin[aws_profile])
+      vim.defer_fn(function()
+        cb()
+      end, 3000)
+    end)
+  end)
+end
+
 -- open ALB on AWS console
 M.ingresses.select = function(name, ns)
+  local gvk = require('kubectl.resources.ingresses').definition.gvk
   commands.run_async('get_single_async', {
-    gvk = { g = 'networking.k8s.io', v = 'v1', k = 'Ingress' },
+    gvk = gvk,
     namespace = ns,
     name = name,
     output = 'Json',
@@ -36,10 +70,7 @@ M.ingresses.select = function(name, ns)
     local data = vim.json.decode(data_raw)
     local ingress_dns = vim.inspect(data.status.loadBalancer.ingress[1].hostname)
     vim.schedule(function()
-      local cluster_name = require('kubectl.state').context['current-context']
-      local aws_profile = os.getenv 'AWS_PROFILE' or cluster_to_profile[cluster_name]
-      local region = os.getenv 'AWS_REGION'
-        or vim.trim(vim.system({ 'aws', 'configure', 'get', 'region', '--profile', aws_profile }, { text = true }):wait().stdout)
+      local aws_profile, region = get_profile_and_region()
       vim.notify('AWS_PROFILE: ' .. aws_profile .. ' AWS_REGION: ' .. region .. ' Ingress DNS: ' .. ingress_dns)
       local aws_cmd = {
         'aws',
@@ -66,20 +97,8 @@ M.ingresses.select = function(name, ns)
         local alb_arn = aws_output and aws_output[1].LoadBalancerArn
         local lb_url =
           string.format('https://%s.console.aws.amazon.com/ec2/home?region=%s#LoadBalancer:loadBalancerArn=%s;tab=listenersb', region, region, alb_arn)
-        vim.schedule(function()
-          vim.ui.select({ 'Yes', 'No' }, { title = 'Open OneLogin before?' }, function(choice)
-            if not choice then
-              return
-            end
-            if choice == 'No' then
-              vim.ui.open(lb_url)
-              return
-            end
-            vim.ui.open(profile_to_onelogin[aws_profile])
-            vim.defer_fn(function()
-              vim.ui.open(lb_url)
-            end, 3000)
-          end)
+        prompt_onelogin(aws_profile, function()
+          vim.ui.open(lb_url)
         end)
       end)
     end)
@@ -88,8 +107,9 @@ end
 
 -- view Secret of the ServiceAccount
 M.serviceaccounts.select = function(name, ns)
+  local gvk = require('kubectl.resources.serviceaccounts').definition.gvk
   local client = require 'kubectl.client'
-  local sa = client.get_single(vim.json.encode { kind = 'ServiceAccount', namespace = ns, name = name, output = 'Json' })
+  local sa = client.get_single(vim.json.encode { gvk = gvk, namespace = ns, name = name, output = 'Json' })
 
   local sa_decoded = vim.json.decode(sa)
   local secret_name = sa_decoded.secrets and sa_decoded.secrets[1] and sa_decoded.secrets[1].name
@@ -123,8 +143,9 @@ end
 
 -- view Secret of ExternalSecret
 M['externalsecrets.external-secrets.io'].select = function(name, ns)
+  local gvk = require('kubectl.resources.fallback').definition.gvk
   local client = require 'kubectl.client'
-  local es = client.get_single(vim.json.encode { kind = 'ExternalSecret', namespace = ns, name = name, output = 'Json' })
+  local es = client.get_single(vim.json.encode { gvk = gvk, namespace = ns, name = name, output = 'Json' })
   local es_decoded = vim.json.decode(es)
   local secret_name = es_decoded.status and es_decoded.status.binding and es_decoded.status.binding.name
   if secret_name then
@@ -141,12 +162,12 @@ M['certificates.cert-manager.io'].select = function(name, ns)
   require('kubectl.resources.fallback').View(nil, 'certificaterequests.cert-manager.io')
 end
 
--- view ScaledObject metrics of the KEDA ScaledObject
 M['scaledobjects.keda.sh'].select = function(name, ns)
+  local gvk = require('kubectl.resources.fallback').definition.gvk
   local client = require 'kubectl.client'
-  local so = client.get_single(vim.json.encode { kind = 'ScaledObject', namespace = ns, name = name, output = 'Json' })
+  local so = client.get_single(vim.json.encode { gvk = gvk, namespace = ns, name = name, output = 'Json' })
   local so_decoded = vim.json.decode(so)
-  local metric_names = so_decoded.status.externalMetricNames
+  local metric_names = so_decoded.status.externalMetricNames or {}
   for _, metric_name in ipairs(metric_names) do
     vim.system({
       'kubectl',
@@ -173,6 +194,38 @@ M['scaledobjects.keda.sh'].select = function(name, ns)
       vim.notify(string.format('Current metric value for %s (%s): %d real metric (%s)', name, metric_name, real_metric, metric_value))
     end)
   end
+end
+
+M['targetgroupbindings.elbv2.k8s.aws'].select = function(name, ns)
+  local gvk = require('kubectl.resources.fallback').definition.gvk
+  local client = require 'kubectl.client'
+  local tgb = client.get_single(vim.json.encode { gvk = gvk, namespace = ns, name = name, output = 'Json' })
+  local tgb_decoded = vim.json.decode(tgb)
+  local target_group_arn = tgb_decoded.spec.targetGroupARN
+  if not target_group_arn then
+    vim.notify('TargetGroupARN not found for TargetGroupBinding: ' .. name, vim.log.levels.ERROR)
+    return
+  end
+  local aws_profile, region = get_profile_and_region()
+  local tg_url = string.format('https://%s.console.aws.amazon.com/ec2/home?region=%s#TargetGroup:targetGroupArn=%s', region, region, target_group_arn)
+  prompt_onelogin(aws_profile, function()
+    vim.ui.open(tg_url)
+  end)
+end
+
+M['prometheuses.monitoring.coreos.com'].select = function(name, ns)
+  local gvk = require('kubectl.resources.fallback').definition.gvk
+  local client = require 'kubectl.client'
+  local prometheus = client.get_single(vim.json.encode { gvk = gvk, namespace = ns, name = name, output = 'Json' })
+  local prometheus_decoded = vim.json.decode(prometheus)
+  local pod_selector = prometheus_decoded.status and prometheus_decoded.status.selector
+  local res = {}
+  for _, lbl in ipairs(vim.split(pod_selector, ',')) do
+    table.insert(res, 'metadata.labels.' .. lbl)
+  end
+  require('kubectl.state').filter_key = table.concat(res, ',')
+  require('kubectl.state').filter = ''
+  require('kubectl.resources.pods').View()
 end
 
 return M
