@@ -1,4 +1,4 @@
-local model = 'claude-sonnet-4'
+local model = 'gpt-5'
 return {
   {
     'zbirenbaum/copilot.lua',
