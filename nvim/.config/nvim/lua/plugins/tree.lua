@@ -19,7 +19,7 @@ local function on_attach(bufnr)
       sort_current = sort_current + 1
     end
     api.tree.reload()
-    require('user.utils').pretty_print('Sort Method: ' .. SORT_METHODS[sort_current])
+    vim.notify('Sort Method: ' .. SORT_METHODS[sort_current])
   end
 
   -- mark operation
@@ -42,21 +42,6 @@ local function on_attach(bufnr)
       if input == 'y' then
         for _, node in ipairs(marks) do
           api.fs.trash(node)
-        end
-        api.marks.clear()
-        api.tree.reload()
-      end
-    end)
-  end
-  local mark_remove = function()
-    local marks = api.marks.list()
-    if #marks == 0 then
-      table.insert(marks, api.tree.get_node_under_cursor())
-    end
-    vim.ui.input({ prompt = string.format('Remove/Delete %s files? [y/n] ', #marks) }, function(input)
-      if input == 'y' then
-        for _, node in ipairs(marks) do
-          api.fs.remove(node)
         end
         api.marks.clear()
         api.tree.reload()
@@ -115,6 +100,8 @@ local function on_attach(bufnr)
   vim.keymap.del('n', 's', { buffer = bufnr })
   vim.keymap.del('n', '<C-e>', { buffer = bufnr })
   vim.keymap.del('n', 'bd', { buffer = bufnr })
+  vim.keymap.del('n', 'm', { buffer = bufnr })
+  vim.keymap.del('n', 'bmv', { buffer = bufnr })
 
   vim.keymap.set('n', 'h', lefty, opts 'Left')
   vim.keymap.set('n', '<Left>', lefty, opts 'Left')
@@ -127,8 +114,6 @@ local function on_attach(bufnr)
   vim.keymap.set('n', 'K', mark_move_k, opts 'Toggle Bookmark Up')
 
   vim.keymap.set('n', 'dd', mark_cut, opts 'Cut File(s)')
-  vim.keymap.set('n', 'df', mark_trash, opts 'Trash File(s)')
-  vim.keymap.set('n', 'dF', mark_remove, opts 'Remove File(s)')
   vim.keymap.set('n', 'yy', mark_copy, opts 'Copy File(s)')
 
   vim.keymap.set('n', 'mv', api.marks.bulk.move, opts 'Move Bookmarked')
@@ -143,6 +128,34 @@ local function on_attach(bufnr)
     vim.system({ 'mv', file_src, file_out }, { text = true }):wait()
   end
   vim.keymap.set('n', 'r', move_file_to, opts 'Move File To')
+
+  vim.keymap.set('n', 'Z', function()
+    local node = api.tree.get_node_under_cursor()
+    local file_path = node['absolute_path']
+    local file_dir = vim.fn.fnamemodify(file_path, ':h')
+    local file_type = vim.trim(vim.system({ 'file', '--mime-type', '-b', file_path }, { text = true }):wait().stdout)
+
+    local function run(cmd)
+      local ok = vim.system(cmd, { text = true }):wait()
+      if ok.code ~= 0 then
+        vim.notify('Extraction failed: ' .. table.concat(cmd, ' '), vim.log.levels.ERROR)
+        return false
+      end
+      return true
+    end
+
+    if file_type == 'application/gzip' then
+      run { 'tar', 'xzf', file_path, '-C', file_dir }
+    elseif file_type == 'application/zip' then
+      run { 'unzip', file_path, '-d', file_dir }
+    elseif file_type == 'application/x-bzip2' then
+      run { 'tar', 'xjf', file_path, '-C', file_dir }
+    else
+      vim.notify('Unsupported file type for extraction: ' .. file_type, vim.log.levels.WARN)
+      return
+    end
+    vim.notify('Extracted: ' .. file_path)
+  end, opts 'Extract File')
 end
 
 local M = {
