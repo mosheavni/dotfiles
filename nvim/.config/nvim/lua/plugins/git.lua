@@ -115,17 +115,22 @@ local fugitive_config = function()
   -- Toggle fugitive --
   ---------------------
   vim.keymap.set('n', '<leader>gg', function()
-    local _, fugitive_buf = pcall(vim.fn.bufname, '.git/')
-    if fugitive_buf == '' then
-      vim.cmd 'Git'
-    else
-      local bufnr = vim.fn.bufnr(fugitive_buf)
-      if vim.bo[bufnr].buflisted then
-        vim.cmd('bd ' .. fugitive_buf)
-      else
-        vim.cmd 'Git'
+    local to_close = {}
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      if vim.bo[buf].filetype == 'fugitive' then
+        to_close[#to_close + 1] = win
       end
     end
+    if #to_close > 0 then
+      for _, win in ipairs(to_close) do
+        if vim.api.nvim_win_is_valid(win) then
+          pcall(vim.api.nvim_win_close, win, true)
+        end
+      end
+      return
+    end
+    vim.cmd 'Git'
   end)
 
   --------------------------------
