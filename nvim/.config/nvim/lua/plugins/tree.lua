@@ -113,8 +113,8 @@ local function on_attach(bufnr)
   vim.keymap.set('n', 'J', mark_move_j, opts 'Toggle Bookmark Down')
   vim.keymap.set('n', 'K', mark_move_k, opts 'Toggle Bookmark Up')
 
-  vim.keymap.set('n', 'dd', mark_cut, opts 'Cut File(s)')
-  vim.keymap.set('n', 'yy', mark_copy, opts 'Copy File(s)')
+  vim.keymap.set('n', 'dd', mark_cut, opts 'Cut Bookmarked File(s)')
+  vim.keymap.set('n', 'yy', mark_copy, opts 'Copy Bookmarked File(s)')
 
   vim.keymap.set('n', 'mv', api.marks.bulk.move, opts 'Move Bookmarked')
 
