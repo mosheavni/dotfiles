@@ -88,8 +88,7 @@ M.config = function()
       end,
     },
     mapping = cmp.mapping.preset.insert {
-      ['<C-Space>'] = cmp.mapping.complete(),
-      -- ['<C-e>'] = cmp.mapping.abort(),
+      [os.getenv 'CMP_COMPLETION' or '<M-Space>'] = cmp.mapping.complete(),
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
       ['<C-u>'] = cmp.mapping.scroll_docs(-4),
       ['<C-j>'] = cmp.mapping(function(fallback)
@@ -132,7 +131,7 @@ M.config = function()
           fallback()
         end
       end, { 'i', 's' }),
-      ['<C-/>'] = cmp.mapping.close(),
+      ['<C-/>'] = cmp.mapping.abort(),
       ['<C-e>'] = cmp.mapping(function(fallback)
         if luasnip.choice_active() then
           luasnip.change_choice(1)
