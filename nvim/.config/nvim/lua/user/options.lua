@@ -10,7 +10,7 @@ vim.g.loaded_ruby_provider = 0
 -- titlestring
 vim.cmd [[
   function! CleanTitle()
-    return "nvim: " . substitute(getcwd(), $HOME . '/\(Repos/\)\?', '', '')
+    return "💻 nvim: " . substitute(getcwd(), $HOME . '/\(Repos/\)\?', '', '')
   endfunction
 ]]
 vim.o.titlestring = '%{CleanTitle()}'
