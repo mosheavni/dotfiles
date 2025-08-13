@@ -100,7 +100,7 @@ function M.pick_project()
 
   -- Show fzf picker
   fzf.fzf_exec(formatted_dirs, {
-    prompt = 'Projects> ',
+    prompt = 'Projects❯ ',
     actions = {
       ['default'] = function(selected)
         if selected and selected[1] then

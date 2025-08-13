@@ -57,7 +57,7 @@ return {
         local lsp_fmts = get_lsp_formatters(vim.api.nvim_get_current_buf())
 
         vim.ui.select(vim.list_extend(lsp_fmts, conform_fmts), {
-          prompt = 'Select LSP client',
+          prompt = 'Select LSP client❯ ',
           title = 'LSP clients',
           format_item = function(client)
             return client.name

@@ -150,7 +150,7 @@ M.config = function()
   local the_actions = actions()
   require('user.menu').add_actions('DAP', the_actions)
   vim.keymap.set('n', '<leader>dm', function()
-    vim.ui.select(vim.tbl_keys(the_actions), { prompt = 'Choose DAP action', title = 'DAP Actions' }, function(choice)
+    vim.ui.select(vim.tbl_keys(the_actions), { prompt = 'Choose DAP action❯ ', title = 'DAP Actions' }, function(choice)
       if choice then
         the_actions[choice]()
       end

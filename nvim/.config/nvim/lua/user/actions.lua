@@ -157,7 +157,7 @@ end)
     vim.fn.feedkeys 'zt'
   end,
   ['Record Macro (q{letter})'] = function()
-    vim.ui.input({ prompt = 'Macro letter: ' }, function(macro_letter)
+    vim.ui.input({ prompt = 'Macro letter❯ ' }, function(macro_letter)
       if not macro_letter then
         macro_letter = 'q'
       end
@@ -167,11 +167,11 @@ end)
     end)
   end,
   ['Repeat Macro (@{letter} / Q)'] = function()
-    vim.ui.input({ prompt = 'Macro letter: ' }, function(macro_letter)
+    vim.ui.input({ prompt = 'Macro letter❯ ' }, function(macro_letter)
       if not macro_letter then
         macro_letter = 'q'
       end
-      vim.ui.input({ prompt = 'Enter how many times (leave blank for once): ' }, function(macro_times)
+      vim.ui.input({ prompt = 'Enter how many times (leave blank for once)❯ ' }, function(macro_times)
         if not macro_times then
           macro_times = ''
         end
@@ -182,7 +182,7 @@ end)
   ['Save current buffer as temp'] = function()
     local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
     if ft == '' then
-      vim.ui.select(vim.fn.getcompletion('', 'filetype'), { prompt = 'Filetype' }, function(selected)
+      vim.ui.select(vim.fn.getcompletion('', 'filetype'), { prompt = 'Filetype❯ ' }, function(selected)
         if not selected then
           pretty_print 'Canceled.'
           return

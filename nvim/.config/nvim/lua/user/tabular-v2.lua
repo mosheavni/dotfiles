@@ -374,39 +374,39 @@ function M.sort_by_column(col_index, direction)
     local function should_sort_numerically(str)
       local digits = str:gsub('%D', '')
       local non_digits = str:gsub('%d', '')
-      
+
       -- If no digits, definitely not numeric
       if #digits == 0 then
         return false
       end
-      
+
       -- If mostly digits (>= 50% of string), likely numeric
       if #digits >= #str * 0.5 then
         return true
       end
-      
+
       -- Check for common numeric patterns: number followed by unit/suffix
       -- Examples: "1000 GiB", "5.2xlarge", "100MB", "3.5TB"
-      if str:match('^%d+%.?%d*%s*%a*$') then
+      if str:match '^%d+%.?%d*%s*%a*$' then
         return true
       end
-      
+
       -- If digits are at the beginning and represent a significant portion, likely numeric
-      if str:match('^%d+') and #digits >= #str * 0.3 then
+      if str:match '^%d+' and #digits >= #str * 0.3 then
         return true
       end
-      
+
       return false
     end
 
     -- Check if both strings should be sorted numerically
     local a_numeric = should_sort_numerically(val_a)
     local b_numeric = should_sort_numerically(val_b)
-    
+
     if a_numeric and b_numeric then
       local str_num_a = val_a:match '(%d+%.?%d*)' or val_a:match '(%d+)'
       local str_num_b = val_b:match '(%d+%.?%d*)' or val_b:match '(%d+)'
-      
+
       if str_num_a and str_num_b then
         str_num_a = tonumber(str_num_a)
         str_num_b = tonumber(str_num_b)
@@ -437,7 +437,7 @@ function M.filter_table()
     print('No data associated with current buffer. Current buffer ID:', current_bufnr)
     return
   end
-  local input_params = { prompt = 'Filter: ' }
+  local input_params = { prompt = 'Filter❯ ' }
   if tab_state.current_filter then
     input_params.default = tab_state.current_filter
   end
@@ -609,9 +609,9 @@ end
 function M.parse_command(existing_command)
   local tab_state = existing_command and M.get_or_create_tab_state(existing_command) or nil
   local inputs = {
-    command = { prompt = 'Enter command to run: ', default = existing_command or '' },
-    interval = { prompt = 'Enter interval (in seconds): ', default = tostring(tab_state and tab_state.interval or M.default_interval) },
-    delimiter = { prompt = 'Enter delimiter: ', default = tostring(tab_state and tab_state.delimiter or M.default_delimiter) },
+    command = { prompt = 'Enter command to run❯ ', default = existing_command or '' },
+    interval = { prompt = 'Enter interval (in seconds)❯ ', default = tostring(tab_state and tab_state.interval or M.default_interval) },
+    delimiter = { prompt = 'Enter delimiter❯ ', default = tostring(tab_state and tab_state.delimiter or M.default_delimiter) },
   }
   vim.ui.input(inputs.command, function(full_command)
     if not full_command or full_command == '' then
@@ -805,7 +805,7 @@ function M.parse_buffer()
     M.display_table(tabular_command)
   else
     vim.ui.input({
-      prompt = 'Enter delimiter: ',
+      prompt = 'Enter delimiter❯ ',
       default = M.default_delimiter,
     }, function(input)
       if not input then

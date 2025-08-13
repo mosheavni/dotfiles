@@ -68,7 +68,8 @@ local prompt_sso = function(cb)
     return
   end
   vim.schedule(function()
-    vim.ui.select({ 'Yes', 'No' }, { title = 'Open SSO before?' }, function(choice)
+    local question = 'Open SSO_APP URL before?'
+    vim.ui.select({ 'Yes', 'No' }, { title = question, prompt = question .. '❯ ' }, function(choice)
       if not choice then
         return
       end

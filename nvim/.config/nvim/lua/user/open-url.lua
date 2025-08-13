@@ -41,7 +41,7 @@ M.open_url_under_cursor = function()
   end
 
   vim.ui.select(links, {
-    prompt = 'Select a link to open:',
+    prompt = 'Select a link to open❯ ',
     format_item = function(item)
       return item.line .. ':🔗 ' .. item.link
     end,

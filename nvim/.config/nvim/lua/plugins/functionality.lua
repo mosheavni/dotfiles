@@ -19,13 +19,13 @@ local M = {
         ['Between 2 directories'] = function()
           local pretty_print = require('user.utils').pretty_print
           vim.defer_fn(function()
-            vim.ui.input({ prompt = 'Directory A: ' }, function(a)
+            vim.ui.input({ prompt = 'Directory A❯ ' }, function(a)
               if not a or a == '' then
                 pretty_print 'Canceled.'
                 return
               end
               vim.defer_fn(function()
-                vim.ui.input({ prompt = 'Directory B: ' }, function(b)
+                vim.ui.input({ prompt = 'Directory B❯ ' }, function(b)
                   if not b or b == '' then
                     pretty_print 'Canceled.'
                     return
@@ -137,7 +137,7 @@ local M = {
         enter = function()
           vim.keymap.set('n', '<leader>l', '<cmd>Leet<cr>')
           vim.keymap.set('n', '<leader>lr', function()
-            vim.ui.select({ 'easy', 'medium', 'hard' }, { prompt = 'Choose difficulty for a random leet: ' }, function(level)
+            vim.ui.select({ 'easy', 'medium', 'hard' }, { prompt = 'Choose difficulty for a random leet❯ ' }, function(level)
               vim.cmd('Leet random difficulty=' .. level)
             end)
           end, { remap = false })

@@ -53,7 +53,7 @@ local actions = function()
     ['Find in all commits'] = function()
       local rev_list = vim.fn.FugitiveExecute({ 'rev-list', '--all' }).stdout
       vim.defer_fn(function()
-        vim.ui.input({ prompt = 'Enter search term: ' }, function(search_term)
+        vim.ui.input({ prompt = 'Enter search term❯ ' }, function(search_term)
           if not search_term then
             git_funcs.prnt 'Canceled.'
             return
@@ -77,7 +77,7 @@ end
 local diff_actions = {
   ['[Diffview] Diff File History'] = function()
     vim.defer_fn(function()
-      vim.ui.input({ prompt = 'Enter file path (empty for all files, % for current): ' }, function(file_to_check)
+      vim.ui.input({ prompt = 'Enter file path (empty for all files, % for current)❯ ' }, function(file_to_check)
         if not file_to_check then
           return
         end
@@ -200,7 +200,7 @@ local fugitive_config = function()
   vim.keymap.set('n', '<leader>gm', function()
     local git_actions = require('user.menu').get_actions { prefix = 'Git' }
 
-    vim.ui.select(vim.tbl_keys(git_actions), { title = 'Git actions', prompt = 'Choose git action: ' }, function(choice)
+    vim.ui.select(vim.tbl_keys(git_actions), { title = 'Git actions', prompt = 'Choose git action❯ ' }, function(choice)
       if not choice then
         utils.pretty_print('Canceled.', 'Git Actions', '')
         return
