@@ -26,18 +26,18 @@ local get_user_env_vars = function()
     vim.notify('No mappings found for the current context: ' .. context .. ' on ' .. mappings_file, vim.log.levels.ERROR)
     return {}
   end
-  vim.notify("Cluster's user env vars: " .. vim.inspect(mappings[context]), vim.log.levels.INFO)
   return mappings[context]
 end
 
 local get_profile_and_region = function()
   local env_vars = get_user_env_vars() or {}
   local aws_profile = vim.env.AWS_PROFILE
-  if not aws_profile or aws_profile == '' and env_vars.AWS_PROFILE then
-    aws_profile = env_vars.AWS_PROFILE
-  else
-    vim.notify('AWS_PROFILE not found!', vim.log.levels.ERROR)
-    return nil, nil
+  if not aws_profile or aws_profile == '' then
+    if env_vars.AWS_PROFILE then
+      aws_profile = env_vars.AWS_PROFILE
+    else
+      aws_profile = 'default'
+    end
   end
 
   local region = vim.env.AWS_REGION
