@@ -13,33 +13,62 @@ local M = {
   serviceaccounts = {},
 }
 
-local cluster_to_profile = {
-  ['spot-prod'] = 'default',
-  ['spot-prod-bi-billing'] = 'default',
-  ['spot-dev-us-east-2'] = 'dev',
-}
-
-local profile_to_onelogin = {
-  default = 'https://spotinst.onelogin.com/client/apps/select/889121819',
-  dev = 'https://spotinst.onelogin.com/client/apps/select/889121822',
-}
+local get_user_env_vars = function()
+  local state = require 'kubectl.state'
+  local context_user = state.context.contexts[1].context.user
+  if not context_user then
+    vim.notify('No user found for the current context: ' .. state.context.contexts.context.name, vim.log.levels.ERROR)
+    return nil
+  end
+  local env_vars = {}
+  -- find the user for the current context
+  local user_tbl = {}
+  for _, user in ipairs(state.context.users) do
+    if user.name == context_user then
+      user_tbl = user
+      break
+    end
+  end
+  if user_tbl and user_tbl.user and user_tbl.user.exec and user_tbl.user.exec.env then
+    for _, env in ipairs(user_tbl.user.exec.env) do
+      env_vars[env.name] = env.value
+    end
+  end
+  vim.notify("Cluster's user env vars: " .. vim.inspect(env_vars), vim.log.levels.INFO)
+  return env_vars
+end
 
 local get_profile_and_region = function()
-  local cluster_name = require('kubectl.state').context['current-context']
-  local aws_profile = os.getenv 'AWS_PROFILE' or cluster_to_profile[cluster_name]
+  local env_vars = get_user_env_vars() or {}
+  local aws_profile = os.getenv 'AWS_PROFILE'
+  if not aws_profile or aws_profile == '' and env_vars.AWS_PROFILE then
+    aws_profile = env_vars.AWS_PROFILE
+  else
+    vim.notify('AWS_PROFILE not found!', vim.log.levels.ERROR)
+    return nil, nil
+  end
+
   local region = os.getenv 'AWS_REGION'
-    or vim.trim(vim.system({ 'aws', 'configure', 'get', 'region', '--profile', aws_profile }, { text = true }):wait().stdout)
+  if not region or region == '' then
+    region = env_vars.AWS_REGION or vim.trim(vim.system({ 'aws', 'configure', 'get', 'region', '--profile', aws_profile }, { text = true }):wait().stdout)
+  end
+
   return aws_profile, region
 end
 
-local prompt_onelogin = function(aws_profile, cb)
-  local onelogin_url = profile_to_onelogin[aws_profile]
-  if not onelogin_url then
-    vim.notify('No OneLogin URL configured for AWS_PROFILE: ' .. aws_profile, vim.log.levels.ERROR)
+local prompt_sso = function(cb)
+  local env_vars = get_user_env_vars() or {}
+  local sso_url = os.getenv 'SSO_APP'
+  if not sso_url or sso_url == '' and env_vars.SSO_APP then
+    sso_url = env_vars.SSO_APP
+  end
+
+  if not sso_url then
+    vim.notify('No SSO_APP URL env var is configured for the cluster: ', vim.log.levels.ERROR)
     return
   end
   vim.schedule(function()
-    vim.ui.select({ 'Yes', 'No' }, { title = 'Open OneLogin before?' }, function(choice)
+    vim.ui.select({ 'Yes', 'No' }, { title = 'Open SSO before?' }, function(choice)
       if not choice then
         return
       end
@@ -47,7 +76,7 @@ local prompt_onelogin = function(aws_profile, cb)
         cb()
         return
       end
-      vim.ui.open(profile_to_onelogin[aws_profile])
+      vim.ui.open(sso_url)
       vim.defer_fn(function()
         cb()
       end, 3000)
@@ -71,7 +100,6 @@ M.ingresses.select = function(name, ns)
     local ingress_dns = vim.inspect(data.status.loadBalancer.ingress[1].hostname)
     vim.schedule(function()
       local aws_profile, region = get_profile_and_region()
-      vim.notify('AWS_PROFILE: ' .. aws_profile .. ' AWS_REGION: ' .. region .. ' Ingress DNS: ' .. ingress_dns)
       local aws_cmd = {
         'aws',
         'elbv2',
@@ -97,7 +125,7 @@ M.ingresses.select = function(name, ns)
         local alb_arn = aws_output and aws_output[1].LoadBalancerArn
         local lb_url =
           string.format('https://%s.console.aws.amazon.com/ec2/home?region=%s#LoadBalancer:loadBalancerArn=%s;tab=listenersb', region, region, alb_arn)
-        prompt_onelogin(aws_profile, function()
+        prompt_sso(function()
           vim.ui.open(lb_url)
         end)
       end)
@@ -206,9 +234,9 @@ M['targetgroupbindings.elbv2.k8s.aws'].select = function(name, ns)
     vim.notify('TargetGroupARN not found for TargetGroupBinding: ' .. name, vim.log.levels.ERROR)
     return
   end
-  local aws_profile, region = get_profile_and_region()
+  local _, region = get_profile_and_region()
   local tg_url = string.format('https://%s.console.aws.amazon.com/ec2/home?region=%s#TargetGroup:targetGroupArn=%s', region, region, target_group_arn)
-  prompt_onelogin(aws_profile, function()
+  prompt_sso(function()
     vim.ui.open(tg_url)
   end)
 end
