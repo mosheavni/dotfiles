@@ -1,4 +1,4 @@
-vim.g.disabled_plugins = vim.split(os.getenv 'DISABLED_PLUGINS' or '', ',')
+vim.g.disabled_plugins = vim.split(vim.env.DISABLED_PLUGINS or '', ',')
 return {
   config = {
     defaults = {

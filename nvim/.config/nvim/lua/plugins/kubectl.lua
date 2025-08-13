@@ -2,7 +2,7 @@ return {
   'Ramilito/kubectl.nvim',
   version = '2.*',
   dependencies = 'saghen/blink.download',
-  dev = os.getenv 'K8S_DEV' == 'true',
+  dev = vim.env.K8S_DEV == 'true',
   opts = {
     kubectl_cmd = {
       persist_context_change = true,

@@ -40,7 +40,7 @@ end
 
 local get_profile_and_region = function()
   local env_vars = get_user_env_vars() or {}
-  local aws_profile = os.getenv 'AWS_PROFILE'
+  local aws_profile = vim.env.AWS_PROFILE
   if not aws_profile or aws_profile == '' and env_vars.AWS_PROFILE then
     aws_profile = env_vars.AWS_PROFILE
   else
@@ -48,7 +48,7 @@ local get_profile_and_region = function()
     return nil, nil
   end
 
-  local region = os.getenv 'AWS_REGION'
+  local region = vim.env.AWS_REGION
   if not region or region == '' then
     region = env_vars.AWS_REGION or vim.trim(vim.system({ 'aws', 'configure', 'get', 'region', '--profile', aws_profile }, { text = true }):wait().stdout)
   end
@@ -58,7 +58,7 @@ end
 
 local prompt_sso = function(cb)
   local env_vars = get_user_env_vars() or {}
-  local sso_url = os.getenv 'SSO_APP'
+  local sso_url = vim.env.SSO_APP
   if not sso_url or sso_url == '' and env_vars.SSO_APP then
     sso_url = env_vars.SSO_APP
   end

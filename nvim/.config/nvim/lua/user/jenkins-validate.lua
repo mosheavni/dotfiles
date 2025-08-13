@@ -1,8 +1,8 @@
-local user = os.getenv 'JENKINS_USER_ID' or os.getenv 'JENKINS_USERNAME'
-local password = os.getenv 'JENKINS_PASSWORD'
-local token = os.getenv 'JENKINS_API_TOKEN' or os.getenv 'JENKINS_TOKEN'
-local jenkins_url = os.getenv 'JENKINS_URL' or os.getenv 'JENKINS_HOST'
-local op_jenkins_id = os.getenv 'OP_JENKINS_ID' or 't5ejcfcrjyo243irr2bjy3yqhm'
+local user = vim.env.JENKINS_USER_ID or vim.env.JENKINS_USERNAME
+local password = vim.env.JENKINS_PASSWORD
+local token = vim.env.JENKINS_API_TOKEN or vim.env.JENKINS_TOKEN
+local jenkins_url = vim.env.JENKINS_URL or vim.env.JENKINS_HOST
+local op_jenkins_id = vim.env.OP_JENKINS_ID or 't5ejcfcrjyo243irr2bjy3yqhm'
 local namespace_id = vim.api.nvim_create_namespace 'jenkinsfile-linter'
 local validated_msg = 'Jenkinsfile successfully validated.'
 -- local unauthorized_msg = 'ERROR 401 Unauthorized'

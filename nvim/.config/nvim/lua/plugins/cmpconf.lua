@@ -88,7 +88,7 @@ M.config = function()
       end,
     },
     mapping = cmp.mapping.preset.insert {
-      [os.getenv 'CMP_COMPLETION' or '<M-Space>'] = cmp.mapping.complete(),
+      [vim.env.CMP_COMPLETION or '<M-Space>'] = cmp.mapping.complete(),
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
       ['<C-u>'] = cmp.mapping.scroll_docs(-4),
       ['<C-j>'] = cmp.mapping(function(fallback)
