@@ -199,4 +199,23 @@ function M.random_emoji()
   return EMOJIS[math.random(#EMOJIS)]
 end
 
+---@param file_name string The filename to load
+---@return table|nil The content of the file
+function M.read_json_file(file_name)
+  local file_path = file_name
+  local file = io.open(file_path, 'r')
+  if not file then
+    return nil
+  end
+
+  local json_data = file:read '*a'
+  file:close()
+
+  local ok, decoded = pcall(vim.json.decode, json_data, { luanil = { object = true, array = true } })
+  if ok then
+    return decoded
+  end
+  return nil
+end
+
 return M

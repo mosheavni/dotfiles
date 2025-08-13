@@ -1,4 +1,7 @@
 local commands = require 'kubectl.actions.commands'
+local utils = require 'user.utils'
+local mappings_file = vim.env.HOME .. '/.kube/mappings.json'
+local mappings = {}
 local M = {
   ingresses = {},
   ['applications.argoproj.io'] = {},
@@ -15,27 +18,16 @@ local M = {
 
 local get_user_env_vars = function()
   local state = require 'kubectl.state'
-  local context_user = state.context.contexts[1].context.user
-  if not context_user then
-    vim.notify('No user found for the current context: ' .. state.context.contexts.context.name, vim.log.levels.ERROR)
-    return nil
+  local context = state.context['current-context']
+  if vim.tbl_isempty(mappings) then
+    mappings = utils.read_json_file(mappings_file) or {}
   end
-  local env_vars = {}
-  -- find the user for the current context
-  local user_tbl = {}
-  for _, user in ipairs(state.context.users) do
-    if user.name == context_user then
-      user_tbl = user
-      break
-    end
+  if not mappings or not mappings[context] then
+    vim.notify('No mappings found for the current context: ' .. context .. ' on ' .. mappings_file, vim.log.levels.ERROR)
+    return {}
   end
-  if user_tbl and user_tbl.user and user_tbl.user.exec and user_tbl.user.exec.env then
-    for _, env in ipairs(user_tbl.user.exec.env) do
-      env_vars[env.name] = env.value
-    end
-  end
-  vim.notify("Cluster's user env vars: " .. vim.inspect(env_vars), vim.log.levels.INFO)
-  return env_vars
+  vim.notify("Cluster's user env vars: " .. vim.inspect(mappings[context]), vim.log.levels.INFO)
+  return mappings[context]
 end
 
 local get_profile_and_region = function()
@@ -56,7 +48,7 @@ local get_profile_and_region = function()
   return aws_profile, region
 end
 
-local prompt_sso = function(cb)
+local prompt_sso = vim.schedule_wrap(function(cb)
   local env_vars = get_user_env_vars() or {}
   local sso_url = vim.env.SSO_APP
   if not sso_url or sso_url == '' and env_vars.SSO_APP then
@@ -83,7 +75,7 @@ local prompt_sso = function(cb)
       end, 3000)
     end)
   end)
-end
+end)
 
 -- open ALB on AWS console
 M.ingresses.select = function(name, ns)
