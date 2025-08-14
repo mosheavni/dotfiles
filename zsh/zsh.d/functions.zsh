@@ -31,6 +31,21 @@ function mwatch() {
   watch "$final_alias"
 }
 
+ecr-login() {
+  set -x
+  region=$1
+  if [[ -z $region ]]; then
+    region=$(aws configure get region --output text)
+  fi
+  aws ecr get-login-password \
+    --region $region | docker login \
+    --username AWS \
+    --password-stdin $(aws sts get-caller-identity | jq \
+      -r ".Account").dkr.ecr.${region}.amazonaws.com
+  [[ -z $1 ]] && aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+  set +x
+}
+
 function clone() {
   cd ~/Repos
   git clone $1
