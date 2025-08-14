@@ -31,7 +31,7 @@ function mwatch() {
   watch "$final_alias"
 }
 
-ecr-login() {
+function ecr-login() {
   set -x
   region=$1
   if [[ -z $region ]]; then
@@ -48,8 +48,23 @@ ecr-login() {
 
 function clone() {
   cd ~/Repos
-  git clone $1
-  cd "$(basename "$_" .git)"
+  REPO=$1
+  CD_INTO=$REPO
+  # check if $REPO starts with git@ or https://
+  if [[ $REPO == git@* || $REPO == https://* ]]; then
+    git clone $REPO
+    CD_INTO=$(sed 's/\.git$//' <<<"$REPO" | awk -F/ '{print $NF}')
+  else
+    # check if $REPO is in user/repo format
+    if [[ $REPO == */* ]]; then
+      git clone https://github.com/${REPO}.git
+      CD_INTO=$(awk -F'/' '{print $2}' <<<$REPO)
+    else
+      git clone git@github.com:spotinst/${1}.git
+    fi
+  fi
+  echo "CDing into $CD_INTO"
+  cd $CD_INTO
   nvim
 }
 
