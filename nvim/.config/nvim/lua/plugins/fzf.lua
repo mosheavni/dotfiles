@@ -152,7 +152,13 @@ return {
         glob_separator = '%s%-%-', -- query separator pattern (lua): ' --'
         hidden = true,
       },
-      keymap = { fzf = { ['ctrl-q'] = 'select-all+accept' } },
+      keymap = {
+        builtin = {
+          ['<C-d>'] = 'preview-page-down',
+          ['<C-u>'] = 'preview-page-up',
+        },
+        fzf = { ['ctrl-q'] = 'select-all+accept' },
+      },
     }
 
     require('fzf-lua').register_ui_select(function(opts, items)
