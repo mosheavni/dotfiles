@@ -6,7 +6,7 @@ export WEZTERM_SHELL_SKIP_CWD=1
 ZSH_TAB_TITLE="%15<..<%~%<<" #15 char left truncated PWD
 function termsupport_cwd {
   emulate -L zsh
-  print -Pn "\e]0;zsh: ${ZSH_TAB_TITLE}\a" # set tab name
+  print -Pn "\e]0;🖥️ zsh: ${ZSH_TAB_TITLE}\a" # set tab name
 }
 
 function termsupport_cwd_preexec {
