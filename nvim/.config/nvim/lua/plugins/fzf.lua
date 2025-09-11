@@ -22,6 +22,8 @@ return {
         local actions = require 'fzf-lua.actions'
 
         require('fzf-lua').git_branches {
+          header_prefix = '',
+          header_separator = '\n',
           actions = {
             ['default'] = {
               fn = function(selected, opts)

@@ -58,7 +58,6 @@ local M = {
     'rcarriga/nvim-dap-ui',
     { 'mfussenegger/nvim-dap-python', lazy = true },
     'rcarriga/cmp-dap',
-    'mxsdev/nvim-dap-vscode-js',
     'theHamsta/nvim-dap-virtual-text',
     'jay-babu/mason-nvim-dap.nvim',
   },
@@ -97,8 +96,6 @@ M.config = function()
     automatic_installation = true,
     ensure_installed = {
       'bash',
-      'chrome',
-      'node2',
       'python',
     },
     automatic_setup = true,
