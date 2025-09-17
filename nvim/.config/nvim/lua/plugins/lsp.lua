@@ -80,7 +80,7 @@ local language_specific_plugins = {
     'folke/lazydev.nvim',
     ft = 'lua', -- only load on lua files
     dependencies = {
-      'justinsgithub/wezterm-types',
+      'DrKJeff16/wezterm-types',
     },
     opts = {
       library = {

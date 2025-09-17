@@ -1,5 +1,8 @@
+---@type Wezterm
 local wez = require 'wezterm'
 local act = wez.action
+
+---@type Config
 local config = wez.config_builder()
 local HOME = os.getenv 'HOME'
 
@@ -18,9 +21,6 @@ config.harfbuzz_features = {
   'calt=1',
   'clig=1',
   'liga=1',
-  'zero=1',
-  'ss02=1',
-  'ss19=1',
 }
 config.font = wez.font_with_fallback { { family = 'CaskaydiaCove Nerd Font', weight = 'DemiBold' } }
 config.font_size = 16
