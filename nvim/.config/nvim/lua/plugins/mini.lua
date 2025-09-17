@@ -77,11 +77,9 @@ local M = {
       { '<leader>n', '<cmd>tabnew|lua require("mini.notify").show_history()<cr>', { silent = true, desc = 'Show notifications history' } },
     },
     init = function()
-      local mnotify = require 'mini.notify'
-      mnotify.setup {
+      require('mini.notify').setup {
         lsp_progress = { enable = false },
       }
-      vim.notify = mnotify.make_notify()
     end,
   },
   {
@@ -108,7 +106,6 @@ local M = {
         find_left = '',
         highlight = '',
         replace = 'cs',
-        update_n_lines = '',
 
         -- Add this only if you don't want to use extended mappings
         suffix_last = '',
