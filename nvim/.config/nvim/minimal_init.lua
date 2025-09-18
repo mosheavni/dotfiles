@@ -177,7 +177,7 @@ vim.pack.add {
   'https://github.com/ibhagwan/fzf-lua',
   'https://github.com/nvim-treesitter/nvim-treesitter',
   'https://github.com/folke/lazydev.nvim',
-  'https://github.com/echasnovski/mini.surround',
+  'https://github.com/nvim-mini/mini.surround',
   'https://github.com/nvim-lualine/lualine.nvim',
 }
 require('mini.surround').setup {

@@ -1,4 +1,4 @@
-local the_king = 'echasnovski/mini.'
+local the_king = 'nvim-mini/mini.'
 local M = {
   {
     the_king .. 'indentscope',
