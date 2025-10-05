@@ -22,7 +22,7 @@ return {
     diff = { bin = 'kdiff' },
     filter = {
       apply_on_select_from_history = false,
-      max_history = 100,
+      max_history = 30,
     },
     logs = {
       since = '30s',

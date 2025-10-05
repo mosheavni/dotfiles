@@ -61,7 +61,7 @@ M.setup = function()
   vim.lsp.config('terraformls', {
     on_attach = function(c)
       require('treesitter-terraform-doc').setup {}
-      c.server_capabilities.semanticTokensProvider = {}
+      -- c.server_capabilities.semanticTokensProvider = {}
       vim.o.commentstring = '# %s'
     end,
   })

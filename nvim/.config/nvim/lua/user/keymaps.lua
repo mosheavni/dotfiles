@@ -271,9 +271,17 @@ local function b64(action)
   local finish = vim.api.nvim_buf_get_mark(0, ']')
   local line = vim.api.nvim_buf_get_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, {})[1]
   local b64_action = action == 'encode' and vim.base64.encode or vim.base64.decode
-  local new_text = { b64_action(line) }
+  local result = b64_action(line)
+
+  -- Split result by newlines to handle multi-line decoded text
+  local new_text = vim.split(result, '\n', { plain = true })
+
   vim.api.nvim_buf_set_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, new_text)
-  vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { finish[1], finish[2] })
+
+  -- Update cursor position to end of replaced text
+  local new_end_row = start[1] - 1 + #new_text - 1
+  local new_end_col = #new_text[#new_text]
+  vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { new_end_row + 1, new_end_col })
 end
 function _G.__base64_encode(motion)
   if motion == nil or motion == 'line' then

@@ -56,7 +56,7 @@ export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/.dotfiles/requirements.txt
 
 source $HOME/.antidote/antidote.zsh
 antidote load
-eval "$(zoxide init zsh)"
+eval "$(zoxide init zsh --cmd cd)"
 
 # ================ #
 #  PS1 and Random  #
@@ -65,6 +65,7 @@ export EDITOR='nvim'
 export AWS_PAGER=""
 export MANPAGER='nvim +Man!'
 export cdpath=(. ~ ~/Repos)
+export TMPDIR=$HOME/tmp
 
 # zsh gh copilot configuration
 bindkey '^[|' zsh_gh_copilot_explain # bind Alt+shift+\ to explain
