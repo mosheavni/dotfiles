@@ -5,7 +5,7 @@ golang 1.23.1
 helm 3.14.4
 java corretto-21.0.7.6.1
 jq 1.6
-kubectl 1.31.7
+kubectl 1.33.5
 kubectx 0.9.5
 minikube 1.32.0
 mysql 8.0.34

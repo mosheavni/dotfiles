@@ -223,7 +223,7 @@ map('n', '<C-c>', 'ciw', { desc = 'Change inner word' })
 map('n', '<C-c>', 'ciw')
 
 -- Select last inserted text
-map('n', 'gV', '`[v`]', { remap = false, desc = 'Visually select last insert' })
+map('n', 'gV', '`[V`]', { remap = false, desc = 'Visually select last insert' })
 
 -- Convert all tabs to spaces
 map('n', '<leader>ct<space>', ':retab<cr>', { remap = false, silent = true })
