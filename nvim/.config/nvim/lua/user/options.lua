@@ -76,6 +76,7 @@ vim.o.splitbelow = true -- Horizontaly plitted windows open below
 vim.o.splitright = true -- Vertically plitted windows open below bracket for a brief second
 vim.o.startofline = false -- Stop certain movements from always going to the first character of a line.
 vim.o.pumheight = 10 -- pop up menu height
+vim.o.pumborder = 'rounded' -- Popup border style
 vim.o.pumblend = 40 -- Popup blend
 vim.o.confirm = true -- Prompt confirmation if exiting unsaved file
 vim.o.lazyredraw = false -- redraw only when we need to.
