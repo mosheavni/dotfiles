@@ -1,2 +1,2 @@
 #!/bin/bash
-nvim -c "DiffTool $1 $2"
+nvim -c "packadd nvim.difftool" -c "DiffTool $1 $2"

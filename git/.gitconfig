@@ -30,6 +30,12 @@
 [interactive]
   diffFilter = delta --color-only
 
+[diff]
+    tool = nvim_difftool
+
+[difftool "nvim_difftool"]
+    cmd = nvim -c "packadd nvim.difftool" -c "DiffTool $LOCAL $REMOTE"
+
 [delta]
   features     = decorations arctic-fox
   navigate     = true  # use n and N to move between diff sections

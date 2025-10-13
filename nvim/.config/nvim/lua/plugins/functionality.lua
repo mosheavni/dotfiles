@@ -12,34 +12,6 @@ local M = {
     end,
   },
   {
-    'mosheavni/vim-dirdiff', -- todo convert to difftool
-    cmd = { 'DirDiff' },
-    init = function()
-      require('user.menu').add_actions('Diff', {
-        ['Between 2 directories'] = function()
-          local pretty_print = require('user.utils').pretty_print
-          vim.defer_fn(function()
-            vim.ui.input({ prompt = 'Directory A❯ ' }, function(a)
-              if not a or a == '' then
-                pretty_print 'Canceled.'
-                return
-              end
-              vim.defer_fn(function()
-                vim.ui.input({ prompt = 'Directory B❯ ' }, function(b)
-                  if not b or b == '' then
-                    pretty_print 'Canceled.'
-                    return
-                  end
-                  vim.cmd('DirDiff ' .. a .. ' ' .. b)
-                end)
-              end, 100)
-            end)
-          end, 100)
-        end,
-      })
-    end,
-  },
-  {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
     opts = {},
