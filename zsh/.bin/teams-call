@@ -1,0 +1,46 @@
+#!/bin/zsh
+
+# Define users array
+users=(
+    "amit.salman"
+    "ben.saada"
+    "gidi.shnayer"
+    "mireille.faur"
+    "ofek.nacht"
+    "ohad.bokin"
+    "refael.doron"
+    "shimi.azulay"
+)
+
+# Create display names (capitalize and replace dot with space) and sort them
+display_names=()
+for user in "${users[@]}"; do
+    # Split by dot, capitalize each part, join with space
+    first_name=$(echo "$user" | cut -d'.' -f1)
+    last_name=$(echo "$user" | cut -d'.' -f2)
+    display_name="${(C)first_name} ${(C)last_name}"
+    display_names+=("$display_name")
+done
+
+# Sort display names
+IFS=$'\n' sorted_display_names=($(printf '%s\n' "${display_names[@]}" | sort))
+IFS=' '
+
+# Create the selection menu
+selected_display=$(printf '%s\n' "${sorted_display_names[@]}" | fzf --prompt="Select user to call: ")
+
+# Exit if no selection was made
+if [[ -z "$selected_display" ]]; then
+    echo "No user selected. Exiting."
+    exit 0
+fi
+
+# Convert display name back to username format (lowercase and space to dot)
+selected_user=$(echo "$selected_display" | tr '[:upper:]' '[:lower:]' | sed 's/ /./')
+
+# Construct the Teams call URL
+teams_url="https://teams.microsoft.com/l/call/0/0?users=${selected_user}@flexera.com"
+
+# Open the Teams call
+echo "Opening Teams call for $selected_display ($selected_user@flexera.com)..."
+open "$teams_url"
