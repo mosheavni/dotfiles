@@ -1,6 +1,6 @@
 [core]
   excludesfile = ~/.gitignore_global
-  pager        = delta
+  pager = nvim -R +'set ft=diff' +'set nomodifiable' +'nnoremap q :q!<CR>'
   editor       = nvim
 
 [user]
@@ -28,7 +28,7 @@
   defaultBranch = master
 
 [interactive]
-  diffFilter = delta --color-only
+  diffFilter = vim -c "packadd nvim.difftool" -c "DiffTool"
 
 [diff]
     tool = nvim_difftool
@@ -102,7 +102,7 @@
   diff        = true
   grep        = true
   interactive = true
-  pager       = true
+  pager       = false
   showbranch  = true
   status      = true
   ui          = true
