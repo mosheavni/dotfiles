@@ -32,7 +32,6 @@ alias sudoedit="nvim"
 alias zshrc='${=EDITOR} ${ZDOTDIR:-$HOME}/.zshrc'
 alias lv='NVIM_APPNAME=lightvim nvim '
 alias lvim='NVIM_APPNAME=lightvim nvim '
-alias news='nvim ~/.asdf/installs/neovim/nightly/share/nvim/runtime/doc/news.txt'
 
 #------------------------------------------------------------------------------
 # Development Tools

@@ -320,16 +320,6 @@ function kgel() {
   kubectl get pod $* -ojson | jq -r '.metadata.labels | to_entries | .[] | "\(.key)=\(.value)"'
 }
 
-function asdf-kubectl-version() {
-  K8S_VERSION=$(kubectl version -ojson | jq -r '.serverVersion | "\(.major).\(.minor)"' | sed 's/\+$//')
-  TO_INSTALL=$(asdf list-all kubectl | grep "${K8S_VERSION}" | tail -1)
-  if ! asdf list kubectl "${TO_INSTALL}" &>/dev/null; then
-    asdf install kubectl "${TO_INSTALL}"
-  fi
-  asdf global kubectl "${TO_INSTALL}"
-}
-
-
 function mkdp() {
   kubectl get pod --no-headers | fzf | awk '{print $1}' | xargs -n 1 kubectl describe pod
 }
