@@ -80,6 +80,7 @@ return {
     },
   },
   init = function()
+    vim.o.relativenumber = false
     local group = vim.api.nvim_create_augroup('kubectl_user', { clear = true })
     vim.api.nvim_create_autocmd('FileType', {
       group = group,
