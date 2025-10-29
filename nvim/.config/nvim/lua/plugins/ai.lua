@@ -102,6 +102,7 @@ return {
   },
   {
     'yetone/avante.nvim',
+    build = 'make',
     enabled = true,
     version = false, -- Never set this value to "*"! Never!
     keys = {
@@ -109,6 +110,8 @@ return {
       { '<leader>ccs', '<cmd>AvanteStop<CR>' },
     },
     cmd = { 'AvanteChat' },
+    ---@module 'avante'
+    ---@type avante.Config
     opts = {
       disabled_tools = {
         'list_files', -- Built-in file operations
@@ -125,7 +128,6 @@ return {
       provider = 'copilot',
       providers = {
         copilot = {
-          -- model = 'gpt-4.1',
           model = model,
         },
       },
@@ -145,7 +147,6 @@ return {
       end,
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-    build = 'make',
     -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
     dependencies = {
       'nvim-treesitter/nvim-treesitter',
