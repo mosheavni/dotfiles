@@ -80,12 +80,12 @@ return {
     },
   },
   init = function()
-    vim.o.relativenumber = false
     local group = vim.api.nvim_create_augroup('kubectl_user', { clear = true })
     vim.api.nvim_create_autocmd('FileType', {
       group = group,
       pattern = 'k8s_*',
       callback = function()
+        vim.o.relativenumber = false
         vim.opt.titlestring = '❄️ k8s: %t'
         if vim.bo.filetype == 'k8s_yaml' then
           vim.bo.filetype = 'yaml'
