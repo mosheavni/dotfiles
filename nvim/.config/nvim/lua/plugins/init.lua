@@ -113,8 +113,19 @@ local M = {
   {
     'ggandor/leap.nvim',
     keys = {
-      { 's', '<Plug>(leap-forward-to)' },
-      { 'S', '<Plug>(leap-backward-to)' },
+      {
+        's',
+        function()
+          require('leap').leap { forward = true }
+        end,
+      },
+
+      {
+        'S',
+        function()
+          require('leap').leap { backward = true }
+        end,
+      },
     },
   },
   {
