@@ -50,15 +50,6 @@ M.setup = function()
   M.capabilities =
     vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), require('cmp_nvim_lsp').default_capabilities(), M.capabilities or {}, {})
 
-  -- Diagnostics
-  vim.diagnostic.config {
-    jump = { float = true },
-    signs = { text = M.diagnostic_signs },
-    virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
-    virtual_lines = { current_line = true },
-    float = { border = 'rounded', source = 'if_many' },
-  }
-
   ---@diagnostic disable-next-line: missing-fields
   require('user.lsp.servers').setup()
 
@@ -73,6 +64,15 @@ M.setup = function()
       if client and client.server_capabilities.documentSymbolProvider then
         require('nvim-navic').attach(client, bufnr)
       end
+
+      -- Diagnostics
+      vim.diagnostic.config {
+        jump = { float = true },
+        signs = { text = M.diagnostic_signs },
+        virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
+        virtual_lines = { current_line = true },
+        float = { border = 'rounded', source = 'if_many' },
+      }
     end,
   })
 end
