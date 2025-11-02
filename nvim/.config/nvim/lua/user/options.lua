@@ -40,7 +40,7 @@ vim.opt.fillchars = {
   diff = ' ',
   eob = ' ',
 }
-vim.o.shada = [[!,'1000,s1000,h]]
+vim.o.shada = [[!,'50,s100,h]]
 -- vim.opt.foldcolumn = '1'
 vim.o.emoji = true
 -- go to previous/next line with h,l,left arrow and right arrow
