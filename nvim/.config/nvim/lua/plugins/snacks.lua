@@ -3,11 +3,17 @@ return {
   'folke/snacks.nvim',
   priority = 1000,
   lazy = false,
+  ---@type snacks.Config
   opts = {
     bigfile = { enabled = true },
     dashboard = { enabled = false },
     indent = { enabled = false },
-    input = { enabled = true },
+    input = {
+      enabled = true,
+      win = {
+        row = 12,
+      },
+    },
     notifier = {
       enabled = false,
       timeout = 3000,
