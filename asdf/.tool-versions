@@ -19,7 +19,7 @@ tree-sitter 0.20.8
 yq 4.40.3
 gradle 8.5
 pre-commit 3.7.0
-maven 3.6.3
+maven 3.9.11
 lua 5.1.5
 rust stable
 vim 9.1.0958
