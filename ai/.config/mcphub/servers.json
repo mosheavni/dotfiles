@@ -2,6 +2,13 @@
   "mcpServers": {
     "aws-knowledge-mcp-server": {
       "args": ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"],
+      "autoApprove": [
+        "aws___get_regional_availability",
+        "aws___list_regions",
+        "aws___read_documentation",
+        "aws___recommend",
+        "aws___search_documentation"
+      ],
       "command": "uvx"
     },
     "awslabs.aws-api-mcp-server": {
@@ -37,6 +44,14 @@
     },
     "kubernetes": {
       "args": ["mcp-server-kubernetes"],
+      "autoApprove": [
+        "explain_resource",
+        "kubectl_describe",
+        "kubectl_get",
+        "kubectl_logs",
+        "list_api_resources",
+        "ping"
+      ],
       "command": "npx",
       "env": {
         "ALLOW_ONLY_NON_DESTRUCTIVE_TOOLS": "true"
@@ -44,10 +59,22 @@
     },
     "memory": {
       "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "autoApprove": [
+        "create_entities",
+        "create_relations",
+        "add_observations",
+        "delete_entities",
+        "delete_observations",
+        "delete_relations",
+        "read_graph",
+        "search_nodes",
+        "open_nodes"
+      ],
       "command": "npx"
     },
     "sequentialthinking": {
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "autoApprove": ["sequentialthinking"],
       "command": "npx"
     }
   }
