@@ -39,6 +39,7 @@ alias lvim='NVIM_APPNAME=lightvim nvim '
 alias tf='terraform'
 alias tg='terragrunt'
 alias update-nvim-nightly='asdf uninstall neovim nightly && asdf install neovim nightly'
+alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
 #------------------------------------------------------------------------------
 # Git
