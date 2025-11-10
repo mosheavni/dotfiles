@@ -112,18 +112,6 @@ local M = {
     'vim-scripts/CursorLineCurrentWindow',
     event = 'BufReadPost',
   },
-  {
-    'OXY2DEV/markview.nvim',
-    lazy = true,
-    -- For `nvim-treesitter` users.
-    priority = 49,
-    opts = {
-      preview = {
-        filetypes = { 'markdown', 'codecompanion' },
-        ignore_buftypes = {},
-      },
-    },
-  },
 }
 
 return M

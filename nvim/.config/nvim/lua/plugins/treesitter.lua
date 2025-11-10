@@ -12,7 +12,6 @@ local M = {
     pcall(require('nvim-treesitter.install').update { with_sync = true })
   end,
   dependencies = {
-    'OXY2DEV/markview.nvim',
     'nvim-treesitter/nvim-treesitter-textobjects',
     { 'Afourcat/treesitter-terraform-doc.nvim', ft = 'terraform', cmd = 'OpenDoc' },
     'nvim-treesitter/nvim-treesitter-context',
