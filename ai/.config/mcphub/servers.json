@@ -1,29 +1,53 @@
 {
   "mcpServers": {
-    "fetch": {
+    "aws-knowledge-mcp-server": {
+      "args": ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"],
+      "command": "uvx"
+    },
+    "awslabs.aws-api-mcp-server": {
+      "args": ["awslabs.aws-api-mcp-server@latest"],
+      "command": "uvx"
+    },
+    "awslabs.cloudwatch-mcp-server": {
+      "args": ["awslabs.cloudwatch-mcp-server@latest"],
+      "autoApprove": [],
+      "command": "uvx",
+      "disabled": false,
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "transportType": "stdio"
+    },
+    "awslabs.eks-mcp-server": {
       "args": [
-        "mcp-server-fetch"
+        "awslabs.eks-mcp-server@latest",
+        "--allow-write",
+        "--allow-sensitive-data-access"
       ],
+      "autoApprove": [],
+      "command": "uvx",
+      "disabled": false,
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
+    "fetch": {
+      "args": ["mcp-server-fetch"],
       "command": "uvx"
     },
     "kubernetes": {
-      "args": [
-        "mcp-server-kubernetes"
-      ],
-      "command": "npx"
+      "args": ["mcp-server-kubernetes"],
+      "command": "npx",
+      "env": {
+        "ALLOW_ONLY_NON_DESTRUCTIVE_TOOLS": "true"
+      }
     },
     "memory": {
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
       "command": "npx"
     },
     "sequentialthinking": {
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
       "command": "npx"
     }
   }
