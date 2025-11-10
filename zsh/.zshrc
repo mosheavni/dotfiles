@@ -26,6 +26,7 @@ path=(
   /usr/local/opt/curl/bin
   /usr/local/opt/ruby/bin
   $HOME/.bin
+  $HOME/.docker/bin
   $HOME/.local/bin
   $HOME/.cargo/bin
   /usr/local/sbin

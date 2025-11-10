@@ -30,6 +30,7 @@ autoload -U +X bashcompinit && bashcompinit
 # Group related paths together
 fpath+=(
   "${ZSH_CACHE_DIR}/completions"
+  "$HOME/.docker/completions"
   "/opt/homebrew/share/zsh/site-functions"
   "${GENCOMPL_FPATH}"
 )
@@ -41,7 +42,6 @@ complete -o nospace -C terragrunt terragrunt
 complete -o nospace -C 'aws_completer' aws
 
 # Development tools
-load_completion_from_cmd docker completion zsh
 load_completion_from_cmd kubectl completion zsh
 load_completion_from_cmd helm completion zsh
 load_completion_from_cmd asdf completion zsh
