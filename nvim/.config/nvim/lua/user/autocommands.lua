@@ -88,7 +88,7 @@ autocmd('TextYankPost', {
   desc = 'Highlight on yank',
   group = buffer_settings,
   callback = function()
-    pcall(vim.highlight.on_yank, { higroup = 'IncSearch', timeout = 200 })
+    pcall(vim.hl.on_yank, { higroup = 'IncSearch', timeout = 200 })
   end,
 })
 
