@@ -67,7 +67,7 @@ M.setup = function()
 
       -- Diagnostics
       vim.diagnostic.config {
-        jump = { float = true },
+        -- jump = {on_jump = { float = true }},
         signs = { text = M.diagnostic_signs },
         virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
         virtual_lines = { current_line = true },
