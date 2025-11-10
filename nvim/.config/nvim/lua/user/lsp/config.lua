@@ -66,6 +66,10 @@ M.setup = function()
       end
 
       -- Diagnostics
+      if vim.g.dignostics_configured then
+        return
+      end
+      vim.g.dignostics_configured = true
       vim.diagnostic.config {
         -- jump = {on_jump = { float = true }},
         signs = { text = M.diagnostic_signs },
