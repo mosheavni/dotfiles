@@ -45,7 +45,7 @@ return {
               fn = function(selected)
                 local branch = vim.trim(selected[1])
                 vim.fn.setreg('+', branch)
-                utils.info('Yanked branch name ' .. branch)
+                vim.notify('Yanked branch name ' .. branch, vim.log.levels.INFO)
               end,
               reload = false,
               header = 'yank branch name',
@@ -57,17 +57,17 @@ return {
                 vim.defer_fn(function()
                   vim.ui.input({ prompt = 'Rename branch❯ ', default = branch }, function(new_name)
                     if not new_name or new_name == '' then
-                      utils.warn 'Action aborted'
+                      vim.notify('Action aborted', vim.log.levels.WARN)
                       return
                     end
                     -- Rename the branch
                     local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
-                    local _, ret, stderr = require('user.utils').get_os_command_output({ 'git', 'branch', '-m', branch, new_name }, toplevel)
-                    if ret == 0 then
-                      utils.info('Renamed branch ' .. branch .. ' to ' .. new_name)
+                    local result = vim.system({ 'git', 'branch', '-m', branch, new_name }, { text = true, cwd = toplevel }):wait()
+                    if result.code == 0 then
+                      vim.notify('Renamed branch ' .. branch .. ' to ' .. new_name, vim.log.levels.INFO)
                       return
                     else
-                      local msg = string.format('Error when renaming branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
+                      local msg = string.format('Error when renaming branch: %s. Git returned:\n%s', branch, result.stderr or '')
                       vim.notify(msg, vim.log.levels.ERROR)
                     end
                   end)
@@ -81,34 +81,32 @@ return {
                 local branch = vim.trim(selected[1])
                 vim.ui.select({ 'Yes', 'No' }, { prompt = 'Are you sure you want to delete the branch ' .. branch .. '? ' }, function(yes_or_no)
                   if yes_or_no == 'No' then
-                    utils.warn 'Action aborted'
+                    vim.notify('Action aborted', vim.log.levels.WARN)
                     return
                   end
                   -- Delete the branch
                   local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
-                  local act = vim.system({ 'git', 'branch', '-D', branch }, { text = true }):wait()
+                  local act = vim.system({ 'git', 'branch', '-D', branch }, { text = true, cwd = toplevel }):wait()
                   local ret, stderr = act.code, act.stderr
                   if ret == 0 then
-                    utils.info('Deleted branch ' .. branch)
+                    vim.notify('Deleted branch ' .. branch, vim.log.levels.INFO)
                     vim.ui.select({ 'Yes', 'No' }, { prompt = 'Delete also from remote? ' }, function(yes_or_no_remote)
                       if yes_or_no_remote == 'No' then
                         return
                       end
                       -- Delete the branch from remote
-                      local _, ret_remote, stderr_remote =
-                        require('user.utils').get_os_command_output({ 'git', 'push', 'origin', '--delete', branch }, toplevel)
-                      if ret_remote == 0 then
-                        utils.info('Deleted branch ' .. branch .. ' from remote')
+                      local result_remote = vim.system({ 'git', 'push', 'origin', '--delete', branch }, { text = true, cwd = toplevel }):wait()
+                      if result_remote.code == 0 then
+                        vim.notify('Deleted branch ' .. branch .. ' from remote', vim.log.levels.INFO)
                         return
                       else
-                        local msg =
-                          string.format('Error when deleting branch from remote: %s. Git returned:\n%s', branch, table.concat(stderr_remote or {}, '\n'))
-                        utils.err(msg)
+                        local msg = string.format('Error when deleting branch from remote: %s. Git returned:\n%s', branch, result_remote.stderr or '')
+                        vim.notify(msg, vim.log.levels.ERROR)
                       end
                     end)
                     return
                   else
-                    local msg = string.format('Error when deleting branch: %s. Git returned:\n%s', branch, table.concat(stderr or {}, '\n'))
+                    local msg = string.format('Error when deleting branch: %s. Git returned:\n%s', branch, stderr or '')
                     vim.notify(msg, vim.log.levels.ERROR)
                   end
                 end)
