@@ -8,11 +8,11 @@ end
 
 local M = {
   'nvim-treesitter/nvim-treesitter',
-  build = function()
-    pcall(require('nvim-treesitter.install').update { with_sync = true })
-  end,
+  branch = 'main',
+  lazy = false,
+  build = ':TSUpdate',
   dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
+    { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'main' },
     { 'Afourcat/treesitter-terraform-doc.nvim', ft = 'terraform', cmd = 'OpenDoc' },
     'nvim-treesitter/nvim-treesitter-context',
     { 'folke/ts-comments.nvim', opts = {} },
@@ -21,29 +21,39 @@ local M = {
       ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml', 'markdown' },
       opts = {},
     },
-    {
-      'atusy/treemonkey.nvim',
-      keys = {
-        {
-          'm',
-          function()
-            require 'nvim-treesitter.configs'
-            ---@diagnostic disable-next-line: missing-fields
-            require('treemonkey').select {
-              ignore_injections = false,
-              action = require('treemonkey.actions').unite_selection,
-            }
-          end,
-          mode = { 'x', 'o' },
-        },
-      },
-    },
   },
   event = 'BufReadPost',
 }
 
 M.opts = {
-  ensure_installed = {
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = 'vn',
+      node_incremental = '<CR>',
+      scope_incremental = '<S-CR>',
+      node_decremental = '<BS>',
+    },
+  },
+  matchup = {
+    enable = true,
+  },
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+  indent = {
+    enable = true,
+    disable = { 'yaml' },
+  },
+}
+
+M.config = function(_, opts)
+  require('user.menu').add_actions('TreeSitter', actions())
+
+  ---@diagnostic disable-next-line: missing-fields
+  require('nvim-treesitter').setup(opts)
+  require('nvim-treesitter').install {
     'awk',
     'bash',
     'comment',
@@ -89,35 +99,8 @@ M.opts = {
     'vimdoc',
     'xml',
     'yaml',
-  },
+  }
 
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = 'vn',
-      node_incremental = '<CR>',
-      scope_incremental = '<S-CR>',
-      node_decremental = '<BS>',
-    },
-  },
-  matchup = {
-    enable = true,
-  },
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-  },
-  indent = {
-    enable = true,
-    disable = { 'yaml' },
-  },
-}
-
-M.config = function(_, opts)
-  require('user.menu').add_actions('TreeSitter', actions())
-
-  ---@diagnostic disable-next-line: missing-fields
-  require('nvim-treesitter.configs').setup(opts)
   vim.treesitter.language.register('markdown', 'octo')
 
   vim.opt.foldmethod = 'expr'

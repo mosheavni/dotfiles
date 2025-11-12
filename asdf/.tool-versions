@@ -15,7 +15,7 @@ python 3.12.11
 semver 3.4.0
 terraform 1.5.5
 terragrunt 0.64.4
-tree-sitter 0.20.8
+tree-sitter 0.25.10
 yq 4.40.3
 gradle 8.5
 pre-commit 3.7.0
