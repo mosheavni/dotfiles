@@ -170,7 +170,7 @@ M.create_pull_request = function()
   M.get_remotes(function(git_remotes)
     local git_remote_url = git_remotes['origin']
     local prefix = git_remote_url:match '^%w+' == 'git' and 'git@' or 'https://'
-    local git_name, project, repo = git_remote_url:match(('^' .. prefix .. '(%w+).com[:/](.+)/(.+)%.git'))
+    local git_name, project, repo = git_remote_url:match(('^' .. prefix .. '(%w+).com.+[:/](.+)/(.+)%.git'))
     local pr_link = git_name == 'gitlab' and '-/merge_requests/new?merge_request[source_branch]=' or 'pull/new/'
 
     M.get_branch(function(branch_name)
