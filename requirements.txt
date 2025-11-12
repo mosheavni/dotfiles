@@ -25,5 +25,4 @@ s3transfer
 six
 toml
 urllib3
-vim-vint
 zipp
