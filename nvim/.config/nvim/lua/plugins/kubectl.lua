@@ -114,5 +114,12 @@ return {
         end
       end,
     })
+    vim.api.nvim_create_autocmd('User', {
+      group = group,
+      pattern = 'K8sCacheLoaded',
+      callback = function()
+        vim.notify('Kubernetes api-resources cache loaded', vim.log.levels.INFO)
+      end,
+    })
   end,
 }
