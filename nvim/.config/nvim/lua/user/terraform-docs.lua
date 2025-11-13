@@ -20,12 +20,14 @@ M.config = {
   default_provider_source = 'hashicorp',
   -- Optimized map for O(1) provider source lookup, replacing the original array [4, 5]
   provider_source_map = {
-    ibm = 'IBM-Cloud',
-    shell = 'scottwinkler',
-    fastly = 'fastly',
-    vcd = 'vmware',
-    newrelic = 'newrelic',
     cloudflare = 'cloudflare',
+    fastly = 'fastly',
+    ibm = 'IBM-Cloud',
+    newrelic = 'newrelic',
+    shell = 'scottwinkler',
+    spotinst = 'spotinst',
+    vcd = 'vmware',
+    mongodbatlas = 'mongodb',
   },
 }
 
