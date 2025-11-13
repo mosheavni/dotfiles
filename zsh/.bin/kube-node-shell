@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# kube-node-shell: Start an ephemeral debug shell on a Kubernetes node
+# Works with kubectl >= 1.25
+# Requires: kubectl, fzf
+
+set -euo pipefail
+
+IMAGE="${IMAGE:-ubuntu:24.04}"
+PROFILE="${PROFILE:-sysadmin}"
+
+command -v kubectl >/dev/null 2>&1 || {
+  echo "kubectl not found"
+  exit 1
+}
+command -v fzf >/dev/null 2>&1 || {
+  echo "fzf not found"
+  exit 1
+}
+
+node="$(kubectl get nodes -o name | sed 's|node/||' | fzf --prompt='Select node: ' --height=15 --border)"
+if [[ -z "$node" ]]; then
+  echo "No node selected. Aborting." >&2
+  exit 1
+fi
+
+echo "🔧 Launching debug shell on node: $node"
+echo "   Using image: $IMAGE"
+echo "   Using profile: $PROFILE"
+
+# Create ephemeral pod with host namespaces for direct node access
+# The container runs in host namespaces and host filesystem is mounted at /host
+kubectl debug node/"$node" \
+  --image="$IMAGE" \
+  --profile="$PROFILE" \
+  --stdin --tty \
+  -- bash
