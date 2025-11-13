@@ -10,6 +10,7 @@ users=(
     "ohad.bokin"
     "refael.doron"
     "shimi.azulay"
+    "koren.bashari"
 )
 
 # Create display names (capitalize and replace dot with space) and sort them
