@@ -5,7 +5,6 @@ local M = {
   build = ':TSUpdate',
   dependencies = {
     { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'main' },
-    { 'Afourcat/treesitter-terraform-doc.nvim', ft = 'terraform', cmd = 'OpenDoc' },
     'nvim-treesitter/nvim-treesitter-context',
     { 'folke/ts-comments.nvim', opts = {} },
     {

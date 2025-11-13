@@ -50,7 +50,9 @@ M.setup = function()
       '.luarc.jsonc',
       '.luacheckrc',
       '.stylua.toml',
+      '.stylelua.toml',
       'stylua.toml',
+      'stylelua.toml',
       'selene.toml',
       'selene.yml',
     },
@@ -70,7 +72,7 @@ M.setup = function()
 
   vim.lsp.config('terraformls', {
     on_attach = function(c)
-      require('treesitter-terraform-doc').setup {}
+      require('user.terraform-docs').setup {}
       -- c.server_capabilities.semanticTokensProvider = {}
       vim.o.commentstring = '# %s'
     end,
