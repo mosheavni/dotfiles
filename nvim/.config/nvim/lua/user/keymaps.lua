@@ -508,7 +508,10 @@ vim.api.nvim_create_user_command('DirDiff', function(opts)
     return
   end
 
-  vim.cmd 'tabnew'
+  if not opts.bang then
+    vim.cmd 'tabnew'
+  end
+
   vim.cmd.packadd 'nvim.difftool'
   require('difftool').open(opts.fargs[1], opts.fargs[2], {
     rename = {
@@ -516,4 +519,4 @@ vim.api.nvim_create_user_command('DirDiff', function(opts)
     },
     ignore = { '.git' },
   })
-end, { complete = 'dir', nargs = '*' })
+end, { complete = 'dir', nargs = '*', bang = true, desc = 'Diff two directories (bang to not open in a new tab)' })
