@@ -1,13 +1,8 @@
 local M = {
-  'neovim/nvim-lspconfig',
-  event = { 'BufReadPre', 'BufNewFile' },
-}
-
-M.init = require('user.lsp.config').init
-M.config = require('user.lsp.config').setup
-
-M.dependencies = {
-  'nvimtools/none-ls.nvim',
+  {
+    'neovim/nvim-lspconfig',
+    event = { 'BufReadPre', 'BufNewFile' },
+  },
   {
     'mason-org/mason.nvim',
     cmd = 'Mason',
@@ -18,7 +13,64 @@ M.dependencies = {
         border = 'rounded',
       },
     },
+    config = function(_, opts)
+      require('mason').setup(opts)
+
+      -- Ensure the servers always installed
+      local packages = {
+        'bash-debug-adapter',
+        'bash-language-server',
+        'black',
+        'cbfmt',
+        'css-lsp',
+        'cssmodules-language-server',
+        'debugpy',
+        'docker-compose-language-service',
+        'dockerfile-language-server',
+        'eslint_d',
+        'golangci-lint',
+        'groovy-language-server',
+        'hadolint',
+        'helm-ls',
+        'html-lsp',
+        'json-lsp',
+        'lua-language-server',
+        'markdownlint',
+        'npm-groovy-lint',
+        'prettierd',
+        'proselint',
+        'pyright',
+        'ruff',
+        'selene',
+        'shellcheck',
+        'shfmt',
+        'stylua',
+        'taplo',
+        'terraform-ls',
+        'typescript-language-server',
+        'vim-language-server',
+        'vint',
+        'vtsls',
+        'yaml-language-server',
+      }
+      local mr = require 'mason-registry'
+      for _, package in ipairs(packages) do
+        print('checking package: ' .. package)
+        if not mr.is_installed(package) then
+          vim.notify('Installing ' .. package .. ' via Mason')
+          mr.get_package(package):install()
+        end
+      end
+    end,
   },
+}
+
+M[1].init = require('user.lsp.config').init
+M[1].config = require('user.lsp.config').setup
+
+M[1].dependencies = {
+  'nvimtools/none-ls.nvim',
+  'mason-org/mason.nvim',
   {
     'j-hui/fidget.nvim',
     opts = {
