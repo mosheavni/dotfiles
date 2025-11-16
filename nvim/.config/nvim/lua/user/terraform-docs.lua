@@ -4,7 +4,7 @@ local M = {}
 -- I. Configuration and Constants
 M.config = {
   -- The plugin version
-  version = '0.3.1',
+  version = '0.3.2',
   -- The vim user command that will trigger the plugin.
   command_name = 'OpenDoc',
   -- Base URL for documentation
@@ -18,7 +18,6 @@ M.config = {
   },
   -- Default provider source for providers not in the map
   default_provider_source = 'hashicorp',
-  -- Optimized map for O(1) provider source lookup, replacing the original array [4, 5]
   provider_source_map = {
     cloudflare = 'cloudflare',
     fastly = 'fastly',
@@ -58,10 +57,10 @@ local function get_resource_identifier_from_block(block_node, bufnr)
   for i = 0, block_node:named_child_count() - 1 do
     local child = block_node:named_child(i)
 
-    if child:type() == 'string_lit' then
+    if child and child:type() == 'string_lit' then
       local text = ts.get_node_text(child, bufnr)
       -- Remove surrounding quotes (e.g., `"aws_instance"` -> `aws_instance`)
-      return text:gsub('^"(.+)"$', '%1')
+      return (text:gsub('^"(.+)"$', '%1'))
     end
   end
   return nil
@@ -74,7 +73,11 @@ end
 ---@return string? type_suffix The resource type suffix (e.g., 'instance').
 local function split_identifier(resource_id)
   -- Pattern: capture non-underscores (^([^_]+)), then the rest (.*) after the first underscore.
-  return resource_id:match '^([^_]+)_(.*)$'
+  local provider, type_suffix = resource_id:match '^([^_]+)_(.*)$'
+  if not provider then
+    return nil, nil
+  end
+  return provider, type_suffix
 end
 
 --- Find the corresponding provider source (e.g., 'hashicorp') using the optimized map.
@@ -122,12 +125,11 @@ local function get_resource_info()
   if M.config.jump_anchor then
     -- Find the attribute identifier for the jump anchor.
     local current = start_node
-    while current and current ~= block_node do
+    while current and current ~= block_node and not argument_name do
       if current:type() == 'attribute' then
         local arg_id_node = current:named_child(0)
         if arg_id_node and arg_id_node:type() == 'identifier' then
           argument_name = ts.get_node_text(arg_id_node, bufnr)
-          break
         end
       end
       current = current:parent()
