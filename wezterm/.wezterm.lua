@@ -6,12 +6,11 @@ local act = wez.action
 local config = wez.config_builder()
 local HOME = os.getenv 'HOME'
 
-local color = 'Rosé Pine Moon (Gogh)'
-config.color_scheme = color
+config.color_scheme = 'Rosé Pine Moon (Gogh)'
 
 -- performance
-config.max_fps = 240
-config.animation_fps = 240
+config.max_fps = 120
+config.animation_fps = 120
 config.front_end = 'WebGpu'
 config.webgpu_power_preference = 'HighPerformance'
 config.scrollback_lines = 10000
@@ -37,7 +36,7 @@ config.show_close_tab_button_in_tabs = true
 config.tab_max_width = 999
 config.window_frame = {
   font = wez.font { family = 'Roboto', weight = 'Bold' },
-  font_size = 13.0,
+  font_size = 14.0,
 }
 config.colors = {
   background = '#000000',
@@ -51,11 +50,15 @@ config.colors = {
       bg_color = '#1B1B1B',
       fg_color = '#808080',
     },
+    inactive_tab_hover = {
+      bg_color = '#3B3B3A',
+      fg_color = '#C0C0C0',
+    },
   },
 }
 
 -- window
-config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE'
+config.window_decorations = 'RESIZE'
 config.inactive_pane_hsb = {
   saturation = 0.4,
   brightness = 0.7,
@@ -121,6 +124,9 @@ config.keys = {
 
   -- increase/decrease font size by cmd+/-/=
   { key = '+', mods = 'CMD', action = act.IncreaseFontSize },
+
+  -- clear terminal with cmd+shift+l (same as ctrl+l)
+  { key = 'l', mods = 'CMD|SHIFT', action = act.SendKey { key = 'l', mods = 'CTRL' } },
 }
 
 -- arrow keys keybindings
@@ -166,24 +172,11 @@ end
 
 local smart_splits = wez.plugin.require 'https://github.com/mrjones2014/smart-splits.nvim'
 smart_splits.apply_to_config(config, {
-  -- the default config is here, if you'd like to use the default keys,
-  -- you can omit this configuration table parameter and just use
-  -- smart_splits.apply_to_config(config)
-
-  -- directional keys to use in order of: left, down, up, right
   direction_keys = { 'h', 'j', 'k', 'l' },
-  -- if you want to use separate direction keys for move vs. resize, you
-  -- can also do this:
-  -- direction_keys = {
-  --   move = { 'h', 'j', 'k', 'l' },
-  --   resize = { 'LeftArrow', 'DownArrow', 'UpArrow', 'RightArrow' },
-  -- },
-  -- modifier keys to combine with direction_keys
   modifiers = {
-    move = 'CTRL', -- modifier to use for pane movement, e.g. CTRL+h to move left
-    resize = 'META', -- modifier to use for pane resize, e.g. META+h to resize to the left
+    move = 'CTRL',
+    resize = 'META',
   },
-  -- log level to use: info, warn, error
   log_level = 'info',
 })
 
