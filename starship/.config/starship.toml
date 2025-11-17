@@ -2,10 +2,12 @@ format = "$directory$all"
 
 [kubernetes]
 disabled = false
-format = '\([⎈](bold fg:33)[$cluster](fg:166):[$namespace](dimmed green)\) '
+format = '\([$symbol](bold fg:33)[$cluster](fg:166):[$namespace](dimmed green)\) '
+symbol = "☸"
 
 [aws]
 disabled = false
+symbol = '☁️ '
 force_display = true
 style = 'yellow'
 
@@ -16,4 +18,11 @@ disabled = true
 disabled = false
 
 [lua]
-disabled = true
+disabled = false
+
+[directory]
+truncation_length = 8
+truncation_symbol = '…/'
+
+[cmd_duration]
+min_time = 2000
