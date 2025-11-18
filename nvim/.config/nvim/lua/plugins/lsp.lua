@@ -55,7 +55,6 @@ local M = {
       }
       local mr = require 'mason-registry'
       for _, package in ipairs(packages) do
-        print('checking package: ' .. package)
         if not mr.is_installed(package) then
           vim.notify('Installing ' .. package .. ' via Mason')
           mr.get_package(package):install()
