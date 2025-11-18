@@ -6,24 +6,7 @@ local M = {
 M.config = function()
   local lualine = require 'lualine'
 
-  -- Color table for highlights
-  -- stylua: ignore
-  -- local colors = {
-  --   bg       = '#202328',
-  --   fg       = '#bbc2cf',
-  --   aqua     = '#6EB0A3',
-  --   yellow   = '#ECBE7B',
-  --   cyan     = '#008080',
-  --   darkblue = '#081633',
-  --   green    = '#a9b665',
-  --   orange   = '#FF8800',
-  --   violet   = '#a9a1e1',
-  --   magenta  = '#c678dd',
-  --   blue     = '#51afef',
-  --   red      = '#ec5f67',
-  -- }
-
-local palette = require("rose-pine.palette")
+  local palette = require 'rose-pine.palette'
   local colors = {
     bg = palette.base,
     fg = palette.text,
@@ -45,11 +28,6 @@ local palette = require("rose-pine.palette")
     end,
     hide_in_width = function()
       return vim.fn.winwidth(0) > 80
-    end,
-    check_git_workspace = function()
-      local filepath = vim.fn.expand '%:p:h'
-      local gitdir = vim.fn.finddir('.git', filepath .. ';')
-      return gitdir and #gitdir > 0 and #gitdir < #filepath
     end,
     is_yaml_ft = function()
       return vim.api.nvim_get_option_value('filetype', { buf = 0 }) == 'yaml'
