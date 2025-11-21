@@ -1,0 +1,103 @@
+{
+  "alwaysThinkingEnabled": true,
+  "mcpServers": {
+    "aws-knowledge-mcp-server": {
+      "args": ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"],
+      "autoApprove": [
+        "aws___get_regional_availability",
+        "aws___list_regions",
+        "aws___read_documentation",
+        "aws___recommend",
+        "aws___search_documentation"
+      ],
+      "command": "uvx"
+    },
+    "awslabs.aws-api-mcp-server": {
+      "args": ["awslabs.aws-api-mcp-server@latest"],
+      "command": "uvx"
+    },
+    "awslabs.cloudwatch-mcp-server": {
+      "args": ["awslabs.cloudwatch-mcp-server@latest"],
+      "autoApprove": [],
+      "command": "uvx",
+      "disabled": false,
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "transportType": "stdio"
+    },
+    "awslabs.eks-mcp-server": {
+      "args": [
+        "awslabs.eks-mcp-server@latest",
+        "--allow-write",
+        "--allow-sensitive-data-access"
+      ],
+      "autoApprove": [],
+      "command": "uvx",
+      "disabled": false,
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
+    "fetch": {
+      "args": ["mcp-server-fetch"],
+      "command": "uvx"
+    },
+    "kubernetes": {
+      "args": ["mcp-server-kubernetes"],
+      "autoApprove": [
+        "explain_resource",
+        "kubectl_describe",
+        "kubectl_get",
+        "kubectl_logs",
+        "list_api_resources",
+        "ping"
+      ],
+      "command": "npx",
+      "env": {
+        "ALLOW_ONLY_NON_DESTRUCTIVE_TOOLS": "true"
+      }
+    },
+    "memory": {
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "autoApprove": [
+        "create_entities",
+        "create_relations",
+        "add_observations",
+        "delete_entities",
+        "delete_observations",
+        "delete_relations",
+        "read_graph",
+        "search_nodes",
+        "open_nodes"
+      ],
+      "command": "npx"
+    },
+    "selenium": {
+      "args": ["-y", "@angiejones/mcp-selenium"],
+      "autoApprove": [
+        "take_screenshot",
+        "start_browser",
+        "send_keys",
+        "right_click",
+        "press_key",
+        "navigate",
+        "hover",
+        "get_element_text",
+        "find_element",
+        "drag_and_drop",
+        "double_click",
+        "close_session",
+        "click_element",
+        "upload_file"
+      ],
+      "command": "npx",
+      "disabled_tools": []
+    },
+    "sequentialthinking": {
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "autoApprove": ["sequentialthinking"],
+      "command": "npx"
+    }
+  }
+}
