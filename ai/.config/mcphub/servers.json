@@ -72,6 +72,27 @@
       ],
       "command": "npx"
     },
+    "selenium": {
+      "args": ["-y", "@angiejones/mcp-selenium"],
+      "autoApprove": [
+        "take_screenshot",
+        "start_browser",
+        "send_keys",
+        "right_click",
+        "press_key",
+        "navigate",
+        "hover",
+        "get_element_text",
+        "find_element",
+        "drag_and_drop",
+        "double_click",
+        "close_session",
+        "click_element",
+        "upload_file"
+      ],
+      "command": "npx",
+      "disabled_tools": []
+    },
     "sequentialthinking": {
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
       "autoApprove": ["sequentialthinking"],
