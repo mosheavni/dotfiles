@@ -76,7 +76,8 @@ function M.pick_project()
   local fzf = require 'fzf-lua'
 
   -- Get all directories from Repos and dotfiles
-  local all_dirs = get_directories { '~/Repos/', '~/.dotfiles' }
+  local dirs_from_env = vim.split(vim.env.PJ_DIRS, ',') or { '~/Repos/', '~/.dotfiles' }
+  local all_dirs = get_directories(dirs_from_env)
 
   -- Get active projects from wezterm
   local active_projects = {}

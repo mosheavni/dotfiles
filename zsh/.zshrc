@@ -99,3 +99,4 @@ if [ -f '/Users/mosheavni/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/U
 if [ -f '/Users/mosheavni/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/mosheavni/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 export K8S_DEV=true
 export CMP_COMPLETION='<C-Space>'
+export PJ_DIRS='~/Repos/,~/.dotfiles,~/Repos/moshe/'

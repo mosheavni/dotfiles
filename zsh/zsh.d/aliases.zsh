@@ -18,7 +18,7 @@ alias ls='eza '
 alias dc='cd '
 alias dotfiles='cd ~/.dotfiles'
 alias dot='cd ~/.dotfiles'
-alias pj='fdf ~/Repos/ ~/.dotfiles'
+alias pj='fdf "$(sed '\''s/,/ /g'\'' <<<${PJ_DIRS:-~/Repos/,~/.dotfiles})"'
 alias lazy='fdf ~/.local/share/nvim/lazy/'
 alias repos="~/Repos"
 
