@@ -24,10 +24,10 @@ function fdf() {
   wezterm_json=$(wezterm cli list --format json)
   typeset -A pane_map
   while IFS=$'\t' read -r title pane_id; do
-    pane_map[${title#nvim: }]=$pane_id
-  done < <(print $wezterm_json | jq -r '.[] | select(.title | startswith("nvim: ")) | "\(.title)\t\(.tab_id)~\(.pane_id)"')
+    pane_map[${title##*nvim: }]=$pane_id
+  done < <(print $wezterm_json | jq -r '.[] | select(.title | contains("nvim: ")) | "\(.title)\t\(.tab_id)~\(.pane_id)"')
 
-  # Process each directory
+  # Process each directory and pipe to fzf
   for dir in $dirs; do
     dir_name=${dir:t}
     icon=${pane_map[$dir_name]:+ }
