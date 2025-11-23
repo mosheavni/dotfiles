@@ -22,6 +22,10 @@ function set-tab-title() {
   echo -e "\033]0;${title}\a"
 }
 
+function pj() {
+    fdf "$(sed 's/,/ /g' <<<"${PJ_DIRS:-~/Repos/,~/.dotfiles}")"
+}
+
 ### Random functions ###
 function mwatch() {
   # log_file=/tmp/moshe_mwatch.log
