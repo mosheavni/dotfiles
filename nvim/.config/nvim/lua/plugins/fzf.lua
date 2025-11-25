@@ -18,7 +18,6 @@ return {
     {
       '<F4>',
       function()
-        local utils = require 'fzf-lua.utils'
         local actions = require 'fzf-lua.actions'
 
         require('fzf-lua').git_branches {
@@ -127,7 +126,7 @@ return {
   cmd = { 'FzfLua', 'ListFilesFromBranch' },
   config = function()
     require('fzf-lua').setup {
-      'default-title',
+      header_separator = '\n',
       fzf_opts = {
         ['--cycle'] = true,
         ['--history'] = vim.fn.stdpath 'data' .. '/fzf-lua-history', -- <C-n> - next, <C-p> - previous
