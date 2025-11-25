@@ -8,6 +8,7 @@ return {
     { '<leader>ee', ':FzfLua builtin<cr>', silent = true },
     { '<leader>hh', ':FzfLua help_tags<cr>', silent = true },
     { '<leader>i', ':FzfLua oldfiles<cr>', silent = true },
+    { '<leader>/', require('fzf-lua').live_grep },
     {
       '<C-x><C-f>',
       require('fzf-lua').complete_path,
@@ -60,7 +61,7 @@ return {
                       return
                     end
                     -- Rename the branch
-                    local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
+                    local toplevel = require('user.git').get_toplevel_sync()
                     local result = vim.system({ 'git', 'branch', '-m', branch, new_name }, { text = true, cwd = toplevel }):wait()
                     if result.code == 0 then
                       vim.notify('Renamed branch ' .. branch .. ' to ' .. new_name, vim.log.levels.INFO)
@@ -84,7 +85,7 @@ return {
                     return
                   end
                   -- Delete the branch
-                  local toplevel = vim.trim(vim.system({ 'git', 'rev-parse', '--show-toplevel' }, { text = true }):wait().stdout)
+                  local toplevel = require('user.git').get_toplevel_sync()
                   local act = vim.system({ 'git', 'branch', '-D', branch }, { text = true, cwd = toplevel }):wait()
                   local ret, stderr = act.code, act.stderr
                   if ret == 0 then
@@ -118,12 +119,8 @@ return {
         }
       end,
     },
-    {
-      '<leader>/',
-      require('fzf-lua').live_grep,
-    },
   },
-  cmd = { 'FzfLua', 'ListFilesFromBranch' },
+  cmd = { 'FzfLua' },
   config = function()
     require('fzf-lua').setup {
       header_separator = '\n',
@@ -157,7 +154,9 @@ return {
           ['<C-d>'] = 'preview-page-down',
           ['<C-u>'] = 'preview-page-up',
         },
-        fzf = { ['ctrl-q'] = 'select-all+accept' },
+        fzf = {
+          ['ctrl-q'] = 'select-all+accept',
+        },
       },
     }
 

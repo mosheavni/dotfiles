@@ -142,6 +142,17 @@ M.get_branches_sync = function(remote_name)
   return branches
 end
 
+M.get_toplevel = function(cb)
+  run_git({ 'rev-parse', '--show-toplevel' }, nil, function(toplevel)
+    cb(vim.trim(toplevel))
+  end)
+end
+
+M.get_toplevel_sync = function()
+  local toplevel = run_git_sync({ 'rev-parse', '--show-toplevel' }, nil).stdout or ''
+  return vim.trim(toplevel)
+end
+
 M.checkout = function(branch_name)
   run_git({ 'checkout', branch_name }, 'Checking out ' .. branch_name)
 end

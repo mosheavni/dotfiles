@@ -89,7 +89,7 @@ return {
   ['[Terraform] Remove terragrunt files'] = function()
     require('lazy').load { plugins = { 'vim-fugitive' } }
     local scan_dir = require 'plenary.scandir'
-    local terraform_repo = vim.fn.FugitiveExecute({ 'rev-parse', '--show-toplevel' }).stdout
+    local terraform_repo = require('user.git').get_toplevel_sync()
     scan_dir.scan_dir(terraform_repo, {
       add_dirs = false,
       respect_gitignore = false,
