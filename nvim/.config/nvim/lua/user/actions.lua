@@ -1,4 +1,6 @@
 local utils = require 'user.utils'
+local T = vim.keycode
+local leader = T '<leader>'
 local pretty_print = utils.pretty_print
 local find_in_project = function(opts)
   opts = opts or {
@@ -50,8 +52,6 @@ local search_and_replace = function(literal_search)
   }
 end
 
-local T = vim.keycode
-
 return {
   ['Find in pwd (literal search) (<C-f>)'] = function()
     find_in_project { literal_search = true }
@@ -66,7 +66,7 @@ return {
     search_and_replace(false)
   end,
   ['Replace word under cursor (<leader>r)'] = function()
-    vim.fn.feedkeys(T '<leader>' .. 'r')
+    vim.fn.feedkeys(leader .. 'r')
   end,
   ['Select all (vae / <leader>sa)'] = function()
     vim.cmd [[normal! ggVG]]
@@ -220,7 +220,7 @@ end)
     vim.fn.feedkeys 'Y'
   end,
   ['Convert \\n to new lines (<leader><cr>)'] = function()
-    vim.fn.feedkeys(T '<leader>' .. T '<cr>')
+    vim.fn.feedkeys(leader .. T '<cr>')
   end,
   ['Move line down (-)'] = function()
     vim.fn.feedkeys '-'
@@ -232,19 +232,19 @@ end)
     vim.o.wrap = not vim.o.wrap
   end,
   ['Copy full file path to clipboard (<leader>cfa)'] = function()
-    vim.fn.feedkeys(T '<leader>' .. 'cfa')
+    vim.fn.feedkeys(leader .. 'cfa')
   end,
   ['Copy relative file path to clipboard (<leader>cfp)'] = function()
-    vim.fn.feedkeys(T '<leader>' .. 'cfp')
+    vim.fn.feedkeys(leader .. 'cfp')
   end,
   ['Copy directory path to clipboard (<leader>cfd)'] = function()
-    vim.fn.feedkeys(T '<leader>' .. 'cfd')
+    vim.fn.feedkeys(leader .. 'cfd')
   end,
   ['Copy file name to clipboard (<leader>cfn)'] = function()
-    vim.fn.feedkeys(T '<leader>' .. 'cfn')
+    vim.fn.feedkeys(leader .. 'cfn')
   end,
   ['Split long bash line (<leader>\\'] = function()
-    vim.fn.feedkeys(T '<leader>' .. [[\]])
+    vim.fn.feedkeys(leader .. [[\]])
   end,
   ['[YAML] Yaml to Json (:Yaml2Json)'] = function()
     vim.cmd.Yaml2Json()
@@ -256,7 +256,7 @@ end)
     vim.cmd.Json2Yaml()
   end,
   ['Change indent size (<leader>cii)'] = function()
-    vim.fn.feedkeys(T '<leader>' .. 'cii')
+    vim.fn.feedkeys(leader .. 'cii')
   end,
   ['Convert tabs to spaces (<leader>ct<SPC>)'] = function()
     local original_expandtab = vim.opt_global.expandtab:get()
@@ -265,6 +265,6 @@ end)
     vim.opt.expandtab = original_expandtab
   end,
   ['[Diff] unsaved with saved file (<leader>ds)'] = function()
-    vim.fn.feedkeys(T '<leader>' .. 'ds')
+    vim.fn.feedkeys(leader .. 'ds')
   end,
 }
