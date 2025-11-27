@@ -1,6 +1,5 @@
 return {
   'ibhagwan/fzf-lua',
-  event = 'VeryLazy',
   keys = {
     { '<c-p>', ':FzfLua files<cr>', silent = true },
     { '<c-b>', ':FzfLua buffers<cr>', silent = true },
