@@ -55,17 +55,6 @@ local M = {
     },
   },
   {
-    'dstein64/vim-startuptime',
-    cmd = 'Startup Time (:StartupTime)',
-    init = function()
-      require('user.menu').add_actions(nil, {
-        ['StartupTime'] = function()
-          vim.cmd [[StartupTime]]
-        end,
-      })
-    end,
-  },
-  {
     'luukvbaal/statuscol.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
