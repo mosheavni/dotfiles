@@ -47,7 +47,7 @@ function M.input(opts, on_confirm)
   -- Set buffer options using vim.bo (newer API)
   vim.bo[buf].buftype = 'prompt'
   vim.bo[buf].bufhidden = 'wipe'
-  vim.bo[buf].filetype = 'simple_input'
+  vim.bo[buf].filetype = 'input'
   vim.bo[buf].swapfile = false
 
   -- Set default text if provided
