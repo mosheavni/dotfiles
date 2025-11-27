@@ -229,6 +229,8 @@ vim.filetype.add {
   },
 }
 
+require('user.input').setup()
+
 -----------
 -- EXTUI --
 -----------

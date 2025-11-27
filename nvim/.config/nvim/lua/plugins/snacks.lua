@@ -9,7 +9,7 @@ return {
     dashboard = { enabled = false },
     indent = { enabled = false },
     input = {
-      enabled = true,
+      enabled = false,
       win = {
         row = 12,
       },
