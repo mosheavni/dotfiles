@@ -47,7 +47,7 @@ function M.input(opts, on_confirm)
   -- Set buffer options using vim.bo (newer API)
   vim.bo[buf].buftype = 'prompt'
   vim.bo[buf].bufhidden = 'wipe'
-  vim.bo[buf].filetype = 'input'
+  vim.bo[buf].filetype = 'prompt'
   vim.bo[buf].swapfile = false
 
   -- Set default text if provided
@@ -68,6 +68,9 @@ function M.input(opts, on_confirm)
     title_pos = config.title_pos,
     noautocmd = true,
   })
+
+  -- Explicitly clear statusline for this floating window
+  vim.api.nvim_set_option_value('statusline', '', { win = win })
 
   -- Set window options using vim.wo (newer API)
   -- Use window-local call to ensure options are set
