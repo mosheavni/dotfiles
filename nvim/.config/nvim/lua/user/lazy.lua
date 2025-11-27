@@ -1,17 +1,7 @@
-vim.g.disabled_plugins = vim.split(vim.env.DISABLED_PLUGINS or '', ',')
 return {
   config = {
-    defaults = {
-      cond = function(a)
-        return not vim.tbl_contains(vim.g.disabled_plugins or {}, a.name)
-      end,
-    },
-    dev = {
-      path = '~/Repos',
-    },
-    change_detection = {
-      notify = false,
-    },
+    dev = { path = '~/Repos' },
+    change_detection = { notify = false },
     ui = {
       border = 'rounded',
       custom_keys = {
@@ -24,10 +14,7 @@ return {
     diff = {
       cmd = 'diffview.nvim',
     },
-    checker = {
-      -- automatically check for plugin updates
-      enabled = false,
-    },
+    checker = { enabled = false },
     performance = {
       rtp = {
         disabled_plugins = {
