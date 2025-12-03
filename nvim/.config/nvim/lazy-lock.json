@@ -29,7 +29,6 @@
   "jsonpath.nvim": { "branch": "main", "commit": "9e7a3c2aec3465a8f7c86cec6424cf98ee62ee24" },
   "lazy.nvim": { "branch": "main", "commit": "85c7ff3711b730b4030d03144f6db6375044ae82" },
   "lazydev.nvim": { "branch": "main", "commit": "5231c62aa83c2f8dc8e7ba957aa77098cda1257d" },
-  "leap.nvim": { "branch": "main", "commit": "3c49d309d49d66a9feb0dd824353f186b3ee5efa" },
   "leetcode.nvim": { "branch": "master", "commit": "fdd3f91800b3983e27bc9fcfb99cfa7293d7f11a" },
   "linediff.vim": { "branch": "main", "commit": "29fa617fc10307a1e0ae82a8761114e465d17b06" },
   "lspkind-nvim": { "branch": "master", "commit": "3ddd1b4edefa425fda5a9f95a4f25578727c0bb3" },
