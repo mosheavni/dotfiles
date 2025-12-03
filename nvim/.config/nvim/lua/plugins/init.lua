@@ -111,24 +111,6 @@ local M = {
     end,
   },
   {
-    'ggandor/leap.nvim',
-    keys = {
-      {
-        's',
-        function()
-          require('leap').leap { forward = true }
-        end,
-      },
-
-      {
-        'S',
-        function()
-          require('leap').leap { backward = true }
-        end,
-      },
-    },
-  },
-  {
     'axelvc/template-string.nvim',
     ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
     event = 'InsertEnter',

@@ -390,6 +390,7 @@ vim.api.nvim_create_user_command('DiffWithSaved', function()
 end, {})
 
 map('n', '<leader>ds', ':DiffWithSaved<cr>', { remap = false, silent = true })
+
 -----------------------
 -- Visual calculator --
 -----------------------
@@ -418,6 +419,11 @@ vmap <c-r> :VisualCalculator<cr>
 -- Grep --
 ----------
 require('user.grep').setup()
+
+----------------
+-- EasyMotion --
+----------------
+require('user.easymotion').setup()
 
 ------------------------
 -- Run current buffer --
