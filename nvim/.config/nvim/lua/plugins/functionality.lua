@@ -33,6 +33,35 @@ local M = {
     end,
   },
   {
+    'otavioschwanck/github-pr-reviewer.nvim',
+    opts = {
+      -- Key to mark file as viewed and go to next file (only works in review mode)
+      mark_as_viewed_key = '<CR>',
+
+      -- Key to toggle between unified and split diff view (only works in review mode)
+      diff_view_toggle_key = '<C-v>',
+
+      -- Key to toggle floating windows visibility (only works in review mode)
+      toggle_floats_key = '<C-r>',
+
+      -- Key to jump to next hunk (only works in review mode)
+      next_hunk_key = ']c',
+
+      -- Key to jump to previous hunk (only works in review mode)
+      prev_hunk_key = '[c',
+
+      -- Key to go to next modified file (only works in review mode)
+      next_file_key = ']q',
+
+      -- Key to go to previous modified file (only works in review mode)
+      prev_file_key = '[q',
+    },
+    keys = {
+      { '<leader>pr', '<cmd>PRReviewMenu<cr>', desc = 'PR Review Menu' },
+      { '<leader>p', ":<C-u>'<,'>PRSuggestChange<CR>", desc = 'Suggest change', mode = 'v' },
+    },
+  },
+  {
     'gbprod/yanky.nvim',
     dependencies = { 'kkharji/sqlite.lua' },
     cmd = { 'YankyRingHistory' },
