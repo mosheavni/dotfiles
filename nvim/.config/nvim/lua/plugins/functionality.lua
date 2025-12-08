@@ -33,7 +33,8 @@ local M = {
     end,
   },
   {
-    'otavioschwanck/github-pr-reviewer.nvim',
+    'mosheavni/github-pr-reviewer.nvim',
+    dev = vim.env.PR_REVIEW_DEV == 'true',
     opts = {
       -- Key to mark file as viewed and go to next file (only works in review mode)
       mark_as_viewed_key = '<CR>',
@@ -58,7 +59,7 @@ local M = {
     },
     keys = {
       { '<leader>pr', '<cmd>PRReviewMenu<cr>', desc = 'PR Review Menu' },
-      { '<leader>p', ":<C-u>'<,'>PRSuggestChange<CR>", desc = 'Suggest change', mode = 'v' },
+      { '<leader>pr', ":<C-u>'<,'>PRSuggestChange<CR>", desc = 'Suggest change', mode = 'v' },
     },
   },
   {
