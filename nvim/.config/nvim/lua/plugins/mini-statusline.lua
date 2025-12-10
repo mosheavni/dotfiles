@@ -46,18 +46,13 @@ M.config = function()
     if statusline.is_truncated(75) then
       return ''
     end
-    local clients = vim.lsp.get_clients { bufnr = 0 }
+    local clients = vim.b.attached_lsp or {}
     -- Icon with green/pine highlight, then reset to fileinfo color
     local icon = string.format('%%#MiniStatuslineLSPIcon#%s%%#MiniStatuslineFileinfo# ', lsp_icon)
     if not next(clients) then
-      return icon .. 'No Active Lsp'
+      return icon .. 'No Active LSP'
     end
-    return icon .. 'LSP: ' .. table.concat(
-      vim.tbl_map(function(client)
-        return client.name
-      end, clients),
-      ', '
-    )
+    return icon .. 'LSP: ' .. table.concat(clients, ', ')
   end
 
   -- Custom line:col section
@@ -181,7 +176,7 @@ M.config = function()
 
     local schema = yaml_companion.get_buf_schema(0)
     if schema and schema.result and schema.result[1] then
-      return 'YAML Schema: ' .. schema.result[1].name
+      return ' YAML Schema: ' .. schema.result[1].name
     end
 
     return ''

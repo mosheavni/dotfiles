@@ -60,10 +60,16 @@ M.setup = function()
     callback = function(ev)
       local client = vim.lsp.get_client_by_id(ev.data.client_id)
       local bufnr = ev.buf
-      require 'user.lsp.keymaps'(bufnr)
       if client and client.server_capabilities.documentSymbolProvider then
         require('nvim-navic').attach(client, bufnr)
       end
+
+      -- Mappings
+      if vim.b[bufnr].lsp_keymaps_configured then
+        return
+      end
+      vim.b[bufnr].lsp_keymaps_configured = true
+      require 'user.lsp.keymaps'(bufnr)
 
       -- Diagnostics
       if vim.g.dignostics_configured then
@@ -77,6 +83,26 @@ M.setup = function()
         virtual_lines = { current_line = true },
         float = { border = 'rounded', source = 'if_many' },
       }
+
+      -- for statusline
+      vim.b[bufnr].attached_lsp = vim.tbl_map(function(client_l)
+        return client_l.name
+      end, vim.lsp.get_clients { bufnr = bufnr })
+    end,
+  })
+
+  -- for statusline
+  local lsp_statusline_aug = vim.api.nvim_create_augroup('UserLspStatusline', { clear = true })
+  vim.api.nvim_create_autocmd({ 'LspAttach', 'LspDetach' }, {
+    group = lsp_statusline_aug,
+    callback = function(ev)
+      local bufnr = ev.buf
+      vim.schedule(function()
+        vim.b[bufnr].attached_lsp = vim.tbl_map(function(client_l)
+          return client_l.name
+        end, vim.lsp.get_clients { bufnr = bufnr })
+        vim.cmd 'redrawstatus'
+      end)
     end,
   })
 end
