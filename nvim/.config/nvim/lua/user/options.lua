@@ -86,6 +86,7 @@ vim.o.backup = false
 vim.o.backupdir = vim.fn.stdpath 'state' .. '/backup'
 vim.o.writebackup = false
 vim.o.wildmenu = true -- Displays a menu on autocomplete
+vim.opt.wildoptions:append { 'fuzzy', 'pum' }
 vim.opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
 vim.opt.completeopt = 'menu,menuone,noselect,noinsert,popup'
 vim.o.previewheight = 15
