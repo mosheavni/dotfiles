@@ -98,6 +98,9 @@ M.setup = function()
     callback = function(ev)
       local bufnr = ev.buf
       vim.schedule(function()
+        if not vim.api.nvim_buf_is_valid(bufnr) then
+          return
+        end
         vim.b[bufnr].attached_lsp = vim.tbl_map(function(client_l)
           return client_l.name
         end, vim.lsp.get_clients { bufnr = bufnr })
