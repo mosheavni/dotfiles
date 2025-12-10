@@ -51,7 +51,7 @@ local M = {
       },
     },
     keys = {
-      { '<Leader>pc', '<cmd>lua require("oklch-color-picker").pick_under_cursor()<CR>' },
+      { '<Leader>pc', '<cmd>lua require("oklch-color-picker").pick_under_cursor()<CR>', desc = 'Pick color under cursor' },
     },
   },
   {
