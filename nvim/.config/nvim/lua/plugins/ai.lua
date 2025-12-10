@@ -103,7 +103,7 @@ return {
   },
   {
     'coder/claudecode.nvim',
-    enabled = true,
+    enabled = false,
     opts = {},
     keys = {
       { '<leader>ccc', '<cmd>ClaudeCode<cr>', desc = 'Toggle Claude' },
