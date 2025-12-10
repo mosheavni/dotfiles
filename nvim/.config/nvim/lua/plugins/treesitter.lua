@@ -1,7 +1,6 @@
 local treesitter_plugin = {
   'nvim-treesitter/nvim-treesitter',
   branch = 'main',
-  lazy = false,
   build = ':TSUpdate',
   event = 'BufReadPost',
   config = function()
