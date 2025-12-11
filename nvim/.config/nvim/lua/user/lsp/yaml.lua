@@ -44,7 +44,15 @@ local function split_and_add(current, resources)
 end
 
 M.add_crds = function(bufnr)
-  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return {}
+  end
+
+  local ok, lines = pcall(vim.api.nvim_buf_get_lines, bufnr, 0, -1, false)
+  if not ok then
+    return {}
+  end
+
   if lines[1] == '---' then
     table.remove(lines, 1)
   end

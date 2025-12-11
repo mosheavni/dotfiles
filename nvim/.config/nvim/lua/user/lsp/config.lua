@@ -72,10 +72,10 @@ M.setup = function()
       require 'user.lsp.keymaps'(bufnr)
 
       -- Diagnostics
-      if vim.g.dignostics_configured then
+      if vim.g.diagnostics_configured then
         return
       end
-      vim.g.dignostics_configured = true
+      vim.g.diagnostics_configured = true
       vim.diagnostic.config {
         -- jump = {on_jump = { float = true }},
         signs = { text = M.diagnostic_signs },
@@ -83,12 +83,14 @@ M.setup = function()
         virtual_lines = { current_line = true },
         float = { border = 'rounded', source = 'if_many' },
       }
-
-      -- for statusline
-      vim.b[bufnr].attached_lsp = vim.tbl_map(function(client_l)
-        return client_l.name
-      end, vim.lsp.get_clients { bufnr = bufnr })
     end,
+
+    vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
+      group = on_attach_aug,
+      callback = function()
+        vim.lsp.codelens.refresh { bufnr = 0 }
+      end,
+    }),
   })
 
   -- for statusline
