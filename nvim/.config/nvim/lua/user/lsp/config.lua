@@ -84,13 +84,6 @@ M.setup = function()
         float = { border = 'rounded', source = 'if_many' },
       }
     end,
-
-    vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
-      group = on_attach_aug,
-      callback = function()
-        vim.lsp.codelens.refresh { bufnr = 0 }
-      end,
-    }),
   })
 
   -- for statusline

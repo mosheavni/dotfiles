@@ -127,7 +127,7 @@ M.setup = function(opts)
         format = {
           bracketSpacing = false,
         },
-        -- schemas = require('schemastore').yaml.schemas(),
+        schemas = require('schemastore').yaml.schemas(),
         schemaStore = {
           -- Must disable built-in schemaStore support to use
           -- schemas from SchemaStore.nvim plugin
