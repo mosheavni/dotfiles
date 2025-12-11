@@ -51,6 +51,7 @@ local treesitter_plugin = {
       'vimdoc',
       'xml',
       'yaml',
+      'zsh',
     }
 
     vim.treesitter.language.register('markdown', 'octo')
