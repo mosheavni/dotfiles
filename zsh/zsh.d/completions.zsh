@@ -5,23 +5,17 @@ load_completion_from_cmd() {
 
   [[ -n $commands[$cmd] ]] || return
 
-  if [[ ! -f $completion_file ]]; then
-    typeset -g -A _comps
-    autoload -Uz _$cmd
-    _comps[$cmd]=_$cmd
+  # Regenerate if missing or older than 30 days
+  if [[ ! -f $completion_file ]] || [[ $(find "$completion_file" -mtime +30 2>/dev/null) ]]; then
+    eval "$cmd ${args[*]}" >| $completion_file &|
   fi
-
-  eval "$cmd ${args[*]}" >| $completion_file &|
 }
 
 # Constants at the top
 GENCOMPL_FPATH="${HOME}/.zsh/complete"
 
-# zstyles
-zstyle ':completion:*:*:*:*:*' menu select
-zstyle ':completion:*' completer _complete _prefix _match _approximate
-# zstyle ':completion:*' matcher-list 'r:[[:ascii:]]||[[:ascii:]]=** r:|=* m:{a-z\-}={A-Z\_}'
-zstyle ':completion:*:approximate:*' max-errors 3 numeric
+# Let belak/zsh-utils (compstyle_prez_setup) handle most zstyles
+# Only keep plugin-specific configuration here
 zstyle :plugin:zsh-completion-generator programs ggrep kubedebug docker_copy_between_regions ab
 
 # Initialize completion system
