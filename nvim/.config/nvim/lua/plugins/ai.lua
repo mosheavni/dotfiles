@@ -127,7 +127,7 @@ return {
   {
     'yetone/avante.nvim',
     build = 'make',
-    enabled = false,
+    enabled = true,
     version = false, -- Never set this value to "*"! Never!
     keys = {
       { '<leader>ccc', '<cmd>AvanteChat<CR>', mode = { 'n', 'v' } },
