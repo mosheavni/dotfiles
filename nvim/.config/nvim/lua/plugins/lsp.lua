@@ -118,7 +118,7 @@ local language_specific_plugins = {
     'mosheavni/yaml-companion.nvim',
     ft = 'yaml',
     config = function()
-      vim.keymap.set('n', '<leader>cc', ":lua require('yaml-companion').open_ui_select()<cr>", { remap = false, silent = true })
+      vim.keymap.set('n', '<leader>cs', ":lua require('yaml-companion').open_ui_select()<cr>", { remap = false, silent = true })
       require('user.menu').add_actions('YAML', {
         ['Change Schema'] = function()
           require('yaml-companion').open_ui_select()
