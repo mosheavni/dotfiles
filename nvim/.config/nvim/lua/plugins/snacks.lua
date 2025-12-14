@@ -1,35 +1,23 @@
 --# selene: allow(undefined_variable)
 return {
   'folke/snacks.nvim',
-  priority = 1000,
-  lazy = false,
+  -- priority = 1000,
+  -- lazy = false,
   ---@type snacks.Config
   opts = {
     bigfile = { enabled = true },
+    quickfile = { enabled = true },
+    words = { enabled = true },
     dashboard = { enabled = false },
     indent = { enabled = false },
-    input = {
-      enabled = false,
-      win = {
-        row = 12,
-      },
-    },
-    notifier = {
-      enabled = false,
-      timeout = 3000,
-    },
+    input = { enabled = false, win = { row = 12 } },
+    notifier = { enabled = false, timeout = 3000 },
     scope = { enabled = false },
     lazygit = { configure = false },
-    quickfile = { enabled = true },
     scroll = { enabled = false },
     statuscolumn = { enabled = false },
-    words = { enabled = true },
-    styles = {
-      notification = {
-        -- wo = { wrap = true } -- Wrap notifications
-      },
-    },
   },
+  cmd = 'Rename',
   keys = {
     {
       '<leader>bd',
