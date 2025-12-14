@@ -113,8 +113,7 @@ local M = {
   {
     'axelvc/template-string.nvim',
     ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'python' },
-    event = 'InsertEnter',
-    config = true,
+    opts = {},
   },
   {
     'kevinhwang91/nvim-hlslens',
