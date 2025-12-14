@@ -36,8 +36,9 @@ M.config = function()
     local added = diff.added and diff.added > 0 and (string.format('%%#MiniStatuslineDiffAdd#%s %s', icons.added, diff.added)) or ''
     local changed = diff.changed and diff.changed > 0 and (string.format(' %%#MiniStatuslineDiffChange#%s %s', icons.changed, diff.changed)) or ''
     local removed = diff.removed and diff.removed > 0 and (string.format(' %%#MiniStatuslineDiffRemove#%s %s', icons.removed, diff.removed)) or ''
+    local end_hl = (#added + #changed + #removed) > 0 and '%#MiniStatuslineDevinfo#' or ''
 
-    return table.concat({ added, changed, removed }, '')
+    return table.concat({ added, changed, removed }, '') .. end_hl
   end
 
   -- Custom LSP section that shows server names
@@ -176,7 +177,7 @@ M.config = function()
 
     local schema = yaml_companion.get_buf_schema(0)
     if schema and schema.result and schema.result[1] then
-      return ' YAML Schema: ' .. schema.result[1].name
+      return ' Schema: ' .. schema.result[1].name
     end
 
     return ''
