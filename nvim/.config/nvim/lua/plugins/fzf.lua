@@ -1,16 +1,19 @@
 return {
   'ibhagwan/fzf-lua',
+  cmd = { 'FzfLua' },
+  event = 'VeryLazy',
   keys = {
-    { '<c-p>', ':FzfLua files<cr>', silent = true },
-    { '<c-b>', ':FzfLua buffers<cr>', silent = true },
-    { '<leader>el', ':FzfLua files cwd=' .. vim.fs.joinpath(vim.fn.stdpath 'data', 'lazy') .. '<cr>', silent = true },
-    { '<leader>ee', ':FzfLua builtin<cr>', silent = true },
-    { '<leader>hh', ':FzfLua help_tags<cr>', silent = true },
-    { '<leader>i', ':FzfLua oldfiles<cr>', silent = true },
-    { '<leader>/', require('fzf-lua').live_grep },
+    { '<c-p>', ':FzfLua files<cr>', desc = 'Browse files', silent = true },
+    { '<c-b>', ':FzfLua buffers<cr>', desc = 'Browse open buffers', silent = true },
+    { '<leader>ee', ':FzfLua builtin<cr>', desc = 'Browse Fzf builtins', silent = true },
+    { '<leader>hh', ':FzfLua help_tags<cr>', desc = 'Browse help tags', silent = true },
+    { '<leader>i', ':FzfLua oldfiles<cr>', desc = 'Browse recent files', silent = true },
+    { '<leader>/', ':FzfLua live_grep<cr>', desc = 'Live Grep', silent = true },
     {
       '<C-x><C-f>',
-      require('fzf-lua').complete_path,
+      function()
+        require('fzf-lua').complete_path()
+      end,
       mode = 'i',
       silent = true,
       desc = 'Fuzzy complete path',
@@ -117,9 +120,9 @@ return {
           cmd = 'git-branches.zsh',
         }
       end,
+      desc = 'Git Branches',
     },
   },
-  cmd = { 'FzfLua' },
   config = function()
     require('fzf-lua').setup {
       header_separator = '\n',
