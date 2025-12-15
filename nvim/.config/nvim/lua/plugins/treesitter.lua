@@ -9,11 +9,14 @@ local treesitter_plugin = {
       'awk',
       'bash',
       'comment',
+      'css',
       'csv',
       'diff',
       'dockerfile',
+      'editorconfig',
       'embedded_template',
       'git_config',
+      'git_rebase',
       'gitcommit',
       'gitignore',
       'go',
@@ -28,18 +31,27 @@ local treesitter_plugin = {
       'hjson',
       'html',
       'http',
+      'ini',
       'java',
       'javascript',
+      'jinja',
+      'jinja_inline',
+      'jq',
       'json',
       'jsonc',
       'lua',
       'luadoc',
+      'luap',
       'make',
       'markdown',
       'markdown_inline',
+      'passwd',
+      'pem',
+      'printf',
       'python',
       'query',
       'regex',
+      'requirements',
       'scss',
       'sql',
       'ssh_config',
@@ -86,8 +98,8 @@ local treesitter_plugin = {
 
         vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
-        vim.wo.foldmethod = 'expr'
-        vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+        vim.wo[0][0].foldmethod = 'expr'
+        vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
       end,
     })
   end,
