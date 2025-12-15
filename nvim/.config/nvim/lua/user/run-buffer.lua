@@ -1,3 +1,10 @@
+-- Store terminal state for reuse
+local terminal_state = {
+  buf = nil,
+  job_id = nil,
+  cwd = nil,
+}
+
 --- Given a path, open the file, extract all the Makefile keys,
 --  and return them as a list.
 ---@param path string
@@ -143,7 +150,11 @@ local function filename_and_ft()
   -- check if current buffer is a valid file
   if file_name == '' then
     vim.api.nvim_set_option_value('filetype', ft, { buf = 0 })
-    file_name = _G.start_ls()
+    local temp_name = _G.start_ls()
+    if not temp_name then
+      return
+    end
+    file_name = temp_name
   end
 
   -- check if file has changed and prompt the user if should save
@@ -174,24 +185,80 @@ local function execute_file(where)
 
   local opts = { cwd = vim.fn.expand '%:p:h' }
   if not where or where == 'terminal' then
-    -- selene: allow(undefined_variable)
-    local term, created = Snacks.terminal.get(nil, opts)
-    local job_id = vim.bo[term.buf].channel
+    local term_buf = terminal_state.buf
+    local job_id = terminal_state.job_id
 
-    -- clear terminal input if already open
-    if not created then
-      if not term:valid() then
-        term:show()
+    -- Check if terminal buffer exists and is valid
+    if not term_buf or not vim.api.nvim_buf_is_valid(term_buf) then
+      -- Create a new terminal
+      vim.cmd 'split'
+      term_buf = vim.api.nvim_create_buf(false, true)
+      vim.api.nvim_win_set_buf(0, term_buf)
+
+      -- Set buffer name for easy identification
+      vim.api.nvim_buf_set_name(term_buf, 'run-buffer-terminal')
+
+      -- Start terminal with working directory
+      job_id = vim.fn.jobstart(vim.o.shell, {
+        term = true,
+        cwd = opts.cwd,
+        on_exit = function()
+          -- Clear terminal state when it exits
+          terminal_state.buf = nil
+          terminal_state.job_id = nil
+        end,
+      })
+
+      -- Check if jobstart succeeded
+      if job_id <= 0 then
+        vim.notify('Failed to start terminal', vim.log.levels.ERROR)
+        return
       end
-      vim.api.nvim_set_current_win(term.win)
+
+      -- Store terminal state
+      terminal_state.buf = term_buf
+      terminal_state.job_id = job_id
+      terminal_state.cwd = opts.cwd
+    else
+      -- Reuse existing terminal
+      -- Check if terminal is visible in any window
+      local term_win = vim.fn.bufwinid(term_buf)
+      if term_win == -1 then
+        -- Terminal not visible, open it in a split
+        vim.cmd 'split'
+        vim.api.nvim_win_set_buf(0, term_buf)
+      else
+        -- Terminal already visible, switch to it
+        vim.api.nvim_set_current_win(term_win)
+      end
+
+      -- Enter insert mode
+      vim.cmd 'startinsert'
+
+      -- Clear any running command
+      if job_id then
+        vim.schedule(function()
+          vim.fn.chansend(job_id, vim.api.nvim_replace_termcodes('<C-c>', true, true, true))
+        end)
+      end
+
+      -- Change directory if needed
+      if terminal_state.cwd ~= opts.cwd then
+        terminal_state.cwd = opts.cwd
+        if job_id then
+          vim.schedule(function()
+            vim.fn.chansend(job_id, 'cd ' .. vim.fn.shellescape(opts.cwd) .. '\n')
+          end)
+        end
+      end
+    end
+
+    -- Send the command to the terminal
+    if job_id then
       vim.schedule(function()
-        vim.fn.chansend(job_id, vim.api.nvim_replace_termcodes('<C-c>', true, true, true))
+        vim.fn.chansend(job_id, cmd)
       end)
     end
-    -- send command
-    vim.schedule(function()
-      vim.fn.chansend(job_id, cmd)
-    end)
   else
     open_tab(cmd, opts)
   end
