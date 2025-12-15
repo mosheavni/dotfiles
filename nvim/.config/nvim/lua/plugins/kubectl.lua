@@ -42,7 +42,6 @@ return {
   },
   cmd = { 'Kubectl', 'Kubectx', 'Kubens' },
   keys = {
-    { '<leader>k', '<cmd>lua require("kubectl").toggle()<cr>' },
     { '7', '<Plug>(kubectl.view_nodes)', ft = 'k8s_*' },
     { '8', '<Plug>(kubectl.view_daemonsets)', ft = 'k8s_*' },
     { '9', '<Plug>(kubectl.view_statefulsets)', ft = 'k8s_*' },
