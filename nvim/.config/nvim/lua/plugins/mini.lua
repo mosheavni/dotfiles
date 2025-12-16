@@ -1,7 +1,6 @@
-local the_king = 'nvim-mini/mini.'
 local M = {
   {
-    the_king .. 'indentscope',
+    'nvim-mini/mini.indentscope',
     version = false,
     event = 'BufReadPost',
     opts = {
@@ -10,7 +9,7 @@ local M = {
     },
     config = function(_, opts)
       require('mini.indentscope').setup(opts)
-      vim.cmd 'highlight! MiniIndentscopeSymbol ctermfg=109 guifg=#76D1A3'
+      vim.api.nvim_set_hl(0, 'MiniIndentscopeSymbol', { fg = '#76D1A3' })
     end,
     init = function()
       vim.api.nvim_create_autocmd('FileType', {
@@ -40,7 +39,7 @@ local M = {
     end,
   },
   {
-    the_king .. 'cursorword',
+    'nvim-mini/mini.cursorword',
     version = false,
     event = 'BufReadPost',
     config = function()
@@ -52,7 +51,7 @@ local M = {
     end,
   },
   {
-    the_king .. 'hipatterns',
+    'nvim-mini/mini.hipatterns',
     version = false,
     event = { 'BufNewFile', 'BufReadPre', 'VeryLazy' },
     config = function()
@@ -70,7 +69,7 @@ local M = {
     end,
   },
   {
-    the_king .. 'notify',
+    'nvim-mini/mini.notify',
     version = false,
     lazy = false,
     keys = {
@@ -84,13 +83,13 @@ local M = {
     end,
   },
   {
-    the_king .. 'splitjoin',
+    'nvim-mini/mini.splitjoin',
     version = false,
     opts = {},
     keys = { 'gS' },
   },
   {
-    the_king .. 'surround',
+    'nvim-mini/mini.surround',
     version = false,
     keys = {
       { 'S', '<cmd>lua MiniSurround.add("visual")<CR>', mode = 'v' },
@@ -125,7 +124,7 @@ local M = {
     end,
   },
   {
-    the_king .. 'ai',
+    'nvim-mini/mini.ai',
     version = false,
     event = 'VeryLazy',
     config = function()
@@ -140,7 +139,7 @@ local M = {
     end,
   },
   {
-    the_king .. 'pairs',
+    'nvim-mini/mini.pairs',
     version = false,
     enabled = false, -- use nvim-autopairs instead
     event = 'InsertEnter',
@@ -151,7 +150,7 @@ local M = {
     },
   },
   {
-    the_king .. 'operators',
+    'nvim-mini/mini.operators',
     version = false,
     event = 'VeryLazy',
     opts = {
