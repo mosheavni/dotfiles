@@ -36,9 +36,8 @@ M.config = function()
     local added = diff.added and diff.added > 0 and (string.format('%%#MiniStatuslineDiffAdd#%s %s', icons.added, diff.added)) or ''
     local changed = diff.changed and diff.changed > 0 and (string.format(' %%#MiniStatuslineDiffChange#%s %s', icons.changed, diff.changed)) or ''
     local removed = diff.removed and diff.removed > 0 and (string.format(' %%#MiniStatuslineDiffRemove#%s %s', icons.removed, diff.removed)) or ''
-    local end_hl = (#added + #changed + #removed) > 0 and '%#MiniStatuslineDevinfo#' or ''
 
-    return table.concat({ added, changed, removed }, '') .. end_hl
+    return table.concat({ added, changed, removed }, ''), 'MiniStatuslineDevinfo'
   end
 
   -- Custom LSP section that shows server names
@@ -100,20 +99,31 @@ M.config = function()
     end
 
     if #result > 0 then
-      return table.concat(result, ' ') .. '%#MiniStatuslineDevinfo#'
+      return table.concat(result, ' '), 'MiniStatuslineDevinfo'
     end
     return ''
   end
 
+  -- get file format
+  local function section_fileformat()
+    local format_symbols = {
+      unix = '', -- e712
+      dos = '', -- e70f
+      mac = '', -- e711
+    }
+    local format = vim.bo.fileformat
+    return string.format('%%#MiniStatuslineFormatIcon#%s ', format_symbols[format] or format), 'MiniStatuslineDevinfo'
+  end
+
   -- get filetype icon and name
   local function section_filetype_with_icon()
-    if statusline.is_truncated(120) then
+    local filetype = vim.bo.filetype
+    if not filetype or filetype == '' then
       return ''
     end
 
-    local filetype = vim.bo.filetype
-    if filetype == '' then
-      return ''
+    if statusline.is_truncated(120) then
+      return filetype
     end
 
     local ok, devicons = pcall(require, 'nvim-web-devicons')
@@ -121,21 +131,13 @@ M.config = function()
       return filetype
     end
 
-    local icon = devicons.get_icon(vim.fn.expand '%:t', nil, { default = true })
+    local icon = devicons.get_icon(vim.fn.expand '%:t', nil, { strict = true, default = false })
     if not icon then
-      return filetype
+      icon = devicons.get_icon_by_filetype(filetype, { strict = true, default = true })
     end
 
-    local format_symbols = {
-      unix = '', -- e712
-      dos = '', -- e70f
-      mac = '', -- e711
-    }
-    local format = vim.bo.fileformat
-    local format_with_icon = format_symbols[format] or format
-
     -- Icon with pine/blue highlight, then reset to fileinfo color for filetype name
-    return string.format('%%#MiniStatuslineFormatIcon#%s  %%#MiniStatuslineLSPIcon#%s %%#MiniStatuslineFileinfo#%s', format_with_icon, icon, filetype)
+    return string.format('%%#MiniStatuslineLSPIcon#%s %%#MiniStatuslineFileinfo#%s', icon, filetype)
   end
 
   -- Startup time section with color coding
@@ -195,6 +197,7 @@ M.config = function()
         local diff = section_diff()
         local diagnostics = section_diagnostics_colored()
         local filename = statusline.section_filename { trunc_width = 10000 } -- always return the shorter version of the filename
+        local fileformat = section_fileformat()
         local filetype = section_filetype_with_icon()
         local lsp = section_lsp_names()
         local progress = section_progress()
@@ -221,7 +224,7 @@ M.config = function()
             -- Right section
             '%=', -- End left alignment, start right alignment
             { hl = 'MiniStatuslineFileinfo', strings = { lsp } },
-            { strings = { filetype } },
+            { strings = { fileformat, filetype } },
             { hl = 'MiniStatuslineProgress', strings = { progress } },
             { hl = mode_hl, strings = { location } },
             { hl = startup_hl, strings = { startup_time } },

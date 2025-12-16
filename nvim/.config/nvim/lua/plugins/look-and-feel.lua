@@ -42,6 +42,10 @@ local M = {
         },
       },
     },
+    config = function(_, opts)
+      require('nvim-web-devicons').setup(opts)
+      require('nvim-web-devicons').set_icon_by_filetype { fugitive = 'git' }
+    end,
   },
   {
     'eero-lehtinen/oklch-color-picker.nvim',
