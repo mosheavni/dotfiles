@@ -2,6 +2,34 @@ local M = {
   {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
+    init = require('user.lsp.config').init,
+    config = require('user.lsp.config').setup,
+    dependencies = {
+      'nvimtools/none-ls.nvim',
+      'mason-org/mason.nvim',
+      {
+        'j-hui/fidget.nvim',
+        opts = {
+          progress = {
+            display = {
+              progress_icon = { pattern = 'moon', period = 1 },
+            },
+          },
+        },
+      },
+      {
+        'SmiteshP/nvim-navic',
+        lazy = true,
+        opts = {
+          highlight = true,
+        },
+        config = function(_, opts)
+          local navic = require 'nvim-navic'
+          navic.setup(opts)
+          vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
+        end,
+      },
+    },
   },
   {
     'mason-org/mason.nvim',
@@ -60,36 +88,6 @@ local M = {
           mr.get_package(package):install()
         end
       end
-    end,
-  },
-}
-
-M[1].init = require('user.lsp.config').init
-M[1].config = require('user.lsp.config').setup
-
-M[1].dependencies = {
-  'nvimtools/none-ls.nvim',
-  'mason-org/mason.nvim',
-  {
-    'j-hui/fidget.nvim',
-    opts = {
-      progress = {
-        display = {
-          progress_icon = { pattern = 'moon', period = 1 },
-        },
-      },
-    },
-  },
-  {
-    'SmiteshP/nvim-navic',
-    lazy = true,
-    opts = {
-      highlight = true,
-    },
-    config = function(_, opts)
-      local navic = require 'nvim-navic'
-      navic.setup(opts)
-      vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
     end,
   },
 }
