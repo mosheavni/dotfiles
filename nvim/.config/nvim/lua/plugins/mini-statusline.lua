@@ -192,8 +192,8 @@ M.config = function()
       return ''
     end
 
-    local schema = yaml_companion.get_buf_schema(0)
-    if schema and schema.result and schema.result[1] then
+    local ok_schema, schema = pcall(yaml_companion.get_buf_schema, 0)
+    if ok_schema and schema and schema.result and schema.result[1] then
       return ' Schema: ' .. schema.result[1].name
     end
 
