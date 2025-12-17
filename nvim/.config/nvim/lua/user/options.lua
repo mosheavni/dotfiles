@@ -54,7 +54,9 @@ vim.opt.diffopt = {
   'linematch:60',
   'vertical',
   'algorithm:histogram',
+  'inline:char',
 }
+
 vim.o.splitkeep = 'screen'
 
 vim.o.number = true -- Show current line number
