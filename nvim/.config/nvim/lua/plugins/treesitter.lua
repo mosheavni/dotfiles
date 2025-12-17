@@ -2,7 +2,41 @@ local treesitter_plugin = {
   'nvim-treesitter/nvim-treesitter',
   branch = 'main',
   build = ':TSUpdate',
-  event = 'BufReadPost',
+  event = { 'BufReadPost', 'FileType' },
+  init = function()
+    local augroup = vim.api.nvim_create_augroup('myconfig.treesitter', { clear = true })
+    vim.api.nvim_create_autocmd('FileType', {
+      group = augroup,
+      pattern = { '*' },
+      callback = function(event)
+        local filetype = event.match
+        local lang = vim.treesitter.language.get_lang(filetype)
+        if not lang then
+          return
+        end
+
+        local is_installed, _ = vim.treesitter.language.add(lang)
+
+        if not is_installed then
+          local available_langs = require('nvim-treesitter').get_available()
+          if vim.tbl_contains(available_langs, lang) then
+            vim.notify('Parser available for ' .. lang .. '. Please add to install func', vim.log.levels.INFO)
+          end
+          return
+        end
+
+        if not pcall(vim.treesitter.start, event.buf) then
+          return
+        end
+
+        vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+        vim.wo[0][0].foldmethod = 'expr'
+        vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+      end,
+    })
+  end,
+
   config = function()
     require('nvim-treesitter').setup { install_dir = vim.fn.stdpath 'data' .. '/treesitter' }
     require('nvim-treesitter').install {
@@ -65,43 +99,7 @@ local treesitter_plugin = {
       'yaml',
       'zsh',
     }
-
     vim.treesitter.language.register('markdown', 'octo')
-
-    local augroup = vim.api.nvim_create_augroup('myconfig.treesitter', { clear = true })
-    vim.api.nvim_create_autocmd('FileType', {
-      group = augroup,
-      pattern = { '*' },
-      callback = function(event)
-        local filetype = event.match
-        local lang = vim.treesitter.language.get_lang(filetype)
-        if not lang then
-          return
-        end
-
-        local is_installed, _ = vim.treesitter.language.add(lang)
-
-        if not is_installed then
-          local available_langs = require('nvim-treesitter').get_available()
-          local is_available = vim.tbl_contains(available_langs, lang)
-
-          if is_available then
-            vim.notify('Parser available for ' .. lang .. '. Please add to install func', vim.log.levels.INFO)
-            return
-          end
-        end
-
-        local ok, _ = pcall(vim.treesitter.start, event.buf)
-        if not ok then
-          return
-        end
-
-        vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-
-        vim.wo[0][0].foldmethod = 'expr'
-        vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-      end,
-    })
   end,
 }
 
@@ -124,7 +122,7 @@ return {
   },
   {
     'windwp/nvim-ts-autotag',
-    ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml', 'markdown' },
+    ft = { 'html', 'javascript', 'jsx', 'markdown', 'typescript', 'xml' },
     opts = {},
   },
 }
