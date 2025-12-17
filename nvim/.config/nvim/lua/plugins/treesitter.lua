@@ -99,7 +99,6 @@ local treesitter_plugin = {
       'yaml',
       'zsh',
     }
-    vim.treesitter.language.register('markdown', 'octo')
   end,
 }
 
