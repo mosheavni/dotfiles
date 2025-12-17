@@ -3,7 +3,7 @@
   "CursorLineCurrentWindow": { "branch": "master", "commit": "b4eeea98b0d139772969fd243a8802a9883fd2a8" },
   "LuaSnip": { "branch": "master", "commit": "3732756842a2f7e0e76a7b0487e9692072857277" },
   "SchemaStore.nvim": { "branch": "main", "commit": "48dba219db5d45baad6f7491e754706f74d12676" },
-  "avante.nvim": { "branch": "main", "commit": "92f972a413b76ad1969bfdbd4719c63306deca4b" },
+  "avante.nvim": { "branch": "main", "commit": "80f7079556c6acf3d3effa13c22f0e4fd00bcffd" },
   "blink.download": { "branch": "main", "commit": "86361b98f3c8317904a08e3bd12cf3cdcbe3e925" },
   "claudecode.nvim": { "branch": "main", "commit": "6091df0e8edcdc92526cec23bbb42f63c0bb5ff2" },
   "cmp-buffer": { "branch": "main", "commit": "b74fab3656eea9de20a9b8116afa3cfc4ec09657" },
