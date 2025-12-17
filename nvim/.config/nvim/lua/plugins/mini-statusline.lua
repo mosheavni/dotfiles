@@ -22,7 +22,7 @@ M.config = function()
 
   -- Custom diff section with icons and highlights
   local function section_diff()
-    if statusline.is_truncated(80) then
+    if statusline.is_truncated(150) then
       return ''
     end
     local diff = vim.b.gitsigns_status_dict
@@ -36,41 +36,14 @@ M.config = function()
     local added = diff.added and diff.added > 0 and (string.format('%%#MiniStatuslineDiffAdd#%s %s', icons.added, diff.added)) or ''
     local changed = diff.changed and diff.changed > 0 and (string.format(' %%#MiniStatuslineDiffChange#%s %s', icons.changed, diff.changed)) or ''
     local removed = diff.removed and diff.removed > 0 and (string.format(' %%#MiniStatuslineDiffRemove#%s %s', icons.removed, diff.removed)) or ''
+    local end_hl = (#added + #changed + #removed) > 0 and '%#MiniStatuslineDevinfo#' or ''
 
-    return table.concat({ added, changed, removed }, ''), 'MiniStatuslineDevinfo'
-  end
-
-  -- Custom LSP section that shows server names
-  local function section_lsp_names()
-    local lsp_icon = ' '
-    if statusline.is_truncated(75) then
-      return ''
-    end
-    local clients = vim.b.attached_lsp or {}
-    -- Icon with green/pine highlight, then reset to fileinfo color
-    local icon = string.format('%%#MiniStatuslineLSPIcon#%s%%#MiniStatuslineFileinfo# ', lsp_icon)
-    if not next(clients) then
-      return icon .. 'No Active LSP'
-    end
-    return icon .. 'LSP: ' .. table.concat(clients, ', ')
-  end
-
-  -- Custom line:col section
-  local function section_location()
-    return '%l:%v'
-  end
-
-  -- Custom progress section
-  local function section_progress()
-    if statusline.is_truncated(75) then
-      return ''
-    end
-    return '%2p%%'
+    return table.concat({ added, changed, removed }, '') .. end_hl
   end
 
   -- Custom diagnostics section with per-severity coloring
   local function section_diagnostics_colored()
-    if statusline.is_truncated(75) then
+    if statusline.is_truncated(100) then
       return ''
     end
 
@@ -102,6 +75,48 @@ M.config = function()
       return table.concat(result, ' '), 'MiniStatuslineDevinfo'
     end
     return ''
+  end
+
+  -- Custom LSP section that shows server names
+  local function section_lsp_names()
+    local lsp_icon = ' '
+    if statusline.is_truncated(160) then
+      return ''
+    end
+    local clients = vim.b.attached_lsp or {}
+    -- Icon with green/pine highlight, then reset to fileinfo color
+    local icon = string.format('%%#MiniStatuslineLSPIcon#%s%%#MiniStatuslineFileinfo# ', lsp_icon)
+    if not next(clients) then
+      return icon .. 'No Active LSP'
+    end
+    return icon .. 'LSP: ' .. table.concat(clients, ', ')
+  end
+
+  -- Custom line:col section
+  local function section_location()
+    return '%l:%v'
+  end
+
+  -- Custom progress section
+  local function section_progress()
+    if statusline.is_truncated(100) then
+      return ''
+    end
+    return '%2p%%'
+  end
+
+  -- filename section
+  local function section_filename()
+    -- In terminal always use plain name
+    if vim.bo.buftype == 'terminal' then
+      return '%t'
+    elseif statusline.is_truncated(110) then
+      -- File name with 'truncate', 'modified', 'readonly' flags
+      -- Use relative path if truncated
+      return '%t%m%r'
+    else
+      return '%f%m%r'
+    end
   end
 
   -- get file format
@@ -196,7 +211,7 @@ M.config = function()
         local git = statusline.section_git { trunc_width = 40, icon = '' }
         local diff = section_diff()
         local diagnostics = section_diagnostics_colored()
-        local filename = statusline.section_filename { trunc_width = 10000 } -- always return the shorter version of the filename
+        local filename = section_filename()
         local fileformat = section_fileformat()
         local filetype = section_filetype_with_icon()
         local lsp = section_lsp_names()
