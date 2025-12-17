@@ -105,7 +105,7 @@ end
 ---@return table A table containing parsed headers, lines, and column widths.
 function M.raw_parse(buf_lines, delimiter)
   local pattern_delimiter
-  local tab = vim.api.nvim_replace_termcodes('\t', true, true, true)
+  local tab = vim.keycode '\t'
   if delimiter == '  ' then
     pattern_delimiter = '  +'
   elseif delimiter == tab then

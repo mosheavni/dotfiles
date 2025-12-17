@@ -238,7 +238,7 @@ local function execute_file(where)
       -- Clear any running command
       if job_id then
         vim.schedule(function()
-          vim.fn.chansend(job_id, vim.api.nvim_replace_termcodes('<C-c>', true, true, true))
+          vim.fn.chansend(job_id, vim.keycode '<C-c>')
         end)
       end
 

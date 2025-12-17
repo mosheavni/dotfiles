@@ -439,13 +439,13 @@ function ClearTerm(reset)
   vim.opt_local.scrollback = 1
 
   vim.api.nvim_command 'startinsert'
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<c-c>', true, false, true), 't', true)
+  vim.api.nvim_feedkeys(vim.keycode '<c-c>', 't', true)
   if reset == 1 then
     vim.api.nvim_feedkeys('reset', 't', false)
   else
     vim.api.nvim_feedkeys('clear', 't', false)
   end
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<cr>', true, false, true), 't', true)
+  vim.api.nvim_feedkeys(vim.keycode '<cr>', 't', true)
 
   vim.opt_local.scrollback = scrollback
 end

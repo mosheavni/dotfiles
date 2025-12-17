@@ -48,7 +48,7 @@ return {
       '<c-/>',
       function()
         if vim.api.nvim_get_mode().mode == 't' or vim.bo.buftype == 'terminal' then
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-\\><C-n>', true, true, true), 'n', true)
+          vim.api.nvim_feedkeys(vim.keycode '<C-\\><C-n>', 'n', true)
           vim.cmd.close()
         else
           Snacks.terminal.toggle(nil, { cwd = vim.fn.expand '%:p:h' })

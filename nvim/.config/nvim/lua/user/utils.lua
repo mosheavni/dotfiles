@@ -53,7 +53,7 @@ end
 ---Returns the current visual selection and exits visual mode
 ---@return string text The selected text
 function M.get_visual_selection()
-  local esc = vim.api.nvim_replace_termcodes('<esc>', true, false, true)
+  local esc = vim.keycode '<esc>'
   vim.api.nvim_feedkeys(esc, 'x', false)
   local vstart = vim.fn.getpos "'<"
   local vend = vim.fn.getpos "'>"
