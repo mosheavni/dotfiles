@@ -178,7 +178,7 @@ M.config = function()
     },
   }
 
-  cmp.setup.filetype({ 'gitcommit', 'octo' }, {
+  cmp.setup.filetype({ 'gitcommit' }, {
     sources = cmp.config.sources({
       { name = 'git' },
     }, {
