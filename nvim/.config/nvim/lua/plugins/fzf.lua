@@ -9,6 +9,7 @@ return {
     { '<leader>hh', ':FzfLua help_tags<cr>', desc = 'Browse help tags', silent = true },
     { '<leader>i', ':FzfLua oldfiles<cr>', desc = 'Browse recent files', silent = true },
     { '<leader>/', ':FzfLua live_grep<cr>', desc = 'Live Grep', silent = true },
+    { 'z=', ':FzfLua spell_suggest<cr>', desc = 'Spelling suggestions', silent = true },
     {
       '<C-x><C-f>',
       function()
