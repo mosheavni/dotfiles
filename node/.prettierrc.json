@@ -1,7 +1,4 @@
 {
   "editorconfig": true,
-  "bracketSpacing": false,
-  "overrides": [
-    { "files": "*.yaml", "options": { "bracketSpacing": false } }
-  ]
+  "bracketSpacing": false
 }

@@ -1,17 +1,15 @@
 {
-  "rules": {
-    "semi": [
-      "error",
-      "always"
-    ],
-    "quotes": [
-      "error",
-      "double"
-    ]
+  "extends": ["eslint:recommended"],
+  "env": {
+    "node": true,
+    "es2022": true
   },
   "parserOptions": {
     "sourceType": "module",
-    "ecmaVersion": 2020
+    "ecmaVersion": "latest"
   },
-  "parser": "babel-eslint"
+  "rules": {
+    "semi": ["error", "always"],
+    "quotes": ["error", "double"]
+  }
 }
