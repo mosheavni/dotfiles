@@ -1,5 +1,3 @@
-# shellcheck disable=2148,2034,2155,1091,2086,1094
-[[ -n "$ZSH_PROFILE" ]] && zmodload zsh/zprof
 # ================ #
 # Basic ZSH Config #
 # ================ #
