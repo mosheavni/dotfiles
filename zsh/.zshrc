@@ -72,17 +72,18 @@ export cdpath=(. ~ ~/Repos)
 export TMPDIR=$HOME/tmp
 
 # zsh gh copilot configuration
-bindkey '^[|' zsh_gh_copilot_explain # bind Alt+shift+\ to explain
-bindkey '^[\' zsh_gh_copilot_suggest # bind Alt+\ to suggest
+zsh-defer -c '
+  bindkey "^[|" zsh_gh_copilot_explain
+  bindkey "^[\\" zsh_gh_copilot_suggest
+'
 
 # ===================== #
 # Aliases and Functions #
 # ===================== #
-
 for ZSH_FILE in "${ZDOTDIR:-$HOME}"/zsh.d/*.zsh(N); do
     source "${ZSH_FILE}"
 done
-[[ -f $HOME/corp-aliases.sh ]] && source $HOME/corp-aliases.sh
+[[ -f $HOME/corp-aliases.sh ]] && zsh-defer source $HOME/corp-aliases.sh
 
 
 # ================ #
@@ -96,19 +97,6 @@ export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta
 # Starship prompt (loaded synchronously as it's needed immediately)
 eval "$(starship init zsh)"
 
-# Google Cloud SDK - search common install locations
-for gcloud_dir in \
-  "$HOME/google-cloud-sdk" \
-  "$HOME/Downloads/google-cloud-sdk" \
-  "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk" \
-  "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk"; do
-  if [[ -f "$gcloud_dir/path.zsh.inc" ]]; then
-    source "$gcloud_dir/path.zsh.inc"
-    [[ -f "$gcloud_dir/completion.zsh.inc" ]] && source "$gcloud_dir/completion.zsh.inc"
-    break
-  fi
-done
-unset gcloud_dir
 export K8S_DEV=true
 export PR_REVIEW_DEV=true
 export CMP_COMPLETION='<C-Space>'
