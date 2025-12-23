@@ -4,6 +4,9 @@ mattmc3/ez-compinit
 zsh-users/zsh-completions kind:fpath path:src
 RobSis/zsh-completion-generator kind:defer
 
+# defer utility
+romkatv/zsh-defer
+
 loiccoyle/zsh-github-copilot
 ohmyzsh/ohmyzsh path:lib/key-bindings.zsh
 ohmyzsh/ohmyzsh path:plugins/git

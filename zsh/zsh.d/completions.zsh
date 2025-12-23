@@ -30,18 +30,52 @@ fpath+=(
 )
 
 # Group related completions together
-# Infrastructure tools
+# Infrastructure tools (loaded eagerly as they're used frequently)
 complete -o nospace -C terraform terraform
 complete -o nospace -C terragrunt terragrunt
 complete -o nospace -C 'aws_completer' aws
 
+# Lazy load completions - only generate on first use for faster startup
 # Development tools
-load_completion_from_cmd kubectl completion zsh
-load_completion_from_cmd helm completion zsh
-load_completion_from_cmd asdf completion zsh
+kubectl() {
+  unfunction kubectl
+  load_completion_from_cmd kubectl completion zsh
+  kubectl "$@"
+}
+
+helm() {
+  unfunction helm
+  load_completion_from_cmd helm completion zsh
+  helm "$@"
+}
+
+asdf() {
+  unfunction asdf
+  load_completion_from_cmd asdf completion zsh
+  asdf "$@"
+}
 
 # CLI tools
-load_completion_from_cmd gh completion --shell zsh
-load_completion_from_cmd argocd completion zsh
-load_completion_from_cmd wezterm shell-completion --shell zsh
-load_completion_from_cmd op completion zsh
+gh() {
+  unfunction gh
+  load_completion_from_cmd gh completion --shell zsh
+  gh "$@"
+}
+
+argocd() {
+  unfunction argocd
+  load_completion_from_cmd argocd completion zsh
+  argocd "$@"
+}
+
+wezterm() {
+  unfunction wezterm
+  load_completion_from_cmd wezterm shell-completion --shell zsh
+  wezterm "$@"
+}
+
+op() {
+  unfunction op
+  load_completion_from_cmd op completion zsh
+  op "$@"
+}
