@@ -1,4 +1,7 @@
 #!/bin/zsh
+# Guard against re-loading
+[[ -n "$LOADED_ALIASES" ]] && return
+
 #------------------------------------------------------------------------------
 # Core System Command Overrides
 #------------------------------------------------------------------------------
@@ -6,7 +9,6 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias sed=gsed
-alias grep=ggrep
 alias sort=gsort
 alias awk=gawk
 

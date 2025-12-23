@@ -13,7 +13,7 @@ setopt HIST_VERIFY            # Do not execute immediately upon history expansio
 setopt INC_APPEND_HISTORY     # Write to the history file immediately, not when the shell exits.
 setopt SHARE_HISTORY          # Share history between all sessions.
 
-HISTSIZE=10000 # The maximum number of events to save in the internal history.
-SAVEHIST=10000 # The maximum number of events to save in the history file.
+HISTSIZE=100000 # The maximum number of events to save in the internal history.
+SAVEHIST=100000 # The maximum number of events to save in the history file.
 
 alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head -50"

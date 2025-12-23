@@ -1,4 +1,7 @@
 #!/bin/zsh
+# Guard against re-loading
+[[ -n "$LOADED_FUNCTIONS" ]] && return
+
 function take() {
   [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"
 }
@@ -36,7 +39,7 @@ function mwatch() {
 }
 
 function ecr-login() {
-  set -x
+  [[ -n "$DEBUG" ]] && set -x
   region=$1
   if [[ -z $region ]]; then
     region=$(aws configure get region --output text)
@@ -47,7 +50,7 @@ function ecr-login() {
     --password-stdin $(aws sts get-caller-identity | jq \
       -r ".Account").dkr.ecr.${region}.amazonaws.com
   [[ -z $1 ]] && aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-  set +x
+  [[ -n "$DEBUG" ]] && set +x
 }
 
 function clone() {
@@ -64,7 +67,9 @@ function clone() {
       git clone https://github.com/${REPO}.git
       CD_INTO=$(awk -F'/' '{print $2}' <<<$REPO)
     else
-      git clone git@github.com:spotinst/${1}.git
+      # Use GIT_DEFAULT_ORG environment variable
+      GIT_DEFAULT_ORG="${GIT_DEFAULT_ORG:-spotinst-private}"
+      git clone git@github.com:${GIT_DEFAULT_ORG}/${1}.git
     fi
   fi
   echo "CDing into $CD_INTO"
@@ -173,198 +178,28 @@ function cpr() {
   open "https://${git_name}.com/${project_name}/${repo_name}/${pr_link}${branch_name}"
 }
 
-### Kubernetes functions ###
-function kdpw() {
-  n_lines=$(tput lines)
-  # desired_lines is n_lines minus 2
-  desired_lines=$((n_lines - 2))
-  watch "kubectl describe po $* | tail -${desired_lines}"
-}
-
-function grafana_web() {
-  grafana_ingress=$(kubectl get ingress -n monitoring --no-headers -o custom-columns=":metadata.name" | grep -m1 grafana)
-  ingress_host=$(kubectl get ingress -n monitoring "${grafana_ingress}" -ojson | jq -r '.spec.rules[].host')
-  creds=$(kubectl get secret -n monitoring grafana-credentials -ojson | jq '.data | with_entries(.value |= @base64d)')
-  echo "${creds}"
-  jq -r '.password' <<<"${creds}" | pbcopy
-  open "https://${ingress_host}"
-}
-
-function cerebro_web() {
-  cerebro_ingress=$(kubectl get ingress -l app=cerebro -A -ojson | jq -r '.items[].spec.rules[0].host')
-  open https://${cerebro_ingress}
-}
-
-function kibana_web() {
-  kibana_ingress=$(kubectl get ingress -n elastic --no-headers -o custom-columns=":metadata.name" | grep kb-ingress)
-  ingress_host=$(kubectl get ingress -n elastic "${kibana_ingress}" -ojson | jq -r '.spec.rules[].host')
-  creds=$(kubectl get secret -n elastic logs-es-elastic-user -ojson | jq '.data | with_entries(.value |= @base64d)')
-  echo "${creds}"
-  jq -r '.elastic' <<<"${creds}" | pbcopy
-  open "https://${ingress_host}"
-}
-
-function argocd_web() {
-  argocd_ingress=$(kubectl get ingress -n argocd --no-headers -o custom-columns=":metadata.name" | grep argocd-server)
-  ingress_host=https://$(kubectl get ingress -n argocd "${argocd_ingress}" -ojson | jq -r '.spec.rules[].host')
-  creds=$(kubectl get secret -n argocd argocd-initial-admin-secret -ojson | jq '.data | with_entries(.value |= @base64d)')
-
-  # port forward
-  if [[ -n $1 ]] && [[ $1 == "-f" ]]; then
-    set -x
-    kubectl port-forward -n argocd svc/argocd-server 8080:443 &
-    CMDPID=$!
-    set +x
-    ingress_host="http://localhost:8080"
-    echo "waiting for port-forward to start"
-    while ! lsof -nP -iTCP:8080 | grep LISTEN; do
-      echo "port 8080 is still not open"
-      sleep 1
-    done
-    echo "Port forward for svc/argocd-server started on port 8080"
-    echo "To kill, run 'kill $CMDPID' or exit the shell"
-  fi
-  echo "${creds}"
-  jq -r '.password' <<<"${creds}" | pbcopy
-  open "${ingress_host}"
-}
-
-function argocd_login() {
-  argocd_ingress=$(kubectl get ingress -n argocd --no-headers -o custom-columns=":metadata.name" argocd-server)
-  ingress_host=$(kubectl get ingress -n argocd "${argocd_ingress}" -ojson | jq -r '.spec.rules[].host')
-  pass=$(kubectl get secret -n argocd argocd-initial-admin-secret -ojson | jq -r '.data | with_entries(.value |= @base64d) | .password')
-  argocd login --grpc-web "${ingress_host}" --username admin --password "${pass}"
-}
-
-function kgres() {
-  kubectl get pod $* \
-    -ojsonpath='{range .items[*]}{.spec.containers[*].name}{" memory: "}{.spec.containers..resources.requests.memory}{"/"}{.spec.containers..resources.limits.memory}{" | cpu: "}{.spec.containers..resources.requests.cpu}{"/"}{.spec.containers..resources.limits.cpu}{"\n"}{end}' | sort \
-    -u \
-    -k1,1 | column -t
-}
-
-function kubedebug() {
-  # image=gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
-  local image=mosheavni/net-debug:latest
-  local docker_exe=bash
-  local pod_name=debug
-  local kubectl_args=()
-  local processing_k_args=false
-  local sa_override
-  while test $# -gt 0; do
-    if $processing_k_args; then
-      kubectl_args=($kubectl_args $1)
-      shift
-      continue
-    fi
-
-    case $1 in
-    -h | --help)
-      echo "Usage: $0 [-e executable] [-p pod_name] [-i image] [-s service_account] [-- kubernetes_arguments]"
-      echo "  -e  executable        Executable to run in the pod"
-      echo "  -p  pod_name          Pod name"
-      echo "  -i  image             Docker image to run"
-      echo "  -s  service_account   Service account to use"
-      echo "  --  kubectl arguments"
-      return
-      ;;
-      # exe provided
-    -e)
-      shift
-      docker_exe=$1
-      ;;
-    -p)
-      shift
-      pod_name=$1
-      ;;
-    -i)
-      shift
-      image=$1
-      ;;
-    -s)
-      shift
-      sa_override=--overrides="{ \"spec\": { \"serviceAccount\": \"$1\" } }"
-      ;;
-    *)
-      if [[ "$1" == "--" ]]; then
-        processing_k_args=true
-      fi
-      ;;
-    esac
-    shift
-  done
-
-  set -x
-  kubectl run \
-    -i \
-    --rm \
-    --tty \
-    --image=$image \
-    --restart=Never \
-    $sa_override \
-    ${kubectl_args[*]} \
-    $pod_name \
-    -- \
-    $docker_exe
-  set +x
-}
-
-function get_pods_of_svc() {
-  svc_name=$1
-  shift
-  label_selectors=$(kubectl get svc $svc_name $* -ojsonpath="{.spec.selector}" | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" | paste -s -d "," -)
-  kubectl get pod $* -l $label_selectors
-}
-
-function kgel() {
-  if [[ -z $1 ]]; then
-    echo "Usage: $0 <pod_name>"
-    return
-  fi
-  kubectl get pod $* -ojson | jq -r '.metadata.labels | to_entries | .[] | "\(.key)=\(.value)"'
-}
-
-function mkdp() {
-  kubectl get pod --no-headers | fzf | awk '{print $1}' | xargs -n 1 kubectl describe pod
-}
-
-function mklf() {
-  substring=$1
-  if [[ -z $substring ]]; then
-    substring='.*'
-  fi
-  deployment=$(kubectl get deploy,sd --no-headers | grep $substring | fzf | awk '{print $1}')
-
-  pod_labels=$(kubectl get $deployment -ojsonpath='{.spec.template.metadata.labels}' | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]" | paste -s -d "," -)
-
-  pod_or_all=$(echo -e "$(kubectl get pod --no-headers -l "$pod_labels")\nAll" | fzf | awk '{print $1}')
-
-  since=$(echo -e "All\n1h\n1d\n1w\n1m\n1y" | fzf)
-
-  if [[ $since == "All" ]]; then
-    since=""
-  else
-    since="--since=$since"
-  fi
-
-  set -x
-  if [[ $pod_or_all == "All" ]]; then
-    kubectl logs -f -l $pod_labels $since
-  else
-    kubectl logs -f $pod_or_all $since
-  fi
-  set +x
-}
-
 # debug nvim startup time
 function nvim-startuptime() {
   cat /dev/null >startuptime.txt && nvim --startuptime startuptime.txt "$@"
 }
 
 function zip-code() {
-  ZIP_CODE=$(curl -s 'https://www.zipy.co.il/api/findzip/getZip' -H 'content-type: text/plain;charset=UTF-8' -H 'referer: https://www.zipy.co.il/%D7%9E%D7%99%D7%A7%D7%95%D7%93/' --data-raw '{"city":"תל אביב","street":"פלורנטין","house":"2","remote":true}' | jq -r '.result.zip')
-  echo "$ZIP_CODE"
-  echo "$ZIP_CODE" | pbcopy
+curl -s 'https://apimftprd.israelpost.co.il/mypost-zip/SearchZip' \
+  -H 'accept: application/json, text/plain, */*' \
+  -H 'accept-language: en-US,en;q=0.9,ru;q=0.8' \
+  -H 'authorization: Bearer null' \
+  -H 'content-type: application/json' \
+  -H 'ocp-apim-subscription-key: 5ccb5b137e7444d885be752eda7f767a' \
+  -H 'origin: https://doar.israelpost.co.il' \
+  -H 'priority: u=1, i' \
+  -H 'sec-ch-ua: "Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: same-site' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36' \
+  --data-raw '{"CityID":"1212","StreetID":"104347","House":"2","Entry":"א","ByMaanimID":true}' | jq
 }
 
 function matrix() {
@@ -404,18 +239,6 @@ function matrix() {
     echo $lines $cols $(($RANDOM % $cols)) $(($RANDOM % 72))
     sleep 0.05
   done | awk "$awkscript"
-}
-
-function man() {
-  env \
-    LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-    LESS_TERMCAP_md=$(printf "\e[1;31m") \
-    LESS_TERMCAP_me=$(printf "\e[0m") \
-    LESS_TERMCAP_se=$(printf "\e[0m") \
-    LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-    LESS_TERMCAP_ue=$(printf "\e[0m") \
-    LESS_TERMCAP_us=$(printf "\e[1;32m") \
-    man "$@"
 }
 
 export LOADED_FUNCTIONS=true

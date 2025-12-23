@@ -5,10 +5,10 @@ if [[ ! -f "$FZF_ZSH_CACHE" ]] || [[ $(find "$FZF_ZSH_CACHE" -mtime +30 2>/dev/n
 fi
 source "$FZF_ZSH_CACHE"
 
-export FZF_DEFAULT_OPTS='--height=100% --layout=reverse --border --info=inline'
+export FZF_DEFAULT_OPTS='--height=100% --layout=reverse --border --info=inline --highlight-line'
 export FZF_CTRL_T_COMMAND='rg --color=never --files --hidden --follow -g "!.git"'
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers,changes {}' --walker-skip .git,node_modules"
-export FZF_CTRL_R_OPTS="--ansi --color=hl:underline,hl+:underline,header:italic --header 'Press CTRL-Y to copy command into clipboard' --preview 'echo {2..} | bat --color=always -pl bash' --preview-window 'down:4:wrap' --bind 'ctrl-/:toggle-preview' --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort' --prompt='History> '"
+export FZF_CTRL_R_OPTS="--scheme=history --ansi --color=hl:underline,hl+:underline,header:italic --header 'Press CTRL-Y to copy command into clipboard' --preview 'echo {2..} | bat --color=always -pl bash' --preview-window 'down:4:wrap' --bind 'ctrl-/:toggle-preview' --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort' --prompt='History> '"
 
 function fzf-rm() {
   if [[ "$#" -eq 0 ]]; then
