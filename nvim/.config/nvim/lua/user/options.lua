@@ -1,5 +1,3 @@
-vim.o.compatible = false
-vim.g.python3_host_prog = 'python3'
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
 
@@ -18,7 +16,13 @@ vim.o.titlestring = '%{CleanTitle()}'
 vim.o.title = true -- Changes the wezterm title
 vim.o.cursorcolumn = true
 vim.o.cursorline = true -- Add highlight behind current line
-vim.opt.shortmess:append { c = true, l = false, q = false, S = false, C = true, I = true }
+vim.o.jumpoptions = 'stack'
+vim.opt.shortmess:append {
+  c = true, -- no completion messages
+  C = true, -- no ins-completion-menu messages
+  I = true, -- no intro
+  S = true, -- no search count overflow
+}
 vim.o.list = true -- Show some invisible characters (tabs...
 vim.opt.listchars = {
   -- trail = '·',
@@ -55,6 +59,8 @@ vim.opt.diffopt = {
   'vertical',
   'algorithm:histogram',
   'inline:char',
+  'context:6',
+  'iwhite',
 }
 
 vim.o.splitkeep = 'screen'
@@ -82,11 +88,11 @@ vim.o.pumheight = 10 -- pop up menu height
 vim.o.pumborder = 'rounded' -- Popup border style
 vim.o.pumblend = 40 -- Popup blend
 vim.o.confirm = true -- Prompt confirmation if exiting unsaved file
-vim.o.lazyredraw = false -- redraw only when we need to.
+vim.o.lazyredraw = true -- redraw only when we need to.
 vim.o.swapfile = false
-vim.o.backup = false
+vim.o.backup = true
+vim.o.writebackup = true
 vim.o.backupdir = vim.fn.stdpath 'state' .. '/backup'
-vim.o.writebackup = false
 vim.o.wildmenu = true -- Displays a menu on autocomplete
 vim.opt.wildoptions:append { 'fuzzy', 'pum' }
 vim.opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
@@ -117,14 +123,15 @@ vim.opt.nrformats:append 'blank'
 
 -- Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
 vim.o.updatetime = 300
+vim.o.timeoutlen = 400
 
 -- Ignore node_modules and other dirs
 vim.opt.wildignore:append { '**/node_modules/**', '.hg', '.git', '.svn', '*.DS_Store', '*.pyc' }
 vim.opt.path:append { '**' }
 
 -- Folding
-vim.o.foldenable = true
-vim.opt.foldmethod = 'expr'
+vim.o.foldenable = false
+vim.o.foldmethod = 'manual'
 vim.o.foldlevel = 999
 vim.o.foldlevelstart = 99
 vim.o.foldcolumn = '1' -- '0' is not bad
@@ -165,26 +172,17 @@ function _G.custom_foldtext()
 end
 vim.opt.foldtext = 'v:lua.custom_foldtext()'
 
--- Support undercurl
-vim.cmd [[
-let &t_8u = "\e[58:2:%lu:%lu:%lum"
-let &t_Cs = "\e[4:3m"
-let &t_Ce = "\e[4:0m"
-]]
-
 -- j = Delete comment character when joining commented lines.
 -- t = auto break long lines
 -- r = auto insert comment leader after <Enter> (insert mode)
 -- o = auto insert comment leader after o (normal mode)
 -- l = don't break long lines
--- t = Auto-wrap text using 'textwidth'
 vim.opt.formatoptions:append {
   c = true,
   j = true,
   l = true,
   o = true,
   r = true,
-  t = true,
 }
 
 -- Indenting
