@@ -72,7 +72,7 @@ local treesitter_plugin = {
       'jinja_inline',
       'jq',
       'json',
-      'jsonc',
+      'json5',
       'lua',
       'luadoc',
       'luap',
