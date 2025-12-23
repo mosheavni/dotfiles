@@ -72,6 +72,10 @@
       ],
       "command": "npx"
     },
+    "puppeteer": {
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "command": "npx"
+    },
     "selenium": {
       "args": ["-y", "@angiejones/mcp-selenium"],
       "autoApprove": [

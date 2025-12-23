@@ -1,103 +1,12 @@
 {
+  "enabledPlugins": {
+    "feature-dev@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "vercel@claude-plugins-official": true
+  },
   "alwaysThinkingEnabled": true,
-  "mcpServers": {
-    "aws-knowledge-mcp-server": {
-      "args": ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"],
-      "autoApprove": [
-        "aws___get_regional_availability",
-        "aws___list_regions",
-        "aws___read_documentation",
-        "aws___recommend",
-        "aws___search_documentation"
-      ],
-      "command": "uvx"
-    },
-    "awslabs.aws-api-mcp-server": {
-      "args": ["awslabs.aws-api-mcp-server@latest"],
-      "command": "uvx"
-    },
-    "awslabs.cloudwatch-mcp-server": {
-      "args": ["awslabs.cloudwatch-mcp-server@latest"],
-      "autoApprove": [],
-      "command": "uvx",
-      "disabled": false,
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      },
-      "transportType": "stdio"
-    },
-    "awslabs.eks-mcp-server": {
-      "args": [
-        "awslabs.eks-mcp-server@latest",
-        "--allow-write",
-        "--allow-sensitive-data-access"
-      ],
-      "autoApprove": [],
-      "command": "uvx",
-      "disabled": false,
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      }
-    },
-    "fetch": {
-      "args": ["mcp-server-fetch"],
-      "command": "uvx"
-    },
-    "kubernetes": {
-      "args": ["mcp-server-kubernetes"],
-      "autoApprove": [
-        "explain_resource",
-        "kubectl_describe",
-        "kubectl_get",
-        "kubectl_logs",
-        "list_api_resources",
-        "ping"
-      ],
-      "command": "npx",
-      "env": {
-        "ALLOW_ONLY_NON_DESTRUCTIVE_TOOLS": "true"
-      }
-    },
-    "memory": {
-      "args": ["-y", "@modelcontextprotocol/server-memory"],
-      "autoApprove": [
-        "create_entities",
-        "create_relations",
-        "add_observations",
-        "delete_entities",
-        "delete_observations",
-        "delete_relations",
-        "read_graph",
-        "search_nodes",
-        "open_nodes"
-      ],
-      "command": "npx"
-    },
-    "selenium": {
-      "args": ["-y", "@angiejones/mcp-selenium"],
-      "autoApprove": [
-        "take_screenshot",
-        "start_browser",
-        "send_keys",
-        "right_click",
-        "press_key",
-        "navigate",
-        "hover",
-        "get_element_text",
-        "find_element",
-        "drag_and_drop",
-        "double_click",
-        "close_session",
-        "click_element",
-        "upload_file"
-      ],
-      "command": "npx",
-      "disabled_tools": []
-    },
-    "sequentialthinking": {
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
-      "autoApprove": ["sequentialthinking"],
-      "command": "npx"
-    }
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); dir_display=$(echo \"${cwd/#$HOME/\\~}\" | awk -F/ '{if (NF > 8) {printf \"…/\"; for(i=NF-7;i<=NF;i++) printf \"%s%s\", $i, (i<NF?\"/\":\"\"); print \"\"} else print}'); output=\"$dir_display\"; if cd \"$cwd\" 2>/dev/null && git rev-parse --git-dir > /dev/null 2>&1; then branch=$(git -c gc.auto=0 symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null); [ -n \"$branch\" ] && output=\"$output on $branch\"; fi; if command -v kubectl &> /dev/null; then k8s_context=$(kubectl config current-context 2>/dev/null); if [ -n \"$k8s_context\" ]; then k8s_namespace=$(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null); k8s_namespace=${k8s_namespace:-default}; output=\"$output (☸ $k8s_context:$k8s_namespace)\"; fi; fi; [ -n \"$AWS_PROFILE\" ] && output=\"$output (☁️  $AWS_PROFILE)\"; echo \"$output\""
   }
 }
