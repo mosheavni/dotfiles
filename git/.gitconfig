@@ -1,6 +1,6 @@
 [core]
   excludesfile = ~/.gitignore_global
-  pager = nvim -R +'set ft=diff' +'set nomodifiable' +'nnoremap q :q!<CR>'
+  pager        = delta
   editor       = nvim
 
 [user]
@@ -11,7 +11,11 @@
   defaultRemote = origin
 
 [pull]
-  rebase = false
+  rebase = true
+
+[rebase]
+  autoStash  = true
+  autoSquash = true
 
 [push]
   autoSetupRemote = true
@@ -97,7 +101,7 @@
   conflictstyle = diff3
 
 [diff]
-  colorMoved = default
+  colorMoved = zebra
 
 [color]
   branch      = true
