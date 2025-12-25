@@ -120,5 +120,10 @@ return {
         vim.notify('Kubernetes api-resources cache loaded', vim.log.levels.INFO)
       end,
     })
+
+    -- create a user cmd KubectlToggle to start the plugin
+    vim.api.nvim_create_user_command('KubectlToggle', function()
+      require('kubectl').toggle { tab = true }
+    end, {})
   end,
 }
