@@ -41,6 +41,7 @@ end
 
 local M = {
   'mfussenegger/nvim-dap',
+  enabled = false,
   init = function()
     vim.api.nvim_create_user_command('DAP', function()
       require 'dap'
