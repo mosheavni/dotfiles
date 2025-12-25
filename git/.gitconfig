@@ -11,11 +11,7 @@
   defaultRemote = origin
 
 [pull]
-  rebase = true
-
-[rebase]
-  autoStash  = true
-  autoSquash = true
+  rebase = false
 
 [push]
   autoSetupRemote = true
