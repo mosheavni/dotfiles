@@ -18,31 +18,26 @@ local function get_lsp_names(clients)
   )
 end
 
-_G.fmt_lsp = ''
-_G.fmt_conform = ''
-local function notify_format(err, did_format)
-  if not did_format then
-    return
-  end
-  local formatter_names
-  if _G.fmt_lsp ~= '' then
-    formatter_names = _G.fmt_lsp
-    _G.fmt_lsp = ''
+local function get_formatter_names(bufnr)
+  local fmts, is_lsp = require('conform').list_formatters_to_run(bufnr)
+  if is_lsp then
+    return get_lsp_names(get_lsp_formatters(bufnr))
   else
-    local fmts, is_lsp = require('conform').list_formatters_to_run()
-    if is_lsp then
-      formatter_names = get_lsp_names(get_lsp_formatters())
-    else
-      formatter_names = _G.fmt_conform ~= '' and _G.fmt_conform or get_lsp_names(fmts)
-      _G.fmt_conform = ''
-    end
+    return get_lsp_names(fmts)
   end
-  if err then
-    vim.notify(string.format('Error formatting: %s (%s)', err, formatter_names))
-    return
-  end
+end
 
-  vim.notify(string.format('Formatted using %s', formatter_names))
+local function create_notify_callback(formatter_name)
+  return function(err, did_format)
+    if not did_format then
+      return
+    end
+    if err then
+      vim.notify(string.format('Error formatting: %s (%s)', err, formatter_name))
+      return
+    end
+    vim.notify(string.format('Formatted using %s', formatter_name))
+  end
 end
 
 return {
@@ -57,8 +52,8 @@ return {
         local lsp_fmts = get_lsp_formatters(vim.api.nvim_get_current_buf())
 
         vim.ui.select(vim.list_extend(lsp_fmts, conform_fmts), {
-          prompt = 'Select LSP client❯ ',
-          title = 'LSP clients',
+          prompt = 'Select formatter❯ ',
+          title = 'Formatters',
           format_item = function(client)
             return client.name
           end,
@@ -74,12 +69,9 @@ return {
 
           if client.type == 'lsp' then
             conform_opts = { formatters = {}, lsp_format = 'prefer' }
-            _G.fmt_lsp = client.name
-          else
-            _G.fmt_conform = client.name
           end
 
-          require('conform').format(conform_opts, notify_format)
+          require('conform').format(conform_opts, create_notify_callback(client.name))
         end)
       end,
       mode = '',
@@ -131,13 +123,17 @@ return {
       return {
         lsp_format = 'fallback',
         timeout_ms = 5000,
-      },
-        ---@diagnostic disable-next-line: redundant-return-value
-        notify_format
+      }
+    end,
+    format_after_save = function(bufnr)
+      local formatter_names = get_formatter_names(bufnr)
+      if formatter_names ~= '' then
+        vim.notify(string.format('Formatted using %s', formatter_names))
+      end
     end,
     formatters = {},
   },
   init = function()
-    vim.o.formatexpr = "v:lua.require'conform'.formatexpr({timeout_ms=5000})"
+    vim.o.formatexpr = "v:lua.require'conform'.formatexpr({lsp_format='fallback',timeout_ms=5000})"
   end,
 }
