@@ -1,14 +1,9 @@
----@class EasyMotionOpts
----@field chars? string Characters to use for overlays (default: 'fjdkslgha;rueiwotyqpvbcnxmzFJDKSLGHARUEIWOTYQPVBCNXMZ')
----@field keymap? string Keymap to trigger easymotion (default: 'S')
----@field modes? string[] Vim modes to enable the keymap in (default: { 'n', 'x' })
-
 local M = {}
 
 ---@type integer
-local EASYMOTION_NS
+local EASYMOTION_NS = vim.api.nvim_create_namespace 'EASYMOTION_NS'
 ---@type string[]
-local EM_CHARS
+local EM_CHARS = vim.split('fjdkslgha;rueiwotyqpvbcnxmzFJDKSLGHARUEIWOTYQPVBCNXMZ', '')
 
 --- Jump to a location by typing 2 characters
 --- If only one match is found, jumps automatically
@@ -106,23 +101,6 @@ function M.easy_motion()
     -- clear extmarks
     vim.api.nvim_buf_clear_namespace(0, EASYMOTION_NS, 0, -1)
   end)
-end
-
---- Initialize the easymotion plugin
---- Must be called before using easymotion
----@param opts? EasyMotionOpts Configuration options
-function M.setup(opts)
-  opts = opts or {}
-
-  EASYMOTION_NS = vim.api.nvim_create_namespace 'EASYMOTION_NS'
-  EM_CHARS = vim.split(opts.chars or 'fjdkslgha;rueiwotyqpvbcnxmzFJDKSLGHARUEIWOTYQPVBCNXMZ', '')
-
-  ---@type string
-  local keymap = opts.keymap or 's'
-  ---@type string[]
-  local modes = opts.modes or { 'n', 'x' }
-
-  vim.keymap.set(modes, keymap, M.easy_motion, { desc = 'Jump to 2 characters' })
 end
 
 return M

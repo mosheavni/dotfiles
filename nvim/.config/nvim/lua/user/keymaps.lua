@@ -411,7 +411,9 @@ require('user.grep').setup()
 ----------------
 -- EasyMotion --
 ----------------
-require('user.easymotion').setup()
+map({ 'n', 'x' }, 's', function()
+  require('user.easymotion').easy_motion()
+end, { desc = 'Jump to 2 characters' })
 
 ------------------------
 -- Run current buffer --
