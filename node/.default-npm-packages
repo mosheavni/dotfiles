@@ -2,10 +2,11 @@ compare-versions
 dockerfile-language-server-nodejs
 eslint
 eslint-config-react-app
+mcp-hub@latest
 neovim
 npm
 quicktype
 typescript
 vscode-css-languageservice
+vscode-json-languageserver
 yarn
-mcp-hub@latest
