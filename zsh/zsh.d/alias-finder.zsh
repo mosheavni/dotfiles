@@ -47,4 +47,3 @@ function expand-aliases-widget() {
 zle -N expand-aliases-widget
 
 bindkey '^X^A' expand-aliases-widget
-

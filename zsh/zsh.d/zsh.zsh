@@ -16,4 +16,3 @@ copy-line-to-clipboard() {
 }
 zle -N copy-line-to-clipboard
 bindkey '^Y' copy-line-to-clipboard
-
