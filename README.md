@@ -12,63 +12,63 @@
 
 0. Install xcode-select (for basically everything…)
 
-   ```bash
-   xcode-select --install
-   ```
+    ```bash
+    xcode-select --install
+    ```
 
 1. Install [Homebrew](https://brew.sh/)
 
-   ```bash
-   /bin/bash -c \
-     "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-   eval "$(/opt/homebrew/bin/brew shellenv)" # to make brew available before we load `~/.zshrc` that has "$PATH"
-   brew update
-   brew install git stow
-   ```
+    ```bash
+    /bin/bash -c \
+      "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)" # to make brew available before we load `~/.zshrc` that has "$PATH"
+    brew update
+    brew install git stow
+    ```
 
 2. Clone this repo:
 
-   ```bash
-   [[ -d ~/Repos ]] || mkdir ~/Repos
-   cd ~ && git clone git@github.com:mosheavni/dotfiles.git .dotfiles && cd .dotfiles
-   ```
+    ```bash
+    [[ -d ~/Repos ]] || mkdir ~/Repos
+    cd ~ && git clone git@github.com:mosheavni/dotfiles.git .dotfiles && cd .dotfiles
+    ```
 
 3. Install [antidote](https://antidote.sh/)
 
-   ```bash
-   git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
-   ```
+    ```bash
+    git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
+    ```
 
 4. Stow the .dotfiles and reload the shell:
 
-   ```bash
-   ./start.sh
-   source ~/.zshrc
-   ```
+    ```bash
+    ./start.sh
+    source ~/.zshrc
+    ```
 
 5. Install brew dependencies (generated with `brew bundle dump`)
 
-   ```bash
-   brew bundle
-   ```
+    ```bash
+    brew bundle
+    ```
 
 6. Open [Wezterm](https://wezfurlong.org/wezterm/index.html) and start using a real terminal.
 
 7. Install [asdf-vm](https://asdf-vm.com/guide/getting-started.html) plugins
 
-   ```bash
-   cd ~/.dotfiles
-   while read -r plugin_line; do
-     asdf plugin add $(awk '{print $1}' <<<"$plugin_line")
-   done <asdf/.tool-versions
-   asdf install
-   ```
+    ```bash
+    cd ~/.dotfiles
+    while read -r plugin_line; do
+      asdf plugin add $(awk '{print $1}' <<<"$plugin_line")
+    done <asdf/.tool-versions
+    asdf install
+    ```
 
 8. Add support for recently installed [fzf](https://github.com/junegunn/fzf)
 
     ```bash
     $(brew --prefix)/opt/fzf/install
-    ```
+     ```
 
 9. Login to gh cli
 
