@@ -72,7 +72,7 @@ M.config = function()
     end
 
     if #result > 0 then
-      return table.concat(result, ' '), 'MiniStatuslineDevinfo'
+      return table.concat(result, ' ') .. '%#MiniStatuslineDevinfo#'
     end
     return ''
   end
