@@ -26,7 +26,7 @@
     brew install git stow
     ```
 
-2. Clone this repo:
+2. Clone this repository:
 
     ```bash
     [[ -d ~/Repos ]] || mkdir ~/Repos
@@ -76,7 +76,7 @@
     gh auth login --web -h github.com
     ```
 
-10. Install gh [github cli copilot extension](https://github.com/github/gh-copilot)
+10. Install gh [Github cli copilot extension](https://github.com/github/gh-copilot)
 
     ```bash
     gh extension install github/gh-copilot --force
@@ -106,7 +106,7 @@ NVIM_APPNAME=mosheavni/dotfiles/nvim/.config/nvim nvim
 
 - Adjust dock and keyboard settings
 
-- Download and install [docker](https://www.docker.com/products/docker-desktop)
+- Download and install [Docker](https://www.docker.com/products/docker-desktop)
 
 - Change clipy and maccy shortcuts, and load snippets
 
