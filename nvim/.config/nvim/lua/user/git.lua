@@ -72,7 +72,7 @@ end
 
 M.get_branch = function(cb)
   run_git({ 'branch', '--show-current' }, nil, function(branch)
-    local branch = vim.trim(branch)
+    branch = vim.trim(branch)
     if branch == '' then
       M.get_short_commit(function(commit_hash)
         M.prnt('No branch found, using commit hash: ' .. commit_hash)
