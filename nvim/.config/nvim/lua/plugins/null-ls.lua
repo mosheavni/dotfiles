@@ -25,6 +25,7 @@ M.config = function()
       null_ls.builtins.diagnostics.npm_groovy_lint,
       null_ls.builtins.diagnostics.terragrunt_validate,
       null_ls.builtins.diagnostics.selene,
+      null_ls.builtins.diagnostics.actionlint,
       null_ls.builtins.hover.printenv,
     },
   }

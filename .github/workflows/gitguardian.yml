@@ -6,11 +6,14 @@ jobs:
   scanning:
     name: GitGuardian scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0 # fetch all history so multiple commits can be scanned
+          persist-credentials: false
       - name: GitGuardian scan
         uses: GitGuardian/gg-shield-action@master
         env:
