@@ -1,3 +1,5 @@
+[![Super-Linter](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
 # Moshe Avni's DotFiles
 
 <a href="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim"><img src="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim/badges/plugins?style=flat" /></a>
