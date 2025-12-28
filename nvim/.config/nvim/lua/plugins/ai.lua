@@ -193,7 +193,14 @@ return {
       {
         -- support for image pasting
         'HakonHarnes/img-clip.nvim',
-        keys = { { '<leader>p', '<cmd>PasteImage<cr>', desc = 'Paste image from system clipboard', ft = { 'AvanteInput' } } },
+        keys = {
+          {
+            '<leader>p',
+            '<cmd>PasteImage<cr>',
+            desc = 'Paste image from system clipboard',
+            ft = { 'AvanteInput' },
+          },
+        },
         opts = {
           -- recommended settings
           default = {

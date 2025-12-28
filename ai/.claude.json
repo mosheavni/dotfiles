@@ -1,5 +1,5 @@
 {
-  "numStartups": 41,
+  "numStartups": 48,
   "installMethod": "native",
   "autoUpdates": false,
   "theme": "dark-daltonized",
@@ -9,39 +9,39 @@
     "plan-mode-for-complex-tasks": 30,
     "terminal-setup": 1,
     "shift-enter-setup": 1,
-    "memory-command": 31,
+    "memory-command": 46,
     "theme-command": 41,
     "status-line": 26,
-    "stickers-command": 22,
+    "stickers-command": 42,
     "prompt-queue": 3,
-    "enter-to-steer-in-relatime": 23,
-    "todo-list": 23,
-    "ide-upsell-external-terminal": 41,
+    "enter-to-steer-in-relatime": 43,
+    "todo-list": 43,
+    "ide-upsell-external-terminal": 46,
     "# for memory": 34,
-    "install-github-app": 35,
-    "drag-and-drop-images": 35,
-    "paste-images-mac": 35,
-    "double-esc-code-restore": 35,
-    "continue": 35,
-    "shift-tab": 35,
-    "image-paste": 24,
+    "install-github-app": 45,
+    "drag-and-drop-images": 45,
+    "paste-images-mac": 45,
+    "double-esc-code-restore": 45,
+    "continue": 45,
+    "shift-tab": 45,
+    "image-paste": 44,
     "tab-toggle-thinking": 26,
-    "ultrathink-keyword": 36,
-    "shift-enter": 36,
+    "ultrathink-keyword": 46,
+    "shift-enter": 46,
     "custom-agents": 37,
-    "default-permission-mode-config": 33,
-    "permissions": 33,
-    "custom-commands": 28,
+    "default-permission-mode-config": 43,
+    "permissions": 43,
+    "custom-commands": 43,
     "frontend-design-plugin": 41,
     "rename-conversation": 34,
-    "config-thinking-mode": 34,
-    "install-slack-app": 36,
+    "config-thinking-mode": 44,
+    "install-slack-app": 46,
     "btw-side-question": 36,
     "desktop-app": 36,
     "web-app": 36,
     "mobile-app": 36
   },
-  "promptQueueUseCount": 20,
+  "promptQueueUseCount": 23,
   "showExpandedTodos": true,
   "cachedStatsigGates": {
     "tengu_tool_pear": false,
@@ -55,7 +55,7 @@
     "tengu_sumi": false,
     "tengu_react_vulnerability_warning": false,
     "tengu_prompt_suggestion": true,
-    "tengu_year_end_2025_campaign_promo": false
+    "tengu_year_end_2025_campaign_promo": true
   },
   "cachedDynamicConfigs": {
     "tengu_1p_event_batch_config": {
@@ -256,17 +256,17 @@
       ],
       "exampleFilesGeneratedAt": 1766505406703,
       "lastTotalWebSearchRequests": 0,
-      "lastCost": 0.009586250000000001,
-      "lastAPIDuration": 9715,
-      "lastToolDuration": 0,
-      "lastDuration": 61345,
-      "lastLinesAdded": 0,
-      "lastLinesRemoved": 0,
-      "lastTotalInputTokens": 919,
-      "lastTotalOutputTokens": 386,
-      "lastTotalCacheCreationInputTokens": 1043,
-      "lastTotalCacheReadInputTokens": 0,
-      "lastSessionId": "f199aafb-c094-4e85-b7ba-31d5f8f4e706",
+      "lastCost": 0.5643441499999999,
+      "lastAPIDuration": 215467,
+      "lastToolDuration": 96,
+      "lastDuration": 1000895,
+      "lastLinesAdded": 27,
+      "lastLinesRemoved": 29,
+      "lastTotalInputTokens": 1643,
+      "lastTotalOutputTokens": 8527,
+      "lastTotalCacheCreationInputTokens": 60533,
+      "lastTotalCacheReadInputTokens": 700258,
+      "lastSessionId": "9cbac68a-62be-4c55-815e-9ba11be8b8ce",
       "reactVulnerabilityCache": {
         "detected": false,
         "package": null,
@@ -274,23 +274,23 @@
         "version": null,
         "packageManager": null
       },
-      "lastAPIDurationWithoutRetries": 9698,
+      "lastAPIDurationWithoutRetries": 215442,
       "lastModelUsage": {
         "claude-haiku-4-5-20251001": {
-          "inputTokens": 916,
-          "outputTokens": 104,
+          "inputTokens": 1508,
+          "outputTokens": 255,
           "cacheReadInputTokens": 0,
           "cacheCreationInputTokens": 0,
           "webSearchRequests": 0,
-          "costUSD": 0.001436
+          "costUSD": 0.002783
         },
         "claude-sonnet-4-5-20250929": {
-          "inputTokens": 3,
-          "outputTokens": 282,
-          "cacheReadInputTokens": 0,
-          "cacheCreationInputTokens": 1043,
+          "inputTokens": 135,
+          "outputTokens": 8272,
+          "cacheReadInputTokens": 700258,
+          "cacheCreationInputTokens": 60533,
           "webSearchRequests": 0,
-          "costUSD": 0.008150250000000001
+          "costUSD": 0.56156115
         }
       },
       "disabledMcpServers": []
@@ -452,24 +452,50 @@
       "hasClaudeMdExternalIncludesWarningShown": false,
       "exampleFiles": [
         "spotinst-gateway.yaml",
-        "dwh-airflow.yaml",
         "validate-confs.py",
         "argo-cd.yaml",
-        "jenkins.yaml"
+        "spotinst-monitor.yaml",
+        "spotinst-api.yaml"
       ],
-      "exampleFilesGeneratedAt": 1765962637836,
-      "lastCost": 0.7115221500000001,
-      "lastAPIDuration": 186513,
-      "lastToolDuration": 1349,
-      "lastDuration": 18587895,
-      "lastLinesAdded": 4,
+      "exampleFilesGeneratedAt": 1766652874206,
+      "lastCost": 0.39060065000000005,
+      "lastAPIDuration": 87818,
+      "lastToolDuration": 1103,
+      "lastDuration": 168264,
+      "lastLinesAdded": 35,
       "lastLinesRemoved": 0,
-      "lastTotalInputTokens": 31943,
-      "lastTotalOutputTokens": 8602,
-      "lastTotalCacheCreationInputTokens": 110743,
-      "lastTotalCacheReadInputTokens": 461583,
+      "lastTotalInputTokens": 36868,
+      "lastTotalOutputTokens": 3779,
+      "lastTotalCacheCreationInputTokens": 54651,
+      "lastTotalCacheReadInputTokens": 330188,
       "lastTotalWebSearchRequests": 0,
-      "lastSessionId": "c991c66f-ce4f-4c9c-87db-78a28ab4dad6"
+      "lastSessionId": "6bcc7546-bce2-4990-aca7-3c59af2d0bc6",
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageName": null,
+        "version": null,
+        "packageManager": null
+      },
+      "lastAPIDurationWithoutRetries": 87804,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "inputTokens": 36813,
+          "outputTokens": 706,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.040343000000000004
+        },
+        "claude-sonnet-4-5-20250929": {
+          "inputTokens": 55,
+          "outputTokens": 3073,
+          "cacheReadInputTokens": 330188,
+          "cacheCreationInputTokens": 54651,
+          "webSearchRequests": 0,
+          "costUSD": 0.35025765
+        }
+      }
     },
     "/Users/Moshe.Avni/Downloads/batya-edited": {
       "allowedTools": [],
@@ -570,6 +596,204 @@
         }
       },
       "lastSessionId": "c437c4ae-e105-4825-ba48-c703816cf173"
+    },
+    "/Users/Moshe.Avni/Repos/kubectl.nvim": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageName": null,
+        "version": null,
+        "packageManager": null
+      },
+      "exampleFiles": [
+        "init.lua",
+        "mappings.lua",
+        "resourcebuilder.lua",
+        "buffers.lua",
+        "actions.lua"
+      ],
+      "exampleFilesGeneratedAt": 1766651981644,
+      "hasCompletedProjectOnboarding": true,
+      "lastCost": 4.227230049999999,
+      "lastAPIDuration": 1004826,
+      "lastAPIDurationWithoutRetries": 1000136,
+      "lastToolDuration": 485448,
+      "lastDuration": 40954073,
+      "lastLinesAdded": 232,
+      "lastLinesRemoved": 36,
+      "lastTotalInputTokens": 40732,
+      "lastTotalOutputTokens": 45201,
+      "lastTotalCacheCreationInputTokens": 402003,
+      "lastTotalCacheReadInputTokens": 8848659,
+      "lastTotalWebSearchRequests": 0,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "inputTokens": 40065,
+          "outputTokens": 12233,
+          "cacheReadInputTokens": 1440212,
+          "cacheCreationInputTokens": 97835,
+          "webSearchRequests": 0,
+          "costUSD": 0.3675449500000002
+        },
+        "claude-sonnet-4-5-20250929": {
+          "inputTokens": 667,
+          "outputTokens": 32968,
+          "cacheReadInputTokens": 7408447,
+          "cacheCreationInputTokens": 304168,
+          "webSearchRequests": 0,
+          "costUSD": 3.859685099999999
+        }
+      },
+      "lastSessionId": "92445b00-968d-4cc9-bead-52ab5319fc9b"
+    },
+    "/Users/Moshe.Avni/.config/lightvim": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageName": null,
+        "version": null,
+        "packageManager": null
+      },
+      "exampleFiles": [
+        "keymaps.lua",
+        "lsp.lua",
+        "init.lua",
+        "options.lua",
+        "packs.lua"
+      ],
+      "exampleFilesGeneratedAt": 1766741245431
+    },
+    "/Users/Moshe.Avni/.local/share/nvim/lazy/none-ls.nvim": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageName": null,
+        "version": null,
+        "packageManager": null
+      },
+      "exampleFiles": [
+        "BUILTINS.md",
+        "filetype_map.lua",
+        "client.lua",
+        "prettier.lua",
+        "loop.lua"
+      ],
+      "exampleFilesGeneratedAt": 1766921310944,
+      "lastCost": 1.4819679000000001,
+      "lastAPIDuration": 359670,
+      "lastAPIDurationWithoutRetries": 356474,
+      "lastToolDuration": 26490,
+      "lastDuration": 1571223,
+      "lastLinesAdded": 105,
+      "lastLinesRemoved": 54,
+      "lastTotalInputTokens": 17313,
+      "lastTotalOutputTokens": 15141,
+      "lastTotalCacheCreationInputTokens": 121772,
+      "lastTotalCacheReadInputTokens": 2593683,
+      "lastTotalWebSearchRequests": 0,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "inputTokens": 12763,
+          "outputTokens": 631,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.015917999999999998
+        },
+        "claude-sonnet-4-5-20250929": {
+          "inputTokens": 4550,
+          "outputTokens": 14510,
+          "cacheReadInputTokens": 2593683,
+          "cacheCreationInputTokens": 121772,
+          "webSearchRequests": 0,
+          "costUSD": 1.4660499
+        }
+      },
+      "lastSessionId": "0cccd016-48f7-4f1e-b5b5-d123914f5166"
+    },
+    "/Users/Moshe.Avni/Repos/none-ls.nvim": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageName": null,
+        "version": null,
+        "packageManager": null
+      },
+      "exampleFiles": [
+        "filetype_map.lua",
+        "formatting.lua",
+        "client.lua",
+        "loop.lua",
+        "utils.lua"
+      ],
+      "exampleFilesGeneratedAt": 1766922605173,
+      "lastCost": 0.24560644999999995,
+      "lastAPIDuration": 45184,
+      "lastAPIDurationWithoutRetries": 45166,
+      "lastToolDuration": 2280,
+      "lastDuration": 109580,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 6771,
+      "lastTotalOutputTokens": 1714,
+      "lastTotalCacheCreationInputTokens": 47519,
+      "lastTotalCacheReadInputTokens": 128304,
+      "lastTotalWebSearchRequests": 0,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "inputTokens": 6742,
+          "outputTokens": 362,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.008552
+        },
+        "claude-sonnet-4-5-20250929": {
+          "inputTokens": 29,
+          "outputTokens": 1352,
+          "cacheReadInputTokens": 128304,
+          "cacheCreationInputTokens": 47519,
+          "webSearchRequests": 0,
+          "costUSD": 0.23705444999999997
+        }
+      },
+      "lastSessionId": "2343afc8-feb6-4ce6-a371-d24fe830da92"
     }
   },
   "lastReleaseNotesSeen": "2.0.76",
@@ -577,7 +801,7 @@
     "3981bd4b-4502-4646-908b-bbc5d1ea573b": {
       "hasAccess": false,
       "hasAccessNotAsDefault": false,
-      "timestamp": 1766510745453
+      "timestamp": 1766921305148
     }
   },
   "lastPlanModeUse": 1766506565161,
@@ -589,7 +813,8 @@
     "mosheavni/dotfiles": [
       "/Users/Moshe.Avni/.dotfiles/nvim/.config/nvim",
       "/Users/Moshe.Avni/.dotfiles"
-    ]
+    ],
+    "mosheavni/lightvim": ["/Users/Moshe.Avni/.config/lightvim"]
   },
   "hasIdeOnboardingBeenShown": {
     "WezTerm": true
@@ -613,5 +838,6 @@
     "workspaceRole": null,
     "organizationName": "gatkees@gmail.com's Organization"
   },
-  "thinkingMigrationComplete": true
+  "thinkingMigrationComplete": true,
+  "lspRecommendationIgnoredCount": 1
 }

@@ -86,10 +86,10 @@ def repoName = &apos;spotinst-mcs-network-es-connector&apos;
 
 ACL.impersonate(ACL.SYSTEM) {
     def orgFolder = Jenkins.instance.getItem(orgName)
-    
+
     if (orgFolder != null) {
         def job = orgFolder.getItem(repoName)
-        
+
         if (job != null) {
             job.delete()
             println &quot;Job &apos;${orgName}/${repoName}&apos; has been successfully deleted.&quot;

@@ -79,3 +79,9 @@ op() {
   load_completion_from_cmd op completion zsh
   op "$@"
 }
+
+gitleaks() {
+  unfunction gitleaks
+  load_completion_from_cmd gitleaks completion zsh
+  gitleaks "$@"
+}

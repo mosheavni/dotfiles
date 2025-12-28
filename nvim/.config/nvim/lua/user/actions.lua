@@ -130,12 +130,12 @@ return {
 -- Reload the file when it changes on disk
 local group = vim.api.nvim_create_augroup("ReloadModule", {clear = true})
 vim.api.nvim_create_autocmd("BufWritePost", {
-	buffer = 0,
-	group = group,
-	callback = function()
-		vim.cmd("luafile %")
-		vim.notify("Module reloaded")
-	end,
+  buffer = 0,
+  group = group,
+  callback = function()
+    vim.cmd("luafile %")
+    vim.notify("Module reloaded")
+  end,
 })
 
 vim.keymap.set('n', 'bla', function()
