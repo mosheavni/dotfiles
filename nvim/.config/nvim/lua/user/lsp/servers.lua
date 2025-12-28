@@ -24,16 +24,6 @@ M.setup = function()
     'yamlls',
   }
 
-  -- Custom hover for bashls with tldr integration
-  vim.lsp.config('bashls', {
-    on_attach = function(_, bufnr)
-      -- Override K keymap for bashls to use custom hover
-      vim.keymap.set('n', 'K', function()
-        require('user.lsp.bashls-hover').hover()
-      end, { buffer = bufnr, silent = true, desc = 'Hover with tldr' })
-    end,
-  })
-
   vim.lsp.config('jsonls', {
     settings = {
       json = {
