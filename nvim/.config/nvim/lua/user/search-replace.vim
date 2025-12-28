@@ -92,7 +92,7 @@ function! SarToggleAllFile() abort
   let cmd_splitted = split(cmd, sep, 1)
   let all_file = cmd_splitted[0]
   let all_file = all_file ==# '%s' ? '.,$s' :
-               \ all_file ==# '.,$s' ? '0,.s' : '%s'
+      \ all_file ==# '.,$s' ? '0,.s' : '%s'
   let cmd_splitted[0] = all_file
 
   let cmd = join(cmd_splitted, sep)

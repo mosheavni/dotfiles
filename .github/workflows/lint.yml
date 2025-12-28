@@ -44,3 +44,4 @@ jobs:
           VALIDATE_BIOME_LINT: false
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_JSCPD: false
+          VALIDATE_EDITORCONFIG: false

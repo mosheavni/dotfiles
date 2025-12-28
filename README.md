@@ -68,7 +68,7 @@
 
     ```bash
     $(brew --prefix)/opt/fzf/install
-     ```
+    ```
 
 9. Login to gh cli
 
@@ -88,7 +88,7 @@
 
 ## Usage (just NVIM)
 
- > Install requires Neovim 0.10+. Always review the code before installing a configuration.
+> Install requires Neovim 0.10+. Always review the code before installing a configuration.
 
 Clone the repository and install the plugins:
 
