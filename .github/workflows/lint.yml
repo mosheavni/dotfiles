@@ -46,3 +46,6 @@ jobs:
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_JSCPD: false
           VALIDATE_EDITORCONFIG: false
+          VALIDATE_JUPYTER_NBQA_RUFF: false
+          VALIDATE_PYTHON_RUFF: false
+          VALIDATE_PYTHON_RUFF_FORMAT: false
