@@ -2,5 +2,5 @@
 
 # loop directories
 for dir in */; do
-  stow -Rv $dir
+  stow -Rv "$dir"
 done

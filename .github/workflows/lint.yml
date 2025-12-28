@@ -29,8 +29,9 @@ jobs:
 
       - name: Copy configs to root
         run: |
+          mkdir -p .github/linters
           cp nvim/.editorconfig .editorconfig
-          cp nvim/.shellcheckrc .shellcheckrc
+          cp nvim/.shellcheckrc .github/linters/.shellcheckrc
           cp nvim/.luacheckrc .luacheckrc
           cp nvim/.prettierignore .prettierignore
 
