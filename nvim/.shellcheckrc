@@ -1,0 +1,2 @@
+# https://github.com/koalaman/shellcheck/wiki/Ignore
+disable=SC2046,SC1071,SC2086

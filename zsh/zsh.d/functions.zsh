@@ -189,7 +189,7 @@ curl -s 'https://apimftprd.israelpost.co.il/mypost-zip/SearchZip' \
   -H 'accept-language: en-US,en;q=0.9,ru;q=0.8' \
   -H 'authorization: Bearer null' \
   -H 'content-type: application/json' \
-  -H 'ocp-apim-subscription-key: 5ccb5b137e7444d885be752eda7f767a' \
+  -H 'ocp-apim-subscription-key: 5ccb5b137e7444d885be752eda7f767a' \ #gitleaks:allow
   -H 'origin: https://doar.israelpost.co.il' \
   -H 'priority: u=1, i' \
   -H 'sec-ch-ua: "Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"' \

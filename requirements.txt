@@ -10,6 +10,7 @@ jmespath
 msgpack
 neovim
 pathspec
+pre-commit
 protobuf
 psutil
 pycodestyle
