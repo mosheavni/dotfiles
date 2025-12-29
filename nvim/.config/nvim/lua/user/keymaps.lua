@@ -115,6 +115,7 @@ map('n', '<leader>sa', 'ggVG', { remap = false, desc = 'Visually select entire b
 
 -- Run and edit macros
 for _, key in pairs { 'Q', 'X' } do
+  ---@diagnostic disable-next-line: undefined-field
   map('n', key, '@' .. key:lower(), { remap = false })
   map('n', '<leader>' .. key, ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>", { remap = false })
 end

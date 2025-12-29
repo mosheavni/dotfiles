@@ -214,8 +214,7 @@ M.config = function()
         events.subscribe(events.Event.NodeRenamed, function(data)
           if prev.new_name ~= data.new_name or prev.old_name ~= data.old_name then
             data = data
-            -- selene: allow(undefined_variable)
-            Snacks.rename.on_rename_file(data.old_name, data.new_name)
+            require('snacks').rename.on_rename_file(data.old_name, data.new_name)
           end
         end)
       end,
