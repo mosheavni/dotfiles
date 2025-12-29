@@ -373,7 +373,6 @@ function M.sort_by_column(col_index, direction)
     -- Helper function to determine if a string should be sorted numerically
     local function should_sort_numerically(str)
       local digits = str:gsub('%D', '')
-      local non_digits = str:gsub('%d', '')
 
       -- If no digits, definitely not numeric
       if #digits == 0 then
@@ -795,7 +794,7 @@ function M.parse_buffer()
   -- Check if the second line contains dashes seperated by spaces
   if second_line:match '[-=]+%s' then
     local parse_result = M.ec2_instance_selector_parse(buf_lines)
-    local tab_state = M.get_or_create_tab_state(tabular_command, {
+    M.get_or_create_tab_state(tabular_command, {
       command = tabular_command,
       raw_lines = buf_lines,
       headers = parse_result.headers,

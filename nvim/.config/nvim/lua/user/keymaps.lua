@@ -421,29 +421,6 @@ end, { desc = 'Jump to 2 characters' })
 ------------------------
 require 'user.run-buffer'
 
---------------------
--- Clear Terminal --
---------------------
--- selene: allow(unused_variable)
-function ClearTerm(reset)
-  local scrollback = vim.opt_local.scrollback
-  vim.opt_local.scrollback = 1
-
-  vim.api.nvim_command 'startinsert'
-  vim.api.nvim_feedkeys(vim.keycode '<c-c>', 't', true)
-  if reset == 1 then
-    vim.api.nvim_feedkeys('reset', 't', false)
-  else
-    vim.api.nvim_feedkeys('clear', 't', false)
-  end
-  vim.api.nvim_feedkeys(vim.keycode '<cr>', 't', true)
-
-  vim.opt_local.scrollback = scrollback
-end
-vim.api.nvim_create_user_command('ClearTerm', 'lua ClearTerm(<args>)', { nargs = 1 })
-map('t', '<C-l><C-l>', [[<C-\><C-N>:ClearTerm 0<CR>]], { remap = false, silent = true })
-map('t', '<C-l><C-l><C-l>', [[<C-\><C-N>:ClearTerm 1<CR>]], { remap = false, silent = true })
-
 ----------------------------
 -- Sort Json Array by key --
 ----------------------------
