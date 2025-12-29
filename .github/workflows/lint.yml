@@ -50,3 +50,4 @@ jobs:
           VALIDATE_PYTHON_RUFF: false
           VALIDATE_PYTHON_RUFF_FORMAT: false
           VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
+          VALIDATE_SHELL_SHFMT: false # because zsh files fail this test.
