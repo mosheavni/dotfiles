@@ -123,4 +123,38 @@ M.library_current_branch = {
   },
 }
 
+M.selene_ignore_diagnostic = {
+  method = null_ls.methods.CODE_ACTION,
+  filetypes = { 'lua' },
+  name = 'Selene ignore diagnostic',
+  generator = {
+    fn = function(context)
+      local diagnostics = vim.diagnostic.get(context.bufnr, { lnum = context.range.row - 1 })
+      local actions = {}
+      for _, diag in ipairs(diagnostics) do
+        if diag.source == 'selene' then
+          table.insert(actions, {
+            title = 'selene: ignore line diagnostic ' .. diag.code,
+            action = function()
+              local line_number = diag.lnum
+              -- add "-- selene: allow(<code>)" one line above the diagnostic line
+              local ignore_comment = string.format('-- selene: allow(%s)', diag.code)
+              api.nvim_buf_set_lines(context.bufnr, line_number, line_number, false, { ignore_comment })
+            end,
+          })
+          table.insert(actions, {
+            title = 'selene: ignore file diagnostic ' .. diag.code,
+            action = function()
+              local ignore_comment = string.format('--# selene: allow(%s)', diag.code)
+              api.nvim_buf_set_lines(context.bufnr, 0, 0, false, { ignore_comment })
+            end,
+          })
+        end
+      end
+      vim.print('actions: ' .. vim.inspect(actions))
+      return actions
+    end,
+  },
+}
+
 return M
