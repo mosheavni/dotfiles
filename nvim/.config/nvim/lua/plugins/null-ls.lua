@@ -3,7 +3,6 @@ local M = {
   lazy = true,
   dependencies = {
     'gbprod/none-ls-shellcheck.nvim',
-    'jay-babu/mason-null-ls.nvim',
   },
 }
 M.config = function()
@@ -14,25 +13,13 @@ M.config = function()
     debug = true,
     sources = {
       null_ls.builtins.code_actions.gitsigns,
-      null_ls.builtins.code_actions.proselint,
       require('user.lsp.code-actions').revision_branch_comment,
       require('user.lsp.code-actions').toggle_function_params,
       require('user.lsp.code-actions').library_current_branch,
+      require('user.lsp.code-actions').selene_ignore_diagnostic,
       require 'none-ls-shellcheck.code_actions',
-      null_ls.builtins.diagnostics.hadolint,
-      null_ls.builtins.diagnostics.markdownlint,
-      null_ls.builtins.diagnostics.proselint,
-      null_ls.builtins.diagnostics.npm_groovy_lint,
-      null_ls.builtins.diagnostics.terragrunt_validate,
-      null_ls.builtins.diagnostics.selene,
-      null_ls.builtins.diagnostics.actionlint,
       null_ls.builtins.hover.printenv,
     },
-  }
-  require('mason-null-ls').setup {
-    ---@diagnostic disable-next-line: assign-type-mismatch
-    ensure_installed = nil,
-    automatic_installation = true,
   }
 end
 

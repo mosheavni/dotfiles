@@ -46,6 +46,7 @@ local M = {
 
       -- Ensure the servers always installed
       local packages = {
+        'actionlint',
         'bash-debug-adapter',
         'bash-language-server',
         'black',
@@ -56,6 +57,7 @@ local M = {
         'docker-compose-language-service',
         'dockerfile-language-server',
         'eslint_d',
+        'gitleaks',
         'golangci-lint',
         'groovy-language-server',
         'hadolint',
@@ -79,6 +81,7 @@ local M = {
         'vim-language-server',
         'vint',
         'vtsls',
+        'write-good',
         'yaml-language-server',
       }
       local mr = require 'mason-registry'

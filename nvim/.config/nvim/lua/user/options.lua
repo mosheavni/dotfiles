@@ -178,6 +178,7 @@ vim.filetype.add {
       end,
       { priority = 200 },
     },
+    ['.*/.github/workflows/.*%.yml'] = 'yaml.ghaction',
     ['.*Jenkinsfile.*'] = 'groovy',
     [kube_config_pattern] = 'yaml',
     ['.*'] = function()
