@@ -54,7 +54,6 @@ M.setup = function()
       'stylua.toml',
       'stylelua.toml',
       'selene.toml',
-      'selene.yml',
     },
 
     settings = {
@@ -71,6 +70,7 @@ M.setup = function()
   })
 
   vim.lsp.config('terraformls', {
+    cmd = { '/Users/Moshe.Avni/.asdf/installs/golang/1.23.2/bin/terraform-ls', 'serve' },
     on_attach = function()
       require('user.terraform-docs').setup {}
       -- c.server_capabilities.semanticTokensProvider = {}
