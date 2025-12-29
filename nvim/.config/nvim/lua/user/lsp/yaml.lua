@@ -115,6 +115,14 @@ M.setup = function(opts)
         vim.notify('Added YAML modeline for CRDs: ' .. crds, vim.log.levels.INFO, { title = 'YAML LSP' })
       end
     end,
+    filetypes = {
+      'yaml',
+      'yaml.docker-compose',
+      'yaml.gitlab',
+      'yaml.helm-values',
+      'yaml.ghaction',
+    },
+
     capabilities = vim.tbl_deep_extend('force', capabilities, {
       textDocument = {
         foldingRange = {

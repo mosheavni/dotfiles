@@ -51,6 +51,7 @@ local M = {
         'bash-language-server',
         'black',
         'cbfmt',
+        'checkmake',
         'css-lsp',
         'cssmodules-language-server',
         'debugpy',

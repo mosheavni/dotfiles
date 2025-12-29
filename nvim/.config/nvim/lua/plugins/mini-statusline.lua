@@ -182,8 +182,8 @@ M.config = function()
 
   -- YAML schema section (only for YAML files)
   local function section_yaml_schema()
-    -- Only show for YAML files
-    if vim.bo.filetype ~= 'yaml' then
+    local ft = vim.bo.filetype or ''
+    if not ft:match '^yaml' then
       return ''
     end
 

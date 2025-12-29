@@ -1,4 +1,5 @@
 compare-versions
+dclint
 dockerfile-language-server-nodejs
 eslint
 eslint-config-react-app

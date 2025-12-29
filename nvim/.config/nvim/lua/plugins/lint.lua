@@ -19,9 +19,11 @@ return {
       -- hcl = { 'terragrunt_validate' },
       ghaction = { 'actionlint' },
       lua = { 'selene', 'luacheck' },
+      ['docker-compose'] = { 'dclint' },
       groovy = { 'npm-groovy-lint' },
       Jenkinsfile = { 'npm-groovy-lint' },
       markdown = { 'proselint', 'write_good', 'markdownlint' },
+      make = { 'checkmake' },
       sh = { 'shellcheck' },
       zsh = { 'zsh' },
     }

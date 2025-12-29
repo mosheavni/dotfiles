@@ -168,6 +168,7 @@ vim.filetype.add {
   extension = { tfvars = 'terraform' },
   filename = {
     Brewfile = 'ruby',
+    ['docker-compose.yml'] = 'yaml.docker-compose',
   },
   pattern = {
     ['.*/templates/.*%.yaml'] = {
