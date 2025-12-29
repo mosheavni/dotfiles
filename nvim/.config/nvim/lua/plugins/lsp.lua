@@ -52,6 +52,7 @@ local M = {
         'black',
         'cbfmt',
         'checkmake',
+        'codespell',
         'css-lsp',
         'cssmodules-language-server',
         'debugpy',

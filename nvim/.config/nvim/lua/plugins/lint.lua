@@ -15,16 +15,17 @@ return {
     local lint = require 'lint'
 
     lint.linters_by_ft = {
-      dockerfile = { 'hadolint' },
       -- hcl = { 'terragrunt_validate' },
-      ghaction = { 'actionlint' },
-      lua = { 'selene', 'luacheck' },
-      ['docker-compose'] = { 'dclint' },
-      groovy = { 'npm-groovy-lint' },
       Jenkinsfile = { 'npm-groovy-lint' },
-      markdown = { 'proselint', 'write_good', 'markdownlint' },
+      ['docker-compose'] = { 'dclint' },
+      dockerfile = { 'hadolint' },
+      ghaction = { 'actionlint' },
+      groovy = { 'npm-groovy-lint' },
+      lua = { 'selene', 'luacheck' },
       make = { 'checkmake' },
+      markdown = { 'proselint', 'write_good', 'markdownlint' },
       sh = { 'shellcheck' },
+      vim = { 'vint' },
       zsh = { 'zsh' },
     }
 
@@ -56,8 +57,8 @@ return {
             lint.try_lint(linter_name, { cwd = cwd })
           end
 
-          -- gitleaks doesn't need special cwd handling
-          lint.try_lint 'gitleaks'
+          -- generic
+          lint.try_lint { 'gitleaks', 'codespell' }
         end
       end,
     })
