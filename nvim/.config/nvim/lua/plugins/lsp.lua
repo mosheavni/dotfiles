@@ -79,6 +79,7 @@ local M = {
         'stylua',
         'taplo',
         'terraform-ls',
+        'trivy',
         'typescript-language-server',
         'vim-language-server',
         'vint',

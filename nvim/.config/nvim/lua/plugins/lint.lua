@@ -58,7 +58,7 @@ return {
           end
 
           -- generic
-          lint.try_lint { 'gitleaks', 'codespell' }
+          lint.try_lint { 'gitleaks', 'codespell', 'trivy' }
         end
       end,
     })
