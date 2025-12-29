@@ -17,6 +17,7 @@ M.config = function()
       require('user.lsp.code-actions').toggle_function_params,
       require('user.lsp.code-actions').library_current_branch,
       require('user.lsp.code-actions').selene_ignore_diagnostic,
+      require('user.lsp.code-actions').markdownlint_disable_diagnostic,
       require 'none-ls-shellcheck.code_actions',
       null_ls.builtins.hover.printenv,
     },

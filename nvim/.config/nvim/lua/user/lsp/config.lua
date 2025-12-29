@@ -79,9 +79,9 @@ M.setup = function()
       vim.diagnostic.config {
         severity_sort = true,
         signs = { text = M.diagnostic_signs },
-        virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
+        virtual_text = { current_line = false, severity = { min = vim.diagnostic.severity.WARN } },
         virtual_lines = { current_line = true },
-        float = { border = 'rounded', source = 'if_many' },
+        float = { border = 'rounded', source = true },
       }
     end,
   })

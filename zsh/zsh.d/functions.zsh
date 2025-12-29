@@ -26,7 +26,7 @@ function set-tab-title() {
 }
 
 function pj() {
-    fdf "$(sed 's/,/ /g' <<<"${PJ_DIRS:-~/Repos/,~/.dotfiles}")"
+  fdf "$(sed 's/,/ /g' <<<"${PJ_DIRS:-~/Repos/,~/.dotfiles}")"
 }
 
 ### Random functions ###
@@ -184,22 +184,22 @@ function nvim-startuptime() {
 }
 
 function zip-code() {
-curl -s 'https://apimftprd.israelpost.co.il/mypost-zip/SearchZip' \
-  -H 'accept: application/json, text/plain, */*' \
-  -H 'accept-language: en-US,en;q=0.9,ru;q=0.8' \
-  -H 'authorization: Bearer null' \
-  -H 'content-type: application/json' \
-  -H 'ocp-apim-subscription-key: 5ccb5b137e7444d885be752eda7f767a' \ #gitleaks:allow
+  curl -s 'https://apimftprd.israelpost.co.il/mypost-zip/SearchZip' \
+    -H 'accept: application/json, text/plain, */*' \
+    -H 'accept-language: en-US,en;q=0.9,ru;q=0.8' \
+    -H 'authorization: Bearer null' \
+    -H 'content-type: application/json' \
+    -H 'ocp-apim-subscription-key: 5ccb5b137e7444d885be752eda7f767a' \ #gitleaks:allow
   -H 'origin: https://doar.israelpost.co.il' \
-  -H 'priority: u=1, i' \
-  -H 'sec-ch-ua: "Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"' \
-  -H 'sec-ch-ua-mobile: ?0' \
-  -H 'sec-ch-ua-platform: "macOS"' \
-  -H 'sec-fetch-dest: empty' \
-  -H 'sec-fetch-mode: cors' \
-  -H 'sec-fetch-site: same-site' \
-  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36' \
-  --data-raw '{"CityID":"1212","StreetID":"104347","House":"2","Entry":"א","ByMaanimID":true}' | jq
+    -H 'priority: u=1, i' \
+    -H 'sec-ch-ua: "Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"' \
+    -H 'sec-ch-ua-mobile: ?0' \
+    -H 'sec-ch-ua-platform: "macOS"' \
+    -H 'sec-fetch-dest: empty' \
+    -H 'sec-fetch-mode: cors' \
+    -H 'sec-fetch-site: same-site' \
+    -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36' \
+    --data-raw '{"CityID":"1212","StreetID":"104347","House":"2","Entry":"א","ByMaanimID":true}' | jq
 }
 
 function matrix() {

@@ -59,5 +59,11 @@ return {
         end
       end,
     })
+
+    -- ex command GetLinters to list active linters for current buffer
+    vim.api.nvim_create_user_command('GetLinters', function()
+      local linters = lint._resolve_linter_by_ft(vim.bo.filetype)
+      print('Active linters for filetype "' .. vim.bo.filetype .. '": ' .. table.concat(linters, ', '))
+    end, {})
   end,
 }

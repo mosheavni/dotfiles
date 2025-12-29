@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD041 MD013 MD033 MD045  -->
 [![Super-Linter](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
 # Moshe Avni's DotFiles
@@ -76,7 +77,7 @@
     gh auth login --web -h github.com
     ```
 
-10. Install gh [Github cli copilot extension](https://github.com/github/gh-copilot)
+10. Install gh [GitHub cli copilot extension](https://github.com/github/gh-copilot)
 
     ```bash
     gh extension install github/gh-copilot --force

@@ -115,6 +115,7 @@ return {
       vue = { 'prettierd' },
       xml = { 'xmllint' },
       yaml = { 'prettierd' },
+      zsh = { 'shfmt' },
     },
     default_format_opts = {
       lsp_format = 'fallback',
