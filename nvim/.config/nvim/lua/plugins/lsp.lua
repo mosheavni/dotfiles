@@ -77,7 +77,6 @@ local M = {
         'shellcheck',
         'shfmt',
         'stylua',
-        'taplo',
         'terraform-ls',
         'tombi',
         'trivy',

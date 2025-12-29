@@ -86,6 +86,7 @@ local treesitter_plugin = {
       'query',
       'regex',
       'requirements',
+      'rust',
       'scss',
       'sql',
       'ssh_config',
