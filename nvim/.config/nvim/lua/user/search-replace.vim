@@ -52,7 +52,7 @@ function! SarToggleChar(char) abort
   else
     " add the flag
     let new_flags = ''
-    for flag in available_flags
+    for flag in s:available_flags
       if cmd_flags =~ flag || a:char == flag
         let new_flags .= flag
       endif
