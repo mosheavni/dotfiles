@@ -25,6 +25,7 @@ return {
       make = { 'checkmake' },
       markdown = { 'proselint', 'write_good', 'markdownlint' },
       sh = { 'shellcheck' },
+      toml = { 'tombi' },
       vim = { 'vint' },
       zsh = { 'zsh' },
     }

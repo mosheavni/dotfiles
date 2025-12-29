@@ -110,6 +110,7 @@ return {
       sh = { 'shfmt' },
       svelte = { 'prettierd' },
       terraform = { 'terraform_fmt' },
+      toml = { 'tombi' },
       typescript = { 'prettierd' },
       typescriptreact = { 'prettierd' },
       vue = { 'prettierd' },

@@ -7,9 +7,9 @@ symbol = "☸"
 
 [aws]
 disabled = false
-symbol = '☁️ '
+symbol = "☁️ "
 force_display = true
-style = 'yellow'
+style = "yellow"
 
 [python]
 disabled = true
@@ -22,7 +22,7 @@ disabled = false
 
 [directory]
 truncation_length = 8
-truncation_symbol = '…/'
+truncation_symbol = "…/"
 
 [cmd_duration]
 min_time = 2000
