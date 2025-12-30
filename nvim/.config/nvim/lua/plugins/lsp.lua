@@ -65,6 +65,7 @@ local M = {
         'hadolint',
         'helm-ls',
         'html-lsp',
+        'isort',
         'json-lsp',
         'lua-language-server',
         'markdownlint',
