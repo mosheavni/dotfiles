@@ -30,7 +30,7 @@ jobs:
       - name: Copy configs to root
         run: |
           mkdir -p .github/linters
-          for file_n in .editorconfig .shellcheckrc .luacheckrc .prettierignore zizmor.yml; do
+          for file_n in .editorconfig .shellcheckrc .luacheckrc .prettierignore zizmor.yaml; do
             echo "Copying $file_n"
             cp nvim/"$file_n" "$file_n"
             cp nvim/"$file_n" ".github/linters/${file_n}"
