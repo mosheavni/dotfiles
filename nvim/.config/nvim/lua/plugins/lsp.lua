@@ -99,7 +99,17 @@ local M = {
 }
 
 local language_specific_plugins = {
-  { 'cuducos/yaml.nvim', ft = 'yaml' },
+  {
+    'cuducos/yaml.nvim',
+    cmd = {
+      'YAMLFzfLua',
+      'YAMLQuickfix',
+      'YAMLView',
+      'YAMLYank',
+      'YAMLYankKey',
+      'YAMLYankValue',
+    },
+  },
   {
     'phelipetls/jsonpath.nvim',
     ft = 'json',
