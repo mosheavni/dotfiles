@@ -54,7 +54,7 @@ end
 M.list_schemas = function()
   vim.ui.select(M.all_crds, { title = 'Schemas', prompt = 'Select schema❯ ' }, function(selection)
     if not selection then
-      require('user.utils').pretty_print 'Canceled.'
+      vim.notify('Canceled schema selection.', vim.log.levels.WARN)
       return
     end
     local schema_url = M.schema_url .. '/' .. selection

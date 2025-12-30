@@ -45,19 +45,13 @@ local function find_unique_char(char_list, str)
   return ''
 end
 
-local function get_visual_selection()
-  local _, ls, cs = unpack(vim.fn.getpos 'v')
-  local _, le, ce = unpack(vim.fn.getpos '.')
-  return vim.api.nvim_buf_get_text(0, ls - 1, cs - 1, le - 1, ce, {})[1] or ''
-end
-
 -- Main populate function
 function M.populate_searchline(mode)
   -- Get word under cursor or visual selection
   if mode == 'n' then
     sar_state.cword = vim.fn.expand '<cword>'
   else
-    sar_state.cword = get_visual_selection()
+    sar_state.cword = require('user.utils').get_visual_selection()
   end
 
   -- Find unique separator

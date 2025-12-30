@@ -3,7 +3,11 @@ local M = {}
 
 M.prnt = function(message, error)
   vim.schedule(function()
-    utils.pretty_print(message, 'Git Actions', '', error and vim.log.levels.ERROR, error and 7000 or 3000)
+    vim.notify(message, error and vim.log.levels.ERROR or vim.log.levels.INFO, {
+      title = 'Git Actions',
+      icon = '',
+      timeout = error and 7000 or 3000,
+    })
   end)
 end
 

@@ -202,7 +202,7 @@ local fugitive_config = function()
 
     vim.ui.select(vim.tbl_keys(git_actions), { title = 'Git actions', prompt = 'Choose git action❯ ' }, function(choice)
       if not choice then
-        utils.pretty_print('Canceled.', 'Git Actions', '')
+        vim.notify('Canceled.', vim.log.levels.INFO, { title = 'Git Actions', icon = '' })
         return
       end
       git_actions[choice]()

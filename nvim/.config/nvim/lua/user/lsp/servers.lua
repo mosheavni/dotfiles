@@ -64,6 +64,15 @@ M.setup = function()
           disable = { 'undefined-global' },
           globals = { 'vim' },
         },
+        workspace = {
+          library = {
+            vim.env.VIMRUNTIME,
+            '${3rd}/luv/library',
+            '${3rd}/busted/library',
+          },
+          checkThirdParty = false,
+        },
+        telemetry = { enable = false },
       },
     },
   })

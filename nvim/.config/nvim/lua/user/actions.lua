@@ -1,7 +1,5 @@
-local utils = require 'user.utils'
 local T = vim.keycode
 local leader = T '<leader>'
-local pretty_print = utils.pretty_print
 local find_in_project = function(opts)
   opts = opts or {
     literal_search = true,
@@ -30,7 +28,7 @@ local search_and_replace = function(literal_search)
       vim.defer_fn(function()
         vim.ui.input({ prompt = 'Enter Replace term❯ ' }, function(replace_term)
           if not replace_term then
-            pretty_print 'Canceled.'
+            vim.notify('Canceled.', vim.log.levels.INFO, { title = 'Search and Replace' })
             return
           end
           vim.defer_fn(function()
@@ -39,7 +37,7 @@ local search_and_replace = function(literal_search)
               default = 'gce',
             }, function(flags)
               if not flags then
-                pretty_print 'Canceled.'
+                vim.notify('Canceled.', vim.log.levels.INFO, { title = 'Search and Replace' })
                 return
               end
               vim.cmd('silent noautocmd cdo %s?' .. search_term .. '?' .. replace_term .. '?' .. flags)
@@ -110,7 +108,7 @@ return {
     ]]
     -- set q register to -target
     vim.fn.setreg('q', [[yss'I-target=A \j]])
-    pretty_print('Macro q set to -target', 'Terraform')
+    vim.notify('Macro q set to -target', vim.log.levels.INFO, { title = 'Terraform' })
   end,
   ['Basic groovy format'] = function()
     vim.cmd.BasicGroovyFormat()
@@ -121,8 +119,7 @@ return {
   ['Autocommand to reload the lua file nvim'] = function()
     if vim.api.nvim_get_option_value('filetype', { buf = 0 }) ~= 'lua' then
       ---@diagnostic disable-next-line: param-type-mismatch
-      pretty_print('Filetype is not lua!', [[🖥️]], vim.log.levels.ERROR)
-      return
+      vim.notify('Filetype is not lua!', vim.log.levels.ERROR, { title = '🖥️' })
     end
 
     local text = [[
@@ -162,8 +159,8 @@ end)
         macro_letter = 'q'
       end
       vim.fn.feedkeys('q' .. macro_letter)
-      pretty_print('Recording macro ' .. macro_letter .. ' (hit q when finished)', 'Macro')
-      pretty_print('You can repeat this macro with @' .. macro_letter, 'Macro')
+      vim.notify('Recording macro ' .. macro_letter .. ' (hit q when finished)', vim.log.levels.INFO, { title = 'Macro' })
+      vim.notify('You can repeat this macro with @' .. macro_letter, vim.log.levels.INFO, { title = 'Macro' })
     end)
   end,
   ['Repeat Macro (@{letter} / Q)'] = function()
@@ -184,7 +181,7 @@ end)
     if ft == '' then
       vim.ui.select(vim.fn.getcompletion('', 'filetype'), { prompt = 'Filetype❯ ' }, function(selected)
         if not selected then
-          pretty_print 'Canceled.'
+          vim.notify('Canceled.', vim.log.levels.INFO, { title = 'Save as temp' })
           return
         end
         vim.cmd('set filetype=' .. selected)

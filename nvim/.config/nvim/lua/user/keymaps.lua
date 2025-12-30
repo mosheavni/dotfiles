@@ -484,6 +484,14 @@ end, {
   desc = 'Read text using macOS say command',
 })
 
+vim.cmd [[
+function! s:SortInBlock() abort
+  execute "normal viboj\<Esc>"
+  '<,'>sort
+endfunction
+command! SortInBlock call s:SortInBlock()
+]]
+
 require('user.search-replace').setup()
 require('user.tabular-v2').setup()
 require('user.projects').setup()
