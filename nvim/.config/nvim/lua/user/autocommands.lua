@@ -1,9 +1,7 @@
-local utils = require 'user.utils'
 local autocmd = vim.api.nvim_create_autocmd
-local augroup = utils.augroup
 
 -- Check if we need to reload the file when it changed
-local reload_file_group = augroup 'ReloadFile'
+local reload_file_group = vim.api.nvim_create_augroup('ReloadFile', { clear = true })
 autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
   group = reload_file_group,
   callback = function()
@@ -21,7 +19,7 @@ autocmd('FileChangedShellPost', {
   end,
 })
 
-local first_load = augroup 'first_load'
+local first_load = vim.api.nvim_create_augroup('FirstLoad', { clear = true })
 autocmd('UIEnter', {
   desc = 'Print the output of flag --startuptime startuptime.txt',
   group = first_load,
@@ -52,7 +50,7 @@ autocmd('User', {
 })
 
 -- Buffer settings
-local buffer_settings = augroup 'buffer_settings'
+local buffer_settings = vim.api.nvim_create_augroup('BufferSettings', { clear = true })
 autocmd('FileType', {
   desc = 'Quit with q in this filetypes',
   group = buffer_settings,
@@ -134,7 +132,7 @@ vim.api.nvim_create_autocmd('TextYankPost', { -- yank-ring
 })
 
 -- Special filetypes
-local special_filetypes = augroup 'SpecialFiletype'
+local special_filetypes = vim.api.nvim_create_augroup('SpecialFiletypes', { clear = true })
 autocmd({ 'FileType' }, {
   group = special_filetypes,
   pattern = 'json',
@@ -164,7 +162,7 @@ autocmd({ 'FileType' }, {
 })
 
 -- Quickfix
-local quickfix_au = augroup 'QuickFix'
+local quickfix_au = vim.api.nvim_create_augroup('QuickFixAu', { clear = true })
 autocmd({ 'QuickFixCmdPost' }, {
   desc = 'Open location window on location action',
   group = quickfix_au,
@@ -179,7 +177,7 @@ autocmd({ 'QuickFixCmdPost' }, {
 })
 
 -- autocmd for terminal buffers
-local term_au = augroup 'MosheTerm'
+local term_au = vim.api.nvim_create_augroup('MosheTerm', { clear = true })
 autocmd({ 'TermOpen' }, {
   group = term_au,
   pattern = '*',
@@ -191,9 +189,9 @@ autocmd({ 'TermOpen' }, {
 })
 
 -- custom settings
-local CustomSettingsGroup = augroup 'CustomSettingsGroup'
+local custom_settings_group = vim.api.nvim_create_augroup('CustomSettingsGroup', { clear = true })
 autocmd('BufWritePost', {
-  group = CustomSettingsGroup,
+  group = custom_settings_group,
   desc = 'make sh file executable if a shebang is deteced',
   pattern = '*',
   callback = function(args)

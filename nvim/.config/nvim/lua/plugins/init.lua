@@ -70,7 +70,7 @@ local M = {
       }
     end,
     init = function()
-      local custom_switches = require('user.utils').augroup 'CustomSwitches'
+      local custom_switches = vim.api.nvim_create_augroup('CustomSwitches', { clear = true })
       vim.api.nvim_create_autocmd('FileType', {
         group = custom_switches,
         pattern = { 'gitrebase' },

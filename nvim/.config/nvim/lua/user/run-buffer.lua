@@ -264,12 +264,19 @@ local function execute_file(where)
   end
 end
 
-vim.keymap.set('n', '<F3>', execute_file, { remap = false, silent = true })
+local M = {}
 
-vim.api.nvim_create_user_command('RunInTerminal', function()
-  execute_file 'terminal'
-end, {})
+function M.setup()
+  -- Setup can be used for future configurations
+  vim.keymap.set('n', '<F3>', execute_file, { remap = false, silent = true })
 
-vim.api.nvim_create_user_command('RunInTab', function()
-  execute_file 'tab'
-end, {})
+  vim.api.nvim_create_user_command('RunInTerminal', function()
+    execute_file 'terminal'
+  end, {})
+
+  vim.api.nvim_create_user_command('RunInTab', function()
+    execute_file 'tab'
+  end, {})
+end
+
+return M

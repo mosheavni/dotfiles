@@ -1,13 +1,6 @@
 ---@class Utils
 local M = {}
 
----Creates an augroup while clearing previous autocmds
----@param name string The name of the augroup
----@return number augroup_id The augroup id
-function M.augroup(name)
-  return vim.api.nvim_create_augroup(name, { clear = true })
-end
-
 -- Helper functions
 vim.cmd [[
 function! GetVisualSelection() abort
@@ -58,29 +51,6 @@ function M.get_visual_selection()
   local vstart = vim.fn.getpos "'<"
   local vend = vim.fn.getpos "'>"
   return table.concat(vim.fn.getregion(vstart, vend), '\n')
-end
-
-function M.get_os_command_output(cmd, cwd)
-  if type(cmd) ~= 'table' then
-    M.pretty_print('cmd has to be a table', vim.log.levels.ERROR, '🖥️')
-    return '', -1, ''
-  end
-
-  local Job = require 'plenary.job'
-  local command = table.remove(cmd, 1)
-  local stderr = {}
-
-  ---@diagnostic disable-next-line: missing-fields
-  local stdout, ret = Job:new({
-    command = command,
-    args = cmd,
-    cwd = cwd or vim.fn.getcwd(),
-    on_stderr = function(_, data)
-      table.insert(stderr, data)
-    end,
-  }):sync()
-
-  return stdout, ret, stderr
 end
 
 ---Pretty print using vim.notify

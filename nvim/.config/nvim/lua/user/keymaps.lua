@@ -31,13 +31,8 @@ map('i', ',,', '<C-O>A,', { remap = false, desc = 'Add comma at end of line' })
 map('i', '<C-e>', '<C-o>de', { remap = false, desc = 'Delete word after cursor' })
 map('i', '<C-b>', '<C-o>db', { remap = false, desc = 'Delete word before cursor' })
 
-map('n', 'gx', require('user.open-url').open_url_under_cursor, { remap = false, desc = 'Open url under cursor' })
-
 -- Search for string within the visual selection
 map('x', '/', '<Esc>/\\%V', { remap = false })
-
--- open github in browser
-map({ 'v', 'n' }, '<leader>gh', require('user.gitbrowse').open, { remap = false, desc = 'Open github in browser' })
 
 -- operators
 _G.op = _G.op or {}
@@ -104,9 +99,6 @@ map('n', '<C-h>', '<C-w>h', { remap = false, desc = 'Go to Left Window' })
 map('n', '<C-j>', '<C-w>j', { remap = false, desc = 'Go to Lower Window' })
 map('n', '<C-k>', '<C-w>k', { remap = false, desc = 'Go to Upper Window' })
 map('n', '<C-l>', '<C-w>l', { remap = false, desc = 'Go to Right Window' })
-
--- Resize window using <ctrl> arrow keys
-require('user.winresizer').setup()
 
 -- entire file text-object
 map('o', 'ae', '<cmd>normal! ggVG<CR>', { remap = false })
@@ -377,8 +369,27 @@ vim.api.nvim_create_user_command('DiffWithSaved', function()
     end, { buffer = buf })
   end
 end, {})
-
 map('n', '<leader>ds', ':DiffWithSaved<cr>', { remap = false, silent = true })
+
+--------------
+-- Difftool --
+--------------
+vim.api.nvim_create_user_command('DirDiff', function(opts)
+  if vim.tbl_count(opts.fargs) ~= 2 then
+    vim.notify('DirDiff requires exactly two directory arguments', vim.log.levels.ERROR)
+    return
+  end
+
+  if not opts.bang then
+    vim.cmd 'tabnew'
+  end
+
+  vim.cmd.packadd 'nvim.difftool'
+  require('difftool').open(opts.fargs[1], opts.fargs[2], {
+    rename = { detect = false },
+    ignore = { '.git' },
+  })
+end, { complete = 'dir', nargs = '*', bang = true, desc = 'Diff two directories (bang to not open in a new tab)' })
 
 -----------------------
 -- Visual calculator --
@@ -404,22 +415,12 @@ command! -range VisualCalculator call <SID>VisualCalculator()
 vmap <c-r> :VisualCalculator<cr>
 ]]
 
-----------
--- Grep --
-----------
-require('user.grep').setup()
-
 ----------------
 -- EasyMotion --
 ----------------
 map({ 'n', 'x' }, 's', function()
   require('user.easymotion').easy_motion()
 end, { desc = 'Jump to 2 characters' })
-
-------------------------
--- Run current buffer --
-------------------------
-require 'user.run-buffer'
 
 ----------------------------
 -- Sort Json Array by key --
@@ -440,9 +441,6 @@ endfunction
 command! -range JsonSortArrayByKey call <SID>JsonSortArrayByKey()
 ]]
 
---------------
--- Titleize --
---------------
 vim.api.nvim_create_user_command('Titleize', function(opts)
   local title_char = '-'
   if opts.args ~= '' then
@@ -464,33 +462,34 @@ vim.api.nvim_create_user_command('Titleize', function(opts)
   })
 end, { nargs = '?' })
 
-------------------------
--- Search and Replace --
-------------------------
-require('user.search-replace').setup()
+vim.api.nvim_create_user_command('Say', function(opts)
+  local text
 
-require('user.tabular-v2').setup {}
-require('user.projects').setup()
-require 'user.number-separators'
-
---------------
--- Difftool --
---------------
-vim.api.nvim_create_user_command('DirDiff', function(opts)
-  if vim.tbl_count(opts.fargs) ~= 2 then
-    vim.notify('DirDiff requires exactly two directory arguments', vim.log.levels.ERROR)
+  -- If a range is provided (visual selection or line range)
+  if opts.range > 0 then
+    text = require('user.utils').get_visual_selection()
+  -- Otherwise use the provided arguments
+  elseif opts.args ~= '' then
+    text = opts.args
+  else
+    vim.notify('Say: No text provided', vim.log.levels.WARN)
     return
   end
 
-  if not opts.bang then
-    vim.cmd 'tabnew'
-  end
+  -- Pipe to say command
+  vim.system({ 'say', text }, { text = true })
+end, {
+  range = true,
+  nargs = '?',
+  desc = 'Read text using macOS say command',
+})
 
-  vim.cmd.packadd 'nvim.difftool'
-  require('difftool').open(opts.fargs[1], opts.fargs[2], {
-    rename = {
-      detect = false,
-    },
-    ignore = { '.git' },
-  })
-end, { complete = 'dir', nargs = '*', bang = true, desc = 'Diff two directories (bang to not open in a new tab)' })
+require('user.search-replace').setup()
+require('user.tabular-v2').setup()
+require('user.projects').setup()
+require 'user.number-separators'
+require('user.run-buffer').setup()
+require('user.winresizer').setup()
+require('user.grep').setup()
+map('n', 'gx', require('user.open-url').open_url_under_cursor, { remap = false, desc = 'Open url under cursor' })
+map({ 'v', 'n' }, '<leader>gh', require('user.gitbrowse').open, { remap = false, desc = 'Open github in browser' })

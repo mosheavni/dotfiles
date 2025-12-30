@@ -4,9 +4,8 @@ local treesitter_plugin = {
   build = ':TSUpdate',
   event = { 'BufReadPost', 'FileType' },
   init = function()
-    local augroup = vim.api.nvim_create_augroup('myconfig.treesitter', { clear = true })
     vim.api.nvim_create_autocmd('FileType', {
-      group = augroup,
+      group = vim.api.nvim_create_augroup('myconfig.treesitter', { clear = true }),
       pattern = { '*' },
       callback = function(event)
         local filetype = event.match

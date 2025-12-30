@@ -255,6 +255,11 @@ function M.display_table(tabular_command, delimiter)
   -- Maintain state for the opened tabular commands
   local tab_state = M.get_or_create_tab_state(tabular_command, { delimiter = delimiter or M.default_delimiter })
 
+  if not tab_state then
+    print 'Error: Failed to create or get tab state'
+    return
+  end
+
   tab_state.bufnr = M.buffer(tabular_command)
 
   M.set_buf_win_options(tab_state.bufnr)
@@ -648,6 +653,11 @@ function M.parse_command(existing_command)
         end
         tab_state = M.get_or_create_tab_state(command, { command = command })
 
+        if not tab_state then
+          print 'Failed to create tab state'
+          return
+        end
+
         tab_state.delimiter = tostring(delimiter)
         tab_state.interval = interval
 
@@ -791,7 +801,7 @@ function M.parse_buffer()
   local bufnr = vim.api.nvim_get_current_buf()
   local buf_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   local second_line = buf_lines[2] or ''
-  -- Check if the second line contains dashes seperated by spaces
+  -- Check if the second line contains dashes separated by spaces
   if second_line:match '[-=]+%s' then
     local parse_result = M.ec2_instance_selector_parse(buf_lines)
     M.get_or_create_tab_state(tabular_command, {
@@ -816,6 +826,12 @@ function M.parse_buffer()
         raw_lines = buf_lines,
         delimiter = input,
       })
+
+      if not tab_state then
+        print 'Failed to create tab state'
+        return
+      end
+
       tab_state.raw_lines = buf_lines
       tab_state.delimiter = input
 
