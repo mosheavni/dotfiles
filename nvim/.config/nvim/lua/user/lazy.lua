@@ -59,3 +59,5 @@ require('lazy').setup('plugins', {
     },
   },
 })
+
+vim.keymap.set('n', '<leader>z', '<cmd>Lazy<CR>', { silent = true })
