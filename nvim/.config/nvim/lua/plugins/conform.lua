@@ -78,8 +78,6 @@ return {
       desc = 'Format buffer',
     },
   },
-  ---@module "conform"
-  ---@type conform.setupOpts
   opts = {
     log_level = vim.log.levels.INFO,
     formatters_by_ft = {

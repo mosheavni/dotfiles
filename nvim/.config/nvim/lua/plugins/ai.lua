@@ -148,8 +148,6 @@ return {
       { '<leader>ccs', '<cmd>AvanteStop<CR>' },
     },
     cmd = { 'AvanteChat' },
-    ---@module 'avante'
-    ---@type avante.Config
     opts = {
       disabled_tools = {
         'list_files', -- Built-in file operations
