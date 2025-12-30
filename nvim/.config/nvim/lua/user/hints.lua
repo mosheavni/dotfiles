@@ -10,6 +10,7 @@ function M.new(title, hints_config)
   local float = require('user.float').new()
 
   -- Format the hint lines for display
+  ---@return string[]
   local function format_hints()
     local lines = { ' ' .. title .. ' ', '' }
     local max_key_len = 0
@@ -28,8 +29,11 @@ function M.new(title, hints_config)
     table.insert(lines, '')
     return lines
   end
+  ---@cast format_hints ContentFunction
 
   -- Compute window configuration
+  ---@param buf_id integer
+  ---@return vim.api.keyset.win_config
   local function compute_config(buf_id)
     local lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
 
@@ -56,14 +60,17 @@ function M.new(title, hints_config)
       zindex = 50,
     }
   end
+  ---@cast compute_config ConfigFunction
 
   -- Window options
+  ---@return table<string, any>
   local function window_opts()
     return {
       winblend = 10,
       winhighlight = 'Normal:Normal,FloatBorder:FloatBorder',
     }
   end
+  ---@cast window_opts OptsFunction
 
   -- Public API
   return {

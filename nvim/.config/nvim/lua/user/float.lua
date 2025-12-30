@@ -15,8 +15,8 @@ local M = {}
 ---@field buf_id integer? Buffer ID (nil if not created)
 ---@field win_id integer? Window ID (nil if not created)
 
----@alias ContentFunction fun(): string[] Function that returns lines to display
----@alias ConfigFunction fun(buf_id: integer): table Function that returns window config
+---@alias ContentFunction fun(): string[]  Function that returns lines to display
+---@alias ConfigFunction fun(buf_id: integer): vim.api.keyset.win_config Function that returns window config
 ---@alias OptsFunction fun(): table<string, any> Function that returns window options
 
 --- Create a new float instance
@@ -140,7 +140,7 @@ function M.new()
     end
 
     -- CRUCIAL: Force redraw (same as mini.notify)
-    vim.cmd('redraw')
+    vim.cmd 'redraw'
 
     -- Update cache
     instance.cache.buf_id = buf_id
