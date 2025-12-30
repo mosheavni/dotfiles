@@ -30,7 +30,7 @@ jobs:
       - name: Copy configs to root
         run: |
           mkdir -p .github/linters
-          for file_n in .editorconfig .shellcheckrc .luacheckrc .prettierignore; do
+          for file_n in .editorconfig .shellcheckrc .luacheckrc .prettierignore .zizmor.yml; do
             echo "Copying $file_n"
             cp nvim/"$file_n" "$file_n"
             cp nvim/"$file_n" ".github/linters/${file_n}"
@@ -49,5 +49,5 @@ jobs:
           VALIDATE_JUPYTER_NBQA_RUFF: false
           VALIDATE_PYTHON_RUFF: false
           VALIDATE_PYTHON_RUFF_FORMAT: false
-          VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
+          VALIDATE_GITHUB_ACTIONS_ZIZMOR: true
           VALIDATE_SHELL_SHFMT: false # because zsh files fail this test.

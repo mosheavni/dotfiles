@@ -1,6 +1,5 @@
 local T = vim.keycode
 local git_funcs = require 'user.git'
-local utils = require 'user.utils'
 
 local actions = function()
   return {
