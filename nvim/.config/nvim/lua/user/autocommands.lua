@@ -202,12 +202,15 @@ autocmd('BufWritePost', {
     local filename = vim.api.nvim_buf_get_name(args.buf)
     ---@diagnostic disable-next-line: undefined-field
     local fileinfo = vim.uv.fs_stat(filename)
+    ---@diagnostic disable-next-line: undefined-global
+    -- selene: allow(undefined_variable)
     if not fileinfo or bit.band(fileinfo.mode - 32768, 0x40) ~= 0 then
       return
     end
 
     vim.notify 'File made executable'
-    ---@diagnostic disable-next-line: undefined-field
+    ---@diagnostic disable-next-line: undefined-field, undefined-global
+    -- selene: allow(undefined_variable)
     vim.uv.fs_chmod(filename, bit.bor(fileinfo.mode, 493))
   end,
   once = false,

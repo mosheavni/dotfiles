@@ -185,7 +185,7 @@ M.config = function()
       { name = 'buffer' },
     }),
   })
-  require('cmp_git').setup()
+  require('cmp_git').setup {}
 
   local db_fts = { 'sql', 'mysql', 'plsql' }
   for _, ft in ipairs(db_fts) do

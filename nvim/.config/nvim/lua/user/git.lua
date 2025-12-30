@@ -109,8 +109,8 @@ M.get_remotes = function(cb)
     for _, v in ipairs(vim.split(obj, '\n')) do
       local l = v:match '(.-)%s+%(fetch%)'
       if l then
-        local splited = vim.split(l, '\t')
-        remotes[splited[1]] = splited[2]
+        local splitted = vim.split(l, '\t')
+        remotes[splitted[1]] = splitted[2]
       end
     end
     cb(remotes)

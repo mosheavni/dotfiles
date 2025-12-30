@@ -142,7 +142,7 @@ vim.keymap.set('n', 'bla', function()
   vim.notify('hello!')
 end)
     ]]
-    -- prepend those lines to the beggining of the file
+    -- prepend those lines to the beginning of the file
     vim.api.nvim_buf_set_lines(0, 0, 0, false, vim.split(text, '\n'))
     vim.cmd.write()
     vim.cmd 'luafile %'

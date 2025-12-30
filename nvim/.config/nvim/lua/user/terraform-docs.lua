@@ -37,6 +37,7 @@ M.config = {
 ---@param start_node TSNode The starting node (cursor position).
 ---@return TSNode? The encompassing 'block' node.
 local function find_block_node(start_node)
+  ---@type TSNode?
   local node = start_node
   while node do
     -- The top-level definition in HCL is usually a 'block' node
@@ -124,6 +125,7 @@ local function get_resource_info()
   local argument_name
   if M.config.jump_anchor then
     -- Find the attribute identifier for the jump anchor.
+    ---@type TSNode?
     local current = start_node
     while current and current ~= block_node and not argument_name do
       if current:type() == 'attribute' then

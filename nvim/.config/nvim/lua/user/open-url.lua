@@ -7,7 +7,7 @@ M.open_url_under_cursor = function()
 
   ---@diagnostic disable-next-line: param-type-mismatch
   local url = string.gsub(cword, [[[%w%-%.]+/[%w%-%.]+]], '%1')
-  -- Remove surronding quotes if exist
+  -- Remove surrounding quotes if exist
   url = string.gsub(url, [[^["'](.*)["']$]], '%1')
 
   -- If string starts with https://
