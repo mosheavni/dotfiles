@@ -50,7 +50,7 @@ M.actions = function()
       vim.diagnostic.reset()
     end,
     ['Delete Log'] = function()
-      vim.system { 'rm', '-rf', vim.lsp.get_log_path() }
+      vim.system { 'rm', '-rf', vim.lsp.log.get_filename() }
     end,
   }
 end
