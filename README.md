@@ -1,11 +1,14 @@
-<!-- markdownlint-disable MD013 MD033 MD045 -->
+<!-- markdownlint-disable MD013 -->
 
 # Moshe Avni's DotFiles
 
-<a href="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim"><img src="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim/badges/plugins?style=flat" /></a>
-<a href="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim"><img src="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim/badges/leaderkey?style=flat" /></a>
-<a href="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim"><img src="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim/badges/plugin-manager?style=flat" /></a>
-[![Super-Linter](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/marketplace/actions/super-linter)
+![macOS](https://img.shields.io/badge/os-macOS-black?logo=apple)
+![Shell](https://img.shields.io/badge/shell-zsh-89e051?logo=zsh)
+![Editor](https://img.shields.io/badge/editor-Neovim-57A143?logo=neovim)
+![Terminal](https://img.shields.io/badge/terminal-WezTerm-4E49EE?logo=wezterm)
+![Stow](https://img.shields.io/badge/managed%20by-Stow-informational?logo=gnu)
+[![Lint](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml)
+![Last Commit](https://img.shields.io/github/last-commit/mosheavni/dotfiles)
 
 ## Usage
 
