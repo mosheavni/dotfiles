@@ -1,4 +1,5 @@
-<!-- markdownlint-disable -->
+<!-- markdownlint-disable MD013 MD033 MD045 -->
+
 # Moshe Avni's DotFiles
 
 <a href="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim"><img src="https://dotfyle.com/mosheavni/dotfiles-nvim-config-nvim/badges/plugins?style=flat" /></a>
