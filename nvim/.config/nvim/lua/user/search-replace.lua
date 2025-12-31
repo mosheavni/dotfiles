@@ -235,7 +235,7 @@ function M.setup()
   vim.keymap.set('v', '<leader>r', function()
     local cmd, move_left = M.populate_searchline 'v'
     local cursor_keys = string.rep(vim.keycode '<Left>', move_left)
-    vim.fn.feedkeys(':<C-u>' .. cmd .. cursor_keys, 'n')
+    vim.fn.feedkeys(':' .. vim.keycode '<C-u>' .. cmd .. cursor_keys, 'n')
   end, { desc = 'Search and replace visual selection' })
 
   -- Command-line mode mappings
