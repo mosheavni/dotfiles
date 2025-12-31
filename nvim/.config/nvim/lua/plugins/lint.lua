@@ -48,7 +48,7 @@ return {
     local group = vim.api.nvim_create_augroup('nvim-lint', { clear = true })
     vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost', 'InsertLeave', 'TextChanged' }, {
       group = group,
-      callback = function()
+      callback = function(args)
         if vim.bo.modifiable then
           -- Get linters for current filetype
           local linters = lint._resolve_linter_by_ft(vim.bo.filetype)
@@ -59,8 +59,13 @@ return {
             lint.try_lint(linter_name, { cwd = cwd })
           end
 
-          -- generic
-          lint.try_lint { 'gitleaks', 'codespell', 'trivy' }
+          -- Run gitleaks and trivy only on saved buffers (BufWritePost)
+          if args.event == 'BufWritePost' then
+            lint.try_lint { 'gitleaks', 'trivy' }
+          end
+
+          -- Run codespell on all events
+          lint.try_lint { 'codespell' }
         end
       end,
     })
