@@ -8,6 +8,7 @@ local M = {}
 ---@return table Instance with show/close/toggle methods
 function M.new(title, hints_config)
   local float = require('user.float').new()
+  local ns_id = vim.api.nvim_create_namespace('hints_highlight')
 
   -- Format the hint lines for display
   ---@return string[]
@@ -30,6 +31,48 @@ function M.new(title, hints_config)
     return lines
   end
   ---@cast format_hints ContentFunction
+
+  -- Apply extmarks to colorize the hints
+  ---@param buf_id integer
+  local function apply_highlights(buf_id)
+    -- Check if buffer is still valid before applying highlights
+    if not vim.api.nvim_buf_is_valid(buf_id) then
+      return
+    end
+
+    local lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
+
+    for line_idx, line in ipairs(lines) do
+      -- Skip title and empty lines
+      if line_idx > 2 and line ~= '' then
+        local arrow_pos = line:find('→')
+        if arrow_pos then
+          -- Highlight the key (from start to before arrow, trimmed)
+          -- arrow_pos is 1-indexed, extmarks use 0-indexed columns
+          local key_start = 2 -- accounting for leading spaces
+          local key_end = arrow_pos - 3 -- before the spaces and arrow
+          vim.api.nvim_buf_set_extmark(buf_id, ns_id, line_idx - 1, key_start, {
+            end_col = key_end,
+            hl_group = 'Special',
+          })
+
+          -- Highlight the arrow + spaces: "→  "
+          -- Arrow is 3 bytes (UTF-8), followed by 2 spaces
+          vim.api.nvim_buf_set_extmark(buf_id, ns_id, line_idx - 1, arrow_pos - 1, {
+            end_col = arrow_pos + 4, -- arrow (3 bytes) + 2 spaces
+            hl_group = 'Comment',
+          })
+
+          -- Highlight the description
+          -- Starts after arrow (3 bytes) + 2 spaces
+          vim.api.nvim_buf_set_extmark(buf_id, ns_id, line_idx - 1, arrow_pos + 4, {
+            end_col = #line,
+            hl_group = 'Function',
+          })
+        end
+      end
+    end
+  end
 
   -- Compute window configuration
   ---@param buf_id integer
@@ -76,12 +119,22 @@ function M.new(title, hints_config)
   return {
     show = function()
       float.refresh(format_hints, compute_config, window_opts)
+      vim.schedule(function()
+        if float.cache.buf_id then
+          apply_highlights(float.cache.buf_id)
+        end
+      end)
     end,
     close = function()
       float.close()
     end,
     toggle = function()
       float.toggle(format_hints, compute_config, window_opts)
+      vim.schedule(function()
+        if float.cache.buf_id then
+          apply_highlights(float.cache.buf_id)
+        end
+      end)
     end,
   }
 end
