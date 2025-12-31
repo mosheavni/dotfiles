@@ -54,6 +54,9 @@ function ecr-login() {
 }
 
 function clone() {
+  [[ -n "$DEBUG" ]] && set -x
+  # Use GIT_DEFAULT_ORG environment variable
+  GIT_DEFAULT_ORG="${GIT_DEFAULT_ORG:-spotinst-private}"
   cd ~/Repos
   REPO=$1
   CD_INTO=$REPO
@@ -61,19 +64,20 @@ function clone() {
   if [[ $REPO == git@* || $REPO == https://* ]]; then
     git clone $REPO
     CD_INTO=$(sed 's/\.git$//' <<<"$REPO" | awk -F/ '{print $NF}')
+  # check if $REPO starts with $GIT_DEFAULT_ORG/ (e.g., spotinst-private/repo)
+  elif [[ $REPO == ${GIT_DEFAULT_ORG}/* ]]; then
+    git clone git@github.com:${REPO}.git
+    CD_INTO=$(awk -F'/' '{print $2}' <<<$REPO)
+  # check if $REPO is in user/repo format
+  elif [[ $REPO == */* ]]; then
+    git clone https://github.com/${REPO}.git
+    CD_INTO=$(awk -F'/' '{print $2}' <<<$REPO)
   else
-    # check if $REPO is in user/repo format
-    if [[ $REPO == */* ]]; then
-      git clone https://github.com/${REPO}.git
-      CD_INTO=$(awk -F'/' '{print $2}' <<<$REPO)
-    else
-      # Use GIT_DEFAULT_ORG environment variable
-      GIT_DEFAULT_ORG="${GIT_DEFAULT_ORG:-spotinst-private}"
-      git clone git@github.com:${GIT_DEFAULT_ORG}/${1}.git
-    fi
+    git clone git@github.com:${GIT_DEFAULT_ORG}/${1}.git
   fi
   echo "CDing into $CD_INTO"
   cd $CD_INTO
+  [[ -n "$DEBUG" ]] && set +x
   nvim
 }
 
