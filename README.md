@@ -7,8 +7,10 @@
 ![Editor](https://img.shields.io/badge/editor-Neovim-57A143?logo=neovim)
 ![Terminal](https://img.shields.io/badge/terminal-WezTerm-4E49EE?logo=wezterm)
 ![Stow](https://img.shields.io/badge/managed%20by-Stow-informational?logo=gnu)
-[![Lint](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml)
 ![Last Commit](https://img.shields.io/github/last-commit/mosheavni/dotfiles)
+
+[![Lint](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml)
+[![Tests](https://github.com/mosheavni/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/mosheavni/dotfiles/actions/workflows/ci.yml)
 
 ## Usage
 
