@@ -34,14 +34,8 @@ function M.new(title, hints_config)
 
   -- Apply extmarks to colorize the hints
   ---@param buf_id integer
-  local function apply_highlights(buf_id)
-    -- Check if buffer is still valid before applying highlights
-    if not vim.api.nvim_buf_is_valid(buf_id) then
-      return
-    end
-
-    local lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
-
+  ---@param lines string[]
+  local function apply_highlights(buf_id, lines)
     for line_idx, line in ipairs(lines) do
       -- Skip title and empty lines
       if line_idx > 2 and line ~= '' then
@@ -73,6 +67,7 @@ function M.new(title, hints_config)
       end
     end
   end
+  ---@cast apply_highlights HighlightsFunction
 
   -- Compute window configuration
   ---@param buf_id integer
@@ -118,23 +113,13 @@ function M.new(title, hints_config)
   -- Public API
   return {
     show = function()
-      float.refresh(format_hints, compute_config, window_opts)
-      vim.schedule(function()
-        if float.cache.buf_id then
-          apply_highlights(float.cache.buf_id)
-        end
-      end)
+      float.refresh(format_hints, compute_config, window_opts, apply_highlights)
     end,
     close = function()
       float.close()
     end,
     toggle = function()
-      float.toggle(format_hints, compute_config, window_opts)
-      vim.schedule(function()
-        if float.cache.buf_id then
-          apply_highlights(float.cache.buf_id)
-        end
-      end)
+      float.toggle(format_hints, compute_config, window_opts, apply_highlights)
     end,
   }
 end

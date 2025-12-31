@@ -195,7 +195,7 @@ local M = {}
 ---@field refresh fun(content_fn: ContentFunction, config_fn: ConfigFunction, opts_fn?: OptsFunction, highlights_fn?: HighlightsFunction)
 ---@field close fun()
 ---@field is_shown fun(): boolean
----@field toggle fun(content_fn: ContentFunction, config_fn: ConfigFunction, opts_fn?: OptsFunction)
+---@field toggle fun(content_fn: ContentFunction, config_fn: ConfigFunction, opts_fn?: OptsFunction, highlights_fn?: HighlightsFunction)
 ---@field buffer_default_dimensions fun(buf_id: integer, max_width_share: number): integer, integer
 ---@field fit_to_width fun(text: string, width: number): string
 ---@field set_buf_name fun(buf_id: integer, name: string)
@@ -406,11 +406,12 @@ function M.new()
   ---@param content_fn ContentFunction Function that returns lines to display
   ---@param config_fn ConfigFunction Function that returns window config
   ---@param opts_fn OptsFunction? Optional function that returns window options
-  function instance.toggle(content_fn, config_fn, opts_fn)
+  ---@param highlights_fn HighlightsFunction? Optional function that applies highlights synchronously
+  function instance.toggle(content_fn, config_fn, opts_fn, highlights_fn)
     if instance.is_shown() then
       instance.close()
     else
-      instance.refresh(content_fn, config_fn, opts_fn)
+      instance.refresh(content_fn, config_fn, opts_fn, highlights_fn)
     end
   end
 
