@@ -3,10 +3,15 @@ local git_funcs = require 'user.git'
 -- Create hints instance
 local Hints = require 'user.hints'
 local hints = Hints.new('Fugitive - Available Keymaps', {
+  { key = '-', desc = 'Stage/unstage file' },
+  { key = 'X', desc = 'Discard changes' },
+  { key = '=', desc = 'Toggle Inline Diff' },
   { key = 'cc', desc = 'Commit' },
   { key = 'gl', desc = 'Pull' },
   { key = 'gp', desc = 'Push' },
   { key = 'gf', desc = 'Fetch all' },
+  { key = 'czz', desc = 'Push Stash' },
+  { key = 'cza', desc = 'Apply Stash' },
   { key = 'pr', desc = 'Pull request' },
   { key = 'fc', desc = 'First commit' },
   { key = 'wip', desc = 'Work in progress' },
