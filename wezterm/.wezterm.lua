@@ -2,7 +2,6 @@
 local wezterm = require 'wezterm'
 local act = wezterm.action
 
----@type Config
 local config = wezterm.config_builder()
 local HOME = os.getenv 'HOME'
 
