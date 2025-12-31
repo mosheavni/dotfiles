@@ -5,6 +5,32 @@ local SORT_METHODS = {
   'modification_time',
   'extension',
 }
+
+-- Create hints instance
+local Hints = require 'user.hints'
+local hints = Hints.new('Nvim-tree - Available Keymaps', {
+  { key = '<CR>', desc = 'Open file/directory' },
+  { key = 'v', desc = 'Open in vertical split' },
+  { key = 'i', desc = 'Open in horizontal split' },
+  { key = 'x', desc = 'Close directory' },
+  { key = 'h/l', desc = 'Navigate left/right (collapse/expand)' },
+  { key = 'a', desc = 'Create file/directory' },
+  { key = 'd', desc = 'Delete' },
+  { key = 'r', desc = 'Move file to location' },
+  { key = 'c', desc = 'Copy name' },
+  { key = 'y', desc = 'Copy relative path' },
+  { key = 'Y', desc = 'Copy absolute path' },
+  { key = 'J/K', desc = 'Toggle bookmark down/up' },
+  { key = 'dd', desc = 'Cut bookmarked file(s)' },
+  { key = 'yy', desc = 'Copy bookmarked file(s)' },
+  { key = 'p', desc = 'Paste' },
+  { key = 'mv', desc = 'Move bookmarked files' },
+  { key = 'cd', desc = 'Change root to node' },
+  { key = 'T', desc = 'Cycle sort method' },
+  { key = 'Z', desc = 'Extract archive' },
+  { key = 'g?', desc = 'Show help' },
+})
+
 local function on_attach(bufnr)
   local api = require 'nvim-tree.api'
 
@@ -140,6 +166,22 @@ local function on_attach(bufnr)
     end
     vim.notify('Extracted: ' .. file_path)
   end, opts 'Extract File')
+
+  -- Show hints when entering nvim-tree buffer/window
+  vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
+    buffer = bufnr,
+    callback = function()
+      hints.show()
+    end,
+  })
+
+  -- Hide hints when leaving nvim-tree buffer/window
+  vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
+    buffer = bufnr,
+    callback = function()
+      hints.close()
+    end,
+  })
 end
 
 local M = {
