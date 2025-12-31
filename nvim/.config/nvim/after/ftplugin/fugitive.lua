@@ -7,6 +7,7 @@ local hints = Hints.new('Fugitive - Available Keymaps', {
   { key = 'X', desc = 'Discard changes' },
   { key = '=', desc = 'Toggle Inline Diff' },
   { key = 'cc', desc = 'Commit' },
+  { key = 'dv', desc = 'Vertical diff' },
   { key = 'gl', desc = 'Pull' },
   { key = 'gp', desc = 'Push' },
   { key = 'gf', desc = 'Fetch all' },
