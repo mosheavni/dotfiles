@@ -1,6 +1,11 @@
+local M = {}
+
 local ns_id = vim.api.nvim_create_namespace 'number_separators'
 
-local function format_number(number_str)
+---Format a number string with comma separators
+---@param number_str string The number as a string
+---@return string The formatted number with commas
+function M.format_number(number_str)
   -- Handle negative numbers
   local sign = ''
   if number_str:sub(1, 1) == '-' then
@@ -30,7 +35,7 @@ local function apply_number_formatting()
   for lnum, line in ipairs(lines) do
     -- Find numbers in the line
     for number in line:gmatch '(-?%d+%.?%d*)' do
-      local formatted = format_number(number)
+      local formatted = M.format_number(number)
       if formatted ~= number then
         -- Find the column where the number starts
         local start_col = line:find(number, 1, true)
@@ -81,3 +86,5 @@ vim.api.nvim_create_user_command('NumberSeparatorsToggle', function()
     vim.notify 'Number separators enabled'
   end
 end, {})
+
+return M

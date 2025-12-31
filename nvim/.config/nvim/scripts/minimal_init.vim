@@ -1,4 +1,4 @@
-set rtp+=./nvim/.config/nvim/
-set rtp+=../plenary.nvim/
+set runtimepath+=.
+set runtimepath+=../plenary.nvim/
 
 runtime! plugin/plenary.vim
