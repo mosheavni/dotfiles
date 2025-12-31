@@ -493,6 +493,7 @@ command! SortInBlock call s:SortInBlock()
 ]]
 
 require('user.search-replace').setup()
+require('user.search-replace-dashboard').setup()
 require('user.tabular-v2').setup()
 require('user.projects').setup()
 require 'user.number-separators'

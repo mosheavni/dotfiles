@@ -5,18 +5,6 @@ local chars = { '/', '?', '#', ':', '@' }
 local magic_list = { '\\v', '\\m', '\\M', '\\V', '' }
 local available_flags = { 'g', 'c', 'i' }
 
--- Create hints instance
-local Hints = require 'user.hints'
-local hints = Hints.new('Search & Replace - Available Keymaps', {
-  { key = '<M-g>', desc = "Toggle 'g' flag (global)" },
-  { key = '<M-c>', desc = "Toggle 'c' flag (confirm)" },
-  { key = '<M-i>', desc = "Toggle 'i' flag (case-insensitive)" },
-  { key = '<M-d>', desc = 'Toggle replace term (clear/restore)' },
-  { key = '<M-5>', desc = 'Cycle range (%s → .,$s → 0,.s)' },
-  { key = '<M-/>', desc = 'Cycle separator (/ → ? → # → : → @)' },
-  { key = '<M-m>', desc = 'Cycle magic mode (\\v → \\m → \\M → \\V → none)' },
-})
-
 -- State
 local sar_state = {
   active = false,
@@ -30,9 +18,26 @@ local function should_sar()
   return vim.fn.getcmdtype() == ':' and sar_state.active
 end
 
+-- Public function to check if search-replace mode is active
+function M.is_active()
+  return sar_state.active
+end
+
 -- Helper to set command and cursor position (called from C-\ e expression)
 function M.set_cmd_and_pos()
   vim.fn.setcmdpos(sar_state.cursor_pos)
+
+  -- Trigger dashboard refresh by invalidating cache and simulating a keystroke
+  -- This happens after the cmdline is updated, triggering CmdlineChanged with fresh data
+  vim.defer_fn(function()
+    local ok, dashboard = pcall(require, 'user.search-replace-dashboard')
+    if ok and dashboard and dashboard.invalidate_cache then
+      dashboard.invalidate_cache()
+      -- Simulate typing space+backspace to trigger CmdlineChanged without modifying the command
+      vim.fn.feedkeys(' ' .. vim.keycode '<BS>', 'in')
+    end
+  end, 50)
+
   return sar_state.new_cmd
 end
 
@@ -256,23 +261,10 @@ function M.setup()
   vim.keymap.set('c', '<M-/>', M.toggle_separator, { expr = true, desc = 'Toggle separator' })
   vim.keymap.set('c', '<M-m>', M.toggle_magic, { expr = true, desc = 'Toggle magic mode' })
 
-  -- Autocommand to show hints when entering cmdline
-  vim.api.nvim_create_autocmd('CmdlineEnter', {
-    pattern = ':',
-    callback = function()
-      if sar_state.active then
-        vim.schedule(function()
-          hints.show()
-        end)
-      end
-    end,
-  })
-
-  -- Autocommand to close hints when leaving cmdline
+  -- Autocommand to deactivate search-replace mode when leaving cmdline
   vim.api.nvim_create_autocmd('CmdlineLeave', {
     pattern = ':',
     callback = function()
-      hints.close()
       sar_state.active = false
     end,
   })
