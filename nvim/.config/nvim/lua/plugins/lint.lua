@@ -21,7 +21,7 @@ return {
       dockerfile = { 'hadolint' },
       ghaction = { 'actionlint' },
       groovy = { 'npm-groovy-lint' },
-      python = { 'ruff', 'black' },
+      python = { 'ruff' },
       lua = { 'selene', 'luacheck' },
       make = { 'checkmake' },
       markdown = { 'proselint', 'write_good', 'markdownlint' },
