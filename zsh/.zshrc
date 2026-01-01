@@ -83,7 +83,6 @@ for ZSH_FILE in "${ZDOTDIR:-$HOME}"/zsh.d/*.zsh(N); do
 done
 [[ -f $HOME/corp-aliases.sh ]] && zsh-defer source $HOME/corp-aliases.sh
 
-
 # ================ #
 # Kubectl Contexts #
 # ================ #

@@ -13,8 +13,9 @@ return {
       require('copilot').setup {
         nes = {
           enabled = false,
+          auto_trigger = true,
           keymap = {
-            accept_and_goto = '<leader>p',
+            accept_and_goto = '<C-]>',
             accept = false,
             dismiss = '<Esc>',
           },
