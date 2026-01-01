@@ -1,45 +1,33 @@
 function _alias_parser() {
-  parsed_alias=$(alias -- "$1")
-  if [[ $? == 0 ]]; then
-    echo $parsed_alias | awk -F\' '{print $2}'
-  fi
+  local type=$(whence -w -- "$1" 2>/dev/null)
+  [[ $type == *": alias" || $type == *": global alias" ]] && whence -- "$1" 2>/dev/null
 }
 
 function _alias_finder() {
-  final_result=()
-  for s in $(echo $1); do
+  local -a final_result words
+  local alias_val
+  words=(${(z)1})
+
+  for s in $words; do
     alias_val=$(_alias_parser "$s")
     if [[ -n $alias_val ]]; then
-      # Handle nested aliases with the same name
       if [[ $alias_val == *"$s"* ]]; then
-        final_result+=($alias_val)
+        final_result+=(${(z)alias_val})
       else
-        final_result+=($(_alias_finder "$alias_val"))
+        final_result+=(${(z)$(_alias_finder "$alias_val")})
       fi
     else
       final_result+=($s)
     fi
   done
-  echo "${final_result[@]}"
+  print -r -- "${final_result[*]}"
 }
 
 # Widget function to expand aliases in the current command line
 function expand-aliases-widget() {
-  # Get the current buffer (command line content)
-  local current_buffer="$BUFFER"
+  [[ -z $BUFFER ]] && return
 
-  # Skip if buffer is empty
-  if [[ -z "$current_buffer" ]]; then
-    return
-  fi
-
-  # Pass the buffer through _alias_finder
-  local expanded_command=$(_alias_finder "$current_buffer")
-
-  # Replace the buffer with the expanded command
-  BUFFER="$expanded_command"
-
-  # Move cursor to the end of the line
+  BUFFER=$(_alias_finder "$BUFFER")
   CURSOR=$#BUFFER
 }
 
