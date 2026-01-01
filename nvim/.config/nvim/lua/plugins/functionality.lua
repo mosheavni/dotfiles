@@ -20,16 +20,12 @@ local M = {
   {
     'iamcco/markdown-preview.nvim',
     build = 'cd app && yarn install',
-    config = function()
-      vim.g.mkdp_filetypes = { 'markdown' }
-    end,
+    config = function() vim.g.mkdp_filetypes = { 'markdown' } end,
     cmd = 'MarkdownPreview',
     ft = 'markdown',
     init = function()
       require('user.menu').add_actions('Markdown', {
-        ['Preview in Browser'] = function()
-          vim.cmd.MarkdownPreview()
-        end,
+        ['Preview in Browser'] = function() vim.cmd.MarkdownPreview() end,
       })
     end,
   },
@@ -60,7 +56,12 @@ local M = {
     },
     keys = {
       { '<leader>pr', '<cmd>PRReviewMenu<cr>', desc = 'PR Review Menu' },
-      { '<leader>pr', ":<C-u>'<,'>PRSuggestChange<CR>", desc = 'Suggest change', mode = 'v' },
+      {
+        '<leader>pr',
+        ":<C-u>'<,'>PRSuggestChange<CR>",
+        desc = 'Suggest change',
+        mode = 'v',
+      },
     },
   },
   {
@@ -85,9 +86,7 @@ local M = {
     },
     init = function()
       require('user.menu').add_actions('Yanky', {
-        ['Yank history'] = function()
-          vim.cmd 'YankyRingHistory'
-        end,
+        ['Yank history'] = function() vim.cmd('YankyRingHistory') end,
       })
     end,
   },
@@ -113,9 +112,7 @@ local M = {
         preview_split = 'right',
         -- This is the config that will be passed to nvim_open_win.
         -- Change values here to customize the layout
-        override = function(conf)
-          return conf
-        end,
+        override = function(conf) return conf end,
       },
       view_options = {
         -- Show files and directories that start with "."
@@ -140,11 +137,13 @@ local M = {
         enter = function()
           vim.keymap.set('n', '<leader>l', '<cmd>Leet<cr>')
           vim.keymap.set('n', '<leader>lr', function()
-            vim.ui.select({ 'easy', 'medium', 'hard' }, { prompt = 'Choose difficulty for a random leet❯ ' }, function(level)
-              vim.cmd('Leet random difficulty=' .. level)
-            end)
+            vim.ui.select(
+              { 'easy', 'medium', 'hard' },
+              { prompt = 'Choose difficulty for a random leet❯ ' },
+              function(level) vim.cmd('Leet random difficulty=' .. level) end
+            )
           end, { remap = false })
-          require('lazy').load { plugins = { 'copilot.lua' } }
+          require('lazy').load({ plugins = { 'copilot.lua' } })
         end,
         ['question_enter'] = function()
           vim.keymap.set('n', '<c-cr>', '<cmd>Leet run<CR>', { buffer = true })
@@ -155,68 +154,19 @@ local M = {
   },
   {
     'mrjones2014/smart-splits.nvim',
-    keys = {
-      -- resizing splits
-      {
-        '<A-h>',
-        function()
-          require('smart-splits').resize_left()
-        end,
-        desc = 'Resize split left',
-      },
-      {
-        '<A-j>',
-        function()
-          require('smart-splits').resize_down()
-        end,
-        desc = 'Resize split down',
-      },
-      {
-        '<A-k>',
-        function()
-          require('smart-splits').resize_up()
-        end,
-        desc = 'Resize split up',
-      },
-      {
-        '<A-l>',
-        function()
-          require('smart-splits').resize_right()
-        end,
-        desc = 'Resize split right',
-      },
-
+    config = function()
+      ---@diagnostic disable-next-line: missing-fields
+      require('smart-splits').setup({})
+      vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
+      vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
+      vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)
+      vim.keymap.set('n', '<A-l>', require('smart-splits').resize_right)
       -- moving between splits
-      {
-        '<C-h>',
-        function()
-          require('smart-splits').move_cursor_left()
-        end,
-        desc = 'Move to left split',
-      },
-      {
-        '<C-j>',
-        function()
-          require('smart-splits').move_cursor_down()
-        end,
-        desc = 'Move to down split',
-      },
-      {
-        '<C-k>',
-        function()
-          require('smart-splits').move_cursor_up()
-        end,
-        desc = 'Move to up split',
-      },
-      {
-        '<C-l>',
-        function()
-          require('smart-splits').move_cursor_right()
-        end,
-        desc = 'Move to right split',
-      },
-    },
-    opts = {},
+      vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
+      vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
+      vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
+      vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
+    end,
   },
   {
     'nvzone/typr',
