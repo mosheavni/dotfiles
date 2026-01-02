@@ -14,6 +14,9 @@ return {
   config = function()
     local lint = require 'lint'
 
+    -- Trivy toggle state (disabled by default)
+    local trivy_enabled = false
+
     lint.linters_by_ft = {
       -- hcl = { 'terragrunt_validate' },
       Jenkinsfile = { 'npm-groovy-lint' },
@@ -61,7 +64,11 @@ return {
 
           -- Run gitleaks and trivy only on saved buffers (BufWritePost)
           if args.event == 'BufWritePost' then
-            lint.try_lint { 'gitleaks', 'trivy' }
+            local global_linters = { 'gitleaks' }
+            if trivy_enabled then
+              table.insert(global_linters, 'trivy')
+            end
+            lint.try_lint(global_linters)
           end
 
           -- Run codespell on all events
@@ -79,6 +86,22 @@ return {
         print('Linters for ' .. filetype .. ': ' .. table.concat(linters, ', '))
       else
         print('No linters configured for filetype: ' .. filetype)
+      end
+    end, {})
+
+    -- Toggle trivy linting
+    vim.api.nvim_create_user_command('TrivyLintToggle', function()
+      trivy_enabled = not trivy_enabled
+      local status = trivy_enabled and 'enabled' or 'disabled'
+      print('Trivy linting ' .. status)
+
+      if trivy_enabled then
+        -- Run trivy immediately if enabled
+        lint.try_lint { 'trivy' }
+      else
+        -- Clear trivy diagnostics when disabled
+        local trivy_ns = vim.api.nvim_create_namespace 'trivy'
+        vim.diagnostic.reset(trivy_ns, 0)
       end
     end, {})
   end,
