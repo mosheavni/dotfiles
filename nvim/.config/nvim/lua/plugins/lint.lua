@@ -52,28 +52,35 @@ return {
     vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost', 'InsertLeave', 'TextChanged' }, {
       group = group,
       callback = function(args)
-        if vim.bo.modifiable then
-          -- Get linters for current filetype
-          local linters = lint._resolve_linter_by_ft(vim.bo.filetype)
-
-          -- Run each linter with its configured cwd
-          for _, linter_name in ipairs(linters) do
-            local cwd = get_linter_cwd(linter_name)
-            lint.try_lint(linter_name, { cwd = cwd })
-          end
-
-          -- Run gitleaks and trivy only on saved buffers (BufWritePost)
-          if args.event == 'BufWritePost' then
-            local global_linters = { 'gitleaks' }
-            if trivy_enabled then
-              table.insert(global_linters, 'trivy')
-            end
-            lint.try_lint(global_linters)
-          end
-
-          -- Run codespell on all events
-          lint.try_lint { 'codespell' }
+        local excluded_filetypes = { 'gitcommit', 'gitrebase', 'fugitive' }
+        if vim.tbl_contains(excluded_filetypes, vim.bo.filetype) then
+          return
         end
+
+        if not vim.bo.modifiable then
+          return
+        end
+
+        -- Get linters for current filetype
+        local linters = lint._resolve_linter_by_ft(vim.bo.filetype)
+
+        -- Run each linter with its configured cwd
+        for _, linter_name in ipairs(linters) do
+          local cwd = get_linter_cwd(linter_name)
+          lint.try_lint(linter_name, { cwd = cwd })
+        end
+
+        -- Run gitleaks and trivy only on saved buffers (BufWritePost)
+        if args.event == 'BufWritePost' then
+          local global_linters = { 'gitleaks' }
+          if trivy_enabled then
+            table.insert(global_linters, 'trivy')
+          end
+          lint.try_lint(global_linters)
+        end
+
+        -- Run codespell on all events
+        lint.try_lint { 'codespell' }
       end,
     })
 
