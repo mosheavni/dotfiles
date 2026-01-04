@@ -4,12 +4,20 @@ local treesitter_plugin = {
   build = ':TSUpdate',
   event = { 'BufReadPost', 'FileType' },
   init = function()
-    vim.api.nvim_create_autocmd('FileType', {
+    vim.api.nvim_create_autocmd({ 'FileType', 'Syntax' }, {
       group = vim.api.nvim_create_augroup('myconfig.treesitter', { clear = true }),
       pattern = { '*' },
       callback = function(event)
-        local filetype = event.match
-        local lang = vim.treesitter.language.get_lang(filetype)
+        local name = event.match
+        local lang = vim.treesitter.language.get_lang(name)
+
+        if not lang then
+          local syntax = vim.bo[event.buf].syntax
+          if syntax and syntax ~= '' and syntax ~= name then
+            lang = vim.treesitter.language.get_lang(syntax)
+          end
+        end
+
         if not lang then
           return
         end
@@ -24,7 +32,7 @@ local treesitter_plugin = {
           return
         end
 
-        if not pcall(vim.treesitter.start, event.buf) then
+        if not pcall(vim.treesitter.start, event.buf, lang) then
           return
         end
 
