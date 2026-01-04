@@ -15,7 +15,7 @@ return {
           enabled = false,
           auto_trigger = true,
           keymap = {
-            accept_and_goto = '<C-]>',
+            -- accept_and_goto = '<C-]>',
             accept = false,
             dismiss = '<Esc>',
           },
