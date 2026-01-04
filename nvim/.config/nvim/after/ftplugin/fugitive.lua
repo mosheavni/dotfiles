@@ -1,40 +1,40 @@
 local git_funcs = require 'user.git'
 
 -- Create hints instance
-local Hints = require 'user.hints'
-local hints = Hints.new('Fugitive - Available Keymaps', {
-  { key = '-', desc = 'Stage/unstage file' },
-  { key = 'X', desc = 'Discard changes' },
-  { key = '=', desc = 'Toggle Inline Diff' },
-  { key = 'cc', desc = 'Commit' },
-  { key = 'dv', desc = 'Vertical diff' },
-  { key = 'gl', desc = 'Pull' },
-  { key = 'gp', desc = 'Push' },
-  { key = 'gf', desc = 'Fetch all' },
-  { key = 'czz', desc = 'Push Stash' },
-  { key = 'cza', desc = 'Apply Stash' },
-  { key = 'pr', desc = 'Pull request' },
-  { key = 'fc', desc = 'First commit' },
-  { key = 'wip', desc = 'Work in progress' },
-  { key = 'R', desc = 'Reload' },
-  { key = '<leader>t', desc = 'Open terminal' },
-})
+-- local Hints = require 'user.hints'
+-- local hints = Hints.new('Fugitive - Available Keymaps', {
+--   { key = '-', desc = 'Stage/unstage file' },
+--   { key = 'X', desc = 'Discard changes' },
+--   { key = '=', desc = 'Toggle Inline Diff' },
+--   { key = 'cc', desc = 'Commit' },
+--   { key = 'dv', desc = 'Vertical diff' },
+--   { key = 'gl', desc = 'Pull' },
+--   { key = 'gp', desc = 'Push' },
+--   { key = 'gf', desc = 'Fetch all' },
+--   { key = 'czz', desc = 'Push Stash' },
+--   { key = 'cza', desc = 'Apply Stash' },
+--   { key = 'pr', desc = 'Pull request' },
+--   { key = 'fc', desc = 'First commit' },
+--   { key = 'wip', desc = 'Work in progress' },
+--   { key = 'R', desc = 'Reload' },
+--   { key = '<leader>t', desc = 'Open terminal' },
+-- })
 
 -- Show hints when entering fugitive buffer
-vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
-  buffer = 0,
-  callback = function()
-    hints.show()
-  end,
-})
-
--- Hide hints when leaving fugitive buffer
-vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
-  buffer = 0,
-  callback = function()
-    hints.close()
-  end,
-})
+-- vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
+--   buffer = 0,
+--   callback = function()
+--     hints.show()
+--   end,
+-- })
+--
+-- -- Hide hints when leaving fugitive buffer
+-- vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
+--   buffer = 0,
+--   callback = function()
+--     hints.close()
+--   end,
+-- })
 
 vim.schedule(function()
   local buf = git_funcs.get_fugitive_buffer() or 0
@@ -110,5 +110,5 @@ vim.schedule(function()
   })
 
   -- Show hints immediately
-  hints.show()
+  -- hints.show()
 end)
