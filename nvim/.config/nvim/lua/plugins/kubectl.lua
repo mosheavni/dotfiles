@@ -86,7 +86,7 @@ return {
       callback = function()
         vim.o.relativenumber = false
         vim.opt.titlestring = '❄️ k8s: %t'
-        if vim.bo.filetype == 'k8s_yaml' then
+        if vim.bo.filetype:match '^k8s_.*yaml$' then
           vim.bo.filetype = 'yaml'
         end
       end,
