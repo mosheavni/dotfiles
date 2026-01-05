@@ -45,6 +45,7 @@ M.setup = function()
 
   vim.lsp.config('lua_ls', {
     root_markers = {
+      '.git',
       '.luarc.json',
       '.luarc.jsonc',
       '.luacheckrc',
