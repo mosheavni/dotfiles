@@ -72,6 +72,7 @@ local treesitter_plugin = {
       'jq',
       'json',
       'json5',
+      'latex',
       'lua',
       'luadoc',
       'luap',
