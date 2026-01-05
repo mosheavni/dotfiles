@@ -15,12 +15,9 @@ config.webgpu_power_preference = 'HighPerformance'
 config.scrollback_lines = 10000
 
 -- font
-config.harfbuzz_features = {
-  'calt=1',
-  'clig=1',
-  'liga=1',
-}
-config.font = wezterm.font_with_fallback { { family = 'CaskaydiaCove Nerd Font', weight = 'DemiBold' } }
+-- ligatures: != === ---- ~~ ~> ~~> => ==> -> --> <-- <- <== <~ <~~ << >> <= >=
+config.harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1' }
+config.font = wezterm.font_with_fallback { { family = 'CaskaydiaCove Nerd Font' } }
 config.font_size = 16
 config.freetype_load_target = 'Normal'
 config.custom_block_glyphs = false
