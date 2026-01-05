@@ -12,6 +12,10 @@ return {
       interval = 300, -- milliseconds
     },
 
+    lsp = {
+      enabled = true,
+    },
+
     headers = {
       enabled = true,
       hints = true,
