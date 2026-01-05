@@ -1,6 +1,7 @@
 ---@diagnostic disable: missing-fields
 local M = {
   'hrsh7th/nvim-cmp',
+  enabled = false,
   version = false, -- last release is way too old
   event = { 'InsertEnter', 'CmdlineEnter' },
   dependencies = {
@@ -49,13 +50,6 @@ M.config = function()
   local custom_kinds_hl = {}
   vim.api.nvim_set_hl(0, 'CmpItemKindTabNine', { link = 'Green' })
   cmp.setup {
-    enabled = function()
-      local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
-      if string.find(ft, 'k8s_') then
-        return false
-      end
-      return true
-    end,
     native_menu = false,
     view = {
       entries = {
