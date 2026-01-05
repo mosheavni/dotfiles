@@ -29,6 +29,8 @@ end
 
 local function create_notify_callback(formatter_name)
   return function(err, did_format)
+    vim.print('err: ' .. vim.inspect(err))
+    vim.print('did_format: ' .. vim.inspect(did_format))
     if not did_format then
       return
     end
@@ -119,17 +121,26 @@ return {
     default_format_opts = {
       lsp_format = 'fallback',
     },
-    format_on_save = function()
+    format_on_save = function(bufnr)
+      vim.b[bufnr].format_changedtick = vim.api.nvim_buf_get_changedtick(bufnr)
       return {
         lsp_format = 'fallback',
         timeout_ms = 5000,
       }
     end,
     format_after_save = function(bufnr)
-      local formatter_names = get_formatter_names(bufnr)
-      if formatter_names ~= '' then
-        vim.notify(string.format('Formatted using %s', formatter_names))
+      local old_changedtick = vim.b[bufnr].format_changedtick
+      local new_changedtick = vim.api.nvim_buf_get_changedtick(bufnr)
+
+      -- Only notify if the buffer actually changed
+      if old_changedtick and new_changedtick > old_changedtick then
+        local formatter_names = get_formatter_names(bufnr)
+        if formatter_names ~= '' then
+          vim.notify(string.format('Formatted using %s', formatter_names))
+        end
       end
+
+      vim.b[bufnr].format_changedtick = nil
     end,
     formatters = {},
   },
