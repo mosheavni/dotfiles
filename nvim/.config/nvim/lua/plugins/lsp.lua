@@ -1,35 +1,35 @@
 local M = {
   {
     'neovim/nvim-lspconfig',
-    event = { 'BufReadPre', 'BufNewFile' },
-    init = require('user.lsp.config').init,
+    event = 'VeryLazy',
     config = require('user.lsp.config').setup,
     dependencies = {
       'nvimtools/none-ls.nvim',
       'mason-org/mason.nvim',
-      {
-        'j-hui/fidget.nvim',
-        opts = {
-          progress = {
-            display = {
-              progress_icon = { pattern = 'moon', period = 1 },
-            },
-          },
+    },
+  },
+  {
+    'j-hui/fidget.nvim',
+    event = 'LspAttach',
+    opts = {
+      progress = {
+        display = {
+          progress_icon = { pattern = 'moon', period = 1 },
         },
-      },
-      {
-        'SmiteshP/nvim-navic',
-        lazy = true,
-        opts = {
-          highlight = true,
-        },
-        config = function(_, opts)
-          local navic = require 'nvim-navic'
-          navic.setup(opts)
-          vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
-        end,
       },
     },
+  },
+  {
+    'SmiteshP/nvim-navic',
+    event = 'LspAttach',
+    opts = {
+      highlight = true,
+    },
+    config = function(_, opts)
+      local navic = require 'nvim-navic'
+      navic.setup(opts)
+      vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
+    end,
   },
   {
     'mason-org/mason.nvim',
@@ -97,9 +97,8 @@ local M = {
       end
     end,
   },
-}
 
-local language_specific_plugins = {
+  -- language_specific_plugins
   {
     'cuducos/yaml.nvim',
     cmd = {
@@ -113,7 +112,7 @@ local language_specific_plugins = {
   },
   {
     'phelipetls/jsonpath.nvim',
-    ft = 'json',
+    cmd = 'JsonPath',
     config = function()
       vim.api.nvim_buf_create_user_command(0, 'JsonPath', function()
         ---@diagnostic disable-next-line: missing-parameter
@@ -144,7 +143,7 @@ local language_specific_plugins = {
   { 'b0o/SchemaStore.nvim', lazy = true },
   {
     'folke/lazydev.nvim',
-    ft = 'lua', -- only load on lua files
+    ft = 'lua',
     dependencies = {
       'DrKJeff16/wezterm-types',
     },
@@ -153,18 +152,13 @@ local language_specific_plugins = {
         -- See the configuration section for more details
         -- Load luvit types when the `vim.uv` word is found
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-        { path = 'snacks.nvim', words = { 'Snacks' } },
         { path = 'wezterm-types', mods = { 'wezterm' } },
       },
     },
   },
   {
     'ray-x/go.nvim',
-    dependencies = { -- optional packages
-      'ray-x/guihua.lua',
-      'neovim/nvim-lspconfig',
-      'nvim-treesitter/nvim-treesitter',
-    },
+    dependencies = { 'ray-x/guihua.lua' },
     opts = {
       lsp_cfg = true,
       lsp_gofumpt = true,
@@ -189,7 +183,4 @@ local language_specific_plugins = {
   },
 }
 
-return {
-  M,
-  language_specific_plugins,
-}
+return M

@@ -4,27 +4,15 @@ return {
   event = { 'InsertEnter', 'CmdlineEnter' },
   dependencies = {
     'rafamadriz/friendly-snippets',
-    {
-      'saghen/blink.compat',
-      version = '*',
-      lazy = true,
-      opts = {
-        debug = true,
-        impersonate_nvim_cmp = true,
-      },
-    },
-    {
-      'tzachar/cmp-tabnine',
-      build = './install.sh',
-      opts = {
-        max_lines = 1000,
-        max_num_results = 3,
-        sort = true,
-      },
-      config = function(_, opts)
-        require('cmp_tabnine.config'):setup(opts)
-      end,
-    },
+    -- {
+    --   'saghen/blink.compat',
+    --   version = '*',
+    --   lazy = true,
+    --   opts = {
+    --     debug = true,
+    --     impersonate_nvim_cmp = true,
+    --   },
+    -- },
     {
       'L3MON4D3/LuaSnip',
       version = 'v2.*',
@@ -92,22 +80,12 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      -- default = { 'lsp', 'tabnine', 'path', 'snippets', 'buffer' },
-      default = { 'tabnine' },
+      default = { 'lsp', 'path', 'snippets', 'buffer' },
       per_filetype = {
         lua = { inherit_defaults = true, 'lazydev' },
       },
       providers = {
         lazydev = { name = 'LazyDev', module = 'lazydev.integrations.blink' },
-        tabnine = {
-          name = 'cmp_tabnine',
-          module = 'blink.compat.source',
-          async = true,
-          score_offset = 100,
-          opts = {
-            cmp_name = 'cmp_tabnine',
-          },
-        },
       },
     },
     fuzzy = { implementation = 'prefer_rust_with_warning' },

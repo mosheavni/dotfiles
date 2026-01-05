@@ -20,7 +20,7 @@ local M = {
   },
 }
 
-M.init = function()
+M.setup = function()
   _G.start_ls = function(with_file)
     local file_name = nil
     if with_file == true then
@@ -42,15 +42,6 @@ M.init = function()
       _G.start_ls()
     end,
   })
-end
-
-M.setup = function()
-  require('user.lsp.actions').setup()
-  M.capabilities =
-    vim.tbl_deep_extend('force', vim.lsp.protocol.make_client_capabilities(), require('cmp_nvim_lsp').default_capabilities(), M.capabilities or {}, {})
-
-  ---@diagnostic disable-next-line: missing-fields
-  require('user.lsp.servers').setup()
 
   -- on attach
   local on_attach_aug = vim.api.nvim_create_augroup('UserLspAttach', { clear = true })
@@ -102,6 +93,9 @@ M.setup = function()
       end)
     end,
   })
+
+  require('user.lsp.actions').setup()
+  require('user.lsp.servers').setup()
 end
 
 return M
