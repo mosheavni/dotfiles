@@ -18,6 +18,7 @@ return {
       version = 'v2.*',
       build = 'make install_jsregexp',
       config = function()
+        require('luasnip.loaders.from_vscode').lazy_load()
         require('luasnip.loaders.from_vscode').lazy_load { paths = '~/.config/nvim/snippets' }
       end,
     },
@@ -43,6 +44,7 @@ return {
     -- See :h blink-cmp-config-keymap for defining your own keymap
     keymap = {
       preset = 'default',
+      [vim.env.CMP_COMPLETION or '<M-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
       ['<Tab>'] = {
         'select_next',
         function(cmp)
