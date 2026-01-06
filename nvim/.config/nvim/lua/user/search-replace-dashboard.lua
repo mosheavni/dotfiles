@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-field
+
 ---@class SearchReplaceDashboard
 local M = {}
 
@@ -360,15 +362,15 @@ local function apply_highlights(buf_id, lines, parsed)
 
   -- Highlight magic description (line 6) with arrow and description
   local magic_desc_line = lines[7] -- Buffer line 6 is array index 7
-  local arrow_pos = magic_desc_line:find('→', 1, true)
-  if arrow_pos then
+  local magic_arrow_pos = magic_desc_line:find('→', 1, true)
+  if magic_arrow_pos then
     -- Highlight arrow
-    vim.api.nvim_buf_set_extmark(buf_id, dashboard_state.ns_id, 6, arrow_pos - 1, {
-      end_col = arrow_pos + 2, -- UTF-8 character takes 3 bytes
+    vim.api.nvim_buf_set_extmark(buf_id, dashboard_state.ns_id, 6, magic_arrow_pos - 1, {
+      end_col = magic_arrow_pos + 2, -- UTF-8 character takes 3 bytes
       hl_group = config.highlights.arrow,
     })
     -- Highlight description text
-    vim.api.nvim_buf_set_extmark(buf_id, dashboard_state.ns_id, 6, arrow_pos + 2, {
+    vim.api.nvim_buf_set_extmark(buf_id, dashboard_state.ns_id, 6, magic_arrow_pos + 2, {
       end_col = #magic_desc_line,
       hl_group = config.highlights.inactive_desc,
     })
