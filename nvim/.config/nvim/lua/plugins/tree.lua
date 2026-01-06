@@ -15,7 +15,7 @@ local hints = Hints.new('Nvim-tree - Available Keymaps', {
   { key = 'x', desc = 'Close directory' },
   { key = 'h/l', desc = 'Navigate left/right (collapse/expand)' },
   { key = 'a', desc = 'Create file/directory' },
-  { key = 'd', desc = 'Delete' },
+  { key = 'd', desc = 'Delete file/directory' },
   { key = 'r', desc = 'Move file to location' },
   { key = 'c', desc = 'Copy file' },
   { key = 'Y', desc = 'Copy relative path' },
