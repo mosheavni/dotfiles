@@ -103,8 +103,8 @@ return {
       error_header = '  Error ',
     },
     keys = {
-      { '<leader>ccc', '<cmd>CopilotChat<CR>', mode = { 'n', 'v' } },
-      { '<leader>ccs', '<cmd>CopilotChatStop<CR>' },
+      { '<leader>ccc', '<cmd>CopilotChat<CR>', mode = { 'n', 'v' }, desc = 'Copilot Chat' },
+      { '<leader>ccs', '<cmd>CopilotChatStop<CR>', desc = 'Stop Copilot Chat' },
       {
         '<leader>ccp',
         function()
@@ -145,8 +145,8 @@ return {
     enabled = true,
     version = false, -- Never set this value to "*"! Never!
     keys = {
-      { '<leader>ccc', '<cmd>AvanteChat<CR>', mode = { 'n', 'v' } },
-      { '<leader>ccs', '<cmd>AvanteStop<CR>' },
+      { '<leader>ccc', '<cmd>AvanteChat<CR>', mode = { 'n', 'v' }, desc = 'Avante Chat' },
+      { '<leader>ccs', '<cmd>AvanteStop<CR>', desc = 'Stop Avante Chat' },
     },
     cmd = { 'AvanteChat' },
     opts = {

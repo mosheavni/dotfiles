@@ -35,7 +35,7 @@ local M = {
   },
   {
     'junegunn/vim-easy-align',
-    keys = { { 'ga', '<Plug>(EasyAlign)', mode = { 'v', 'n' } } },
+    keys = { { 'ga', '<Plug>(EasyAlign)', desc = 'Align by motion', mode = { 'v', 'n' } } },
   },
   {
     'AndrewRadev/switch.vim',

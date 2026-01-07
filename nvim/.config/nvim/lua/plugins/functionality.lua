@@ -20,12 +20,16 @@ local M = {
   {
     'iamcco/markdown-preview.nvim',
     build = 'cd app && yarn install',
-    config = function() vim.g.mkdp_filetypes = { 'markdown' } end,
+    config = function()
+      vim.g.mkdp_filetypes = { 'markdown' }
+    end,
     cmd = 'MarkdownPreview',
     ft = 'markdown',
     init = function()
       require('user.menu').add_actions('Markdown', {
-        ['Preview in Browser'] = function() vim.cmd.MarkdownPreview() end,
+        ['Preview in Browser'] = function()
+          vim.cmd.MarkdownPreview()
+        end,
       })
     end,
   },
@@ -69,12 +73,12 @@ local M = {
     dependencies = { 'kkharji/sqlite.lua' },
     cmd = { 'YankyRingHistory' },
     keys = {
-      'yy',
-      { 'p', '<Plug>(YankyPutAfter)', mode = { 'n', 'x' } },
-      { 'P', '<Plug>(YankyPutBefore)', mode = { 'n', 'x' } },
-      { '<c-n>', '<Plug>(YankyCycleForward)' },
-      { '<c-m>', '<Plug>(YankyCycleBackward)' },
-      { '<leader>y', '<Cmd>YankyRingHistory<cr>' },
+      { 'yy', desc = 'Yank' },
+      { 'p', '<Plug>(YankyPutAfter)', desc = 'Paste yank after', mode = { 'n', 'x' } },
+      { 'P', '<Plug>(YankyPutBefore)', desc = 'Paste yank before', mode = { 'n', 'x' } },
+      { '<c-n>', '<Plug>(YankyCycleForward)', desc = 'Cycle yank forward' },
+      { '<c-m>', '<Plug>(YankyCycleBackward)', desc = 'Cycle yank backward' },
+      { '<leader>y', '<Cmd>YankyRingHistory<cr>', desc = 'Yank history' },
     },
     opts = {
       ring = {
@@ -86,7 +90,9 @@ local M = {
     },
     init = function()
       require('user.menu').add_actions('Yanky', {
-        ['Yank history'] = function() vim.cmd('YankyRingHistory') end,
+        ['Yank history'] = function()
+          vim.cmd 'YankyRingHistory'
+        end,
       })
     end,
   },
@@ -112,7 +118,9 @@ local M = {
         preview_split = 'right',
         -- This is the config that will be passed to nvim_open_win.
         -- Change values here to customize the layout
-        override = function(conf) return conf end,
+        override = function(conf)
+          return conf
+        end,
       },
       view_options = {
         -- Show files and directories that start with "."
@@ -137,13 +145,11 @@ local M = {
         enter = function()
           vim.keymap.set('n', '<leader>l', '<cmd>Leet<cr>')
           vim.keymap.set('n', '<leader>lr', function()
-            vim.ui.select(
-              { 'easy', 'medium', 'hard' },
-              { prompt = 'Choose difficulty for a random leet❯ ' },
-              function(level) vim.cmd('Leet random difficulty=' .. level) end
-            )
+            vim.ui.select({ 'easy', 'medium', 'hard' }, { prompt = 'Choose difficulty for a random leet❯ ' }, function(level)
+              vim.cmd('Leet random difficulty=' .. level)
+            end)
           end, { remap = false })
-          require('lazy').load({ plugins = { 'copilot.lua' } })
+          require('lazy').load { plugins = { 'copilot.lua' } }
         end,
         ['question_enter'] = function()
           vim.keymap.set('n', '<c-cr>', '<cmd>Leet run<CR>', { buffer = true })
@@ -156,7 +162,7 @@ local M = {
     'mrjones2014/smart-splits.nvim',
     config = function()
       ---@diagnostic disable-next-line: missing-fields
-      require('smart-splits').setup({})
+      require('smart-splits').setup {}
       vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left)
       vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down)
       vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up)

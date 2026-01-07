@@ -82,9 +82,9 @@ local M = {
     dependencies = { 'kevinhwang91/promise-async' },
     event = 'BufReadPost',
     keys = {
-      { '<leader>fo', '<cmd>lua require("ufo").openAllFolds()<cr>' },
-      { '<leader>fc', '<cmd>lua require("ufo").closeAllFolds()<cr>' },
-      { '<leader>fp', '<cmd>lua require("ufo").peekFoldedLinesUnderCursor()<cr>' },
+      { '<leader>fo', '<cmd>lua require("ufo").openAllFolds()<cr>', desc = 'Open all folds' },
+      { '<leader>fc', '<cmd>lua require("ufo").closeAllFolds()<cr>', desc = 'Close all folds' },
+      { '<leader>fp', '<cmd>lua require("ufo").peekFoldedLinesUnderCursor()<cr>', desc = 'Peek folded lines' },
     },
     opts = {
       open_fold_hl_timeout = 0,

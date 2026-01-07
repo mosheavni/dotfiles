@@ -65,8 +65,8 @@ local M = {
 }
 
 M.keys = {
-  { '<F5>', '<cmd>lua require("dap").continue()<cr>' },
-  { '<leader>db', '<cmd>lua require("dap").toggle_breakpoint()<cr>' },
+  { '<F5>', '<cmd>lua require("dap").continue()<cr>', desc = 'DAP: Continue' },
+  { '<leader>db', '<cmd>lua require("dap").toggle_breakpoint()<cr>', desc = 'DAP: Toggle Breakpoint' },
 }
 
 M.config = function()

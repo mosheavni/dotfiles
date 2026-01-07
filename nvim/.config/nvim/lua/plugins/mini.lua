@@ -86,7 +86,7 @@ local M = {
     'nvim-mini/mini.splitjoin',
     version = false,
     opts = {},
-    keys = { 'gS' },
+    keys = { 'gS', desc = 'Split/Join arguments' },
   },
   {
     'nvim-mini/mini.surround',
