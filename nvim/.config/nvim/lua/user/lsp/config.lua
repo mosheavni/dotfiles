@@ -24,7 +24,7 @@ M.setup = function()
   _G.start_ls = function(with_file)
     local file_name = nil
     if with_file == true then
-      local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
+      local ft = vim.bo[0].filetype
       file_name = _G.tmp_write { should_delete = false, new = false, ft = ft }
     end
     -- load lsp
@@ -54,6 +54,11 @@ M.setup = function()
         require('nvim-navic').attach(client, bufnr)
       end
 
+      -- Configure semantic token highlighting
+      if client and client.server_capabilities.semanticTokensProvider then
+        vim.lsp.semantic_tokens.start(ev.buf, client.id)
+      end
+
       -- Mappings
       if vim.b[bufnr].lsp_keymaps_configured then
         return
@@ -69,9 +74,16 @@ M.setup = function()
       vim.diagnostic.config {
         severity_sort = true,
         signs = { text = M.diagnostic_signs },
-        virtual_text = { current_line = false, severity = { min = vim.diagnostic.severity.WARN } },
+        virtual_text = {
+          prefix = '●',
+          source = 'if_many',
+          current_line = false,
+          severity = { min = vim.diagnostic.severity.WARN },
+        },
         virtual_lines = { current_line = true },
         float = { border = 'rounded', source = true },
+        update_in_insert = false, -- Don't update diagnostics while typing
+        underline = true,
       }
     end,
   })

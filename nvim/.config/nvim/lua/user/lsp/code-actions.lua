@@ -169,7 +169,7 @@ M.markdownlint_disable_diagnostic = {
       for _, diag in ipairs(diagnostics) do
         if diag.source == 'markdownlint' then
           -- Extract rule code from message like "error MD041/first-line-heading/..."
-          local rule_code = diag.message:match('error (MD%d+)/')
+          local rule_code = diag.message:match 'error (MD%d+)/'
           if rule_code and not seen_rules[rule_code] then
             seen_rules[rule_code] = true
             table.insert(actions, {
@@ -196,25 +196,17 @@ M.markdownlint_disable_diagnostic = {
               action = function()
                 -- Check if first line has markdownlint-disable comment
                 local first_line = api.nvim_buf_get_lines(context.bufnr, 0, 1, false)[1]
-                vim.print('first_line: ' .. vim.inspect(first_line))
 
-                local has_disable = first_line and first_line:match('<!%-%-%s*markdownlint%-disable%s+')
-                local has_disable_line = first_line and first_line:match('disable%-line')
-                local has_disable_next_line = first_line and first_line:match('disable%-next%-line')
-
-                vim.print('has_disable: ' .. vim.inspect(has_disable))
-                vim.print('has_disable_line: ' .. vim.inspect(has_disable_line))
-                vim.print('has_disable_next_line: ' .. vim.inspect(has_disable_next_line))
+                local has_disable = first_line and first_line:match '<!%-%-%s*markdownlint%-disable%s+'
+                local has_disable_line = first_line and first_line:match 'disable%-line'
+                local has_disable_next_line = first_line and first_line:match 'disable%-next%-line'
 
                 if has_disable and not has_disable_line and not has_disable_next_line then
                   -- Append to existing disable comment
-                  vim.print('Appending to existing line')
                   local new_line = first_line:gsub('(%s*)-->', ' ' .. rule_code .. '%1-->')
-                  vim.print('new_line: ' .. vim.inspect(new_line))
                   api.nvim_buf_set_lines(context.bufnr, 0, 1, false, { new_line })
                 else
                   -- Create new disable comment
-                  vim.print('Creating new line')
                   local ignore_comment = '<!-- markdownlint-disable ' .. rule_code .. ' -->'
                   api.nvim_buf_set_lines(context.bufnr, 0, 0, false, { ignore_comment })
                 end
