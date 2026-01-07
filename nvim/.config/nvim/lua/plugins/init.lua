@@ -115,11 +115,11 @@ local M = {
   {
     'kevinhwang91/nvim-hlslens',
     keys = {
-      { 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>zzzv]] },
-      { 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>zzzv]] },
-      { '*', [[*<Cmd>lua require('hlslens').start()<CR>N]] },
-      { '#', [[#<Cmd>lua require('hlslens').start()<CR>n]] },
-      { 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]] },
+      { 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>zzzv]], desc = 'Next search result' },
+      { 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>zzzv]], desc = 'Previous search result' },
+      { '*', [[*<Cmd>lua require('hlslens').start()<CR>N]], desc = 'Search word under cursor forward' },
+      { '#', [[#<Cmd>lua require('hlslens').start()<CR>n]], desc = 'Search word under cursor backward' },
+      { 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], desc = 'Search word under cursor forward (partial)' },
       { 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]] },
     },
     event = 'CmdlineEnter',

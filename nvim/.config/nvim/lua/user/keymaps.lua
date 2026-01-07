@@ -156,19 +156,6 @@ map('n', '<CR>', '<Esc>:nohlsearch<CR><CR>', { remap = false, silent = true, des
 map('i', 'jk', '<esc>', { remap = false, desc = 'Exit insert mode' })
 map('n', '<leader>qq', '<cmd>qall<cr>', { remap = false, silent = true, desc = 'Quit all' })
 
--- Search visually selected text with // or * or #
-vim.cmd [[
-function! StarSearch(cmdtype) abort
-  let old_reg=getreg('"')
-  let old_regtype=getregtype('"')
-  norm! gvy
-  let @/ = '\V' . substitute(escape(@", a:cmdtype . '\.*$^~['), '\_s\+', '\\_s\\+', 'g')
-  norm! gVzv
-  call setreg('"', old_reg, old_regtype)
-endfunction
-]]
-map('v', '*', "<cmd>call StarSearch('/')<CR>/<C-R>=@/<CR><CR>", { remap = false, silent = true })
-map('v', '#', "<cmd>call StarSearch('?')<CR>?<C-R>=@/<CR><CR>", { remap = false, silent = true })
 
 -- Terminal
 map('t', '<Esc>', [[<C-\><C-n>]], { remap = false, desc = 'Exit terminal mode' })
