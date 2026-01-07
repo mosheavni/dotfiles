@@ -21,7 +21,7 @@ map('v', '<s-tab>', '<gv', { desc = 'Unindent selected text' })
 
 -- Add undo break-points
 for _, c in ipairs { ',', '.', ';', '!', '?', '(', ')' } do
-  map('i', c, c .. '<C-g>u')
+  map('i', c, c .. '<C-g>u', { desc = 'Insert ' .. c .. ' with undo break-point' })
 end
 
 map('i', ';;', '<C-O>A;', { remap = false, desc = 'Add semicolon at end of line' })
@@ -32,7 +32,7 @@ map('i', '<C-e>', '<C-o>de', { remap = false, desc = 'Delete word after cursor' 
 map('i', '<C-b>', '<C-o>db', { remap = false, desc = 'Delete word before cursor' })
 
 -- Search for string within the visual selection
-map('x', '/', '<Esc>/\\%V', { remap = false })
+map('x', '/', '<Esc>/\\%V', { remap = false, desc = 'Search within visual selection' })
 
 -- operators
 _G.op = _G.op or {}
@@ -50,7 +50,7 @@ function _G.op.surround_with_interpolation(motion)
   vim.api.nvim_buf_set_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, new_text)
   vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { finish[1], finish[2] })
 end
-map('n', 'mt', _G.op.surround_with_interpolation)
+map('n', 'mt', _G.op.surround_with_interpolation, { desc = 'Surround with string interpolation' })
 
 -- Indent block
 vim.cmd [[
@@ -88,8 +88,8 @@ com! BasicGroovyFormat call s:BasicGroovyFormat()
 
 -- Windows mappings
 map('n', '<Leader><Leader>', '<C-^>', { remap = false, silent = true, desc = 'Switch to alternate file' })
-map('n', '<tab>', '<c-w>w', { remap = false, silent = true })
-map('n', '<c-w><c-c>', '<c-w>c', { remap = false, silent = true })
+map('n', '<tab>', '<c-w>w', { remap = false, silent = true, desc = 'Go to next window' })
+map('n', '<c-w><c-c>', '<c-w>c', { remap = false, silent = true, desc = 'Close current window' })
 map('n', '<c-w>v', '<cmd>vnew<cr>', { remap = false, silent = true, desc = 'New buffer vertically split' })
 map('n', '<c-w>s', '<cmd>new<cr>', { remap = false, silent = true, desc = 'New buffer horizontally split' })
 map('n', '<c-w>e', '<cmd>enew<cr>', { remap = false, silent = true, desc = 'New empty buffer' })
@@ -101,35 +101,35 @@ map('n', '<C-k>', '<C-w>k', { remap = false, desc = 'Go to Upper Window' })
 map('n', '<C-l>', '<C-w>l', { remap = false, desc = 'Go to Right Window' })
 
 -- entire file text-object
-map('o', 'ae', '<cmd>normal! ggVG<CR>', { remap = false })
+map('o', 'ae', '<cmd>normal! ggVG<CR>', { remap = false, desc = 'Entire buffer text-object' })
 map('v', 'ae', '<esc>ggVG', { remap = false, desc = 'Select entire buffer' })
 map('n', '<leader>sa', 'ggVG', { remap = false, desc = 'Visually select entire buffer' })
 
 -- Run and edit macros
 for _, key in pairs { 'Q', 'X' } do
   ---@diagnostic disable-next-line: undefined-field
-  map('n', key, '@' .. key:lower(), { remap = false })
-  map('n', '<leader>' .. key, ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>", { remap = false })
+  map('n', key, '@' .. key:lower(), { remap = false, desc = 'Run macro ' .. key:lower() })
+  map('n', '<leader>' .. key, ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>", { remap = false, desc = 'Edit macro ' .. key:lower() })
 end
 
 -- Quickfix and tabs
-map('n', ']q', '<cmd>cnext<cr>zz', { remap = false, silent = true })
-map('n', '[q', '<cmd>cprev<cr>zz', { remap = false, silent = true })
-map('n', ']l', '<cmd>lnext<cr>zz', { remap = false, silent = true })
-map('n', '[l', '<cmd>lprev<cr>zz', { remap = false, silent = true })
-map('n', ']t', '<cmd>tabnext<cr>zz', { remap = false, silent = true })
-map('n', '[t', '<cmd>tabprev<cr>zz', { remap = false, silent = true })
-map('n', ']b', '<cmd>bnext<cr>', { remap = false, silent = true })
-map('n', '[b', '<cmd>bprev<cr>', { remap = false, silent = true })
+map('n', ']q', '<cmd>cnext<cr>zz', { remap = false, silent = true, desc = 'Next quickfix item' })
+map('n', '[q', '<cmd>cprev<cr>zz', { remap = false, silent = true, desc = 'Previous quickfix item' })
+map('n', ']l', '<cmd>lnext<cr>zz', { remap = false, silent = true, desc = 'Next location list item' })
+map('n', '[l', '<cmd>lprev<cr>zz', { remap = false, silent = true, desc = 'Previous location list item' })
+map('n', ']t', '<cmd>tabnext<cr>zz', { remap = false, silent = true, desc = 'Next tab' })
+map('n', '[t', '<cmd>tabprev<cr>zz', { remap = false, silent = true, desc = 'Previous tab' })
+map('n', ']b', '<cmd>bnext<cr>', { remap = false, silent = true, desc = 'Next buffer' })
+map('n', '[b', '<cmd>bprev<cr>', { remap = false, silent = true, desc = 'Previous buffer' })
 
 -- tabs
-map('n', '<leader>tn', '<cmd>tabnew<cr>', { remap = false, silent = true })
-map('n', '<leader>tc', '<cmd>tabclose<cr>', { remap = false, silent = true })
-map('n', '<leader>th', '<cmd>-tabmove<cr>', { remap = false, silent = true })
-map('n', '<leader>tl', '<cmd>+tabmove<cr>', { remap = false, silent = true })
+map('n', '<leader>tn', '<cmd>tabnew<cr>', { remap = false, silent = true, desc = 'New tab' })
+map('n', '<leader>tc', '<cmd>tabclose<cr>', { remap = false, silent = true, desc = 'Close tab' })
+map('n', '<leader>th', '<cmd>-tabmove<cr>', { remap = false, silent = true, desc = 'Move tab left' })
+map('n', '<leader>tl', '<cmd>+tabmove<cr>', { remap = false, silent = true, desc = 'Move tab right' })
 
 -- This creates a new line of '=' signs the same length of the line
-map('n', '<leader>=', 'yypVr=', { remap = false })
+map('n', '<leader>=', 'yypVr=', { remap = false, desc = 'Duplicate line with = signs' })
 
 -- Map dp and dg with leader for diffput and diffget
 _G.op.diffput = function()
@@ -194,7 +194,7 @@ map('n', '<C-c>', 'ciw', { desc = 'Change inner word' })
 map('n', 'gV', '`[V`]', { remap = false, desc = 'Visually select last insert' })
 
 -- Convert all tabs to spaces
-map('n', '<leader>ct<space>', ':retab<cr>', { remap = false, silent = true })
+map('n', '<leader>ct<space>', ':retab<cr>', { remap = false, silent = true, desc = 'Convert tabs to spaces' })
 
 -- Enable folding with the leader-f/a
 map('n', '<leader>ff', 'za', { remap = false, desc = 'Toggle fold' })
@@ -265,10 +265,10 @@ function _G.op.base64_decode(motion)
   end
   b64 'decode'
 end
-map('n', '<leader>64', _G.op.base64_encode)
-map('n', '<leader>46', _G.op.base64_decode)
-map('v', '<leader>64', _G.op.base64_encode)
-map('v', '<leader>46', _G.op.base64_decode)
+map('n', '<leader>64', _G.op.base64_encode, { desc = 'Base64 encode' })
+map('n', '<leader>46', _G.op.base64_decode, { desc = 'Base64 decode' })
+map('v', '<leader>64', _G.op.base64_encode, { desc = 'Base64 encode selection' })
+map('v', '<leader>46', _G.op.base64_decode, { desc = 'Base64 decode selection' })
 
 -- Close current buffer
 map('n', '<leader>bc', ':close<cr>', { silent = true, desc = 'Close this buffer' })
@@ -333,7 +333,7 @@ map('n', 'cii', function()
     vim.opt_local.softtabstop = indent_size_normalized
     vim.opt_local.tabstop = indent_size_normalized
   end)
-end)
+end, { desc = 'Change indentation size' })
 
 -------------------------
 -- Diff with last save --
@@ -356,7 +356,7 @@ vim.api.nvim_create_user_command('DiffWithSaved', function()
     end, { buffer = buf })
   end
 end, {})
-map('n', '<leader>ds', ':DiffWithSaved<cr>', { remap = false, silent = true })
+map('n', '<leader>ds', ':DiffWithSaved<cr>', { remap = false, silent = true, desc = 'Diff with saved file' })
 
 --------------
 -- Difftool --
