@@ -75,9 +75,10 @@ return {
         local faults_filter = '!1/1,!2/2,!3/3,!4/4,!5/5,!6/6,!7/7,!Completed,!Terminating'
         if current == faults_filter then
           state.setFilter ''
-          return
+        else
+          state.setFilter(faults_filter)
         end
-        state.setFilter(faults_filter)
+        vim.api.nvim_input '<Plug>(kubectl.refresh)'
       end,
       desc = 'Toggle faults',
       ft = 'k8s_*',
