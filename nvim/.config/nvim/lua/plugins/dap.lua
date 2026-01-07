@@ -153,7 +153,7 @@ M.config = function()
         the_actions[choice]()
       end
     end)
-  end)
+  end, { desc = 'DAP: Actions menu' })
 
   -------------
   -- Set CMP --
@@ -175,37 +175,36 @@ M.config = function()
   -------------
   -- keymaps --
   -------------
-  local opts = { noremap = true, silent = true, buffer = true }
 
   -- Continue / Start
   vim.keymap.set('n', '<leader>dc', function()
     dap.continue()
-  end, opts)
+  end, { noremap = true, silent = true, buffer = true, desc = 'DAP: Continue/Start' })
 
   -- Step Over
   vim.keymap.set('n', '<leader>do', function()
     dap.step_over()
-  end, opts)
+  end, { noremap = true, silent = true, buffer = true, desc = 'DAP: Step over' })
 
   -- Step Into
   vim.keymap.set('n', '<leader>di', function()
     dap.step_into()
-  end, opts)
+  end, { noremap = true, silent = true, buffer = true, desc = 'DAP: Step into' })
 
   -- Step Out
   vim.keymap.set('n', '<leader>dO', function()
     dap.step_out()
-  end, opts)
+  end, { noremap = true, silent = true, buffer = true, desc = 'DAP: Step out' })
 
   -- Keymap to terminate debugging
   vim.keymap.set('n', '<leader>dq', function()
     dap.terminate()
-  end, opts)
+  end, { noremap = true, silent = true, buffer = true, desc = 'DAP: Terminate' })
 
   -- Toggle DAP UI
   vim.keymap.set('n', '<leader>du', function()
     dapui.toggle()
-  end, opts)
+  end, { noremap = true, silent = true, buffer = true, desc = 'DAP: Toggle UI' })
 end
 
 return M

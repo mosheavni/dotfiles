@@ -116,7 +116,7 @@ local M = {
       { '*', [[*<Cmd>lua require('hlslens').start()<CR>N]], desc = 'Search word under cursor forward' },
       { '#', [[#<Cmd>lua require('hlslens').start()<CR>n]], desc = 'Search word under cursor backward' },
       { 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], desc = 'Search word under cursor forward (partial)' },
-      { 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]] },
+      { 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], desc = 'Search word under cursor backward (partial)' },
     },
     event = 'CmdlineEnter',
     opts = {},
@@ -124,7 +124,7 @@ local M = {
   {
     'machakann/vim-swap',
     keys = {
-      { '<leader>sw', '<Plug>(swap-interactive)', mode = { 'n', 'v' } },
+      { '<leader>sw', '<Plug>(swap-interactive)', mode = { 'n', 'v' }, desc = 'Swap function arguments interactively' },
     },
     init = function()
       vim.g.swap_no_default_key_mappings = true
@@ -231,7 +231,7 @@ local M = {
     'stevearc/oil.nvim',
     cmd = { 'Oil' },
     keys = {
-      { '<c-e>', "<cmd>lua require('oil').open_float()<cr>" },
+      { '<c-e>', "<cmd>lua require('oil').open_float()<cr>", desc = 'Open Oil file explorer (float)' },
     },
     opts = {
       -- Configuration for the floating window in oil.open_float

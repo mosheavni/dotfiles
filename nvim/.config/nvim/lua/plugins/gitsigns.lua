@@ -21,7 +21,7 @@ local M = {
           gs.next_hunk()
         end)
         return '<Ignore>'
-      end, { expr = true })
+      end, { expr = true, desc = 'Next hunk' })
 
       map('n', '[c', function()
         if vim.wo.diff then
@@ -31,15 +31,15 @@ local M = {
           gs.prev_hunk()
         end)
         return '<Ignore>'
-      end, { expr = true })
+      end, { expr = true, desc = 'Previous hunk' })
 
       -- Actions
-      map('n', '<leader>hp', gs.preview_hunk)
-      map('n', '<leader>hb', gs.toggle_current_line_blame)
-      map('n', '<leader>hd', gs.toggle_deleted)
+      map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview hunk' })
+      map('n', '<leader>hb', gs.toggle_current_line_blame, { desc = 'Toggle current line blame' })
+      map('n', '<leader>hd', gs.toggle_deleted, { desc = 'Toggle deleted' })
 
       -- Text object
-      map({ 'o', 'x' }, 'ih', '<cmd>Gitsigns select_hunk<CR>')
+      map({ 'o', 'x' }, 'ih', '<cmd>Gitsigns select_hunk<CR>', { desc = 'Select hunk' })
     end,
   },
   init = function()

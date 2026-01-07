@@ -104,11 +104,11 @@ local fugitive_config = function()
   -- Pull / Push --
   -----------------
   vim.api.nvim_create_user_command('Gp', git_funcs.push, {})
-  vim.keymap.set('n', '<leader>gp', '<cmd>Gp<cr>')
+  vim.keymap.set('n', '<leader>gp', '<cmd>Gp<cr>', { desc = 'Git push' })
   vim.api.nvim_create_user_command('Gl', git_funcs.pull, {})
-  vim.keymap.set('n', '<leader>gl', '<cmd>Gl<cr>')
+  vim.keymap.set('n', '<leader>gl', '<cmd>Gl<cr>', { desc = 'Git pull' })
   vim.api.nvim_create_user_command('Gf', git_funcs.fetch_all, {})
-  vim.keymap.set('n', '<leader>gf', '<cmd>Gf<cr>')
+  vim.keymap.set('n', '<leader>gf', '<cmd>Gf<cr>', { desc = 'Git fetch all' })
 
   ---------------------
   -- Toggle fugitive --
@@ -130,7 +130,7 @@ local fugitive_config = function()
       return
     end
     vim.cmd 'Git'
-  end)
+  end, { desc = 'Toggle Git status' })
 
   --------------------------------
   -- Pull / Merge origin master --
@@ -155,7 +155,7 @@ local fugitive_config = function()
         vim.api.nvim_set_current_line(new_line)
       end)
     end)
-  end)
+  end, { desc = 'Print current branch to buffer' })
   vim.keymap.set('n', '<leader>gB', function()
     git_funcs.get_branch(function(branch)
       vim.schedule(function()
@@ -163,7 +163,7 @@ local fugitive_config = function()
         git_funcs.prnt('Copied current branch "' .. branch .. '" to clipboard.')
       end)
     end)
-  end)
+  end, { desc = 'Copy current branch to clipboard' })
 
   ------------------
   -- Git checkout --
@@ -184,7 +184,7 @@ local fugitive_config = function()
     vim.cmd 'Gcd'
     local cwd = vim.fn.getcwd()
     git_funcs.prnt('Changed directory to Git root' .. cwd)
-  end)
+  end, { desc = 'CD to Git root' })
 
   -------------------------
   -- Create Pull Request --
@@ -206,7 +206,7 @@ local fugitive_config = function()
       end
       git_actions[choice]()
     end)
-  end)
+  end, { desc = 'Git actions menu' })
 end
 
 local M = {
