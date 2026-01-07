@@ -5,9 +5,6 @@ local M = {
       'PlenaryBustedFile',
       'PlenaryBustedDirectory',
     },
-    keys = {
-      { '<leader>tf', '<cmd>PlenaryBustedFile %<CR>', mode = 'n' },
-    },
   },
   {
     'milisims/nvim-luaref',
