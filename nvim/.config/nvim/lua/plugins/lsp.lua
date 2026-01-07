@@ -181,6 +181,11 @@ local M = {
     ft = { 'go', 'gomod' },
     build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
   },
+  {
+    'milisims/nvim-luaref',
+    ft = 'lua',
+  },
+  { 'Bilal2453/luvit-meta', lazy = true },
 }
 
 return M
