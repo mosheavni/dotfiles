@@ -53,11 +53,13 @@ M.add_crds = function(bufnr)
     return {}
   end
 
+  local first_line_removed = false
   if lines[1] == '---' then
     table.remove(lines, 1)
+    first_line_removed = true
   end
   local resources = {}
-  local current = { line = 0 } -- Start at line 1 for first resource
+  local current = { line = 1 } -- Start at line 1 for first resource
   for i, line in ipairs(lines) do
     if line:match '^kind:' then
       current.kind = line:match '^kind:%s*(.+)'
@@ -82,9 +84,14 @@ M.add_crds = function(bufnr)
       local url =
         string.format('https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/%s/%s_%s.json', resource.apiGroup, resource.kind:lower(), resource.version)
       local modeline = string.format('# yaml-language-server: $schema=%s', url)
-      -- Check if the modeline already exists in the previous line
-      local prev_line = vim.api.nvim_buf_get_lines(bufnr, resource.line, resource.line + 1, false)[1]
-      if not prev_line or not prev_line:match '# yaml%-language%-server: %$schema=' then
+      -- Check if the modeline already exists at the line where we want to insert it
+      -- We need to account for the offset when checking, same as when inserting
+      local check_line = resource.line - 1
+      if first_line_removed then
+        check_line = check_line + 1
+      end
+      local target_line = vim.api.nvim_buf_get_lines(bufnr, check_line, check_line + 1, false)[1]
+      if not target_line or not target_line:match '# yaml%-language%-server: %$schema=' then
         table.insert(lines_to_add, { line = resource.line - 1, comment = modeline })
         if not vim.list_contains(added_kinds, resource.kind) then
           table.insert(added_kinds, resource.kind)
@@ -94,7 +101,9 @@ M.add_crds = function(bufnr)
   end
 
   -- Insert the comments
-  local offset = 1
+  -- If first line was removed, we need to offset by 1 because the lines table indices
+  -- are shifted but buffer line numbers are not
+  local offset = first_line_removed and 1 or 0
   for _, line in ipairs(lines_to_add) do
     local line_num = line.line
     vim.api.nvim_buf_set_lines(bufnr, line_num + offset, line_num + offset, false, { line.comment })
