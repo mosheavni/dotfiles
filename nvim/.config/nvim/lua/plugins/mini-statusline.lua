@@ -2,7 +2,9 @@ local M = {
   'nvim-mini/mini.statusline',
   version = false,
   event = 'VeryLazy',
-  enabled = true,
+  enabled = function()
+    return not vim.bo.filetype:match '^k8s_.*'
+  end,
 }
 
 M.config = function()

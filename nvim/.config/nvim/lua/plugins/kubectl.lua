@@ -4,25 +4,17 @@ return {
   dependencies = 'saghen/blink.download',
   dev = vim.env.K8S_DEV == 'true',
   opts = {
-    kubectl_cmd = {
-      persist_context_change = true,
-    },
     auto_refresh = {
       enabled = true,
       interval = 300, -- milliseconds
     },
-
-    lsp = {
-      enabled = true,
-    },
-
+    lsp = { enabled = true },
     headers = {
       enabled = true,
       hints = true,
       context = true,
       heartbeat = true,
     },
-    -- log_level = vim.log.levels.DEBUG,
     diff = { bin = 'kdiff' },
     filter = {
       apply_on_select_from_history = false,
@@ -33,16 +25,11 @@ return {
       timestamps = false,
       prefix = false,
     },
+    statusline = { enabled = true },
     alias = {
       apply_on_select_from_history = true,
       max_history = 30,
     },
-    -- lineage = {
-    --   enabled = false,
-    -- },
-    -- completion = {
-    --   follow_cursor = false,
-    -- },
   },
   cmd = { 'Kubectl', 'Kubectx', 'Kubens' },
   keys = {
