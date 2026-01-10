@@ -247,7 +247,7 @@ end)
     vim.cmd.Yaml2Json()
   end,
   ['[YAML] Add YAML Schema Modeline'] = function()
-    require('user.additional-schemas').init()
+    require('yaml-companion').open_datree_crd_select()
   end,
   ['[JSON] Json to Yaml (:Json2Yaml)'] = function()
     vim.cmd.Json2Yaml()
