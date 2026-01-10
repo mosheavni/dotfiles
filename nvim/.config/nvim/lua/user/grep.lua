@@ -8,9 +8,9 @@ local default_opts = {
   },
   grep = {
     literal_flag = '-F', -- Default literal search flag
-    format = '%f:%l:%c:%m', -- Default grep format
+    format = '%f:%l:%m', -- Default grep format
     -- Built-in grep command fallback
-    cmd = 'grep -n -r --exclude=%s . $*',
+    cmd = 'grep -n -r --exclude=%s $* .',
   },
   -- ripgrep configuration
   rg = {
