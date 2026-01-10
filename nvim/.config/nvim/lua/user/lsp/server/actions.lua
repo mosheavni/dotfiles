@@ -11,6 +11,133 @@ local function get_indent(line)
   return string.match(line, '^%s*')
 end
 
+--- Build an LSP text edit
+---@param line_start number 0-indexed start line
+---@param line_end number 0-indexed end line
+---@param new_text string text to insert
+---@return table edit
+local function make_edit(line_start, line_end, new_text)
+  return {
+    range = {
+      start = { line = line_start, character = 0 },
+      ['end'] = { line = line_end, character = 0 },
+    },
+    newText = new_text,
+  }
+end
+
+-- Action builder: insert comment above current line (for "next line" ignore directives)
+---@param opts table { title_fmt, check_existing, format_new, format_merge }
+---@return table action_builder
+local function next_line_action(opts)
+  return {
+    build = function(context, uri, line_number, _, indent, rule)
+      local prev_line = line_number > 0 and context.content[line_number] or ''
+      local existing = opts.check_existing(prev_line)
+
+      local edit
+      if existing then
+        edit = make_edit(line_number - 1, line_number, opts.format_merge(prev_line, rule))
+      else
+        edit = make_edit(line_number, line_number, opts.format_new(rule, indent))
+      end
+
+      return {
+        title = string.format(opts.title_fmt, rule),
+        kind = 'quickfix',
+        edit = { changes = { [uri] = { edit } } },
+      }
+    end,
+  }
+end
+
+-- Action builder: append comment to current line (for "current line" ignore directives)
+---@param opts table { title_fmt, check_existing, format_new, format_merge }
+---@return table action_builder
+local function current_line_action(opts)
+  return {
+    build = function(_, uri, line_number, current_line, _, rule)
+      local existing = opts.check_existing(current_line)
+      local new_text = existing and opts.format_merge(current_line, rule) or opts.format_new(current_line, rule)
+
+      return {
+        title = string.format(opts.title_fmt, rule),
+        kind = 'quickfix',
+        edit = { changes = { [uri] = { make_edit(line_number, line_number + 1, new_text) } } },
+      }
+    end,
+  }
+end
+
+-- Action builder: insert comment at file top (for file-level ignore directives)
+---@param opts table { title_fmt, check_existing, format_new, format_merge }
+---@return table action_builder
+local function file_action(opts)
+  return {
+    build = function(context, uri, _, _, _, rule)
+      local first_line = context.content[1] or ''
+      local existing = opts.check_existing(first_line)
+
+      local edit
+      if existing then
+        edit = make_edit(0, 1, opts.format_merge(first_line, rule))
+      else
+        edit = make_edit(0, 0, opts.format_new(rule))
+      end
+
+      return {
+        title = string.format(opts.title_fmt, rule),
+        kind = 'quickfix',
+        edit = { changes = { [uri] = { edit } } },
+      }
+    end,
+  }
+end
+
+--- Create a lint ignore action generator from config
+---@param config table { filetypes, source, actions }
+---@return function generator
+local function create_lint_ignore_generator(config)
+  return function(context)
+    -- Check filetype
+    local ft_match = false
+    for _, ft in ipairs(config.filetypes) do
+      if context.filetype == ft then
+        ft_match = true
+        break
+      end
+    end
+    if not ft_match then
+      return {}
+    end
+
+    local diagnostics = vim.diagnostic.get(context.bufnr, { lnum = context.range.row - 1 })
+    local actions = {}
+    local seen_rules = {}
+    local uri = vim.uri_from_bufnr(context.bufnr)
+
+    for _, diag in ipairs(diagnostics) do
+      if diag.source == config.source then
+        local rule_code = diag.code
+        if rule_code and not seen_rules[rule_code] then
+          seen_rules[rule_code] = true
+          local line_number = diag.lnum
+          local current_line = context.content[line_number + 1] or ''
+          local indent = get_indent(current_line)
+
+          for _, action_config in ipairs(config.actions) do
+            local action = action_config.build(context, uri, line_number, current_line, indent, rule_code)
+            if action then
+              table.insert(actions, action)
+            end
+          end
+        end
+      end
+    end
+    return actions
+  end
+end
+
 --- Build context from LSP params (similar to null-ls context)
 ---@param params table LSP codeAction params
 ---@return table context
@@ -208,201 +335,111 @@ local function library_current_branch(context)
   }
 end
 
--- Groovy: npm-groovy-lint disable diagnostic
-local function groovylint_disable_diagnostic(context)
-  if context.filetype ~= 'groovy' and context.filetype ~= 'Jenkinsfile' then
-    return {}
-  end
+-- Groovy: npm-groovy-lint ignore diagnostics
+local groovylint_ignore = create_lint_ignore_generator({
+  filetypes = { 'groovy', 'Jenkinsfile' },
+  source = 'npm-groovy-lint',
+  actions = {
+    current_line_action({
+      title_fmt = 'groovylint: disable current line %s',
+      check_existing = function(line)
+        return line:match '// groovylint%-disable%-line'
+      end,
+      format_new = function(line, rule)
+        return line .. ' // groovylint-disable-line ' .. rule .. '\n'
+      end,
+      format_merge = function(line, rule)
+        return line:gsub('// groovylint%-disable%-line%s+(.+)$', '// groovylint-disable-line %1, ' .. rule) .. '\n'
+      end,
+    }),
+    next_line_action({
+      title_fmt = 'groovylint: disable next line %s',
+      check_existing = function(line)
+        return line:match '// groovylint%-disable%-next%-line'
+      end,
+      format_new = function(rule, indent)
+        return indent .. '// groovylint-disable-next-line ' .. rule .. '\n'
+      end,
+      format_merge = function(line, rule)
+        return line:gsub('// groovylint%-disable%-next%-line%s+(.+)$', '// groovylint-disable-next-line %1, ' .. rule)
+          .. '\n'
+      end,
+    }),
+    file_action({
+      title_fmt = 'groovylint: disable file %s',
+      check_existing = function(line)
+        return line:match '%/%*%s*groovylint%-disable'
+      end,
+      format_new = function(rule)
+        return '/* groovylint-disable ' .. rule .. ' */\n'
+      end,
+      format_merge = function(line, rule)
+        return line:gsub('%/%*%s*groovylint%-disable%s+([^%*]+)%s*%*%/', '/* groovylint-disable %1, ' .. rule .. ' */')
+          .. '\n'
+      end,
+    }),
+  },
+})
 
-  local diagnostics = vim.diagnostic.get(context.bufnr, { lnum = context.range.row - 1 })
-  local actions = {}
-  local seen_rules = {}
-  local uri = vim.uri_from_bufnr(context.bufnr)
+-- Lua: Selene ignore diagnostics
+local selene_ignore = create_lint_ignore_generator({
+  filetypes = { 'lua' },
+  source = 'selene',
+  actions = {
+    next_line_action({
+      title_fmt = 'selene: ignore line diagnostic %s',
+      check_existing = function()
+        return nil
+      end, -- selene doesn't merge
+      format_new = function(rule, indent)
+        return indent .. '-- selene: allow(' .. rule .. ')\n'
+      end,
+      format_merge = function() end, -- never called
+    }),
+    file_action({
+      title_fmt = 'selene: ignore file diagnostic %s',
+      check_existing = function()
+        return nil
+      end,
+      format_new = function(rule)
+        return '--# selene: allow(' .. rule .. ')\n'
+      end,
+      format_merge = function() end,
+    }),
+  },
+})
 
-  for _, diag in ipairs(diagnostics) do
-    if diag.source == 'npm-groovy-lint' then
-      local rule_code = diag.code
-      if rule_code and not seen_rules[rule_code] then
-        seen_rules[rule_code] = true
-
-        local line_number = diag.lnum
-        local current_line = context.content[line_number + 1] or ''
-        local indent = get_indent(current_line)
-
-        -- Check for existing disable-line comment on current line
-        local existing_disable_line = current_line:match '// groovylint%-disable%-line%s+(.+)$'
-        local new_line_text
-        if existing_disable_line then
-          -- Append to existing disable-line comment
-          new_line_text = current_line:gsub(
-            '// groovylint%-disable%-line%s+(.+)$',
-            '// groovylint-disable-line %1, ' .. rule_code
-          ) .. '\n'
-        else
-          -- Add new disable-line comment
-          new_line_text = current_line .. ' // groovylint-disable-line ' .. rule_code .. '\n'
-        end
-
-        -- Disable current line action
-        table.insert(actions, {
-          title = 'groovylint: disable current line ' .. rule_code,
-          kind = 'quickfix',
-          edit = {
-            changes = {
-              [uri] = {
-                {
-                  range = {
-                    start = { line = line_number, character = 0 },
-                    ['end'] = { line = line_number + 1, character = 0 },
-                  },
-                  newText = new_line_text,
-                },
-              },
-            },
-          },
-        })
-
-        -- Disable next line action
-        -- Check if previous line has a disable-next-line comment
-        local prev_line = line_number > 0 and context.content[line_number] or ''
-        local existing_disable_next = prev_line:match '// groovylint%-disable%-next%-line%s+(.+)$'
-
-        local next_line_edit
-        if existing_disable_next then
-          -- Modify existing disable-next-line comment
-          local modified_prev = prev_line:gsub(
-            '// groovylint%-disable%-next%-line%s+(.+)$',
-            '// groovylint-disable-next-line %1, ' .. rule_code
-          ) .. '\n'
-          next_line_edit = {
-            range = {
-              start = { line = line_number - 1, character = 0 },
-              ['end'] = { line = line_number, character = 0 },
-            },
-            newText = modified_prev,
-          }
-        else
-          -- Insert new disable-next-line comment
-          local ignore_comment = indent .. '// groovylint-disable-next-line ' .. rule_code .. '\n'
-          next_line_edit = {
-            range = {
-              start = { line = line_number, character = 0 },
-              ['end'] = { line = line_number, character = 0 },
-            },
-            newText = ignore_comment,
-          }
-        end
-
-        table.insert(actions, {
-          title = 'groovylint: disable next line ' .. rule_code,
-          kind = 'quickfix',
-          edit = {
-            changes = {
-              [uri] = { next_line_edit },
-            },
-          },
-        })
-
-        -- File-level disable: check if we should modify existing or insert new
-        local first_line = context.content[1] or ''
-        local existing_file_disable = first_line:match '%/%*%s*groovylint%-disable%s+([^%*]+)%s*%*%/'
-
-        local file_edit
-        if existing_file_disable then
-          -- Modify existing file-level disable comment
-          local modified_line = first_line:gsub(
-            '%/%*%s*groovylint%-disable%s+([^%*]+)%s*%*%/',
-            '/* groovylint-disable %1, ' .. rule_code .. ' */'
-          ) .. '\n'
-          file_edit = {
-            range = {
-              start = { line = 0, character = 0 },
-              ['end'] = { line = 1, character = 0 },
-            },
-            newText = modified_line,
-          }
-        else
-          -- Insert new file-level disable comment
-          file_edit = {
-            range = {
-              start = { line = 0, character = 0 },
-              ['end'] = { line = 0, character = 0 },
-            },
-            newText = '/* groovylint-disable ' .. rule_code .. ' */\n',
-          }
-        end
-
-        table.insert(actions, {
-          title = 'groovylint: disable file ' .. rule_code,
-          kind = 'quickfix',
-          edit = {
-            changes = {
-              [uri] = { file_edit },
-            },
-          },
-        })
-      end
-    end
-  end
-
-  return actions
-end
-
--- Lua: Selene ignore diagnostic
-local function selene_ignore_diagnostic(context)
-  if context.filetype ~= 'lua' then
-    return {}
-  end
-
-  local diagnostics = vim.diagnostic.get(context.bufnr, { lnum = context.range.row - 1 })
-  local actions = {}
-  local uri = vim.uri_from_bufnr(context.bufnr)
-
-  for _, diag in ipairs(diagnostics) do
-    if diag.source == 'selene' then
-      local line_number = diag.lnum
-      local ignore_comment = string.format('-- selene: allow(%s)\n', diag.code)
-      table.insert(actions, {
-        title = 'selene: ignore line diagnostic ' .. diag.code,
-        kind = 'quickfix',
-        edit = {
-          changes = {
-            [uri] = {
-              {
-                range = {
-                  start = { line = line_number, character = 0 },
-                  ['end'] = { line = line_number, character = 0 },
-                },
-                newText = ignore_comment,
-              },
-            },
-          },
-        },
-      })
-
-      local file_ignore_comment = string.format('--# selene: allow(%s)\n', diag.code)
-      table.insert(actions, {
-        title = 'selene: ignore file diagnostic ' .. diag.code,
-        kind = 'quickfix',
-        edit = {
-          changes = {
-            [uri] = {
-              {
-                range = {
-                  start = { line = 0, character = 0 },
-                  ['end'] = { line = 0, character = 0 },
-                },
-                newText = file_ignore_comment,
-              },
-            },
-          },
-        },
-      })
-    end
-  end
-
-  return actions
-end
+-- Dockerfile: Hadolint ignore diagnostics
+local hadolint_ignore = create_lint_ignore_generator({
+  filetypes = { 'dockerfile' },
+  source = 'hadolint',
+  actions = {
+    next_line_action({
+      title_fmt = 'hadolint: ignore next line %s',
+      check_existing = function(line)
+        return line:match '# hadolint ignore='
+      end,
+      format_new = function(rule, indent)
+        return indent .. '# hadolint ignore=' .. rule .. '\n'
+      end,
+      format_merge = function(line, rule)
+        return line:gsub('(# hadolint ignore=.+)$', '%1,' .. rule) .. '\n'
+      end,
+    }),
+    file_action({
+      title_fmt = 'hadolint: ignore file %s',
+      check_existing = function(line)
+        return line:match '# hadolint global ignore='
+      end,
+      format_new = function(rule)
+        return '# hadolint global ignore=' .. rule .. '\n'
+      end,
+      format_merge = function(line, rule)
+        return line:gsub('(# hadolint global ignore=.+)$', '%1,' .. rule) .. '\n'
+      end,
+    }),
+  },
+})
 
 -- Markdown: Markdownlint disable diagnostic
 local function markdownlint_disable_diagnostic(context)
@@ -513,8 +550,9 @@ local action_generators = {
   revision_branch_comment,
   toggle_function_params,
   library_current_branch,
-  groovylint_disable_diagnostic,
-  selene_ignore_diagnostic,
+  groovylint_ignore,
+  selene_ignore,
+  hadolint_ignore,
   markdownlint_disable_diagnostic,
 }
 
