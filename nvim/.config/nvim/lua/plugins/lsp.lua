@@ -5,7 +5,6 @@ local M = {
     config = require('user.lsp.config').setup,
     dependencies = {
       'nvimtools/none-ls.nvim',
-      'mason-org/mason.nvim',
     },
   },
   {
