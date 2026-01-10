@@ -18,6 +18,7 @@ M.setup = function()
     'lua_ls',
     'pyright',
     'terraformls',
+    'user_lsp',
     'vimls',
     'vtsls',
     'yamlls',

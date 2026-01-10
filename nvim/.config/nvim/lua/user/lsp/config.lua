@@ -85,19 +85,9 @@ M.setup = function()
           underline = true,
         }
       end
-    end,
-  })
 
-  -- for statusline
-  local lsp_statusline_aug = vim.api.nvim_create_augroup('UserLspStatusline', { clear = true })
-  vim.api.nvim_create_autocmd({ 'LspAttach', 'LspDetach' }, {
-    group = lsp_statusline_aug,
-    callback = function(ev)
-      local bufnr = ev.buf
+      -- for statusline
       vim.schedule(function()
-        if not vim.api.nvim_buf_is_valid(bufnr) then
-          return
-        end
         vim.b[bufnr].attached_lsp = vim.tbl_map(function(client_l)
           return client_l.name
         end, vim.lsp.get_clients { bufnr = bufnr })
@@ -108,7 +98,6 @@ M.setup = function()
 
   require('user.lsp.actions').setup()
   require('user.lsp.servers').setup()
-  require('user.lsp.server').setup()
 end
 
 return M

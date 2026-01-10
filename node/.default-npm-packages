@@ -6,6 +6,7 @@ eslint-config-react-app
 mcp-hub@latest
 neovim
 npm
+npm-groovy-lint
 quicktype
 typescript
 vscode-css-languageservice
