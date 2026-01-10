@@ -208,6 +208,146 @@ local function library_current_branch(context)
   }
 end
 
+-- Groovy: npm-groovy-lint disable diagnostic
+local function groovylint_disable_diagnostic(context)
+  if context.filetype ~= 'groovy' and context.filetype ~= 'Jenkinsfile' then
+    return {}
+  end
+
+  local diagnostics = vim.diagnostic.get(context.bufnr, { lnum = context.range.row - 1 })
+  local actions = {}
+  local seen_rules = {}
+  local uri = vim.uri_from_bufnr(context.bufnr)
+
+  for _, diag in ipairs(diagnostics) do
+    if diag.source == 'npm-groovy-lint' then
+      local rule_code = diag.code
+      if rule_code and not seen_rules[rule_code] then
+        seen_rules[rule_code] = true
+
+        local line_number = diag.lnum
+        local current_line = context.content[line_number + 1] or ''
+        local indent = get_indent(current_line)
+
+        -- Check for existing disable-line comment on current line
+        local existing_disable_line = current_line:match '// groovylint%-disable%-line%s+(.+)$'
+        local new_line_text
+        if existing_disable_line then
+          -- Append to existing disable-line comment
+          new_line_text = current_line:gsub(
+            '// groovylint%-disable%-line%s+(.+)$',
+            '// groovylint-disable-line %1, ' .. rule_code
+          ) .. '\n'
+        else
+          -- Add new disable-line comment
+          new_line_text = current_line .. ' // groovylint-disable-line ' .. rule_code .. '\n'
+        end
+
+        -- Disable current line action
+        table.insert(actions, {
+          title = 'groovylint: disable current line ' .. rule_code,
+          kind = 'quickfix',
+          edit = {
+            changes = {
+              [uri] = {
+                {
+                  range = {
+                    start = { line = line_number, character = 0 },
+                    ['end'] = { line = line_number + 1, character = 0 },
+                  },
+                  newText = new_line_text,
+                },
+              },
+            },
+          },
+        })
+
+        -- Disable next line action
+        -- Check if previous line has a disable-next-line comment
+        local prev_line = line_number > 0 and context.content[line_number] or ''
+        local existing_disable_next = prev_line:match '// groovylint%-disable%-next%-line%s+(.+)$'
+
+        local next_line_edit
+        if existing_disable_next then
+          -- Modify existing disable-next-line comment
+          local modified_prev = prev_line:gsub(
+            '// groovylint%-disable%-next%-line%s+(.+)$',
+            '// groovylint-disable-next-line %1, ' .. rule_code
+          ) .. '\n'
+          next_line_edit = {
+            range = {
+              start = { line = line_number - 1, character = 0 },
+              ['end'] = { line = line_number, character = 0 },
+            },
+            newText = modified_prev,
+          }
+        else
+          -- Insert new disable-next-line comment
+          local ignore_comment = indent .. '// groovylint-disable-next-line ' .. rule_code .. '\n'
+          next_line_edit = {
+            range = {
+              start = { line = line_number, character = 0 },
+              ['end'] = { line = line_number, character = 0 },
+            },
+            newText = ignore_comment,
+          }
+        end
+
+        table.insert(actions, {
+          title = 'groovylint: disable next line ' .. rule_code,
+          kind = 'quickfix',
+          edit = {
+            changes = {
+              [uri] = { next_line_edit },
+            },
+          },
+        })
+
+        -- File-level disable: check if we should modify existing or insert new
+        local first_line = context.content[1] or ''
+        local existing_file_disable = first_line:match '%/%*%s*groovylint%-disable%s+([^%*]+)%s*%*%/'
+
+        local file_edit
+        if existing_file_disable then
+          -- Modify existing file-level disable comment
+          local modified_line = first_line:gsub(
+            '%/%*%s*groovylint%-disable%s+([^%*]+)%s*%*%/',
+            '/* groovylint-disable %1, ' .. rule_code .. ' */'
+          ) .. '\n'
+          file_edit = {
+            range = {
+              start = { line = 0, character = 0 },
+              ['end'] = { line = 1, character = 0 },
+            },
+            newText = modified_line,
+          }
+        else
+          -- Insert new file-level disable comment
+          file_edit = {
+            range = {
+              start = { line = 0, character = 0 },
+              ['end'] = { line = 0, character = 0 },
+            },
+            newText = '/* groovylint-disable ' .. rule_code .. ' */\n',
+          }
+        end
+
+        table.insert(actions, {
+          title = 'groovylint: disable file ' .. rule_code,
+          kind = 'quickfix',
+          edit = {
+            changes = {
+              [uri] = { file_edit },
+            },
+          },
+        })
+      end
+    end
+  end
+
+  return actions
+end
+
 -- Lua: Selene ignore diagnostic
 local function selene_ignore_diagnostic(context)
   if context.filetype ~= 'lua' then
@@ -373,6 +513,7 @@ local action_generators = {
   revision_branch_comment,
   toggle_function_params,
   library_current_branch,
+  groovylint_disable_diagnostic,
   selene_ignore_diagnostic,
   markdownlint_disable_diagnostic,
 }
