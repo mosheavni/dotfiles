@@ -90,7 +90,14 @@ local function get_line_directive(bufnr, row)
   return find_disable_directive(bufnr, row_start, row_end)
 end
 
-local function disable_action(bufnr, existing_directive, default_line, code, indentation)
+--- Build a WorkspaceEdit for disabling a shellcheck rule
+---@param uri string Buffer URI
+---@param existing_directive table|nil Existing directive info
+---@param default_line number Default line for new directive (1-indexed)
+---@param code string ShellCheck code to disable
+---@param indentation string Indentation for the directive
+---@return table edit WorkspaceEdit
+local function build_disable_edit(uri, existing_directive, default_line, code, indentation)
   local codes = code
   local row_start = default_line - 1
   local row_end = default_line - 1
@@ -101,17 +108,31 @@ local function disable_action(bufnr, existing_directive, default_line, code, ind
     row_end = existing_directive.row
   end
 
-  local directive = indentation .. '# shellcheck disable=' .. codes
-  api.nvim_buf_set_lines(bufnr, row_start, row_end, false, { directive })
+  local directive = indentation .. '# shellcheck disable=' .. codes .. '\n'
+  return {
+    changes = {
+      [uri] = {
+        {
+          range = {
+            start = { line = row_start, character = 0 },
+            ['end'] = { line = row_end, character = 0 },
+          },
+          newText = directive,
+        },
+      },
+    },
+  }
 end
 
 local function generate_file_disable_action(bufnr, code)
+  local uri = vim.uri_from_bufnr(bufnr)
+  local existing_directive = get_file_directive(bufnr)
+  local default_line = get_first_non_shebang_row(bufnr) + 1
+
   return {
     title = 'Disable ShellCheck rule ' .. code .. ' for the entire file',
     kind = 'quickfix',
-    action = function()
-      disable_action(bufnr, get_file_directive(bufnr), get_first_non_shebang_row(bufnr) + 1, code, '')
-    end,
+    edit = build_disable_edit(uri, existing_directive, default_line, code, ''),
   }
 end
 
@@ -128,13 +149,13 @@ local function generate_line_disable_action(bufnr, row, code)
   row = match_row + 1
   local line = api.nvim_buf_get_lines(bufnr, row - 1, row, false)[1]
   local indentation = line:match '^%s+' or ''
+  local uri = vim.uri_from_bufnr(bufnr)
+  local existing_directive = get_line_directive(bufnr, row)
 
   return {
     title = 'Disable ShellCheck rule ' .. code .. ' for this line',
     kind = 'quickfix',
-    action = function()
-      disable_action(bufnr, get_line_directive(bufnr, row), row, code, indentation)
-    end,
+    edit = build_disable_edit(uri, existing_directive, row, code, indentation),
   }
 end
 

@@ -92,11 +92,13 @@ function M.start()
 
   local commands = {
     ---@param cmd table
-    ---@param ctx table<string,any>
-    [USER_LSP_COMMAND] = function(cmd, ctx)
+    ---@param _ctx table<string,any>
+    [USER_LSP_COMMAND] = function(cmd, _ctx)
       local action = cmd.arguments[1]
       if action then
-        vim.api.nvim_buf_call(ctx.bufnr, action)
+        -- Call directly - action functions already capture context.bufnr
+        -- Avoid nvim_buf_call which can trigger LSP change tracking issues
+        action()
       else
         vim.notify('Action not available', vim.log.levels.INFO)
       end
@@ -107,6 +109,13 @@ function M.start()
     capabilities = {
       codeActionProvider = true,
       hoverProvider = true,
+      -- Use Full sync (1) to properly initialize buf_state for change tracking
+      -- We ignore the actual notifications in srv.notify(), but this ensures
+      -- Neovim initializes the internal state correctly (like null-ls does)
+      textDocumentSync = {
+        openClose = true,
+        change = 1, -- TextDocumentSyncKind.Full
+      },
     },
     handlers = {
       ---@param _method string
@@ -115,15 +124,20 @@ function M.start()
       ['textDocument/codeAction'] = function(_method, params, callback)
         local code_actions = {}
         for _, action in ipairs(actions.get_actions(params)) do
-          table.insert(code_actions, {
+          local ca = {
             title = action.title,
             kind = action.kind or 'source',
-            command = {
+          }
+          if action.edit then
+            ca.edit = action.edit
+          elseif action.action then
+            ca.command = {
               title = action.title,
               command = USER_LSP_COMMAND,
               arguments = { action.action },
-            },
-          })
+            }
+          end
+          table.insert(code_actions, ca)
         end
         callback(nil, code_actions)
       end,
