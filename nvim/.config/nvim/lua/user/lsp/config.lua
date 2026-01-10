@@ -50,41 +50,41 @@ M.setup = function()
     callback = function(ev)
       local client = vim.lsp.get_client_by_id(ev.data.client_id)
       local bufnr = ev.buf
+
+      -- navic
       if client and client.server_capabilities.documentSymbolProvider then
         require('nvim-navic').attach(client, bufnr)
       end
 
       -- Configure semantic token highlighting
       if client and client.server_capabilities.semanticTokensProvider then
-        vim.lsp.semantic_tokens.start(ev.buf, client.id)
+        vim.lsp.semantic_tokens.enable(true)
       end
 
-      -- Mappings
-      if vim.b[bufnr].lsp_keymaps_configured then
-        return
+      -- Mappings (per-buffer, only once)
+      if not vim.b[bufnr].lsp_keymaps_configured then
+        vim.b[bufnr].lsp_keymaps_configured = true
+        require 'user.lsp.keymaps'(bufnr)
       end
-      vim.b[bufnr].lsp_keymaps_configured = true
-      require 'user.lsp.keymaps'(bufnr)
 
-      -- Diagnostics
-      if vim.g.diagnostics_configured then
-        return
+      -- Diagnostics config (once)
+      if not vim.g.diagnostics_configured then
+        vim.g.diagnostics_configured = true
+        vim.diagnostic.config {
+          severity_sort = true,
+          signs = { text = M.diagnostic_signs },
+          virtual_text = {
+            prefix = '●',
+            source = 'if_many',
+            current_line = false,
+            severity = { min = vim.diagnostic.severity.WARN },
+          },
+          virtual_lines = { current_line = true },
+          float = { border = 'rounded', source = true },
+          update_in_insert = false,
+          underline = true,
+        }
       end
-      vim.g.diagnostics_configured = true
-      vim.diagnostic.config {
-        severity_sort = true,
-        signs = { text = M.diagnostic_signs },
-        virtual_text = {
-          prefix = '●',
-          source = 'if_many',
-          current_line = false,
-          severity = { min = vim.diagnostic.severity.WARN },
-        },
-        virtual_lines = { current_line = true },
-        float = { border = 'rounded', source = true },
-        update_in_insert = false, -- Don't update diagnostics while typing
-        underline = true,
-      }
     end,
   })
 
