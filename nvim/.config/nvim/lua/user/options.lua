@@ -126,7 +126,7 @@ vim.o.updatetime = 300
 vim.o.timeoutlen = 400
 
 -- Ignore node_modules and other dirs
-vim.opt.wildignore:append { '**/node_modules/**', '.hg', '.git', '.svn', '*.DS_Store', '*.pyc' }
+vim.opt.wildignore:append { '**/node_modules/**', '**/.hg/**', '**/.git/**', '**/.svn/**', '*.DS_Store', '*.pyc' }
 vim.opt.path:append { '**' }
 
 -- Folding
