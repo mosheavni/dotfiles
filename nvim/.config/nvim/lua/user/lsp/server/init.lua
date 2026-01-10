@@ -1,7 +1,8 @@
--- Custom in-process LSP server for code actions
+-- Custom in-process LSP server for code actions and hover
 -- Based on crates.nvim's LSP implementation pattern
 
 local actions = require 'user.lsp.server.actions'
+local hover = require 'user.lsp.server.hover'
 
 local M = {
   id = nil,
@@ -105,6 +106,7 @@ function M.start()
   local server = create_server {
     capabilities = {
       codeActionProvider = true,
+      hoverProvider = true,
     },
     handlers = {
       ---@param _method string
@@ -124,6 +126,14 @@ function M.start()
           })
         end
         callback(nil, code_actions)
+      end,
+
+      ---@param _method string
+      ---@param params any
+      ---@param callback fun(err: nil, hover: lsp.Hover|nil)
+      ['textDocument/hover'] = function(_method, params, callback)
+        local result = hover.get_hover(params)
+        callback(nil, result)
       end,
     },
   }

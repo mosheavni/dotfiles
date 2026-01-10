@@ -3,9 +3,6 @@ local M = {
     'neovim/nvim-lspconfig',
     event = 'VeryLazy',
     config = require('user.lsp.config').setup,
-    dependencies = {
-      'nvimtools/none-ls.nvim',
-    },
   },
   {
     'j-hui/fidget.nvim',
