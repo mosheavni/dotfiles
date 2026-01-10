@@ -129,6 +129,7 @@ local M = {
   },
   {
     'mosheavni/yaml-companion.nvim',
+    dev = vim.env.YAMLC_DEV == 'true',
     ft = 'yaml',
     config = function()
       vim.keymap.set('n', '<leader>cs', ":lua require('yaml-companion').open_ui_select()<cr>", { remap = false, silent = true })
