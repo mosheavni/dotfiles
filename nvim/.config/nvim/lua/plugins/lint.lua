@@ -28,7 +28,7 @@ return {
       lua = { 'selene', 'luacheck' },
       make = { 'checkmake' },
       markdown = { 'proselint', 'write_good', 'markdownlint' },
-      sh = { 'shellcheck' },
+      -- sh = { 'shellcheck' }, -- diagnostics provided by bash-ls
       toml = { 'tombi' },
       vim = { 'vint' },
       zsh = { 'zsh' },

@@ -108,6 +108,7 @@ M.setup = function()
 
   require('user.lsp.actions').setup()
   require('user.lsp.servers').setup()
+  require('user.lsp.server').setup()
 end
 
 return M
