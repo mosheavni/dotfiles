@@ -51,7 +51,7 @@ local function tldr_hover(context, word)
   end
 
   -- Run tldr command
-  local result = vim.fn.system({ 'tldr', '--raw', word })
+  local result = vim.fn.system { 'tldr', '--raw', word }
   if vim.v.shell_error ~= 0 then
     return nil
   end
@@ -76,7 +76,7 @@ local function printenv_hover(context, word)
     return nil
   end
 
-  local value = vim.uv.os_getenv(word)
+  local value = vim.env[word]
   if value then
     return {
       contents = {

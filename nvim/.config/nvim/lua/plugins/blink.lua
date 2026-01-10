@@ -58,7 +58,7 @@ return {
       },
       ['<S-Tab>'] = { 'select_prev', 'fallback' },
       ['<C-j>'] = { 'snippet_forward', 'fallback' },
-      ['<C-k>'] = { 'snippet_backward', 'fallback' },
+      ['<C-k>'] = { 'snippet_backward', 'show_signature', 'hide_signature', 'fallback' },
       ['<CR>'] = { 'accept', 'fallback' },
       ['<C-u>'] = { 'scroll_signature_up', 'fallback' },
       ['<C-d>'] = { 'scroll_signature_down', 'fallback' },
