@@ -11,6 +11,10 @@ local function get_indent(line)
   return string.match(line, '^%s*')
 end
 
+local function is_groovy(context)
+  return context.filetype == 'groovy' or context.filetype == 'Jenkinsfile'
+end
+
 --- Build an LSP text edit
 ---@param line_start number 0-indexed start line
 ---@param line_end number 0-indexed end line
@@ -95,9 +99,13 @@ local function file_action(opts)
 end
 
 --- Create a lint ignore action generator from config
----@param config table { filetypes, source, actions }
+---@param config table { filetypes, source, actions, get_rule_code? }
 ---@return function generator
 local function create_lint_ignore_generator(config)
+  local get_rule_code = config.get_rule_code or function(diag)
+    return diag.code
+  end
+
   return function(context)
     -- Check filetype
     local ft_match = false
@@ -114,11 +122,10 @@ local function create_lint_ignore_generator(config)
     local diagnostics = vim.diagnostic.get(context.bufnr, { lnum = context.range.row - 1 })
     local actions = {}
     local seen_rules = {}
-    local uri = vim.uri_from_bufnr(context.bufnr)
 
     for _, diag in ipairs(diagnostics) do
       if diag.source == config.source then
-        local rule_code = diag.code
+        local rule_code = get_rule_code(diag)
         if rule_code and not seen_rules[rule_code] then
           seen_rules[rule_code] = true
           local line_number = diag.lnum
@@ -126,7 +133,7 @@ local function create_lint_ignore_generator(config)
           local indent = get_indent(current_line)
 
           for _, action_config in ipairs(config.actions) do
-            local action = action_config.build(context, uri, line_number, current_line, indent, rule_code)
+            local action = action_config.build(context, context.uri, line_number, current_line, indent, rule_code)
             if action then
               table.insert(actions, action)
             end
@@ -148,6 +155,7 @@ local function build_context(params)
 
   return {
     bufnr = bufnr,
+    uri = vim.uri_from_bufnr(bufnr),
     content = content,
     range = {
       row = row,
@@ -180,7 +188,6 @@ local function revision_branch_comment(context)
   local indent = get_indent(target_revision_line)
 
   if string.find(target_revision_line, 'targetRevision: HEAD') then
-    local uri = vim.uri_from_bufnr(context.bufnr)
     local new_text = indent .. 'targetRevision: ' .. git.get_branch_sync() .. ' # TODO: Change to HEAD before merging\n'
     return {
       {
@@ -188,7 +195,7 @@ local function revision_branch_comment(context)
         kind = 'refactor.rewrite',
         edit = {
           changes = {
-            [uri] = {
+            [context.uri] = {
               {
                 range = {
                   start = { line = target_revision_line_number - 1, character = 0 },
@@ -203,14 +210,13 @@ local function revision_branch_comment(context)
     }
   end
 
-  local uri = vim.uri_from_bufnr(context.bufnr)
   return {
     {
       title = 'Change branch to HEAD',
       kind = 'refactor.rewrite',
       edit = {
         changes = {
-          [uri] = {
+          [context.uri] = {
             {
               range = {
                 start = { line = target_revision_line_number - 1, character = 0 },
@@ -227,7 +233,7 @@ end
 
 -- Groovy/Jenkinsfile: Toggle function params
 local function toggle_function_params(context)
-  if context.filetype ~= 'groovy' and context.filetype ~= 'Jenkinsfile' then
+  if not is_groovy(context) then
     return {}
   end
 
@@ -257,14 +263,13 @@ local function toggle_function_params(context)
     final = current_line:gsub([=[(%s*def%s%w+%().*(%).*)]=], '%1Map args=[' .. function_args .. ']%2')
   end
 
-  local uri = vim.uri_from_bufnr(context.bufnr)
   return {
     {
       title = 'Toggle function positional params to map args',
       kind = 'refactor.rewrite',
       edit = {
         changes = {
-          [uri] = {
+          [context.uri] = {
             {
               range = {
                 start = { line = row - 1, character = 0 },
@@ -281,7 +286,7 @@ end
 
 -- Groovy/Jenkinsfile: Toggle library branch
 local function library_current_branch(context)
-  if context.filetype ~= 'groovy' and context.filetype ~= 'Jenkinsfile' then
+  if not is_groovy(context) then
     return {}
   end
 
@@ -290,7 +295,6 @@ local function library_current_branch(context)
     return {}
   end
 
-  local uri = vim.uri_from_bufnr(context.bufnr)
   if string.find(first_line, [[@Library%(['"]utils@]]) then
     return {
       {
@@ -298,7 +302,7 @@ local function library_current_branch(context)
         kind = 'refactor.rewrite',
         edit = {
           changes = {
-            [uri] = {
+            [context.uri] = {
               {
                 range = {
                   start = { line = 0, character = 0 },
@@ -320,7 +324,7 @@ local function library_current_branch(context)
       kind = 'refactor.rewrite',
       edit = {
         changes = {
-          [uri] = {
+          [context.uri] = {
             {
               range = {
                 start = { line = 0, character = 0 },
@@ -441,109 +445,51 @@ local hadolint_ignore = create_lint_ignore_generator({
   },
 })
 
--- Markdown: Markdownlint disable diagnostic
-local function markdownlint_disable_diagnostic(context)
-  if context.filetype ~= 'markdown' then
-    return {}
-  end
-
-  local diagnostics = vim.diagnostic.get(context.bufnr, { lnum = context.range.row - 1 })
-  local actions = {}
-  local seen_rules = {}
-  local uri = vim.uri_from_bufnr(context.bufnr)
-
-  for _, diag in ipairs(diagnostics) do
-    if diag.source == 'markdownlint' then
-      local rule_code = diag.message:match 'error (MD%d+)/'
-      if rule_code and not seen_rules[rule_code] then
-        seen_rules[rule_code] = true
-
-        local line_number = diag.lnum
-        local current_line = context.content[line_number + 1] or ''
-        local new_line = current_line .. ' <!-- markdownlint-disable-line ' .. rule_code .. ' -->\n'
-
-        table.insert(actions, {
-          title = 'markdownlint: disable current line ' .. rule_code,
-          kind = 'quickfix',
-          edit = {
-            changes = {
-              [uri] = {
-                {
-                  range = {
-                    start = { line = line_number, character = 0 },
-                    ['end'] = { line = line_number + 1, character = 0 },
-                  },
-                  newText = new_line,
-                },
-              },
-            },
-          },
-        })
-
-        local indent = get_indent(current_line)
-        local ignore_comment = indent .. '<!-- markdownlint-disable-next-line ' .. rule_code .. ' -->\n'
-
-        table.insert(actions, {
-          title = 'markdownlint: disable next line ' .. rule_code,
-          kind = 'quickfix',
-          edit = {
-            changes = {
-              [uri] = {
-                {
-                  range = {
-                    start = { line = line_number, character = 0 },
-                    ['end'] = { line = line_number, character = 0 },
-                  },
-                  newText = ignore_comment,
-                },
-              },
-            },
-          },
-        })
-
-        -- File-level disable: check if we should modify existing or insert new
-        local first_line = context.content[1] or ''
-        local has_disable = first_line:match '<!%-%-%s*markdownlint%-disable%s+'
-        local has_disable_line = first_line:match 'disable%-line'
-        local has_disable_next_line = first_line:match 'disable%-next%-line'
-
-        local file_edit
-        if has_disable and not has_disable_line and not has_disable_next_line then
-          -- Modify existing disable comment
-          local modified_line = first_line:gsub('(%s*)-->', ' ' .. rule_code .. '%1-->') .. '\n'
-          file_edit = {
-            range = {
-              start = { line = 0, character = 0 },
-              ['end'] = { line = 1, character = 0 },
-            },
-            newText = modified_line,
-          }
-        else
-          -- Insert new disable comment
-          file_edit = {
-            range = {
-              start = { line = 0, character = 0 },
-              ['end'] = { line = 0, character = 0 },
-            },
-            newText = '<!-- markdownlint-disable ' .. rule_code .. ' -->\n',
-          }
-        end
-
-        table.insert(actions, {
-          title = 'markdownlint: disable file ' .. rule_code,
-          kind = 'quickfix',
-          edit = {
-            changes = {
-              [uri] = { file_edit },
-            },
-          },
-        })
-      end
-    end
-  end
-
-  return actions
-end
+-- Markdown: Markdownlint disable diagnostics
+local markdownlint_ignore = create_lint_ignore_generator({
+  filetypes = { 'markdown' },
+  source = 'markdownlint',
+  get_rule_code = function(diag)
+    return diag.message:match 'error (MD%d+)/'
+  end,
+  actions = {
+    current_line_action({
+      title_fmt = 'markdownlint: disable current line %s',
+      check_existing = function()
+        return nil
+      end, -- markdownlint doesn't merge inline
+      format_new = function(line, rule)
+        return line .. ' <!-- markdownlint-disable-line ' .. rule .. ' -->\n'
+      end,
+      format_merge = function() end,
+    }),
+    next_line_action({
+      title_fmt = 'markdownlint: disable next line %s',
+      check_existing = function()
+        return nil
+      end,
+      format_new = function(rule, indent)
+        return indent .. '<!-- markdownlint-disable-next-line ' .. rule .. ' -->\n'
+      end,
+      format_merge = function() end,
+    }),
+    file_action({
+      title_fmt = 'markdownlint: disable file %s',
+      check_existing = function(line)
+        local has_disable = line:match '<!%-%-%s*markdownlint%-disable%s+'
+        local has_disable_line = line:match 'disable%-line'
+        local has_disable_next_line = line:match 'disable%-next%-line'
+        return has_disable and not has_disable_line and not has_disable_next_line
+      end,
+      format_new = function(rule)
+        return '<!-- markdownlint-disable ' .. rule .. ' -->\n'
+      end,
+      format_merge = function(line, rule)
+        return line:gsub('(%s*)-->', ' ' .. rule .. '%1-->') .. '\n'
+      end,
+    }),
+  },
+})
 
 -- List of all action generators
 local action_generators = {
@@ -553,7 +499,7 @@ local action_generators = {
   groovylint_ignore,
   selene_ignore,
   hadolint_ignore,
-  markdownlint_disable_diagnostic,
+  markdownlint_ignore,
 }
 
 --- Get all applicable actions for the given LSP params
