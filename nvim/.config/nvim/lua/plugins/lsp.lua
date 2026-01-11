@@ -99,17 +99,6 @@ local M = {
 
   -- language_specific_plugins
   {
-    'cuducos/yaml.nvim',
-    cmd = {
-      'YAMLFzfLua',
-      'YAMLQuickfix',
-      'YAMLView',
-      'YAMLYank',
-      'YAMLYankKey',
-      'YAMLYankValue',
-    },
-  },
-  {
     'phelipetls/jsonpath.nvim',
     cmd = 'JsonPath',
     config = function()
@@ -133,9 +122,19 @@ local M = {
     ft = 'yaml',
     config = function()
       vim.keymap.set('n', '<leader>cs', ":lua require('yaml-companion').open_ui_select()<cr>", { remap = false, silent = true })
+      vim.api.nvim_create_user_command('YamlYankKey', function()
+        local info = require('yaml-companion').get_key_at_cursor()
+        if info and info.key then
+          vim.fn.setreg('+', info.key)
+          vim.notify('Copied: ' .. info.key)
+        end
+      end, {})
       require('user.menu').add_actions('YAML', {
         ['Change Schema'] = function()
           require('yaml-companion').open_ui_select()
+        end,
+        ['Copy Yaml Key at Cursor to clipboard (:YamlYankKey)'] = function()
+          vim.cmd [[YamlYankKey]]
         end,
       })
     end,
