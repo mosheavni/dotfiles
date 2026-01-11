@@ -340,11 +340,11 @@ local function library_current_branch(context)
 end
 
 -- Groovy: npm-groovy-lint ignore diagnostics
-local groovylint_ignore = create_lint_ignore_generator({
+local groovylint_ignore = create_lint_ignore_generator {
   filetypes = { 'groovy', 'Jenkinsfile' },
   source = 'npm-groovy-lint',
   actions = {
-    current_line_action({
+    current_line_action {
       title_fmt = 'groovylint: disable current line %s',
       check_existing = function(line)
         return line:match '// groovylint%-disable%-line'
@@ -355,8 +355,8 @@ local groovylint_ignore = create_lint_ignore_generator({
       format_merge = function(line, rule)
         return line:gsub('// groovylint%-disable%-line%s+(.+)$', '// groovylint-disable-line %1, ' .. rule) .. '\n'
       end,
-    }),
-    next_line_action({
+    },
+    next_line_action {
       title_fmt = 'groovylint: disable next line %s',
       check_existing = function(line)
         return line:match '// groovylint%-disable%-next%-line'
@@ -365,11 +365,10 @@ local groovylint_ignore = create_lint_ignore_generator({
         return indent .. '// groovylint-disable-next-line ' .. rule .. '\n'
       end,
       format_merge = function(line, rule)
-        return line:gsub('// groovylint%-disable%-next%-line%s+(.+)$', '// groovylint-disable-next-line %1, ' .. rule)
-          .. '\n'
+        return line:gsub('// groovylint%-disable%-next%-line%s+(.+)$', '// groovylint-disable-next-line %1, ' .. rule) .. '\n'
       end,
-    }),
-    file_action({
+    },
+    file_action {
       title_fmt = 'groovylint: disable file %s',
       check_existing = function(line)
         return line:match '%/%*%s*groovylint%-disable'
@@ -378,47 +377,50 @@ local groovylint_ignore = create_lint_ignore_generator({
         return '/* groovylint-disable ' .. rule .. ' */\n'
       end,
       format_merge = function(line, rule)
-        return line:gsub('%/%*%s*groovylint%-disable%s+([^%*]+)%s*%*%/', '/* groovylint-disable %1, ' .. rule .. ' */')
-          .. '\n'
+        return line:gsub('%/%*%s*groovylint%-disable%s+([^%*]+)%s*%*%/', '/* groovylint-disable %1, ' .. rule .. ' */') .. '\n'
       end,
-    }),
+    },
   },
-})
+}
 
 -- Lua: Selene ignore diagnostics
-local selene_ignore = create_lint_ignore_generator({
+local selene_ignore = create_lint_ignore_generator {
   filetypes = { 'lua' },
   source = 'selene',
   actions = {
-    next_line_action({
+    next_line_action {
       title_fmt = 'selene: ignore line diagnostic %s',
-      check_existing = function()
-        return nil
-      end, -- selene doesn't merge
+      check_existing = function(line)
+        return line:match '%-%- selene: allow%('
+      end,
       format_new = function(rule, indent)
         return indent .. '-- selene: allow(' .. rule .. ')\n'
       end,
-      format_merge = function() end, -- never called
-    }),
-    file_action({
+      format_merge = function(line, rule)
+        return line:gsub('(%-%- selene: allow%([^%)]+)', '%1, ' .. rule) .. '\n'
+      end,
+    },
+    file_action {
       title_fmt = 'selene: ignore file diagnostic %s',
-      check_existing = function()
-        return nil
+      check_existing = function(line)
+        return line:match '%-%-# selene: allow%('
       end,
       format_new = function(rule)
         return '--# selene: allow(' .. rule .. ')\n'
       end,
-      format_merge = function() end,
-    }),
+      format_merge = function(line, rule)
+        return line:gsub('(%-%-# selene: allow%([^%)]+)', '%1, ' .. rule) .. '\n'
+      end,
+    },
   },
-})
+}
 
 -- Dockerfile: Hadolint ignore diagnostics
-local hadolint_ignore = create_lint_ignore_generator({
+local hadolint_ignore = create_lint_ignore_generator {
   filetypes = { 'dockerfile' },
   source = 'hadolint',
   actions = {
-    next_line_action({
+    next_line_action {
       title_fmt = 'hadolint: ignore next line %s',
       check_existing = function(line)
         return line:match '# hadolint ignore='
@@ -429,8 +431,8 @@ local hadolint_ignore = create_lint_ignore_generator({
       format_merge = function(line, rule)
         return line:gsub('(# hadolint ignore=.+)$', '%1,' .. rule) .. '\n'
       end,
-    }),
-    file_action({
+    },
+    file_action {
       title_fmt = 'hadolint: ignore file %s',
       check_existing = function(line)
         return line:match '# hadolint global ignore='
@@ -441,19 +443,99 @@ local hadolint_ignore = create_lint_ignore_generator({
       format_merge = function(line, rule)
         return line:gsub('(# hadolint global ignore=.+)$', '%1,' .. rule) .. '\n'
       end,
-    }),
+    },
   },
-})
+}
+
+-- Lua: Luacheck ignore diagnostics (for warning codes)
+local luacheck_ignore = create_lint_ignore_generator {
+  filetypes = { 'lua' },
+  source = 'luacheck',
+  actions = {
+    current_line_action {
+      title_fmt = 'luacheck: ignore current line %s',
+      check_existing = function(line)
+        return line:match '-- luacheck: ignore'
+      end,
+      format_new = function(line, rule)
+        return line .. ' -- luacheck: ignore ' .. rule .. '\n'
+      end,
+      format_merge = function(line, rule)
+        return line:gsub('(-- luacheck: ignore.*)$', '%1 ' .. rule) .. '\n'
+      end,
+    },
+    next_line_action {
+      title_fmt = 'luacheck: ignore next line %s',
+      check_existing = function(line)
+        return line:match '-- luacheck: ignore'
+      end,
+      format_new = function(rule, indent)
+        return indent .. '-- luacheck: ignore ' .. rule .. '\n'
+      end,
+      format_merge = function(line, rule)
+        return line:gsub('(-- luacheck: ignore.*)$', '%1 ' .. rule) .. '\n'
+      end,
+    },
+    file_action {
+      title_fmt = 'luacheck: ignore file %s',
+      check_existing = function(line)
+        return line:match '-- luacheck: ignore'
+      end,
+      format_new = function(rule)
+        return '-- luacheck: ignore ' .. rule .. '\n'
+      end,
+      format_merge = function(line, rule)
+        return line:gsub('(-- luacheck: ignore.*)$', '%1 ' .. rule) .. '\n'
+      end,
+    },
+  },
+}
+
+-- Lua: Luacheck globals (for undefined global warnings)
+local luacheck_globals = create_lint_ignore_generator {
+  filetypes = { 'lua' },
+  source = 'luacheck',
+  get_rule_code = function(diag)
+    -- Extract global name from messages like "Undefined global `vim`"
+    return diag.message:match 'Undefined global `([^`]+)`'
+  end,
+  actions = {
+    current_line_action {
+      title_fmt = 'luacheck: add global %s (current line)',
+      check_existing = function(line)
+        return line:match '-- luacheck:.*globals'
+      end,
+      format_new = function(line, global)
+        return line .. ' -- luacheck: globals ' .. global .. '\n'
+      end,
+      format_merge = function(line, global)
+        return line:gsub('(-- luacheck:.-globals[^,]*)', '%1 ' .. global) .. '\n'
+      end,
+    },
+    file_action {
+      title_fmt = 'luacheck: add global %s (file)',
+      check_existing = function(line)
+        return line:match '-- luacheck:.*globals'
+      end,
+      format_new = function(global)
+        return '-- luacheck: globals ' .. global .. '\n'
+      end,
+      format_merge = function(line, global)
+        return line:gsub('(-- luacheck:.-globals[^,\n]*)', '%1 ' .. global) .. '\n'
+      end,
+    },
+  },
+}
 
 -- Markdown: Markdownlint disable diagnostics
-local markdownlint_ignore = create_lint_ignore_generator({
+local markdownlint_ignore = create_lint_ignore_generator {
   filetypes = { 'markdown' },
   source = 'markdownlint',
   get_rule_code = function(diag)
     return diag.message:match 'error (MD%d+)/'
   end,
   actions = {
-    current_line_action({
+    current_line_action {
       title_fmt = 'markdownlint: disable current line %s',
       check_existing = function()
         return nil
@@ -462,8 +544,8 @@ local markdownlint_ignore = create_lint_ignore_generator({
         return line .. ' <!-- markdownlint-disable-line ' .. rule .. ' -->\n'
       end,
       format_merge = function() end,
-    }),
-    next_line_action({
+    },
+    next_line_action {
       title_fmt = 'markdownlint: disable next line %s',
       check_existing = function()
         return nil
@@ -472,8 +554,8 @@ local markdownlint_ignore = create_lint_ignore_generator({
         return indent .. '<!-- markdownlint-disable-next-line ' .. rule .. ' -->\n'
       end,
       format_merge = function() end,
-    }),
-    file_action({
+    },
+    file_action {
       title_fmt = 'markdownlint: disable file %s',
       check_existing = function(line)
         local has_disable = line:match '<!%-%-%s*markdownlint%-disable%s+'
@@ -487,9 +569,9 @@ local markdownlint_ignore = create_lint_ignore_generator({
       format_merge = function(line, rule)
         return line:gsub('(%s*)-->', ' ' .. rule .. '%1-->') .. '\n'
       end,
-    }),
+    },
   },
-})
+}
 
 -- List of all action generators
 local action_generators = {
@@ -498,6 +580,8 @@ local action_generators = {
   library_current_branch,
   groovylint_ignore,
   selene_ignore,
+  luacheck_ignore,
+  luacheck_globals,
   hadolint_ignore,
   markdownlint_ignore,
 }
