@@ -112,6 +112,7 @@ local function on_attach(bufnr)
   vim.keymap.del('n', 'bd', { buffer = bufnr })
   vim.keymap.del('n', 'm', { buffer = bufnr })
   vim.keymap.del('n', 'bmv', { buffer = bufnr })
+  vim.keymap.del('n', '<Tab>', { buffer = bufnr })
 
   vim.keymap.set('n', 'h', lefty, opts 'Left')
   vim.keymap.set('n', '<Left>', lefty, opts 'Left')
