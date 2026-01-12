@@ -47,13 +47,9 @@ M.setup = function()
   vim.lsp.config('lua_ls', {
     root_markers = {
       '.git',
-      '.luarc.json',
-      '.luarc.jsonc',
       '.luacheckrc',
       '.stylua.toml',
-      '.stylelua.toml',
       'stylua.toml',
-      'stylelua.toml',
       'selene.toml',
     },
 

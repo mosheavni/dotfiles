@@ -35,9 +35,23 @@ return {
       zsh = { 'zsh' },
     }
 
+    -- Fix luacheck to pass filename for .luacheckrc file patterns to work
+    lint.linters.luacheck.args = {
+      '--formatter',
+      'plain',
+      '--codes',
+      '--ranges',
+      '--filename',
+      function()
+        return vim.api.nvim_buf_get_name(0)
+      end,
+      '-',
+    }
+
     -- Configure linter root markers (similar to LSP root_dir)
     local linter_root_markers = {
       selene = { 'selene.toml' },
+      luacheck = { '.luacheckrc' },
     }
 
     -- Helper to get the appropriate cwd for a linter

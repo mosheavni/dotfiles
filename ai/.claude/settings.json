@@ -1,11 +1,12 @@
 {
-  "enabledPlugins": {
-    "lua-lsp@claude-plugins-official": true,
-    "vercel@claude-plugins-official": true
-  },
-  "alwaysThinkingEnabled": true,
   "statusLine": {
     "type": "command",
     "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); dir_display=$(echo \"${cwd/#$HOME/~}\" | awk -F/ '{if (NF > 8) {printf \"…/\"; for(i=NF-7;i<=NF;i++) printf \"%s%s\", $i, (i<NF?\"/\":\"\"); print \"\"} else print}'); output=\"$dir_display\"; if cd \"$cwd\" 2>/dev/null && git rev-parse --git-dir > /dev/null 2>&1; then branch=$(git -c gc.auto=0 symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null); [ -n \"$branch\" ] && output=\"$output on $branch\"; fi; if command -v kubectl &> /dev/null; then k8s_context=$(kubectl config current-context 2>/dev/null); if [ -n \"$k8s_context\" ]; then k8s_namespace=$(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null); k8s_namespace=${k8s_namespace:-default}; output=\"$output (☸ $k8s_context:$k8s_namespace)\"; fi; fi; [ -n \"$AWS_PROFILE\" ] && output=\"$output (☁️  $AWS_PROFILE)\"; echo \"$output\""
-  }
+  },
+  "enabledPlugins": {
+    "lua-lsp@claude-plugins-official": true,
+    "vercel@claude-plugins-official": true,
+    "lua-language-server@claude-code-lsps": true
+  },
+  "alwaysThinkingEnabled": true
 }
