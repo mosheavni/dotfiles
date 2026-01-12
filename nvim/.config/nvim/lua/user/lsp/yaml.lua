@@ -53,6 +53,9 @@ M.setup = function(opts)
         on_attach = true,
       },
     },
+    cluster_crds = {
+      fallback = true, -- Auto-fallback to cluster when Datree fails
+    },
     -- log_level = 'debug',
     builtin_matchers = {
       -- Detects Kubernetes files based on content
