@@ -52,27 +52,6 @@ M.setup = function()
       'stylua.toml',
       'selene.toml',
     },
-
-    settings = {
-      Lua = {
-        runtime = { version = 'LuaJIT' },
-        completion = { callSnippet = 'Replace' },
-        hint = { enable = true },
-        diagnostics = {
-          disable = { 'undefined-global' },
-          globals = { 'vim' },
-        },
-        workspace = {
-          library = {
-            vim.env.VIMRUNTIME,
-            '${3rd}/luv/library',
-            '${3rd}/busted/library',
-          },
-          checkThirdParty = false,
-        },
-        telemetry = { enable = false },
-      },
-    },
   })
 
   vim.lsp.config('terraformls', {

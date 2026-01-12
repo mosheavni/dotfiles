@@ -149,9 +149,12 @@ local M = {
     opts = {
       library = {
         -- See the configuration section for more details
-        -- Load luvit types when the `vim.uv` word is found
-        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
         { path = 'wezterm-types', mods = { 'wezterm' } },
+        { path = 'plenary.nvim', words = { 'describe', 'assert' } },
+        { path = 'luvit-meta/library' },
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        { path = '${3rd}/busted/library', words = { 'describe', 'it', 'assert' } },
+        { path = '${3rd}/luassert/library', words = { 'assert' } },
       },
     },
   },
