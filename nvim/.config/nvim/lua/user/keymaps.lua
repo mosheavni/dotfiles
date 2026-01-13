@@ -484,7 +484,6 @@ require('user.search-replace-dashboard').setup()
 require('user.tabular-v2').setup()
 require('user.projects').setup()
 require 'user.number-separators'
-require('user.run-buffer').setup()
 require('user.winresizer').setup()
 require('user.grep').setup()
 map('n', 'gx', require('user.open-url').open_url_under_cursor, { remap = false, desc = 'Open url under cursor' })
