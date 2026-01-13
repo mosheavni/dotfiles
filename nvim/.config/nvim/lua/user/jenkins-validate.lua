@@ -1,146 +1,150 @@
-local user = vim.env.JENKINS_USER_ID or vim.env.JENKINS_USERNAME
-local password = vim.env.JENKINS_PASSWORD
-local token = vim.env.JENKINS_API_TOKEN or vim.env.JENKINS_TOKEN
-local jenkins_url = vim.env.JENKINS_URL or vim.env.JENKINS_HOST
-local op_jenkins_id = vim.env.OP_JENKINS_ID or 't5ejcfcrjyo243irr2bjy3yqhm'
 local namespace_id = vim.api.nvim_create_namespace 'jenkinsfile-linter'
-local validated_msg = 'Jenkinsfile successfully validated.'
--- local unauthorized_msg = 'ERROR 401 Unauthorized'
--- local not_found_msg = 'ERROR 404 Not Found'
+local op_jenkins_id = vim.env.OP_JENKINS_ID or 't5ejcfcrjyo243irr2bjy3yqhm'
 
-local M = {}
+local creds = nil
 
-local function check_creds()
-  if user == nil then
-    return false, 'JENKINS_USER_ID is not set, please set it'
-  elseif password == nil and token == nil then
-    return false, 'JENKINS_PASSWORD or JENKINS_API_TOKEN need to be set, please set one'
-  elseif jenkins_url == nil then
-    return false, 'JENKINS_URL is not set, please set it'
-  else
-    return true
+local function get_env_creds()
+  local user = vim.env.JENKINS_USER_ID or vim.env.JENKINS_USERNAME
+  local secret = vim.env.JENKINS_API_TOKEN or vim.env.JENKINS_TOKEN or vim.env.JENKINS_PASSWORD
+  local url = vim.env.JENKINS_URL or vim.env.JENKINS_HOST
+  if user and secret and url then
+    return { user = user, secret = secret, url = url }
   end
 end
 
-local function get_crumb_job()
-  local args = {
-    'curl',
-    '-s',
-    '--user',
-    user .. ':' .. (token or password),
-    jenkins_url .. '/crumbIssuer/api/json',
-  }
-  local data = vim.system(args, { text = true }):wait()
-  local ok, crumb = pcall(vim.json.decode, data.stdout)
+local function get_onepass_creds()
+  if vim.fn.executable 'op' ~= 1 then
+    return nil, '1Password CLI not installed (brew install 1password-cli)'
+  end
+  local res = vim.system({ 'op', 'item', 'get', op_jenkins_id, '--reveal', '--format', 'json' }):wait()
+  if res.code ~= 0 then
+    return nil, 'op failed: ' .. (res.stderr or 'unknown error')
+  end
+  local ok, data = pcall(vim.json.decode, res.stdout)
   if not ok then
-    vim.notify('error decoding json ' .. vim.inspect(crumb))
-    return
+    return nil, 'failed to parse op output'
   end
-  return crumb.crumb
-end
-
-local validate_job = vim.schedule_wrap(function(crumb_job)
-  local args = {
-    'curl',
-    '-s',
-    '--user',
-    user .. ':' .. (token or password),
-    '-X',
-    'POST',
-    '-H',
-    'Jenkins-Crumb:' .. crumb_job,
-    '-F',
-    'jenkinsfile=<' .. vim.fn.expand '%:p',
-    jenkins_url .. '/pipeline-model-converter/validate',
-  }
-  local res = vim.system(args, { text = true }):wait()
-  if res.code == 0 then
-    local data = vim.trim(res.stdout)
-    if data == validated_msg then
-      vim.diagnostic.reset(namespace_id, 0)
-      vim.notify(validated_msg, vim.log.levels.INFO)
-    else
-      -- We only want to grab the msg, line, and col. We just throw
-      -- everything else away. NOTE: That only one seems to ever be
-      -- returned so this in theory will only ever match at most once per
-      -- call.
-      --WorkflowScript: 46: unexpected token: } @ line 46, column 1.
-      local msg, line_str, col_str = data:match 'WorkflowScript.+%d+: (.+) @ line (%d+), column (%d+).'
-      if line_str and col_str then
-        local line = tonumber(line_str) - 1
-        local col = tonumber(col_str) - 1
-
-        local diag = {
-          bufnr = vim.api.nvim_get_current_buf(),
-          lnum = line,
-          end_lnum = line,
-          col = col,
-          end_col = col,
-          severity = vim.diagnostic.severity.ERROR,
-          message = msg,
-          source = 'jenkins validate',
-        }
-
-        vim.diagnostic.set(namespace_id, vim.api.nvim_get_current_buf(), { diag })
-      end
-    end
-  end
-end)
-
-local onepass_creds = function()
-  local is_op_exists = vim.fn.executable 'op' == 1
-  if not is_op_exists then
-    vim.notify('1Password CLI is not installed', vim.log.levels.ERROR)
-    vim.notify('Install with brew install 1password-cli', vim.log.levels.INFO)
-    return false
-  end
-  local onepass = vim
-    .system({
-      'op',
-      'item',
-      'get',
-      op_jenkins_id,
-      '--reveal',
-      '--format',
-      'json',
-    })
-    :wait()
-  if onepass.code ~= 0 then
-    return false
-  end
-  local creds = vim.json.decode(vim.trim(onepass.stdout))
-
-  for _, field in ipairs(creds.fields) do
+  local user, password
+  for _, field in ipairs(data.fields or {}) do
     if field.purpose == 'USERNAME' then
       user = field.value
-    elseif field.purpose == 'PASSWORD' then
+    end
+    if field.purpose == 'PASSWORD' then
       password = field.value
     end
   end
-  jenkins_url = creds.urls[1].href
-  return true
-end
-
-local function ok_and_validate(should_notify)
-  local ok, msg = check_creds()
-  if ok then
-    validate_job(get_crumb_job())
-    return true
-  elseif should_notify then
-    vim.notify(msg, vim.log.levels.ERROR)
+  local url = data.urls and data.urls[1] and data.urls[1].href
+  if user and password and url then
+    return { user = user, secret = password, url = url }
   end
-  return false
+  return nil, 'incomplete credentials in 1Password item'
 end
 
-M.validate = function()
-  if not ok_and_validate(false) then
-    local is_onepass = onepass_creds()
-    if is_onepass then
-      ok_and_validate(true)
-    else
-      vim.notify('Credentials not set', vim.log.levels.ERROR)
-    end
+local function get_creds()
+  if creds then
+    return creds
+  end
+  creds = get_env_creds()
+  if creds then
+    return creds
+  end
+  local op_creds, err = get_onepass_creds()
+  if op_creds then
+    creds = op_creds
+    return creds
+  end
+  return nil,
+    err or [[no credentials found. Set env vars:
+  JENKINS_USER_ID, JENKINS_API_TOKEN, JENKINS_URL
+
+To generate a token: Jenkins → Your Name → Security → API Token → Add new Token]]
+end
+
+local function get_crumb()
+  local c = get_creds()
+  local res = vim
+    .system({
+      'curl',
+      '-s',
+      '--user',
+      c.user .. ':' .. c.secret,
+      c.url .. '/crumbIssuer/api/json',
+    }, { text = true })
+    :wait()
+  local ok, data = pcall(vim.json.decode, res.stdout)
+  if ok and data.crumb then
+    return data.crumb
+  end
+  return nil, 'failed to get crumb: ' .. (res.stdout or res.stderr or 'unknown')
+end
+
+local function parse_error(output)
+  local msg, line, col = output:match 'WorkflowScript.+%d+: (.+) @ line (%d+), column (%d+).'
+  if line and col then
+    return { msg = msg, line = tonumber(line) - 1, col = tonumber(col) - 1 }
   end
 end
 
-return M
+local function validate()
+  local c, err = get_creds()
+  if not c then
+    vim.notify(err, vim.log.levels.ERROR)
+    return
+  end
+
+  local crumb, crumb_err = get_crumb()
+  if not crumb then
+    vim.notify(crumb_err, vim.log.levels.ERROR)
+    return
+  end
+
+  local res = vim
+    .system({
+      'curl',
+      '-s',
+      '--user',
+      c.user .. ':' .. c.secret,
+      '-X',
+      'POST',
+      '-H',
+      'Jenkins-Crumb:' .. crumb,
+      '-F',
+      'jenkinsfile=<' .. vim.fn.expand '%:p',
+      c.url .. '/pipeline-model-converter/validate',
+    }, { text = true })
+    :wait()
+
+  if res.code ~= 0 then
+    vim.notify('curl failed: ' .. (res.stderr or ''), vim.log.levels.ERROR)
+    return
+  end
+
+  local output = vim.trim(res.stdout)
+  if output == 'Jenkinsfile successfully validated.' then
+    vim.diagnostic.reset(namespace_id, 0)
+    vim.notify('Jenkinsfile validated', vim.log.levels.INFO)
+    return
+  end
+
+  local err_info = parse_error(output)
+  if err_info then
+    vim.diagnostic.set(namespace_id, 0, {
+      {
+        lnum = err_info.line,
+        col = err_info.col,
+        severity = vim.diagnostic.severity.ERROR,
+        message = err_info.msg,
+        source = 'jenkins',
+      },
+    })
+  else
+    vim.notify('Validation failed: ' .. output, vim.log.levels.ERROR)
+  end
+end
+
+return {
+  validate = validate,
+  clear_creds = function()
+    creds = nil
+  end,
+}
