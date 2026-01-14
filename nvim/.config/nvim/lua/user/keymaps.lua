@@ -109,7 +109,12 @@ map('n', '<leader>sa', 'ggVG', { remap = false, desc = 'Visually select entire b
 for _, key in pairs { 'Q', 'X' } do
   ---@diagnostic disable-next-line: undefined-field
   map('n', key, '@' .. key:lower(), { remap = false, desc = 'Run macro ' .. key:lower() })
-  map('n', '<leader>' .. key, ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>", { remap = false, desc = 'Edit macro ' .. key:lower() })
+  map(
+    'n',
+    '<leader>' .. key,
+    ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>",
+    { remap = false, desc = 'Edit macro ' .. key:lower() }
+  )
 end
 
 -- Quickfix and tabs
@@ -155,7 +160,6 @@ map('n', '<CR>', '<Esc>:nohlsearch<CR><CR>', { remap = false, silent = true, des
 -- Exit mappings
 map('i', 'jk', '<esc>', { remap = false, desc = 'Exit insert mode' })
 map('n', '<leader>qq', '<cmd>qall<cr>', { remap = false, silent = true, desc = 'Quit all' })
-
 
 -- Terminal
 map('t', '<Esc>', [[<C-\><C-n>]], { remap = false, desc = 'Exit terminal mode' })
@@ -285,6 +289,10 @@ map('!a', 'waht', 'what', { remap = false })
 map('!a', 'tehn', 'then', { remap = false })
 map('!a', 'taht', 'that', { remap = false })
 map('!a', 'cehck', 'check', { remap = false })
+map('!a', 'wip', 'work in progress', { remap = false })
+map('!a', 'asap', 'as soon as possible', { remap = false })
+map('!a', 'fyi', 'for your information', { remap = false })
+map('!a', 'idk', "I don't know", { remap = false })
 
 map('!a', 'rbm', [[# TODO: remove before merging]], { remap = false })
 map('!a', 'cbm', [[# TODO: change before merging]], { remap = false })
