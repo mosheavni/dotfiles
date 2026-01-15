@@ -117,17 +117,9 @@ for _, key in pairs { 'Q', 'X' } do
   )
 end
 
--- Quickfix and tabs
-map('n', ']q', '<cmd>cnext<cr>zz', { remap = false, silent = true, desc = 'Next quickfix item' })
-map('n', '[q', '<cmd>cprev<cr>zz', { remap = false, silent = true, desc = 'Previous quickfix item' })
-map('n', ']l', '<cmd>lnext<cr>zz', { remap = false, silent = true, desc = 'Next location list item' })
-map('n', '[l', '<cmd>lprev<cr>zz', { remap = false, silent = true, desc = 'Previous location list item' })
-map('n', ']t', '<cmd>tabnext<cr>zz', { remap = false, silent = true, desc = 'Next tab' })
-map('n', '[t', '<cmd>tabprev<cr>zz', { remap = false, silent = true, desc = 'Previous tab' })
-map('n', ']b', '<cmd>bnext<cr>', { remap = false, silent = true, desc = 'Next buffer' })
-map('n', '[b', '<cmd>bprev<cr>', { remap = false, silent = true, desc = 'Previous buffer' })
-
 -- tabs
+map('n', ']t', '<cmd>tabnext<cr>', { remap = false, silent = true, desc = 'Next tab' })
+map('n', '[t', '<cmd>tabprev<cr>', { remap = false, silent = true, desc = 'Previous tab' })
 map('n', '<leader>tn', '<cmd>tabnew<cr>', { remap = false, silent = true, desc = 'New tab' })
 map('n', '<leader>tc', '<cmd>tabclose<cr>', { remap = false, silent = true, desc = 'Close tab' })
 map('n', '<leader>th', '<cmd>-tabmove<cr>', { remap = false, silent = true, desc = 'Move tab left' })
