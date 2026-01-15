@@ -486,5 +486,6 @@ require('user.projects').setup()
 require 'user.number-separators'
 require('user.winresizer').setup()
 require('user.grep').setup()
+require('user.figlet').setup()
 map('n', 'gx', require('user.open-url').open_url_under_cursor, { remap = false, desc = 'Open url under cursor' })
 map({ 'v', 'n' }, '<leader>gh', require('user.gitbrowse').open, { remap = false, desc = 'Open github in browser' })
