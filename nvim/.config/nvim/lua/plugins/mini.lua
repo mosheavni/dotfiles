@@ -140,17 +140,6 @@ local M = {
     end,
   },
   {
-    'nvim-mini/mini.pairs',
-    version = false,
-    enabled = false, -- use nvim-autopairs instead
-    event = 'InsertEnter',
-    opts = {
-      mappings = {
-        ['`'] = { action = 'closeopen', pair = '``', neigh_pattern = '[^\\`].', register = { cr = false } },
-      },
-    },
-  },
-  {
     'nvim-mini/mini.operators',
     version = false,
     event = 'VeryLazy',
