@@ -101,7 +101,14 @@ function M.input(opts, on_confirm)
   vim.fn.prompt_setprompt(buf, '')
 
   -- Result handling
+  local called = false
   local function close_and_callback(value)
+    -- Prevent double-calling (prompt callback + keymap)
+    if called then
+      return
+    end
+    called = true
+
     -- Restore original guicursor
     vim.o.guicursor = original_guicursor
 
@@ -109,15 +116,21 @@ function M.input(opts, on_confirm)
       vim.api.nvim_win_close(win, true)
     end
     vim.cmd.stopinsert()
-    vim.schedule(function()
-      if vim.api.nvim_win_is_valid(parent_win) then
-        vim.api.nvim_set_current_win(parent_win)
-        if parent_mode == 'i' then
-          vim.cmd 'startinsert'
-        end
-      end
-      on_confirm(value)
-    end)
+
+    -- Switch back to parent window first
+    if vim.api.nvim_win_is_valid(parent_win) then
+      vim.api.nvim_set_current_win(parent_win)
+    end
+
+    -- Call callback synchronously (required for LSP rename)
+    on_confirm(value)
+
+    -- Restore insert mode if needed (after callback)
+    if parent_mode == 'i' and vim.api.nvim_win_is_valid(parent_win) then
+      vim.schedule(function()
+        vim.cmd 'startinsert'
+      end)
+    end
   end
 
   -- Set up prompt callbacks
