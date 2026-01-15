@@ -19,7 +19,6 @@ local k8s_schemas = {
 }
 
 local yaml_lspconfig = {
-  cmd = { 'node', '/Users/Moshe.Avni/Repos/yaml-language-server/out/server/src/server.js', '--stdio' },
   filetypes = {
     'yaml',
     'yaml.docker-compose',
