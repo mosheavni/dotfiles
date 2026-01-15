@@ -30,6 +30,7 @@ return {
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
+
     -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
     -- 'super-tab' for mappings similar to vscode (tab to accept)
     -- 'enter' for enter to accept
@@ -76,6 +77,7 @@ return {
     appearance = { nerd_font_variant = 'normal' },
 
     completion = {
+      accept = { auto_brackets = { enabled = true } },
       documentation = { auto_show = true },
       list = { selection = { preselect = false, auto_insert = true } },
     },
