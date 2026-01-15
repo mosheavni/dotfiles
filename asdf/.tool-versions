@@ -14,7 +14,7 @@ nodejs 22.20.0
 python 3.14.0
 semver 3.4.0
 terraform 1.5.5
-terragrunt 0.64.4
+terragrunt 0.97.2
 tree-sitter 0.26.3
 yq 4.40.3
 gradle 8.5
