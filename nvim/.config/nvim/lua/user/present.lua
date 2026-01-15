@@ -127,13 +127,22 @@ local function apply_presentation_ui()
   vim.o.showtabline = 0
 end
 
----Setup buffer-local keymaps
+---Setup buffer-local keymaps and autocmds
 ---@param buf integer
 local function setup_keymaps(buf)
   local opts = { buffer = buf, silent = true }
   vim.keymap.set('n', ']]', M.next, opts)
   vim.keymap.set('n', '[[', M.prev, opts)
   vim.keymap.set('n', '<Esc>', M.stop, opts)
+
+  -- Cleanup when window is closed by any means (:q, :close, etc.)
+  vim.api.nvim_create_autocmd('BufWinLeave', {
+    buffer = buf,
+    once = true,
+    callback = function()
+      vim.schedule(M.stop)
+    end,
+  })
 end
 
 ---Center content within the window dimensions
