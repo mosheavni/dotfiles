@@ -4,6 +4,11 @@ local M = {}
 -- Store the original vim.ui.input
 local original_input = vim.ui.input
 
+-- Input history
+local history = {}
+local history_index = 0
+local max_history = 50
+
 -- Configuration
 local config = {
   width = 60,
@@ -13,6 +18,27 @@ local config = {
   icon = ' ', -- Pen icon on the left
   icon_hl = 'DiagnosticHint', -- Highlight group for the icon
 }
+
+--- Add a value to history
+---@param value string
+local function history_add(value)
+  if not value or value == '' then
+    return
+  end
+  -- Remove duplicate if exists
+  for i, v in ipairs(history) do
+    if v == value then
+      table.remove(history, i)
+      break
+    end
+  end
+  -- Add to end
+  table.insert(history, value)
+  -- Trim if too long
+  while #history > max_history do
+    table.remove(history, 1)
+  end
+end
 
 -- Create highlight groups
 local function setup_highlights()
@@ -24,6 +50,8 @@ end
 ---@param opts {prompt?: string, default?: string, completion?: string}
 ---@param on_confirm fun(value?: string)
 function M.input(opts, on_confirm)
+  assert(type(on_confirm) == 'function', '`on_confirm` must be a function')
+
   opts = opts or {}
   local prompt = opts.prompt or 'Input'
   prompt = vim.trim(prompt):gsub(':$', '')
@@ -31,6 +59,10 @@ function M.input(opts, on_confirm)
   -- Store parent window and mode
   local parent_win = vim.api.nvim_get_current_win()
   local parent_mode = vim.fn.mode()
+
+  -- Reset history index for new input session
+  history_index = #history + 1
+  local current_text = opts.default or ''
 
   -- Calculate window size and position
   local width = config.width
@@ -55,6 +87,10 @@ function M.input(opts, on_confirm)
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, { opts.default })
   end
 
+  -- Handle zindex for nested floating windows
+  local parent_zindex = vim.api.nvim_win_get_config(parent_win).zindex
+  local zindex = math.max((parent_zindex or 0) + 10, 50)
+
   -- Create floating window
   local win = vim.api.nvim_open_win(buf, true, {
     relative = 'editor',
@@ -67,6 +103,7 @@ function M.input(opts, on_confirm)
     title = ' ' .. prompt .. ' ',
     title_pos = config.title_pos,
     noautocmd = true,
+    zindex = zindex,
   })
 
   -- Explicitly clear statusline for this floating window
@@ -100,6 +137,13 @@ function M.input(opts, on_confirm)
   -- Setup prompt
   vim.fn.prompt_setprompt(buf, '')
 
+  --- Set buffer text and cursor position
+  ---@param text string
+  local function set_text(text)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, { text })
+    vim.api.nvim_win_set_cursor(win, { 1, #text })
+  end
+
   -- Result handling
   local called = false
   local function close_and_callback(value)
@@ -108,6 +152,9 @@ function M.input(opts, on_confirm)
       return
     end
     called = true
+
+    -- Add to history if non-empty
+    history_add(value)
 
     -- Restore original guicursor
     vim.o.guicursor = original_guicursor
@@ -160,6 +207,31 @@ function M.input(opts, on_confirm)
     close_and_callback(nil)
   end, opts_map)
 
+  -- History navigation
+  vim.keymap.set({ 'i', 'n' }, '<Up>', function()
+    if #history == 0 then
+      return
+    end
+    -- Save current text if at the end of history
+    if history_index > #history then
+      current_text = vim.api.nvim_buf_get_lines(buf, 0, -1, false)[1] or ''
+    end
+    history_index = math.max(1, history_index - 1)
+    set_text(history[history_index] or '')
+  end, opts_map)
+
+  vim.keymap.set({ 'i', 'n' }, '<Down>', function()
+    if #history == 0 then
+      return
+    end
+    history_index = math.min(#history + 1, history_index + 1)
+    if history_index > #history then
+      set_text(current_text)
+    else
+      set_text(history[history_index] or '')
+    end
+  end, opts_map)
+
   -- Optional: Auto-expand width based on text
   vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI' }, {
     buffer = buf,
@@ -167,6 +239,9 @@ function M.input(opts, on_confirm)
       if not vim.api.nvim_win_is_valid(win) then
         return
       end
+
+      -- Prevent "buffer modified" warning
+      vim.bo[buf].modified = false
 
       local text = vim.api.nvim_buf_get_lines(buf, 0, -1, false)[1] or ''
       local text_width = vim.api.nvim_strwidth(text)
