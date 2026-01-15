@@ -77,6 +77,11 @@ return {
     appearance = { nerd_font_variant = 'normal' },
 
     completion = {
+      menu = {
+        draw = {
+          columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 }, { 'source_name' } },
+        },
+      },
       accept = { auto_brackets = { enabled = true } },
       documentation = { auto_show = true },
       list = { selection = { preselect = false, auto_insert = true } },
