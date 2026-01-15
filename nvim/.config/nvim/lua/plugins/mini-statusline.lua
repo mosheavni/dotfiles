@@ -221,6 +221,7 @@ M.config = function()
         local location = section_location()
         local startup_time, startup_hl = section_startup_time()
         local yaml_schema = section_yaml_schema()
+        local search = statusline.section_searchcount { trunc_width = 75 }
 
         -- Use statusline syntax to include borders without automatic spacing
         local left_border_str = '%#MiniStatuslineBorder#▊'
@@ -240,7 +241,7 @@ M.config = function()
 
             -- Right section
             '%=', -- End left alignment, start right alignment
-            { hl = 'MiniStatuslineFileinfo', strings = { lsp } },
+            { hl = 'MiniStatuslineFileinfo', strings = { search, lsp } },
             { strings = { fileformat, filetype } },
             { hl = 'MiniStatuslineProgress', strings = { progress } },
             { hl = mode_hl, strings = { location } },
