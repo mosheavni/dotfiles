@@ -215,34 +215,6 @@ local M = {
     cmd = { 'Linediff' },
   },
   {
-    'stevearc/oil.nvim',
-    cmd = { 'Oil' },
-    keys = {
-      { '<c-e>', "<cmd>lua require('oil').open_float()<cr>", desc = 'Open Oil file explorer (float)' },
-    },
-    opts = {
-      -- Configuration for the floating window in oil.open_float
-      float = {
-        -- optionally override the oil buffers window title with custom function: fun(winid: integer): string
-        get_win_title = nil,
-        -- preview_split: Split direction: "auto", "left", "right", "above", "below".
-        -- max_width and max_height can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
-        max_width = 0.6,
-        max_height = 0.7,
-        preview_split = 'right',
-        -- This is the config that will be passed to nvim_open_win.
-        -- Change values here to customize the layout
-        override = function(conf)
-          return conf
-        end,
-      },
-      view_options = {
-        -- Show files and directories that start with "."
-        show_hidden = true,
-      },
-    },
-  },
-  {
     'kawre/leetcode.nvim',
     build = ':TSUpdate html',
     lazy = leet_arg ~= vim.fn.argv(0, -1),
@@ -287,12 +259,6 @@ local M = {
       vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up, { desc = 'Move to split above' })
       vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right, { desc = 'Move to right split' })
     end,
-  },
-  {
-    'nvzone/typr',
-    dependencies = 'nvzone/volt',
-    opts = {},
-    cmd = { 'Typr', 'TyprStats' },
   },
 }
 
