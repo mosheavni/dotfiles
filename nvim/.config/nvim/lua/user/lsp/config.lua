@@ -97,7 +97,32 @@ M.setup = function()
   })
 
   require('user.lsp.actions').setup()
-  require('user.lsp.servers').setup()
+  require('user.lsp.inspect').setup()
+
+  -- Global capabilities for all LSP servers
+  vim.lsp.config('*', { capabilities = M.capabilities })
+
+  -- Enable LSP servers
+  vim.lsp.enable {
+    'bashls',
+    'cssls',
+    'cssmodules_ls',
+    'docker_compose_language_service',
+    'dockerls',
+    'golangci_lint_ls',
+    'groovyls',
+    'helm_ls',
+    'html',
+    'jinja_lsp',
+    'jsonls',
+    'lua_ls',
+    'pyright',
+    'terraformls',
+    'user_lsp',
+    'vimls',
+    'vtsls',
+    'yamlls',
+  }
 end
 
 return M
