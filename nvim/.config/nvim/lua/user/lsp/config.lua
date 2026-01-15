@@ -20,6 +20,44 @@ local M = {
   },
 }
 
+local function setup_keymaps(bufnr)
+  local function opts(description)
+    return { remap = false, buffer = bufnr, silent = true, desc = description }
+  end
+
+  -- rename
+  vim.keymap.set('n', '<leader>lr', vim.lsp.buf.rename, opts 'Rename')
+  -- goto definition/declaration
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts 'Go to definition')
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts 'Go to declaration')
+  vim.keymap.set('n', '<leader>lk', vim.lsp.buf.signature_help, opts 'Signature help')
+
+  -- GoTo code navigation
+  vim.keymap.set('n', 'gy', vim.lsp.buf.type_definition, opts 'Go to type definition')
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts 'Go to implementation')
+  vim.keymap.set('n', 'gR', vim.lsp.buf.references, opts 'Go to references')
+
+  -- Workspace
+  vim.keymap.set('n', '<leader>lwa', vim.lsp.buf.add_workspace_folder, opts 'Add workspace folder')
+  vim.keymap.set('n', '<leader>lwr', vim.lsp.buf.remove_workspace_folder, opts 'Remove workspace folder')
+  vim.keymap.set('n', '<leader>lwl', function()
+    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  end, opts 'List workspace folders')
+
+  -- Inlay hints
+  vim.keymap.set('n', '<leader>lh', function()
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = bufnr })
+  end, opts 'Toggle inlay hints')
+
+  -- Diagnostics
+  vim.keymap.set('n', '<leader>lq', vim.diagnostic.setqflist, opts 'Set qflist with diagnostics')
+  vim.keymap.set('n', '<leader>ld', vim.diagnostic.open_float, opts 'Open diagnostics float window')
+
+  -- Code action
+  vim.keymap.set('n', '<leader>la', vim.lsp.buf.code_action, opts 'Code action')
+  vim.keymap.set('n', '<leader>lx', vim.lsp.codelens.run, opts 'Code lens')
+end
+
 M.setup = function()
   _G.start_ls = function(with_file)
     local file_name = nil
@@ -64,7 +102,7 @@ M.setup = function()
       -- Mappings (per-buffer, only once)
       if not vim.b[bufnr].lsp_keymaps_configured then
         vim.b[bufnr].lsp_keymaps_configured = true
-        require 'user.lsp.keymaps'(bufnr)
+        setup_keymaps(bufnr)
       end
 
       -- Diagnostics config (once)
