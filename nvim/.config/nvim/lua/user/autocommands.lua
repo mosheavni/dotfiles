@@ -215,3 +215,18 @@ autocmd('BufWritePost', {
   end,
   once = false,
 })
+
+-- CursorLine only in current window
+local cursorline_group = vim.api.nvim_create_augroup('CursorLineCurrentWindow', { clear = true })
+autocmd({ 'WinEnter', 'BufWinEnter' }, {
+  group = cursorline_group,
+  callback = function()
+    vim.opt_local.cursorline = true
+  end,
+})
+autocmd('WinLeave', {
+  group = cursorline_group,
+  callback = function()
+    vim.opt_local.cursorline = false
+  end,
+})
