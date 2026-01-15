@@ -101,16 +101,17 @@ M.filetype_to_extension = {
 }
 
 M.filetype_to_command = {
+  go = 'go',
+  html = 'open',
   javascript = 'node',
+  json = 'jq',
+  python = 'python3',
+  sh = 'bash',
+  terraform = 'terragrunt plan',
   typescript = 'node',
   typescriptreact = 'node',
-  python = 'python3',
-  html = 'open',
-  sh = 'bash',
-  zsh = 'zsh',
-  go = 'go',
   yaml = 'yq',
-  json = 'jq',
+  zsh = 'zsh',
 }
 
 -- Cache emojis table

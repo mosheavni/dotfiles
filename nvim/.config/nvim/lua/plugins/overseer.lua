@@ -1,3 +1,7 @@
+local dont_append_filename = {
+  terraform = true,
+}
+
 -- Helper: Run in wezterm tab
 local function run_in_wezterm_tab()
   local ft = vim.bo.filetype ~= '' and vim.bo.filetype or 'sh'
@@ -8,7 +12,10 @@ local function run_in_wezterm_tab()
 
   local utils = require 'user.utils'
   local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ''
-  local cmd = first_line:match '^#!' and file_name or (utils.filetype_to_command[ft] or 'bash') .. ' ' .. file_name
+  local cmd = first_line:match '^#!' and file_name or (utils.filetype_to_command[ft] or 'bash')
+  if not dont_append_filename[ft] then
+    cmd = cmd .. ' ' .. file_name
+  end
 
   local cwd = vim.fn.expand '%:p:h'
   local spawn = vim.system({ 'wezterm', 'cli', 'spawn', '--cwd=' .. cwd }, { text = true }):wait()
