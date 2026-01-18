@@ -20,7 +20,7 @@
 - [Usage (just NVIM)](#usage-just-nvim)
 - [Additional stuff](#additional-stuff)
 - [Troubleshooting](#troubleshooting)
-  - [Reinstalling nodejs dependencies](#reinstalling-nodejs-dependencies)
+  - [Reinstalling Node.js dependencies](#reinstalling-nodejs-dependencies)
   - [Reinstalling Python dependencies](#reinstalling-python-dependencies)
   - [Remove TreeSitter parsers](#remove-treesitter-parsers)
 
@@ -136,7 +136,7 @@ NVIM_APPNAME=mosheavni/dotfiles/nvim/.config/nvim nvim
 
 ## Troubleshooting
 
-### Reinstalling nodejs dependencies
+### Reinstalling Node.js dependencies
 
 ```bash
 while read -r npm_package; do
