@@ -120,4 +120,31 @@ NVIM_APPNAME=mosheavni/dotfiles/nvim/.config/nvim nvim
 
 - Install [magnet](https://apps.apple.com/us/app/magnet/id441258766?mt=12)
 
-- Install Snagit
+- Install [OneNote](https://apps.apple.com/il/app/microsoft-onenote/id784801555?mt=12)
+
+- Install [shottr](https://shottr.cc/)
+
+## Troubleshooting
+
+### Reinstalling nodejs dependencies
+
+```bash
+while read -r npm_package; do
+  echo "$npm_package"
+  npm i -g "$npm_package"
+done <~/.dotfiles/node/.default-npm-packages
+```
+
+### Reinstalling Python dependencies
+
+```bash
+pip install --user -r ~/.dotfiles/requirements.txt
+```
+
+### Remove TreeSitter parsers
+
+```bash
+rm -rf ~/.local/share/nvim/treesitter
+```
+
+Then reopen nvim and run `:TSUpdate`
