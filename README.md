@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD013 -->
 
-# Moshe Avni's DotFiles
+# Koren Bashari's DotFiles
 
 ![macOS](https://img.shields.io/badge/os-macOS-black?logo=apple)
 ![Shell](https://img.shields.io/badge/shell-zsh-89e051?logo=zsh)
@@ -8,10 +8,11 @@
 ![Terminal](https://img.shields.io/badge/terminal-WezTerm-4E49EE?logo=wezterm)
 ![Stow](https://img.shields.io/badge/managed%20by-Stow-informational?logo=gnu)
 ![Last
-Commit](https://img.shields.io/github/last-commit/mosheavni/dotfiles?logo=git)
+Commit](https://img.shields.io/github/last-commit/KorenB/dotfiles?logo=git)
 
-[![Lint](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml)
-[![Tests](https://github.com/mosheavni/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/mosheavni/dotfiles/actions/workflows/ci.yml)
+[![Lint](https://github.com/KorenB/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/KorenB/dotfiles/actions/workflows/lint.yml)
+
+[![Tests](https://github.com/KorenB/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/KorenB/dotfiles/actions/workflows/ci.yml)
 
 ## Usage
 
@@ -37,7 +38,7 @@ Commit](https://img.shields.io/github/last-commit/mosheavni/dotfiles?logo=git)
 
    ```bash
    [[ -d ~/Repos ]] || mkdir ~/Repos
-   cd ~ && git clone git@github.com:mosheavni/dotfiles.git .dotfiles && cd .dotfiles
+   cd ~ && git clone git@github.com:KorenB/dotfiles.git .dotfiles && cd .dotfiles
    ```
 
 3. Install [antidote](https://antidote.sh/)
@@ -100,13 +101,13 @@ Commit](https://img.shields.io/github/last-commit/mosheavni/dotfiles?logo=git)
 Clone the repository and install the plugins:
 
 ```sh
-git clone git@github.com:mosheavni/dotfiles ~/.config/mosheavni/dotfiles
+git clone git@github.com:KorenB/dotfiles ~/.config/KorenB/dotfiles
 ```
 
 Open Neovim with this config:
 
 ```sh
-NVIM_APPNAME=mosheavni/dotfiles/nvim/.config/nvim nvim
+NVIM_APPNAME=KorenB/dotfiles/nvim/.config/nvim nvim
 ```
 
 ## Additional stuff
