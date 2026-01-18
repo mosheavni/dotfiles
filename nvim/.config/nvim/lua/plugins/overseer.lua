@@ -67,7 +67,7 @@ end
 -- "Run current buffer" template provider - dynamically checks if runnable
 local run_current_buffer_template = {
   name = 'run_current_buffer',
-  generator = function(opts, cb)
+  generator = function(_, cb)
     local file_name = vim.fn.expand '%:p'
     if file_name == '' then
       return cb {}
