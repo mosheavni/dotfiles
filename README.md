@@ -1,17 +1,18 @@
-<!-- markdownlint-disable MD013 -->
+<!-- markdownlint-disable MD013 MD033 -->
 
 # Moshe Avni's DotFiles
 
-![macOS](https://img.shields.io/badge/os-macOS-black?logo=apple)
-![Shell](https://img.shields.io/badge/shell-zsh-89e051?logo=zsh)
-![Editor](https://img.shields.io/badge/editor-Neovim-57A143?logo=neovim)
-![Terminal](https://img.shields.io/badge/terminal-WezTerm-4E49EE?logo=wezterm)
-![Stow](https://img.shields.io/badge/managed%20by-Stow-informational?logo=gnu)
-![Last
-Commit](https://img.shields.io/github/last-commit/mosheavni/dotfiles?logo=git)
-
-[![Lint](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml)
-[![Tests](https://github.com/mosheavni/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/mosheavni/dotfiles/actions/workflows/ci.yml)
+<p align="center">
+  <img src="https://img.shields.io/badge/os-macOS-black?logo=apple" alt="macOS">
+  <img src="https://img.shields.io/badge/shell-zsh-89e051?logo=zsh" alt="Shell">
+  <img src="https://img.shields.io/badge/editor-Neovim-57A143?logo=neovim" alt="Editor">
+  <img src="https://img.shields.io/badge/terminal-WezTerm-4E49EE?logo=wezterm" alt="Terminal">
+  <img src="https://img.shields.io/badge/managed%20by-Stow-informational?logo=gnu" alt="Stow">
+  <img src="https://img.shields.io/github/last-commit/mosheavni/dotfiles?logo=git" alt="Last Commit">
+  <br>
+  <a href="https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml"><img src="https://github.com/mosheavni/dotfiles/actions/workflows/lint.yml/badge.svg" alt="Lint"></a>
+  <a href="https://github.com/mosheavni/dotfiles/actions/workflows/ci.yml"><img src="https://github.com/mosheavni/dotfiles/actions/workflows/ci.yml/badge.svg" alt="Tests"></a>
+</p>
 
 ## Usage
 
