@@ -14,6 +14,16 @@
   <a href="https://github.com/mosheavni/dotfiles/actions/workflows/ci.yml"><img src="https://github.com/mosheavni/dotfiles/actions/workflows/ci.yml/badge.svg" alt="Tests"></a>
 </p>
 
+## Table of Contents
+
+- [Usage](#usage)
+- [Usage (just NVIM)](#usage-just-nvim)
+- [Additional stuff](#additional-stuff)
+- [Troubleshooting](#troubleshooting)
+  - [Reinstalling nodejs dependencies](#reinstalling-nodejs-dependencies)
+  - [Reinstalling Python dependencies](#reinstalling-python-dependencies)
+  - [Remove TreeSitter parsers](#remove-treesitter-parsers)
+
 ## Usage
 
 ### (also, how to bootstrap a brand new Mac laptop)
@@ -28,7 +38,7 @@
 
    ```bash
    /bin/bash -c \
-     "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+     "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
    eval "$(/opt/homebrew/bin/brew shellenv)" # to make brew available before we load `~/.zshrc` that has "$PATH"
    brew update
    brew install git stow
@@ -116,7 +126,7 @@ NVIM_APPNAME=mosheavni/dotfiles/nvim/.config/nvim nvim
 
 - Download and install [Docker](https://www.docker.com/products/docker-desktop)
 
-- Change clipy and maccy shortcuts, and load snippets
+- Change clipy (for snippets) and maccy (for clipboard) shortcuts, and load snippets
 
 - Install [magnet](https://apps.apple.com/us/app/magnet/id441258766?mt=12)
 
