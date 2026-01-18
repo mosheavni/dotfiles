@@ -1,4 +1,5 @@
 local model = 'claude-sonnet-4.5'
+local ai_keymap = '<leader>ccc'
 return {
   {
     'zbirenbaum/copilot.lua',
@@ -65,6 +66,43 @@ return {
     },
   },
   {
+    'carlos-algms/agentic.nvim',
+    dependencies = { 'HakonHarnes/img-clip.nvim' },
+    opts = {
+      -- Available by default: "claude-acp" | "gemini-acp" | "codex-acp" | "opencode-acp" | "cursor-acp"
+      provider = 'claude-acp', -- setting the name here is all you need to get started
+      keymaps = { prompt = { paste_image = { { '<localleader>p', mode = { 'n' } } } } },
+    },
+
+    -- these are just suggested keymaps; customize as desired
+    keys = {
+      {
+        ai_keymap,
+        function()
+          require('agentic').toggle()
+        end,
+        mode = { 'n', 'v', 'i' },
+        desc = 'Toggle Agentic Chat',
+      },
+      {
+        "<C-'>",
+        function()
+          require('agentic').add_selection_or_file_to_context()
+        end,
+        mode = { 'n', 'v' },
+        desc = 'Add file or selection to Agentic to Context',
+      },
+      {
+        '<C-,>',
+        function()
+          require('agentic').new_session()
+        end,
+        mode = { 'n', 'v', 'i' },
+        desc = 'New Agentic Session',
+      },
+    },
+  },
+  {
     'CopilotC-Nvim/CopilotChat.nvim',
     enabled = false,
     cmd = {
@@ -103,7 +141,7 @@ return {
       error_header = '  Error ',
     },
     keys = {
-      { '<leader>ccc', '<cmd>CopilotChat<CR>', mode = { 'n', 'v' }, desc = 'Copilot Chat' },
+      { ai_keymap, '<cmd>CopilotChat<CR>', mode = { 'n', 'v' }, desc = 'Copilot Chat' },
       { '<leader>ccs', '<cmd>CopilotChatStop<CR>', desc = 'Stop Copilot Chat' },
       {
         '<leader>ccp',
@@ -121,7 +159,7 @@ return {
     enabled = false,
     opts = {},
     keys = {
-      { '<leader>ccc', '<cmd>ClaudeCode<cr>', desc = 'Toggle Claude' },
+      { ai_keymap, '<cmd>ClaudeCode<cr>', desc = 'Toggle Claude' },
       -- { '<leader>af', '<cmd>ClaudeCodeFocus<cr>', desc = 'Focus Claude' },
       -- { '<leader>ar', '<cmd>ClaudeCode --resume<cr>', desc = 'Resume Claude' },
       -- { '<leader>aC', '<cmd>ClaudeCode --continue<cr>', desc = 'Continue Claude' },
@@ -142,10 +180,10 @@ return {
   {
     'yetone/avante.nvim',
     build = 'make',
-    enabled = true,
+    enabled = false,
     version = false, -- Never set this value to "*"! Never!
     keys = {
-      { '<leader>ccc', '<cmd>AvanteChat<CR>', mode = { 'n', 'v' }, desc = 'Avante Chat' },
+      { ai_keymap, '<cmd>AvanteChat<CR>', mode = { 'n', 'v' }, desc = 'Avante Chat' },
       { '<leader>ccs', '<cmd>AvanteStop<CR>', desc = 'Stop Avante Chat' },
     },
     cmd = { 'AvanteChat' },
@@ -189,30 +227,23 @@ return {
       'nvim-treesitter/nvim-treesitter',
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
-      {
-        -- support for image pasting
-        'HakonHarnes/img-clip.nvim',
-        keys = {
-          {
-            '<leader>p',
-            '<cmd>PasteImage<cr>',
-            desc = 'Paste image from system clipboard',
-            ft = { 'AvanteInput' },
-          },
-        },
-        opts = {
-          -- recommended settings
-          default = {
-            embed_image_as_base64 = false,
-            prompt_for_file_name = false,
-            drag_and_drop = {
-              insert_mode = true,
-            },
-            -- required for Windows users
-            use_absolute_path = true,
-          },
-        },
-      },
     },
+  },
+  {
+    -- support for image pasting
+    'HakonHarnes/img-clip.nvim',
+    lazy = true,
+    -- opts = {
+    --   -- recommended settings
+    --   default = {
+    --     embed_image_as_base64 = false,
+    --     prompt_for_file_name = false,
+    --     drag_and_drop = {
+    --       insert_mode = true,
+    --     },
+    --     -- required for Windows users
+    --     use_absolute_path = true,
+    --   },
+    -- },
   },
 }

@@ -15,6 +15,7 @@ fi
 typeset -gU path fpath
 
 # Additional PATHs
+export PNPM_HOME="$HOME/Library/pnpm"
 path=(
   ${ASDF_DATA_DIR:-$HOME/.asdf}/shims
   /opt/homebrew/bin
@@ -29,6 +30,7 @@ path=(
   $HOME/.cargo/bin
   /usr/local/sbin
   /usr/local/opt/postgresql@15/bin
+  $PNPM_HOME
   $path
 )
 

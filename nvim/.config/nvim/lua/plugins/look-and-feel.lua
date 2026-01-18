@@ -91,13 +91,9 @@ local M = {
     },
 
     init = function()
-      ---@diagnostic disable-next-line: inject-field
       vim.o.foldcolumn = '1' -- '0' is not bad
-      ---@diagnostic disable-next-line: inject-field
       vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-      ---@diagnostic disable-next-line: inject-field
       vim.o.foldlevelstart = 99
-      ---@diagnostic disable-next-line: inject-field
       vim.o.foldenable = true
     end,
   },
@@ -105,9 +101,9 @@ local M = {
     -- Make sure to set this up properly if you have lazy=true
     'MeanderingProgrammer/render-markdown.nvim',
     opts = {
-      file_types = { 'markdown', 'Avante' },
+      file_types = { 'markdown', 'Avante', 'AgenticChat' },
     },
-    ft = { 'markdown', 'Avante' },
+    ft = { 'markdown', 'Avante', 'AgenticChat' },
   },
 }
 
