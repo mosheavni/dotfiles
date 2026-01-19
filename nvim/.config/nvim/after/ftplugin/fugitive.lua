@@ -18,13 +18,31 @@ local hints = Hints.new('Fugitive - Available Keymaps', {
   { key = 'wip', desc = 'Work in progress' },
   { key = 'R', desc = 'Reload' },
   { key = '<leader>t', desc = 'Open terminal' },
+  { key = '<leader>h', desc = 'Toggle Hints' },
 })
+
+vim.g.fugitive_hints = true
+
+-- Toggle hints on fugitive
+vim.keymap.set('n', '<leader>h', function()
+  if vim.bo.filetype ~= 'fugitive' then
+    return
+  end
+  vim.g.fugitive_hints = not vim.g.fugitive_hints
+  if vim.g.fugitive_hints then
+    hints.show()
+  else
+    hints.close()
+  end
+end, { desc = 'Toggle Fugitive hints (only in fugitive buffers)' })
 
 -- Show hints when entering fugitive buffer
 vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
   buffer = 0,
   callback = function()
-    hints.show()
+    if vim.g.fugitive_hints then
+      hints.show()
+    end
   end,
 })
 
