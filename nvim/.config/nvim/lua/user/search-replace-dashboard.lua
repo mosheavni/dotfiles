@@ -4,18 +4,25 @@
 local M = {}
 
 local Float = require 'user.float'
+local utils = require 'user.search-replace-utils'
 
 -- Internal state
 local dashboard_state = {
   float = nil, -- Float instance
   ns_id = nil, -- Namespace for highlights
   last_parsed = nil, -- Cache of last parsed command
+  hidden = false, -- Track if user manually hid the dashboard
 }
 
 -- Refresh state to prevent infinite loops
 local refresh_state = {
   last_fake_keystroke_time = 0,
 }
+
+---Trigger a dashboard refresh via fake keystroke
+local function trigger_refresh()
+  utils.trigger_cmdline_refresh(M.invalidate_cache)
+end
 
 -- Configuration
 local config = {
@@ -47,99 +54,49 @@ local config = {
 ---@field flags table<string, boolean> Flags as {g=true, c=true, i=false}
 ---@field raw string The original command
 
----Split string by separator, respecting escapes
----@param str string The string to split
----@param sep string The separator character
----@return string[] parts The split parts
-local function split_by_unescaped_separator(str, sep)
-  local parts = {}
-  local current = ''
-  local i = 1
-
-  while i <= #str do
-    local char = str:sub(i, i)
-
-    if char == '\\' and i < #str then
-      -- Escaped character - include both backslash and next char
-      current = current .. char .. str:sub(i + 1, i + 1)
-      i = i + 2
-    elseif char == sep then
-      -- Unescaped separator - split here
-      table.insert(parts, current)
-      current = ''
-      i = i + 1
-    else
-      current = current .. char
-      i = i + 1
-    end
-  end
-
-  -- Add remaining content
-  table.insert(parts, current)
-
-  return parts
-end
-
----Parse a substitute command into components
+---Parse a substitute command into components (dashboard-specific format with flags as table)
 ---@param cmdline string The command line content
 ---@return ParsedCommand|nil parsed The parsed components, or nil if not a valid substitute
 local function parse_substitute_command(cmdline)
-  -- Quick validation: must be a substitute command
-  if not cmdline:match '^[%%.,0-9$]*s' then
-    return nil
+  -- Use shared utility for basic parsing
+  local base = utils.parse_substitute_cmd(cmdline)
+  if not base then
+    -- Check if it's an incomplete command (just range + separator, no search yet)
+    if not cmdline:match '^[%%.,0-9$]*s' then
+      return nil
+    end
+    -- Handle incomplete command
+    local range = (cmdline:match '^([%%.,0-9$]*)s' or '') .. 's'
+    local after_s = cmdline:sub(#range + 1)
+    if #after_s == 0 then
+      return nil
+    end
+    return {
+      range = range,
+      separator = after_s:sub(1, 1),
+      magic = '',
+      search = '',
+      replace = '',
+      flags = { g = false, c = false, i = false },
+      raw = cmdline,
+    }
   end
 
-  local parsed = {
-    range = '',
-    separator = '',
-    magic = '',
-    search = '',
-    replace = '',
-    flags = { g = false, c = false, i = false },
+  -- Convert to dashboard format (flags as table)
+  local flags_str = base.flags or ''
+  return {
+    range = base.range,
+    separator = base.sep,
+    magic = base.magic,
+    search = base.search,
+    replace = base.replace,
+    flags = {
+      g = flags_str:find 'g' ~= nil,
+      c = flags_str:find 'c' ~= nil,
+      i = flags_str:find 'i' ~= nil,
+    },
     raw = cmdline,
   }
-
-  -- Step 1: Extract range (everything before 's')
-  local range_pattern = '^([%%.,0-9$]*)s'
-  local range_match = cmdline:match(range_pattern)
-  if range_match then
-    parsed.range = range_match .. 's'
-  else
-    parsed.range = 's' -- No range specified
-  end
-
-  -- Step 2: Determine separator (first character after 's')
-  local after_s = cmdline:sub(#parsed.range + 1)
-
-  -- Next character is separator
-  if #after_s > 0 then
-    parsed.separator = after_s:sub(1, 1)
-  else
-    return parsed -- Incomplete command
-  end
-
-  -- Step 3: Split by separator (accounting for escaping)
-  local parts = split_by_unescaped_separator(after_s:sub(2), parsed.separator)
-
-  if #parts >= 1 then
-    parsed.search = parts[1] or ''
-    -- Extract magic mode from search pattern (it's at the beginning)
-    local magic_match = parsed.search:match '^(\\[vmMV])'
-    if magic_match then
-      parsed.magic = magic_match
-    end
-  end
-  if #parts >= 2 then
-    parsed.replace = parts[2] or ''
-  end
-  if #parts >= 3 then
-    local flags_str = parts[3] or ''
-    parsed.flags.g = flags_str:find 'g' ~= nil
-    parsed.flags.c = flags_str:find 'c' ~= nil
-    parsed.flags.i = flags_str:find 'i' ~= nil
-  end
-
-  return parsed
 end
 
 ---Get description for a range
@@ -257,6 +214,7 @@ local function get_keymaps_info()
     { key = '<M-5>', flag = nil, desc = 'Cycle range' },
     { key = '<M-/>', flag = nil, desc = 'Cycle separator' },
     { key = '<M-m>', flag = nil, desc = 'Cycle magic mode' },
+    { key = '<M-h>', flag = nil, desc = 'Toggle dashboard' },
   }
 end
 
@@ -627,48 +585,65 @@ function M.close_dashboard()
   dashboard_state.last_parsed = nil
 end
 
+---Toggle the dashboard visibility
+function M.toggle_dashboard()
+  -- Use hidden state directly instead of is_shown() which may not be reliable after scheduled close
+  if dashboard_state.hidden then
+    -- Currently hidden, show it
+    dashboard_state.hidden = false
+    trigger_refresh()
+  else
+    -- Currently shown (or would be shown), hide it
+    dashboard_state.hidden = true
+    vim.schedule(function()
+      M.close_dashboard()
+    end)
+  end
+end
+
 ---Setup autocmds for the dashboard
 function M.setup()
   local augroup = vim.api.nvim_create_augroup('SearchReplaceDashboard', { clear = true })
 
-  -- Show dashboard when search-replace mode is activated
+  -- Reset hidden state on new cmdline session
   vim.api.nvim_create_autocmd('CmdlineEnter', {
     group = augroup,
     pattern = ':',
     callback = function()
-      local sar = require 'user.search-replace'
-      if sar.is_active() then
-        -- Double schedule to ensure cmdline is fully populated
-        vim.schedule(function()
-          vim.schedule(function()
-            -- Don't pass cmdline here - let it read fresh after delay
-            M.refresh_dashboard()
-          end)
-        end)
-      end
+      dashboard_state.hidden = false
     end,
   })
 
-  -- Update dashboard on every keystroke
+  -- Update dashboard on every keystroke - auto-detect substitute commands
   vim.api.nvim_create_autocmd('CmdlineChanged', {
     group = augroup,
     pattern = ':',
     callback = function()
-      local sar = require 'user.search-replace'
-      if sar.is_active() then
-        local now = vim.loop.now()
-        -- Check if we recently triggered a fake keystroke (to prevent infinite loop)
-        if now - refresh_state.last_fake_keystroke_time < 100 then
-          -- We're in a fake keystroke cycle, just refresh normally
-          M.refresh_dashboard()
-        else
-          -- Trigger fake keystroke for proper refresh (same fix as toggles)
-          refresh_state.last_fake_keystroke_time = now
-          vim.defer_fn(function()
-            M.invalidate_cache()
-            vim.fn.feedkeys(' ' .. vim.keycode '<BS>', 'in')
-          end, 50)
+      -- Don't show if user manually hid it
+      if dashboard_state.hidden then
+        return
+      end
+
+      local cmdline = vim.fn.getcmdline()
+      -- Quick check: does it look like a substitute command?
+      if not utils.is_substitute_cmd(cmdline) then
+        -- Not a substitute command, close dashboard if open
+        if dashboard_state.float and dashboard_state.float.is_shown() then
+          M.close_dashboard()
         end
+        return
+      end
+
+      -- It's a substitute command - refresh dashboard
+      local now = vim.loop.now()
+      -- Check if we recently triggered a fake keystroke (to prevent infinite loop)
+      if now - refresh_state.last_fake_keystroke_time < 100 then
+        -- We're in a fake keystroke cycle, just refresh normally
+        M.refresh_dashboard()
+      else
+        -- Trigger fake keystroke for proper refresh
+        refresh_state.last_fake_keystroke_time = now
+        trigger_refresh()
       end
     end,
   })
@@ -681,6 +656,12 @@ function M.setup()
       M.close_dashboard()
     end,
   })
+
+  -- Add toggle keymap for command-line mode
+  vim.keymap.set('c', '<M-h>', function()
+    M.toggle_dashboard()
+    return ''
+  end, { expr = true, desc = 'Toggle search/replace dashboard' })
 end
 
 return M

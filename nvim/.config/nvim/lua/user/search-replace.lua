@@ -1,5 +1,7 @@
 local M = {}
 
+local utils = require 'user.search-replace-utils'
+
 -- Configuration
 local chars = { '/', '?', '#', ':', '@' }
 local magic_list = { '\\v', '\\m', '\\M', '\\V', '' }
@@ -15,7 +17,24 @@ local sar_state = {
 
 -- Helper functions
 local function should_sar()
-  return vim.fn.getcmdtype() == ':' and sar_state.active
+  if vim.fn.getcmdtype() ~= ':' then
+    return false
+  end
+  -- Active mode (triggered by <leader>r) or detected substitute command
+  if sar_state.active then
+    return true
+  end
+  -- Check if current cmdline looks like a substitute command
+  return utils.is_substitute_cmd(vim.fn.getcmdline())
+end
+
+-- Get the current separator (from state if active, or parse from cmdline)
+local function get_current_sep()
+  if sar_state.active then
+    return sar_state.sep
+  end
+  local parsed = utils.parse_substitute_cmd(vim.fn.getcmdline())
+  return parsed and parsed.sep or '/'
 end
 
 -- Public function to check if search-replace mode is active
@@ -28,15 +47,10 @@ function M.set_cmd_and_pos()
   vim.fn.setcmdpos(sar_state.cursor_pos)
 
   -- Trigger dashboard refresh by invalidating cache and simulating a keystroke
-  -- This happens after the cmdline is updated, triggering CmdlineChanged with fresh data
-  vim.defer_fn(function()
-    local ok, dashboard = pcall(require, 'user.search-replace-dashboard')
-    if ok and dashboard and dashboard.invalidate_cache then
-      dashboard.invalidate_cache()
-      -- Simulate typing space+backspace to trigger CmdlineChanged without modifying the command
-      vim.fn.feedkeys(' ' .. vim.keycode '<BS>', 'in')
-    end
-  end, 50)
+  local ok, dashboard = pcall(require, 'user.search-replace-dashboard')
+  if ok and dashboard and dashboard.invalidate_cache then
+    utils.trigger_cmdline_refresh(dashboard.invalidate_cache)
+  end
 
   return sar_state.new_cmd
 end
@@ -82,9 +96,9 @@ function M.toggle_char(char)
     return ''
   end
 
-  local sep = sar_state.sep
-  local parts = vim.split(cmd, sep, { plain = true })
-  local flags = parts[#parts]
+  local sep = get_current_sep()
+  local parts = utils.normalize_parts(vim.split(cmd, sep, { plain = true }))
+  local flags = parts[4]
 
   -- Toggle the flag
   if flags:find(char) then
@@ -100,12 +114,12 @@ function M.toggle_char(char)
     flags = new_flags
   end
 
-  parts[#parts] = flags
+  parts[4] = flags
   local new_cmd = table.concat(parts, sep)
 
   -- Store command and cursor position for helper function
   sar_state.new_cmd = new_cmd
-  sar_state.cursor_pos = #new_cmd - #sep - #parts[#parts] + 1
+  sar_state.cursor_pos = #new_cmd - #sep - #parts[4] + 1
 
   -- Use <C-\>e to evaluate expression that sets both command and cursor
   return vim.keycode '<C-\\>e' .. 'luaeval(\'require("user.search-replace").set_cmd_and_pos()\')' .. vim.keycode '<CR>'
@@ -118,16 +132,19 @@ function M.toggle_replace_term()
     return ''
   end
 
-  local sep = sar_state.sep
-  local parts = vim.split(cmd, sep, { plain = true })
-  local replace_term = parts[#parts - 1] == '' and sar_state.cword or ''
-  parts[#parts - 1] = replace_term
+  local sep = get_current_sep()
+  local parts = utils.normalize_parts(vim.split(cmd, sep, { plain = true }))
+  -- Use stored cword if in active mode, otherwise use search term or empty
+  local current_replace = parts[3]
+  local search_term = parts[2]
+  local replace_term = current_replace == '' and (sar_state.active and sar_state.cword or search_term) or ''
+  parts[3] = replace_term
 
   local new_cmd = table.concat(parts, sep)
 
   -- Store command and cursor position for helper function
   sar_state.new_cmd = new_cmd
-  sar_state.cursor_pos = #new_cmd - #sep - #parts[#parts] + 1
+  sar_state.cursor_pos = #new_cmd - #sep - #parts[4] + 1
 
   -- Use <C-\>e to evaluate expression that sets both command and cursor
   return vim.keycode '<C-\\>e' .. 'luaeval(\'require("user.search-replace").set_cmd_and_pos()\')' .. vim.keycode '<CR>'
@@ -140,8 +157,8 @@ function M.toggle_all_file()
     return ''
   end
 
-  local sep = sar_state.sep
-  local parts = vim.split(cmd, sep, { plain = true })
+  local sep = get_current_sep()
+  local parts = utils.normalize_parts(vim.split(cmd, sep, { plain = true }))
   local range = parts[1]
 
   -- Cycle through ranges: %s -> .,$s -> 0,.s -> %s
@@ -158,7 +175,7 @@ function M.toggle_all_file()
 
   -- Store command and cursor position for helper function
   sar_state.new_cmd = new_cmd
-  sar_state.cursor_pos = #new_cmd - #sep - #parts[#parts] + 1
+  sar_state.cursor_pos = #new_cmd - #sep - #parts[4] + 1
 
   -- Use <C-\>e to evaluate expression that sets both command and cursor
   return vim.keycode '<C-\\>e' .. 'luaeval(\'require("user.search-replace").set_cmd_and_pos()\')' .. vim.keycode '<CR>'
@@ -171,8 +188,8 @@ function M.toggle_separator()
     return ''
   end
 
-  local old_sep = sar_state.sep
-  local parts = vim.split(cmd, old_sep, { plain = true })
+  local old_sep = get_current_sep()
+  local parts = utils.normalize_parts(vim.split(cmd, old_sep, { plain = true }))
 
   -- Find next separator
   local idx = 0
@@ -188,7 +205,7 @@ function M.toggle_separator()
 
   -- Store command and cursor position for helper function
   sar_state.new_cmd = new_cmd
-  sar_state.cursor_pos = #new_cmd - #sar_state.sep - #parts[#parts] + 1
+  sar_state.cursor_pos = #new_cmd - #sar_state.sep - #parts[4] + 1
 
   -- Use <C-\>e to evaluate expression that sets both command and cursor
   return vim.keycode '<C-\\>e' .. 'luaeval(\'require("user.search-replace").set_cmd_and_pos()\')' .. vim.keycode '<CR>'
@@ -201,27 +218,32 @@ function M.toggle_magic()
     return ''
   end
 
-  local sep = sar_state.sep
-  local parts = vim.split(cmd, sep, { plain = true })
+  local sep = get_current_sep()
+  local parts = utils.normalize_parts(vim.split(cmd, sep, { plain = true }))
+
+  -- Get current magic mode from the search pattern
+  local search_pattern = parts[2]
+  local current_magic = search_pattern:match '^(\\[vmMV])' or ''
 
   -- Find next magic mode
   local idx = 0
   for i, m in ipairs(magic_list) do
-    if m == sar_state.magic then
+    if m == current_magic then
       idx = i
       break
     end
   end
-  sar_state.magic = magic_list[(idx % #magic_list) + 1]
+  local new_magic = magic_list[(idx % #magic_list) + 1]
 
-  -- Update the search pattern with new magic
-  parts[2] = sar_state.magic .. sar_state.cword
+  -- Strip old magic and add new magic to search pattern
+  local search_without_magic = search_pattern:gsub('^\\[vmMV]', '')
+  parts[2] = new_magic .. search_without_magic
 
   local new_cmd = table.concat(parts, sep)
 
   -- Store command and cursor position for helper function
   sar_state.new_cmd = new_cmd
-  sar_state.cursor_pos = #new_cmd - #sep - #parts[#parts] + 1
+  sar_state.cursor_pos = #new_cmd - #sep - #parts[4] + 1
 
   -- Use <C-\>e to evaluate expression that sets both command and cursor
   return vim.keycode '<C-\\>e' .. 'luaeval(\'require("user.search-replace").set_cmd_and_pos()\')' .. vim.keycode '<CR>'
