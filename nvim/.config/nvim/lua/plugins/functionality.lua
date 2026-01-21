@@ -215,6 +215,13 @@ local M = {
     cmd = { 'Linediff' },
   },
   {
+    'mosheavni/search-replace.nvim',
+    dev = vim.env.SAR_DEV == 'true',
+    config = function()
+      require('search-replace').setup()
+    end,
+  },
+  {
     'kawre/leetcode.nvim',
     build = ':TSUpdate html',
     lazy = leet_arg ~= vim.fn.argv(0, -1),
