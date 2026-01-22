@@ -258,7 +258,7 @@ M.config = function()
   local function setup_highlights()
     -- Customize mode colors to match lualine rose-pine theme
     -- Text color = mode color, background = base (neutral)
-    vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { fg = palette.rose, bg = palette.base, bold = true })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { fg = palette.leaf, bg = palette.base, bold = true })
     vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { fg = palette.pine, bg = palette.base, bold = true })
     vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { fg = palette.foam, bg = palette.base, bold = true })
     vim.api.nvim_set_hl(0, 'MiniStatuslineModeReplace', { fg = palette.iris, bg = palette.base, bold = true })
