@@ -3,3 +3,4 @@ tags
 .luarc.json
 pyrightconfig.json
 .DS_Store
+.claude/settings.local.json
