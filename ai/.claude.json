@@ -1,49 +1,50 @@
 {
-  "numStartups": 107,
+  "numStartups": 124,
   "installMethod": "native",
   "autoUpdates": false,
   "theme": "dark-daltonized",
   "hasSeenTasksHint": true,
   "tipsHistory": {
     "new-user-warmup": 10,
-    "plan-mode-for-complex-tasks": 30,
+    "plan-mode-for-complex-tasks": 108,
     "terminal-setup": 1,
     "shift-enter-setup": 1,
-    "memory-command": 107,
-    "theme-command": 101,
+    "memory-command": 122,
+    "theme-command": 121,
     "status-line": 26,
     "stickers-command": 102,
     "prompt-queue": 3,
-    "enter-to-steer-in-relatime": 104,
-    "todo-list": 104,
-    "ide-upsell-external-terminal": 104,
+    "enter-to-steer-in-relatime": 124,
+    "todo-list": 124,
+    "ide-upsell-external-terminal": 121,
     "# for memory": 34,
-    "install-github-app": 107,
-    "drag-and-drop-images": 107,
-    "paste-images-mac": 97,
-    "double-esc-code-restore": 97,
-    "continue": 97,
-    "shift-tab": 97,
+    "install-github-app": 117,
+    "drag-and-drop-images": 117,
+    "paste-images-mac": 118,
+    "double-esc-code-restore": 118,
+    "continue": 118,
+    "shift-tab": 118,
     "image-paste": 104,
     "tab-toggle-thinking": 26,
     "ultrathink-keyword": 100,
-    "shift-enter": 107,
-    "custom-agents": 97,
-    "default-permission-mode-config": 104,
-    "permissions": 104,
-    "custom-commands": 103,
+    "shift-enter": 117,
+    "custom-agents": 113,
+    "default-permission-mode-config": 114,
+    "permissions": 114,
+    "custom-commands": 118,
     "frontend-design-plugin": 41,
-    "rename-conversation": 95,
+    "rename-conversation": 110,
     "config-thinking-mode": 87,
-    "install-slack-app": 100,
+    "install-slack-app": 120,
     "btw-side-question": 81,
-    "desktop-app": 97,
-    "web-app": 97,
-    "mobile-app": 97,
-    "git-worktrees": 102,
-    "guest-passes": 103
+    "desktop-app": 113,
+    "web-app": 113,
+    "mobile-app": 113,
+    "git-worktrees": 123,
+    "guest-passes": 121,
+    "agent-flag": 124
   },
-  "promptQueueUseCount": 62,
+  "promptQueueUseCount": 65,
   "showExpandedTodos": true,
   "cachedStatsigGates": {
     "tengu_tool_pear": false,
@@ -79,7 +80,7 @@
     "tengu_tool_pear": false,
     "tengu_c4w_usage_limit_notifications_enabled": true,
     "tengu_thinkback": false,
-    "tengu_sumi": false,
+    "tengu_sumi": true,
     "tengu_ant_attribution_header_new": true,
     "tengu_react_vulnerability_warning": false,
     "tengu_accept_with_feedback": true,
@@ -99,12 +100,30 @@
     },
     "tengu_post_compact_survey": false,
     "tengu_streaming_tool_execution2": false,
-    "tengu_tool_search_unsupported_models": null,
-    "tengu_permission_explainer": false
+    "tengu_tool_search_unsupported_models": [
+      "haiku"
+    ],
+    "tengu_permission_explainer": true,
+    "tengu_code_diff_cli": true,
+    "enhanced_telemetry_beta": false,
+    "tengu_session_memory": false,
+    "tengu_plan_mode_interview_phase": false,
+    "tengu_bash_haiku_prefetch": true,
+    "tengu_chrome_auto_enable": false,
+    "tengu_keybinding_customization": false,
+    "tengu_claudeai_mcp_connectors": false,
+    "tengu_plank_river_frost": "user_intent",
+    "tengu_brass_pebble": false,
+    "tengu_attribution_header": true,
+    "tengu_cache_plum_violet": false
   },
   "mcpServers": {
     "aws-knowledge-mcp-server": {
-      "args": ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"],
+      "args": [
+        "fastmcp",
+        "run",
+        "https://knowledge-mcp.global.api.aws"
+      ],
       "autoApprove": [
         "aws___get_regional_availability",
         "aws___list_regions",
@@ -115,11 +134,15 @@
       "command": "uvx"
     },
     "awslabs.aws-api-mcp-server": {
-      "args": ["awslabs.aws-api-mcp-server@latest"],
+      "args": [
+        "awslabs.aws-api-mcp-server@latest"
+      ],
       "command": "uvx"
     },
     "awslabs.cloudwatch-mcp-server": {
-      "args": ["awslabs.cloudwatch-mcp-server@latest"],
+      "args": [
+        "awslabs.cloudwatch-mcp-server@latest"
+      ],
       "autoApprove": [],
       "command": "uvx",
       "disabled": false,
@@ -142,11 +165,15 @@
       }
     },
     "fetch": {
-      "args": ["mcp-server-fetch"],
+      "args": [
+        "mcp-server-fetch"
+      ],
       "command": "uvx"
     },
     "kubernetes": {
-      "args": ["mcp-server-kubernetes"],
+      "args": [
+        "mcp-server-kubernetes"
+      ],
       "autoApprove": [
         "explain_resource",
         "kubectl_describe",
@@ -161,7 +188,10 @@
       }
     },
     "memory": {
-      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
       "autoApprove": [
         "create_entities",
         "create_relations",
@@ -176,11 +206,17 @@
       "command": "npx"
     },
     "puppeteer": {
-      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ],
       "command": "npx"
     },
     "selenium": {
-      "args": ["-y", "@angiejones/mcp-selenium"],
+      "args": [
+        "-y",
+        "@angiejones/mcp-selenium"
+      ],
       "autoApprove": [
         "take_screenshot",
         "start_browser",
@@ -201,8 +237,13 @@
       "disabled_tools": []
     },
     "sequentialthinking": {
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
-      "autoApprove": ["sequentialthinking"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "autoApprove": [
+        "sequentialthinking"
+      ],
       "command": "npx"
     }
   },
@@ -210,7 +251,7 @@
   "firstStartTime": "2025-11-20T12:04:54.863Z",
   "userID": "f202daa52b396183541b780acfe3a048ba34c7d6f004f666e7f8434206e5af7b",
   "sonnet45MigrationComplete": true,
-  "changelogLastFetched": 1768216106098,
+  "changelogLastFetched": 1769419053063,
   "autoUpdatesProtectedForNative": true,
   "claudeCodeFirstTokenDate": "2025-07-16T13:49:40.829506Z",
   "shiftEnterKeyBindingInstalled": true,
@@ -242,7 +283,9 @@
       ],
       "exampleFilesGeneratedAt": 1763641870072,
       "lastTotalWebSearchRequests": 0,
-      "disabledMcpServers": ["sentry"],
+      "disabledMcpServers": [
+        "sentry"
+      ],
       "hasCompletedProjectOnboarding": true,
       "lastCost": 0.220874,
       "lastAPIDuration": 71465,
@@ -267,25 +310,25 @@
       "hasClaudeMdExternalIncludesApproved": false,
       "hasClaudeMdExternalIncludesWarningShown": false,
       "exampleFiles": [
-        "kubectl.lua",
-        "keymaps.lua",
         "lsp.lua",
-        "ai.lua",
-        "servers.lua"
+        "keymaps.lua",
+        "options.lua",
+        "kubectl.lua",
+        "ai.lua"
       ],
-      "exampleFilesGeneratedAt": 1767783238873,
+      "exampleFilesGeneratedAt": 1768890437416,
       "lastTotalWebSearchRequests": 0,
-      "lastCost": 1.1454562499999998,
-      "lastAPIDuration": 217148,
-      "lastToolDuration": 4801,
-      "lastDuration": 92695040,
-      "lastLinesAdded": 95,
-      "lastLinesRemoved": 10,
-      "lastTotalInputTokens": 5591,
-      "lastTotalOutputTokens": 10193,
-      "lastTotalCacheCreationInputTokens": 110495,
-      "lastTotalCacheReadInputTokens": 521915,
-      "lastSessionId": "cf8a0793-6c0b-4820-85a9-9ad819c5b69f",
+      "lastCost": 0.16937424999999998,
+      "lastAPIDuration": 29543,
+      "lastToolDuration": 53098,
+      "lastDuration": 124742,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 1415,
+      "lastTotalOutputTokens": 1173,
+      "lastTotalCacheCreationInputTokens": 14551,
+      "lastTotalCacheReadInputTokens": 93117,
+      "lastSessionId": "079a31fb-b23d-4ee8-b37b-2044b90fdffa",
       "reactVulnerabilityCache": {
         "detected": false,
         "package": null,
@@ -293,23 +336,23 @@
         "version": null,
         "packageManager": null
       },
-      "lastAPIDurationWithoutRetries": 217063,
+      "lastAPIDurationWithoutRetries": 29525,
       "lastModelUsage": {
         "claude-haiku-4-5-20251001": {
-          "inputTokens": 5415,
-          "outputTokens": 640,
+          "inputTokens": 992,
+          "outputTokens": 28,
           "cacheReadInputTokens": 0,
-          "cacheCreationInputTokens": 10883,
+          "cacheCreationInputTokens": 0,
           "webSearchRequests": 0,
-          "costUSD": 0.02221875
+          "costUSD": 0.001132
         },
         "claude-opus-4-5-20251101": {
-          "inputTokens": 176,
-          "outputTokens": 9553,
-          "cacheReadInputTokens": 521915,
-          "cacheCreationInputTokens": 99612,
+          "inputTokens": 423,
+          "outputTokens": 1145,
+          "cacheReadInputTokens": 93117,
+          "cacheCreationInputTokens": 14551,
           "webSearchRequests": 0,
-          "costUSD": 1.1232374999999999
+          "costUSD": 0.16824225
         }
       },
       "disabledMcpServers": []
@@ -413,20 +456,46 @@
         "git.lua",
         "README.md"
       ],
-      "exampleFilesGeneratedAt": 1765197210645,
+      "exampleFilesGeneratedAt": 1768831943739,
       "hasCompletedProjectOnboarding": true,
       "lastTotalWebSearchRequests": 0,
-      "lastCost": 0.9152067999999999,
-      "lastAPIDuration": 308982,
-      "lastToolDuration": 4605,
-      "lastDuration": 80202586,
-      "lastLinesAdded": 219,
-      "lastLinesRemoved": 12,
-      "lastTotalInputTokens": 8853,
-      "lastTotalOutputTokens": 14524,
-      "lastTotalCacheCreationInputTokens": 71750,
-      "lastTotalCacheReadInputTokens": 1455371,
-      "lastSessionId": "8f19d0ec-c2b9-4acd-a24f-ac610e7897bf"
+      "lastCost": 8.94013125,
+      "lastAPIDuration": 1038308,
+      "lastToolDuration": 10907,
+      "lastDuration": 2184718,
+      "lastLinesAdded": 273,
+      "lastLinesRemoved": 236,
+      "lastTotalInputTokens": 134230,
+      "lastTotalOutputTokens": 56286,
+      "lastTotalCacheCreationInputTokens": 189703,
+      "lastTotalCacheReadInputTokens": 12471455,
+      "lastSessionId": "7920528d-3da0-4f34-9c51-87c83f45140c",
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageName": null,
+        "version": null,
+        "packageManager": null
+      },
+      "lastAPIDurationWithoutRetries": 1038277,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "inputTokens": 133065,
+          "outputTokens": 1364,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.13988499999999995
+        },
+        "claude-opus-4-5-20251101": {
+          "inputTokens": 1165,
+          "outputTokens": 54922,
+          "cacheReadInputTokens": 12471455,
+          "cacheCreationInputTokens": 189703,
+          "webSearchRequests": 0,
+          "costUSD": 8.800246249999997
+        }
+      }
     },
     "/Users/Moshe.Avni/.local/share/nvim/lazy/conform.nvim": {
       "allowedTools": [],
@@ -1142,55 +1211,146 @@
       },
       "exampleFiles": [
         "config.lua",
-        "requests.lua",
-        "util.lua",
-        "yaml-companion_spec.lua",
-        "resources.lua"
+        "init.lua",
+        "context/init.lua",
+        "crd_detector.lua",
+        "config_spec.lua"
       ],
-      "exampleFilesGeneratedAt": 1768076432106,
+      "exampleFilesGeneratedAt": 1768893124275,
       "hasCompletedProjectOnboarding": true,
-      "lastCost": 0.0184321,
-      "lastAPIDuration": 11472,
-      "lastAPIDurationWithoutRetries": 11470,
-      "lastToolDuration": 0,
-      "lastDuration": 30218,
-      "lastLinesAdded": 0,
-      "lastLinesRemoved": 0,
-      "lastTotalInputTokens": 9,
-      "lastTotalOutputTokens": 471,
-      "lastTotalCacheCreationInputTokens": 0,
-      "lastTotalCacheReadInputTokens": 31121,
+      "lastCost": 0.8930060000000002,
+      "lastAPIDuration": 184696,
+      "lastAPIDurationWithoutRetries": 184686,
+      "lastToolDuration": 1715,
+      "lastDuration": 13662166,
+      "lastLinesAdded": 79,
+      "lastLinesRemoved": 12,
+      "lastTotalInputTokens": 11308,
+      "lastTotalOutputTokens": 9120,
+      "lastTotalCacheCreationInputTokens": 46698,
+      "lastTotalCacheReadInputTokens": 731319,
       "lastTotalWebSearchRequests": 0,
       "lastModelUsage": {
-        "claude-opus-4-5-20251101": {
-          "inputTokens": 6,
-          "outputTokens": 279,
-          "cacheReadInputTokens": 18380,
-          "cacheCreationInputTokens": 0,
-          "webSearchRequests": 0,
-          "costUSD": 0.016195
-        },
         "claude-haiku-4-5-20251001": {
-          "inputTokens": 3,
-          "outputTokens": 192,
-          "cacheReadInputTokens": 12741,
+          "inputTokens": 11104,
+          "outputTokens": 232,
+          "cacheReadInputTokens": 0,
           "cacheCreationInputTokens": 0,
           "webSearchRequests": 0,
-          "costUSD": 0.0022371
+          "costUSD": 0.012263999999999999
+        },
+        "claude-opus-4-5-20251101": {
+          "inputTokens": 204,
+          "outputTokens": 8888,
+          "cacheReadInputTokens": 731319,
+          "cacheCreationInputTokens": 46698,
+          "webSearchRequests": 0,
+          "costUSD": 0.880742
         }
       },
-      "lastSessionId": "73a717af-56d5-4cd7-b011-c5a57bf7bac4"
+      "lastSessionId": "31c46f03-f028-4ef4-bb85-a452b7b2a6ea"
+    },
+    "/Users/Moshe.Avni/Repos/search-replace.nvim": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageName": null,
+        "version": null,
+        "packageManager": null
+      },
+      "hasCompletedProjectOnboarding": true,
+      "lastCost": 4.6083235,
+      "lastAPIDuration": 763427,
+      "lastAPIDurationWithoutRetries": 760719,
+      "lastToolDuration": 5430,
+      "lastDuration": 5252847,
+      "lastLinesAdded": 155,
+      "lastLinesRemoved": 108,
+      "lastTotalInputTokens": 9958,
+      "lastTotalOutputTokens": 37703,
+      "lastTotalCacheCreationInputTokens": 121052,
+      "lastTotalCacheReadInputTokens": 5825991,
+      "lastTotalWebSearchRequests": 0,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "inputTokens": 9248,
+          "outputTokens": 831,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.013402999999999998
+        },
+        "claude-opus-4-5-20251101": {
+          "inputTokens": 710,
+          "outputTokens": 36872,
+          "cacheReadInputTokens": 5825991,
+          "cacheCreationInputTokens": 121052,
+          "webSearchRequests": 0,
+          "costUSD": 4.594920500000001
+        }
+      },
+      "lastSessionId": "4f4f36a8-5fa4-4494-ab28-842e5ae06017",
+      "exampleFiles": [
+        "dashboard.lua",
+        "core.lua",
+        "init.lua",
+        "search-replace_spec.lua",
+        "README.md"
+      ],
+      "exampleFilesGeneratedAt": 1768895306047
+    },
+    "/Users/Moshe.Avni": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 1,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "exampleFiles": [],
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageName": null,
+        "version": null,
+        "packageManager": null
+      },
+      "lastCost": 0,
+      "lastAPIDuration": 0,
+      "lastAPIDurationWithoutRetries": 0,
+      "lastToolDuration": 0,
+      "lastDuration": 6460,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 0,
+      "lastTotalOutputTokens": 0,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 0,
+      "lastTotalWebSearchRequests": 0,
+      "lastModelUsage": {},
+      "lastSessionId": "c0ef76e2-d655-437a-8ed2-f4b8ca16a1e2"
     }
   },
-  "lastReleaseNotesSeen": "2.1.5",
+  "lastReleaseNotesSeen": "2.1.19",
   "s1mAccessCache": {
     "3981bd4b-4502-4646-908b-bbc5d1ea573b": {
       "hasAccess": false,
       "hasAccessNotAsDefault": false,
-      "timestamp": 1768216106008
+      "timestamp": 1769419052525
     }
   },
-  "lastPlanModeUse": 1768157900622,
+  "lastPlanModeUse": 1769415927076,
   "hasUsedBackslashReturn": true,
   "githubRepoPaths": {
     "mosheavni/flight-calendar": [
@@ -1200,9 +1360,15 @@
       "/Users/Moshe.Avni/.dotfiles/nvim/.config/nvim",
       "/Users/Moshe.Avni/.dotfiles"
     ],
-    "mosheavni/lightvim": ["/Users/Moshe.Avni/.config/lightvim"],
-    "mvdan/sh": ["/Users/Moshe.Avni/Repos/sh"],
-    "spotinst/spotinst-gateway": ["/Users/Moshe.Avni/Repos/spotinst-gateway"],
+    "mosheavni/lightvim": [
+      "/Users/Moshe.Avni/.config/lightvim"
+    ],
+    "mvdan/sh": [
+      "/Users/Moshe.Avni/Repos/sh"
+    ],
+    "spotinst/spotinst-gateway": [
+      "/Users/Moshe.Avni/Repos/spotinst-gateway"
+    ],
     "mosheavni/duplicated-images": [
       "/Users/Moshe.Avni/Repos/duplicated-images"
     ],
@@ -1214,6 +1380,12 @@
     ],
     "mosheavni/yaml-companion.nvim": [
       "/Users/Moshe.Avni/Repos/yaml-companion.nvim"
+    ],
+    "mosheavni/github-pr-reviewer.nvim": [
+      "/Users/Moshe.Avni/Repos/github-pr-reviewer.nvim"
+    ],
+    "mosheavni/search-replace.nvim": [
+      "/Users/Moshe.Avni/Repos/search-replace.nvim"
     ]
   },
   "hasIdeOnboardingBeenShown": {
@@ -1248,20 +1420,23 @@
         "campaign": "claude_code_guest_pass",
         "referral_link": "https://claude.ai/referral/b9CyF4h-Fg"
       },
-      "timestamp": 1768216105819
+      "referrer_reward": null,
+      "timestamp": 1769417157026
     }
   },
   "groveConfigCache": {
     "a1cdda29-65b2-47b5-8962-0c4eda04f071": {
       "grove_enabled": true,
-      "timestamp": 1768160021052
+      "timestamp": 1769419052241
     }
   },
   "passesUpsellSeenCount": 4,
   "skillUsage": {
     "init": {
-      "usageCount": 1,
-      "lastUsedAt": 1768076433869
+      "usageCount": 2,
+      "lastUsedAt": 1768892720607
     }
-  }
+  },
+  "opusProMigrationComplete": true,
+  "cachedChromeExtensionInstalled": true
 }
