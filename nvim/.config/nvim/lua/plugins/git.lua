@@ -246,26 +246,35 @@ local M = {
         default_mappings = true,
       }
       require('user.menu').add_actions('GitConflict', {
-        ['Choose Ours'] = function()
+        ['Choose Ours (co)'] = function()
           vim.cmd 'GitConflictChooseOurs'
         end,
-        ['Choose Theirs'] = function()
+        ['Choose Theirs (ct)'] = function()
           vim.cmd 'GitConflictChooseTheirs'
         end,
-        ['Choose Both'] = function()
+        ['Choose Both (cb)'] = function()
           vim.cmd 'GitConflictChooseBoth'
         end,
-        ['Choose None'] = function()
+        ['Choose None (c0)'] = function()
           vim.cmd 'GitConflictChooseNone'
         end,
-        ['Next Conflict'] = function()
+        ['Next Conflict (]x)'] = function()
           vim.cmd 'GitConflictNextConflict'
         end,
-        ['Previous Conflict'] = function()
+        ['Previous Conflict ([x)'] = function()
           vim.cmd 'GitConflictPrevConflict'
         end,
         ['Send conflicts to Quickfix'] = function()
           vim.cmd 'GitConflictListQf'
+        end,
+      })
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'GitConflictDetected',
+        callback = function()
+          vim.notify('Conflict detected in ' .. vim.fn.expand '<afile>')
+          vim.schedule(function()
+            vim.cmd 'GitConflictListQf'
+          end)
         end,
       })
     end,
