@@ -144,7 +144,7 @@ map('n', '<leader>dg', function()
   return 'g@l'
 end, { expr = true, desc = 'Diff get current line' })
 map('n', '<leader>dn', '<cmd>windo diffthis<cr>', { remap = false, silent = true, desc = 'Start diff mode' })
-map('n', '<leader>df', '<cmd>windo diffoff<cr>', { remap = false, silent = true, desc = 'End diff mode' })
+map('n', '<leader>df', '<cmd>diffoff!<cr>', { remap = false, silent = true, desc = 'End diff mode' })
 
 -- Map enter to no highlight
 map('n', '<CR>', '<Esc>:nohlsearch<CR><CR>', { remap = false, silent = true, desc = 'Clear search highlighting' })
@@ -350,7 +350,7 @@ vim.api.nvim_create_user_command('DiffWithSaved', function()
   -- Map `q` for both buffers to exit diff view and delete scratch buffer
   for _, buf in ipairs { scratch, start } do
     map('n', 'q', function()
-      vim.cmd 'windo diffoff'
+      vim.cmd 'diffoff!'
       vim.api.nvim_buf_delete(scratch, { force = true })
       vim.keymap.del('n', 'q', { buffer = start })
     end, { buffer = buf })
