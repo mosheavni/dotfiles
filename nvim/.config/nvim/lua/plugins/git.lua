@@ -23,14 +23,16 @@ local actions = function()
       vim.fn.feedkeys(T '<leader>' .. 'gB')
     end,
     ['Fetch (all remotes and tags)'] = git_funcs.fetch_all,
-    ['Pull origin master (:Gpom)'] = function()
-      git_funcs.pull_remote_branch('origin', 'master')
+    ['Pull origin default branch (:Gpom)'] = function()
+      git_funcs.pull_default_branch 'origin'
     end,
     ['Revert last commit (soft)'] = git_funcs.soft_revert,
     ['Pull {remote} {branch}'] = git_funcs.ui_select_pull_remote_branch,
     ['Merge {remote} {branch}'] = git_funcs.ui_select_merge_remote_branch,
-    ['Merge origin/master (:Gmom)'] = function()
-      git_funcs.merge_remote_branch('origin', 'master')
+    ['Pull {remote} default branch'] = git_funcs.ui_select_pull_default_branch,
+    ['Merge {remote} default branch'] = git_funcs.ui_select_merge_default_branch,
+    ['Merge origin default branch (:Gmom)'] = function()
+      git_funcs.merge_default_branch 'origin'
     end,
     ['Open Status / Menu (<leader>gg / :Git)'] = function()
       vim.cmd 'Git'
@@ -136,10 +138,10 @@ local fugitive_config = function()
   -- Pull / Merge origin master --
   --------------------------------
   vim.api.nvim_create_user_command('Gmom', function()
-    git_funcs.merge_remote_branch('origin', 'master')
+    git_funcs.merge_default_branch 'origin'
   end, {})
   vim.api.nvim_create_user_command('Gpom', function()
-    git_funcs.pull_remote_branch('origin', 'master')
+    git_funcs.pull_default_branch 'origin'
   end, {})
 
   -------------------------

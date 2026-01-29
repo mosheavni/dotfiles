@@ -71,6 +71,21 @@ local function run_git_sync(args, msg)
 end
 
 -------------------
+-- Helper Functions (exported for testing)
+-------------------
+
+M.extract_owner_repo = function(url)
+  local gitbrowse = require 'user.gitbrowse'
+  local https_url = gitbrowse.get_repo(url)
+  return https_url:match 'https://[^/]+/(.+)$'
+end
+
+M.parse_symbolic_ref = function(stdout, remote)
+  remote = remote or 'origin'
+  return vim.trim(stdout):match('refs/remotes/' .. remote .. '/(.+)$')
+end
+
+-------------------
 -- Git Functions --
 -------------------
 
@@ -137,6 +152,55 @@ M.get_branches = function(remote_name, cb)
   end)
 end
 
+M.get_default_branch = function(remote, cb)
+  remote = remote or 'origin'
+
+  -- Strategy 1: Local symbolic-ref (fast, offline, silent)
+  vim.system({ 'git', 'symbolic-ref', 'refs/remotes/' .. remote .. '/HEAD' }, { text = true }, function(obj)
+    if obj.code == 0 and obj.stdout then
+      local branch = M.parse_symbolic_ref(obj.stdout, remote)
+      if branch then
+        return vim.schedule(function()
+          cb(branch)
+        end)
+      end
+    end
+
+    -- Strategy 2: GitHub CLI (silent)
+    M.get_remotes(function(remotes)
+      local url = remotes[remote]
+      if url then
+        local owner_repo = M.extract_owner_repo(url)
+        if owner_repo then
+          vim.system({ 'gh', 'api', 'repos/' .. owner_repo, '--jq', '.default_branch' }, { text = true }, function(gh_obj)
+            vim.schedule(function()
+              if gh_obj.code == 0 and gh_obj.stdout and vim.trim(gh_obj.stdout) ~= '' then
+                return cb(vim.trim(gh_obj.stdout))
+              end
+              -- Strategy 3: Fallback to user selection
+              M.get_branches(remote, function(branches)
+                local common = { 'main', 'master', 'develop' }
+                local choices = vim.tbl_filter(function(b)
+                  return vim.tbl_contains(branches, b)
+                end, common)
+                if #choices == 0 then
+                  choices = branches
+                end
+                with_ui_select(choices, { prompt = 'Select default branch> ' }, cb, true)
+              end)
+            end)
+          end)
+          return
+        end
+      end
+      -- Fallback if no remote URL found
+      M.get_branches(remote, function(branches)
+        with_ui_select(branches, { prompt = 'Select default branch> ' }, cb, true)
+      end)
+    end)
+  end)
+end
+
 M.get_branches_sync = function(remote_name)
   local obj = run_git_sync { 'ls-remote', '--heads', remote_name or 'origin' }
   local branches = {}
@@ -179,6 +243,32 @@ end
 
 M.merge_remote_branch = function(remote_name, branch_name)
   run_git({ 'merge', remote_name .. '/' .. branch_name }, 'Merging ' .. remote_name .. '/' .. branch_name)
+end
+
+M.pull_default_branch = function(remote)
+  remote = remote or 'origin'
+  M.get_default_branch(remote, function(branch)
+    M.pull_remote_branch(remote, branch)
+  end)
+end
+
+M.merge_default_branch = function(remote)
+  remote = remote or 'origin'
+  M.get_default_branch(remote, function(branch)
+    M.merge_remote_branch(remote, branch)
+  end)
+end
+
+M.ui_select_pull_default_branch = function()
+  M.ui_select_remotes(function(remote)
+    M.pull_default_branch(remote)
+  end)
+end
+
+M.ui_select_merge_default_branch = function()
+  M.ui_select_remotes(function(remote)
+    M.merge_default_branch(remote)
+  end)
 end
 
 M.create_pull_request = function()
