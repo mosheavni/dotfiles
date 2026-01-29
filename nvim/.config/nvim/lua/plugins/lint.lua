@@ -15,8 +15,11 @@ return {
   config = function()
     local lint = require 'lint'
 
-    -- Trivy toggle state (disabled by default)
-    local trivy_enabled = false
+    -- Disabled linters state (accessible from sources.lua)
+    lint._disabled_linters = { trivy = true } -- trivy disabled by default
+
+    -- Global linter names (for sources.lua to display)
+    lint._global_linter_names = { 'codespell', 'gitleaks', 'trivy' }
 
     lint.linters_by_ft = {
       -- hcl = { 'terragrunt_validate' },
@@ -79,45 +82,38 @@ return {
         -- Get linters for current filetype
         local linters = lint._resolve_linter_by_ft(vim.bo.filetype)
 
-        -- Run each linter with its configured cwd
+        -- Run each linter with its configured cwd (if not disabled)
         for _, linter_name in ipairs(linters) do
-          local cwd = get_linter_cwd(linter_name)
-          lint.try_lint(linter_name, { cwd = cwd })
+          if not lint._disabled_linters[linter_name] then
+            local cwd = get_linter_cwd(linter_name)
+            lint.try_lint(linter_name, { cwd = cwd })
+          end
         end
 
         -- Run gitleaks and trivy only on saved buffers (BufWritePost)
         if args.event == 'BufWritePost' then
-          local global_linters = { 'gitleaks' }
-          if trivy_enabled then
-            table.insert(global_linters, 'trivy')
+          if not lint._disabled_linters['gitleaks'] then
+            lint.try_lint { 'gitleaks' }
           end
-          lint.try_lint(global_linters)
+          if not lint._disabled_linters['trivy'] then
+            lint.try_lint { 'trivy' }
+          end
         end
 
         -- Run codespell on all events
-        lint.try_lint { 'codespell' }
+        if not lint._disabled_linters['codespell'] then
+          lint.try_lint { 'codespell' }
+        end
       end,
     })
 
-    -- Show linters for the current buffer's file type
-    vim.api.nvim_create_user_command('LintInfo', function()
-      local filetype = vim.bo.filetype
-      local linters = require('lint').linters_by_ft[filetype]
-
-      if linters then
-        print('Linters for ' .. filetype .. ': ' .. table.concat(linters, ', '))
-      else
-        print('No linters configured for filetype: ' .. filetype)
-      end
-    end, {})
-
-    -- Toggle trivy linting
+    -- Toggle trivy linting (kept for backwards compatibility)
     vim.api.nvim_create_user_command('TrivyLintToggle', function()
-      trivy_enabled = not trivy_enabled
-      local status = trivy_enabled and 'enabled' or 'disabled'
+      lint._disabled_linters['trivy'] = not lint._disabled_linters['trivy']
+      local status = lint._disabled_linters['trivy'] and 'disabled' or 'enabled'
       print('Trivy linting ' .. status)
 
-      if trivy_enabled then
+      if not lint._disabled_linters['trivy'] then
         -- Run trivy immediately if enabled
         lint.try_lint { 'trivy' }
       else

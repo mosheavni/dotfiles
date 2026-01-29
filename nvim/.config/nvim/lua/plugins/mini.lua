@@ -14,17 +14,18 @@ local M = {
     init = function()
       vim.api.nvim_create_autocmd('FileType', {
         pattern = {
+          'Trouble',
           'dashboard',
           'floaterm',
           'fugitive',
           'help',
+          'input',
           'lazy',
           'lazyterm',
           'mason',
           'notify',
+          'sources',
           'trouble',
-          'Trouble',
-          'input',
         },
         callback = function()
           vim.b.miniindentscope_disable = true
