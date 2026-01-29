@@ -40,7 +40,7 @@ end, { desc = 'Toggle Fugitive hints (only in fugitive buffers)' })
 vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
   buffer = 0,
   callback = function()
-    if vim.g.fugitive_hints then
+    if vim.g.fugitive_hints and vim.bo.filetype == 'fugitive' then
       hints.show()
     end
   end,
