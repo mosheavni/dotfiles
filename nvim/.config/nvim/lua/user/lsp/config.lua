@@ -109,6 +109,7 @@ M.setup = function()
       if not vim.g.diagnostics_configured then
         vim.g.diagnostics_configured = true
         vim.diagnostic.config {
+          jump = { float = true },
           severity_sort = true,
           signs = { text = M.diagnostic_signs },
           virtual_text = {

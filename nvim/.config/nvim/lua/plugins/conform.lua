@@ -2,20 +2,13 @@ local function get_lsp_formatters(bufnr)
   local formatting_clients = {}
   for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do
     ---@diagnostic disable-next-line: param-type-mismatch
-    if client:supports_method('textDocument/formatting', bufnr) then
-      table.insert(formatting_clients, { name = client.name, type = 'lsp' })
-    end
+    if client:supports_method('textDocument/formatting', bufnr) then table.insert(formatting_clients, { name = client.name, type = 'lsp' }) end
   end
   return formatting_clients
 end
 
 local function get_lsp_names(clients)
-  return table.concat(
-    vim.tbl_map(function(client)
-      return client.name
-    end, clients),
-    ', '
-  )
+  return table.concat(vim.tbl_map(function(client) return client.name end, clients), ', ')
 end
 
 local function get_formatter_names(bufnr)
@@ -31,9 +24,7 @@ local function create_notify_callback(formatter_name)
   return function(err, did_format)
     vim.print('err: ' .. vim.inspect(err))
     vim.print('did_format: ' .. vim.inspect(did_format))
-    if not did_format then
-      return
-    end
+    if not did_format then return end
     if err then
       vim.notify(string.format('Error formatting: %s (%s)', err, formatter_name))
       return
@@ -56,22 +47,16 @@ return {
         vim.ui.select(vim.list_extend(lsp_fmts, conform_fmts), {
           prompt = 'Select formatter❯ ',
           title = 'Formatters',
-          format_item = function(client)
-            return client.name
-          end,
+          format_item = function(client) return client.name end,
         }, function(client)
-          if not client then
-            return
-          end
+          if not client then return end
 
           local conform_opts = {
             formatters = { client.name },
             stop_after_first = true,
           }
 
-          if client.type == 'lsp' then
-            conform_opts = { formatters = {}, lsp_format = 'prefer' }
-          end
+          if client.type == 'lsp' then conform_opts = { formatters = {}, lsp_format = 'prefer' } end
 
           require('conform').format(conform_opts, create_notify_callback(client.name))
         end)
@@ -135,16 +120,12 @@ return {
       -- Only notify if the buffer actually changed
       if old_changedtick and new_changedtick > old_changedtick then
         local formatter_names = get_formatter_names(bufnr)
-        if formatter_names ~= '' then
-          vim.notify(string.format('Formatted using %s', formatter_names))
-        end
+        if formatter_names ~= '' then vim.notify(string.format('Formatted using %s', formatter_names)) end
       end
 
       vim.b[bufnr].format_changedtick = nil
     end,
     formatters = {},
   },
-  init = function()
-    vim.o.formatexpr = "v:lua.require'conform'.formatexpr({lsp_format='fallback',timeout_ms=5000})"
-  end,
+  init = function() vim.o.formatexpr = "v:lua.require'conform'.formatexpr({lsp_format='fallback',timeout_ms=5000})" end,
 }

@@ -80,7 +80,7 @@ return {
         vim.o.relativenumber = false
         vim.opt.titlestring = '❄️ k8s: %t'
         if vim.bo.filetype:match '^k8s_.*yaml$' then
-          vim.bo.filetype = 'yaml'
+          vim.treesitter.start(0, 'yaml')
         end
       end,
     })

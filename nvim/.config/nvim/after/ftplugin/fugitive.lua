@@ -21,7 +21,7 @@ local hints = Hints.new('Fugitive - Available Keymaps', {
   { key = '<leader>h', desc = 'Toggle Hints' },
 })
 
-vim.g.fugitive_hints = true
+vim.g.fugitive_hints = false
 
 -- Toggle hints on fugitive
 vim.keymap.set('n', '<leader>h', function()

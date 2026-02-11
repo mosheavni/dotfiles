@@ -222,23 +222,17 @@ function M.new()
   --- Check if buffer is valid
   ---@param buf_id integer?
   ---@return boolean
-  local function is_valid_buf(buf_id)
-    return buf_id ~= nil and vim.api.nvim_buf_is_valid(buf_id)
-  end
+  local function is_valid_buf(buf_id) return buf_id ~= nil and vim.api.nvim_buf_is_valid(buf_id) end
 
   --- Check if window is valid
   ---@param win_id integer?
   ---@return boolean
-  local function is_valid_win(win_id)
-    return win_id ~= nil and vim.api.nvim_win_is_valid(win_id)
-  end
+  local function is_valid_win(win_id) return win_id ~= nil and vim.api.nvim_win_is_valid(win_id) end
 
   --- Check if window is in current tabpage
   ---@param win_id integer
   ---@return boolean
-  local function is_win_in_tabpage(win_id)
-    return vim.api.nvim_win_get_tabpage(win_id) == vim.api.nvim_get_current_tabpage()
-  end
+  local function is_win_in_tabpage(win_id) return vim.api.nvim_win_get_tabpage(win_id) == vim.api.nvim_get_current_tabpage() end
 
   --- Create a new buffer for the float
   ---@return integer buf_id The created buffer ID
@@ -270,9 +264,7 @@ function M.new()
   ---@param win_id integer Window ID
   ---@param win_opts table<string, any>? Window options to apply
   local function window_apply_options(win_id, win_opts)
-    if not win_opts then
-      return
-    end
+    if not win_opts then return end
     for opt, value in pairs(win_opts) do
       vim.api.nvim_set_option_value(opt, value, { win = win_id })
     end
@@ -326,9 +318,7 @@ function M.new()
   --- Set buffer name with pattern (following mini.notify)
   ---@param buf_id integer Buffer ID
   ---@param name string Name suffix
-  local function set_buf_name(buf_id, name)
-    vim.api.nvim_buf_set_name(buf_id, 'float://' .. buf_id .. '/' .. name)
-  end
+  local function set_buf_name(buf_id, name) vim.api.nvim_buf_set_name(buf_id, 'float://' .. buf_id .. '/' .. name) end
 
   --- Main refresh function (follows mini.notify pattern)
   --- Shows or updates the floating window with new content
@@ -340,39 +330,33 @@ function M.new()
     -- Reschedule if in fast event (CRUCIAL - same as mini.notify)
     local in_fast = vim.in_fast_event()
     if in_fast then
-      return vim.schedule(function()
-        instance.refresh(content_fn, config_fn, opts_fn, highlights_fn)
-      end)
+      return vim.schedule(function() instance.refresh(content_fn, config_fn, opts_fn, highlights_fn) end)
     end
 
     -- Get content lines
     local lines = content_fn()
-    if not lines or #lines == 0 then
-      return instance.close()
-    end
+    if not lines or #lines == 0 then return instance.close() end
 
     -- Refresh buffer
     local buf_id = instance.cache.buf_id
-    if not is_valid_buf(buf_id) then
-      buf_id = buffer_create()
-    end
+    if not is_valid_buf(buf_id) then buf_id = buffer_create() end
     ---@cast buf_id integer
     buffer_refresh(buf_id, lines)
 
     -- Apply highlights synchronously (mini.notify pattern)
-    if highlights_fn then
-      highlights_fn(buf_id, lines)
-    end
+    if highlights_fn then highlights_fn(buf_id, lines) end
 
     -- Refresh window
     local win_id = instance.cache.win_id
-    if not (is_valid_win(win_id) and is_win_in_tabpage(win_id --[[@as integer]])) then
+    if
+      not (
+        is_valid_win(win_id) and is_win_in_tabpage(win_id --[[@as integer]])
+      )
+    then
       window_close()
       local win_config = config_fn(buf_id)
       win_id = window_open(buf_id, win_config)
-      if opts_fn then
-        window_apply_options(win_id, opts_fn())
-      end
+      if opts_fn then window_apply_options(win_id, opts_fn()) end
     else
       ---@cast win_id integer
       local new_config = config_fn(buf_id)
@@ -398,9 +382,7 @@ function M.new()
 
   --- Check if the floating window is currently shown
   ---@return boolean
-  function instance.is_shown()
-    return is_valid_win(instance.cache.win_id) and is_win_in_tabpage(instance.cache.win_id)
-  end
+  function instance.is_shown() return is_valid_win(instance.cache.win_id) and is_win_in_tabpage(instance.cache.win_id) end
 
   --- Toggle the floating window visibility
   ---@param content_fn ContentFunction Function that returns lines to display
@@ -420,24 +402,18 @@ function M.new()
   ---@param max_width_share number Maximum width as share of columns (0-1)
   ---@return integer width Computed width
   ---@return integer height Computed height
-  function instance.buffer_default_dimensions(buf_id, max_width_share)
-    return buffer_default_dimensions(buf_id, max_width_share)
-  end
+  function instance.buffer_default_dimensions(buf_id, max_width_share) return buffer_default_dimensions(buf_id, max_width_share) end
 
   --- Utility: Fit text to width with ellipsis
   ---@param text string Text to fit
   ---@param width number Maximum width
   ---@return string Fitted text with ellipsis if truncated
-  function instance.fit_to_width(text, width)
-    return fit_to_width(text, width)
-  end
+  function instance.fit_to_width(text, width) return fit_to_width(text, width) end
 
   --- Utility: Set buffer name with pattern
   ---@param buf_id integer Buffer ID
   ---@param name string Name suffix
-  function instance.set_buf_name(buf_id, name)
-    set_buf_name(buf_id, name)
-  end
+  function instance.set_buf_name(buf_id, name) set_buf_name(buf_id, name) end
 
   return instance
 end
