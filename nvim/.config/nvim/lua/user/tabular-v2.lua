@@ -19,6 +19,7 @@ local M = {
 ---@field ns_headers integer|nil The namespace ID for headers.
 ---@field ns_sort integer|nil The namespace ID for sorting.
 ---@field ns_filter integer|nil The namespace ID for filtering.
+---@field display_indices integer[] Mapping from display line index to data line index in lines.
 ---@field timer uv.uv_timer_t|nil The timer for periodic updates.
 ---@field current_filter string|nil The current filter applied to the table.
 
@@ -40,6 +41,7 @@ M.default_tab_state = {
   ns_headers = nil,
   ns_sort = nil,
   ns_filter = nil,
+  display_indices = {},
   timer = nil, -- Timer for periodic updates
 }
 
@@ -174,7 +176,6 @@ function M.set_buf_win_options(bufnr)
   vim.api.nvim_set_option_value('filetype', 'tabular', { buf = bufnr })
   vim.api.nvim_set_option_value('buftype', 'nofile', { buf = bufnr })
   vim.api.nvim_set_option_value('bufhidden', 'wipe', { buf = bufnr })
-  vim.api.nvim_set_option_value('modifiable', true, { buf = bufnr })
   vim.api.nvim_set_option_value('modified', false, { buf = bufnr })
 
   -- set no wrap
@@ -200,6 +201,32 @@ function M.set_buf_win_options(bufnr)
   vim.keymap.set('n', '?', function()
     M.show_help()
   end, k_opts)
+  vim.keymap.set('n', 'd', function()
+    vim.o.operatorfunc = "v:lua.require'user.tabular-v2'.delete_lines_op"
+    return 'g@'
+  end, { noremap = true, silent = true, buffer = bufnr, expr = true })
+  vim.keymap.set('n', 'dd', function()
+    vim.o.operatorfunc = "v:lua.require'user.tabular-v2'.delete_lines_op"
+    return 'g@_'
+  end, { noremap = true, silent = true, buffer = bufnr, expr = true })
+  vim.keymap.set('x', 'd', function()
+    local start_line = vim.fn.line "'<"
+    local end_line = vim.fn.line "'>"
+    M.delete_displayed_lines(bufnr, start_line, end_line)
+  end, k_opts)
+
+  -- Prevent cursor from entering header (line 1) and separator (line 2)
+  local clamp_group = vim.api.nvim_create_augroup('TabularClampCursor' .. bufnr, { clear = true })
+  vim.api.nvim_create_autocmd('CursorMoved', {
+    group = clamp_group,
+    buffer = bufnr,
+    callback = function()
+      local row = vim.api.nvim_win_get_cursor(0)[1]
+      if row < 3 then
+        vim.api.nvim_win_set_cursor(0, { 3, 0 })
+      end
+    end,
+  })
 end
 
 function M.set_lines_and_highlight(opts)
@@ -209,6 +236,7 @@ function M.set_lines_and_highlight(opts)
     return
   end
 
+  vim.api.nvim_set_option_value('modifiable', true, { buf = opts.bufnr })
   vim.api.nvim_buf_set_lines(opts.bufnr, 0, -1, false, opts.display_lines)
 
   -- Clear any existing filter and sort indicators
@@ -244,6 +272,56 @@ function M.set_lines_and_highlight(opts)
 
     pos = pos + width + M.spacing
   end
+end
+
+--- Deletes displayed lines from tab_state.lines by buffer line range
+--- @param bufnr integer: The buffer number
+--- @param start_line integer: First buffer line (1-indexed)
+--- @param end_line integer: Last buffer line (1-indexed)
+function M.delete_displayed_lines(bufnr, start_line, end_line)
+  local tab_state = M.find_tab_state_by_bufnr(bufnr)
+  if not tab_state then
+    return
+  end
+
+  -- Clamp to data area (lines 3+, since 1=header, 2=separator)
+  start_line = math.max(start_line, 3)
+  if end_line < 3 then
+    return
+  end
+
+  -- Map buffer lines to data indices via display_indices
+  -- display_indices[1] corresponds to buffer line 3
+  local indices_to_remove = {}
+  for line = start_line, end_line do
+    local display_idx = line - 2
+    local data_idx = tab_state.display_indices[display_idx]
+    if data_idx then
+      table.insert(indices_to_remove, data_idx)
+    end
+  end
+
+  if #indices_to_remove == 0 then
+    return
+  end
+
+  -- Remove in reverse order to maintain indices
+  table.sort(indices_to_remove, function(a, b)
+    return a > b
+  end)
+  for _, idx in ipairs(indices_to_remove) do
+    table.remove(tab_state.lines, idx)
+  end
+
+  M.display_table(tab_state.command)
+end
+
+--- Operatorfunc for d{motion} in tabular buffers
+function M.delete_lines_op(_type)
+  local bufnr = vim.api.nvim_get_current_buf()
+  local start_line = vim.api.nvim_buf_get_mark(bufnr, '[')[1]
+  local end_line = vim.api.nvim_buf_get_mark(bufnr, ']')[1]
+  M.delete_displayed_lines(bufnr, start_line, end_line)
 end
 
 function M.display_table(tabular_command, delimiter)
@@ -291,8 +369,9 @@ function M.display_table(tabular_command, delimiter)
   local separator_line = table.concat(separator_parts, string.rep('-', M.spacing))
   local display_lines = { header_line, separator_line }
 
-  -- Format and insert data lines
-  for _, row in ipairs(tab_state.lines) do
+  -- Format and insert data lines, tracking display-to-data index mapping
+  tab_state.display_indices = {}
+  for data_idx, row in ipairs(tab_state.lines) do
     local should_display = true
     if tab_state.current_filter and tab_state.current_filter ~= '' then
       should_display = false
@@ -312,6 +391,7 @@ function M.display_table(tabular_command, delimiter)
         table.insert(formatted_row, padded_cell)
       end
       table.insert(display_lines, table.concat(formatted_row, string.rep(' ', M.spacing)))
+      table.insert(tab_state.display_indices, data_idx)
     end
   end
 
@@ -327,6 +407,9 @@ function M.display_table(tabular_command, delimiter)
     ns_sort = tab_state.ns_sort,
     ns_filter = tab_state.ns_filter,
   }
+
+  -- Lock the buffer to prevent editing
+  vim.api.nvim_set_option_value('modifiable', false, { buf = tab_state.bufnr })
 end
 
 --- Size suffix multipliers for file size parsing
@@ -376,6 +459,47 @@ function M.parse_size(str)
   return tonumber(num) * multiplier
 end
 
+--- Extracts IP octets from a string containing an IP address
+--- Supports plain IPs (10.10.42.1), EC2 internal names (ip-10-10-42-1.ec2.internal),
+--- and other dash-separated IP formats
+--- @param str string: The string to parse
+--- @return integer[]|nil: Array of 4 octets, or nil if not an IP
+function M.parse_ip(str)
+  if not str or str == '' then
+    return nil
+  end
+  -- Try dotted IP (1.2.3.4 or prefix like "ip:" before it)
+  local a, b, c, d = str:match '(%d+)%.(%d+)%.(%d+)%.(%d+)'
+  if not a then
+    -- Try dash-separated IP from EC2 names: ip-10-10-42-1.ec2.internal or ip-10-10-42-1
+    a, b, c, d = str:match 'ip%-(%d+)%-(%d+)%-(%d+)%-(%d+)'
+  end
+  if not a then
+    return nil
+  end
+  local octets = { tonumber(a), tonumber(b), tonumber(c), tonumber(d) }
+  -- Validate octets are in 0-255 range
+  for _, octet in ipairs(octets) do
+    if octet < 0 or octet > 255 then
+      return nil
+    end
+  end
+  return octets
+end
+
+--- Compares two IP octet arrays
+--- @param ip_a integer[]: First IP octets
+--- @param ip_b integer[]: Second IP octets
+--- @return integer: -1 if a < b, 1 if a > b, 0 if equal
+function M.compare_ips(ip_a, ip_b)
+  for i = 1, 4 do
+    if ip_a[i] ~= ip_b[i] then
+      return ip_a[i] < ip_b[i] and -1 or 1
+    end
+  end
+  return 0
+end
+
 function M.sort_by_column(col_index, direction)
   local current_bufnr = vim.api.nvim_get_current_buf()
   local tab_state = M.find_tab_state_by_bufnr(current_bufnr)
@@ -418,6 +542,21 @@ function M.sort_by_column(col_index, direction)
       else
         return size_a > size_b
       end
+    end
+
+    -- Try to parse as IP addresses (plain or EC2 internal names)
+    local ip_a = M.parse_ip(val_a)
+    local ip_b = M.parse_ip(val_b)
+    if ip_a and ip_b then
+      local cmp = M.compare_ips(ip_a, ip_b)
+      if cmp ~= 0 then
+        if tab_state.sort_direction == 1 then
+          return cmp == -1
+        else
+          return cmp == 1
+        end
+      end
+      -- IPs are equal, fall through to string comparison
     end
 
     -- Try to convert to numbers if possible
@@ -794,7 +933,6 @@ function M.unload(bufnr)
   if tab_state.ns_filter then
     vim.api.nvim_buf_clear_namespace(bufnr, tab_state.ns_filter, 0, -1)
   end
-
   -- Remove the tab state from our tracking table
   local command_to_remove = tab_state.command
   if command_to_remove then

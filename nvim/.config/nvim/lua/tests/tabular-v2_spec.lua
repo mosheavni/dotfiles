@@ -228,4 +228,175 @@ describe('user.tabular-v2', function()
       eq(tabular.parse_size '10ZZ', nil)
     end)
   end)
+
+  describe('parse_ip', function()
+    it('parses dotted IP addresses', function()
+      eq(tabular.parse_ip '10.10.42.1', { 10, 10, 42, 1 })
+      eq(tabular.parse_ip '192.168.1.100', { 192, 168, 1, 100 })
+      eq(tabular.parse_ip '0.0.0.0', { 0, 0, 0, 0 })
+      eq(tabular.parse_ip '255.255.255.255', { 255, 255, 255, 255 })
+    end)
+
+    it('parses EC2 internal hostnames', function()
+      eq(tabular.parse_ip 'ip-10-10-42-1.ec2.internal', { 10, 10, 42, 1 })
+      eq(tabular.parse_ip 'ip-10-10-101-214.ec2.internal', { 10, 10, 101, 214 })
+      eq(tabular.parse_ip 'ip-10-10-72-124.ec2.internal', { 10, 10, 72, 124 })
+      eq(tabular.parse_ip 'ip-172-31-0-5.ec2.internal', { 172, 31, 0, 5 })
+    end)
+
+    it('parses bare EC2 dash-separated IPs without domain', function()
+      eq(tabular.parse_ip 'ip-10-10-42-1', { 10, 10, 42, 1 })
+    end)
+
+    it('parses IP embedded in a larger string', function()
+      eq(tabular.parse_ip 'server-192.168.1.1', { 192, 168, 1, 1 })
+    end)
+
+    it('returns nil for non-IP strings', function()
+      eq(tabular.parse_ip 'hello', nil)
+      eq(tabular.parse_ip '', nil)
+      eq(tabular.parse_ip '123', nil)
+      eq(tabular.parse_ip 'not-an-ip', nil)
+    end)
+
+    it('returns nil for invalid octet values', function()
+      eq(tabular.parse_ip '256.1.1.1', nil)
+      eq(tabular.parse_ip 'ip-999-10-10-1.ec2.internal', nil)
+    end)
+  end)
+
+  describe('delete_displayed_lines', function()
+    local fake_bufnr = 999
+
+    local function setup_tab_state(lines, display_indices)
+      local tab_state = vim.tbl_deep_extend('force', {}, tabular.default_tab_state, {
+        bufnr = fake_bufnr,
+        command = 'test-delete',
+        lines = lines,
+        display_indices = display_indices,
+        headers = { 'Name', 'Age' },
+        col_widths = { 4, 3 },
+      })
+      tabular.tabs_state['test-delete'] = tab_state
+      return tab_state
+    end
+
+    after_each(function()
+      tabular.tabs_state['test-delete'] = nil
+    end)
+
+    it('removes a single line with dd (buffer line 3 = display index 1)', function()
+      local tab_state = setup_tab_state({
+        { 'Alice', '30' },
+        { 'Bob', '25' },
+        { 'Charlie', '35' },
+      }, { 1, 2, 3 })
+
+      -- Simulate dd on buffer line 3 (first data line)
+      -- delete_displayed_lines maps buffer line 3 → display_indices[1] = data index 1
+      tabular.delete_displayed_lines(fake_bufnr, 3, 3)
+
+      eq(#tab_state.lines, 2)
+      eq(tab_state.lines[1], { 'Bob', '25' })
+      eq(tab_state.lines[2], { 'Charlie', '35' })
+    end)
+
+    it('removes multiple lines (e.g. d2j from line 3 to 5)', function()
+      local tab_state = setup_tab_state({
+        { 'Alice', '30' },
+        { 'Bob', '25' },
+        { 'Charlie', '35' },
+        { 'Dave', '40' },
+      }, { 1, 2, 3, 4 })
+
+      tabular.delete_displayed_lines(fake_bufnr, 3, 5)
+
+      eq(#tab_state.lines, 1)
+      eq(tab_state.lines[1], { 'Dave', '40' })
+    end)
+
+    it('removes the last line', function()
+      local tab_state = setup_tab_state({
+        { 'Alice', '30' },
+        { 'Bob', '25' },
+      }, { 1, 2 })
+
+      tabular.delete_displayed_lines(fake_bufnr, 4, 4)
+
+      eq(#tab_state.lines, 1)
+      eq(tab_state.lines[1], { 'Alice', '30' })
+    end)
+
+    it('respects display_indices with active filter', function()
+      -- lines has 4 entries, but filter only shows indices 1, 3, 4
+      local tab_state = setup_tab_state({
+        { 'Alice', '30' },
+        { 'Bob', '25' },
+        { 'Charlie', '35' },
+        { 'Dave', '40' },
+      }, { 1, 3, 4 })
+
+      -- Delete buffer line 4 → display_indices[2] = data index 3 (Charlie)
+      tabular.delete_displayed_lines(fake_bufnr, 4, 4)
+
+      eq(#tab_state.lines, 3)
+      eq(tab_state.lines[1], { 'Alice', '30' })
+      eq(tab_state.lines[2], { 'Bob', '25' })
+      eq(tab_state.lines[3], { 'Dave', '40' })
+    end)
+
+    it('clamps start_line to 3 (skips header and separator)', function()
+      local tab_state = setup_tab_state({
+        { 'Alice', '30' },
+        { 'Bob', '25' },
+      }, { 1, 2 })
+
+      -- Range includes header lines 1-3, should only delete data at line 3
+      tabular.delete_displayed_lines(fake_bufnr, 1, 3)
+
+      eq(#tab_state.lines, 1)
+      eq(tab_state.lines[1], { 'Bob', '25' })
+    end)
+
+    it('does nothing when range is entirely in header area', function()
+      local tab_state = setup_tab_state({
+        { 'Alice', '30' },
+      }, { 1 })
+
+      tabular.delete_displayed_lines(fake_bufnr, 1, 2)
+
+      eq(#tab_state.lines, 1)
+      eq(tab_state.lines[1], { 'Alice', '30' })
+    end)
+
+    it('does nothing for unknown bufnr', function()
+      setup_tab_state({
+        { 'Alice', '30' },
+      }, { 1 })
+
+      -- Should not error
+      tabular.delete_displayed_lines(12345, 3, 3)
+    end)
+  end)
+
+  describe('compare_ips', function()
+    it('compares IPs by first differing octet', function()
+      eq(tabular.compare_ips({ 10, 10, 42, 1 }, { 10, 10, 101, 214 }), -1)
+      eq(tabular.compare_ips({ 10, 10, 101, 214 }, { 10, 10, 42, 1 }), 1)
+    end)
+
+    it('returns 0 for equal IPs', function()
+      eq(tabular.compare_ips({ 10, 10, 42, 1 }, { 10, 10, 42, 1 }), 0)
+    end)
+
+    it('compares by later octets when earlier ones are equal', function()
+      eq(tabular.compare_ips({ 10, 10, 10, 1 }, { 10, 10, 10, 2 }), -1)
+      eq(tabular.compare_ips({ 10, 10, 10, 255 }, { 10, 10, 10, 1 }), 1)
+    end)
+
+    it('compares by first octet correctly', function()
+      eq(tabular.compare_ips({ 10, 0, 0, 0 }, { 172, 0, 0, 0 }), -1)
+      eq(tabular.compare_ips({ 192, 168, 1, 1 }, { 10, 0, 0, 1 }), 1)
+    end)
+  end)
 end)
