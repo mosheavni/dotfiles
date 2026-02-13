@@ -329,6 +329,53 @@ function M.display_table(tabular_command, delimiter)
   }
 end
 
+--- Size suffix multipliers for file size parsing
+M.size_multipliers = {
+  -- Binary (IEC) suffixes
+  ['Ki'] = 1024,
+  ['Mi'] = 1024 ^ 2,
+  ['Gi'] = 1024 ^ 3,
+  ['Ti'] = 1024 ^ 4,
+  ['Pi'] = 1024 ^ 5,
+  -- Short binary suffixes (e.g., Kubernetes style: 5Gi, 100Mi)
+  ['KiB'] = 1024,
+  ['MiB'] = 1024 ^ 2,
+  ['GiB'] = 1024 ^ 3,
+  ['TiB'] = 1024 ^ 4,
+  ['PiB'] = 1024 ^ 5,
+  -- Decimal (SI) suffixes
+  ['K'] = 1000,
+  ['M'] = 1000 ^ 2,
+  ['G'] = 1000 ^ 3,
+  ['T'] = 1000 ^ 4,
+  ['P'] = 1000 ^ 5,
+  ['KB'] = 1000,
+  ['MB'] = 1000 ^ 2,
+  ['GB'] = 1000 ^ 3,
+  ['TB'] = 1000 ^ 4,
+  ['PB'] = 1000 ^ 5,
+  -- Byte
+  ['B'] = 1,
+}
+
+--- Parses a file size string into a numeric byte value
+--- @param str string: The string to parse (e.g., "5Gi", "100MB", "2.5 TiB")
+--- @return number|nil: The size in bytes, or nil if not a valid size string
+function M.parse_size(str)
+  if not str or str == '' then
+    return nil
+  end
+  local num, suffix = str:match '^(%d+%.?%d*)%s*(%a+)$'
+  if not num or not suffix then
+    return nil
+  end
+  local multiplier = M.size_multipliers[suffix]
+  if not multiplier then
+    return nil
+  end
+  return tonumber(num) * multiplier
+end
+
 function M.sort_by_column(col_index, direction)
   local current_bufnr = vim.api.nvim_get_current_buf()
   local tab_state = M.find_tab_state_by_bufnr(current_bufnr)
@@ -360,6 +407,17 @@ function M.sort_by_column(col_index, direction)
     end
     if val_b:find ',' then
       val_b = val_b:gsub('(%d+),(%d+)', '%1%2')
+    end
+
+    -- Try to parse as file sizes (e.g., "5Gi", "100Mi", "2.5TB")
+    local size_a = M.parse_size(val_a)
+    local size_b = M.parse_size(val_b)
+    if size_a and size_b then
+      if tab_state.sort_direction == 1 then
+        return size_a < size_b
+      else
+        return size_a > size_b
+      end
     end
 
     -- Try to convert to numbers if possible
