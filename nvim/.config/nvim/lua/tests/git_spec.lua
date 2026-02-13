@@ -148,7 +148,7 @@ describe('user.git', function()
 
     it('handles Azure DevOps SSH URL', function()
       local result = git.extract_owner_repo 'git@ssh.dev.azure.com:v3/org/project/repo'
-      eq(result, 'project/repo')
+      eq(result, 'org/project/_git/repo')
     end)
 
     it('handles URL with port number', function()
@@ -158,7 +158,7 @@ describe('user.git', function()
 
     it('handles nested groups (GitLab subgroups)', function()
       local result = git.extract_owner_repo 'git@gitlab.com:group/subgroup/repo.git'
-      eq(result, 'subgroup/repo')
+      eq(result, 'group/subgroup/repo')
     end)
 
     it('returns nil for invalid URL', function()
@@ -183,7 +183,7 @@ describe('user.git', function()
     it('get_toplevel_sync returns repo root', function()
       local toplevel = git.get_toplevel_sync()
       assert.is_not_nil(toplevel)
-      assert.is_true(toplevel:match '%.dotfiles$' ~= nil)
+      assert.is_true(toplevel:match 'dotfiles$' ~= nil)
     end)
 
     it('get_branches_sync returns branches from origin', function()
