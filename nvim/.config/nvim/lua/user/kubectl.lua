@@ -79,6 +79,9 @@ end)
 
 -- open ALB on AWS console
 M.ingresses.select = function(name, ns)
+  if not (name and ns) then
+    return
+  end
   local gvk = require('kubectl.resources.ingresses').definition.gvk
   commands.run_async('get_single_async', {
     gvk = gvk,
@@ -128,6 +131,9 @@ end
 
 -- view Secret of the ServiceAccount
 M.serviceaccounts.select = function(name, ns)
+  if not (name and ns) then
+    return
+  end
   local gvk = require('kubectl.resources.serviceaccounts').definition.gvk
   local client = require 'kubectl.client'
   local sa = client.get_single(vim.json.encode { gvk = gvk, namespace = ns, name = name, output = 'Json' })
@@ -157,6 +163,9 @@ end
 
 -- view ExternalSecrets of the ClusterSecretStore
 M['clustersecretstores.external-secrets.io'].select = function(name)
+  if not name then
+    return
+  end
   require('kubectl.state').filter_key = 'spec.secretStoreRef.name=' .. name .. ',spec.secretStoreRef.kind=ClusterSecretStore'
   require('kubectl.state').filter = ''
   require('kubectl.resources.fallback').View(nil, 'externalsecrets.external-secrets.io')
@@ -164,6 +173,9 @@ end
 
 -- view Secret of ExternalSecret
 M['externalsecrets.external-secrets.io'].select = function(name, ns)
+  if not (name and ns) then
+    return
+  end
   local gvk = require('kubectl.resources.fallback').definition.gvk
   local client = require 'kubectl.client'
   local es = client.get_single(vim.json.encode { gvk = gvk, namespace = ns, name = name, output = 'Json' })
@@ -178,12 +190,18 @@ end
 
 -- view CertificateRequests of the Certificate
 M['certificates.cert-manager.io'].select = function(name, ns)
+  if not (name and ns) then
+    return
+  end
   require('kubectl.state').filter_key = 'metadata.ownerReferences.name=' .. name .. ',metadata.ownerReferences.kind=Certificate,metadata.namespace=' .. ns
   require('kubectl.state').filter = ''
   require('kubectl.resources.fallback').View(nil, 'certificaterequests.cert-manager.io')
 end
 
 M['scaledobjects.keda.sh'].select = function(name, ns)
+  if not (name and ns) then
+    return
+  end
   local gvk = require('kubectl.resources.fallback').definition.gvk
   local client = require 'kubectl.client'
   local so = client.get_single(vim.json.encode { gvk = gvk, namespace = ns, name = name, output = 'Json' })
@@ -218,6 +236,9 @@ M['scaledobjects.keda.sh'].select = function(name, ns)
 end
 
 M['targetgroupbindings.elbv2.k8s.aws'].select = function(name, ns)
+  if not (name and ns) then
+    return
+  end
   local gvk = require('kubectl.resources.fallback').definition.gvk
   local client = require 'kubectl.client'
   local tgb = client.get_single(vim.json.encode { gvk = gvk, namespace = ns, name = name, output = 'Json' })
@@ -235,6 +256,9 @@ M['targetgroupbindings.elbv2.k8s.aws'].select = function(name, ns)
 end
 
 M['prometheuses.monitoring.coreos.com'].select = function(name, ns)
+  if not (name and ns) then
+    return
+  end
   local gvk = require('kubectl.resources.fallback').definition.gvk
   local client = require 'kubectl.client'
   local prometheus = client.get_single(vim.json.encode { gvk = gvk, namespace = ns, name = name, output = 'Json' })
