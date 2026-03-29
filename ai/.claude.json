@@ -1,51 +1,52 @@
 {
-  "numStartups": 124,
+  "numStartups": 141,
   "installMethod": "native",
   "autoUpdates": false,
   "theme": "dark-daltonized",
   "hasSeenTasksHint": true,
   "tipsHistory": {
     "new-user-warmup": 10,
-    "plan-mode-for-complex-tasks": 108,
+    "plan-mode-for-complex-tasks": 130,
     "terminal-setup": 1,
     "shift-enter-setup": 1,
-    "memory-command": 122,
-    "theme-command": 121,
+    "memory-command": 137,
+    "theme-command": 141,
     "status-line": 26,
     "stickers-command": 102,
     "prompt-queue": 3,
     "enter-to-steer-in-relatime": 124,
     "todo-list": 124,
-    "ide-upsell-external-terminal": 121,
+    "ide-upsell-external-terminal": 139,
     "# for memory": 34,
-    "install-github-app": 117,
-    "drag-and-drop-images": 117,
-    "paste-images-mac": 118,
-    "double-esc-code-restore": 118,
-    "continue": 118,
-    "shift-tab": 118,
-    "image-paste": 104,
+    "install-github-app": 137,
+    "drag-and-drop-images": 137,
+    "paste-images-mac": 139,
+    "double-esc-code-restore": 139,
+    "continue": 139,
+    "shift-tab": 139,
+    "image-paste": 124,
     "tab-toggle-thinking": 26,
     "ultrathink-keyword": 100,
-    "shift-enter": 117,
-    "custom-agents": 113,
-    "default-permission-mode-config": 114,
-    "permissions": 114,
-    "custom-commands": 118,
-    "frontend-design-plugin": 41,
-    "rename-conversation": 110,
+    "shift-enter": 137,
+    "custom-agents": 128,
+    "default-permission-mode-config": 135,
+    "permissions": 135,
+    "custom-commands": 133,
+    "frontend-design-plugin": 133,
+    "rename-conversation": 141,
     "config-thinking-mode": 87,
-    "install-slack-app": 120,
+    "install-slack-app": 140,
     "btw-side-question": 81,
-    "desktop-app": 113,
-    "web-app": 113,
-    "mobile-app": 113,
-    "git-worktrees": 123,
-    "guest-passes": 121,
-    "agent-flag": 124
+    "desktop-app": 128,
+    "web-app": 128,
+    "mobile-app": 129,
+    "git-worktrees": 133,
+    "guest-passes": 127,
+    "agent-flag": 139,
+    "overage-promo": 136,
+    "feedback-command": 138
   },
-  "promptQueueUseCount": 65,
-  "showExpandedTodos": true,
+  "promptQueueUseCount": 69,
   "cachedStatsigGates": {
     "tengu_tool_pear": false,
     "tengu_disable_bypass_permissions_mode": false,
@@ -86,9 +87,10 @@
     "tengu_accept_with_feedback": true,
     "tengu_tool_result_persistence": false,
     "tengu_1p_event_batch_config": {
-      "scheduledDelayMillis": 5000,
-      "maxExportBatchSize": 200,
-      "maxQueueSize": 8192
+      "scheduledDelayMillis": 10000,
+      "maxExportBatchSize": 400,
+      "maxQueueSize": 8192,
+      "path": "/api/event_logging/v2/batch"
     },
     "tengu_scratch": false,
     "tengu_log_segment_events": false,
@@ -99,8 +101,10 @@
       "color": ""
     },
     "tengu_post_compact_survey": false,
-    "tengu_streaming_tool_execution2": false,
-    "tengu_tool_search_unsupported_models": ["haiku"],
+    "tengu_streaming_tool_execution2": true,
+    "tengu_tool_search_unsupported_models": [
+      "haiku"
+    ],
     "tengu_permission_explainer": true,
     "tengu_code_diff_cli": true,
     "enhanced_telemetry_beta": false,
@@ -109,15 +113,107 @@
     "tengu_bash_haiku_prefetch": true,
     "tengu_chrome_auto_enable": false,
     "tengu_keybinding_customization": false,
-    "tengu_claudeai_mcp_connectors": false,
+    "tengu_claudeai_mcp_connectors": true,
     "tengu_plank_river_frost": "user_intent",
     "tengu_brass_pebble": false,
     "tengu_attribution_header": true,
-    "tengu_cache_plum_violet": false
+    "tengu_cache_plum_violet": true,
+    "tengu_plum_vx3": true,
+    "tengu_marble_anvil": true,
+    "tengu_scarf_coffee": false,
+    "tengu_keybinding_customization_release": true,
+    "tengu_pr_status_cli": true,
+    "tengu_system_prompt_global_cache": true,
+    "tengu_workout": false,
+    "tengu_coral_fern": true,
+    "tengu_tst_kx7": false,
+    "tengu_marble_kite": false,
+    "tengu_cork_m4q": true,
+    "tengu_kv7_prompt_sort": false,
+    "tengu_file_write_optimization": true,
+    "tengu_oboe": true,
+    "tengu_penguins_enabled": true,
+    "tengu_chomp_inflection": false,
+    "tengu_workout2": true,
+    "tengu_penguins_off": null,
+    "tengu_silver_lantern": false,
+    "tengu_copper_lantern": false,
+    "tengu_tst_names_in_messages": false,
+    "tengu_vinteuil_phrase": true,
+    "tengu_copper_lantern_config": {
+      "meridian": "2026-02-05T07:59:00Z"
+    },
+    "tengu_sm_compact": false,
+    "tengu_compact_cache_prefix": true,
+    "tengu_compact_streaming_retry": false,
+    "tengu_mcp_elicitation": false,
+    "tengu_bergotte_lantern": false,
+    "tengu_snippet_save": false,
+    "tengu_fgts": false,
+    "tengu_mulberry_fog": false,
+    "tengu_prompt_cache_1h_config": {
+      "allowlist": [
+        "repl_main_thread*",
+        "sdk",
+        "auto_mode"
+      ]
+    },
+    "tengu_immediate_model_command": false,
+    "tengu_birthday_hat": false,
+    "tengu_amber_prism": false,
+    "tengu_kairos_cron": true,
+    "tengu_frond_boric": {},
+    "tengu_quiet_hollow": true,
+    "tengu_herring_clock": false,
+    "tengu_marble_whisper": false,
+    "tengu_kairos_brief_config": {
+      "enable_slash_command": false
+    },
+    "tengu_amber_quartz": true,
+    "tengu_ccr_bridge": true,
+    "tengu_grey_wool": true,
+    "tengu_auto_mode_config": {
+      "enabled": "disabled",
+      "twoStageClassifier": true
+    },
+    "tengu_cicada_nap_ms": 0,
+    "tengu_miraculo_the_bard": false,
+    "tengu_miraculo_the_bard2": false,
+    "tengu_paper_halyard": false,
+    "tengu_granite_whisper": false,
+    "tengu_desktop_upsell": {
+      "enable_shortcut_tip": false,
+      "enable_startup_dialog": false
+    },
+    "tengu_streaming_text": false,
+    "tengu_turtle_carbon": true,
+    "tengu_pebble_leaf_prune": false,
+    "tengu_glacier_2xr": false,
+    "tengu_basalt_3kr": false,
+    "tengu_swinburne_dune": true,
+    "tengu_sotto_voce": true,
+    "tengu_moth_copse": false,
+    "tengu_defer_all_bn4": false,
+    "tengu_toolref_defer_j8m": false,
+    "tengu_tst_hint_m7r": false,
+    "tengu_satin_quoll": {},
+    "tengu_tool_input_aliasing": false,
+    "tengu_tight_weave": true,
+    "tengu_auto_background_agents": false,
+    "tengu_destructive_command_warning": false,
+    "tengu_orchid_trellis": false,
+    "tengu_marble_whisper2": true,
+    "tengu_hawthorn_steeple": false,
+    "tengu_collage_kaleidoscope": false,
+    "tengu_chair_sermon": false
   },
   "mcpServers": {
     "aws-knowledge-mcp-server": {
-      "args": ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"],
+      "args": [
+        "fastmcp",
+        "run",
+        "https://knowledge-mcp.global.api.aws"
+      ],
       "autoApprove": [
         "aws___get_regional_availability",
         "aws___list_regions",
@@ -128,11 +224,15 @@
       "command": "uvx"
     },
     "awslabs.aws-api-mcp-server": {
-      "args": ["awslabs.aws-api-mcp-server@latest"],
+      "args": [
+        "awslabs.aws-api-mcp-server@latest"
+      ],
       "command": "uvx"
     },
     "awslabs.cloudwatch-mcp-server": {
-      "args": ["awslabs.cloudwatch-mcp-server@latest"],
+      "args": [
+        "awslabs.cloudwatch-mcp-server@latest"
+      ],
       "autoApprove": [],
       "command": "uvx",
       "disabled": false,
@@ -155,11 +255,15 @@
       }
     },
     "fetch": {
-      "args": ["mcp-server-fetch"],
+      "args": [
+        "mcp-server-fetch"
+      ],
       "command": "uvx"
     },
     "kubernetes": {
-      "args": ["mcp-server-kubernetes"],
+      "args": [
+        "mcp-server-kubernetes"
+      ],
       "autoApprove": [
         "explain_resource",
         "kubectl_describe",
@@ -174,7 +278,10 @@
       }
     },
     "memory": {
-      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
       "autoApprove": [
         "create_entities",
         "create_relations",
@@ -189,11 +296,17 @@
       "command": "npx"
     },
     "puppeteer": {
-      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ],
       "command": "npx"
     },
     "selenium": {
-      "args": ["-y", "@angiejones/mcp-selenium"],
+      "args": [
+        "-y",
+        "@angiejones/mcp-selenium"
+      ],
       "autoApprove": [
         "take_screenshot",
         "start_browser",
@@ -214,8 +327,13 @@
       "disabled_tools": []
     },
     "sequentialthinking": {
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
-      "autoApprove": ["sequentialthinking"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "autoApprove": [
+        "sequentialthinking"
+      ],
       "command": "npx"
     }
   },
@@ -223,7 +341,7 @@
   "firstStartTime": "2025-11-20T12:04:54.863Z",
   "userID": "f202daa52b396183541b780acfe3a048ba34c7d6f004f666e7f8434206e5af7b",
   "sonnet45MigrationComplete": true,
-  "changelogLastFetched": 1769419053063,
+  "changelogLastFetched": 1773315462393,
   "autoUpdatesProtectedForNative": true,
   "claudeCodeFirstTokenDate": "2025-07-16T13:49:40.829506Z",
   "shiftEnterKeyBindingInstalled": true,
@@ -255,7 +373,9 @@
       ],
       "exampleFilesGeneratedAt": 1763641870072,
       "lastTotalWebSearchRequests": 0,
-      "disabledMcpServers": ["sentry"],
+      "disabledMcpServers": [
+        "sentry"
+      ],
       "hasCompletedProjectOnboarding": true,
       "lastCost": 0.220874,
       "lastAPIDuration": 71465,
@@ -280,25 +400,25 @@
       "hasClaudeMdExternalIncludesApproved": false,
       "hasClaudeMdExternalIncludesWarningShown": false,
       "exampleFiles": [
+        "lazy-lock.json",
         "lsp.lua",
         "keymaps.lua",
-        "options.lua",
-        "kubectl.lua",
-        "ai.lua"
+        "config.lua",
+        ".zshrc"
       ],
-      "exampleFilesGeneratedAt": 1768890437416,
+      "exampleFilesGeneratedAt": 1773157740711,
       "lastTotalWebSearchRequests": 0,
-      "lastCost": 0.16937424999999998,
-      "lastAPIDuration": 29543,
-      "lastToolDuration": 53098,
-      "lastDuration": 124742,
-      "lastLinesAdded": 0,
-      "lastLinesRemoved": 0,
-      "lastTotalInputTokens": 1415,
-      "lastTotalOutputTokens": 1173,
-      "lastTotalCacheCreationInputTokens": 14551,
-      "lastTotalCacheReadInputTokens": 93117,
-      "lastSessionId": "079a31fb-b23d-4ee8-b37b-2044b90fdffa",
+      "lastCost": 0.28486275,
+      "lastAPIDuration": 84698,
+      "lastToolDuration": 5062,
+      "lastDuration": 301897,
+      "lastLinesAdded": 6,
+      "lastLinesRemoved": 27,
+      "lastTotalInputTokens": 12,
+      "lastTotalOutputTokens": 3934,
+      "lastTotalCacheCreationInputTokens": 34757,
+      "lastTotalCacheReadInputTokens": 318260,
+      "lastSessionId": "9c6422a7-9690-4d0d-b8b1-b0c414c1a456",
       "reactVulnerabilityCache": {
         "detected": false,
         "package": null,
@@ -306,26 +426,44 @@
         "version": null,
         "packageManager": null
       },
-      "lastAPIDurationWithoutRetries": 29525,
+      "lastAPIDurationWithoutRetries": 84697,
       "lastModelUsage": {
-        "claude-haiku-4-5-20251001": {
-          "inputTokens": 992,
-          "outputTokens": 28,
-          "cacheReadInputTokens": 0,
-          "cacheCreationInputTokens": 0,
+        "claude-sonnet-4-6": {
+          "inputTokens": 12,
+          "outputTokens": 3934,
+          "cacheReadInputTokens": 318260,
+          "cacheCreationInputTokens": 34757,
           "webSearchRequests": 0,
-          "costUSD": 0.001132
-        },
-        "claude-opus-4-5-20251101": {
-          "inputTokens": 423,
-          "outputTokens": 1145,
-          "cacheReadInputTokens": 93117,
-          "cacheCreationInputTokens": 14551,
-          "webSearchRequests": 0,
-          "costUSD": 0.16824225
+          "costUSD": 0.28486275
         }
       },
-      "disabledMcpServers": []
+      "disabledMcpServers": [],
+      "hasCompletedProjectOnboarding": true,
+      "lastFpsAverage": 6.4,
+      "lastFpsLow1Pct": 359.31,
+      "lastSessionMetrics": {
+        "frame_duration_ms_count": 1930,
+        "frame_duration_ms_min": 0.0240839999896707,
+        "frame_duration_ms_max": 11.479041999962647,
+        "frame_duration_ms_avg": 0.4478888512951683,
+        "frame_duration_ms_p50": 0.3080835000000661,
+        "frame_duration_ms_p95": 1.23396069999726,
+        "frame_duration_ms_p99": 2.0924635900135033,
+        "hook_duration_ms_count": 11,
+        "hook_duration_ms_min": 86,
+        "hook_duration_ms_max": 165,
+        "hook_duration_ms_avg": 109.54545454545455,
+        "hook_duration_ms_p50": 99,
+        "hook_duration_ms_p95": 154,
+        "hook_duration_ms_p99": 162.8,
+        "pre_tool_hook_duration_ms_count": 11,
+        "pre_tool_hook_duration_ms_min": 0,
+        "pre_tool_hook_duration_ms_max": 0,
+        "pre_tool_hook_duration_ms_avg": 0,
+        "pre_tool_hook_duration_ms_p50": 0,
+        "pre_tool_hook_duration_ms_p95": 0,
+        "pre_tool_hook_duration_ms_p99": 0
+      }
     },
     "/Users/Moshe.Avni/Repos/terraform": {
       "allowedTools": [],
@@ -334,29 +472,65 @@
       "enabledMcpjsonServers": [],
       "disabledMcpjsonServers": [],
       "hasTrustDialogAccepted": true,
-      "projectOnboardingSeenCount": 1,
+      "projectOnboardingSeenCount": 4,
       "hasClaudeMdExternalIncludesApproved": false,
       "hasClaudeMdExternalIncludesWarningShown": false,
       "exampleFiles": [
         "microservices.tf",
         "weighted-traffic.tf",
-        "ecr-repos.tf",
         "iam.tf",
+        "ecr-repos.tf",
         "data.tf"
       ],
-      "exampleFilesGeneratedAt": 1764152614417,
-      "lastCost": 2.5839598,
-      "lastAPIDuration": 1614757,
-      "lastToolDuration": 1703,
-      "lastDuration": 80779850,
-      "lastLinesAdded": 3336,
-      "lastLinesRemoved": 302,
-      "lastTotalInputTokens": 4847,
-      "lastTotalOutputTokens": 69988,
-      "lastTotalCacheCreationInputTokens": 165536,
-      "lastTotalCacheReadInputTokens": 3029936,
+      "exampleFilesGeneratedAt": 1773315464500,
+      "lastCost": 0.26197035,
+      "lastAPIDuration": 118245,
+      "lastToolDuration": 29135,
+      "lastDuration": 7691774,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 25,
+      "lastTotalOutputTokens": 2512,
+      "lastTotalCacheCreationInputTokens": 31891,
+      "lastTotalCacheReadInputTokens": 348747,
       "lastTotalWebSearchRequests": 0,
-      "lastSessionId": "96ba8612-0dfd-45e2-9c36-59db144c7eb3"
+      "lastSessionId": "ee2894a6-be09-450f-8640-f8d25ef62114",
+      "lastAPIDurationWithoutRetries": 118236,
+      "lastFpsAverage": 1.03,
+      "lastFpsLow1Pct": 427.41,
+      "lastModelUsage": {
+        "claude-sonnet-4-6": {
+          "inputTokens": 25,
+          "outputTokens": 2512,
+          "cacheReadInputTokens": 348747,
+          "cacheCreationInputTokens": 31891,
+          "webSearchRequests": 0,
+          "costUSD": 0.26197035
+        }
+      },
+      "lastSessionMetrics": {
+        "frame_duration_ms_count": 3165,
+        "frame_duration_ms_min": 0.034416999988025054,
+        "frame_duration_ms_max": 21.78762499988079,
+        "frame_duration_ms_avg": 0.4445922774091646,
+        "frame_duration_ms_p50": 0.327916499983985,
+        "frame_duration_ms_p95": 1.1579517999882218,
+        "frame_duration_ms_p99": 1.771041590011154,
+        "hook_duration_ms_count": 17,
+        "hook_duration_ms_min": 115,
+        "hook_duration_ms_max": 791,
+        "hook_duration_ms_avg": 174.76470588235293,
+        "hook_duration_ms_p50": 134,
+        "hook_duration_ms_p95": 283.79999999999956,
+        "hook_duration_ms_p99": 689.56,
+        "pre_tool_hook_duration_ms_count": 16,
+        "pre_tool_hook_duration_ms_min": 0,
+        "pre_tool_hook_duration_ms_max": 0,
+        "pre_tool_hook_duration_ms_avg": 0,
+        "pre_tool_hook_duration_ms_p50": 0,
+        "pre_tool_hook_duration_ms_p95": 0,
+        "pre_tool_hook_duration_ms_p99": 0
+      }
     },
     "/Users/Moshe.Avni/.local/share/nvim/lazy/lualine.nvim": {
       "allowedTools": [],
@@ -505,17 +679,17 @@
       "enabledMcpjsonServers": [],
       "disabledMcpjsonServers": [],
       "hasTrustDialogAccepted": true,
-      "projectOnboardingSeenCount": 0,
+      "projectOnboardingSeenCount": 1,
       "hasClaudeMdExternalIncludesApproved": false,
       "hasClaudeMdExternalIncludesWarningShown": false,
       "exampleFiles": [
         "spotinst-gateway.yaml",
+        "jenkins.yaml",
         "validate-confs.py",
         "argo-cd.yaml",
-        "spotinst-monitor.yaml",
         "spotinst-api.yaml"
       ],
-      "exampleFilesGeneratedAt": 1766652874206,
+      "exampleFilesGeneratedAt": 1770646965609,
       "lastCost": 0.39060065000000005,
       "lastAPIDuration": 87818,
       "lastToolDuration": 1103,
@@ -676,42 +850,36 @@
         "mappings.lua",
         "init.lua",
         "resourcebuilder.lua",
-        "tables.lua",
-        "buffers.lua"
+        "buffers.lua",
+        "config.lua"
       ],
-      "exampleFilesGeneratedAt": 1767514241334,
+      "exampleFilesGeneratedAt": 1770646526108,
       "hasCompletedProjectOnboarding": true,
-      "lastCost": 43.36653929999998,
-      "lastAPIDuration": 6037818,
-      "lastAPIDurationWithoutRetries": 6030772,
-      "lastToolDuration": 472079,
-      "lastDuration": 97311055,
-      "lastLinesAdded": 1365,
-      "lastLinesRemoved": 574,
-      "lastTotalInputTokens": 152831,
-      "lastTotalOutputTokens": 274733,
-      "lastTotalCacheCreationInputTokens": 2633906,
-      "lastTotalCacheReadInputTokens": 48919722,
+      "lastCost": 0.0018539999999999997,
+      "lastAPIDuration": 1535,
+      "lastAPIDurationWithoutRetries": 1517,
+      "lastToolDuration": 0,
+      "lastDuration": 438547,
+      "lastLinesAdded": 0,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 1664,
+      "lastTotalOutputTokens": 38,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 0,
       "lastTotalWebSearchRequests": 0,
       "lastModelUsage": {
         "claude-haiku-4-5-20251001": {
-          "inputTokens": 144901,
-          "outputTokens": 32012,
-          "cacheReadInputTokens": 4062013,
-          "cacheCreationInputTokens": 468613,
+          "inputTokens": 1664,
+          "outputTokens": 38,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
           "webSearchRequests": 0,
-          "costUSD": 1.2969285499999987
-        },
-        "claude-opus-4-5-20251101": {
-          "inputTokens": 7930,
-          "outputTokens": 242721,
-          "cacheReadInputTokens": 44857709,
-          "cacheCreationInputTokens": 2165293,
-          "webSearchRequests": 0,
-          "costUSD": 42.069610749999974
+          "costUSD": 0.0018539999999999997
         }
       },
-      "lastSessionId": "7389fdd0-ca6c-4237-8adb-1ed240ecea07"
+      "lastSessionId": "a697f24b-11f6-41bf-9f83-48422230fca2",
+      "lastFpsAverage": 2.08,
+      "lastFpsLow1Pct": 401.43
     },
     "/Users/Moshe.Avni/.config/lightvim": {
       "allowedTools": [],
@@ -1008,44 +1176,46 @@
         "packageManager": null
       },
       "exampleFiles": [
+        "package.json",
         "aws.js",
         "initiator.js",
-        "constants.js",
-        "instance.js",
+        "index.js",
         "volume.js"
       ],
-      "exampleFilesGeneratedAt": 1767629045841,
-      "lastCost": 5.445876500000001,
-      "lastAPIDuration": 1168245,
-      "lastAPIDurationWithoutRetries": 1168080,
-      "lastToolDuration": 418805,
-      "lastDuration": 72563941,
-      "lastLinesAdded": 771,
-      "lastLinesRemoved": 290,
-      "lastTotalInputTokens": 39755,
-      "lastTotalOutputTokens": 56431,
-      "lastTotalCacheCreationInputTokens": 903044,
-      "lastTotalCacheReadInputTokens": 5748804,
+      "exampleFilesGeneratedAt": 1770025131671,
+      "lastCost": 0.8699759999999999,
+      "lastAPIDuration": 200295,
+      "lastAPIDurationWithoutRetries": 200277,
+      "lastToolDuration": 110488,
+      "lastDuration": 5006145,
+      "lastLinesAdded": 7,
+      "lastLinesRemoved": 0,
+      "lastTotalInputTokens": 19920,
+      "lastTotalOutputTokens": 10065,
+      "lastTotalCacheCreationInputTokens": 143170,
+      "lastTotalCacheReadInputTokens": 2256801,
       "lastTotalWebSearchRequests": 0,
       "lastModelUsage": {
         "claude-haiku-4-5-20251001": {
-          "inputTokens": 31615,
-          "outputTokens": 8890,
-          "cacheReadInputTokens": 1269811,
-          "cacheCreationInputTokens": 89927,
+          "inputTokens": 19826,
+          "outputTokens": 6953,
+          "cacheReadInputTokens": 2025170,
+          "cacheCreationInputTokens": 95206,
           "webSearchRequests": 0,
-          "costUSD": 0.31545485
+          "costUSD": 0.3761155000000001
         },
-        "claude-sonnet-4-5-20250929": {
-          "inputTokens": 8140,
-          "outputTokens": 47541,
-          "cacheReadInputTokens": 4478993,
-          "cacheCreationInputTokens": 813117,
+        "claude-opus-4-5-20251101": {
+          "inputTokens": 94,
+          "outputTokens": 3112,
+          "cacheReadInputTokens": 231631,
+          "cacheCreationInputTokens": 47964,
           "webSearchRequests": 0,
-          "costUSD": 5.13042165
+          "costUSD": 0.4938605
         }
       },
-      "lastSessionId": "a8f47375-6aaa-4104-b9da-b71174a25a61"
+      "lastSessionId": "12fdc0db-700f-4a1a-a857-94696a666d86",
+      "lastFpsAverage": 6.85,
+      "lastFpsLow1Pct": 35.55
     },
     "/Users/Moshe.Avni/Repos/duplicate-photos-ios": {
       "allowedTools": [],
@@ -1310,29 +1480,168 @@
       "lastTotalWebSearchRequests": 0,
       "lastModelUsage": {},
       "lastSessionId": "c0ef76e2-d655-437a-8ed2-f4b8ca16a1e2"
+    },
+    "/Users/Moshe.Avni/Repos/terraform-modules": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 2,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "reactVulnerabilityCache": {
+        "detected": false,
+        "package": null,
+        "packageName": null,
+        "version": null,
+        "packageManager": null
+      },
+      "exampleFiles": [
+        "variables.tf",
+        "iam-irsa.tf",
+        "aurora.tf",
+        "eks.tf",
+        "s3-bucket.tf"
+      ],
+      "exampleFilesGeneratedAt": 1770799963625
+    },
+    "/Users/Moshe.Avni/my-video": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 1,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "exampleFiles": [],
+      "lastCost": 1.624875,
+      "lastAPIDuration": 350298,
+      "lastAPIDurationWithoutRetries": 350275,
+      "lastToolDuration": 48397,
+      "lastDuration": 1063020,
+      "lastLinesAdded": 1395,
+      "lastLinesRemoved": 5,
+      "lastTotalInputTokens": 23221,
+      "lastTotalOutputTokens": 21818,
+      "lastTotalCacheCreationInputTokens": 79526,
+      "lastTotalCacheReadInputTokens": 1270989,
+      "lastTotalWebSearchRequests": 0,
+      "lastFpsAverage": 6.45,
+      "lastFpsLow1Pct": 116.24,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "inputTokens": 23183,
+          "outputTokens": 807,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 12068,
+          "webSearchRequests": 0,
+          "costUSD": 0.04230300000000001
+        },
+        "claude-opus-4-6": {
+          "inputTokens": 38,
+          "outputTokens": 21011,
+          "cacheReadInputTokens": 1270989,
+          "cacheCreationInputTokens": 67458,
+          "webSearchRequests": 0,
+          "costUSD": 1.582572
+        }
+      },
+      "lastSessionId": "0ca7bc96-96fc-4bb1-8bf0-4a83319c2bae",
+      "lastSessionMetrics": {
+        "frame_duration_ms_count": 6844,
+        "frame_duration_ms_min": 0.11791600001743063,
+        "frame_duration_ms_max": 20.07637500000419,
+        "frame_duration_ms_avg": 1.4030248223260016,
+        "frame_duration_ms_p50": 0.9293960000068182,
+        "frame_duration_ms_p95": 3.3891723499749746,
+        "frame_duration_ms_p99": 8.56428016001591
+      }
+    },
+    "/Users/Moshe.Avni/psytrance-track": {
+      "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "lastCost": 3.212526999999999,
+      "lastAPIDuration": 1113571,
+      "lastAPIDurationWithoutRetries": 1113546,
+      "lastToolDuration": 156314,
+      "lastDuration": 177485835,
+      "lastLinesAdded": 1588,
+      "lastLinesRemoved": 589,
+      "lastTotalInputTokens": 9931,
+      "lastTotalOutputTokens": 62065,
+      "lastTotalCacheCreationInputTokens": 138212,
+      "lastTotalCacheReadInputTokens": 1576396,
+      "lastTotalWebSearchRequests": 0,
+      "lastFpsAverage": 2.25,
+      "lastFpsLow1Pct": 66.13,
+      "lastModelUsage": {
+        "claude-haiku-4-5-20251001": {
+          "inputTokens": 8414,
+          "outputTokens": 356,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.010193999999999998
+        },
+        "claude-opus-4-6": {
+          "inputTokens": 1517,
+          "outputTokens": 61709,
+          "cacheReadInputTokens": 1576396,
+          "cacheCreationInputTokens": 138212,
+          "webSearchRequests": 0,
+          "costUSD": 3.2023329999999985
+        }
+      },
+      "lastSessionId": "7376b568-70fb-4736-8159-f46f74b7a735",
+      "lastSessionMetrics": {
+        "frame_duration_ms_count": 18131,
+        "frame_duration_ms_min": 0.20666700000015226,
+        "frame_duration_ms_max": 214.5492920000106,
+        "frame_duration_ms_avg": 3.4965551846007474,
+        "frame_duration_ms_p50": 1.4330415000440553,
+        "frame_duration_ms_p95": 6.235262399975896,
+        "frame_duration_ms_p99": 12.38823981988935
+      }
     }
   },
-  "lastReleaseNotesSeen": "2.1.19",
+  "lastReleaseNotesSeen": "2.1.74",
   "s1mAccessCache": {
     "3981bd4b-4502-4646-908b-bbc5d1ea573b": {
       "hasAccess": false,
       "hasAccessNotAsDefault": false,
-      "timestamp": 1769419052525
+      "timestamp": 1772704376965
     }
   },
-  "lastPlanModeUse": 1769415927076,
+  "lastPlanModeUse": 1773159840782,
   "hasUsedBackslashReturn": true,
   "githubRepoPaths": {
     "mosheavni/flight-calendar": [
       "/Users/Moshe.Avni/Repos/moshe/flight-calendar"
     ],
     "mosheavni/dotfiles": [
-      "/Users/Moshe.Avni/.dotfiles/nvim/.config/nvim",
-      "/Users/Moshe.Avni/.dotfiles"
+      "/Users/Moshe.Avni/.dotfiles",
+      "/Users/Moshe.Avni/.dotfiles/nvim/.config/nvim"
     ],
-    "mosheavni/lightvim": ["/Users/Moshe.Avni/.config/lightvim"],
-    "mvdan/sh": ["/Users/Moshe.Avni/Repos/sh"],
-    "spotinst/spotinst-gateway": ["/Users/Moshe.Avni/Repos/spotinst-gateway"],
+    "mosheavni/lightvim": [
+      "/Users/Moshe.Avni/.config/lightvim"
+    ],
+    "mvdan/sh": [
+      "/Users/Moshe.Avni/Repos/sh"
+    ],
+    "spotinst/spotinst-gateway": [
+      "/Users/Moshe.Avni/Repos/spotinst-gateway"
+    ],
     "mosheavni/duplicated-images": [
       "/Users/Moshe.Avni/Repos/duplicated-images"
     ],
@@ -1350,6 +1659,9 @@
     ],
     "mosheavni/search-replace.nvim": [
       "/Users/Moshe.Avni/Repos/search-replace.nvim"
+    ],
+    "mosheavni/kubectl.nvim": [
+      "/Users/Moshe.Avni/Repos/kubectl.nvim"
     ]
   },
   "hasIdeOnboardingBeenShown": {
@@ -1371,10 +1683,10 @@
     "emailAddress": "gatkees@gmail.com",
     "organizationUuid": "3981bd4b-4502-4646-908b-bbc5d1ea573b",
     "hasExtraUsageEnabled": true,
-    "displayName": "Moshe",
-    "organizationRole": "admin",
-    "workspaceRole": null,
-    "organizationName": "gatkees@gmail.com's Organization"
+    "billingType": "stripe_subscription",
+    "accountCreatedAt": "2024-09-21T18:02:56.926690Z",
+    "subscriptionCreatedAt": "2025-07-16T13:35:20.298464Z",
+    "displayName": "Moshe"
   },
   "passesEligibilityCache": {
     "3981bd4b-4502-4646-908b-bbc5d1ea573b": {
@@ -1385,13 +1697,14 @@
         "referral_link": "https://claude.ai/referral/b9CyF4h-Fg"
       },
       "referrer_reward": null,
-      "timestamp": 1769417157026
+      "remaining_passes": 3,
+      "timestamp": 1770025129896
     }
   },
   "groveConfigCache": {
     "a1cdda29-65b2-47b5-8962-0c4eda04f071": {
       "grove_enabled": true,
-      "timestamp": 1769419052241
+      "timestamp": 1773315463977
     }
   },
   "passesUpsellSeenCount": 4,
@@ -1399,8 +1712,30 @@
     "init": {
       "usageCount": 2,
       "lastUsedAt": 1768892720607
+    },
+    "gsd:update": {
+      "usageCount": 3,
+      "lastUsedAt": 1773158283280
+    },
+    "remotion-best-practices": {
+      "usageCount": 1,
+      "lastUsedAt": 1770828826786
     }
   },
   "opusProMigrationComplete": true,
-  "cachedChromeExtensionInstalled": true
+  "cachedChromeExtensionInstalled": true,
+  "penguinModeOrgEnabled": true,
+  "hasShownOpus46Notice": {
+    "3981bd4b-4502-4646-908b-bbc5d1ea573b": true
+  },
+  "clientDataCache": {
+    "data": {},
+    "timestamp": 1773159154847
+  },
+  "showSpinnerTree": false,
+  "opus46FeedSeenCount": 6,
+  "effortCalloutDismissed": true,
+  "sonnet1m45MigrationComplete": true,
+  "cachedExtraUsageDisabledReason": "out_of_credits",
+  "voiceNoticeSeenCount": 1
 }

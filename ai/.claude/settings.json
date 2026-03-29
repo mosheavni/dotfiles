@@ -9,6 +9,16 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/Moshe.Avni/.claude/hooks/gsd-context-monitor.js\""
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -21,5 +31,6 @@
     "lua-language-server@claude-code-lsps": true,
     "swift-lsp@claude-plugins-official": true
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "skipDangerousModePermissionPrompt": true
 }
