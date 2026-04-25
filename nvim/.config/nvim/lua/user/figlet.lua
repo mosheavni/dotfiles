@@ -67,13 +67,12 @@ local function download_font(font_name, font_dir, callback)
     local url = font_repo_url .. '/' .. vim.uri_encode(font_name, 'rfc2396') .. '.' .. ext
     local dest = vim.fs.joinpath(font_dir, font_name .. '.' .. ext)
 
-    vim.system({ 'curl', '-fsSL', '-o', dest, url }, {}, function(result)
+    vim.net.request(url, { outpath = dest }, function(err)
       vim.schedule(function()
-        if result.code == 0 then
+        if not err then
           vim.notify('Downloaded font: ' .. font_name, vim.log.levels.INFO)
           callback(true)
         else
-          -- Remove failed download attempt
           vim.fs.rm(dest, { force = true })
           ext_index = ext_index + 1
           try_download()

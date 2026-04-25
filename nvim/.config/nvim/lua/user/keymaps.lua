@@ -306,21 +306,23 @@ end, {})
 -- Where am I? --
 -----------------
 vim.api.nvim_create_user_command('Whereami', function()
-  local result = vim.system({ 'curl', '-s', 'http://ipconfig.io/json' }):wait()
-  vim.print('result: ' .. vim.inspect(result))
-  if result.code ~= 0 then
-    vim.notify('Failed to fetch location data', vim.log.levels.ERROR)
-    return
-  end
-  local country_data = vim.json.decode(result.stdout)
-  local iso = country_data.country_iso
-  local country = country_data.country
-  local emoji = require('user.utils').country_os_to_emoji(iso)
-  if not emoji then
-    emoji = '🌎'
-  end
-  local msg = string.format([[You're in %s %s]], country, emoji)
-  vim.notify(msg, vim.log.levels.INFO, { title = 'Where am I?', icon = emoji })
+  vim.net.request('http://ipconfig.io/json', {
+    verbose = true,
+  }, function(err, result)
+    if err then
+      vim.notify('Failed to fetch location data: ' .. err, vim.log.levels.ERROR)
+      return
+    end
+    local country_data = vim.json.decode(result.body)
+    local iso = country_data.country_iso
+    local country = country_data.country
+    local emoji = require('user.utils').country_os_to_emoji(iso)
+    if not emoji then
+      emoji = '🌎'
+    end
+    local msg = string.format([[You're in %s %s]], country, emoji)
+    vim.notify(msg, vim.log.levels.INFO, { title = 'Where am I?', icon = emoji })
+  end)
 end, {})
 
 ------------------------
