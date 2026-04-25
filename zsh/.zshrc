@@ -110,6 +110,6 @@ eval "$(starship init zsh)"
 export K8S_DEV=false
 export PR_REVIEW_DEV=false
 export YAMLC_DEV=false
-export SAR_DEV=true
+export SAR_DEV=false
 export CMP_COMPLETION='<C-Space>'
 export PJ_DIRS='~/Repos/,~/.dotfiles'
