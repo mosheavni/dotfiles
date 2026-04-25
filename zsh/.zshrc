@@ -81,7 +81,7 @@ zsh-defer -c '
 # Aliases and Functions #
 # ===================== #
 for ZSH_FILE in "${ZDOTDIR:-$HOME}"/zsh.d/*.zsh(N); do
-    source "${ZSH_FILE}"
+  source "${ZSH_FILE}"
 done
 [[ -f $HOME/corp-aliases.sh ]] && zsh-defer source $HOME/corp-aliases.sh
 
@@ -107,9 +107,9 @@ fi
 # Starship prompt (loaded synchronously as it's needed immediately)
 eval "$(starship init zsh)"
 
-export K8S_DEV=true
-export PR_REVIEW_DEV=true
-export YAMLC_DEV=true
+export K8S_DEV=false
+export PR_REVIEW_DEV=false
+export YAMLC_DEV=false
 export SAR_DEV=true
 export CMP_COMPLETION='<C-Space>'
-export PJ_DIRS='~/Repos/,~/.dotfiles,~/Repos/moshe/'
+export PJ_DIRS='~/Repos/,~/.dotfiles'

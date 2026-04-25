@@ -81,12 +81,12 @@ if wallpaper_file then
       },
       repeat_y = 'NoRepeat',
       hsb = {
-        brightness = 0.17,
+        brightness = 0.07,
         hue = 1.0,
         saturation = 1.0,
       },
       height = 'Cover',
-      width = 'Contain',
+      width = 'Cover',
       opacity = 1.0,
     },
   }
