@@ -56,7 +56,7 @@ function ecr-login() {
 function clone() {
   [[ -n "$DEBUG" ]] && set -x
   # Use GIT_DEFAULT_ORG environment variable
-  GIT_DEFAULT_ORG="${GIT_DEFAULT_ORG:-spotinst-private}"
+  GIT_DEFAULT_ORG="${GIT_DEFAULT_ORG:-mosheavni}"
   cd ~/Repos
   REPO=$1
   CD_INTO=$REPO
@@ -64,7 +64,7 @@ function clone() {
   if [[ $REPO == git@* || $REPO == https://* ]]; then
     git clone $REPO
     CD_INTO=$(sed 's/\.git$//' <<<"$REPO" | awk -F/ '{print $NF}')
-  # check if $REPO starts with $GIT_DEFAULT_ORG/ (e.g., spotinst-private/repo)
+  # check if $REPO starts with $GIT_DEFAULT_ORG/ (e.g., spotinst/repo)
   elif [[ $REPO == ${GIT_DEFAULT_ORG}/* ]]; then
     git clone git@github.com:${REPO}.git
     CD_INTO=$(awk -F'/' '{print $2}' <<<$REPO)
