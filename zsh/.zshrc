@@ -71,12 +71,6 @@ export MANPAGER='nvim +Man!'
 export cdpath=(. ~ ~/Repos)
 export TMPDIR=$HOME/tmp
 
-# zsh gh copilot configuration
-zsh-defer -c '
-  bindkey "^[|" zsh_gh_copilot_explain
-  bindkey "^[\\" zsh_gh_copilot_suggest
-'
-
 # ===================== #
 # Aliases and Functions #
 # ===================== #

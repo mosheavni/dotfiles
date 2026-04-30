@@ -88,21 +88,9 @@
    $(brew --prefix)/opt/fzf/install
    ```
 
-9. Login to gh cli
+9. ???
 
-   ```bash
-   gh auth login --web -h github.com
-   ```
-
-10. Install gh [GitHub cli copilot extension](https://github.com/github/gh-copilot)
-
-    ```bash
-    gh extension install github/gh-copilot --force
-    ```
-
-11. ???
-
-12. PROFIT
+10. PROFIT
 
 ## Usage (just NVIM)
 

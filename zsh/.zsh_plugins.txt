@@ -7,7 +7,6 @@ RobSis/zsh-completion-generator kind:defer
 # defer utility
 romkatv/zsh-defer
 
-loiccoyle/zsh-github-copilot
 ohmyzsh/ohmyzsh path:lib/key-bindings.zsh
 ohmyzsh/ohmyzsh path:plugins/git
 zsh-users/zsh-history-substring-search
