@@ -7,7 +7,7 @@ load_completion_from_cmd() {
 
   # Regenerate if missing or older than 30 days
   if [[ ! -f $completion_file ]] || [[ $(find "$completion_file" -mtime +30 2>/dev/null) ]]; then
-    eval "$cmd ${args[*]}" >| $completion_file &|
+    eval "$cmd ${args[*]}" >|$completion_file &|
   fi
 }
 
@@ -84,4 +84,10 @@ gitleaks() {
   unfunction gitleaks
   load_completion_from_cmd gitleaks completion zsh
   gitleaks "$@"
+}
+
+uvx() {
+  unfunction uvx
+  load_completion_from_cmd uvx --generate-shell-completion zsh
+  uvx "$@"
 }
