@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a macOS dotfiles repository managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level directory (nvim, zsh, git, etc.) is a "stow package" that gets symlinked to the home directory when deployed.
+This is a macOS dotfiles repository managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level directory (nvim, Zsh, Git, etc.) is a "stow package" that gets symlinked to the home directory when deployed.
 
 ## Commands
 
@@ -79,7 +79,7 @@ Each directory at the root is a stow package. The internal structure mirrors whe
 - `zsh/.zshrc` → `~/.zshrc`
 - `git/.gitconfig` → `~/.gitconfig`
 
-The `.stowrc` file excludes non-stowable files (Brewfile, README, etc.) from deployment.
+The `.stowrc` file excludes non-stowable files (Brewfile, readme, etc.) from deployment.
 
 ### Neovim Configuration
 
@@ -95,7 +95,7 @@ Load order:
 
 Plugin specs are in `lua/plugins/` - lazy.nvim auto-discovers all files in this directory.
 
-Custom modules in `lua/user/` include utilities (utils.lua), git helpers, LSP configuration, and various feature modules.
+Custom modules in `lua/user/` include utilities (utils.lua), Git helpers, LSP configuration, and various feature modules.
 
 ### Zsh Configuration
 
