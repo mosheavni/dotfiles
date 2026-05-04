@@ -5,17 +5,111 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/Moshe.Avni/.claude/hooks/gsd-check-update.js\""
+            "command": "node \"/Users/mosheavni/.claude/hooks/gsd-check-update.js\""
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"/Users/mosheavni/.claude/hooks/gsd-session-state.sh\""
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/mosheavni/.claude/hooks/caveman-activate.js\"",
+            "timeout": 5,
+            "statusMessage": "Loading caveman mode..."
           }
         ]
       }
     ],
     "PostToolUse": [
       {
+        "matcher": "Bash|Edit|Write|MultiEdit|Agent|Task",
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/Moshe.Avni/.claude/hooks/gsd-context-monitor.js\""
+            "command": "node \"/Users/mosheavni/.claude/hooks/gsd-context-monitor.js\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/mosheavni/.claude/hooks/gsd-read-injection-scanner.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"/Users/mosheavni/.claude/hooks/gsd-phase-boundary.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/mosheavni/.claude/hooks/gsd-prompt-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/mosheavni/.claude/hooks/gsd-read-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/mosheavni/.claude/hooks/gsd-workflow-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"/Users/mosheavni/.claude/hooks/gsd-validate-commit.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/mosheavni/.claude/hooks/caveman-mode-tracker.js\"",
+            "timeout": 5,
+            "statusMessage": "Tracking caveman mode..."
           }
         ]
       }
@@ -23,22 +117,29 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "node \"/Users/Moshe.Avni/.claude/hooks/gsd-statusline.js\""
+    "command": "node \"/Users/mosheavni/.claude/hooks/gsd-statusline.js\""
   },
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
     "lua-language-server@claude-code-lsps": true,
-    "swift-lsp@claude-plugins-official": true
+    "swift-lsp@claude-plugins-official": true,
+    "caveman@caveman": true
   },
-  "alwaysThinkingEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
   "extraKnownMarketplaces": {
     "claude-code-lsps": {
       "source": {
         "source": "github",
         "repo": "Piebald-AI/claude-code-lsps"
       }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
     }
-  }
+  },
+  "alwaysThinkingEnabled": true,
+  "skipDangerousModePermissionPrompt": true
 }
