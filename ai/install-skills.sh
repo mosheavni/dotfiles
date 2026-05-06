@@ -18,7 +18,7 @@ skills=(
   "vercel-labs/skills:find-skills"
   "sickn33/antigravity-awesome-skills:clean-code"
   "anthropics/skills:pdf"
-  "anthropics/skills:image-enhancer"
+  "ComposioHQ/awesome-claude-skills:image-enhancer"
   "ComposioHQ/awesome-claude-skills:skill-creator"
   "ComposioHQ/awesome-claude-skills:video-downloader"
 )
