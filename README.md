@@ -122,6 +122,16 @@ NVIM_APPNAME=mosheavni/dotfiles/nvim/.config/nvim nvim
 
 - Install [shottr](https://shottr.cc/)
 
+## AI / Claude Code Skills
+
+Claude Code skills extend the `/skill-name` slash command system. Skills live in `~/.claude/skills/`.
+
+```bash
+./ai/install-skills.sh
+```
+
+Verify with `npx skills ls -g`.
+
 ## Troubleshooting
 
 ### Reinstalling Node.js dependencies

@@ -1,0 +1,22 @@
+# plugin/runtime managed
+agents/
+hooks/
+package.json
+plugins/
+skills/
+
+# runtime files
+history.jsonl
+.caveman-active
+.caveman-history.jsonl
+.caveman-statusline-suffix
+session-env/
+sessions/
+backups/
+cache/
+paste-cache/
+file-history/
+shell-snapshots/
+plans/
+projects/
+settings.json.bak
