@@ -15,8 +15,7 @@ alias awk=gawk
 #------------------------------------------------------------------------------
 # File Navigation & Management
 #------------------------------------------------------------------------------
-alias ll='ls -lah'
-alias ls='eza '
+alias ll='ls -lah --color=auto'
 alias dc='cd '
 alias dotfiles='cd ~/.dotfiles'
 alias dot='cd ~/.dotfiles'
