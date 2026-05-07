@@ -12,3 +12,4 @@ typescript
 vscode-css-languageservice
 vscode-json-languageserver
 yarn
+@agentclientprotocol/claude-agent-acp

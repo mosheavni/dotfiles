@@ -122,7 +122,6 @@
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
-    "lua-language-server@claude-code-lsps": true,
     "swift-lsp@claude-plugins-official": true,
     "caveman@caveman": true
   },
@@ -141,5 +140,8 @@
     }
   },
   "alwaysThinkingEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "advisorModel": "opus",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark-daltonized",
+  "agentPushNotifEnabled": true
 }
