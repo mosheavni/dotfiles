@@ -156,3 +156,4 @@ rm -rf ~/.local/share/nvim/treesitter
 ```
 
 Then reopen nvim and run `:TSUpdate`
+# silverfort-task
