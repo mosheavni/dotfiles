@@ -200,7 +200,7 @@ end)
   ['Find buffers (<C-b>)'] = function()
     vim.cmd 'FzfLua buffers'
   end,
-  ['Open Nvim Tree File Browser (<C-o>)'] = function()
+  ['Open Nvim Tree File Browser (<leader>o)'] = function()
     local api = require 'nvim-tree.api'
     api.tree.toggle()
   end,
