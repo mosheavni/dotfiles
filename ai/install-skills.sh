@@ -5,13 +5,6 @@ set -e
 
 echo "Installing Claude Code skills..."
 
-# GSD (Get Shit Done) suite — 65+ project management skills
-if [[ -f ~/.claude/get-shit-done/VERSION ]]; then
-  echo "  [skip] GSD already installed ($(cat ~/.claude/get-shit-done/VERSION))"
-else
-  npx get-shit-done-cc@latest -g
-fi
-
 # Individual skills — format: "repo:skill-name"
 skills=(
   "obra/superpowers:brainstorming"
