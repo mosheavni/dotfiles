@@ -82,11 +82,11 @@ autocmd('FileType', {
     vim.treesitter.start(0, 'markdown')
   end,
 })
-autocmd('TextYankPost', {
-  desc = 'Highlight on yank',
+autocmd({ 'TextYankPost', 'TextPutPost' }, {
+  desc = 'Highlight on yank/put',
   group = buffer_settings,
   callback = function()
-    pcall(vim.hl.on_yank, { higroup = 'IncSearch', timeout = 200 })
+    vim.hl.hl_op { higroup = 'IncSearch', timeout = 200 }
   end,
 })
 
