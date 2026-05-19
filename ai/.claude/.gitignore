@@ -4,6 +4,7 @@ hooks/
 package.json
 plugins/
 skills/
+tasks/
 
 # runtime files
 history.jsonl
@@ -21,3 +22,4 @@ plans/
 projects/
 settings.json.bak
 mcp-needs-auth-cache.json
+
