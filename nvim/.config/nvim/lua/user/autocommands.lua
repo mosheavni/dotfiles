@@ -119,11 +119,12 @@ autocmd('BufReadPost', {
 })
 
 -- better yank ring
-vim.api.nvim_create_autocmd('TextYankPost', { -- yank-ring
+vim.api.nvim_create_autocmd({ 'TextYankPost', 'TextPutPost' }, { -- yank-ring
   desc = 'Maintain a yank ring in registers 0-9',
   group = buffer_settings,
   callback = function()
-    if vim.v.event.operator == 'y' then
+    local op = vim.v.event.operator
+    if op == 'y' or op == 'p' or op == 'P' then
       for i = 9, 1, -1 do -- Shift all numbered registers.
         vim.fn.setreg(tostring(i), vim.fn.getreg(tostring(i - 1)))
       end
