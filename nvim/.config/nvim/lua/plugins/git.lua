@@ -126,7 +126,7 @@ local fugitive_config = function()
     if #to_close > 0 then
       for _, win in ipairs(to_close) do
         if vim.api.nvim_win_is_valid(win) then
-          pcall(vim.api.nvim_win_close, win, true)
+          vim.npcall(vim.api.nvim_win_close, win, true)
         end
       end
       return

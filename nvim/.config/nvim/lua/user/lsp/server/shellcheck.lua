@@ -21,7 +21,7 @@ local shellcheck_disable_pattern = '^%s*#%s*shellcheck%s+disable=([^%s]*)%s*$'
 ---@param invert boolean|nil
 ---@return string|nil, number|nil
 local function search_region(bufnr, regex, row_start, row_end, continue_regex, invert)
-  invert = invert ~= nil and invert or false
+  invert = vim.nonnil(invert, false)
   local region_start, region_end
   local idx_start, idx_end, step
 

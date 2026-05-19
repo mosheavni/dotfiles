@@ -31,7 +31,7 @@ M.reload_fugitive_index = function()
 end
 
 local function with_ui_select(items, opts, cb, auto_select)
-  auto_select = auto_select == nil and true or auto_select
+  auto_select = vim.nonnil(auto_select, true)
   if #items == 1 and auto_select then
     return cb(items[1])
   end
