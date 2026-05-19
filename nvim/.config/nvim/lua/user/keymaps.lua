@@ -189,6 +189,10 @@ map('n', '<C-c>', 'ciw', { desc = 'Change inner word' })
 -- Select last inserted text
 map('n', 'gV', '`[V`]', { remap = false, desc = 'Visually select last insert' })
 
+-- Treesitter-based selection (vim.treesitter.select)
+-- [N / ]N (built-in visual): jump to sibling node
+map({ 'n', 'x' }, '<leader>V', function() vim.treesitter.select 'parent' end, { desc = 'TS: select/expand to parent node' })
+
 -- Convert all tabs to spaces
 map('n', '<leader>ct<space>', ':retab<cr>', { remap = false, silent = true, desc = 'Convert tabs to spaces' })
 
