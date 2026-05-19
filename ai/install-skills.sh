@@ -13,16 +13,22 @@ skills=(
   "anthropics/skills:pdf"
   "ComposioHQ/awesome-claude-skills:image-enhancer"
   "ComposioHQ/awesome-claude-skills:skill-creator"
-  "ComposioHQ/awesome-claude-skills:video-downloader"
+  "ComposioHQ/awesome-claude-skills:youtube-downloader"
+  "obra/superpowers"
+  "nextlevelbuilder/ui-ux-pro-max-skill:ui-ux-pro-max"
 )
 
 for entry in "${skills[@]}"; do
-  repo="${entry%%:*}"
-  skill="${entry##*:}"
-  if [[ -d ~/.agents/skills/"$skill" ]]; then
-    echo "  [skip] $skill already installed"
+  if [[ "$entry" == *:* ]]; then
+    repo="${entry%%:*}"
+    skill="${entry##*:}"
+    if [[ -d ~/.agents/skills/"$skill" ]]; then
+      echo "  [skip] $skill already installed"
+    else
+      npx skills add -g -y "$repo" -s "$skill"
+    fi
   else
-    npx skills add -g -y "$repo" -s "$skill"
+    npx skills add -g -y "$entry"
   fi
 done
 

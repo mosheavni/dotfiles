@@ -49,5 +49,9 @@
   "advisorModel": "opus",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-daltonized",
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"/Users/mosheavni/.dotfiles/ai/.claude/plugins/cache/caveman/caveman/ef6050c5e184/hooks/caveman-statusline.sh\""
+  }
 }
