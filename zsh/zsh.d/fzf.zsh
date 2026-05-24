@@ -1,9 +1,4 @@
-# Cache FZF initialization for performance
-FZF_ZSH_CACHE="${ZSH_CACHE_DIR}/fzf-init.zsh"
-if [[ ! -f "$FZF_ZSH_CACHE" ]] || [[ $(find "$FZF_ZSH_CACHE" -mtime +30 2>/dev/null) ]]; then
-  fzf --zsh >|"$FZF_ZSH_CACHE"
-fi
-source "$FZF_ZSH_CACHE"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export FZF_DEFAULT_OPTS='--height=100% --layout=reverse --border --info=inline --highlight-line'
 export FZF_CTRL_T_COMMAND='rg --color=never --files --hidden --follow -g "!.git"'
