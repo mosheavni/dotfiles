@@ -70,7 +70,7 @@ return {
     dependencies = { 'HakonHarnes/img-clip.nvim' },
     opts = {
       -- Available by default: "claude-acp" | "gemini-acp" | "codex-acp" | "opencode-acp" | "cursor-acp"
-      provider = 'claude-agent-acp', -- setting the name here is all you need to get started
+      provider = 'cursor-acp', -- setting the name here is all you need to get started
       keymaps = { prompt = { paste_image = { { '<localleader>p', mode = { 'n' } } } } },
     },
 
