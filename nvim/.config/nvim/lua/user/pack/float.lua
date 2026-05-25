@@ -568,7 +568,7 @@ local function jump(direction)
   if not float.is_shown() then
     return
   end
-  local win_id = float.cache.win_id
+  local win_id = float.cache.win_id or 0
   local row = api.nvim_win_get_cursor(win_id)[1]
   local rows = vim.tbl_keys(state.line_to_name)
   table.sort(rows)
