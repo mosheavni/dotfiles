@@ -315,7 +315,7 @@ local function config_fn(_)
   local columns = vim.o.columns
   local screen_lines = vim.o.lines
   local width = math.min(100, math.max(64, math.floor(columns * 0.82)))
-  local height = math.min(32, math.max(18, math.floor(screen_lines * 0.72)))
+  local height = math.max(24, math.floor(screen_lines * 0.80))
 
   return {
     relative = 'editor',
