@@ -27,6 +27,10 @@ return function()
         return
       end
 
+      if not vim.treesitter.query.get(lang, 'highlights') then
+        return
+      end
+
       if not pcall(vim.treesitter.start, event.buf) then
         return
       end
