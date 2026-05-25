@@ -1,8 +1,8 @@
-local dont_append_filename = {
-  terraform = true,
-}
+local pack = require 'user.pack.add'
+pack.add 'https://github.com/stevearc/overseer.nvim'
 
--- Helper: Run in wezterm tab
+local dont_append_filename = { terraform = true }
+
 local function run_in_wezterm_tab()
   local ft = vim.bo.filetype ~= '' and vim.bo.filetype or 'sh'
   local file_name = vim.fn.expand '%:p'
@@ -24,11 +24,8 @@ local function run_in_wezterm_tab()
   end
 end
 
--- Helper: Run lua file directly (not through overseer)
 local function run_lua_file()
   local file_name = vim.fn.expand '%:p'
-  -- Try to unload the module if it's loaded
-  -- Match any lua file path and convert to module path
   local module_path = file_name:match '.*/lua/(.*)%.lua$'
   if module_path then
     module_path = module_path:gsub('/', '.')
@@ -41,21 +38,14 @@ local function run_lua_file()
   vim.notify('Sourced: ' .. vim.fn.expand '%:t', vim.log.levels.INFO)
 end
 
--- F3 handler: open task picker (or handle special filetypes directly)
 local function open_task_picker()
   local ft = vim.bo.filetype
-
-  -- Handle lua files directly (luafile is a vim command, not shell)
   if ft == 'lua' then
     return run_lua_file()
   end
-
-  -- Handle groovy/Jenkinsfiles directly
   if ft == 'groovy' then
     return require('user.jenkins-validate').validate()
   end
-
-  -- For everything else, open the task picker
   local overseer = require 'overseer'
   overseer.run_task({}, function(task)
     if task then
@@ -64,7 +54,6 @@ local function open_task_picker()
   end)
 end
 
--- "Run current buffer" template provider - dynamically checks if runnable
 local run_current_buffer_template = {
   name = 'run_current_buffer',
   generator = function(_, cb)
@@ -72,21 +61,15 @@ local run_current_buffer_template = {
     if file_name == '' then
       return cb {}
     end
-
     local ft = vim.bo.filetype or ''
     local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ''
     local utils = require 'user.utils'
-
-    -- Check if this filetype is runnable (lua/groovy handled directly, not here)
     local has_shebang = first_line:match '^#!'
     local has_cmd = utils.filetype_to_command[ft] ~= nil
     local is_terraform = ft == 'terraform'
-
     if not (has_shebang or has_cmd or is_terraform) then
       return cb {}
     end
-
-    -- Build the command
     local cmd
     if has_shebang then
       cmd = file_name
@@ -95,84 +78,44 @@ local run_current_buffer_template = {
     else
       cmd = (utils.filetype_to_command[ft] or 'bash') .. ' ' .. file_name
     end
-
     cb {
       {
         name = 'Run: ' .. vim.fn.expand '%:t',
         priority = 0,
         builder = function()
-          return {
-            cmd = cmd,
-            cwd = vim.fn.expand '%:p:h',
-          }
+          return { cmd = cmd, cwd = vim.fn.expand '%:p:h' }
         end,
       },
     }
   end,
 }
 
--- Project-specific task definitions
--- Add your per-project tasks here with condition.dir
 local project_tasks = {
-  -- Dotfiles project tasks
   {
     name = 'dotfiles: stow all',
     builder = function()
-      return {
-        cmd = { './start.sh' },
-        cwd = vim.env.HOME .. '/.dotfiles',
-      }
+      return { cmd = { './start.sh' }, cwd = vim.env.HOME .. '/.dotfiles' }
     end,
-    condition = {
-      dir = vim.env.HOME .. '/.dotfiles',
-    },
+    condition = { dir = vim.env.HOME .. '/.dotfiles' },
   },
   {
     name = 'nvim: run tests',
     builder = function()
-      return {
-        cmd = { 'make', 'test' },
-        cwd = vim.env.HOME .. '/.dotfiles/nvim/.config/nvim',
-      }
+      return { cmd = { 'make', 'test' }, cwd = vim.env.HOME .. '/.dotfiles/nvim/.config/nvim' }
     end,
-    condition = {
-      dir = vim.env.HOME .. '/.dotfiles',
-    },
+    condition = { dir = vim.env.HOME .. '/.dotfiles' },
   },
-  -- Add more project tasks here following the same pattern:
-  -- {
-  --   name = 'myproject: build',
-  --   builder = function()
-  --     return { cmd = { 'make', 'build' } }
-  --   end,
-  --   condition = { dir = '/path/to/myproject' },
-  -- },
 }
 
-return {
-  'stevearc/overseer.nvim',
-  opts = {
-    task_list = {
-      direction = 'bottom',
-      min_height = 8,
-    },
-  },
-  keys = {
-    { '<F3>', open_task_picker, desc = 'Open task picker' },
-  },
-  cmd = { 'OverseerRun', 'OverseerToggle', 'OverseerTaskAction', 'RunInTab' },
-  config = function(_, opts)
-    local overseer = require 'overseer'
-    overseer.setup(opts)
-
-    -- Register "Run current buffer" template
-    overseer.register_template(run_current_buffer_template)
-
-    -- Register project-specific tasks
-    for _, task in ipairs(project_tasks) do
-      overseer.register_template(task)
-    end
-
-    vim.api.nvim_create_user_command('RunInTab', run_in_wezterm_tab, {})
-  end,
-}
+return function()
+  require('overseer').setup {
+    task_list = { direction = 'bottom', min_height = 8 },
+  }
+  local overseer = require 'overseer'
+  overseer.register_template(run_current_buffer_template)
+  for _, task in ipairs(project_tasks) do
+    overseer.register_template(task)
+  end
+  vim.api.nvim_create_user_command('RunInTab', run_in_wezterm_tab, {})
+  vim.keymap.set('n', '<F3>', open_task_picker, { desc = 'Open task picker' })
+end

@@ -39,11 +39,11 @@ autocmd('UIEnter', {
   end,
 })
 
--- VeryLazy
+-- Deferred plugin setup
 autocmd('User', {
-  desc = 'Setup non-critical stuff after lazy has loaded',
+  desc = 'Setup non-critical stuff after deferred plugins load',
   group = first_load,
-  pattern = 'VeryLazy',
+  pattern = 'DeferredPluginsLoaded',
   callback = function()
     require('user.menu').setup()
   end,

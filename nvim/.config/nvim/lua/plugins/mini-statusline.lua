@@ -1,13 +1,11 @@
-local M = {
-  'nvim-mini/mini.statusline',
-  version = false,
-  event = 'VeryLazy',
-  enabled = function()
-    return not vim.bo.filetype:match '^k8s_.*'
-  end,
-}
+local pack = require 'user.pack.add'
+pack.add 'https://github.com/nvim-mini/mini.statusline'
 
-M.config = function()
+return function()
+  if vim.bo.filetype:match '^k8s_.*' then
+    return
+  end
+
   local statusline = require 'mini.statusline'
 
   -- Get rose-pine colors
@@ -157,31 +155,6 @@ M.config = function()
     return string.format('%%#MiniStatuslineLSPIcon#%s %%#MiniStatuslineFileinfo#%s', icon, filetype)
   end
 
-  -- Startup time section with color coding
-  local function section_startup_time()
-    if statusline.is_truncated(75) then
-      return '', 'MiniStatuslineFileinfo'
-    end
-
-    local ok, lazy = pcall(require, 'lazy')
-    if not ok then
-      return '', 'MiniStatuslineFileinfo'
-    end
-
-    local time = lazy.stats().startuptime
-    local hl = 'MiniStatuslineStartupGreen'
-
-    if time > 120 then
-      hl = 'MiniStatuslineStartupRed'
-    elseif time > 90 then
-      hl = 'MiniStatuslineStartupOrange'
-    elseif time > 60 then
-      hl = 'MiniStatuslineStartupYellow'
-    end
-
-    return string.format('%.2f', time), hl
-  end
-
   -- YAML schema section (only for YAML files)
   local function section_yaml_schema()
     local ft = vim.bo.filetype or ''
@@ -219,7 +192,6 @@ M.config = function()
         local lsp = section_lsp_names()
         local progress = section_progress()
         local location = section_location()
-        local startup_time, startup_hl = section_startup_time()
         local yaml_schema = section_yaml_schema()
         local search = statusline.section_searchcount { trunc_width = 75 }
 
@@ -245,7 +217,6 @@ M.config = function()
             { strings = { fileformat, filetype } },
             { hl = 'MiniStatuslineProgress', strings = { progress } },
             { hl = mode_hl, strings = { location } },
-            { hl = startup_hl, strings = { startup_time } },
           }
           .. right_border_str
       end,
@@ -280,13 +251,6 @@ M.config = function()
     vim.api.nvim_set_hl(0, 'MiniStatuslineLSPIcon', { fg = palette.pine, bg = palette.base })
     vim.api.nvim_set_hl(0, 'MiniStatuslineFormatIcon', { fg = palette.rose, bg = palette.base, bold = true })
 
-    -- Startup time colors (color-coded by performance)
-    vim.api.nvim_set_hl(0, 'MiniStatuslineStartupGreen', { fg = palette.pine, bg = palette.base })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineStartupYellow', { fg = palette.gold, bg = palette.base })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineStartupOrange', { fg = palette.iris, bg = palette.base })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineStartupRed', { fg = palette.love, bg = palette.base })
   end
   setup_highlights()
 end
-
-return M

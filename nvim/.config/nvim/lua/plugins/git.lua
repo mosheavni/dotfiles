@@ -1,3 +1,11 @@
+local pack = require 'user.pack.add'
+pack.add {
+  'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/tpope/vim-fugitive',
+  'https://github.com/sindrets/diffview.nvim',
+  'https://github.com/akinsho/git-conflict.nvim',
+}
+
 local T = vim.keycode
 local git_funcs = require 'user.git'
 
@@ -211,107 +219,44 @@ local fugitive_config = function()
   end, { desc = 'Git actions menu' })
 end
 
-local M = {
-  {
-    'tpope/vim-fugitive',
-    config = fugitive_config,
-    keys = {
-      '<leader>gb',
-      '<leader>gB',
-      '<leader>gc',
-      '<leader>gf',
-      '<leader>gg',
-      '<leader>gl',
-      '<leader>gm',
-      '<leader>gp',
-    },
-    cmd = {
-      'Gco',
-      'Git',
-      'Gcb',
-      'Gl',
-      'Gp',
-      'Gmom',
-      'Gpom',
-      'Gread',
-      'Gvsplit',
-      'Cpr',
-    },
-  },
-  {
-    'akinsho/git-conflict.nvim',
-    version = '*',
-    event = 'BufReadPre',
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('git-conflict').setup {
-        default_mappings = true,
-      }
-      require('user.menu').add_actions('GitConflict', {
-        ['Choose Ours (co)'] = function()
-          vim.cmd 'GitConflictChooseOurs'
-        end,
-        ['Choose Theirs (ct)'] = function()
-          vim.cmd 'GitConflictChooseTheirs'
-        end,
-        ['Choose Both (cb)'] = function()
-          vim.cmd 'GitConflictChooseBoth'
-        end,
-        ['Choose None (c0)'] = function()
-          vim.cmd 'GitConflictChooseNone'
-        end,
-        ['Next Conflict (]x)'] = function()
-          vim.cmd 'GitConflictNextConflict'
-        end,
-        ['Previous Conflict ([x)'] = function()
-          vim.cmd 'GitConflictPrevConflict'
-        end,
-        ['Send conflicts to Quickfix'] = function()
-          vim.cmd 'GitConflictListQf'
-        end,
-      })
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'GitConflictDetected',
-        callback = function()
-          vim.notify('Conflict detected in ' .. vim.fn.expand '<afile>')
-          vim.schedule(function()
-            vim.cmd 'GitConflictListQf'
-          end)
-        end,
-      })
-    end,
-  },
-  {
-    'sindrets/diffview.nvim',
-    dependencies = 'nvim-lua/plenary.nvim',
-    cmd = {
-      'DiffviewClose',
-      'DiffviewFileHistory',
-      'DiffviewFocusFiles',
-      'DiffviewLog',
-      'DiffviewOpen',
-      'DiffviewRefresh',
-      'DiffviewToggleFiles',
-    },
-    keys = {
-      -- { '<leader>gd', '<cmd>DiffviewFileHistory<cr>', mode = { 'n', 'v' }, desc = 'Diffview files' },
-      {
-        '<leader>gd',
-        diff_actions['[Diffview] Diff File History'],
-        mode = 'n',
-        desc = 'Diffview files',
-      },
-      {
-        '<leader>gd',
-        ':DiffviewFileHistory<cr>',
-        mode = 'v',
-        desc = 'Diffview selection',
-      },
-    },
-    config = function()
-      require 'diffview'
-    end,
-  },
-}
+return function()
+  fugitive_config()
 
-return M
+  require('git-conflict').setup { default_mappings = true }
+  require('user.menu').add_actions('GitConflict', {
+    ['Choose Ours (co)'] = function()
+      vim.cmd 'GitConflictChooseOurs'
+    end,
+    ['Choose Theirs (ct)'] = function()
+      vim.cmd 'GitConflictChooseTheirs'
+    end,
+    ['Choose Both (cb)'] = function()
+      vim.cmd 'GitConflictChooseBoth'
+    end,
+    ['Choose None (c0)'] = function()
+      vim.cmd 'GitConflictChooseNone'
+    end,
+    ['Next Conflict (]x)'] = function()
+      vim.cmd 'GitConflictNextConflict'
+    end,
+    ['Previous Conflict ([x)'] = function()
+      vim.cmd 'GitConflictPrevConflict'
+    end,
+    ['Send conflicts to Quickfix'] = function()
+      vim.cmd 'GitConflictListQf'
+    end,
+  })
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'GitConflictDetected',
+    callback = function()
+      vim.notify('Conflict detected in ' .. vim.fn.expand '<afile>')
+      vim.schedule(function()
+        vim.cmd 'GitConflictListQf'
+      end)
+    end,
+  })
+
+  require 'diffview'
+  vim.keymap.set('n', '<leader>gd', diff_actions['[Diffview] Diff File History'], { desc = 'Diffview files' })
+  vim.keymap.set('v', '<leader>gd', ':DiffviewFileHistory<cr>', { desc = 'Diffview selection' })
+end

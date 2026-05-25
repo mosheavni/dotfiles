@@ -1,8 +1,8 @@
-local M = {
-  'lewis6991/gitsigns.nvim',
-  event = 'BufReadPre',
-  cmd = { 'Gitsigns' },
-  opts = {
+local pack = require 'user.pack.add'
+pack.add 'https://github.com/lewis6991/gitsigns.nvim'
+
+return function()
+  require('gitsigns').setup {
     on_attach = function(bufnr)
       local gs = package.loaded.gitsigns
 
@@ -12,7 +12,6 @@ local M = {
         vim.keymap.set(mode, l, r, opts)
       end
 
-      -- Navigation
       map('n', ']c', function()
         if vim.wo.diff then
           return ']c'
@@ -33,31 +32,25 @@ local M = {
         return '<Ignore>'
       end, { expr = true, desc = 'Previous hunk' })
 
-      -- Actions
       map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview hunk' })
       map('n', '<leader>hb', gs.toggle_current_line_blame, { desc = 'Toggle current line blame' })
       map('n', '<leader>hd', gs.toggle_deleted, { desc = 'Toggle deleted' })
-
-      -- Text object
       map({ 'o', 'x' }, 'ih', '<cmd>Gitsigns select_hunk<CR>', { desc = 'Select hunk' })
     end,
-  },
-  init = function()
-    require('user.menu').add_actions('Git', {
-      ['Preview hunk (<leader>hp)'] = function()
-        vim.cmd.Gitsigns 'preview_hunk'
-      end,
-      ['Toggle current line blame (<leader>hb)'] = function()
-        vim.cmd.Gitsigns 'toggle_current_line_blame'
-      end,
-      ['Toggle deleted (<leader>hd)'] = function()
-        vim.cmd.Gitsigns 'toggle_deleted'
-      end,
-      ['Select hunk'] = function()
-        vim.cmd.Gitsigns 'select_hunk'
-      end,
-    })
-  end,
-}
+  }
 
-return M
+  require('user.menu').add_actions('Git', {
+    ['Preview hunk (<leader>hp)'] = function()
+      vim.cmd.Gitsigns 'preview_hunk'
+    end,
+    ['Toggle current line blame (<leader>hb)'] = function()
+      vim.cmd.Gitsigns 'toggle_current_line_blame'
+    end,
+    ['Toggle deleted (<leader>hd)'] = function()
+      vim.cmd.Gitsigns 'toggle_deleted'
+    end,
+    ['Select hunk'] = function()
+      vim.cmd.Gitsigns 'select_hunk'
+    end,
+  })
+end

@@ -1,126 +1,97 @@
--- Helper function to find root directory based on markers
+local pack = require 'user.pack.add'
+pack.add 'https://github.com/mfussenegger/nvim-lint'
+
 local function find_root(markers)
   local path = vim.api.nvim_buf_get_name(0)
-  local root = vim.fs.find(markers, {
-    path = path,
-    upward = true,
-  })[1]
+  local root = vim.fs.find(markers, { path = path, upward = true })[1]
   return root and vim.fs.dirname(root) or nil
 end
 
-return {
-  'mfussenegger/nvim-lint',
-  event = { 'BufReadPre', 'BufNewFile' },
-  dependencies = { 'mason-org/mason.nvim' },
-  config = function()
-    local lint = require 'lint'
+return function()
+  local lint = require 'lint'
 
-    -- Disabled linters state (accessible from sources.lua)
-    lint._disabled_linters = { trivy = true } -- trivy disabled by default
+  lint._disabled_linters = { trivy = true }
+  lint._global_linter_names = { 'codespell', 'gitleaks', 'trivy' }
 
-    -- Global linter names (for sources.lua to display)
-    lint._global_linter_names = { 'codespell', 'gitleaks', 'trivy' }
+  lint.linters_by_ft = {
+    Jenkinsfile = { 'npm-groovy-lint' },
+    ['docker-compose'] = { 'dclint' },
+    dockerfile = { 'hadolint' },
+    ghaction = { 'actionlint' },
+    groovy = { 'npm-groovy-lint' },
+    python = { 'ruff' },
+    lua = { 'selene', 'luacheck' },
+    make = { 'checkmake' },
+    markdown = { 'proselint', 'write_good', 'markdownlint' },
+    toml = { 'tombi' },
+    vim = { 'vint' },
+    zsh = { 'zsh' },
+  }
 
-    lint.linters_by_ft = {
-      -- hcl = { 'terragrunt_validate' },
-      Jenkinsfile = { 'npm-groovy-lint' },
-      ['docker-compose'] = { 'dclint' },
-      dockerfile = { 'hadolint' },
-      ghaction = { 'actionlint' },
-      groovy = { 'npm-groovy-lint' },
-      python = { 'ruff' },
-      lua = { 'selene', 'luacheck' },
-      make = { 'checkmake' },
-      markdown = { 'proselint', 'write_good', 'markdownlint' },
-      -- sh = { 'shellcheck' }, -- diagnostics provided by bash-ls
-      toml = { 'tombi' },
-      vim = { 'vint' },
-      zsh = { 'zsh' },
-    }
+  lint.linters.luacheck.args = {
+    '--formatter',
+    'plain',
+    '--codes',
+    '--ranges',
+    '--filename',
+    function()
+      return vim.api.nvim_buf_get_name(0)
+    end,
+    '-',
+  }
 
-    -- Fix luacheck to pass filename for .luacheckrc file patterns to work
-    lint.linters.luacheck.args = {
-      '--formatter',
-      'plain',
-      '--codes',
-      '--ranges',
-      '--filename',
-      function()
-        return vim.api.nvim_buf_get_name(0)
-      end,
-      '-',
-    }
+  local linter_root_markers = {
+    selene = { 'selene.toml' },
+    luacheck = { '.luacheckrc' },
+  }
 
-    -- Configure linter root markers (similar to LSP root_dir)
-    local linter_root_markers = {
-      selene = { 'selene.toml' },
-      luacheck = { '.luacheckrc' },
-    }
-
-    -- Helper to get the appropriate cwd for a linter
-    local function get_linter_cwd(linter_name)
-      local markers = linter_root_markers[linter_name]
-      if markers then
-        return find_root(markers)
-      end
-      return nil
+  local function get_linter_cwd(linter_name)
+    local markers = linter_root_markers[linter_name]
+    if markers then
+      return find_root(markers)
     end
+    return nil
+  end
 
-    local group = vim.api.nvim_create_augroup('nvim-lint', { clear = true })
-    vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost', 'InsertLeave', 'TextChanged' }, {
-      group = group,
-      callback = function(args)
-        local excluded_filetypes = { 'gitcommit', 'gitrebase', 'fugitive' }
-        if vim.tbl_contains(excluded_filetypes, vim.bo.filetype) then
-          return
-        end
-
-        if not vim.bo.modifiable then
-          return
-        end
-
-        -- Get linters for current filetype
-        local linters = lint._resolve_linter_by_ft(vim.bo.filetype)
-
-        -- Run each linter with its configured cwd (if not disabled)
-        for _, linter_name in ipairs(linters) do
-          if not lint._disabled_linters[linter_name] then
-            local cwd = get_linter_cwd(linter_name)
-            lint.try_lint(linter_name, { cwd = cwd })
-          end
-        end
-
-        -- Run gitleaks and trivy only on saved buffers (BufWritePost)
-        if args.event == 'BufWritePost' then
-          if not lint._disabled_linters['gitleaks'] then
-            lint.try_lint { 'gitleaks' }
-          end
-          if not lint._disabled_linters['trivy'] then
-            lint.try_lint { 'trivy' }
-          end
-        end
-
-        -- Run codespell on all events
-        if not lint._disabled_linters['codespell'] then
-          lint.try_lint { 'codespell' }
-        end
-      end,
-    })
-
-    -- Toggle trivy linting (kept for backwards compatibility)
-    vim.api.nvim_create_user_command('TrivyLintToggle', function()
-      lint._disabled_linters['trivy'] = not lint._disabled_linters['trivy']
-      local status = lint._disabled_linters['trivy'] and 'disabled' or 'enabled'
-      print('Trivy linting ' .. status)
-
-      if not lint._disabled_linters['trivy'] then
-        -- Run trivy immediately if enabled
-        lint.try_lint { 'trivy' }
-      else
-        -- Clear trivy diagnostics when disabled
-        local trivy_ns = vim.api.nvim_create_namespace 'trivy'
-        vim.diagnostic.reset(trivy_ns, 0)
+  local group = vim.api.nvim_create_augroup('nvim-lint', { clear = true })
+  vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost', 'InsertLeave', 'TextChanged' }, {
+    group = group,
+    callback = function(args)
+      local excluded_filetypes = { 'gitcommit', 'gitrebase', 'fugitive' }
+      if vim.tbl_contains(excluded_filetypes, vim.bo.filetype) or not vim.bo.modifiable then
+        return
       end
-    end, {})
-  end,
-}
+
+      local linters = lint._resolve_linter_by_ft(vim.bo.filetype)
+      for _, linter_name in ipairs(linters) do
+        if not lint._disabled_linters[linter_name] then
+          lint.try_lint(linter_name, { cwd = get_linter_cwd(linter_name) })
+        end
+      end
+
+      if args.event == 'BufWritePost' then
+        if not lint._disabled_linters['gitleaks'] then
+          lint.try_lint { 'gitleaks' }
+        end
+        if not lint._disabled_linters['trivy'] then
+          lint.try_lint { 'trivy' }
+        end
+      end
+
+      if not lint._disabled_linters['codespell'] then
+        lint.try_lint { 'codespell' }
+      end
+    end,
+  })
+
+  vim.api.nvim_create_user_command('TrivyLintToggle', function()
+    lint._disabled_linters['trivy'] = not lint._disabled_linters['trivy']
+    local status = lint._disabled_linters['trivy'] and 'disabled' or 'enabled'
+    print('Trivy linting ' .. status)
+    if not lint._disabled_linters['trivy'] then
+      lint.try_lint { 'trivy' }
+    else
+      vim.diagnostic.reset(vim.api.nvim_create_namespace 'trivy', 0)
+    end
+  end, {})
+end

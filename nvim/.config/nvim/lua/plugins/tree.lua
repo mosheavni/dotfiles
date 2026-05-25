@@ -1,3 +1,6 @@
+local pack = require 'user.pack.add'
+pack.add 'https://github.com/nvim-tree/nvim-tree.lua'
+
 local sort_current = 1
 local SORT_METHODS = {
   'name',
@@ -185,16 +188,7 @@ local function on_attach(bufnr)
   })
 end
 
-local M = {
-  'nvim-tree/nvim-tree.lua',
-  cmd = { 'NvimTreeToggle', 'NvimTreeOpen', 'NvimTreeFocus', 'NvimTreeRefresh' },
-  keys = {
-    { '<leader>v', ':lua require("nvim-tree.api").tree.find_file { open = true, focus = true }<cr>', silent = true, desc = 'Open Tree under current file' },
-    { '<leader>o', ':lua require("nvim-tree.api").tree.toggle()<cr>', silent = true, desc = 'Open Tree' },
-  },
-}
-
-M.config = function()
+return function()
   local nvim_tree = require 'nvim-tree'
   local api = require 'nvim-tree.api'
 
@@ -263,6 +257,11 @@ M.config = function()
       end,
     })
   end)
-end
 
-return M
+  vim.keymap.set('n', '<leader>v', function()
+    require('nvim-tree.api').tree.find_file { open = true, focus = true }
+  end, { silent = true, desc = 'Open Tree under current file' })
+  vim.keymap.set('n', '<leader>o', function()
+    require('nvim-tree.api').tree.toggle()
+  end, { silent = true, desc = 'Open Tree' })
+end
