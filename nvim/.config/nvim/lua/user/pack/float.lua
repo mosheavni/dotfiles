@@ -9,6 +9,21 @@ local M = {}
 
 local ns = api.nvim_create_namespace 'pack_float_ui'
 local max_commits = 12
+local recent_commit_count = 5
+local max_concurrent_fetches = 6
+local conventional_commit_hls = {
+  feat = 'PackFloatCommitFeat',
+  fix = 'PackFloatCommitFix',
+  perf = 'PackFloatCommitPerf',
+  docs = 'PackFloatCommitDocs',
+  refactor = 'PackFloatCommitRefactor',
+  test = 'PackFloatCommitTest',
+  chore = 'PackFloatCommitChore',
+  build = 'PackFloatCommitBuild',
+  ci = 'PackFloatCommitCi',
+  style = 'PackFloatCommitStyle',
+  revert = 'PackFloatCommitRevert',
+}
 
 local float = Float.new()
 
@@ -24,6 +39,7 @@ local state = {
   clean = {},
   not_loaded = {},
   commits = {},
+  recent_commits = {},
   expanded = {},
   line_to_name = {},
   name_to_line = {},
@@ -43,10 +59,22 @@ local function setup_highlights()
     PackFloatHash = 'Number',
     PackFloatKey = 'Function',
     PackFloatError = 'DiagnosticError',
+    PackFloatCommitFeat = 'Function',
+    PackFloatCommitFix = 'DiagnosticError',
+    PackFloatCommitPerf = 'Special',
+    PackFloatCommitDocs = 'Directory',
+    PackFloatCommitRefactor = 'Type',
+    PackFloatCommitTest = 'Identifier',
+    PackFloatCommitBuild = 'Constant',
+    PackFloatCommitCi = 'Statement',
+    PackFloatCommitStyle = 'PreProc',
+    PackFloatCommitRevert = 'WarningMsg',
+    PackFloatCommitOther = 'Label',
   }
   for group, link in pairs(links) do
     api.nvim_set_hl(0, group, { link = link, default = true })
   end
+  api.nvim_set_hl(0, 'PackFloatCommitChore', { fg = '#ebbcba' })
 end
 
 local function plugin_at_cursor()
@@ -77,6 +105,25 @@ local function sort_by_name(items)
   table.sort(items, function(a, b)
     return a.spec.name < b.spec.name
   end)
+end
+
+local function conventional_commit_prefix(commit)
+  local subject = commit:match '^%x+%s+%b()%s+(.+)'
+  if not subject then
+    subject = commit:match '^%x+%s+(.+)'
+  end
+  if not subject then
+    return nil, nil
+  end
+
+  local prefix, commit_type = subject:match '^(([%a][%w-]*)%b()!?:)'
+  if not prefix then
+    prefix, commit_type = subject:match '^(([%a][%w-]*)!?:)'
+  end
+  if not prefix then
+    return nil, nil
+  end
+  return prefix, conventional_commit_hls[commit_type:lower()] or 'PackFloatCommitOther'
 end
 
 local function set_plugins(plugins)
@@ -122,6 +169,7 @@ local function reset_data()
   state.clean = {}
   state.not_loaded = {}
   state.commits = {}
+  state.recent_commits = {}
   state.expanded = {}
   state.line_to_name = {}
   state.name_to_line = {}
@@ -191,6 +239,28 @@ local function build_content()
     name_to_line[name] = name_to_line[name] or row + 1
   end
 
+  local function add_detail(text, hl, name)
+    add(text, hl)
+    mark_plugin(#lines - 1, name)
+  end
+
+  local function add_commit_line(commit, name)
+    local commit_row = add('    ' .. commit)
+    mark_plugin(commit_row, name)
+    local hash = commit:match '^(%x+)'
+    if hash then
+      add_hl(commit_row, 4, 4 + #hash, 'PackFloatHash')
+      local prefix, prefix_hl = conventional_commit_prefix(commit)
+      if prefix then
+        local prefix_start = commit:find(prefix, #hash + 1, true)
+        if prefix_start then
+          local start_col = 4 + prefix_start - 1
+          add_hl(commit_row, start_col, start_col + #prefix, prefix_hl)
+        end
+      end
+    end
+  end
+
   local header = (' vim.pack  %d plugins  %d updates'):format(#state.plugins, #state.pending)
   if state.checking then
     header = header .. '  checking...'
@@ -232,32 +302,37 @@ local function build_content()
     end
 
     if state.expanded[name] then
-      add(('    path: %s'):format(plugin.path), 'PackFloatMuted')
-      mark_plugin(#lines - 1, name)
-      add(('    src:  %s'):format(plugin.spec.src), 'PackFloatMuted')
-      mark_plugin(#lines - 1, name)
+      if plugin.spec.desc then
+        add_detail(('    desc: %s'):format(plugin.spec.desc), 'PackFloatMuted', name)
+      end
+
+      local recent_commits = state.recent_commits[name]
+      if recent_commits == nil or recent_commits == false then
+        add_detail('    recent commits: loading...', 'PackFloatMuted', name)
+      elseif #recent_commits == 0 then
+        add_detail('    recent commits: none found', 'PackFloatMuted', name)
+      else
+        add_detail('    recent commits:', 'PackFloatMuted', name)
+        for i = 1, math.min(#recent_commits, recent_commit_count) do
+          add_commit_line(recent_commits[i], name)
+        end
+      end
+
+      add_detail(('    path: %s'):format(plugin.path), 'PackFloatMuted', name)
+      add_detail(('    src:  %s'):format(plugin.spec.src), 'PackFloatMuted', name)
 
       if pending then
         if commits == nil then
-          add('    commits: loading...', 'PackFloatMuted')
-          mark_plugin(#lines - 1, name)
+          add_detail('    commits: loading...', 'PackFloatMuted', name)
         elseif #commits == 0 then
-          add('    commits: no new commits found', 'PackFloatMuted')
-          mark_plugin(#lines - 1, name)
+          add_detail('    commits: no new commits found', 'PackFloatMuted', name)
         else
           local limit = math.min(#commits, max_commits)
           for i = 1, limit do
-            local commit = commits[i]
-            local commit_row = add('    ' .. commit)
-            mark_plugin(commit_row, name)
-            local hash = commit:match '^(%x+)'
-            if hash then
-              add_hl(commit_row, 4, 4 + #hash, 'PackFloatHash')
-            end
+            add_commit_line(commits[i], name)
           end
           if #commits > limit then
-            add(('    ... %d more'):format(#commits - limit), 'PackFloatMuted')
-            mark_plugin(#lines - 1, name)
+            add_detail(('    ... %d more'):format(#commits - limit), 'PackFloatMuted', name)
           end
         end
       end
@@ -366,6 +441,37 @@ local function load_commits(plugin, check_id)
   end)
 end
 
+local function load_recent_commits(plugin, check_id)
+  local name = plugin.spec.name
+  state.recent_commits[name] = false
+  vim.system({
+    'git',
+    '-C',
+    plugin.path,
+    'log',
+    '--oneline',
+    '--decorate=short',
+    '-5',
+  }, { text = true }, function(result)
+    vim.schedule(function()
+      if state.check_id ~= check_id or not float.is_shown() then
+        return
+      end
+      state.recent_commits[name] = result.code == 0 and split_lines(result.stdout) or {}
+      render()
+    end)
+  end)
+end
+
+local function load_expanded_recent_commits(check_id)
+  for _, plugin in ipairs(state.plugins) do
+    local name = plugin.spec.name
+    if state.expanded[name] and state.recent_commits[name] == nil then
+      load_recent_commits(plugin, check_id)
+    end
+  end
+end
+
 local function finish_refresh(check_id, failures)
   if state.check_id ~= check_id or not float.is_shown() then
     return
@@ -374,6 +480,7 @@ local function finish_refresh(check_id, failures)
   stop_check_animation()
   state.checking = false
   state.status = failures > 0 and ('ready, %d fetch failed'):format(failures) or 'ready'
+  load_expanded_recent_commits(check_id)
   render()
 end
 
@@ -387,9 +494,11 @@ local function refresh_local()
     end
 
     state.commits = {}
+    state.recent_commits = {}
     set_plugins(plugins_or_err)
     state.status = 'ready'
     render()
+    load_expanded_recent_commits(state.check_id)
 
     for _, plugin in ipairs(state.pending) do
       load_commits(plugin, state.check_id)
@@ -408,8 +517,11 @@ local function refresh_fetch_async()
   local check_id = state.check_id
   local total = #state.plugins
   local remaining = total
+  local next_plugin = 1
+  local active_fetches = 0
   local failures = 0
   state.commits = {}
+  state.recent_commits = {}
   start_check_animation()
   render()
 
@@ -418,48 +530,64 @@ local function refresh_fetch_async()
     return
   end
 
-  for _, plugin in ipairs(state.plugins) do
-    local name = plugin.spec.name
-    vim.system({
-      'git',
-      '-C',
-      plugin.path,
-      'fetch',
-      '--quiet',
-      '--tags',
-      '--force',
-      '--recurse-submodules=yes',
-      'origin',
-    }, {}, function(fetch_result)
-      vim.schedule(function()
-        if state.check_id ~= check_id or not float.is_shown() then
-          return
-        end
+  local function start_next_fetches()
+    while active_fetches < max_concurrent_fetches and next_plugin <= total do
+      local plugin = state.plugins[next_plugin]
+      next_plugin = next_plugin + 1
+      active_fetches = active_fetches + 1
 
-        if fetch_result.code ~= 0 then
-          failures = failures + 1
-        else
-          local ok, plugin_data = pcall(vim.pack.get, { name }, { offline = true })
-          if ok and plugin_data[1] then
-            replace_plugin(plugin_data[1])
-            if is_pending(plugin_data[1]) then
-              load_commits(plugin_data[1], check_id)
-            end
-          else
-            failures = failures + 1
+      local name = plugin.spec.name
+      vim.system({
+        'git',
+        '-C',
+        plugin.path,
+        'fetch',
+        '--quiet',
+        '--tags',
+        '--force',
+        '--recurse-submodules=yes',
+        'origin',
+      }, {}, function(fetch_result)
+        vim.schedule(function()
+          if state.check_id ~= check_id or not float.is_shown() then
+            return
           end
-        end
 
-        remaining = remaining - 1
-        state.status = ('fetching remotes %d/%d'):format(total - remaining, total)
-        render()
+          active_fetches = active_fetches - 1
+          remaining = remaining - 1
 
-        if remaining == 0 then
-          finish_refresh(check_id, failures)
-        end
+          if fetch_result.code ~= 0 then
+            failures = failures + 1
+          else
+            local ok, plugin_data = pcall(vim.pack.get, { name }, { offline = true })
+            if ok and plugin_data[1] then
+              replace_plugin(plugin_data[1])
+              if state.expanded[name] then
+                load_recent_commits(plugin_data[1], check_id)
+              end
+              if is_pending(plugin_data[1]) then
+                load_commits(plugin_data[1], check_id)
+              end
+            else
+              failures = failures + 1
+            end
+          end
+
+          state.status = ('fetching remotes %d/%d'):format(total - remaining, total)
+          if remaining == 0 then
+            finish_refresh(check_id, failures)
+            return
+          end
+          if active_fetches == 0 or (total - remaining) % max_concurrent_fetches == 0 then
+            render()
+          end
+          start_next_fetches()
+        end)
       end)
-    end)
+    end
   end
+
+  start_next_fetches()
 end
 
 local function refresh(fetch)
@@ -468,6 +596,15 @@ local function refresh(fetch)
   else
     refresh_local()
   end
+end
+
+local function refresh_after_open(fetch, check_id)
+  vim.defer_fn(function()
+    if state.check_id ~= check_id or not float.is_shown() then
+      return
+    end
+    refresh(fetch)
+  end, 50)
 end
 
 local function close()
@@ -560,6 +697,7 @@ local function clean_current()
   load_fast_plugin_list()
   state.expanded[name] = nil
   state.commits[name] = nil
+  state.recent_commits[name] = nil
   state.status = 'removed ' .. name
   render()
 end
@@ -604,6 +742,21 @@ local function toggle_details()
   render()
   if float.is_shown() and state.name_to_line[name] then
     api.nvim_win_set_cursor(float.cache.win_id, { state.name_to_line[name], 0 })
+  end
+
+  if state.expanded[name] and state.recent_commits[name] == nil then
+    local check_id = state.check_id
+    vim.schedule(function()
+      if state.check_id ~= check_id or not state.expanded[name] then
+        return
+      end
+      for _, plugin in ipairs(state.plugins) do
+        if plugin.spec.name == name then
+          load_recent_commits(plugin, check_id)
+          break
+        end
+      end
+    end)
   end
 end
 
@@ -666,7 +819,7 @@ function M.open(opts)
     end,
   })
 
-  refresh(opts.fetch ~= false)
+  refresh_after_open(opts.fetch ~= false, state.check_id)
 end
 
 api.nvim_create_user_command('PackFloat', function(command)
