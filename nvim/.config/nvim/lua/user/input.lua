@@ -82,11 +82,6 @@ function M.input(opts, on_confirm)
   vim.bo[buf].filetype = 'prompt'
   vim.bo[buf].swapfile = false
 
-  -- Set default text if provided
-  if opts.default then
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, { opts.default })
-  end
-
   -- Handle zindex for nested floating windows
   local parent_zindex = vim.api.nvim_win_get_config(parent_win).zindex
   local zindex = math.max((parent_zindex or 0) + 10, 50)
@@ -136,6 +131,11 @@ function M.input(opts, on_confirm)
 
   -- Setup prompt
   vim.fn.prompt_setprompt(buf, '')
+
+  -- Set default text after prompt setup, matching Snacks input behavior.
+  if opts.default then
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, { opts.default })
+  end
 
   --- Set buffer text and cursor position
   ---@param text string
@@ -262,7 +262,9 @@ function M.input(opts, on_confirm)
   })
 
   -- Start in insert mode at the end of the line
-  vim.cmd 'startinsert!'
+  vim.api.nvim_win_call(win, function()
+    vim.cmd 'startinsert!'
+  end)
   if opts.default then
     vim.api.nvim_win_set_cursor(win, { 1, #opts.default })
   end
