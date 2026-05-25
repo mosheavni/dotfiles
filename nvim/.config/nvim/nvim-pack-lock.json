@@ -134,10 +134,6 @@
       "rev": "1e37ade260e2b655c3a9b8407ba7e6b0fb995b28",
       "src": "https://github.com/nvim-mini/mini.surround"
     },
-    "neovim": {
-      "rev": "ff483051a47e27d84bdef47703538df1ed9f4a47",
-      "src": "https://github.com/rose-pine/neovim"
-    },
     "nginx.vim": {
       "rev": "a5991f38135d0c6c259d0b9f5e629ba33b891b9e",
       "src": "https://github.com/chr4/nginx.vim"

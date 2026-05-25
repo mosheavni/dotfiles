@@ -3,15 +3,16 @@
 --   :PackFloat!     open UI without fetching, using already fetched refs
 
 local api = vim.api
+local Float = require 'user.float'
 
 local M = {}
 
 local ns = api.nvim_create_namespace 'pack_float_ui'
 local max_commits = 12
 
+local float = Float.new()
+
 local state = {
-  bufnr = nil,
-  winid = nil,
   autocmd = nil,
   check_timer = nil,
   check_dot_count = 0,
@@ -27,6 +28,9 @@ local state = {
   line_to_name = {},
   name_to_line = {},
 }
+
+-- Highlights stashed by content_fn for highlights_fn to consume.
+local pending_hls = {}
 
 local function setup_highlights()
   local links = {
@@ -45,19 +49,11 @@ local function setup_highlights()
   end
 end
 
-local function valid_window()
-  return state.winid and api.nvim_win_is_valid(state.winid)
-end
-
-local function valid_buffer()
-  return state.bufnr and api.nvim_buf_is_valid(state.bufnr)
-end
-
 local function plugin_at_cursor()
-  if not valid_window() then
+  if not float.is_shown() then
     return nil
   end
-  local row = api.nvim_win_get_cursor(state.winid)[1]
+  local row = api.nvim_win_get_cursor(float.cache.win_id)[1]
   return state.line_to_name[row]
 end
 
@@ -162,32 +158,13 @@ local function start_check_animation()
   state.check_timer = vim.uv.new_timer()
   state.check_timer:start(350, 350, function()
     vim.schedule(function()
-      if not state.checking or not valid_buffer() then
+      if not state.checking or not float.is_shown() then
         return
       end
       state.check_dot_count = state.check_dot_count % 3 + 1
       render()
     end)
   end)
-end
-
-local function set_lines(lines, hls)
-  if not valid_buffer() then
-    return
-  end
-
-  vim.bo[state.bufnr].modifiable = true
-  api.nvim_buf_set_lines(state.bufnr, 0, -1, false, lines)
-  vim.bo[state.bufnr].modifiable = false
-  vim.bo[state.bufnr].modified = false
-
-  api.nvim_buf_clear_namespace(state.bufnr, ns, 0, -1)
-  for _, hl in ipairs(hls) do
-    api.nvim_buf_set_extmark(state.bufnr, ns, hl[1], hl[2], {
-      end_col = hl[3],
-      hl_group = hl[4],
-    })
-  end
 end
 
 local function build_content()
@@ -222,7 +199,7 @@ local function build_content()
   end
   add(header, 'PackFloatTitle')
 
-  local help = ' [r] refresh  [u] update plugin  [U] update all  [Enter] details  [q] close'
+  local help = ' [r] refresh  [u] update plugin  [U] update all  [x] clean inactive  [Enter] details  [q] close'
   local help_row = add(help)
   for start_pos, end_pos in help:gmatch '()%b[]()' do
     add_hl(help_row, start_pos - 1, end_pos - 1, 'PackFloatKey')
@@ -318,12 +295,53 @@ local function build_content()
   return lines, hls
 end
 
+local function content_fn()
+  local lines, hls = build_content()
+  pending_hls = hls
+  return lines
+end
+
+local function highlights_fn(buf_id, _)
+  api.nvim_buf_clear_namespace(buf_id, ns, 0, -1)
+  for _, hl in ipairs(pending_hls) do
+    api.nvim_buf_set_extmark(buf_id, ns, hl[1], hl[2], {
+      end_col = hl[3],
+      hl_group = hl[4],
+    })
+  end
+end
+
+local function config_fn(_)
+  local columns = vim.o.columns
+  local screen_lines = vim.o.lines
+  local width = math.min(100, math.max(64, math.floor(columns * 0.82)))
+  local height = math.min(32, math.max(18, math.floor(screen_lines * 0.72)))
+
+  return {
+    relative = 'editor',
+    width = width,
+    height = height,
+    row = math.floor((screen_lines - height) / 2),
+    col = math.floor((columns - width) / 2),
+    style = 'minimal',
+    border = 'rounded',
+    title = ' vim.pack ',
+    title_pos = 'center',
+  }
+end
+
+local function opts_fn()
+  return {
+    cursorline = true,
+    wrap = false,
+  }
+end
+
 render = function()
-  if not valid_buffer() then
+  if not float.is_shown() then
     return
   end
-  local lines, hls = build_content()
-  set_lines(lines, hls)
+  float.refresh(content_fn, config_fn, opts_fn, highlights_fn)
 end
 
 local function load_commits(plugin, check_id)
@@ -339,7 +357,7 @@ local function load_commits(plugin, check_id)
     plugin.rev .. '..' .. plugin.rev_to,
   }, { text = true }, function(result)
     vim.schedule(function()
-      if state.check_id ~= check_id or not valid_buffer() then
+      if state.check_id ~= check_id or not float.is_shown() then
         return
       end
       state.commits[name] = result.code == 0 and split_lines(result.stdout) or {}
@@ -349,7 +367,7 @@ local function load_commits(plugin, check_id)
 end
 
 local function finish_refresh(check_id, failures)
-  if state.check_id ~= check_id or not valid_buffer() then
+  if state.check_id ~= check_id or not float.is_shown() then
     return
   end
 
@@ -414,7 +432,7 @@ local function refresh_fetch_async()
       'origin',
     }, {}, function(fetch_result)
       vim.schedule(function()
-        if state.check_id ~= check_id or not valid_buffer() then
+        if state.check_id ~= check_id or not float.is_shown() then
           return
         end
 
@@ -457,14 +475,10 @@ local function close()
     pcall(api.nvim_del_autocmd, state.autocmd)
     state.autocmd = nil
   end
-  if valid_window() then
-    api.nvim_win_close(state.winid, true)
-  end
-  state.winid = nil
-  state.bufnr = nil
   state.check_id = state.check_id + 1
   state.checking = false
   stop_check_animation()
+  float.close()
 end
 
 local function update_plugins(names)
@@ -512,32 +526,71 @@ local function update_all()
   update_plugins(names)
 end
 
-local function jump(direction)
-  if not valid_window() then
+local function clean_current()
+  local name = plugin_at_cursor()
+  if not name then
     return
   end
-  local row = api.nvim_win_get_cursor(state.winid)[1]
+
+  local is_inactive = false
+  for _, plugin in ipairs(state.not_loaded) do
+    if plugin.spec.name == name then
+      is_inactive = true
+      break
+    end
+  end
+  if not is_inactive then
+    vim.notify(('vim.pack: %s is active, remove from init.lua and restart first'):format(name), vim.log.levels.WARN)
+    return
+  end
+
+  local choice = vim.fn.confirm(('Delete inactive plugin "%s" from disk?'):format(name), '&Yes\n&No', 2)
+  if choice ~= 1 then
+    return
+  end
+
+  local ok, err = pcall(vim.pack.del, { name })
+  if not ok then
+    vim.notify('vim.pack: ' .. tostring(err), vim.log.levels.ERROR)
+    state.status = 'clean failed'
+    render()
+    return
+  end
+
+  load_fast_plugin_list()
+  state.expanded[name] = nil
+  state.commits[name] = nil
+  state.status = 'removed ' .. name
+  render()
+end
+
+local function jump(direction)
+  if not float.is_shown() then
+    return
+  end
+  local win_id = float.cache.win_id
+  local row = api.nvim_win_get_cursor(win_id)[1]
   local rows = vim.tbl_keys(state.line_to_name)
   table.sort(rows)
   if direction > 0 then
     for _, next_row in ipairs(rows) do
       if next_row > row then
-        api.nvim_win_set_cursor(state.winid, { next_row, 0 })
+        api.nvim_win_set_cursor(win_id, { next_row, 0 })
         return
       end
     end
     if rows[1] then
-      api.nvim_win_set_cursor(state.winid, { rows[1], 0 })
+      api.nvim_win_set_cursor(win_id, { rows[1], 0 })
     end
   else
     for i = #rows, 1, -1 do
       if rows[i] < row then
-        api.nvim_win_set_cursor(state.winid, { rows[i], 0 })
+        api.nvim_win_set_cursor(win_id, { rows[i], 0 })
         return
       end
     end
     if rows[#rows] then
-      api.nvim_win_set_cursor(state.winid, { rows[#rows], 0 })
+      api.nvim_win_set_cursor(win_id, { rows[#rows], 0 })
     end
   end
 end
@@ -549,16 +602,16 @@ local function toggle_details()
   end
   state.expanded[name] = not state.expanded[name]
   render()
-  if valid_window() and state.name_to_line[name] then
-    api.nvim_win_set_cursor(state.winid, { state.name_to_line[name], 0 })
+  if float.is_shown() and state.name_to_line[name] then
+    api.nvim_win_set_cursor(float.cache.win_id, { state.name_to_line[name], 0 })
   end
 end
 
-local function map(lhs, rhs, desc)
-  vim.keymap.set('n', lhs, rhs, { buffer = state.bufnr, silent = true, nowait = true, desc = desc })
-end
+local function setup_keymaps(buf_id)
+  local function map(lhs, rhs, desc)
+    vim.keymap.set('n', lhs, rhs, { buffer = buf_id, silent = true, nowait = true, desc = desc })
+  end
 
-local function setup_keymaps()
   map('q', close, 'Close')
   map('<Esc>', close, 'Close')
   map('r', function()
@@ -566,6 +619,7 @@ local function setup_keymaps()
   end, 'Refresh updates')
   map('u', update_current, 'Update plugin')
   map('U', update_all, 'Update all pending')
+  map('x', clean_current, 'Clean inactive plugin')
   map('<CR>', toggle_details, 'Toggle details')
   map(']]', function()
     jump(1)
@@ -578,52 +632,33 @@ end
 function M.open(opts)
   opts = opts or {}
 
-  if valid_window() then
-    api.nvim_set_current_win(state.winid)
+  if float.is_shown() then
+    api.nvim_set_current_win(float.cache.win_id)
     return
   end
 
   setup_highlights()
-
-  state.bufnr = api.nvim_create_buf(false, true)
-  vim.bo[state.bufnr].buftype = 'nofile'
-  vim.bo[state.bufnr].bufhidden = 'wipe'
-  vim.bo[state.bufnr].swapfile = false
-  vim.bo[state.bufnr].filetype = 'pack-float'
-
-  local columns = vim.o.columns
-  local screen_lines = vim.o.lines
-  local width = math.min(100, math.max(64, math.floor(columns * 0.82)))
-  local height = math.min(32, math.max(18, math.floor(screen_lines * 0.72)))
-
-  state.winid = api.nvim_open_win(state.bufnr, true, {
-    relative = 'editor',
-    width = width,
-    height = height,
-    row = math.floor((screen_lines - height) / 2),
-    col = math.floor((columns - width) / 2),
-    style = 'minimal',
-    border = 'rounded',
-    title = ' vim.pack ',
-    title_pos = 'center',
-  })
-
-  vim.wo[state.winid].cursorline = true
-  vim.wo[state.winid].wrap = false
-
   reset_data()
   load_fast_plugin_list()
-  setup_keymaps()
-  render()
 
-  local captured_win = state.winid
+  -- Initial render: creates the buffer and opens the window via Float.
+  float.refresh(content_fn, config_fn, opts_fn, highlights_fn)
+
+  local buf_id = float.cache.buf_id
+  local win_id = float.cache.win_id
+  if not buf_id or not win_id then
+    return
+  end
+
+  api.nvim_set_current_win(win_id)
+  vim.bo[buf_id].filetype = 'pack-float'
+  setup_keymaps(buf_id)
+
   state.autocmd = api.nvim_create_autocmd('WinClosed', {
     once = true,
     callback = function(ev)
-      if vim._tointeger(ev.match) == captured_win then
+      if vim._tointeger(ev.match) == win_id then
         state.autocmd = nil
-        state.winid = nil
-        state.bufnr = nil
         state.check_id = state.check_id + 1
         state.checking = false
         stop_check_animation()
