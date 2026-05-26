@@ -50,7 +50,24 @@ local function setup_keymaps(bufnr)
   end, opts 'Toggle inlay hints')
 
   -- Diagnostics
-  vim.keymap.set('n', '<leader>lq', vim.diagnostic.setqflist, opts 'Set qflist with diagnostics')
+  vim.keymap.set('n', '<leader>lq', function()
+    local diagnostics = vim.diagnostic.get(bufnr)
+    if vim.tbl_isempty(diagnostics) then
+      vim.notify('No diagnostics in current buffer', vim.log.levels.INFO)
+      return
+    end
+    local items = vim.diagnostic.toqflist(diagnostics)
+    for i, d in ipairs(diagnostics) do
+      if d.source and d.source ~= '' and items[i] then
+        items[i].text = string.format('[%s] %s', d.source, items[i].text)
+      end
+    end
+    vim.fn.setqflist({}, ' ', {
+      title = 'Diagnostics: ' .. vim.api.nvim_buf_get_name(bufnr),
+      items = items,
+    })
+    vim.cmd 'botright copen'
+  end, opts 'Set qflist with buffer diagnostics')
   vim.keymap.set('n', '<leader>ld', vim.diagnostic.open_float, opts 'Open diagnostics float window')
 
   -- Code action
