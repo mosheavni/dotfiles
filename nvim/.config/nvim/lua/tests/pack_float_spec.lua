@@ -133,7 +133,7 @@ describe('user.pack.float', function()
         return plugins
       end,
     }
-    vim.system = function(command, opts, on_exit)
+    vim.system = function(command, _, on_exit)
       if command[1] == 'git' and command[4] == 'fetch' then
         active_fetches = active_fetches + 1
         max_active_fetches = math.max(max_active_fetches, active_fetches)
@@ -183,7 +183,7 @@ describe('user.pack.float', function()
         return { plugin }
       end,
     }
-    vim.system = function(command, opts, on_exit)
+    vim.system = function(command, _, on_exit)
       if command[1] == 'git' and command[3] == plugin.path then
         git_log_command = command
         on_exit {
@@ -253,7 +253,7 @@ describe('user.pack.float', function()
         return { plugin }
       end,
     }
-    vim.system = function(command, opts, on_exit)
+    vim.system = function(command, _, on_exit)
       if command[1] == 'git' and command[3] == plugin.path then
         on_exit {
           code = 0,
