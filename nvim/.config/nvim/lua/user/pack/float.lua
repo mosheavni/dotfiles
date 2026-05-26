@@ -408,7 +408,7 @@ end
 local function opts_fn()
   return {
     cursorline = true,
-    wrap = false,
+    wrap = true,
   }
 end
 
