@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add {
+vim.pack.add {
   'https://github.com/saghen/blink.download',
   { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.x' },
   'https://github.com/L3MON4D3/LuaSnip',

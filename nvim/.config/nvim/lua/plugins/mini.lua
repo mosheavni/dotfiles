@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add {
+vim.pack.add {
   'https://github.com/nvim-mini/mini.notify',
   'https://github.com/nvim-mini/mini.indentscope',
   'https://github.com/nvim-mini/mini.cursorword',

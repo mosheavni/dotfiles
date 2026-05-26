@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add 'https://github.com/lewis6991/gitsigns.nvim'
+vim.pack.add { 'https://github.com/lewis6991/gitsigns.nvim' }
 
 return function()
   require('gitsigns').setup {

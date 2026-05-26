@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add 'https://github.com/mfussenegger/nvim-lint'
+vim.pack.add { 'https://github.com/mfussenegger/nvim-lint' }
 
 local function find_root(markers)
   local path = vim.api.nvim_buf_get_name(0)

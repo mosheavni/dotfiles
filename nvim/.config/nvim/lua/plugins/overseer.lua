@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add 'https://github.com/stevearc/overseer.nvim'
+vim.pack.add { 'https://github.com/stevearc/overseer.nvim' }
 
 local dont_append_filename = { terraform = true }
 

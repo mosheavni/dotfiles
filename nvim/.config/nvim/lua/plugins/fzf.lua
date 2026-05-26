@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add 'https://github.com/ibhagwan/fzf-lua'
+vim.pack.add { 'https://github.com/ibhagwan/fzf-lua' }
 
 return function()
   require('fzf-lua').setup {

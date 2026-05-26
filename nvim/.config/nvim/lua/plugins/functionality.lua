@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add {
+vim.pack.add {
   'https://github.com/mrjones2014/smart-splits.nvim',
   'https://github.com/kkharji/sqlite.lua',
   'https://github.com/yorickpeterse/nvim-pqf',
@@ -14,14 +13,27 @@ pack.add {
   'https://github.com/iamcco/markdown-preview.nvim',
   'https://github.com/AndrewRadev/linediff.vim',
   'https://github.com/chr4/nginx.vim',
-  'https://github.com/mosheavni/github-pr-reviewer.nvim',
-  'https://github.com/mosheavni/search-replace.nvim',
   'https://github.com/gbprod/yanky.nvim',
 }
+
+local sar_dev = vim.fn.expand '~/Repos/search-replace.nvim'
+if vim.env.SAR_DEV == 'true' and vim.fn.isdirectory(sar_dev) == 1 then
+  vim.opt.runtimepath:prepend(sar_dev)
+else
+  vim.pack.add { 'https://github.com/mosheavni/search-replace.nvim' }
+end
+
+local pr_review_dev = vim.fn.expand '~/Repos/github-pr-reviewer.nvim'
+if vim.env.PR_REVIEW_DEV == 'true' and vim.fn.isdirectory(pr_review_dev) == 1 then
+  vim.opt.runtimepath:prepend(pr_review_dev)
+else
+  vim.pack.add { 'https://github.com/mosheavni/github-pr-reviewer.nvim' }
+end
 
 local M = {}
 
 function M.eager()
+  ---@diagnostic disable-next-line: missing-fields
   require('smart-splits').setup {}
   vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left, { desc = 'Resize split left' })
   vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down, { desc = 'Resize split down' })

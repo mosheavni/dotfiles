@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add 'https://github.com/nvim-tree/nvim-tree.lua'
+vim.pack.add { 'https://github.com/nvim-tree/nvim-tree.lua' }
 
 local sort_current = 1
 local SORT_METHODS = {

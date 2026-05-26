@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add {
+vim.pack.add {
   'https://github.com/nvim-treesitter/nvim-treesitter',
   'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
   'https://github.com/nvim-treesitter/nvim-treesitter-context',

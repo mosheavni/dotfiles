@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add {
+vim.pack.add {
   'https://github.com/nvim-lua/plenary.nvim',
   'https://github.com/tpope/vim-fugitive',
   'https://github.com/sindrets/diffview.nvim',

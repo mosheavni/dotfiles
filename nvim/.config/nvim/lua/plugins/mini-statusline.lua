@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add 'https://github.com/nvim-mini/mini.statusline'
+vim.pack.add { 'https://github.com/nvim-mini/mini.statusline' }
 
 return function()
   if vim.bo.filetype:match '^k8s_.*' then

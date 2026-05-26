@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add 'https://github.com/folke/snacks.nvim'
+vim.pack.add { 'https://github.com/folke/snacks.nvim' }
 
 return function()
   require('snacks').setup {

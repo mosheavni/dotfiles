@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add {
+vim.pack.add {
   'https://github.com/zbirenbaum/copilot.lua',
   'https://github.com/ravitemer/mcphub.nvim',
   'https://github.com/carlos-algms/agentic.nvim',

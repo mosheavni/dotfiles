@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add {
+vim.pack.add {
   { src = 'https://github.com/rose-pine/neovim', name = 'rose-pine' },
   'https://github.com/nvim-tree/nvim-web-devicons',
   'https://github.com/eero-lehtinen/oklch-color-picker.nvim',

@@ -1,7 +1,12 @@
-local pack = require 'user.pack.add'
-pack.add { src = 'https://github.com/Ramilito/kubectl.nvim', version = vim.version.range '2.x' }
+local dev = vim.fn.expand '~/Repos/kubectl.nvim'
+if vim.env.K8S_DEV == 'true' and vim.fn.isdirectory(dev) == 1 then
+  vim.opt.runtimepath:prepend(dev)
+else
+  vim.pack.add { { src = 'https://github.com/Ramilito/kubectl.nvim', version = vim.version.range '2.x' } }
+end
 
 return function()
+  ---@diagnostic disable-next-line: missing-fields
   require('kubectl').setup {
     auto_refresh = { enabled = true, interval = 300 },
     lsp = { enabled = true },

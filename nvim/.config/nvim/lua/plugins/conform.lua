@@ -1,5 +1,4 @@
-local pack = require 'user.pack.add'
-pack.add 'https://github.com/stevearc/conform.nvim'
+vim.pack.add { 'https://github.com/stevearc/conform.nvim' }
 
 local function get_lsp_formatters(bufnr)
   local formatting_clients = {}
