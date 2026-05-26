@@ -167,6 +167,51 @@ describe('user.tabular-v2', function()
       eq(result.headers, { 'A', 'B', 'C' })
       eq(result.lines[1], { '1', '2', '3' })
     end)
+
+    it('does not split on commas inside double-quoted CSV fields', function()
+      local lines = {
+        '"Title","Artist","Year"',
+        '"Here, There And Everywhere","The Beatles","1966"',
+        '"Yesterday","The Beatles","1965"',
+      }
+      local result = tabular.raw_parse(lines, ',')
+
+      eq(result.headers, { '"Title"', '"Artist"', '"Year"' })
+      eq(#result.lines, 2)
+      eq(result.lines[1], { '"Here, There And Everywhere"', '"The Beatles"', '"1966"' })
+      eq(result.lines[2], { '"Yesterday"', '"The Beatles"', '"1965"' })
+    end)
+
+    it('produces col_widths covering rows wider than the header row', function()
+      -- 2 header cols, but a data row has 3 fields. Must not leave col_widths[3] nil.
+      local lines = {
+        'A,B',
+        '1,2,3',
+      }
+      local result = tabular.raw_parse(lines, ',')
+
+      eq(#result.col_widths, 3)
+      eq(result.col_widths[3], 1)
+    end)
+  end)
+
+  describe('split_quoted', function()
+    it('splits a plain comma line', function()
+      eq(tabular.split_quoted('a,b,c', ','), { 'a', 'b', 'c' })
+    end)
+
+    it('keeps quoted commas intact and preserves quotes', function()
+      eq(tabular.split_quoted('"a,b",c,"d"', ','), { '"a,b"', 'c', '"d"' })
+    end)
+
+    it('preserves empty fields', function()
+      eq(tabular.split_quoted('a,,b', ','), { 'a', '', 'b' })
+      eq(tabular.split_quoted('a,"",b', ','), { 'a', '""', 'b' })
+    end)
+
+    it('handles multi-character delimiters', function()
+      eq(tabular.split_quoted('a||b||c', '||'), { 'a', 'b', 'c' })
+    end)
   end)
 
   describe('parse_size', function()
@@ -376,6 +421,34 @@ describe('user.tabular-v2', function()
 
       -- Should not error
       tabular.delete_displayed_lines(12345, 3, 3)
+    end)
+  end)
+
+  describe('ec2_instance_selector_parse', function()
+    it('parses a typical ruler-based table', function()
+      local raw_lines = {
+        'Instance Type  VCPUs  Memory',
+        '-------------  -----  ------',
+        't3.micro       2      1 GiB',
+        'm5.large       2      8 GiB',
+      }
+      local result = tabular.ec2_instance_selector_parse(raw_lines)
+      eq(result.headers, { 'Instance Type', 'VCPUs', 'Memory' })
+      eq(#result.lines, 2)
+      eq(result.lines[1], { 't3.micro', '2', '1 GiB' })
+      eq(result.lines[2], { 'm5.large', '2', '8 GiB' })
+    end)
+
+    it('does not error when the last column has no trailing space', function()
+      -- spaces_lengths has fewer entries than dashes_lengths; must not crash.
+      local raw_lines = {
+        'A    B    C',
+        '---  ---  ---',
+        'a1   b1   c1',
+      }
+      local result = tabular.ec2_instance_selector_parse(raw_lines)
+      eq(result.headers, { 'A', 'B', 'C' })
+      eq(result.lines[1], { 'a1', 'b1', 'c1' })
     end)
   end)
 

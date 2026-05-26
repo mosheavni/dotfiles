@@ -102,12 +102,41 @@ function M.buffer(title)
   return buf
 end
 
+---Split a line on `delimiter`, treating regions inside double quotes as opaque
+---(quoted delimiters are NOT treated as separators). Quotes are preserved.
+---@param line string
+---@param delimiter string
+---@return string[]
+function M.split_quoted(line, delimiter)
+  local fields = {}
+  local start = 1
+  local in_quotes = false
+  local dlen = #delimiter
+  local i = 1
+  while i <= #line do
+    local c = line:sub(i, i)
+    if c == '"' then
+      in_quotes = not in_quotes
+      i = i + 1
+    elseif not in_quotes and line:sub(i, i + dlen - 1) == delimiter then
+      table.insert(fields, line:sub(start, i - 1))
+      start = i + dlen
+      i = i + dlen
+    else
+      i = i + 1
+    end
+  end
+  table.insert(fields, line:sub(start))
+  return fields
+end
+
 ---@param buf_lines string[] The lines from the buffer to be parsed.
 ---@param delimiter string The delimiter used to split the lines into columns.
 ---@return table A table containing parsed headers, lines, and column widths.
 function M.raw_parse(buf_lines, delimiter)
   local pattern_delimiter
   local tab = vim.keycode '\t'
+  local use_quoted_split = false
   if delimiter == '  ' then
     pattern_delimiter = '  +'
   elseif delimiter == tab then
@@ -118,9 +147,19 @@ function M.raw_parse(buf_lines, delimiter)
       -- If no tabs, use spaces as fallback
       pattern_delimiter = '  +'
     end
+  elseif delimiter == ',' then
+    -- CSV: respect double-quoted fields so commas inside them don't split
+    use_quoted_split = true
   else
     -- Escape special pattern characters in delimiter
     pattern_delimiter = delimiter:gsub('[%(%)%.%%%+%-%*%?%[%]%^%$]', '%%%1')
+  end
+
+  local function split_line(line)
+    if use_quoted_split then
+      return M.split_quoted(line, delimiter)
+    end
+    return vim.split(line, pattern_delimiter)
   end
 
   -- clear empty lines
@@ -133,7 +172,7 @@ function M.raw_parse(buf_lines, delimiter)
   -- Parse headers
   local headers = {}
   local header_line = buf_lines[1]
-  local header_words = vim.split(header_line, pattern_delimiter)
+  local header_words = split_line(header_line)
   for _, word in ipairs(header_words) do
     word = vim.trim(word)
     if word ~= '' then
@@ -146,7 +185,7 @@ function M.raw_parse(buf_lines, delimiter)
   for i = 2, #buf_lines do
     local line = buf_lines[i]
     local row = {}
-    local words = vim.split(line, pattern_delimiter)
+    local words = split_line(line)
     for _, word in ipairs(words) do
       word = vim.trim(word)
       if word ~= '' then
@@ -156,10 +195,17 @@ function M.raw_parse(buf_lines, delimiter)
     table.insert(lines, row)
   end
 
-  -- Calculate column widths
+  -- Calculate column widths. Cover any rows that ended up wider than the
+  -- header row so display_table never indexes a nil col width.
+  local max_cols = #headers
+  for _, row in ipairs(lines) do
+    if #row > max_cols then
+      max_cols = #row
+    end
+  end
   local col_widths = {}
-  for i, header in ipairs(headers) do
-    col_widths[i] = #header
+  for i = 1, max_cols do
+    col_widths[i] = #(headers[i] or '')
     for _, row in ipairs(lines) do
       col_widths[i] = math.max(col_widths[i], #(row[i] or ''))
     end
@@ -959,7 +1005,7 @@ function M.ec2_instance_selector_parse(raw_lines)
   for i, length in ipairs(dashes_lengths) do
     local header = first_line:sub(start_pos, start_pos + length - 1)
     table.insert(headers, vim.trim(header))
-    start_pos = start_pos + length + spaces_lengths[i]
+    start_pos = start_pos + length + (spaces_lengths[i] or 0)
   end
 
   -- Parse data lines
@@ -971,7 +1017,7 @@ function M.ec2_instance_selector_parse(raw_lines)
     for j, length in ipairs(dashes_lengths) do
       local word = line:sub(data_start_pos, data_start_pos + length - 1)
       table.insert(row, vim.trim(word))
-      data_start_pos = data_start_pos + length + spaces_lengths[j]
+      data_start_pos = data_start_pos + length + (spaces_lengths[j] or 0)
     end
     table.insert(lines, row)
   end
@@ -997,8 +1043,8 @@ function M.parse_buffer()
   local bufnr = vim.api.nvim_get_current_buf()
   local buf_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   local second_line = buf_lines[2] or ''
-  -- Check if the second line contains dashes separated by spaces
-  if second_line:match '[-=]+%s' then
+  -- Check if the second line is a ruler made only of dashes/equals (and whitespace)
+  if second_line:match '^[%-=%s]+$' and second_line:find '[%-=]' then
     local parse_result = M.ec2_instance_selector_parse(buf_lines)
     M.get_or_create_tab_state(tabular_command, {
       command = tabular_command,
