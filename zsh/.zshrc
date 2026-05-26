@@ -101,8 +101,7 @@ fi
 # Starship prompt (loaded synchronously as it's needed immediately)
 eval "$(starship init zsh)"
 
-export K8S_DEV=false
-export PR_REVIEW_DEV=false
+export K8S_DEV=true
 export YAMLC_DEV=false
 export SAR_DEV=false
 export CMP_COMPLETION='<C-Space>'

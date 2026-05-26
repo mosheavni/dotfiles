@@ -23,13 +23,6 @@ else
   vim.pack.add { 'https://github.com/mosheavni/search-replace.nvim' }
 end
 
-local pr_review_dev = vim.fn.expand '~/Repos/github-pr-reviewer.nvim'
-if vim.env.PR_REVIEW_DEV == 'true' and vim.fn.isdirectory(pr_review_dev) == 1 then
-  vim.opt.runtimepath:prepend(pr_review_dev)
-else
-  vim.pack.add { 'https://github.com/mosheavni/github-pr-reviewer.nvim' }
-end
-
 local M = {}
 
 function M.eager()
@@ -63,18 +56,6 @@ function M.deferred()
       vim.cmd.MarkdownPreview()
     end,
   })
-
-  require('github-pr-reviewer').setup {
-    mark_as_viewed_key = '<CR>',
-    diff_view_toggle_key = '<C-v>',
-    toggle_floats_key = '<C-r>',
-    next_hunk_key = ']c',
-    prev_hunk_key = '[c',
-    next_file_key = ']q',
-    prev_file_key = '[q',
-  }
-  vim.keymap.set('n', '<leader>pr', '<cmd>PRReviewMenu<cr>', { desc = 'PR Review Menu' })
-  vim.keymap.set('v', '<leader>pr', ":<C-u>'<,'>PRSuggestChange<CR>", { desc = 'Suggest change' })
 
   require('yanky').setup {
     ring = {
