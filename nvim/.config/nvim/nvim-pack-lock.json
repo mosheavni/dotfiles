@@ -5,11 +5,11 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "5330d61a3b2f7ecf8bf6f9ab4ce12878497f2cee",
+      "rev": "e25e63f3b24fd6b8c2fc713107ad5d5594028eac",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "agentic.nvim": {
-      "rev": "0ba4456caa22425eb06868aa5a7b5723d62522ca",
+      "rev": "88a6d7ae1d21a06cf1e3dd5b66dd62881cbdbfac",
       "src": "https://github.com/carlos-algms/agentic.nvim"
     },
     "blink.cmp": {
@@ -26,7 +26,7 @@
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "copilot.lua": {
-      "rev": "7b89909d0647c89298de880255b287b01b7e5d34",
+      "rev": "393fd009c39b24dfc4cb4bf6f632288c64b13258",
       "src": "https://github.com/zbirenbaum/copilot.lua"
     },
     "diffview.nvim": {
@@ -58,7 +58,7 @@
       "src": "https://github.com/ray-x/go.nvim"
     },
     "guihua.lua": {
-      "rev": "8c34ebbb59990c6cb70110d786ad82b2a7182c78",
+      "rev": "f8e06bd8a26dee3377d63c2adf1e57cdb58ac474",
       "src": "https://github.com/ray-x/guihua.lua"
     },
     "img-clip.nvim": {
@@ -191,7 +191,7 @@
       "src": "https://github.com/kevinhwang91/nvim-ufo"
     },
     "nvim-web-devicons": {
-      "rev": "0d7d35fa946837b8738b17c18d1faa1ac351e7f9",
+      "rev": "dfbfaa967a6f7ec50789bead7ef87e336c1fa63c",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "oklch-color-picker.nvim": {
