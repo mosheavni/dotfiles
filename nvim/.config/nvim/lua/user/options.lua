@@ -223,6 +223,7 @@ vim.filetype.add {
 }
 
 require('user.input').setup()
+require 'user.search-count'
 
 -----------
 -- EXTUI --
