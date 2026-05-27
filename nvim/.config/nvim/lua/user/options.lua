@@ -103,7 +103,6 @@ vim.o.smartcase = true -- ignore case if search pattern is all lowercase, case-s
 vim.o.autoread = true -- Re-read file if it was changed from the outside
 vim.o.scrolloff = 4 -- When about to scroll page, see 7 lines below cursor
 vim.o.sidescrolloff = 8 -- Columns of context
-vim.o.scrolloffpad = 1 -- allow cursor to center at EOF
 vim.o.cmdheight = 1 -- Height of the command bar
 vim.o.hidden = true -- Hide buffer if abandoned
 vim.o.showmatch = true -- When closing a bracket (like {}), show the enclosing
