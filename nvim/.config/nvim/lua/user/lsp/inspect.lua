@@ -35,9 +35,15 @@ local function show_client_config(client)
   end
 
   table.insert(lines, '')
-  table.insert(lines, '-- ═══════════════════════════════════════════════════════════════════════════')
+  table.insert(
+    lines,
+    '-- ═══════════════════════════════════════════════════════════════════════════'
+  )
   table.insert(lines, '-- SERVER CAPABILITIES')
-  table.insert(lines, '-- ═══════════════════════════════════════════════════════════════════════════')
+  table.insert(
+    lines,
+    '-- ═══════════════════════════════════════════════════════════════════════════'
+  )
   table.insert(lines, '')
 
   local caps_str = format_value(client.server_capabilities)
@@ -46,9 +52,15 @@ local function show_client_config(client)
   end
 
   table.insert(lines, '')
-  table.insert(lines, '-- ═══════════════════════════════════════════════════════════════════════════')
+  table.insert(
+    lines,
+    '-- ═══════════════════════════════════════════════════════════════════════════'
+  )
   table.insert(lines, '-- SETTINGS (workspace/configuration)')
-  table.insert(lines, '-- ═══════════════════════════════════════════════════════════════════════════')
+  table.insert(
+    lines,
+    '-- ═══════════════════════════════════════════════════════════════════════════'
+  )
   table.insert(lines, '')
 
   local settings_str = format_value(client.settings)
@@ -89,7 +101,7 @@ function M.setup()
   })
 
   require('user.menu').add_actions('LSP', {
-    ['Inspect LSP Config'] = M.select_client,
+    ['Inspect LSP Config (:LspInspect)'] = M.select_client,
   })
 end
 
