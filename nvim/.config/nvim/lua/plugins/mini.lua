@@ -34,7 +34,6 @@ function M.deferred()
       'mason',
       'notify',
       'pack-float',
-      'sources',
       'trouble',
     },
     callback = function()
