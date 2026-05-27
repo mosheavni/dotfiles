@@ -10,7 +10,6 @@ vim.pack.add {
   'https://github.com/DrKJeff16/wezterm-types',
   'https://github.com/b0o/SchemaStore.nvim',
   'https://github.com/ray-x/go.nvim',
-  'https://github.com/milisims/nvim-luaref',
 }
 
 local yamlc_dev = vim.fn.expand '~/Repos/yaml-companion.nvim'
