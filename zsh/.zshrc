@@ -91,10 +91,10 @@ export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta
 # MCP Servers Sync     #
 # ==================== #
 # Sync MCP servers from mcphub to Claude (once per day, background)
-MCP_SYNC_TIMESTAMP="$HOME/.cache/mcp-sync-last-run"
+MCP_SYNC_TIMESTAMP="$HOME/last-ai-sync.txt"
 if [[ ! -f "$MCP_SYNC_TIMESTAMP" ]] || [[ "$(date +%Y%m%d)" != "$(date -r "$MCP_SYNC_TIMESTAMP" +%Y%m%d 2>/dev/null)" ]]; then
   (
-    ~/.dotfiles/ai/sync-mcp-servers.sh 2>/dev/null && touch "$MCP_SYNC_TIMESTAMP"
+    ~/.dotfiles/ai/sync-mcp-servers.sh 2>/dev/null
   ) &|
 fi
 
