@@ -33,6 +33,7 @@ function M.deferred()
       'input',
       'mason',
       'notify',
+      'pack-float',
       'sources',
       'trouble',
     },
