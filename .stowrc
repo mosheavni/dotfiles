@@ -6,3 +6,4 @@
 --ignore=requirements.txt
 --ignore=snippets.xml
 --ignore=start.sh
+--ignore=graphify-out

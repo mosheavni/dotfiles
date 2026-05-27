@@ -1,3 +1,4 @@
 nvim/.config/plenary.nvim/
 /.claude
 ai/.claude.json
+/graphify-out/

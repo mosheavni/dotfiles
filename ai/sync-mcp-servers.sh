@@ -1,10 +1,14 @@
 #!/bin/bash
 
-# Sync MCP servers configuration from mcphub to Claude and Cursor
-# Source of truth: .config/mcphub/servers.json (edit via nvim UI)
-# Targets:
-#   - ~/.claude.json (user-scoped MCP servers for Claude Code)
-#   - ~/.cursor/mcp.json (global MCP servers for Cursor)
+# Sync configuration from various sources to local targets.
+#
+# MCP servers (local → local):
+#   Source of truth: .config/mcphub/servers.json (edit via nvim UI)
+#   Targets: ~/.claude.json, ~/.cursor/mcp.json
+#
+# Remote files (URL → local):
+#   multica-ai/andrej-karpathy-skills → cursor/AGENTS.md
+#   multica-ai/andrej-karpathy-skills → cursor/.cursor/rules/agents.mdc
 
 set -e
 
@@ -72,3 +76,48 @@ fi
 if [ "$claude_result" -eq 2 ] && [ "$cursor_result" -eq 2 ]; then
   exit 0
 fi
+
+# Sync a remote file from a URL to a local path.
+# Returns: 0 = updated, 1 = error, 2 = already in sync
+sync_remote_file() {
+  local url="$1"
+  local target="$2"
+  local display_name="$3"
+
+  if ! command -v curl &>/dev/null; then
+    echo "Warning: curl is not installed. Cannot sync $display_name." >&2
+    return 1
+  fi
+
+  local content
+  content=$(curl -fsSL "$url") || {
+    echo "Warning: Failed to fetch $url" >&2
+    return 1
+  }
+
+  if [ -f "$target" ] && [ "$(cat "$target")" = "$content" ]; then
+    return 2
+  fi
+
+  mkdir -p "$(dirname "$target")"
+  printf '%s\n' "$content" >"$target"
+  echo "✓ Synced $display_name from $url"
+  return 0
+}
+
+KARPATHY_BASE="https://raw.githubusercontent.com/multica-ai/andrej-karpathy-skills/main"
+
+LAST_SYNC_FILE="${HOME}/last-ai-sync.txt"
+
+set +e
+sync_remote_file \
+  "$KARPATHY_BASE/CLAUDE.md" \
+  "$SCRIPT_DIR/../cursor/AGENTS.md" \
+  "cursor/AGENTS.md"
+sync_remote_file \
+  "$KARPATHY_BASE/.cursor/rules/karpathy-guidelines.mdc" \
+  "$SCRIPT_DIR/../cursor/.cursor/rules/agents.mdc" \
+  "cursor/.cursor/rules/agents.mdc"
+set -e
+
+date >"$LAST_SYNC_FILE"

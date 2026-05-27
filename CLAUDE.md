@@ -81,6 +81,21 @@ Each directory at the root is a stow package. The internal structure mirrors whe
 
 The `.stowrc` file excludes non-stowable files (Brewfile, readme, etc.) from deployment.
 
+**When creating new files, decide scope first:**
+
+| Where to put it | When |
+|---|---|
+| Inside a stow package (e.g. `cursor/`, `ai/`) | Config you want on every machine (global) |
+| `.cursor/rules/*.mdc` at repo root | Cursor rules scoped to this repo only |
+| Repo root with a leading dot (e.g. `.cursor/`) | Repo-local tooling config, never stowed |
+| Gitignored + excluded in `.stowrc` | Generated/local output (e.g. `graphify-out/`) |
+
+**AI config packages:**
+
+- `cursor/` → stows `~/AGENTS.md` (Claude + agents) and `~/.cursor/rules/agents.mdc` (Cursor global rules)
+- `ai/` → stows `~/.claude/` (Claude config, skills, MCP servers)
+- `.cursor/rules/` (repo root, NOT a stow package) → Cursor rules that only apply when working in this repo
+
 ### Neovim Configuration
 
 Entry point: `nvim/.config/nvim/init.lua`

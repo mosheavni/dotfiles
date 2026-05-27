@@ -38,6 +38,9 @@
         "FASTMCP_LOG_LEVEL": "ERROR"
       }
     },
+    "excalidraw": {
+      "url": "https://mcp.excalidraw.com"
+    },
     "fetch": {
       "args": ["mcp-server-fetch"],
       "command": "uvx"
