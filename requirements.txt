@@ -23,6 +23,7 @@ python-dateutil
 regex
 requests
 rope
+ruff
 s3transfer
 six
 toml
