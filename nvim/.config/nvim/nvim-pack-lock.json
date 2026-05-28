@@ -12,6 +12,10 @@
       "rev": "88a6d7ae1d21a06cf1e3dd5b66dd62881cbdbfac",
       "src": "https://github.com/carlos-algms/agentic.nvim"
     },
+    "bigfile.nvim": {
+      "rev": "33eb067e3d7029ac77e081cfe7c45361887a311a",
+      "src": "https://github.com/LunarVim/bigfile.nvim"
+    },
     "blink.cmp": {
       "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
       "src": "https://github.com/saghen/blink.cmp",
@@ -68,11 +72,6 @@
     "jsonpath.nvim": {
       "rev": "9e7a3c2aec3465a8f7c86cec6424cf98ee62ee24",
       "src": "https://github.com/phelipetls/jsonpath.nvim"
-    },
-    "kubectl.nvim": {
-      "rev": "c440c60ca340abae660820c39a2565be374ba1b6",
-      "src": "https://github.com/Ramilito/kubectl.nvim",
-      "version": "2.0.0 - 3.0.0"
     },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
@@ -154,10 +153,6 @@
       "rev": "a4ed4e761c400849e8c9f8bda33e5083f890268c",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
-    "nvim-luaref": {
-      "rev": "9cd3ed50d5752ffd56d88dd9e395ddd3dc2c7127",
-      "src": "https://github.com/milisims/nvim-luaref"
-    },
     "nvim-navic": {
       "rev": "f5eba192f39b453675d115351808bd51276d9de5",
       "src": "https://github.com/SmiteshP/nvim-navic"
@@ -225,10 +220,6 @@
     "smart-splits.nvim": {
       "rev": "b24335c3186b6c35522fa108af63646a2f70b3b6",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
-    },
-    "snacks.nvim": {
-      "rev": "882c996cf28183f4d63640de0b4c02ec886d01f2",
-      "src": "https://github.com/folke/snacks.nvim"
     },
     "sqlite.lua": {
       "rev": "50092d60feb242602d7578398c6eb53b4a8ffe7b",
