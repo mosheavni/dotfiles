@@ -30,7 +30,7 @@
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "copilot.lua": {
-      "rev": "393fd009c39b24dfc4cb4bf6f632288c64b13258",
+      "rev": "e8b9be2e51c393bedc893cef3bd1c5555a4d45f5",
       "src": "https://github.com/zbirenbaum/copilot.lua"
     },
     "diffview.nvim": {
@@ -150,7 +150,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "a4ed4e761c400849e8c9f8bda33e5083f890268c",
+      "rev": "6f76a3eeadc2ee235d74cd7d5319e95a261084af",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-navic": {

@@ -269,7 +269,7 @@ local function build_content()
   end
   add(header, 'PackFloatTitle')
 
-  local help = ' [r] refresh  [u] update plugin  [U] update all  [x] clean inactive  [Enter] details  [q] close'
+  local help = ' [r] refresh  [u] update plugin  [U] update all  [x] clean inactive  [Enter] details  [K] open commit  [q] close'
   local help_row = add(help)
   for start_pos, end_pos in help:gmatch '()%b[]()' do
     add_hl(help_row, start_pos - 1, end_pos - 1, 'PackFloatKey')
@@ -306,6 +306,26 @@ local function build_content()
         add_detail(('    desc: %s'):format(plugin.spec.desc), 'PackFloatMuted', name)
       end
 
+      if pending then
+        if commits == nil then
+          add_detail('    new commits: loading...', 'PackFloatMuted', name)
+        elseif #commits == 0 then
+          add_detail('    new commits: none found', 'PackFloatMuted', name)
+        else
+          add_detail('    new commits:', 'PackFloatMuted', name)
+          local limit = math.min(#commits, max_commits)
+          for i = 1, limit do
+            add_commit_line(commits[i], name)
+          end
+          if #commits > limit then
+            add_detail(('    ... %d more'):format(#commits - limit), 'PackFloatMuted', name)
+          end
+        end
+      end
+
+      add_detail(('    path: %s'):format(plugin.path), 'PackFloatMuted', name)
+      add_detail(('    src:  %s'):format(plugin.spec.src), 'PackFloatMuted', name)
+
       local recent_commits = state.recent_commits[name]
       if recent_commits == nil or recent_commits == false then
         add_detail('    recent commits: loading...', 'PackFloatMuted', name)
@@ -315,25 +335,6 @@ local function build_content()
         add_detail('    recent commits:', 'PackFloatMuted', name)
         for i = 1, math.min(#recent_commits, recent_commit_count) do
           add_commit_line(recent_commits[i], name)
-        end
-      end
-
-      add_detail(('    path: %s'):format(plugin.path), 'PackFloatMuted', name)
-      add_detail(('    src:  %s'):format(plugin.spec.src), 'PackFloatMuted', name)
-
-      if pending then
-        if commits == nil then
-          add_detail('    commits: loading...', 'PackFloatMuted', name)
-        elseif #commits == 0 then
-          add_detail('    commits: no new commits found', 'PackFloatMuted', name)
-        else
-          local limit = math.min(#commits, max_commits)
-          for i = 1, limit do
-            add_commit_line(commits[i], name)
-          end
-          if #commits > limit then
-            add_detail(('    ... %d more'):format(#commits - limit), 'PackFloatMuted', name)
-          end
         end
       end
     end
@@ -760,6 +761,36 @@ local function toggle_details()
   end
 end
 
+local function open_commit_in_browser()
+  if not float.is_shown() then
+    return
+  end
+  local win_id = float.cache.win_id or 0
+  local row = api.nvim_win_get_cursor(win_id)[1]
+  local line = api.nvim_buf_get_lines(float.cache.buf_id, row - 1, row, false)[1] or ''
+  local hash = line:match '^%s+(%x+)%s'
+  if not hash then
+    return
+  end
+  local name = state.line_to_name[row]
+  if not name then
+    return
+  end
+  local src
+  for _, plugin in ipairs(state.plugins) do
+    if plugin.spec.name == name then
+      src = plugin.spec.src
+      break
+    end
+  end
+  if not src then
+    return
+  end
+  local url = src:match '^https?://' and src or ('https://' .. src)
+  url = url:gsub('%.git$', '') .. '/commit/' .. hash
+  vim.ui.open(url)
+end
+
 local function setup_keymaps(buf_id)
   local function map(lhs, rhs, desc)
     vim.keymap.set('n', lhs, rhs, { buffer = buf_id, silent = true, nowait = true, desc = desc })
@@ -774,6 +805,7 @@ local function setup_keymaps(buf_id)
   map('U', update_all, 'Update all pending')
   map('x', clean_current, 'Clean inactive plugin')
   map('<CR>', toggle_details, 'Toggle details')
+  map('K', open_commit_in_browser, 'Open commit in browser')
   map(']]', function()
     jump(1)
   end, 'Next plugin')
