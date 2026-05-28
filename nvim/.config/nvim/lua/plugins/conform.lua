@@ -11,31 +11,11 @@ local function get_lsp_formatters(bufnr)
   return formatting_clients
 end
 
-local function get_lsp_names(clients)
-  return table.concat(vim.tbl_map(function(client)
-    return client.name
-  end, clients), ', ')
-end
-
 local function get_formatter_names(bufnr)
   local fmts, is_lsp = require('conform').list_formatters_to_run(bufnr)
-  if is_lsp then
-    return get_lsp_names(get_lsp_formatters(bufnr))
-  end
-  return get_lsp_names(fmts)
-end
-
-local function create_notify_callback(formatter_name)
-  return function(err, did_format)
-    if not did_format then
-      return
-    end
-    if err then
-      vim.notify(string.format('Error formatting: %s (%s)', err, formatter_name))
-      return
-    end
-    vim.notify(string.format('Formatted using %s', formatter_name))
-  end
+  local list = is_lsp and get_lsp_formatters(bufnr) or fmts
+  -- stylua: ignore
+  return table.concat(vim.tbl_map(function(f) return f.name end, list), ', ')
 end
 
 return function()
@@ -103,18 +83,20 @@ return function()
     vim.ui.select(vim.list_extend(lsp_fmts, conform_fmts), {
       prompt = 'Select formatter❯ ',
       title = 'Formatters',
-      format_item = function(client)
-        return client.name
-      end,
+      -- stylua: ignore
+      format_item = function(client) return client.name end,
     }, function(client)
-      if not client then
-        return
-      end
+      -- stylua: ignore
+      if not client then return end
       local conform_opts = { formatters = { client.name }, stop_after_first = true }
       if client.type == 'lsp' then
         conform_opts = { formatters = {}, lsp_format = 'prefer' }
       end
-      require('conform').format(conform_opts, create_notify_callback(client.name))
+      require('conform').format(conform_opts, function(err, did_format)
+        if did_format then
+          vim.notify(err and ('Error formatting: ' .. err) or ('Formatted using ' .. client.name))
+        end
+      end)
     end)
   end, { desc = 'Format buffer' })
 end
