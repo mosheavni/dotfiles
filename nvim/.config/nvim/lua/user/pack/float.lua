@@ -535,56 +535,63 @@ local function refresh_fetch_async()
     while active_fetches < max_concurrent_fetches and next_plugin <= total do
       local plugin = state.plugins[next_plugin]
       next_plugin = next_plugin + 1
-      active_fetches = active_fetches + 1
+      if plugin then
+        active_fetches = active_fetches + 1
 
-      local name = plugin.spec.name
-      vim.system({
-        'git',
-        '-C',
-        plugin.path,
-        'fetch',
-        '--quiet',
-        '--tags',
-        '--force',
-        '--recurse-submodules=yes',
-        'origin',
-      }, {}, function(fetch_result)
-        vim.schedule(function()
-          if state.check_id ~= check_id or not float.is_shown() then
-            return
-          end
-
-          active_fetches = active_fetches - 1
-          remaining = remaining - 1
-
-          if fetch_result.code ~= 0 then
-            failures = failures + 1
-          else
-            local ok, plugin_data = pcall(vim.pack.get, { name }, { offline = true })
-            if ok and plugin_data[1] then
-              replace_plugin(plugin_data[1])
-              if state.expanded[name] then
-                load_recent_commits(plugin_data[1], check_id)
-              end
-              if is_pending(plugin_data[1]) then
-                load_commits(plugin_data[1], check_id)
-              end
-            else
-              failures = failures + 1
+        local name = plugin.spec.name
+        vim.system({
+          'git',
+          '-C',
+          plugin.path,
+          'fetch',
+          '--quiet',
+          '--tags',
+          '--force',
+          '--recurse-submodules=yes',
+          'origin',
+        }, {}, function(fetch_result)
+          vim.schedule(function()
+            if state.check_id ~= check_id or not float.is_shown() then
+              return
             end
-          end
 
-          state.status = ('fetching remotes %d/%d'):format(total - remaining, total)
-          if remaining == 0 then
-            finish_refresh(check_id, failures)
-            return
-          end
-          if active_fetches == 0 or (total - remaining) % max_concurrent_fetches == 0 then
-            render()
-          end
-          start_next_fetches()
+            active_fetches = active_fetches - 1
+            remaining = remaining - 1
+
+            if fetch_result.code ~= 0 then
+              failures = failures + 1
+            else
+              local ok, plugin_data = pcall(vim.pack.get, { name }, { offline = true })
+              if ok and plugin_data[1] then
+                replace_plugin(plugin_data[1])
+                if state.expanded[name] then
+                  load_recent_commits(plugin_data[1], check_id)
+                end
+                if is_pending(plugin_data[1]) then
+                  load_commits(plugin_data[1], check_id)
+                end
+              else
+                failures = failures + 1
+              end
+            end
+
+            state.status = ('fetching remotes %d/%d'):format(total - remaining, total)
+            if remaining == 0 then
+              finish_refresh(check_id, failures)
+              return
+            end
+            if active_fetches == 0 or (total - remaining) % max_concurrent_fetches == 0 then
+              render()
+            end
+            start_next_fetches()
+          end)
         end)
-      end)
+      else
+        remaining = remaining - 1
+        if remaining == 0 then
+          finish_refresh(check_id, failures)
+        end
+      end
     end
   end
 
