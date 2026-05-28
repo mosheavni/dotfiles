@@ -2,7 +2,10 @@ local dev = vim.fn.expand '~/Repos/kubectl.nvim'
 if vim.env.K8S_DEV == 'true' and vim.fn.isdirectory(dev) == 1 then
   vim.opt.runtimepath:prepend(dev)
 else
-  vim.pack.add { { src = 'https://github.com/Ramilito/kubectl.nvim', version = vim.version.range '2.x' } }
+  vim.pack.add {
+    'https://github.com/saghen/blink.download',
+    { src = 'https://github.com/Ramilito/kubectl.nvim', version = vim.version.range '2.x' },
+  }
 end
 
 return function()
