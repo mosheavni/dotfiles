@@ -33,7 +33,6 @@ vim.api.nvim_create_autocmd('PackChanged', {
 
 require('plugins.look-and-feel').eager()
 require('plugins.mini').eager()
-require 'plugins.snacks'()
 require 'plugins.gitsigns'()
 require('plugins.functionality').eager()
 require 'plugins.kubectl'()

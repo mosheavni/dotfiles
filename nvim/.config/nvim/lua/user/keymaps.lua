@@ -273,6 +273,17 @@ map('v', '<leader>46', _G.op.base64_decode, { desc = 'Base64 decode selection' }
 -- Close current buffer
 map('n', '<leader>bc', ':close<cr>', { silent = true, desc = 'Close this buffer' })
 
+map('n', '<leader>bh', function()
+  local count = 0
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) and #vim.fn.win_findbuf(buf) == 0 then
+      vim.api.nvim_buf_delete(buf, {})
+      count = count + 1
+    end
+  end
+  vim.notify(count .. ' hidden buffer(s) deleted')
+end, { desc = 'Delete Hidden Buffers' })
+
 -- Duplicate a line and comment out the first line
 map('n', 'yc', 'yygccp', { remap = true, desc = 'Duplicate and comment line' })
 

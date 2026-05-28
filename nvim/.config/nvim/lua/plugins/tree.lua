@@ -250,7 +250,9 @@ return function()
         events.subscribe(events.Event.NodeRenamed, function(data)
           if prev.new_name ~= data.new_name or prev.old_name ~= data.old_name then
             data = data
-            require('snacks').rename.on_rename_file(data.old_name, data.new_name)
+            if _G._notify_lsp_rename then
+              _G._notify_lsp_rename(data.old_name, data.new_name)
+            end
           end
         end)
       end,

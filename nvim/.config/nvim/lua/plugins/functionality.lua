@@ -14,6 +14,7 @@ vim.pack.add {
   'https://github.com/AndrewRadev/linediff.vim',
   'https://github.com/chr4/nginx.vim',
   'https://github.com/gbprod/yanky.nvim',
+  'https://github.com/LunarVim/bigfile.nvim',
 }
 
 local sar_dev = vim.fn.expand '~/Repos/search-replace.nvim'
@@ -133,6 +134,37 @@ function M.deferred()
   require('template-string').setup {}
 
   vim.keymap.set({ 'v', 'n' }, 'ga', '<Plug>(EasyAlign)', { desc = 'Align by motion' })
+
+  require('bigfile').setup()
+
+  local function notify_lsp_rename(old_path, new_path)
+    local changes = { { oldUri = vim.uri_from_fname(old_path), newUri = vim.uri_from_fname(new_path) } }
+    for _, client in ipairs(vim.lsp.get_clients()) do
+      if client:supports_method 'workspace/willRenameFiles' then
+        ---@diagnostic disable-next-line: param-type-mismatch
+        local resp = client:request_sync('workspace/willRenameFiles', { files = changes }, 1000)
+        if resp and resp.result then
+          vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
+        end
+      end
+      if client:supports_method 'workspace/didRenameFiles' then
+        client:notify('workspace/didRenameFiles', { files = changes })
+      end
+    end
+  end
+
+  _G._notify_lsp_rename = notify_lsp_rename
+
+  vim.api.nvim_create_user_command('Rename', function()
+    local old = vim.api.nvim_buf_get_name(0)
+    vim.ui.input({ prompt = 'New filename: ', default = old }, function(new)
+      if not new or new == old then return end
+      vim.fn.rename(old, new)
+      vim.cmd('keepalt saveas ' .. vim.fn.fnameescape(new))
+      notify_lsp_rename(old, new)
+    end)
+  end, { desc = 'Rename file' })
+
 end
 
 return M
