@@ -12,6 +12,7 @@ msgpack
 neovim
 pathspec
 pre-commit
+proselint
 protobuf
 psutil
 pycodestyle
@@ -19,6 +20,7 @@ pyflakes
 pygls
 pylint
 pynvim
+pyright
 python-dateutil
 regex
 requests
@@ -28,4 +30,5 @@ s3transfer
 six
 toml
 urllib3
+vim-vint
 zipp

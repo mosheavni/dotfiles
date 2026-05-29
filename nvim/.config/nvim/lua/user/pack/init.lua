@@ -15,9 +15,6 @@ vim.api.nvim_create_autocmd('PackChanged', {
     if name == 'nvim-treesitter' then
       ensure_loaded()
       vim.cmd 'TSUpdate'
-    elseif name == 'mason.nvim' and kind == 'update' then
-      ensure_loaded()
-      pcall(vim.cmd, 'MasonUpdate')
     elseif name == 'LuaSnip' and kind == 'install' then
       vim.system({ 'make', 'install_jsregexp' }, { cwd = ev.data.path }):wait()
     elseif name == 'markdown-preview.nvim' and kind == 'install' then

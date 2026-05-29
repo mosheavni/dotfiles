@@ -1,5 +1,6 @@
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
+vim.g.python3_host_prog = vim.fn.trim(vim.fn.system 'brew --prefix python3') .. '/bin/python3'
 
 -- Disable bundled runtime plugins we never use (reduces startup work).
 vim.g.loaded_2html_plugin = 1

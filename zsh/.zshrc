@@ -28,6 +28,7 @@ path=(
   $HOME/.docker/bin
   $HOME/.local/bin
   $HOME/.cargo/bin
+  $HOME/go/bin
   /usr/local/sbin
   /usr/local/opt/postgresql@15/bin
   $PNPM_HOME
@@ -54,8 +55,6 @@ export LC_ALL=en_US.UTF-8
 #  Autoloaders  #
 # ============= #
 # asdf
-export ASDF_PYTHON_DEFAULT_PACKAGES_FILE=~/.dotfiles/requirements.txt
-
 source $HOME/.antidote/antidote.zsh
 antidote load
 

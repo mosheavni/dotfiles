@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec java -jar "$HOME/.local/share/groovy-language-server/build/libs/groovy-language-server-all.jar" "$@"

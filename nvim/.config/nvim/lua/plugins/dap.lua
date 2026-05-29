@@ -60,7 +60,6 @@ local M = {
     { 'mfussenegger/nvim-dap-python', lazy = true },
     'rcarriga/cmp-dap',
     'theHamsta/nvim-dap-virtual-text',
-    'jay-babu/mason-nvim-dap.nvim',
   },
 }
 
@@ -74,7 +73,6 @@ M.config = function()
   local dapui = require 'dapui'
   local dap_python = require 'dap-python'
   local cmp = require 'cmp'
-  local mason_nvim_dap = require 'mason-nvim-dap'
 
   dapui.setup()
   dap.listeners.after.event_initialized['dapui_config'] = function()
@@ -90,24 +88,6 @@ M.config = function()
   ---@diagnostic disable-next-line: missing-fields
   require('nvim-dap-virtual-text').setup {
     commented = true, -- Show virtual text alongside comment
-  }
-
-  ---@diagnostic disable-next-line: missing-fields
-  mason_nvim_dap.setup {
-    automatic_installation = true,
-    ensure_installed = {
-      'bash',
-      'python',
-    },
-    automatic_setup = true,
-    handlers = {
-      function(config)
-        -- all sources with no handler get passed here
-
-        -- Keep original functionality
-        mason_nvim_dap.default_setup(config)
-      end,
-    },
   }
 
   dap_python.setup 'python3'

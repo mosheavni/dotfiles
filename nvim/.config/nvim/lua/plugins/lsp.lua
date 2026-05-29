@@ -1,7 +1,6 @@
 vim.pack.add {
   'https://github.com/MunifTanjim/nui.nvim',
   'https://github.com/ray-x/guihua.lua',
-  'https://github.com/mason-org/mason.nvim',
   'https://github.com/neovim/nvim-lspconfig',
   'https://github.com/j-hui/fidget.nvim',
   'https://github.com/SmiteshP/nvim-navic',
@@ -20,65 +19,6 @@ else
 end
 
 return function()
-  require('mason').setup {
-    ui = { border = 'rounded' },
-  }
-
-  local packages = {
-    'actionlint',
-    'bash-debug-adapter',
-    'bash-language-server',
-    'black',
-    'cbfmt',
-    'checkmake',
-    'codespell',
-    'css-lsp',
-    'cssmodules-language-server',
-    'debugpy',
-    'docker-compose-language-service',
-    'dockerfile-language-server',
-    'eslint_d',
-    'gitleaks',
-    'golangci-lint',
-    'golangci-lint-langserver',
-    'groovy-language-server',
-    'hadolint',
-    'helm-ls',
-    'html-lsp',
-    'isort',
-    'jinja-lsp',
-    'json-lsp',
-    'lua-language-server',
-    'markdownlint',
-    'npm-groovy-lint',
-    'prettierd',
-    'proselint',
-    'pyright',
-    'ruff',
-    'selene',
-    'shellcheck',
-    'shfmt',
-    'stylua',
-    'terraform-ls',
-    'tombi',
-    'trivy',
-    'typescript-language-server',
-    'vim-language-server',
-    'vint',
-    'vtsls',
-    'write-good',
-    'yaml-language-server',
-  }
-  local mr = require 'mason-registry'
-  for _, package in ipairs(packages) do
-    if not mr.is_installed(package) then
-      vim.notify('Installing ' .. package .. ' via Mason')
-      mr.get_package(package):install()
-    end
-  end
-
-  vim.keymap.set('n', '<leader>cm', '<cmd>Mason<cr>', { desc = 'Mason' })
-
   require('user.lsp.config').setup()
 
   require('fidget').setup {

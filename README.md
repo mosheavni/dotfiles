@@ -20,8 +20,6 @@
 - [Usage (just NVIM)](#usage-just-nvim)
 - [Additional stuff](#additional-stuff)
 - [Troubleshooting](#troubleshooting)
-  - [Reinstalling Node.js dependencies](#reinstalling-nodejs-dependencies)
-  - [Reinstalling Python dependencies](#reinstalling-python-dependencies)
   - [Remove TreeSitter parsers](#remove-treesitter-parsers)
 
 ## Usage
@@ -64,33 +62,17 @@
    source ~/.zshrc
    ```
 
-5. Install brew dependencies (generated with `brew bundle dump`)
+5. Install and update everything (brew, asdf, pip, npm, cargo, go, etc.):
 
    ```bash
-   brew bundle
+   ./updates.sh
    ```
 
 6. Open [Wezterm](https://wezfurlong.org/wezterm/index.html) and start using a real terminal.
 
-7. Install [asdf-vm](https://asdf-vm.com/guide/getting-started.html) plugins
+7. ???
 
-   ```bash
-   cd ~/.dotfiles
-   while read -r plugin_line; do
-     asdf plugin add $(awk '{print $1}' <<<"$plugin_line")
-   done <asdf/.tool-versions
-   asdf install
-   ```
-
-8. Add support for recently installed [fzf](https://github.com/junegunn/fzf)
-
-   ```bash
-   $(brew --prefix)/opt/fzf/install
-   ```
-
-9. ???
-
-10. PROFIT
+8. PROFIT
 
 ## Usage (just NVIM)
 
@@ -134,20 +116,9 @@ Verify with `npx skills ls -g`.
 
 ## Troubleshooting
 
-### Reinstalling Node.js dependencies
+### Reinstalling all packages
 
-```bash
-while read -r npm_package; do
-  echo "$npm_package"
-  npm i -g "$npm_package"
-done <~/.dotfiles/node/.default-npm-packages
-```
-
-### Reinstalling Python dependencies
-
-```bash
-pip install --user -r ~/.dotfiles/requirements.txt
-```
+Run `./updates.sh` — it handles brew, asdf, pip, npm, cargo, go, GitHub releases, and build-from-source tools.
 
 ### Remove TreeSitter parsers
 
