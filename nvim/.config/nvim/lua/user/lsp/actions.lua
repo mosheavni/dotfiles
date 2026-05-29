@@ -49,6 +49,10 @@ M.actions = function()
     ['Clear Diagnostics'] = function()
       vim.diagnostic.reset()
     end,
+    ['Read Log'] = function()
+      vim.cmd.tabnew()
+      vim.cmd.edit(vim.lsp.log.get_filename())
+    end,
     ['Delete Log'] = function()
       vim.system { 'rm', '-rf', vim.lsp.log.get_filename() }
     end,
