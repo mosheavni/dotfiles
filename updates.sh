@@ -1,58 +1,91 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "Installing missing asdf plugins"
-while read -r plugin_name _; do
-  asdf plugin add "$plugin_name" 2>/dev/null || true
-done <~/.dotfiles/asdf/.tool-versions
-asdf install
+DOTFILES="$HOME/.dotfiles"
 
-echo "Updating asdf and all plugins"
-asdf plugin update --all
+# ── helpers ──────────────────────────────────────────────────────────────────
 
-echo "Installing missing brew packages"
-brew bundle --file=~/.dotfiles/Brewfile
+log() {
+  echo ""
+  echo "▶ $*"
+}
 
-echo "Upgrading brew packages"
-brew update
-brew upgrade
+each_line() {
+  # Usage: each_line <file> <callback>
+  # Calls callback for each non-empty, non-comment line in file.
+  local file="$1" callback="$2"
+  while IFS= read -r line; do
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    "$callback" "$line"
+  done <"$file"
+}
 
-echo "Setting up fzf shell integration"
-"$(brew --prefix)/opt/fzf/install" --all --no-update-rc
+# ── sections ─────────────────────────────────────────────────────────────────
 
-echo "Installing and upgrading pip packages"
-"$(brew --prefix python3)/bin/pip3" install -r ~/.dotfiles/python/requirements.txt
+update_asdf() {
+  log "asdf — install plugins and runtimes"
+  while read -r plugin _; do
+    asdf plugin add "$plugin" 2>/dev/null || true
+  done <"$DOTFILES/asdf/.tool-versions"
+  asdf install
+  asdf plugin update --all
+}
 
-echo "Installing and updating npm packages"
-xargs "$(brew --prefix node)/bin/npm" install -g <~/.dotfiles/node/global-npm-packages
+update_brew() {
+  log "brew — bundle, update, upgrade"
+  brew bundle --file="$DOTFILES/Brewfile"
+  brew update
+  brew upgrade
+  log "fzf — shell integration"
+  "$(brew --prefix)/opt/fzf/install" --all --no-update-rc
+}
 
-echo "Installing/updating cargo packages"
-while IFS= read -r pkg; do
-  [[ -z "$pkg" || "$pkg" == \#* ]] && continue
-  cargo install "$pkg"
-done <~/.dotfiles/rust/cargo-packages.txt
+update_pip() {
+  log "pip — sync venv at ~/.local/share/dotfiles-python"
+  uv venv --python "$(brew --prefix python3)/bin/python3" --allow-existing \
+    "$HOME/.local/share/dotfiles-python"
+  uv pip install --python "$HOME/.local/share/dotfiles-python" \
+    -r "$DOTFILES/python/requirements.txt"
+}
 
-echo "Installing/updating go packages"
-while IFS= read -r pkg; do
-  [[ -z "$pkg" || "$pkg" == \#* ]] && continue
-  GOPATH="$HOME/go" go install "$pkg"
-done <~/.dotfiles/go/go-packages.txt
+update_npm() {
+  log "npm — global packages"
+  xargs "$(brew --prefix node)/bin/npm" install -g --force \
+    <"$DOTFILES/node/global-npm-packages"
+}
 
-echo "Installing/updating GitHub release tools"
-install_dir="$HOME/.local/bin"
-mkdir -p "$install_dir"
-while read -r repo binary; do
-  [[ -z "$repo" || "$repo" == \#* ]] && continue
-  gh release download --repo "$repo" --pattern "*darwin*amd64*" \
-    --output "$install_dir/$binary" --clobber
-  chmod +x "$install_dir/$binary"
-done <~/.dotfiles/github-releases.txt
+_cargo_install() { cargo install "$1"; }
+update_cargo() {
+  log "cargo — global packages"
+  each_line "$DOTFILES/rust/cargo-packages.txt" _cargo_install
+}
 
-echo "Building from source: groovy-language-server"
-gls_dir="$HOME/.local/share/groovy-language-server"
-if [[ -d "$gls_dir" ]]; then
-  git -C "$gls_dir" pull
-else
-  git clone https://github.com/GroovyLanguageServer/groovy-language-server "$gls_dir"
-fi
-(cd "$gls_dir" && ./gradlew build)
+_go_install() { GOPATH="$HOME/go" go install "$1"; }
+update_go() {
+  log "go — global packages"
+  each_line "$DOTFILES/go/go-packages.txt" _go_install
+}
+
+update_build_tools() {
+  log "build — groovy-language-server"
+  local dir="$HOME/.local/share/groovy-language-server"
+  if [[ -d "$dir" ]]; then
+    git -C "$dir" pull
+  else
+    git clone https://github.com/GroovyLanguageServer/groovy-language-server "$dir"
+  fi
+  (cd "$dir" && ./gradlew build)
+}
+
+# ── main ─────────────────────────────────────────────────────────────────────
+
+update_asdf
+update_brew
+update_pip
+update_npm
+update_cargo
+update_go
+update_build_tools
+
+echo ""
+echo "✓ All done."

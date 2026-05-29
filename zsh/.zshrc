@@ -27,6 +27,7 @@ path=(
   $HOME/.bin
   $HOME/.docker/bin
   $HOME/.local/bin
+  $HOME/.local/share/dotfiles-python/bin
   $HOME/.cargo/bin
   $HOME/go/bin
   /usr/local/sbin

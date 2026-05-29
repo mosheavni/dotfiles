@@ -1,1 +1,1 @@
-github.com/mrtazz/checkmake/cmd/checkmake@latest
+github.com/checkmake/checkmake/cmd/checkmake@latest
