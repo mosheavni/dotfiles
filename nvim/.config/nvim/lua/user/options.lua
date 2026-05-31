@@ -56,6 +56,7 @@ vim.opt.listchars = {
   extends = '',
   precedes = '',
   tab = '┆·',
+  nbsp = '␣',
   -- leadmultispace = '│ ',
 }
 

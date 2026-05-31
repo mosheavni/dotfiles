@@ -88,13 +88,16 @@ M.setup = function()
   end
   vim.keymap.set('n', '<leader>ls', function()
     _G.start_ls(false)
-  end)
+  end, { desc = 'Start LSP (without file)' })
   vim.keymap.set('n', '<leader>lS', function()
     _G.start_ls(true)
-  end)
+  end, { desc = 'Start LSP (with file)' })
   require('user.menu').add_actions('LSP', {
-    ['Start LSP (<leader>ls)'] = function()
+    ['Start LSP without file (<leader>ls)'] = function()
       _G.start_ls()
+    end,
+    ['Start LSP with file (<leader>lS)'] = function()
+      _G.start_ls(true)
     end,
   })
 
@@ -122,16 +125,35 @@ M.setup = function()
         setup_keymaps(bufnr)
       end
 
+      -- Highlight references of symbol under cursor (semantic, complements mini.cursorword)
+      if client and client:supports_method('textDocument/documentHighlight', bufnr) then
+        local hl_group = vim.api.nvim_create_augroup('lsp-document-highlight', { clear = false })
+        vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+          buffer = bufnr,
+          group = hl_group,
+          callback = vim.lsp.buf.document_highlight,
+        })
+        vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+          buffer = bufnr,
+          group = hl_group,
+          callback = vim.lsp.buf.clear_references,
+        })
+        vim.api.nvim_create_autocmd('LspDetach', {
+          group = vim.api.nvim_create_augroup('lsp-document-highlight-detach', { clear = true }),
+          callback = function(ev)
+            vim.lsp.buf.clear_references()
+            vim.api.nvim_clear_autocmds { group = 'lsp-document-highlight', buffer = ev.buf }
+          end,
+        })
+      end
+
       -- Diagnostics config (once)
       if not vim.g.diagnostics_configured then
         vim.g.diagnostics_configured = true
         vim.diagnostic.config {
           jump = {
-            on_jump = function(diagnostic)
-              if not diagnostic then
-                return
-              end
-              vim.diagnostic.open_float()
+            on_jump = function(_, bufnr)
+              vim.diagnostic.open_float { bufnr = bufnr, scope = 'cursor', focus = false }
             end,
           },
           severity_sort = true,
