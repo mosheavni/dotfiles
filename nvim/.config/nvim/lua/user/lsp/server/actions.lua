@@ -35,15 +35,15 @@ end
 ---@return table action_builder
 local function next_line_action(opts)
   return {
-    build = function(context, uri, line_number, _, indent, rule)
+    build = function(context, uri, line_number, _, indent, rule, cs)
       local prev_line = line_number > 0 and context.content[line_number] or ''
       local existing = opts.check_existing(prev_line)
 
       local edit
       if existing then
-        edit = make_edit(line_number - 1, line_number, opts.format_merge(prev_line, rule))
+        edit = make_edit(line_number - 1, line_number, opts.format_merge(prev_line, rule, cs))
       else
-        edit = make_edit(line_number, line_number, opts.format_new(rule, indent))
+        edit = make_edit(line_number, line_number, opts.format_new(rule, indent, cs))
       end
 
       return {
@@ -60,9 +60,9 @@ end
 ---@return table action_builder
 local function current_line_action(opts)
   return {
-    build = function(_, uri, line_number, current_line, _, rule)
+    build = function(_, uri, line_number, current_line, _, rule, cs)
       local existing = opts.check_existing(current_line)
-      local new_text = existing and opts.format_merge(current_line, rule) or opts.format_new(current_line, rule)
+      local new_text = existing and opts.format_merge(current_line, rule, cs) or opts.format_new(current_line, rule, cs)
 
       return {
         title = string.format(opts.title_fmt, rule),
@@ -78,15 +78,15 @@ end
 ---@return table action_builder
 local function file_action(opts)
   return {
-    build = function(context, uri, _, _, _, rule)
+    build = function(context, uri, _, _, _, rule, cs)
       local first_line = context.content[1] or ''
       local existing = opts.check_existing(first_line)
 
       local edit
       if existing then
-        edit = make_edit(0, 1, opts.format_merge(first_line, rule))
+        edit = make_edit(0, 1, opts.format_merge(first_line, rule, cs))
       else
-        edit = make_edit(0, 0, opts.format_new(rule))
+        edit = make_edit(0, 0, opts.format_new(rule, cs))
       end
 
       return {
@@ -99,7 +99,7 @@ local function file_action(opts)
 end
 
 --- Create a lint ignore action generator from config
----@param config table { filetypes, source, actions, get_rule_code? }
+---@param config table { filetypes?, source, actions, get_rule_code? }
 ---@return function generator
 local function create_lint_ignore_generator(config)
   local get_rule_code = config.get_rule_code or function(diag)
@@ -107,16 +107,23 @@ local function create_lint_ignore_generator(config)
   end
 
   return function(context)
-    -- Check filetype
-    local ft_match = false
-    for _, ft in ipairs(config.filetypes) do
-      if context.filetype == ft then
-        ft_match = true
-        break
+    -- Check filetype (nil means all filetypes)
+    if config.filetypes then
+      local ft_match = false
+      for _, ft in ipairs(config.filetypes) do
+        if context.filetype == ft then
+          ft_match = true
+          break
+        end
+      end
+      if not ft_match then
+        return {}
       end
     end
-    if not ft_match then
-      return {}
+
+    local cs = vim.bo[context.bufnr].commentstring
+    if cs == '' then
+      cs = '# %s'
     end
 
     local diagnostics = vim.diagnostic.get(context.bufnr, { lnum = context.range.row - 1 })
@@ -133,7 +140,7 @@ local function create_lint_ignore_generator(config)
           local indent = get_indent(current_line)
 
           for _, action_config in ipairs(config.actions) do
-            local action = action_config.build(context, context.uri, line_number, current_line, indent, rule_code)
+            local action = action_config.build(context, context.uri, line_number, current_line, indent, rule_code, cs)
             if action then
               table.insert(actions, action)
             end
@@ -573,6 +580,47 @@ local markdownlint_ignore = create_lint_ignore_generator {
   },
 }
 
+-- codespell: ignore misspellings (global, all filetypes, comment-syntax aware)
+local codespell_ignore = create_lint_ignore_generator {
+  source = 'codespell',
+  get_rule_code = function(diag)
+    local word = diag.message:match '^%s*(.-)%s*==>'
+    return word ~= '' and word or nil
+  end,
+  actions = {
+    current_line_action {
+      title_fmt = "codespell: ignore '%s' (current line)",
+      check_existing = function(line)
+        return line:match 'codespell:ignore%f[%s%z]'
+      end,
+      format_new = function(line, word, cs)
+        return line .. ' ' .. cs:format('codespell:ignore ' .. word) .. '\n'
+      end,
+      format_merge = function(line, word)
+        return line:gsub('(codespell:ignore[%w%-]*)([^\n]*)', function(directive, rest)
+          local sep = rest:match '%S' and rest .. ', ' or rest .. ' '
+          return directive .. sep .. word
+        end, 1) .. '\n'
+      end,
+    },
+    next_line_action {
+      title_fmt = "codespell: ignore '%s' (next line)",
+      check_existing = function(line)
+        return line:match 'codespell:ignore%-next%-line'
+      end,
+      format_new = function(word, indent, cs)
+        return indent .. cs:format('codespell:ignore-next-line ' .. word) .. '\n'
+      end,
+      format_merge = function(line, word)
+        return line:gsub('(codespell:ignore%-next%-line)([^\n]*)', function(directive, rest)
+          local sep = rest:match '%S' and rest .. ', ' or rest .. ' '
+          return directive .. sep .. word
+        end, 1) .. '\n'
+      end,
+    },
+  },
+}
+
 -- List of all action generators
 local action_generators = {
   revision_branch_comment,
@@ -584,6 +632,7 @@ local action_generators = {
   luacheck_globals,
   hadolint_ignore,
   markdownlint_ignore,
+  codespell_ignore,
 }
 
 --- Get all applicable actions for the given LSP params

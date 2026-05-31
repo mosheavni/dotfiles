@@ -89,6 +89,11 @@ update_build_tools() {
   (cd "$dir" && ./gradlew build)
 }
 
+random() {
+  log "random updates"
+  tldr --update
+}
+
 # ── main ─────────────────────────────────────────────────────────────────────
 
 update_asdf
@@ -99,6 +104,7 @@ update_cargo
 update_go
 update_gh_releases
 update_build_tools
+random
 
 echo ""
 echo "✓ All done."
