@@ -11,7 +11,6 @@ local tools = {
   { name = 'codespell', binary = 'codespell' },
   { name = 'css-lsp', binary = 'vscode-css-language-server' },
   { name = 'cssmodules-language-server', binary = 'cssmodules-language-server' },
-  { name = 'debugpy', binary = nil, python_module = 'debugpy' },
   { name = 'docker-compose-language-service', binary = 'docker-compose-langserver' },
   { name = 'dockerfile-language-server', binary = 'docker-langserver' },
   { name = 'eslint_d', binary = 'eslint_d' },

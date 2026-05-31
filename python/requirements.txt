@@ -3,7 +3,6 @@ black
 boto3
 botocore
 codespell
-debugpy
 docutils
 isort
 jedi
