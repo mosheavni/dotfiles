@@ -81,7 +81,7 @@ if wallpaper_file then
       },
       repeat_y = 'NoRepeat',
       hsb = {
-        brightness = 0.07,
+        brightness = 0.18,
         hue = 1.0,
         saturation = 1.0,
       },
