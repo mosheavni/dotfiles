@@ -66,6 +66,18 @@ update_go() {
   each_line "$DOTFILES/go/go-packages.txt" _go_install
 }
 
+update_gh_releases() {
+  log "gh — GitHub release tools"
+  local install_dir="$HOME/.local/bin"
+  mkdir -p "$install_dir"
+  while read -r repo binary; do
+    [[ -z "$repo" || "$repo" == \#* ]] && continue
+    gh release download --repo "$repo" --pattern "*darwin*amd64*" \
+      --output "$install_dir/$binary" --clobber
+    chmod +x "$install_dir/$binary"
+  done <"$DOTFILES/github-releases.txt"
+}
+
 update_build_tools() {
   log "build — groovy-language-server"
   local dir="$HOME/.local/share/groovy-language-server"
@@ -85,6 +97,7 @@ update_pip
 update_npm
 update_cargo
 update_go
+update_gh_releases
 update_build_tools
 
 echo ""
