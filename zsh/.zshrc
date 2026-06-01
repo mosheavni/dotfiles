@@ -105,4 +105,4 @@ export K8S_DEV=true
 export YAMLC_DEV=false
 export SAR_DEV=false
 export CMP_COMPLETION='<C-Space>'
-export PJ_DIRS='~/Repos/,~/.dotfiles'
+export PJ_DIRS='~/Repos/,~/.dotfiles,~/.config/lightvim'
