@@ -125,10 +125,6 @@
       "rev": "d12d8e6ea8e4d9d3e6fb0e3ff11c84fcce2299ac",
       "src": "https://github.com/nvim-mini/mini.surround"
     },
-    "nginx.vim": {
-      "rev": "a5991f38135d0c6c259d0b9f5e629ba33b891b9e",
-      "src": "https://github.com/chr4/nginx.vim"
-    },
     "nui.nvim": {
       "rev": "de740991c12411b663994b2860f1a4fd0937c130",
       "src": "https://github.com/MunifTanjim/nui.nvim"

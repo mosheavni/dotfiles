@@ -10,7 +10,6 @@ vim.pack.add {
   'https://github.com/windwp/nvim-autopairs',
   'https://github.com/iamcco/markdown-preview.nvim',
   'https://github.com/AndrewRadev/linediff.vim',
-  'https://github.com/chr4/nginx.vim',
   'https://github.com/gbprod/yanky.nvim',
   'https://github.com/LunarVim/bigfile.nvim',
 }
