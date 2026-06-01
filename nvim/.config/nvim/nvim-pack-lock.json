@@ -22,7 +22,7 @@
       "version": "1.0.0 - 2.0.0"
     },
     "blink.download": {
-      "rev": "2cb62890cee636fe46722d03b7b2331e54fb3755",
+      "rev": "c09dd66e9ad97e1a7777f3fa5f0504ca2e877231",
       "src": "https://github.com/saghen/blink.download"
     },
     "conform.nvim": {
@@ -46,7 +46,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "fea9eedc6894c44d44cbb772a5cd11c93b82d7a1",
+      "rev": "d340ade20dfe4ef87e6f9a63b9905be91965b5dc",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "git-conflict.nvim": {
@@ -90,7 +90,7 @@
       "src": "https://github.com/ravitemer/mcphub.nvim"
     },
     "mini.ai": {
-      "rev": "4ce4c35e411ea329a15d4b15e9c89c2a3089e437",
+      "rev": "deacc8e9cf05df0297e3b14a08c2f8a415045c6f",
       "src": "https://github.com/nvim-mini/mini.ai"
     },
     "mini.cursorword": {
@@ -122,7 +122,7 @@
       "src": "https://github.com/nvim-mini/mini.statusline"
     },
     "mini.surround": {
-      "rev": "1e37ade260e2b655c3a9b8407ba7e6b0fb995b28",
+      "rev": "d12d8e6ea8e4d9d3e6fb0e3ff11c84fcce2299ac",
       "src": "https://github.com/nvim-mini/mini.surround"
     },
     "nginx.vim": {
@@ -136,10 +136,6 @@
     "nvim-autopairs": {
       "rev": "7b9923abad60b903ece7c52940e1321d39eccc79",
       "src": "https://github.com/windwp/nvim-autopairs"
-    },
-    "nvim-bqf": {
-      "rev": "c282a62bec6c0621a1ef5132aa3f4c9fc4dcc2c7",
-      "src": "https://github.com/kevinhwang91/nvim-bqf"
     },
     "nvim-lint": {
       "rev": "d48f3a76189d03b2239f6df1b2f7e3fa8353743b",
@@ -245,10 +241,6 @@
       "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
       "src": "https://github.com/tpope/vim-fugitive"
     },
-    "vim-lister": {
-      "rev": "ec903e615f867f910cd8adc73f5906d521f3f214",
-      "src": "https://github.com/tommcdo/vim-lister"
-    },
     "vim-matchup": {
       "rev": "a2d618496223386844acb5a6763cfc3cc1357af1",
       "src": "https://github.com/andymass/vim-matchup"
@@ -258,7 +250,7 @@
       "src": "https://github.com/machakann/vim-swap"
     },
     "wezterm-types": {
-      "rev": "d3505f689e53d8fda536d265d870a1fee937e69f",
+      "rev": "13ab56e813cb5af9a36ae6b4c987ba2558cb3fcb",
       "src": "https://github.com/DrKJeff16/wezterm-types"
     },
     "yaml-companion.nvim": {
