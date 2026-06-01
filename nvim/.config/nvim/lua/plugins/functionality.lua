@@ -2,8 +2,6 @@ vim.pack.add {
   'https://github.com/mrjones2014/smart-splits.nvim',
   'https://github.com/kkharji/sqlite.lua',
   'https://github.com/yorickpeterse/nvim-pqf',
-  'https://github.com/tommcdo/vim-lister',
-  'https://github.com/kevinhwang91/nvim-bqf',
   'https://github.com/junegunn/vim-easy-align',
   'https://github.com/AndrewRadev/switch.vim',
   'https://github.com/axelvc/template-string.nvim',
@@ -158,13 +156,14 @@ function M.deferred()
   vim.api.nvim_create_user_command('Rename', function()
     local old = vim.api.nvim_buf_get_name(0)
     vim.ui.input({ prompt = 'New filename: ', default = old }, function(new)
-      if not new or new == old then return end
+      if not new or new == old then
+        return
+      end
       vim.fn.rename(old, new)
       vim.cmd('keepalt saveas ' .. vim.fn.fnameescape(new))
       notify_lsp_rename(old, new)
     end)
   end, { desc = 'Rename file' })
-
 end
 
 return M
