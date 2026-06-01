@@ -104,8 +104,31 @@ return function()
     return '%2p%%'
   end
 
+  -- quickfix search term section
+  local function section_qf_search()
+    if vim.bo.filetype ~= 'qf' then
+      return ''
+    end
+    local term = vim.g.qf_search_term
+    local term_id = vim.g.qf_search_term_id
+    if not term or term == '' or not term_id then
+      return ''
+    end
+    if vim.fn.getqflist({ id = 0 }).id ~= term_id then
+      return ''
+    end
+    local base, filters = term:match '^(.-)%s+(%b())$'
+    if base and filters then
+      return '%#MiniStatuslineFilename#' .. base .. ' %#MiniStatuslineDevinfo#' .. filters
+    end
+    return '%#MiniStatuslineFilename#' .. term
+  end
+
   -- filename section
   local function section_filename()
+    if vim.bo.filetype == 'qf' then
+      return ''
+    end
     -- In terminal always use plain name
     if vim.bo.buftype == 'terminal' then
       return '%t'
@@ -186,6 +209,7 @@ return function()
         local diff = section_diff()
         local diagnostics = section_diagnostics_colored()
         local filename = section_filename()
+        local qf_search = section_qf_search()
         local fileformat = section_fileformat()
         local filetype = section_filetype_with_icon()
         local lsp = section_lsp_names()
@@ -209,6 +233,7 @@ return function()
             -- Center section
             '%=', -- Start center alignment
             { hl = 'MiniStatuslineFilename', strings = { filename } },
+            { hl = 'MiniStatuslineDevinfo', strings = { qf_search } },
 
             -- Right section
             '%=', -- End left alignment, start right alignment

@@ -93,6 +93,7 @@ local function rip_grep_cword(bang, visualmode, search_word)
     search_word = vim.fn.expand '<cword>'
   end
 
+  local raw_term = search_word
   local search_message = 'for ' .. search_word
   if bang then
     search_message = 'literally for ' .. search_word
@@ -105,6 +106,8 @@ local function rip_grep_cword(bang, visualmode, search_word)
   vim.notify(cmd, vim.log.levels.INFO)
   vim.print('Searching ' .. search_message .. '...')
   vim.cmd('silent grep! ' .. search_word)
+  vim.g.qf_search_term = ' ' .. raw_term
+  vim.g.qf_search_term_id = vim.fn.getqflist({ id = 0 }).id
   vim.cmd 'cwindow'
 end
 
