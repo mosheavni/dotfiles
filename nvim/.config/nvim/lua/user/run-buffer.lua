@@ -36,12 +36,6 @@ function M.is_run_buffer_terminal_buf(buf)
   return false
 end
 
---- Cheap check for statusline: any F3 terminal still tracked (may include dead jobs).
----@return boolean
-function M.has_tracked_terminals()
-  return next(terminals) ~= nil
-end
-
 ---@param job_id integer|nil
 ---@return boolean
 local function job_alive(job_id)
@@ -246,10 +240,6 @@ function M._resolve_cmd(ft, file_name, first_line)
     return nil, true
   end
 
-  if ft == 'make' then
-    return nil, false
-  end
-
   return cmd, false
 end
 
@@ -319,7 +309,6 @@ local function run_in_terminal(file_name, cmd, opts)
     terminals[file_name] = nil
 
     local term_buf = vim.api.nvim_create_buf(false, true)
-    vim.b[term_buf].run_buffer_terminal = true
     ensure_terminal_visible(term_buf)
 
     local job_id = vim.fn.jobstart(vim.o.shell, {
@@ -421,12 +410,6 @@ function M.list_terminals()
     return a.buf < b.buf
   end)
   return list
-end
-
---- Count of run-buffer terminals that still have a live job and a valid buf.
----@return integer
-function M.get_active_count()
-  return #M.list_terminals()
 end
 
 --- Cycle the current window's buffer to the next/previous run-buffer

@@ -184,13 +184,11 @@ describe('user.run-buffer', function()
     end)
 
     it('reports zero terminals when none are tracked', function()
-      eq(rb.get_active_count(), 0)
       eq(rb.list_terminals(), {})
     end)
 
     it('ignores entries whose buffer is invalid', function()
       rb._terminals['/tmp/fake.sh'] = { buf = 999999, job_id = 1, cwd = '/tmp' }
-      eq(rb.get_active_count(), 0)
       eq(rb.list_terminals(), {})
     end)
 
@@ -236,27 +234,11 @@ describe('user.run-buffer', function()
       eq(vim.api.nvim_get_current_buf(), before)
     end)
 
-    it('get_active_count matches #list_terminals', function()
-      local buf_a = vim.api.nvim_create_buf(false, true)
-      rb._terminals['/tmp/a.sh'] = { buf = buf_a, job_id = 1, cwd = '/tmp' }
-      eq(rb.get_active_count(), #rb.list_terminals())
-      eq(rb.get_active_count(), 1)
-    end)
-
     it('_clear_terminal_for_buf drops the matching entry', function()
       local buf_a = vim.api.nvim_create_buf(false, true)
       rb._terminals['/tmp/wipe.sh'] = { buf = buf_a, job_id = 1, cwd = '/tmp' }
       rb._clear_terminal_for_buf(buf_a)
       eq(rb._terminals['/tmp/wipe.sh'], nil)
-    end)
-
-    it('has_tracked_terminals is false when the table is empty', function()
-      eq(rb.has_tracked_terminals(), false)
-    end)
-
-    it('has_tracked_terminals is true when an entry exists', function()
-      rb._terminals['/tmp/x.sh'] = { buf = 1, job_id = 1, cwd = '/tmp' }
-      eq(rb.has_tracked_terminals(), true)
     end)
 
     it('is_run_buffer_terminal_buf is true for buffers in the terminals table', function()
