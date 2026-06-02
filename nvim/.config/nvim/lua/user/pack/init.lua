@@ -47,7 +47,6 @@ vim.schedule(function()
   require 'plugins.blink'()
   require 'plugins.ai'()
   require 'plugins.tree'()
-  require 'plugins.overseer'()
   require 'plugins.mini-statusline'()
 
   vim.api.nvim_exec_autocmds('User', { pattern = 'DeferredPluginsLoaded' })
