@@ -177,6 +177,33 @@ return function()
     return string.format('%%#MiniStatuslineLSPIcon#%s %%#MiniStatuslineFileinfo#%s', icon, filetype)
   end
 
+  -- Run-buffer terminals indicator. Shows the file basenames of the live
+  -- F3 terminals, sorted by creation order (same order as ]t / [t cycles).
+  -- The one tied to the current buffer (or the terminal you're on) is
+  -- highlighted so you can tell at a glance which terminal is "yours".
+  local function section_run_terminals()
+    if statusline.is_truncated(120) then
+      return ''
+    end
+    local ok, rb = pcall(require, 'user.run-buffer')
+    if not ok or type(rb.list_terminals) ~= 'function' then
+      return ''
+    end
+    local list = rb.list_terminals()
+    if #list == 0 then
+      return ''
+    end
+    local parts = {}
+    for _, item in ipairs(list) do
+      if item.is_active then
+        table.insert(parts, '%#MiniStatuslineFilename#' .. item.basename .. '%#MiniStatuslineDevinfo#')
+      else
+        table.insert(parts, item.basename)
+      end
+    end
+    return ' ' .. table.concat(parts, ' · ')
+  end
+
   -- YAML schema section (only for YAML files)
   local function section_yaml_schema()
     local ft = vim.bo.filetype or ''
@@ -216,6 +243,7 @@ return function()
         local progress = section_progress()
         local location = section_location()
         local yaml_schema = section_yaml_schema()
+        local run_terminals = section_run_terminals()
         local search = statusline.section_searchcount { trunc_width = 75 }
 
         -- Use statusline syntax to include borders without automatic spacing
@@ -227,7 +255,7 @@ return function()
             -- Left section
             { hl = mode_hl, strings = { mode } },
             { hl = 'MiniStatuslineGit', strings = { git } },
-            { hl = 'MiniStatuslineDevinfo', strings = { diff, diagnostics, yaml_schema } },
+            { hl = 'MiniStatuslineDevinfo', strings = { diff, diagnostics, yaml_schema, run_terminals } },
             '%<', -- Truncation point
 
             -- Center section
@@ -274,7 +302,6 @@ return function()
     vim.api.nvim_set_hl(0, 'MiniStatuslineBorder', { fg = palette.foam, bg = palette.base })
     vim.api.nvim_set_hl(0, 'MiniStatuslineLSPIcon', { fg = palette.pine, bg = palette.base })
     vim.api.nvim_set_hl(0, 'MiniStatuslineFormatIcon', { fg = palette.rose, bg = palette.base, bold = true })
-
   end
   setup_highlights()
 end
