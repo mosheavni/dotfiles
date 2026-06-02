@@ -13,11 +13,27 @@
 [pull]
   rebase = false
 
+[rebase]
+  autoStash  = true
+  autoSquash = true
+  updateRefs = true
+
 [push]
   autoSetupRemote = true
 
+[fetch]
+  prune     = true
+  pruneTags = true
+
+[commit]
+  verbose = true
+
+[rerere]
+  enabled    = true
+  autoUpdate = true
+
 [help]
-  autocorrect = 1
+  autocorrect = prompt
 
 [branch]
   autosetupmerge = always
