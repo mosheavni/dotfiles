@@ -8,15 +8,39 @@
 ---@field cwd string
 local terminals = {}
 
--- Forward declaration so closures inside execute_file (e.g. ]t/[t keymaps)
--- can reach M.cycle_terminal, which is assigned below.
 local M = {}
+
+local utils = require 'user.utils'
 
 -- Height of the horizontal terminal split, in lines.
 local TERMINAL_HEIGHT = 15
 -- Delay between sending <C-c> and the next command, so the shell has time
 -- to handle SIGINT and return to a fresh prompt before we feed it more input.
 local INTERRUPT_DELAY_MS = 50
+
+-- Filetypes whose command must not include the buffer path (e.g. directory-scoped tools).
+local FT_NO_FILE_ARG = {
+  terraform = true,
+}
+
+---@param buf? integer
+---@return boolean
+function M.is_run_buffer_terminal_buf(buf)
+  buf = buf or vim.api.nvim_get_current_buf()
+  -- jobstart(..., { term = true }) renames the buffer to term://…; track by bufnr.
+  for _, state in pairs(terminals) do
+    if state.buf == buf then
+      return true
+    end
+  end
+  return false
+end
+
+--- Cheap check for statusline: any F3 terminal still tracked (may include dead jobs).
+---@return boolean
+function M.has_tracked_terminals()
+  return next(terminals) ~= nil
+end
 
 ---@param job_id integer|nil
 ---@return boolean
@@ -34,18 +58,50 @@ end
 --- stack multiple bottom splits when switching between files.
 ---@return integer|nil winid
 local function find_visible_run_buffer_win()
-  local own_bufs = {}
   for _, state in pairs(terminals) do
     if state.buf then
-      own_bufs[state.buf] = true
-    end
-  end
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    if own_bufs[vim.api.nvim_win_get_buf(win)] then
-      return win
+      local win = vim.fn.bufwinid(state.buf)
+      if win ~= -1 then
+        return win
+      end
     end
   end
   return nil
+end
+
+--- Show term_buf in an existing window or open/reuse the bottom split.
+---@param term_buf integer
+---@return integer winid
+local function ensure_terminal_visible(term_buf)
+  local term_win = vim.fn.bufwinid(term_buf)
+  if term_win ~= -1 then
+    vim.api.nvim_set_current_win(term_win)
+    return term_win
+  end
+  local reuse_win = find_visible_run_buffer_win()
+  if reuse_win then
+    vim.api.nvim_win_set_buf(reuse_win, term_buf)
+    vim.api.nvim_set_current_win(reuse_win)
+    return reuse_win
+  end
+  vim.cmd('botright ' .. TERMINAL_HEIGHT .. 'split')
+  vim.api.nvim_win_set_buf(0, term_buf)
+  return vim.api.nvim_get_current_win()
+end
+
+---@param file_name string
+local function clear_terminal_for_file(file_name)
+  terminals[file_name] = nil
+end
+
+---@param buf integer
+local function clear_terminal_for_buf(buf)
+  for file, state in pairs(terminals) do
+    if state.buf == buf then
+      terminals[file] = nil
+      return
+    end
+  end
 end
 
 --- True when the line is a Makefile rule target (not a recipe, comment, or assignment).
@@ -114,51 +170,63 @@ end
 ---@param cmd string command to write
 ---@param opts table options
 local function open_tab(cmd, opts)
+  if vim.fn.executable('wezterm') ~= 1 then
+    vim.notify('wezterm not found in PATH', vim.log.levels.ERROR)
+    return
+  end
   if not opts.cwd then
     opts.cwd = vim.fn.getcwd()
   end
   local spawn = vim.system({ 'wezterm', 'cli', 'spawn', '--cwd=' .. opts.cwd }, { text = true }):wait()
-  local spawn_stdout = vim.trim(spawn.stdout)
-  if spawn.code == 0 and spawn_stdout ~= '' then
-    local send_text = { 'wezterm', 'cli', 'send-text', '--pane-id', spawn_stdout, cmd }
-    local send_text_out = vim.system(send_text, {}):wait()
-    if send_text_out.code ~= 0 then
-      vim.notify('Error running command in wezterm: ' .. send_text_out.stdout .. ' ' .. send_text_out.stderr, vim.log.levels.ERROR)
-    end
+  local spawn_stdout = vim.trim(spawn.stdout or '')
+  if spawn.code ~= 0 or spawn_stdout == '' then
+    local err = vim.trim((spawn.stderr or '') .. ' ' .. (spawn.stdout or ''))
+    vim.notify('wezterm spawn failed: ' .. (err ~= '' and err or ('exit ' .. tostring(spawn.code))), vim.log.levels.ERROR)
+    return
+  end
+  local send_text = { 'wezterm', 'cli', 'send-text', '--pane-id', spawn_stdout, cmd }
+  local send_text_out = vim.system(send_text, {}):wait()
+  if send_text_out.code ~= 0 then
+    vim.notify(
+      'Error running command in wezterm: ' .. (send_text_out.stdout or '') .. ' ' .. (send_text_out.stderr or ''),
+      vim.log.levels.ERROR
+    )
   end
 end
 
----Get make command
----@param file_name string file name
----@return string make command
-local function get_make(file_name)
+---@param file_name string
+---@param on_done fun(cmd: string|nil)
+local function get_make_async(file_name, on_done)
   local options = get_makefile_options(file_name)
-  local opts_for_select = vim.tbl_map(function(option)
+  if #options == 0 then
+    on_done(nil)
+    return
+  end
+  local labels = vim.tbl_map(function(option)
     return option.text
   end, options)
-
-  local choice = vim.fn.inputlist {
-    'Select a target to run:',
-    table.concat(opts_for_select, '\n'),
-  }
-  if choice < 1 or choice > #options then
-    return nil
-  end
-  return 'make ' .. options[choice].value
+  vim.ui.select(labels, { prompt = 'Select make target❯ ' }, function(_choice, idx)
+    if not idx then
+      on_done(nil)
+      return
+    end
+    on_done('make ' .. options[idx].value)
+  end)
 end
 
---- Get cmd or break
----@param ft string filetype
----@param file_name string file name
+--- Build the shell command for a filetype (sync). Make targets use get_make_async.
+---@param ft string
+---@param file_name string
+---@param first_line string
 ---@return string|nil cmd
 ---@return boolean should_break
-local function cmd_or_break(ft, file_name)
-  local utils = require 'user.utils'
+function M._resolve_cmd(ft, file_name, first_line)
   local cmd = utils.filetype_to_command[ft] or 'bash'
-  local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ''
 
   if first_line:match '^#!' then
     cmd = file_name
+  elseif FT_NO_FILE_ARG[ft] then
+    -- Use mapped command as-is (e.g. terragrunt plan).
   else
     cmd = cmd .. ' ' .. file_name
   end
@@ -179,17 +247,32 @@ local function cmd_or_break(ft, file_name)
   end
 
   if ft == 'make' then
-    cmd = get_make(file_name)
-    if not cmd then
-      return nil, true
-    end
-  end
-
-  if ft == 'terraform' then
-    cmd = 'terragrunt plan'
+    return nil, false
   end
 
   return cmd, false
+end
+
+--- Get cmd or break (async when ft is make).
+---@param ft string
+---@param file_name string
+---@param on_done fun(cmd: string|nil, should_break: boolean)
+local function cmd_or_break_async(ft, file_name, on_done)
+  local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ''
+
+  if ft == 'make' then
+    get_make_async(file_name, function(cmd)
+      if not cmd then
+        on_done(nil, true)
+        return
+      end
+      on_done(cmd, false)
+    end)
+    return
+  end
+
+  local cmd, should_break = M._resolve_cmd(ft, file_name, first_line)
+  on_done(cmd, should_break)
 end
 
 local function filename_and_ft()
@@ -226,52 +309,24 @@ local function filename_and_ft()
   return file_name, ft
 end
 
-local function execute_file(where)
-  if vim.bo.buftype == 'terminal' then
-    return
-  end
-  local file_name, ft = filename_and_ft()
-  if not file_name or not ft then
-    return
-  end
-
-  local cmd, should_break = cmd_or_break(ft, file_name)
-  if should_break or not cmd then
-    return
-  end
-
-  local opts = { cwd = vim.fn.expand '%:p:h' }
-  if where and where ~= 'terminal' then
-    open_tab(cmd, opts)
-    return
-  end
-
+---@param file_name string
+---@param cmd string
+---@param opts { cwd: string }
+local function run_in_terminal(file_name, cmd, opts)
   local state = terminals[file_name]
 
   if not terminal_usable(state) then
-    -- Drop any stale entry (e.g. buf wiped, job died) before recreating.
     terminals[file_name] = nil
 
-    -- Prefer to reuse an already-visible run-buffer terminal window so we
-    -- don't stack multiple bottom splits when running F3 across files.
-    local reuse_win = find_visible_run_buffer_win()
     local term_buf = vim.api.nvim_create_buf(false, true)
-    if reuse_win then
-      vim.api.nvim_win_set_buf(reuse_win, term_buf)
-      vim.api.nvim_set_current_win(reuse_win)
-    else
-      vim.cmd('botright ' .. TERMINAL_HEIGHT .. 'split')
-      vim.api.nvim_win_set_buf(0, term_buf)
-    end
-    -- Suffix with the buffer id to guarantee a unique name even when two
-    -- open files share the same basename.
-    vim.api.nvim_buf_set_name(term_buf, 'run-buffer-terminal:' .. vim.fn.fnamemodify(file_name, ':t') .. '#' .. term_buf)
+    vim.b[term_buf].run_buffer_terminal = true
+    ensure_terminal_visible(term_buf)
 
     local job_id = vim.fn.jobstart(vim.o.shell, {
       term = true,
       cwd = opts.cwd,
       on_exit = function()
-        terminals[file_name] = nil
+        clear_terminal_for_file(file_name)
       end,
     })
 
@@ -282,16 +337,6 @@ local function execute_file(where)
 
     terminals[file_name] = { buf = term_buf, job_id = job_id, cwd = opts.cwd }
 
-    -- Buffer-local ]t / [t cycle through run-buffer terminals only on these
-    -- buffers, so the global tab-cycling mapping is preserved elsewhere.
-    vim.keymap.set('n', ']t', function()
-      M.cycle_terminal 'next'
-    end, { buffer = term_buf, silent = true, desc = 'run-buffer: next terminal' })
-    vim.keymap.set('n', '[t', function()
-      M.cycle_terminal 'prev'
-    end, { buffer = term_buf, silent = true, desc = 'run-buffer: prev terminal' })
-
-    -- Fresh shell, no running command, no cd needed.
     vim.schedule(function()
       if job_alive(job_id) then
         vim.fn.chansend(job_id, cmd)
@@ -300,32 +345,12 @@ local function execute_file(where)
     return
   end
 
-  -- Reuse this file's existing terminal: bring it into view.
-  local term_buf = state.buf
-  local term_win = vim.fn.bufwinid(term_buf)
-  if term_win ~= -1 then
-    vim.api.nvim_set_current_win(term_win)
-  else
-    local reuse_win = find_visible_run_buffer_win()
-    if reuse_win then
-      vim.api.nvim_win_set_buf(reuse_win, term_buf)
-      vim.api.nvim_set_current_win(reuse_win)
-    else
-      vim.cmd('botright ' .. TERMINAL_HEIGHT .. 'split')
-      vim.api.nvim_win_set_buf(0, term_buf)
-    end
-  end
+  ensure_terminal_visible(state.buf)
   vim.cmd 'startinsert'
 
   local job_id = state.job_id
-
-  -- Interrupt anything currently running so the shell returns to a prompt.
   vim.fn.chansend(job_id, vim.keycode '<C-c>')
 
-  -- Build a single payload (optional cd + the command) and feed it after a
-  -- short delay so the shell has time to process the SIGINT first. Sending
-  -- it as one chansend means the shell sees them as sequential lines on the
-  -- same prompt instead of racing each other.
   local payload = ''
   if state.cwd ~= opts.cwd then
     state.cwd = opts.cwd
@@ -340,11 +365,37 @@ local function execute_file(where)
   end, INTERRUPT_DELAY_MS)
 end
 
+local function execute_file(where)
+  if vim.bo.buftype == 'terminal' then
+    return
+  end
+  local file_name, ft = filename_and_ft()
+  if not file_name or not ft then
+    return
+  end
+
+  cmd_or_break_async(ft, file_name, function(cmd, should_break)
+    if should_break or not cmd then
+      return
+    end
+
+    local opts = { cwd = vim.fn.expand '%:p:h' }
+    if where and where ~= 'terminal' then
+      open_tab(cmd, opts)
+      return
+    end
+
+    run_in_terminal(file_name, cmd, opts)
+  end)
+end
+
 -- Exposed for tests in lua/tests/run-buffer_spec.lua. Treat as internal.
 M._filename_and_ft = filename_and_ft
 M._terminals = terminals
 M._get_makefile_options = get_makefile_options
 M._makefile_target_name = makefile_target_name
+M._clear_terminal_for_buf = clear_terminal_for_buf
+M._get_make_async = get_make_async
 
 --- Return all live run-buffer terminals, sorted by buffer-id (== creation
 --- order). Each entry has `is_active = true` when it belongs to the file of
@@ -375,13 +426,7 @@ end
 --- Count of run-buffer terminals that still have a live job and a valid buf.
 ---@return integer
 function M.get_active_count()
-  local count = 0
-  for _, state in pairs(terminals) do
-    if terminal_usable(state) then
-      count = count + 1
-    end
-  end
-  return count
+  return #M.list_terminals()
 end
 
 --- Cycle the current window's buffer to the next/previous run-buffer
@@ -415,7 +460,6 @@ function M.cycle_terminal(direction)
 end
 
 function M.setup()
-  -- Setup can be used for future configurations
   vim.keymap.set('n', '<F3>', execute_file, { remap = false, silent = true })
 
   vim.api.nvim_create_user_command('RunInTerminal', function()
@@ -425,6 +469,12 @@ function M.setup()
   vim.api.nvim_create_user_command('RunInTab', function()
     execute_file 'tab'
   end, {})
+
+  vim.api.nvim_create_autocmd('BufWipeout', {
+    callback = function(ev)
+      clear_terminal_for_buf(ev.buf)
+    end,
+  })
 end
 
 return M

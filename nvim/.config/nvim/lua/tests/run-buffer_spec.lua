@@ -235,6 +235,96 @@ describe('user.run-buffer', function()
       rb.cycle_terminal 'next'
       eq(vim.api.nvim_get_current_buf(), before)
     end)
+
+    it('get_active_count matches #list_terminals', function()
+      local buf_a = vim.api.nvim_create_buf(false, true)
+      rb._terminals['/tmp/a.sh'] = { buf = buf_a, job_id = 1, cwd = '/tmp' }
+      eq(rb.get_active_count(), #rb.list_terminals())
+      eq(rb.get_active_count(), 1)
+    end)
+
+    it('_clear_terminal_for_buf drops the matching entry', function()
+      local buf_a = vim.api.nvim_create_buf(false, true)
+      rb._terminals['/tmp/wipe.sh'] = { buf = buf_a, job_id = 1, cwd = '/tmp' }
+      rb._clear_terminal_for_buf(buf_a)
+      eq(rb._terminals['/tmp/wipe.sh'], nil)
+    end)
+
+    it('has_tracked_terminals is false when the table is empty', function()
+      eq(rb.has_tracked_terminals(), false)
+    end)
+
+    it('has_tracked_terminals is true when an entry exists', function()
+      rb._terminals['/tmp/x.sh'] = { buf = 1, job_id = 1, cwd = '/tmp' }
+      eq(rb.has_tracked_terminals(), true)
+    end)
+
+    it('is_run_buffer_terminal_buf is true for buffers in the terminals table', function()
+      local buf = vim.api.nvim_create_buf(true, false)
+      rb._terminals['/tmp/foo.sh'] = { buf = buf, job_id = 1, cwd = '/tmp' }
+      assert.is_true(rb.is_run_buffer_terminal_buf(buf))
+      local other = vim.api.nvim_create_buf(true, false)
+      assert.is_false(rb.is_run_buffer_terminal_buf(other))
+    end)
+  end)
+
+  describe('_resolve_cmd', function()
+    it('terraform runs terragrunt plan without appending the file path', function()
+      local cmd, should_break = rb._resolve_cmd('terraform', '/tmp/main.tf', '')
+      eq(cmd, 'terragrunt plan')
+      eq(should_break, false)
+    end)
+
+    it('python appends the file path', function()
+      local cmd, should_break = rb._resolve_cmd('python', '/tmp/script.py', '')
+      eq(cmd, 'python3 /tmp/script.py')
+      eq(should_break, false)
+    end)
+
+    it('uses the file path when the shebang is present', function()
+      local cmd = rb._resolve_cmd('sh', '/tmp/run.sh', '#!/bin/bash')
+      eq(cmd, '/tmp/run.sh')
+    end)
+  end)
+
+  describe('get_make_async', function()
+    local makefile_path
+    local original_ui_select
+
+    before_each(function()
+      makefile_path = vim.fn.tempname()
+      local f = assert(io.open(makefile_path, 'w'))
+      f:write('all:\n\ntest:\n')
+      f:close()
+      original_ui_select = vim.ui.select
+    end)
+
+    after_each(function()
+      vim.ui.select = original_ui_select
+      os.remove(makefile_path)
+    end)
+
+    it('returns make <target> for the selected index', function()
+      vim.ui.select = function(_items, _opts, on_select)
+        on_select('2 - test', 2)
+      end
+      local done_cmd
+      rb._get_make_async(makefile_path, function(cmd)
+        done_cmd = cmd
+      end)
+      eq(done_cmd, 'make test')
+    end)
+
+    it('returns nil when the picker is cancelled', function()
+      vim.ui.select = function(_items, _opts, on_select)
+        on_select(nil, nil)
+      end
+      local done_cmd = 'pending'
+      rb._get_make_async(makefile_path, function(cmd)
+        done_cmd = cmd
+      end)
+      eq(done_cmd, nil)
+    end)
   end)
 
   describe('Makefile target parsing', function()

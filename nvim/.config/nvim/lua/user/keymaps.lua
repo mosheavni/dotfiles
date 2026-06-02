@@ -117,9 +117,23 @@ for _, key in pairs { 'Q', 'X' } do
   )
 end
 
--- tabs
-map('n', ']t', '<cmd>tabnext<cr>', { remap = false, silent = true, desc = 'Next tab' })
-map('n', '[t', '<cmd>tabprev<cr>', { remap = false, silent = true, desc = 'Previous tab' })
+-- tabs (on run-buffer F3 terminals, ]t/[t cycle terminals instead)
+map('n', ']t', function()
+  local rb = require 'user.run-buffer'
+  if rb.is_run_buffer_terminal_buf() then
+    rb.cycle_terminal 'next'
+  else
+    vim.cmd.tabnext()
+  end
+end, { remap = false, silent = true, desc = 'Next tab / run-buffer terminal' })
+map('n', '[t', function()
+  local rb = require 'user.run-buffer'
+  if rb.is_run_buffer_terminal_buf() then
+    rb.cycle_terminal 'prev'
+  else
+    vim.cmd.tabprev()
+  end
+end, { remap = false, silent = true, desc = 'Previous tab / run-buffer terminal' })
 map('n', '<leader>tn', '<cmd>tabnew<cr>', { remap = false, silent = true, desc = 'New tab' })
 map('n', '<leader>tc', '<cmd>tabclose<cr>', { remap = false, silent = true, desc = 'Close tab' })
 map('n', '<leader>th', '<cmd>-tabmove<cr>', { remap = false, silent = true, desc = 'Move tab left' })

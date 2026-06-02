@@ -177,16 +177,18 @@ return function()
     return string.format('%%#MiniStatuslineLSPIcon#%s %%#MiniStatuslineFileinfo#%s', icon, filetype)
   end
 
-  -- Run-buffer terminals indicator. Shows the file basenames of the live
-  -- F3 terminals, sorted by creation order (same order as ]t / [t cycles).
-  -- The one tied to the current buffer (or the terminal you're on) is
-  -- highlighted so you can tell at a glance which terminal is "yours".
+  -- Run-buffer terminals indicator (only on F3 terminal buffers). Shows
+  -- basenames of live terminals, sorted by creation order (]t / [t order).
+  -- The active terminal is highlighted.
   local function section_run_terminals()
     if statusline.is_truncated(120) then
       return ''
     end
     local ok, rb = pcall(require, 'user.run-buffer')
     if not ok or type(rb.list_terminals) ~= 'function' then
+      return ''
+    end
+    if not rb.is_run_buffer_terminal_buf() then
       return ''
     end
     local list = rb.list_terminals()
