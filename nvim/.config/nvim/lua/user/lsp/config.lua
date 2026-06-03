@@ -140,9 +140,9 @@ M.setup = function()
         })
         vim.api.nvim_create_autocmd('LspDetach', {
           group = vim.api.nvim_create_augroup('lsp-document-highlight-detach', { clear = true }),
-          callback = function(ev)
+          callback = function(detach_ev)
             vim.lsp.buf.clear_references()
-            vim.api.nvim_clear_autocmds { group = 'lsp-document-highlight', buffer = ev.buf }
+            vim.api.nvim_clear_autocmds { group = 'lsp-document-highlight', buffer = detach_ev.buf }
           end,
         })
       end
@@ -152,8 +152,8 @@ M.setup = function()
         vim.g.diagnostics_configured = true
         vim.diagnostic.config {
           jump = {
-            on_jump = function(_, bufnr)
-              vim.diagnostic.open_float { bufnr = bufnr, scope = 'cursor', focus = false }
+            on_jump = function(_, jump_bufnr)
+              vim.diagnostic.open_float { bufnr = jump_bufnr, scope = 'cursor', focus = false }
             end,
           },
           severity_sort = true,

@@ -27,6 +27,11 @@ jobs:
           neovim: true
           version: ${{ matrix.rev }}
 
+      # act copies the host repo and skips checkout auth; SSH remotes fail ls-remote in the container.
+      - name: Use HTTPS origin in act
+        if: env.ACT
+        run: git remote set-url origin "https://github.com/${{ github.repository }}.git"
+
       - name: Prepare
         run: |
           cd nvim/.config/nvim

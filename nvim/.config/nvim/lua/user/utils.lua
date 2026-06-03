@@ -111,7 +111,7 @@ M.filetype_to_command = {
   typescript = 'node',
   typescriptreact = 'node',
   yaml = 'yq',
-  ['yaml.ghaction'] = 'act -W',
+  ['yaml.ghaction'] = 'act --container-architecture linux/amd64 -W',
   zsh = 'zsh',
 }
 
@@ -201,10 +201,7 @@ function M.wezterm_spawn_and_send(text, opts)
   end
   local send = vim.system({ 'wezterm', 'cli', 'send-text', '--pane-id', pane_id, text }, {}):wait()
   if send.code ~= 0 then
-    vim.notify(
-      'Error running command in wezterm: ' .. (send.stdout or '') .. ' ' .. (send.stderr or ''),
-      vim.log.levels.ERROR
-    )
+    vim.notify('Error running command in wezterm: ' .. (send.stdout or '') .. ' ' .. (send.stderr or ''), vim.log.levels.ERROR)
     return false
   end
   return true
