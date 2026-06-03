@@ -165,22 +165,22 @@ describe('user.run-buffer', function()
 
     -- Stand-in for a real terminal: a fresh scratch buffer whose bufnr is
     -- valid for as long as the test holds it. We pair it with a fake job_id
-    -- that job_alive() will reject so terminal_usable() returns false; for
-    -- tests where we DO want a usable entry we stub vim.fn.jobwait.
-    local original_jobwait
+    -- that utils.job_alive() will reject so terminal_usable() returns false; for
+    -- tests where we DO want a usable entry we stub vim.fn.jobpid.
+    local original_jobpid
 
     before_each(function()
       for k in pairs(rb._terminals) do
         rb._terminals[k] = nil
       end
-      original_jobwait = vim.fn.jobwait
-      vim.fn.jobwait = function()
-        return { -1 }
+      original_jobpid = vim.fn.jobpid
+      vim.fn.jobpid = function()
+        return 12345
       end
     end)
 
     after_each(function()
-      vim.fn.jobwait = original_jobwait
+      vim.fn.jobpid = original_jobpid
     end)
 
     it('reports zero terminals when none are tracked', function()
@@ -189,6 +189,24 @@ describe('user.run-buffer', function()
 
     it('ignores entries whose buffer is invalid', function()
       rb._terminals['/tmp/fake.sh'] = { buf = 999999, job_id = 1, cwd = '/tmp' }
+      eq(rb.list_terminals(), {})
+    end)
+
+    it('ignores entries whose job is no longer running', function()
+      vim.fn.jobpid = function()
+        return 0
+      end
+      local buf = vim.api.nvim_create_buf(false, true)
+      rb._terminals['/tmp/dead.sh'] = { buf = buf, job_id = 1, cwd = '/tmp' }
+      eq(rb.list_terminals(), {})
+    end)
+
+    it('ignores entries whose job id is no longer valid (E900)', function()
+      vim.fn.jobpid = function()
+        error('E900: Invalid channel id', 0)
+      end
+      local buf = vim.api.nvim_create_buf(false, true)
+      rb._terminals['/tmp/stale.sh'] = { buf = buf, job_id = 1, cwd = '/tmp' }
       eq(rb.list_terminals(), {})
     end)
 
@@ -260,6 +278,18 @@ describe('user.run-buffer', function()
     it('python appends the file path', function()
       local cmd, should_break = rb._resolve_cmd('python', '/tmp/script.py', '')
       eq(cmd, 'python3 /tmp/script.py')
+      eq(should_break, false)
+    end)
+
+    it('yaml uses yq', function()
+      local cmd, should_break = rb._resolve_cmd('yaml', '/tmp/config.yaml', '')
+      eq(cmd, 'yq /tmp/config.yaml')
+      eq(should_break, false)
+    end)
+
+    it('compound yaml filetypes use yq', function()
+      local cmd, should_break = rb._resolve_cmd('yaml.docker-compose', '/tmp/docker-compose.yml', '')
+      eq(cmd, 'yq /tmp/docker-compose.yml')
       eq(should_break, false)
     end)
 

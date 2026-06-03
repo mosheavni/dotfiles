@@ -1,3 +1,5 @@
+local utils = require 'user.utils'
+
 local M = {
   icon = '',
 }
@@ -61,13 +63,7 @@ local function switch_to_project(project_path, panes)
     vim.fn.system('wezterm cli activate-tab --tab-id ' .. existing_tab.tab_id)
     vim.fn.system('wezterm cli activate-pane --pane-id ' .. existing_tab.pane_id)
   else
-    -- Create new tab with nvim
-    vim.system({ 'wezterm', 'cli', 'spawn', '--cwd', vim.fn.expand(project_path) }, { text = true }, function(res)
-      local id = vim.trim(res.stdout)
-      vim.schedule(function()
-        vim.system { 'wezterm', 'cli', 'send-text', '--pane-id', id, 'nvim' .. vim.keycode '<cr>' }
-      end)
-    end)
+    utils.wezterm_spawn_and_send('nvim' .. vim.keycode '<cr>', { cwd = vim.fn.expand(project_path) })
   end
 end
 

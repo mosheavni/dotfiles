@@ -36,16 +36,10 @@ function M.is_run_buffer_terminal_buf(buf)
   return false
 end
 
----@param job_id integer|nil
----@return boolean
-local function job_alive(job_id)
-  return job_id ~= nil and job_id > 0 and vim.fn.jobwait({ job_id }, 0)[1] == -1
-end
-
 ---@param state RunBufferTerminal|nil
 ---@return boolean
 local function terminal_usable(state)
-  return state ~= nil and state.buf ~= nil and vim.api.nvim_buf_is_valid(state.buf) and job_alive(state.job_id)
+  return state ~= nil and state.buf ~= nil and vim.api.nvim_buf_is_valid(state.buf) and utils.job_alive(state.job_id)
 end
 
 --- Find an already-visible run-buffer terminal window to reuse so we don't
@@ -160,34 +154,6 @@ local function run_lua(file_name)
   vim.notify('Reloading lua file', vim.log.levels.INFO)
 end
 
----Open a new tab in wezterm and write the command
----@param cmd string command to write
----@param opts table options
-local function open_tab(cmd, opts)
-  if vim.fn.executable('wezterm') ~= 1 then
-    vim.notify('wezterm not found in PATH', vim.log.levels.ERROR)
-    return
-  end
-  if not opts.cwd then
-    opts.cwd = vim.fn.getcwd()
-  end
-  local spawn = vim.system({ 'wezterm', 'cli', 'spawn', '--cwd=' .. opts.cwd }, { text = true }):wait()
-  local spawn_stdout = vim.trim(spawn.stdout or '')
-  if spawn.code ~= 0 or spawn_stdout == '' then
-    local err = vim.trim((spawn.stderr or '') .. ' ' .. (spawn.stdout or ''))
-    vim.notify('wezterm spawn failed: ' .. (err ~= '' and err or ('exit ' .. tostring(spawn.code))), vim.log.levels.ERROR)
-    return
-  end
-  local send_text = { 'wezterm', 'cli', 'send-text', '--pane-id', spawn_stdout, cmd }
-  local send_text_out = vim.system(send_text, {}):wait()
-  if send_text_out.code ~= 0 then
-    vim.notify(
-      'Error running command in wezterm: ' .. (send_text_out.stdout or '') .. ' ' .. (send_text_out.stderr or ''),
-      vim.log.levels.ERROR
-    )
-  end
-end
-
 ---@param file_name string
 ---@param on_done fun(cmd: string|nil)
 local function get_make_async(file_name, on_done)
@@ -199,7 +165,7 @@ local function get_make_async(file_name, on_done)
   local labels = vim.tbl_map(function(option)
     return option.text
   end, options)
-  vim.ui.select(labels, { prompt = 'Select make target❯ ' }, function(_choice, idx)
+  vim.ui.select(labels, { prompt = 'Select make target❯ ' }, function(_, idx)
     if not idx then
       on_done(nil)
       return
@@ -215,13 +181,11 @@ end
 ---@return string|nil cmd
 ---@return boolean should_break
 function M._resolve_cmd(ft, file_name, first_line)
-  local cmd = utils.filetype_to_command[ft] or 'bash'
+  local cmd = utils.command_for_filetype(ft)
 
   if first_line:match '^#!' then
     cmd = file_name
-  elseif FT_NO_FILE_ARG[ft] then
-    -- Use mapped command as-is (e.g. terragrunt plan).
-  else
+  elseif not FT_NO_FILE_ARG[ft] then
     cmd = cmd .. ' ' .. file_name
   end
 
@@ -327,7 +291,7 @@ local function run_in_terminal(file_name, cmd, opts)
     terminals[file_name] = { buf = term_buf, job_id = job_id, cwd = opts.cwd }
 
     vim.schedule(function()
-      if job_alive(job_id) then
+      if utils.job_alive(job_id) then
         vim.fn.chansend(job_id, cmd)
       end
     end)
@@ -348,7 +312,7 @@ local function run_in_terminal(file_name, cmd, opts)
   payload = payload .. cmd
 
   vim.defer_fn(function()
-    if job_alive(job_id) then
+    if utils.job_alive(job_id) then
       vim.fn.chansend(job_id, payload)
     end
   end, INTERRUPT_DELAY_MS)
@@ -370,7 +334,7 @@ local function execute_file(where)
 
     local opts = { cwd = vim.fn.expand '%:p:h' }
     if where and where ~= 'terminal' then
-      open_tab(cmd, opts)
+      utils.wezterm_spawn_and_send(cmd, opts)
       return
     end
 
