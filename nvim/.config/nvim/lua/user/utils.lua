@@ -170,18 +170,6 @@ function M.random_emoji()
   return EMOJIS[math.random(#EMOJIS)]
 end
 
---- True when job_id refers to a running job channel.
---- jobwait raises E565 during TermClose; jobpid raises E900 on stale channels.
----@param job_id integer|nil
----@return boolean
-function M.job_alive(job_id)
-  if job_id == nil or job_id <= 0 then
-    return false
-  end
-  local ok, pid = pcall(vim.fn.jobpid, job_id)
-  return ok and pid ~= 0
-end
-
 --- Spawn a new Wezterm pane and send text to it (sync).
 ---@param text string Text to send to the new pane
 ---@param opts? { cwd?: string }

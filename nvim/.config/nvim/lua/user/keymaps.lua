@@ -117,23 +117,23 @@ for _, key in pairs { 'Q', 'X' } do
   )
 end
 
--- tabs (on run-buffer F3 terminals, ]t/[t cycle terminals instead)
+-- tabs (on managed terminals, ]t/[t cycle terminals instead)
 map('n', ']t', function()
-  local rb = require 'user.run-buffer'
-  if rb.is_run_buffer_terminal_buf() then
-    rb.cycle_terminal 'next'
+  local term = require 'user.terminal'
+  if term.is_tracked_buf() then
+    term.cycle 'next'
   else
     vim.cmd.tabnext()
   end
-end, { remap = false, silent = true, desc = 'Next tab / run-buffer terminal' })
+end, { remap = false, silent = true, desc = 'Next tab / terminal' })
 map('n', '[t', function()
-  local rb = require 'user.run-buffer'
-  if rb.is_run_buffer_terminal_buf() then
-    rb.cycle_terminal 'prev'
+  local term = require 'user.terminal'
+  if term.is_tracked_buf() then
+    term.cycle 'prev'
   else
     vim.cmd.tabprev()
   end
-end, { remap = false, silent = true, desc = 'Previous tab / run-buffer terminal' })
+end, { remap = false, silent = true, desc = 'Previous tab / terminal' })
 map('n', '<leader>tn', '<cmd>tabnew<cr>', { remap = false, silent = true, desc = 'New tab' })
 map('n', '<leader>tc', '<cmd>tabclose<cr>', { remap = false, silent = true, desc = 'Close tab' })
 map('n', '<leader>th', '<cmd>-tabmove<cr>', { remap = false, silent = true, desc = 'Move tab left' })
@@ -205,7 +205,9 @@ map('n', 'gV', '`[V`]', { remap = false, desc = 'Visually select last insert' })
 
 -- Treesitter-based selection (vim.treesitter.select)
 -- [N / ]N (built-in visual): jump to sibling node
-map({ 'n', 'x' }, '<leader>V', function() vim.treesitter.select 'parent' end, { desc = 'TS: select/expand to parent node' })
+map({ 'n', 'x' }, '<leader>V', function()
+  vim.treesitter.select 'parent'
+end, { desc = 'TS: select/expand to parent node' })
 
 -- Convert all tabs to spaces
 map('n', '<leader>ct<space>', ':retab<cr>', { remap = false, silent = true, desc = 'Convert tabs to spaces' })
@@ -513,6 +515,7 @@ command! SortInBlock call s:SortInBlock()
 require('user.tabular-v2').setup()
 require('user.projects').setup()
 require 'user.number-separators'
+require('user.terminal').setup()
 require('user.run-buffer').setup()
 require('user.winresizer').setup()
 require('user.grep').setup()

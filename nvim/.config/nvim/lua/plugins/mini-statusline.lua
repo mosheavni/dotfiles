@@ -129,9 +129,15 @@ return function()
     if vim.bo.filetype == 'qf' then
       return ''
     end
-    -- In terminal always use plain name
     if vim.bo.buftype == 'terminal' then
-      return '%t'
+      local ok, term = pcall(require, 'user.terminal')
+      if ok and term.is_tracked_buf() then
+        local state = term.entry_for_buf()
+        if state then
+          return state.name .. '%m%r'
+        end
+      end
+      return '%t%m%r'
     elseif statusline.is_truncated(110) then
       -- File name with 'truncate', 'modified', 'readonly' flags
       -- Use relative path if truncated
@@ -177,30 +183,28 @@ return function()
     return string.format('%%#MiniStatuslineLSPIcon#%s %%#MiniStatuslineFileinfo#%s', icon, filetype)
   end
 
-  -- Run-buffer terminals indicator (only on F3 terminal buffers). Shows
-  -- basenames of live terminals, sorted by creation order (]t / [t order).
-  -- The active terminal is highlighted.
-  local function section_run_terminals()
+  -- Managed terminals (]t / [t order). The active terminal is highlighted.
+  local function section_terminals()
     if statusline.is_truncated(120) then
       return ''
     end
-    local ok, rb = pcall(require, 'user.run-buffer')
-    if not ok or type(rb.list_terminals) ~= 'function' then
+    local ok, term = pcall(require, 'user.terminal')
+    if not ok or type(term.list) ~= 'function' then
       return ''
     end
-    if not rb.is_run_buffer_terminal_buf() then
+    if not term.is_tracked_buf() then
       return ''
     end
-    local list = rb.list_terminals()
+    local list = term.list()
     if #list == 0 then
       return ''
     end
     local parts = {}
     for _, item in ipairs(list) do
       if item.is_active then
-        table.insert(parts, '%#MiniStatuslineFilename#' .. item.basename .. '%#MiniStatuslineDevinfo#')
+        table.insert(parts, '%#MiniStatuslineFilename#' .. item.name .. '%#MiniStatuslineDevinfo#')
       else
-        table.insert(parts, item.basename)
+        table.insert(parts, item.name)
       end
     end
     return ' ' .. table.concat(parts, ' · ')
@@ -245,7 +249,7 @@ return function()
         local progress = section_progress()
         local location = section_location()
         local yaml_schema = section_yaml_schema()
-        local run_terminals = section_run_terminals()
+        local run_terminals = section_terminals()
         local search = statusline.section_searchcount { trunc_width = 75 }
 
         -- Use statusline syntax to include borders without automatic spacing

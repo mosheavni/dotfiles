@@ -139,48 +139,6 @@ describe('user.utils', function()
     end)
   end)
 
-  describe('job_alive', function()
-    local original_jobpid
-
-    before_each(function()
-      original_jobpid = vim.fn.jobpid
-    end)
-
-    after_each(function()
-      vim.fn.jobpid = original_jobpid
-    end)
-
-    it('returns false for nil', function()
-      assert.is_false(utils.job_alive(nil))
-    end)
-
-    it('returns false for non-positive job_id', function()
-      assert.is_false(utils.job_alive(0))
-      assert.is_false(utils.job_alive(-1))
-    end)
-
-    it('returns true when jobpid returns non-zero', function()
-      vim.fn.jobpid = function()
-        return 12345
-      end
-      assert.is_true(utils.job_alive(1))
-    end)
-
-    it('returns false when jobpid returns zero', function()
-      vim.fn.jobpid = function()
-        return 0
-      end
-      assert.is_false(utils.job_alive(1))
-    end)
-
-    it('returns false when jobpid raises E900', function()
-      vim.fn.jobpid = function()
-        error('E900: Invalid channel id', 0)
-      end
-      assert.is_false(utils.job_alive(1))
-    end)
-  end)
-
   describe('command_for_filetype', function()
     it('returns the mapped command for a known filetype', function()
       eq(utils.command_for_filetype 'yaml', 'yq')
