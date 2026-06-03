@@ -70,10 +70,61 @@ update_gh_releases() {
   log "gh — GitHub release tools"
   local install_dir="$HOME/.local/bin"
   mkdir -p "$install_dir"
-  while read -r repo binary; do
+
+  local arch
+  case "$(uname -m)" in
+  arm64 | aarch64) arch=arm64 ;;
+  x86_64 | amd64) arch=amd64 ;;
+  *)
+    echo "Unsupported architecture: $(uname -m)" >&2
+    return 1
+    ;;
+  esac
+
+  while read -r repo binary arm64_pattern amd64_pattern; do
     [[ -z "$repo" || "$repo" == \#* ]] && continue
-    gh release download --repo "$repo" --pattern "*darwin*amd64*" \
-      --output "$install_dir/$binary" --clobber
+    local pattern
+    if [[ "$arch" == arm64 ]]; then
+      pattern="$arm64_pattern"
+    else
+      pattern="$amd64_pattern"
+    fi
+
+    local tmpdir asset assets=()
+    tmpdir=$(mktemp -d)
+    gh release download --repo "$repo" --pattern "$pattern" --dir "$tmpdir" --clobber
+    while IFS= read -r -d '' f; do
+      assets+=("$f")
+    done < <(find "$tmpdir" -maxdepth 1 -type f -print0)
+    if ((${#assets[@]} != 1)); then
+      echo "Expected 1 release asset for $repo (pattern: $pattern), found ${#assets[@]}" >&2
+      rm -rf "$tmpdir"
+      return 1
+    fi
+    asset="${assets[0]}"
+
+    case "$asset" in
+    *.tar.gz | *.tgz | *.tar.xz | *.tar.bz2 | *.tar)
+      tar -xf "$asset" -C "$tmpdir"
+      asset=$(find "$tmpdir" -name "$binary" -type f | head -1)
+      if [[ -z "$asset" ]]; then
+        echo "Could not find $binary inside archive for $repo" >&2
+        rm -rf "$tmpdir"
+        return 1
+      fi
+      ;;
+    *.zip)
+      unzip -oq "$asset" -d "$tmpdir"
+      asset=$(find "$tmpdir" -name "$binary" -type f | head -1)
+      if [[ -z "$asset" ]]; then
+        echo "Could not find $binary inside archive for $repo" >&2
+        rm -rf "$tmpdir"
+        return 1
+      fi
+      ;;
+    esac
+    mv "$asset" "$install_dir/$binary"
+    rm -rf "$tmpdir"
     chmod +x "$install_dir/$binary"
   done <"$DOTFILES/github-releases.txt"
 }
@@ -96,15 +147,72 @@ random() {
 
 # ── main ─────────────────────────────────────────────────────────────────────
 
-update_asdf
-update_brew
-update_pip
-update_npm
-update_cargo
-update_go
-update_gh_releases
-update_build_tools
-random
+UPDATE_SECTIONS=(asdf brew pip npm cargo go gh build random)
+
+run_section() {
+  case "$1" in
+  asdf) update_asdf ;;
+  brew) update_brew ;;
+  pip) update_pip ;;
+  npm) update_npm ;;
+  cargo) update_cargo ;;
+  go) update_go ;;
+  gh) update_gh_releases ;;
+  build) update_build_tools ;;
+  random) random ;;
+  *)
+    echo "Unknown section: $1" >&2
+    return 1
+    ;;
+  esac
+}
+
+interactive_select() {
+  if ! command -v gum >/dev/null; then
+    echo "gum is required for -i (brew install gum)" >&2
+    exit 1
+  fi
+
+  local selected
+  if ! selected=$(
+    gum choose --no-limit --selected='*' \
+      --header "Select updates to run (space toggle, enter confirm)" \
+      "${UPDATE_SECTIONS[@]}"
+  ); then
+    echo "Cancelled."
+    exit 0
+  fi
+
+  if [[ -z "$selected" ]]; then
+    echo "No updates selected."
+    exit 0
+  fi
+
+  local section
+  while IFS= read -r section; do
+    [[ -z "$section" ]] && continue
+    run_section "$section"
+  done <<<"$selected"
+}
+
+INTERACTIVE=false
+while getopts "i" opt; do
+  case "$opt" in
+  i) INTERACTIVE=true ;;
+  *)
+    echo "Usage: $0 [-i]" >&2
+    exit 1
+    ;;
+  esac
+done
+
+if $INTERACTIVE; then
+  interactive_select
+else
+  for section in "${UPDATE_SECTIONS[@]}"; do
+    run_section "$section"
+  done
+fi
 
 echo ""
 echo "✓ All done."
