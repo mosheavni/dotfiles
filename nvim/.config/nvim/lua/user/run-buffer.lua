@@ -318,6 +318,19 @@ local function run_in_terminal(file_name, cmd, opts)
   end, INTERRUPT_DELAY_MS)
 end
 
+--- Working directory for running the buffer (repo root for GitHub Actions workflows).
+---@param ft string
+---@return string
+local function run_cwd(ft)
+  if ft == 'yaml.ghaction' then
+    local root = require('user.git').get_toplevel_sync()
+    if root ~= '' then
+      return root
+    end
+  end
+  return vim.fn.expand '%:p:h'
+end
+
 local function execute_file(where)
   if vim.bo.buftype == 'terminal' then
     return
@@ -332,7 +345,7 @@ local function execute_file(where)
       return
     end
 
-    local opts = { cwd = vim.fn.expand '%:p:h' }
+    local opts = { cwd = run_cwd(ft) }
     if where and where ~= 'terminal' then
       utils.wezterm_spawn_and_send(cmd, opts)
       return
@@ -349,6 +362,7 @@ M._get_makefile_options = get_makefile_options
 M._makefile_target_name = makefile_target_name
 M._clear_terminal_for_buf = clear_terminal_for_buf
 M._get_make_async = get_make_async
+M._run_cwd = run_cwd
 
 --- Return all live run-buffer terminals, sorted by buffer-id (== creation
 --- order). Each entry has `is_active = true` when it belongs to the file of

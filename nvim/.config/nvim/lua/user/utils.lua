@@ -111,6 +111,7 @@ M.filetype_to_command = {
   typescript = 'node',
   typescriptreact = 'node',
   yaml = 'yq',
+  ['yaml.ghaction'] = 'act -W',
   zsh = 'zsh',
 }
 

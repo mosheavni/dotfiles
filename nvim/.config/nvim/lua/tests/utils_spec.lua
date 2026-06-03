@@ -189,7 +189,10 @@ describe('user.utils', function()
 
     it('falls back to the base filetype before the dot', function()
       eq(utils.command_for_filetype 'yaml.docker-compose', 'yq')
-      eq(utils.command_for_filetype 'yaml.ghaction', 'yq')
+    end)
+
+    it('uses act for GitHub Actions workflow files', function()
+      eq(utils.command_for_filetype 'yaml.ghaction', 'act -W')
     end)
 
     it('defaults to bash for unknown filetypes', function()

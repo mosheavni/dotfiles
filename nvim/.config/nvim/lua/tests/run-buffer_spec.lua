@@ -268,6 +268,44 @@ describe('user.run-buffer', function()
     end)
   end)
 
+  describe('_run_cwd', function()
+    local original_git
+
+    before_each(function()
+      original_git = package.loaded['user.git']
+    end)
+
+    after_each(function()
+      package.loaded['user.git'] = original_git
+    end)
+
+    it('uses git repo root for yaml.ghaction', function()
+      package.loaded['user.git'] = {
+        get_toplevel_sync = function()
+          return '/repo'
+        end,
+      }
+      eq(rb._run_cwd('yaml.ghaction'), '/repo')
+    end)
+
+    it('falls back to the buffer directory when not in a git repo', function()
+      package.loaded['user.git'] = {
+        get_toplevel_sync = function()
+          return ''
+        end,
+      }
+      local tmp = vim.fn.tempname() .. '.yml'
+      fresh_named_buffer(tmp, 'yaml.ghaction')
+      eq(rb._run_cwd('yaml.ghaction'), vim.fn.expand '%:p:h')
+    end)
+
+    it('uses the buffer directory for other filetypes', function()
+      local tmp = vim.fn.tempname() .. '.py'
+      fresh_named_buffer(tmp, 'python')
+      eq(rb._run_cwd('python'), vim.fn.expand '%:p:h')
+    end)
+  end)
+
   describe('_resolve_cmd', function()
     it('terraform runs terragrunt plan without appending the file path', function()
       local cmd, should_break = rb._resolve_cmd('terraform', '/tmp/main.tf', '')
@@ -290,6 +328,12 @@ describe('user.run-buffer', function()
     it('compound yaml filetypes use yq', function()
       local cmd, should_break = rb._resolve_cmd('yaml.docker-compose', '/tmp/docker-compose.yml', '')
       eq(cmd, 'yq /tmp/docker-compose.yml')
+      eq(should_break, false)
+    end)
+
+    it('yaml.ghaction runs act with the workflow path', function()
+      local cmd, should_break = rb._resolve_cmd('yaml.ghaction', '/repo/.github/workflows/ci.yml', '')
+      eq(cmd, 'act -W /repo/.github/workflows/ci.yml')
       eq(should_break, false)
     end)
 
