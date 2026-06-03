@@ -225,6 +225,13 @@ local function cmd_or_break_async(ft, file_name, on_done)
     return
   end
 
+  if ft == 'yaml.ghaction' then
+    require('user.gh-actions').resolve_act_cmd_async(file_name, function(cmd)
+      on_done(cmd, cmd == nil)
+    end)
+    return
+  end
+
   local cmd, should_break = M._resolve_cmd(ft, file_name, first_line)
   on_done(cmd, should_break)
 end

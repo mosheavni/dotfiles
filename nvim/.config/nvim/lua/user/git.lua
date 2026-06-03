@@ -221,6 +221,36 @@ M.get_toplevel_sync = function()
   return vim.trim(toplevel)
 end
 
+--- Default branch for local tooling (act, etc.). Offline; no UI prompts.
+---@param remote? string
+---@return string
+M.get_default_branch_sync = function(remote)
+  remote = remote or 'origin'
+  local obj = run_git_sync({ 'symbolic-ref', 'refs/remotes/' .. remote .. '/HEAD' }, nil)
+  if obj.code == 0 and obj.stdout then
+    local branch = M.parse_symbolic_ref(obj.stdout, remote)
+    if branch then
+      return branch
+    end
+  end
+  local current = M.get_branch_sync()
+  if current and not current:match '^[0-9a-f]+$' then
+    return current
+  end
+  return 'master'
+end
+
+---@param remote? string
+---@return string|nil owner/repo slug for GitHub-style remotes
+M.get_owner_repo_sync = function(remote)
+  remote = remote or 'origin'
+  local obj = run_git_sync({ 'remote', 'get-url', remote }, nil)
+  if obj.code ~= 0 or not obj.stdout or vim.trim(obj.stdout) == '' then
+    return nil
+  end
+  return M.extract_owner_repo(vim.trim(obj.stdout))
+end
+
 M.checkout = function(branch_name)
   run_git({ 'checkout', branch_name }, 'Checking out ' .. branch_name)
 end

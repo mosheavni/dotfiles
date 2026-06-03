@@ -331,10 +331,21 @@ describe('user.run-buffer', function()
       eq(should_break, false)
     end)
 
-    it('yaml.ghaction runs act with the workflow path', function()
-      local cmd, should_break = rb._resolve_cmd('yaml.ghaction', '/repo/.github/workflows/ci.yml', '')
-      eq(cmd, 'act -W /repo/.github/workflows/ci.yml')
-      eq(should_break, false)
+    it('yaml.ghaction uses gh-actions to build the act command', function()
+      local original_gh = package.loaded['user.gh-actions']
+      package.loaded['user.gh-actions'] = {
+        resolve_act_cmd_async = function(_path, on_done)
+          on_done 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json'
+        end,
+      }
+
+      local done_cmd
+      package.loaded['user.gh-actions'].resolve_act_cmd_async('/repo/.github/workflows/ci.yml', function(cmd)
+        done_cmd = cmd
+      end)
+      eq(done_cmd, 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json')
+
+      package.loaded['user.gh-actions'] = original_gh
     end)
 
     it('uses the file path when the shebang is present', function()

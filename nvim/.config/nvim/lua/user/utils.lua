@@ -111,7 +111,8 @@ M.filetype_to_command = {
   typescript = 'node',
   typescriptreact = 'node',
   yaml = 'yq',
-  ['yaml.ghaction'] = 'act --container-architecture linux/amd64 -W',
+  -- yaml.ghaction: see user/gh-actions.lua (run-buffer builds the act command)
+  ['yaml.ghaction'] = 'act',
   zsh = 'zsh',
 }
 

@@ -192,7 +192,7 @@ describe('user.utils', function()
     end)
 
     it('uses act for GitHub Actions workflow files', function()
-      eq(utils.command_for_filetype 'yaml.ghaction', 'act -W')
+      eq(utils.command_for_filetype 'yaml.ghaction', 'act')
     end)
 
     it('defaults to bash for unknown filetypes', function()
