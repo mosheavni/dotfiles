@@ -34,6 +34,7 @@ return function()
   vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 
   vim.api.nvim_create_user_command('JsonPath', function()
+    ---@diagnostic disable-next-line: missing-parameter
     local json_path = require('jsonpath').get()
     vim.fn.setreg('+', json_path)
     vim.notify('Copied ' .. json_path .. ' to register +', vim.log.levels.INFO, { title = 'JsonPath' })

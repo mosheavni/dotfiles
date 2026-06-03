@@ -175,7 +175,7 @@ describe('user.run-buffer', function()
           return '/repo'
         end,
       }
-      eq(rb._run_cwd('yaml.ghaction'), '/repo')
+      eq(rb._run_cwd 'yaml.ghaction', '/repo')
     end)
 
     it('falls back to the buffer directory when not in a git repo', function()
@@ -186,13 +186,13 @@ describe('user.run-buffer', function()
       }
       local tmp = vim.fn.tempname() .. '.yml'
       fresh_named_buffer(tmp, 'yaml.ghaction')
-      eq(rb._run_cwd('yaml.ghaction'), vim.fn.expand '%:p:h')
+      eq(rb._run_cwd 'yaml.ghaction', vim.fn.expand '%:p:h')
     end)
 
     it('uses the buffer directory for other filetypes', function()
       local tmp = vim.fn.tempname() .. '.py'
       fresh_named_buffer(tmp, 'python')
-      eq(rb._run_cwd('python'), vim.fn.expand '%:p:h')
+      eq(rb._run_cwd 'python', vim.fn.expand '%:p:h')
     end)
   end)
 
@@ -224,16 +224,13 @@ describe('user.run-buffer', function()
     it('yaml.ghaction uses gh-actions to build the act command', function()
       local original_gh = package.loaded['user.gh-actions']
       package.loaded['user.gh-actions'] = {
-        resolve_act_cmd_async = function(_path, on_done)
-          on_done 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json'
+        build_act_cmd = function()
+          return 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json'
         end,
       }
 
-      local done_cmd
-      package.loaded['user.gh-actions'].resolve_act_cmd_async('/repo/.github/workflows/ci.yml', function(cmd)
-        done_cmd = cmd
-      end)
-      eq(done_cmd, 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json')
+      local cmd = package.loaded['user.gh-actions'].build_act_cmd '/repo/.github/workflows/ci.yml'
+      eq(cmd, 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json')
 
       package.loaded['user.gh-actions'] = original_gh
     end)
@@ -251,7 +248,7 @@ describe('user.run-buffer', function()
     before_each(function()
       makefile_path = vim.fn.tempname()
       local f = assert(io.open(makefile_path, 'w'))
-      f:write('all:\n\ntest:\n')
+      f:write 'all:\n\ntest:\n'
       f:close()
       original_ui_select = vim.ui.select
     end)
@@ -290,7 +287,7 @@ describe('user.run-buffer', function()
     before_each(function()
       makefile_path = vim.fn.tempname()
       local f = assert(io.open(makefile_path, 'w'))
-      f:write([[
+      f:write [[
 .PHONY: all test prepare clean
 
 all: test
@@ -303,7 +300,7 @@ test: prepare
 
 clean:
 	rm -rf ../plenary.nvim
-]])
+]]
       f:close()
       package.loaded['user.run-buffer'] = nil
     end)

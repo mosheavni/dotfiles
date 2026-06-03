@@ -148,9 +148,8 @@ local function cmd_or_break_async(ft, file_name, on_done)
   end
 
   if ft == 'yaml.ghaction' then
-    require('user.gh-actions').resolve_act_cmd_async(file_name, function(cmd)
-      on_done(cmd, cmd == nil)
-    end)
+    local cmd = require('user.gh-actions').build_act_cmd(file_name)
+    on_done(cmd, cmd == nil)
     return
   end
 
