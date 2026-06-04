@@ -60,6 +60,9 @@ return function()
       if vim.tbl_contains(excluded_filetypes, vim.bo.filetype) or not vim.bo.modifiable then
         return
       end
+      if vim.api.nvim_buf_get_name(0):match '^%w+://' then
+        return
+      end
 
       local linters = lint._resolve_linter_by_ft(vim.bo.filetype)
       for _, linter_name in ipairs(linters) do
