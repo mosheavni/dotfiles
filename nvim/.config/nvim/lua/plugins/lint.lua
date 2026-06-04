@@ -93,4 +93,10 @@ return function()
       vim.diagnostic.reset(vim.api.nvim_create_namespace 'trivy', 0)
     end
   end, {})
+
+  require('user.menu').add_actions('Lint', {
+    ['Toggle Trivy linting (:TrivyLintToggle)'] = function()
+      vim.cmd [[TrivyLintToggle]]
+    end,
+  })
 end

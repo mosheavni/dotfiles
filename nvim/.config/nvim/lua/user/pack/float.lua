@@ -868,4 +868,13 @@ end, {
   desc = 'Open lazy-style vim.pack UI',
 })
 
+require('user.menu').add_actions('Plugins', {
+  ['Open vim.pack UI (:PackFloat)'] = function()
+    vim.cmd [[PackFloat]]
+  end,
+  ['Open vim.pack UI without fetch (:PackFloat!)'] = function()
+    vim.cmd [[PackFloat!]]
+  end,
+})
+
 return M

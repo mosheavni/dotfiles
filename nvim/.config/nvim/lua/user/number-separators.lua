@@ -131,4 +131,10 @@ vim.api.nvim_create_user_command('NumberSeparatorsToggle', function()
   end
 end, {})
 
+require('user.menu').add_actions('Editor', {
+  ['Toggle number separators (:NumberSeparatorsToggle)'] = function()
+    vim.cmd [[NumberSeparatorsToggle]]
+  end,
+})
+
 return M

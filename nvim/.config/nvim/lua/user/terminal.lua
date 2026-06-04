@@ -310,6 +310,18 @@ function M.setup()
     M.pick()
   end, {})
 
+  require('user.menu').add_actions('Terminal', {
+    ['Open new floating terminal (:Terminal)'] = function()
+      vim.cmd [[Terminal]]
+    end,
+    ['Rename current terminal (:TerminalRename)'] = function()
+      vim.cmd [[TerminalRename]]
+    end,
+    ['Pick existing terminal (:TerminalPick)'] = function()
+      vim.cmd [[TerminalPick]]
+    end,
+  })
+
   vim.api.nvim_create_autocmd('BufWipeout', {
     callback = function(ev)
       M._clear_for_buf(ev.buf)

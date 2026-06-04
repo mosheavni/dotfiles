@@ -97,4 +97,10 @@ return function()
   vim.api.nvim_create_user_command('KubectlOpen', function()
     require('kubectl').open()
   end, {})
+
+  require('user.menu').add_actions('Kubernetes', {
+    ['Open kubectl UI (:KubectlOpen)'] = function()
+      vim.cmd [[KubectlOpen]]
+    end,
+  })
 end

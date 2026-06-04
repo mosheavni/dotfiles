@@ -298,6 +298,15 @@ function M.setup()
   vim.api.nvim_create_user_command('RunInTab', function()
     execute_file 'tab'
   end, {})
+
+  require('user.menu').add_actions('Run', {
+    ['Run buffer in terminal split (<F3> | :RunInTerminal)'] = function()
+      vim.cmd [[RunInTerminal]]
+    end,
+    ['Run buffer in new tab (:RunInTab)'] = function()
+      vim.cmd [[RunInTab]]
+    end,
+  })
 end
 
 return M

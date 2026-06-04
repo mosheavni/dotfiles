@@ -406,6 +406,7 @@ vim.api.nvim_create_user_command('DirDiff', function(opts)
 
   vim.cmd.packadd 'nvim.difftool'
   require('difftool').open(opts.fargs[1], opts.fargs[2], {
+    method = 'auto',
     rename = { detect = false },
     ignore = { '.git' },
   })
@@ -511,6 +512,61 @@ function! s:SortInBlock() abort
 endfunction
 command! SortInBlock call s:SortInBlock()
 ]]
+
+require('user.menu').add_actions('YAML', {
+  ['Convert buffer Yaml to Json (:Yaml2Json)'] = function()
+    vim.cmd [[Yaml2Json]]
+  end,
+})
+require('user.menu').add_actions('JSON', {
+  ['Convert buffer Json to Yaml (:Json2Yaml)'] = function()
+    vim.cmd [[Json2Yaml]]
+  end,
+  ['Sort Json Array by Key (:JsonSortArrayByKey)'] = function()
+    vim.cmd [[JsonSortArrayByKey]]
+  end,
+})
+require('user.menu').add_actions('Diff', {
+  ['Diff with saved file (<leader>ds | :DiffWithSaved)'] = function()
+    vim.cmd [[DiffWithSaved]]
+  end,
+  ['Diff two directories (:DirDiff)'] = function()
+    vim.ui.input({ prompt = 'Left dir❯ ', completion = 'dir' }, function(left)
+      if not left or left == '' then
+        return
+      end
+      vim.ui.input({ prompt = 'Right dir❯ ', completion = 'dir' }, function(right)
+        if not right or right == '' then
+          return
+        end
+        vim.cmd('DirDiff ' .. vim.fn.fnameescape(left) .. ' ' .. vim.fn.fnameescape(right))
+      end)
+    end)
+  end,
+})
+require('user.menu').add_actions('Misc', {
+  ['Where am I? (:Whereami)'] = function()
+    vim.cmd [[Whereami]]
+  end,
+  ['Visual Calculator (<C-r> | :VisualCalculator)'] = function()
+    vim.cmd [[VisualCalculator]]
+  end,
+  ['Titleize current line (:Titleize)'] = function()
+    vim.ui.input({ prompt = 'Title char (default -)❯ ' }, function(char)
+      vim.cmd('Titleize ' .. (char or ''))
+    end)
+  end,
+  ['Say text via macOS (:Say)'] = function()
+    vim.ui.input({ prompt = 'Text to say❯ ' }, function(text)
+      if text and text ~= '' then
+        vim.cmd('Say ' .. text)
+      end
+    end)
+  end,
+  ['Sort lines in surrounding block (:SortInBlock)'] = function()
+    vim.cmd [[SortInBlock]]
+  end,
+})
 
 require('user.tabular-v2').setup()
 require('user.projects').setup()

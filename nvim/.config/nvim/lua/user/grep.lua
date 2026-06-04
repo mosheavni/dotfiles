@@ -129,6 +129,15 @@ function M.setup(opts)
   vim.keymap.set({ 'n', 'v' }, opts.keymap.search, function()
     return vim.fn.mode() == 'v' and ':RipGrepCWORDVisual!<cr>' or ':RipGrepCWORD!<Space>'
   end, { remap = false, expr = true })
+
+  require('user.menu').add_actions('Grep', {
+    ['RipGrep word under cursor (' .. opts.keymap.search .. ' | :RipGrepCWORD)'] = function()
+      vim.cmd [[RipGrepCWORD!]]
+    end,
+    ['RipGrep visual selection (' .. opts.keymap.search .. ' | :RipGrepCWORDVisual)'] = function()
+      vim.cmd [[RipGrepCWORDVisual!]]
+    end,
+  })
 end
 
 return M

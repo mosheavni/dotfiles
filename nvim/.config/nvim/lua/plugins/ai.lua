@@ -54,4 +54,16 @@ return function()
   vim.keymap.set({ 'n', 'v', 'i' }, '<C-,>', function()
     require('agentic').new_session()
   end, { desc = 'New Agentic Session' })
+
+  require('user.menu').add_actions('AI', {
+    ['Toggle Agentic Chat (' .. ai_keymap .. ')'] = function()
+      require('agentic').toggle()
+    end,
+    ['New Agentic Session (<C-,>)'] = function()
+      require('agentic').new_session()
+    end,
+    ["Add file/selection to Agentic context (<C-'>)"] = function()
+      require('agentic').add_selection_or_file_to_context()
+    end,
+  })
 end

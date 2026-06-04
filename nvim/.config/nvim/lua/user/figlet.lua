@@ -162,6 +162,12 @@ end
 
 function M.setup()
   vim.api.nvim_create_user_command('Figlet', M.pick_font, { desc = 'Pick a figlet font and insert ASCII art' })
+
+  require('user.menu').add_actions('Insert', {
+    ['Pick figlet font and insert ASCII art (:Figlet)'] = function()
+      vim.cmd [[Figlet]]
+    end,
+  })
 end
 
 return M

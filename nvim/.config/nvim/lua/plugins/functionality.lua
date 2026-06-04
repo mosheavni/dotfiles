@@ -163,6 +163,12 @@ function M.deferred()
       notify_lsp_rename(old, new)
     end)
   end, { desc = 'Rename file' })
+
+  require('user.menu').add_actions('File', {
+    ['Rename current file (:Rename)'] = function()
+      vim.cmd [[Rename]]
+    end,
+  })
 end
 
 return M

@@ -1100,6 +1100,15 @@ function M.setup(opts)
     M.parse_command()
   end, {})
 
+  require('user.menu').add_actions('Tabular', {
+    ['Parse buffer as tabular (:TabularParse)'] = function()
+      vim.cmd [[TabularParse]]
+    end,
+    ['Parse output of a command as tabular (:TabularParseCmd)'] = function()
+      vim.cmd [[TabularParseCmd]]
+    end,
+  })
+
   -- Set up autocmd to clean up resources when tabular buffers are deleted
   local tabular_group = vim.api.nvim_create_augroup('TabularCleanup', { clear = true })
   vim.api.nvim_create_autocmd({ 'BufDelete', 'BufWipeout' }, {

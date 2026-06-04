@@ -51,25 +51,25 @@ local search_and_replace = function(literal_search)
 end
 
 return {
-  ['Find in pwd (literal search) (<C-f>)'] = function()
+  ['[Search] Find in pwd (literal search) (<C-f>)'] = function()
     find_in_project { literal_search = true }
   end,
-  ['Find in pwd (regex search) (<C-f>)'] = function()
+  ['[Search] Find in pwd (regex search) (<C-f>)'] = function()
     find_in_project { literal_search = false }
   end,
-  ['Search and Replace in cwd (literal search)'] = function()
+  ['[Search] Search and Replace in cwd (literal search)'] = function()
     search_and_replace(true)
   end,
-  ['Search and Replace in cwd (regex search)'] = function()
+  ['[Search] Search and Replace in cwd (regex search)'] = function()
     search_and_replace(false)
   end,
-  ['Replace word under cursor (<leader>r)'] = function()
+  ['[Search] Replace word under cursor (<leader>r)'] = function()
     vim.fn.feedkeys(leader .. 'r')
   end,
-  ['Select all (vae / <leader>sa)'] = function()
+  ['[Edit] Select all (vae / <leader>sa)'] = function()
     vim.cmd [[normal! ggVG]]
   end,
-  ['Indent block forward (<leader>gt)'] = function()
+  ['[Edit] Indent block forward (<leader>gt)'] = function()
     vim.cmd [[normal! v%koj$>]]
   end,
   ['[Folds] Open all folds (zR / <leader>fo)'] = function()
@@ -109,13 +109,13 @@ return {
     vim.fn.setreg('q', [[yss'I-target=A \j]])
     vim.notify('Macro q set to -target', vim.log.levels.INFO, { title = 'Terraform' })
   end,
-  ['Basic groovy format'] = function()
+  ['[Format] Basic groovy format'] = function()
     vim.cmd.BasicGroovyFormat()
   end,
-  ['Where am I?'] = function()
+  ['[Misc] Where am I?'] = function()
     vim.cmd.Whereami()
   end,
-  ['Autocommand to reload the lua file nvim'] = function()
+  ['[Lua] Autocommand to reload the lua file nvim'] = function()
     if vim.api.nvim_get_option_value('filetype', { buf = 0 }) ~= 'lua' then
       ---@diagnostic disable-next-line: param-type-mismatch
       vim.notify('Filetype is not lua!', vim.log.levels.ERROR, { title = '🖥️' })
@@ -143,16 +143,16 @@ end)
     vim.cmd.write()
     vim.cmd 'luafile %'
   end,
-  ['Center Focus (zz)'] = function()
+  ['[View] Center Focus (zz)'] = function()
     vim.fn.feedkeys 'zz'
   end,
-  ['Bottom Focus (zb)'] = function()
+  ['[View] Bottom Focus (zb)'] = function()
     vim.fn.feedkeys 'zb'
   end,
-  ['Top Focus (zt)'] = function()
+  ['[View] Top Focus (zt)'] = function()
     vim.fn.feedkeys 'zt'
   end,
-  ['Record Macro (q{letter})'] = function()
+  ['[Macro] Record Macro (q{letter})'] = function()
     vim.ui.input({ prompt = 'Macro letter❯ ' }, function(macro_letter)
       if not macro_letter then
         macro_letter = 'q'
@@ -162,7 +162,7 @@ end)
       vim.notify('You can repeat this macro with @' .. macro_letter, vim.log.levels.INFO, { title = 'Macro' })
     end)
   end,
-  ['Repeat Macro (@{letter} / Q)'] = function()
+  ['[Macro] Repeat Macro (@{letter} / Q)'] = function()
     vim.ui.input({ prompt = 'Macro letter❯ ' }, function(macro_letter)
       if not macro_letter then
         macro_letter = 'q'
@@ -175,7 +175,7 @@ end)
       end)
     end)
   end,
-  ['Save current buffer as temp'] = function()
+  ['[File] Save current buffer as temp'] = function()
     local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
     if ft == '' then
       vim.ui.select(vim.fn.getcompletion('', 'filetype'), { prompt = 'Filetype❯ ' }, function(selected)
@@ -193,53 +193,53 @@ end)
       vim.cmd 'edit'
     end
   end,
-  ['Find files (<C-p>)'] = function()
+  ['[Search] Find files (<C-p>)'] = function()
     vim.cmd 'FzfLua files'
   end,
-  ['Find buffers (<C-b>)'] = function()
+  ['[Search] Find buffers (<C-b>)'] = function()
     vim.cmd 'FzfLua buffers'
   end,
-  ['Open Nvim Tree File Browser (<leader>o)'] = function()
+  ['[File] Open Nvim Tree File Browser (<leader>o)'] = function()
     local api = require 'nvim-tree.api'
     api.tree.toggle()
   end,
-  ['Close all notifications (<leader>x)'] = function()
+  ['[Misc] Close all notifications (<leader>x)'] = function()
     require('notify').dismiss { pending = true, silent = true }
   end,
-  ['Quit all (<leader>qq)'] = function()
+  ['[Misc] Quit all (<leader>qq)'] = function()
     vim.cmd.qall()
   end,
-  ['Paste from clipboard (cv)'] = function()
+  ['[Edit] Paste from clipboard (cv)'] = function()
     vim.fn.feedkeys 'cv'
   end,
-  ['Copy entire file to clipboard (Y)'] = function()
+  ['[Edit] Copy entire file to clipboard (Y)'] = function()
     vim.fn.feedkeys 'Y'
   end,
-  ['Convert \\n to new lines (<leader><cr>)'] = function()
+  ['[Edit] Convert \\n to new lines (<leader><cr>)'] = function()
     vim.fn.feedkeys(leader .. T '<cr>')
   end,
-  ['Move line down (-)'] = function()
+  ['[Edit] Move line down (-)'] = function()
     vim.fn.feedkeys '-'
   end,
-  ['Move line up (_)'] = function()
+  ['[Edit] Move line up (_)'] = function()
     vim.fn.feedkeys '_'
   end,
-  ['Toggle words wrapping (<leader>ww)'] = function()
+  ['[View] Toggle words wrapping (<leader>ww)'] = function()
     vim.o.wrap = not vim.o.wrap
   end,
-  ['Copy full file path to clipboard (<leader>cfa)'] = function()
+  ['[File] Copy full file path to clipboard (<leader>cfa)'] = function()
     vim.fn.feedkeys(leader .. 'cfa')
   end,
-  ['Copy relative file path to clipboard (<leader>cfp)'] = function()
+  ['[File] Copy relative file path to clipboard (<leader>cfp)'] = function()
     vim.fn.feedkeys(leader .. 'cfp')
   end,
-  ['Copy directory path to clipboard (<leader>cfd)'] = function()
+  ['[File] Copy directory path to clipboard (<leader>cfd)'] = function()
     vim.fn.feedkeys(leader .. 'cfd')
   end,
-  ['Copy file name to clipboard (<leader>cfn)'] = function()
+  ['[File] Copy file name to clipboard (<leader>cfn)'] = function()
     vim.fn.feedkeys(leader .. 'cfn')
   end,
-  ['Split long bash line (<leader>\\'] = function()
+  ['[Edit] Split long bash line (<leader>\\'] = function()
     vim.fn.feedkeys(leader .. [[\]])
   end,
   ['[YAML] Yaml to Json (:Yaml2Json)'] = function()
@@ -251,10 +251,10 @@ end)
   ['[JSON] Json to Yaml (:Json2Yaml)'] = function()
     vim.cmd.Json2Yaml()
   end,
-  ['Change indent size (<leader>cii)'] = function()
-    vim.fn.feedkeys(leader .. 'cii')
+  ['[Editor] Change indent size (cii)'] = function()
+    vim.fn.feedkeys 'cii'
   end,
-  ['Convert tabs to spaces (<leader>ct<SPC>)'] = function()
+  ['[Editor] Convert tabs to spaces (<leader>ct<SPC>)'] = function()
     local original_expandtab = vim.opt_global.expandtab:get()
     vim.opt.expandtab = true
     vim.cmd.retab()
