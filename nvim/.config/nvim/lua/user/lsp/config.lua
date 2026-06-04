@@ -125,6 +125,16 @@ M.setup = function()
         setup_keymaps(bufnr)
       end
 
+      -- Prefer LSP folding over treesitter/indent when the server supports it.
+      -- Skip when the window is in diff mode so fugitive (and :diffthis) keep foldmethod=diff.
+      if client and client:supports_method('textDocument/foldingRange', bufnr) then
+        local win = vim.api.nvim_get_current_win()
+        if not vim.wo[win].diff then
+          vim.wo[win][0].foldmethod = 'expr'
+          vim.wo[win][0].foldexpr = 'v:lua.vim.lsp.foldexpr()'
+        end
+      end
+
       -- Highlight references of symbol under cursor (semantic, complements mini.cursorword)
       if client and client:supports_method('textDocument/documentHighlight', bufnr) then
         local hl_group = vim.api.nvim_create_augroup('lsp-document-highlight', { clear = false })

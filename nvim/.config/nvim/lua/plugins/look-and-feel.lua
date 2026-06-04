@@ -3,8 +3,6 @@ vim.pack.add {
   'https://github.com/nvim-tree/nvim-web-devicons',
   'https://github.com/eero-lehtinen/oklch-color-picker.nvim',
   'https://github.com/luukvbaal/statuscol.nvim',
-  'https://github.com/kevinhwang91/promise-async',
-  'https://github.com/kevinhwang91/nvim-ufo',
   'https://github.com/MeanderingProgrammer/render-markdown.nvim',
 }
 
@@ -58,23 +56,6 @@ function M.deferred()
       },
     },
   }
-
-  vim.o.foldcolumn = '1'
-  vim.o.foldlevel = 99
-  vim.o.foldlevelstart = 99
-  vim.o.foldenable = true
-  vim.o.foldtext = 'v:lua.vim.lsp.foldtext()'
-
-  require('ufo').setup { open_fold_hl_timeout = 0 }
-  vim.keymap.set('n', '<leader>fo', function()
-    require('ufo').openAllFolds()
-  end, { desc = 'Open all folds' })
-  vim.keymap.set('n', '<leader>fc', function()
-    require('ufo').closeAllFolds()
-  end, { desc = 'Close all folds' })
-  vim.keymap.set('n', '<leader>fp', function()
-    require('ufo').peekFoldedLinesUnderCursor()
-  end, { desc = 'Peek folded lines' })
 
   require('render-markdown').setup {
     file_types = { 'markdown', 'Avante', 'AgenticChat' },

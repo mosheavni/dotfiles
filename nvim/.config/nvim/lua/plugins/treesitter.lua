@@ -35,8 +35,11 @@ return function()
       end
 
       vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-      vim.wo[0][0].foldmethod = 'expr'
-      vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+      local win = vim.api.nvim_get_current_win()
+      if not vim.wo[win].diff then
+        vim.wo[win][0].foldmethod = 'expr'
+        vim.wo[win][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+      end
     end,
   })
 

@@ -72,7 +72,6 @@ vim.opt.fillchars = {
   eob = ' ',
 }
 vim.o.shada = [[!,'50,s100,h]]
--- vim.opt.foldcolumn = '1'
 vim.o.emoji = true
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
@@ -158,11 +157,15 @@ vim.opt.wildignore:append { '**/node_modules/**', '**/.hg/**', '**/.git/**', '**
 vim.opt.path:append { '**' }
 
 -- Folding
-vim.o.foldenable = false
-vim.o.foldmethod = 'manual'
-vim.o.foldlevel = 999
+-- Default to indent so non-treesitter, non-LSP buffers still get folds.
+-- Treesitter autocmd (plugins/treesitter.lua) upgrades to treesitter foldexpr per buffer.
+-- LspAttach autocmd (user/lsp/config.lua) upgrades to LSP foldexpr when the server supports it.
+vim.o.foldenable = true
+vim.o.foldmethod = 'indent'
+vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
-vim.o.foldcolumn = '1' -- '0' is not bad
+vim.o.foldcolumn = '1'
+vim.o.foldtext = ''
 
 -- j = Delete comment character when joining commented lines.
 -- t = auto break long lines

@@ -72,16 +72,16 @@ return {
   ['[Edit] Indent block forward (<leader>gt)'] = function()
     vim.cmd [[normal! v%koj$>]]
   end,
-  ['[Folds] Open all folds (zR / <leader>fo)'] = function()
+  ['[Folds] Open all folds (<leader>fo | zR)'] = function()
     vim.cmd 'normal! zR'
   end,
-  ['[Folds] Open fold (za / <leader>ff)'] = function()
+  ['[Folds] Open fold (<leader>ff | za)'] = function()
     vim.cmd 'normal! za'
   end,
-  ['[Folds] Open all folds folds under the cursor (level fold) (<leader>fl)'] = function()
+  ['[Folds] Open all folds folds under the cursor (level fold) (<leader>fl | zazczA)'] = function()
     vim.cmd 'normal! zazczA'
   end,
-  ['[Folds] Close all folds (<leader>fc)'] = function()
+  ['[Folds] Close all folds (<leader>fc | zM)'] = function()
     vim.cmd 'normal! zM'
   end,
   ['[Terraform] Remove terragrunt files'] = function()
