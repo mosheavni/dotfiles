@@ -243,17 +243,59 @@ map('n', '<leader>cd', ':cd %:p:h<CR>:pwd<CR>', { remap = false, silent = true, 
 -- Change every " -" with " \<cr> -" to break long lines of bash
 map('n', [[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], { silent = true, desc = 'Break long command line' })
 
--- global yanks and deletes (Lua: single buffer write instead of :global per-line delete)
-local filter_lines = require 'user.filter-lines'
-for _, spec in ipairs {
-  { '<leader>dab', filter_lines.delete, true, 'Delete all but...' },
-  { '<leader>daa', filter_lines.delete, false, 'Delete all ...' },
-  { '<leader>yab', filter_lines.yank, false, 'Yank all but...' },
-  { '<leader>yaa', filter_lines.yank, true, 'Yank all...' },
-} do
-  map('v', spec[1], function()
-    spec[2](spec[3])
-  end, { remap = false, desc = spec[4], silent = true })
+-- global yanks and deletes (single buffer write instead of :global per-line delete)
+do
+  local esc = vim.keycode '<Esc>'
+  local function select_lines(lines, pattern, matching)
+    local result = {}
+    for _, line in ipairs(lines) do
+      local matches = pattern ~= '' and vim.fn.match(line, '\\V' .. vim.fn.escape(pattern, '\\')) ~= -1
+      if matches == matching then
+        result[#result + 1] = line
+      end
+    end
+    return result
+  end
+  local function visual_context()
+    local pattern = table.concat(require('user.utils').get_visual_selection_stay_in_visual(), '\n')
+    vim.api.nvim_feedkeys(esc, 'n', false)
+    if pattern == '' then
+      return
+    end
+    return { pattern = pattern, lines = vim.api.nvim_buf_get_lines(0, 0, -1, false) }
+  end
+  local function filter_delete(matching)
+    local ctx = visual_context()
+    if not ctx then
+      return
+    end
+    local saved = vim.fn.getreg '"'
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, select_lines(ctx.lines, ctx.pattern, matching))
+    vim.fn.setreg('"', saved)
+    vim.cmd.noh()
+  end
+  local function filter_yank(matching)
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local ctx = visual_context()
+    if not ctx then
+      return
+    end
+    local saved = vim.fn.getreg '"'
+    vim.fn.setreg('E', table.concat(select_lines(ctx.lines, ctx.pattern, matching), '\n'), 'l')
+    vim.fn.setreg('"', saved)
+    vim.api.nvim_win_set_cursor(0, cursor)
+    vim.cmd.noh()
+  end
+  for _, spec in ipairs {
+    { '<leader>dab', filter_delete, true, 'Delete all but...' },
+    { '<leader>daa', filter_delete, false, 'Delete all ...' },
+    { '<leader>yab', filter_yank, false, 'Yank all but...' },
+    { '<leader>yaa', filter_yank, true, 'Yank all...' },
+  } do
+    map('v', spec[1], function()
+      spec[2](spec[3])
+    end, { remap = false, desc = spec[4], silent = true })
+  end
 end
 
 -- Base64 dencode
