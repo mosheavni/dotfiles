@@ -11,14 +11,40 @@ M.prnt = function(message, error)
   end)
 end
 
+---@param bufname string
+---@return boolean
+M.is_fugitive_status_bufname = function(bufname)
+  -- vim-fugitive status buffer URL is fugitive://{git_dir}// (no path after the trailing //)
+  return vim.startswith(bufname, 'fugitive://') and vim.endswith(bufname, '//')
+end
+
 M.get_fugitive_buffer = function()
+  local candidates = {}
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     local bufname = vim.api.nvim_buf_get_name(buf)
-    if vim.startswith(bufname, 'fugitive://') and string.find(bufname, '.git//') then
+    if M.is_fugitive_status_bufname(bufname) then
+      candidates[#candidates + 1] = buf
+    end
+  end
+  if #candidates == 0 then
+    return nil
+  end
+  if #candidates == 1 or vim.fn.exists '*FugitiveGitDir' ~= 1 then
+    return candidates[1]
+  end
+  local git_dir = vim.fn.FugitiveGitDir()
+  if git_dir == '' then
+    return candidates[1]
+  end
+  for _, buf in ipairs(candidates) do
+    local matches = vim.api.nvim_buf_call(buf, function()
+      return vim.fn.FugitiveGitDir() == git_dir
+    end)
+    if matches then
       return buf
     end
   end
-  return nil
+  return candidates[1]
 end
 
 M.reload_fugitive_index = function()

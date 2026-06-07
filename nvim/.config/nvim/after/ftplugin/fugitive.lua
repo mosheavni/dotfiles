@@ -54,9 +54,12 @@ vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
   end,
 })
 
+local bufnr = vim.api.nvim_get_current_buf()
 vim.schedule(function()
-  local buf = git_funcs.get_fugitive_buffer() or 0
-  vim.api.nvim_buf_set_keymap(buf, 'n', '<leader>t', '', {
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>t', '', {
     noremap = true,
     silent = true,
     desc = 'Open terminal',
@@ -65,7 +68,7 @@ vim.schedule(function()
     end,
   })
 
-  vim.api.nvim_buf_set_keymap(buf, 'n', 'cc', '', {
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'cc', '', {
     noremap = true,
     silent = true,
     desc = 'Commit',
@@ -74,28 +77,28 @@ vim.schedule(function()
     end,
   })
 
-  vim.api.nvim_buf_set_keymap(buf, 'n', 'gl', '', {
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gl', '', {
     noremap = true,
     silent = true,
     desc = 'Pull',
     callback = git_funcs.pull,
   })
 
-  vim.api.nvim_buf_set_keymap(buf, 'n', 'gp', '', {
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gp', '', {
     noremap = true,
     silent = true,
     desc = 'Push',
     callback = git_funcs.push,
   })
 
-  vim.api.nvim_buf_set_keymap(buf, 'n', 'gf', '', {
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gf', '', {
     noremap = true,
     silent = true,
     desc = 'Fetch',
     callback = git_funcs.fetch_all,
   })
 
-  vim.api.nvim_buf_set_keymap(buf, 'n', 'pr', '', {
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'pr', '', {
     noremap = true,
     silent = true,
     desc = 'Pull request',
@@ -104,14 +107,14 @@ vim.schedule(function()
     end,
   })
 
-  vim.api.nvim_buf_set_keymap(buf, 'n', 'fc', '', {
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'fc', '', {
     noremap = true,
     silent = true,
     desc = 'First commit',
     callback = git_funcs.first_commit,
   })
 
-  vim.api.nvim_buf_set_keymap(buf, 'n', 'R', '', {
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'R', '', {
     noremap = true,
     silent = true,
     desc = 'Reload',
@@ -120,7 +123,7 @@ vim.schedule(function()
     end,
   })
 
-  vim.api.nvim_buf_set_keymap(buf, 'n', 'wip', '', {
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'wip', '', {
     noremap = true,
     silent = true,
     desc = 'Enter work in progress',
