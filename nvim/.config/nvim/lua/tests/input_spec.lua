@@ -47,6 +47,42 @@ describe('user.input', function()
     end)
   end)
 
+  describe('resolve_border', function()
+    it('prefers explicit config border', function()
+      eq(input.resolve_border('single', 'rounded'), 'single')
+    end)
+
+    it('falls back to winborder', function()
+      eq(input.resolve_border(nil, 'shadow'), 'shadow')
+    end)
+
+    it('defaults to rounded', function()
+      eq(input.resolve_border(nil, ''), 'rounded')
+      eq(input.resolve_border(nil, nil), 'rounded')
+    end)
+  end)
+
+  describe('normalize_highlight_ranges', function()
+    it('keeps valid byte ranges', function()
+      local ranges = input.normalize_highlight_ranges('hello', { { 0, 5, 'Error' } })
+      eq(ranges, { { start_col = 0, end_col = 5, hl = 'Error' } })
+    end)
+
+    it('drops invalid or out-of-bounds ranges', function()
+      eq(input.normalize_highlight_ranges('hi', { { 0, 5, 'Error' } }), {})
+      eq(input.normalize_highlight_ranges('hi', { { 2, 1, 'Error' } }), {})
+      eq(input.normalize_highlight_ranges('hi', { 'bad' }), {})
+    end)
+
+    it('supports multibyte end index', function()
+      local text = 'café'
+      local end_byte = vim.fn.byteidx(text, vim.fn.strchars(text))
+      local ranges = input.normalize_highlight_ranges(text, { { 0, end_byte, 'Special' } })
+      eq(#ranges, 1)
+      eq(ranges[1].hl, 'Special')
+    end)
+  end)
+
   describe('format_completion_footer', function()
     it('formats id and total', function()
       eq(input.format_completion_footer(2, 5), ' 2/5 ')

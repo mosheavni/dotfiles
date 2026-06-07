@@ -26,15 +26,41 @@ local function normalize_mode(mode)
   return 'n'
 end
 
+local hl_ns = vim.api.nvim_create_namespace 'simple-input'
+
 -- Configuration
 local config = {
   width = 60,
   row = nil, -- nil = auto-center vertically
-  border = 'rounded',
+  border = nil, -- nil = |winborder| or 'rounded'
   title_pos = 'center',
-  icon = ' ', -- Pen icon on the left
-  icon_hl = 'DiagnosticHint', -- Highlight group for the icon
+  icon = '', -- Shown in float title
+  icon_hl = 'DiagnosticHint',
 }
+
+---@param config_border string|nil
+---@param winborder string|nil
+---@return string|string[]
+function M.resolve_border(config_border, winborder)
+  if config_border ~= nil and config_border ~= '' then
+    return config_border
+  end
+  if type(winborder) == 'string' and winborder ~= '' then
+    return winborder
+  end
+  return 'rounded'
+end
+
+local function window_border()
+  return M.resolve_border(config.border, vim.o.winborder)
+end
+
+local function float_title(prompt)
+  return {
+    { ' ' .. config.icon .. ' ', config.icon_hl },
+    { prompt, 'SimpleInputTitle' },
+  }
+end
 
 --- Byte column (0-indexed) for cursor at end of `text` (multibyte-safe).
 ---@param text string
@@ -90,6 +116,31 @@ function M.format_completion_footer(id, total)
   return string.format(' %d/%d ', id, total)
 end
 
+--- Validate `vim.ui.input` highlight ranges for extmarks.
+--- Each range is `{ byte_start, byte_end, hl_group }` with 0-based byte indexes;
+--- `byte_end` is exclusive (same as |input()| highlight callback).
+---@param text string
+---@param ranges table|nil
+---@return { start_col: number, end_col: number, hl: string }[]
+function M.normalize_highlight_ranges(text, ranges)
+  local result = {}
+  if type(ranges) ~= 'table' then
+    return result
+  end
+
+  local len = vim.fn.strlen(text)
+  for _, r in ipairs(ranges) do
+    if type(r) == 'table' and type(r[1]) == 'number' and type(r[2]) == 'number' and type(r[3]) == 'string' then
+      local start_col, end_col = r[1], r[2]
+      if start_col >= 0 and end_col > start_col and end_col <= len then
+        table.insert(result, { start_col = start_col, end_col = end_col, hl = r[3] })
+      end
+    end
+  end
+
+  return result
+end
+
 --- Whether an input session is currently open.
 ---@return boolean
 function M.is_active()
@@ -125,7 +176,7 @@ local function setup_highlights()
   vim.api.nvim_set_hl(0, 'SimpleInputHint', { link = 'Comment', default = true })
 end
 
----@param opts {prompt?: string, default?: string, completion?: string}
+---@param opts {prompt?: string, default?: string, completion?: string, highlight?: fun(text: string): {[1]: number, [2]: number, [3]: string}[]}
 ---@param on_confirm fun(value?: string)
 function M.input(opts, on_confirm)
   assert(type(on_confirm) == 'function', '`on_confirm` must be a function')
@@ -177,6 +228,8 @@ function M.input(opts, on_confirm)
   local zindex = math.max((parent_zindex or 0) + 10, 50)
 
   -- Create floating window
+  local border = window_border()
+
   local win = vim.api.nvim_open_win(buf, true, {
     relative = 'editor',
     width = width,
@@ -184,8 +237,8 @@ function M.input(opts, on_confirm)
     row = row,
     col = col,
     style = 'minimal',
-    border = config.border,
-    title = ' ' .. prompt .. ' ',
+    border = border,
+    title = float_title(prompt),
     title_pos = config.title_pos,
     noautocmd = true,
     zindex = zindex,
@@ -210,8 +263,7 @@ function M.input(opts, on_confirm)
     vim.wo.wrap = true
     vim.wo.colorcolumn = ''
     vim.wo.winbar = ''
-    -- Add icon to statuscolumn on the left
-    vim.wo.statuscolumn = ' %#' .. config.icon_hl .. '#' .. config.icon .. ' '
+    vim.wo.statuscolumn = ''
   end)
 
   -- Store original guicursor and set to vertical bar for input
@@ -231,15 +283,6 @@ function M.input(opts, on_confirm)
   local complete_state = nil
   local suppress_complete_clear = false
 
-  --- Set buffer text and cursor position
-  ---@param text string
-  local function set_text(text)
-    suppress_complete_clear = true
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, { text })
-    vim.api.nvim_win_set_cursor(win, { 1, M.end_cursor_col(text) })
-    suppress_complete_clear = false
-  end
-
   local function completion_footer()
     if complete_state == nil or #complete_state.items == 0 then
       return nil
@@ -247,6 +290,38 @@ function M.input(opts, on_confirm)
     return {
       { M.format_completion_footer(complete_state.id, #complete_state.items), 'SimpleInputHint' },
     }
+  end
+
+  local function refresh_highlights()
+    vim.api.nvim_buf_clear_namespace(buf, hl_ns, 0, -1)
+    if not vim.is_callable(opts.highlight) then
+      return
+    end
+
+    local text = vim.api.nvim_buf_get_lines(buf, 0, -1, false)[1] or ''
+    local ok, ranges = pcall(opts.highlight, text)
+    if not ok then
+      return
+    end
+
+    for _, r in ipairs(M.normalize_highlight_ranges(text, ranges)) do
+      vim.api.nvim_buf_set_extmark(buf, hl_ns, 0, r.start_col, {
+        end_row = 0,
+        end_col = r.end_col,
+        hl_group = r.hl,
+        strict = false,
+      })
+    end
+  end
+
+  --- Set buffer text and cursor position
+  ---@param text string
+  local function set_text(text)
+    suppress_complete_clear = true
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, { text })
+    vim.api.nvim_win_set_cursor(win, { 1, M.end_cursor_col(text) })
+    refresh_highlights()
+    suppress_complete_clear = false
   end
 
   local function refresh_float_layout()
@@ -270,8 +345,8 @@ function M.input(opts, on_confirm)
       row = row,
       col = new_col,
       style = 'minimal',
-      border = config.border,
-      title = ' ' .. prompt .. ' ',
+      border = border,
+      title = float_title(prompt),
       title_pos = config.title_pos,
       zindex = zindex,
     }
@@ -289,6 +364,19 @@ function M.input(opts, on_confirm)
     callback = refresh_float_layout,
   })
 
+  local colorscheme_au = vim.api.nvim_create_autocmd('ColorScheme', {
+    callback = function()
+      setup_highlights()
+      if vim.api.nvim_win_is_valid(win) then
+        vim.api.nvim_win_call(win, function()
+          vim.wo.winhighlight =
+            'NormalFloat:SimpleInputNormal,FloatBorder:SimpleInputBorder,FloatTitle:SimpleInputTitle,CursorLine:SimpleInputNormal,CursorColumn:SimpleInputNormal'
+        end)
+      end
+      refresh_highlights()
+    end,
+  })
+
   local text_change_au = vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI' }, {
     buffer = buf,
     callback = function()
@@ -297,13 +385,19 @@ function M.input(opts, on_confirm)
         complete_state = nil
       end
       refresh_float_layout()
+      refresh_highlights()
     end,
   })
+
+  if opts.default then
+    refresh_highlights()
+  end
 
   session = my_session
 
   local function cleanup_autocmds()
     pcall(vim.api.nvim_del_autocmd, resize_au)
+    pcall(vim.api.nvim_del_autocmd, colorscheme_au)
     pcall(vim.api.nvim_del_autocmd, text_change_au)
   end
 
@@ -330,25 +424,34 @@ function M.input(opts, on_confirm)
     pcall(vim.api.nvim_win_close, win, true)
     vim.cmd.stopinsert()
 
+    local tab_before = vim.fn.tabpagenr()
+    local win_before = vim.api.nvim_get_current_win()
+
     on_confirm(value)
 
-    -- Chained vim.ui.input sets session again; only restore root parent when done.
-    if session == nil and root_context ~= nil then
-      local restore = root_context
-      root_context = nil
-      if vim.api.nvim_win_is_valid(restore.win) then
-        vim.api.nvim_set_current_win(restore.win)
-      end
-      if restore.mode == 'i' and vim.api.nvim_win_is_valid(restore.win) then
-        vim.schedule(function()
-          if session == nil then
-            vim.cmd 'startinsert'
-          end
-        end)
-      else
-        vim.cmd 'stopinsert'
-      end
+    -- Chained vim.ui.input sets session again inside on_confirm.
+    if session ~= nil then
+      return
     end
+
+    local restore = root_context
+    root_context = nil
+    local navigated = vim.fn.tabpagenr() ~= tab_before or vim.api.nvim_get_current_win() ~= win_before
+    if not navigated and restore ~= nil and vim.api.nvim_win_is_valid(restore.win) then
+      vim.api.nvim_set_current_win(restore.win)
+    end
+
+    -- Defer mode restore + redraw so |print()| / |echom| from on_confirm stay visible
+    -- (second |stopinsert| was clearing the message line; |lazyredraw| needs |redraw!|).
+    vim.schedule(function()
+      if session ~= nil then
+        return
+      end
+      if restore ~= nil and restore.mode == 'i' and restore.win and vim.api.nvim_win_is_valid(restore.win) then
+        vim.cmd 'startinsert'
+      end
+      vim.cmd 'redraw!'
+    end)
   end
 
   -- Set up prompt callbacks
@@ -369,8 +472,12 @@ function M.input(opts, on_confirm)
     close_and_callback(text)
   end, opts_map)
 
-  -- Cancel on Escape
+  -- Cancel on Escape / Ctrl-C (same as |input()| and mini.input)
   vim.keymap.set({ 'i', 'n' }, '<Esc>', function()
+    close_and_callback(nil)
+  end, opts_map)
+
+  vim.keymap.set({ 'i', 'n' }, '<C-c>', function()
     close_and_callback(nil)
   end, opts_map)
 

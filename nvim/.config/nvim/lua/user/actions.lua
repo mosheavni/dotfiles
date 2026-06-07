@@ -1,5 +1,39 @@
 local T = vim.keycode
 local leader = T '<leader>'
+
+--- Search term for project-wide substitute (blank input = same term RipGrep used).
+---@param term string|nil
+---@return string|nil
+local function effective_search_term(term)
+  if term == nil then
+    return nil
+  end
+  if term ~= '' then
+    return term
+  end
+  local qf_term = vim.g.qf_search_term
+  if type(qf_term) == 'string' and qf_term ~= '' then
+    return vim.trim(qf_term)
+  end
+  return vim.fn.expand '<cword>'
+end
+
+---@param term string
+---@param literal boolean
+---@return string
+local function substitute_pattern(term, literal)
+  if literal then
+    return '\\V' .. vim.fn.escape(term, '\\')
+  end
+  return vim.fn.escape(term, '?&/\\')
+end
+
+---@param term string
+---@return string
+local function substitute_replacement(term)
+  return vim.fn.escape(term, '?&/\\~')
+end
+
 local find_in_project = function(opts)
   opts = opts or {
     literal_search = true,
@@ -9,12 +43,13 @@ local find_in_project = function(opts)
   local bang = opts.literal_search and '' or '!'
   local noautocmd_str = opts.noautocmd and 'noautocmd ' or ''
   vim.ui.input({ prompt = 'Enter search term (blank for word under cursor)? ' }, function(search_term)
-    local original_search_term = search_term
-    if search_term then
-      search_term = ' ' .. search_term
+    if search_term == nil then
+      return
     end
+    local original_search_term = search_term
+    local grep_arg = search_term ~= '' and (' ' .. search_term) or ''
 
-    vim.cmd(noautocmd_str .. 'RipGrepCWORD' .. bang .. search_term)
+    vim.cmd(noautocmd_str .. 'RipGrepCWORD' .. bang .. grep_arg)
     opts.callback(original_search_term)
   end)
 end
@@ -23,8 +58,14 @@ local search_and_replace = function(literal_search)
   find_in_project {
     literal_search = literal_search,
     callback = function(search_term)
+      search_term = effective_search_term(search_term)
+      if not search_term or search_term == '' then
+        vim.notify('No search term.', vim.log.levels.WARN, { title = 'Search and Replace' })
+        return
+      end
+
       vim.ui.input({ prompt = 'Enter Replace term? ' }, function(replace_term)
-        if not replace_term then
+        if replace_term == nil then
           vim.notify('Canceled.', vim.log.levels.INFO, { title = 'Search and Replace' })
           return
         end
@@ -32,11 +73,13 @@ local search_and_replace = function(literal_search)
           prompt = 'Enter flags (g=global, c=confirm, i=case insensitive, e=ignore errors, n=only count)? ',
           default = 'gce',
         }, function(flags)
-          if not flags then
+          if flags == nil then
             vim.notify('Canceled.', vim.log.levels.INFO, { title = 'Search and Replace' })
             return
           end
-          vim.cmd('silent noautocmd cdo %s?' .. search_term .. '?' .. replace_term .. '?' .. flags)
+          local pattern = substitute_pattern(search_term, literal_search)
+          local replacement = substitute_replacement(replace_term)
+          vim.cmd(string.format('silent noautocmd cdo %%s?%s?%s?%s', pattern, replacement, flags))
         end)
       end)
     end,
