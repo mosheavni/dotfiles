@@ -329,7 +329,7 @@ function M.input(opts, on_confirm)
       return
     end
 
-    local ui = vim.api.nvim_list_uis()[1]
+    ui = vim.api.nvim_list_uis()[1]
     win_width = ui.width
     win_height = ui.height
     row = config.row or math.floor((win_height - height) / 2) - 2
