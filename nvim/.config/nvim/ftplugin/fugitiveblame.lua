@@ -28,44 +28,33 @@ vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
   end,
 })
 
+local bufnr = vim.api.nvim_get_current_buf()
 vim.schedule(function()
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
 
-  vim.api.nvim_buf_set_keymap(0, 'n', '<CR>', '', {
-    noremap = true,
-    silent = true,
-    desc = 'Open Diffview',
-    callback = function()
-      local commit_hash = get_commit_hash()
-      vim.notify('Opening Diffview for ' .. commit_hash)
-      vim.cmd('DiffviewOpen ' .. commit_hash .. '^!')
-    end,
-  })
+  vim.keymap.set('n', '<CR>', function()
+    local commit_hash = get_commit_hash()
+    vim.notify('Opening Diffview for ' .. commit_hash)
+    vim.cmd('DiffviewOpen ' .. commit_hash .. '^!')
+  end, { buffer = bufnr, desc = 'Open Diffview' })
 
-  vim.api.nvim_buf_set_keymap(0, 'n', 'yy', '', {
-    noremap = true,
-    silent = true,
-    desc = 'Copy commit hash',
-    callback = function()
-      local commit_hash = get_commit_hash()
-      vim.fn.setreg('+', commit_hash)
-      vim.notify(commit_hash .. ' copied to clipboard')
-    end,
-  })
+  vim.keymap.set('n', 'yy', function()
+    local commit_hash = get_commit_hash()
+    vim.fn.setreg('+', commit_hash)
+    vim.notify(commit_hash .. ' copied to clipboard')
+  end, { buffer = bufnr, desc = 'Copy commit hash' })
 
-  vim.api.nvim_buf_set_keymap(0, 'n', '<leader>gh', '', {
-    noremap = true,
-    silent = true,
-    desc = 'Open commit hash in browser',
-    callback = function()
-      local commit_hash = get_commit_hash()
-      vim.cmd 'wincmd p'
-      -- selene: allow(undefined_variable)
-      require('user.gitbrowse').open {
-        what = 'commit',
-        commit = commit_hash,
-      }
-    end,
-  })
+  vim.keymap.set('n', '<leader>gh', function()
+    local commit_hash = get_commit_hash()
+    vim.cmd 'wincmd p'
+    -- selene: allow(undefined_variable)
+    require('user.gitbrowse').open {
+      what = 'commit',
+      commit = commit_hash,
+    }
+  end, { buffer = bufnr, desc = 'Open commit hash in browser' })
 
   -- Show hints immediately
   hints.show()

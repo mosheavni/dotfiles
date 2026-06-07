@@ -59,76 +59,29 @@ vim.schedule(function()
   if not vim.api.nvim_buf_is_valid(bufnr) then
     return
   end
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>t', '', {
-    noremap = true,
-    silent = true,
-    desc = 'Open terminal',
-    callback = function()
-      vim.cmd 'vertical terminal'
-    end,
-  })
+  vim.keymap.set('n', '<leader>t', function()
+    vim.cmd 'vertical terminal'
+  end, { buffer = bufnr, desc = 'Open terminal' })
 
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'cc', '', {
-    noremap = true,
-    silent = true,
-    desc = 'Commit',
-    callback = function()
-      vim.cmd 'silent Git commit --quiet'
-    end,
-  })
+  vim.keymap.set('n', 'cc', function()
+    vim.cmd 'silent Git commit --quiet'
+  end, { buffer = bufnr, desc = 'Commit' })
 
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gl', '', {
-    noremap = true,
-    silent = true,
-    desc = 'Pull',
-    callback = git_funcs.pull,
-  })
+  vim.keymap.set('n', 'gl', git_funcs.pull, { buffer = bufnr, desc = 'Pull' })
+  vim.keymap.set('n', 'gp', git_funcs.push, { buffer = bufnr, desc = 'Push' })
+  vim.keymap.set('n', 'gf', git_funcs.fetch_all, { buffer = bufnr, desc = 'Fetch' })
 
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gp', '', {
-    noremap = true,
-    silent = true,
-    desc = 'Push',
-    callback = git_funcs.push,
-  })
+  vim.keymap.set('n', 'pr', function()
+    vim.cmd 'silent! Cpr'
+  end, { buffer = bufnr, desc = 'Pull request' })
 
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gf', '', {
-    noremap = true,
-    silent = true,
-    desc = 'Fetch',
-    callback = git_funcs.fetch_all,
-  })
+  vim.keymap.set('n', 'fc', git_funcs.first_commit, { buffer = bufnr, desc = 'First commit' })
 
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'pr', '', {
-    noremap = true,
-    silent = true,
-    desc = 'Pull request',
-    callback = function()
-      vim.cmd 'silent! Cpr'
-    end,
-  })
+  vim.keymap.set('n', 'R', function()
+    vim.cmd 'e'
+  end, { buffer = bufnr, desc = 'Reload' })
 
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'fc', '', {
-    noremap = true,
-    silent = true,
-    desc = 'First commit',
-    callback = git_funcs.first_commit,
-  })
-
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'R', '', {
-    noremap = true,
-    silent = true,
-    desc = 'Reload',
-    callback = function()
-      vim.cmd 'e'
-    end,
-  })
-
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'wip', '', {
-    noremap = true,
-    silent = true,
-    desc = 'Enter work in progress',
-    callback = git_funcs.enter_wip,
-  })
+  vim.keymap.set('n', 'wip', git_funcs.enter_wip, { buffer = bufnr, desc = 'Enter work in progress' })
 
   -- Show hints immediately
   -- hints.show()

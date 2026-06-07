@@ -49,6 +49,19 @@ return function()
     require('fzf-lua').complete_path()
   end, { silent = true, desc = 'Fuzzy complete path' })
 
+  local FZF_UI_DEFER = 100
+
+  local function fzf_resume_later()
+    vim.defer_fn(function()
+      require('fzf-lua').resume()
+    end, FZF_UI_DEFER)
+  end
+
+  local function fzf_exit_then(fn)
+    require('fzf-lua.utils').fzf_exit()
+    vim.defer_fn(fn, FZF_UI_DEFER)
+  end
+
   vim.keymap.set('n', '<F4>', function()
     local actions = require 'fzf-lua.actions'
     require('fzf-lua').git_branches {
@@ -66,7 +79,7 @@ return function()
           fn = function(selected)
             require('user.git').checkout(vim.trim(selected[1]))
           end,
-          reload = false,
+          reload = true,
           header = 'checkout',
         },
         ['ctrl-y'] = {
@@ -75,17 +88,17 @@ return function()
             vim.fn.setreg('+', branch)
             vim.notify('Yanked branch name ' .. branch, vim.log.levels.INFO)
           end,
-          reload = false,
+          reload = true,
           header = 'yank branch name',
         },
         ['ctrl-r'] = {
           fn = function(selected)
-            require('fzf-lua.utils').fzf_exit()
             local branch = vim.trim(selected[1])
-            vim.defer_fn(function()
+            fzf_exit_then(function()
               vim.ui.input({ prompt = 'Rename branch❯ ', default = branch }, function(new_name)
                 if not new_name or new_name == '' then
                   vim.notify('Action aborted', vim.log.levels.WARN)
+                  fzf_resume_later()
                   return
                 end
                 local toplevel = require('user.git').get_toplevel_sync()
@@ -95,44 +108,49 @@ return function()
                 else
                   vim.notify(string.format('Error when renaming branch: %s. Git returned:\n%s', branch, result.stderr or ''), vim.log.levels.ERROR)
                 end
+                fzf_resume_later()
               end)
-            end, 100)
+            end)
           end,
-          reload = true,
           header = 'rename',
         },
         ['ctrl-x'] = {
           fn = function(selected)
             local branch = vim.trim(selected[1])
-            vim.ui.select({ 'Yes', 'No' }, { prompt = 'Are you sure you want to delete the branch ' .. branch .. '? ' }, function(yes_or_no)
-              if yes_or_no == 'No' then
-                vim.notify('Action aborted', vim.log.levels.WARN)
-                return
-              end
-              local toplevel = require('user.git').get_toplevel_sync()
-              local act = vim.system({ 'git', 'branch', '-D', branch }, { text = true, cwd = toplevel }):wait()
-              if act.code == 0 then
-                vim.notify('Deleted branch ' .. branch, vim.log.levels.INFO)
-                vim.ui.select({ 'Yes', 'No' }, { prompt = 'Delete also from remote? ' }, function(yes_or_no_remote)
-                  if yes_or_no_remote == 'No' then
-                    return
-                  end
-                  local result_remote = vim.system({ 'git', 'push', 'origin', '--delete', branch }, { text = true, cwd = toplevel }):wait()
-                  if result_remote.code == 0 then
-                    vim.notify('Deleted branch ' .. branch .. ' from remote', vim.log.levels.INFO)
-                  else
-                    vim.notify(
-                      string.format('Error when deleting branch from remote: %s. Git returned:\n%s', branch, result_remote.stderr or ''),
-                      vim.log.levels.ERROR
-                    )
-                  end
-                end)
-              else
-                vim.notify(string.format('Error when deleting branch: %s. Git returned:\n%s', branch, act.stderr or ''), vim.log.levels.ERROR)
-              end
+            fzf_exit_then(function()
+              vim.ui.select({ 'Yes', 'No' }, { prompt = 'Are you sure you want to delete the branch ' .. branch .. '? ' }, function(yes_or_no)
+                if not yes_or_no or yes_or_no == 'No' then
+                  vim.notify('Action aborted', vim.log.levels.WARN)
+                  fzf_resume_later()
+                  return
+                end
+                local toplevel = require('user.git').get_toplevel_sync()
+                local act = vim.system({ 'git', 'branch', '-D', branch }, { text = true, cwd = toplevel }):wait()
+                if act.code == 0 then
+                  vim.notify('Deleted branch ' .. branch, vim.log.levels.INFO)
+                  vim.ui.select({ 'Yes', 'No' }, { prompt = 'Delete also from remote? ' }, function(yes_or_no_remote)
+                    if not yes_or_no_remote or yes_or_no_remote == 'No' then
+                      fzf_resume_later()
+                      return
+                    end
+                    local result_remote = vim.system({ 'git', 'push', 'origin', '--delete', branch }, { text = true, cwd = toplevel }):wait()
+                    if result_remote.code == 0 then
+                      vim.notify('Deleted branch ' .. branch .. ' from remote', vim.log.levels.INFO)
+                    else
+                      vim.notify(
+                        string.format('Error when deleting branch from remote: %s. Git returned:\n%s', branch, result_remote.stderr or ''),
+                        vim.log.levels.ERROR
+                      )
+                    end
+                    fzf_resume_later()
+                  end)
+                else
+                  vim.notify(string.format('Error when deleting branch: %s. Git returned:\n%s', branch, act.stderr or ''), vim.log.levels.ERROR)
+                  fzf_resume_later()
+                end
+              end)
             end)
           end,
-          reload = true,
           header = 'delete',
         },
       },
