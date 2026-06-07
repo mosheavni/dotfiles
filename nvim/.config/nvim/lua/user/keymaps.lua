@@ -243,11 +243,18 @@ map('n', '<leader>cd', ':cd %:p:h<CR>:pwd<CR>', { remap = false, silent = true, 
 -- Change every " -" with " \<cr> -" to break long lines of bash
 map('n', [[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], { silent = true, desc = 'Break long command line' })
 
--- global yanks and deletes
-map('v', '<leader>dab', [["hyqeq:v?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], { remap = false, desc = 'Delete all but...', silent = true })
-map('v', '<leader>daa', [["hyqeq:g?\V<c-r>h?d E<cr>:let @"=@e<cr>:noh<cr>]], { remap = false, desc = 'Delete all ...', silent = true })
-map('v', '<leader>yab', [["hymmqeq:v?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], { remap = false, desc = 'Yank all but...', silent = true })
-map('v', '<leader>yaa', [["hymmqeq:g?\V<c-r>h?yank E<cr>:let @"=@e<cr>`m:noh<cr>]], { remap = false, desc = 'Yank all...', silent = true })
+-- global yanks and deletes (Lua: single buffer write instead of :global per-line delete)
+local filter_lines = require 'user.filter-lines'
+for _, spec in ipairs {
+  { '<leader>dab', filter_lines.delete, true, 'Delete all but...' },
+  { '<leader>daa', filter_lines.delete, false, 'Delete all ...' },
+  { '<leader>yab', filter_lines.yank, false, 'Yank all but...' },
+  { '<leader>yaa', filter_lines.yank, true, 'Yank all...' },
+} do
+  map('v', spec[1], function()
+    spec[2](spec[3])
+  end, { remap = false, desc = spec[4], silent = true })
+end
 
 -- Base64 dencode
 local function b64(action)

@@ -35,12 +35,13 @@ endfunction
 ---@return string[] lines Array of selected lines
 function M.get_visual_selection_stay_in_visual()
   local mode = vim.api.nvim_get_mode().mode
-  local opts = {}
+  local vstart = vim.fn.getpos 'v'
+  local vend = vim.fn.getpos '.'
   -- \22 is an escaped version of <c-v>
   if mode == 'v' or mode == 'V' or mode == '\22' then
-    opts.type = mode
+    return vim.fn.getregion(vstart, vend, { type = mode })
   end
-  return vim.fn.getregion(vim.fn.getpos 'v', vim.fn.getpos '.', opts)
+  return vim.fn.getregion(vstart, vend)
 end
 
 ---Returns the current visual selection and exits visual mode
