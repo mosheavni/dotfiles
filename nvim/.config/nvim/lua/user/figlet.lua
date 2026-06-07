@@ -127,6 +127,7 @@ local function open_picker(buf, row, width)
       ['default'] = function(selected)
         if selected and selected[1] then
           local font = selected[1]
+          require('fzf-lua.utils').fzf_exit()
           vim.defer_fn(function()
             vim.ui.input({ prompt = 'Text to figlet❯ ' }, function(text)
               if text and text ~= '' then
@@ -143,7 +144,7 @@ local function open_picker(buf, row, width)
                 end
               end
             end)
-          end, 1)
+          end, 100)
         end
       end,
     },

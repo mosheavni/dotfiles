@@ -15,9 +15,7 @@ local actions = function()
     end,
     ['Create Pull Request (pr in git buffer)'] = git_funcs.create_pull_request,
     ['Checkout new branch (:Gcb {new_branch})'] = function()
-      vim.defer_fn(function()
-        git_funcs.create_new_branch { args = '' }
-      end, 100)
+      git_funcs.create_new_branch { args = '' }
     end,
     ['Set upstream to HEAD'] = git_funcs.set_upstream_head,
     ['Blame'] = function()
@@ -60,16 +58,14 @@ local actions = function()
     ['Delete tag'] = git_funcs.ui_select_delete_tag,
     ['Find in all commits'] = function()
       local rev_list = vim.fn.FugitiveExecute({ 'rev-list', '--all' }).stdout
-      vim.defer_fn(function()
-        vim.ui.input({ prompt = 'Enter search term❯ ' }, function(search_term)
-          if not search_term then
-            git_funcs.prnt 'Canceled.'
-            return
-          end
-          git_funcs.prnt('Searching for ' .. search_term .. ' in all commits...')
-          vim.cmd('silent Ggrep ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
-        end)
-      end, 100)
+      vim.ui.input({ prompt = 'Enter search term❯ ' }, function(search_term)
+        if not search_term then
+          git_funcs.prnt 'Canceled.'
+          return
+        end
+        git_funcs.prnt('Searching for ' .. search_term .. ' in all commits...')
+        vim.cmd('silent Ggrep ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
+      end)
     end,
     ['Push (:Gp)'] = git_funcs.push,
     ['Pull (:Gl)'] = git_funcs.pull,
@@ -84,14 +80,12 @@ end
 
 local diff_actions = {
   ['[Diffview] Diff File History'] = function()
-    vim.defer_fn(function()
-      vim.ui.input({ prompt = 'Enter file path (empty for all files, % for current)❯ ' }, function(file_to_check)
-        if not file_to_check then
-          return
-        end
-        vim.cmd('DiffviewFileHistory ' .. file_to_check)
-      end)
-    end, 100)
+    vim.ui.input({ prompt = 'Enter file path (empty for all files, % for current)❯ ' }, function(file_to_check)
+      if not file_to_check then
+        return
+      end
+      vim.cmd('DiffviewFileHistory ' .. file_to_check)
+    end)
   end,
   ['[Diffview] Diff with branch'] = function()
     git_funcs.ui_select_remotes(function(remote)
@@ -213,7 +207,7 @@ local fugitive_config = function()
         vim.notify('Canceled.', vim.log.levels.INFO, { title = 'Git Actions', icon = '' })
         return
       end
-      git_actions[choice]()
+      vim.defer_fn(git_actions[choice], 100)
     end)
   end, { desc = 'Git actions menu' })
 end
