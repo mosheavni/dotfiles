@@ -245,7 +245,6 @@ map('n', [[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], { silent = true, desc
 
 -- global yanks and deletes (single buffer write instead of :global per-line delete)
 do
-  local esc = vim.keycode '<Esc>'
   local function select_lines(lines, pattern, matching)
     local result = {}
     for _, line in ipairs(lines) do
@@ -257,8 +256,7 @@ do
     return result
   end
   local function visual_context()
-    local pattern = table.concat(require('user.utils').get_visual_selection_stay_in_visual(), '\n')
-    vim.api.nvim_feedkeys(esc, 'n', false)
+    local pattern = require('user.utils').get_visual_selection()
     if pattern == '' then
       return
     end
