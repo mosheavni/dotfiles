@@ -123,3 +123,7 @@
   showbranch  = true
   status      = true
   ui          = true
+
+# Machine-local overrides (not committed). Last include wins.
+[include]
+  path = ~/.gitconfig.local
