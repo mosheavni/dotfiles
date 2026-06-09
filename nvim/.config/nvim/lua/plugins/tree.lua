@@ -18,7 +18,7 @@ local hints = Hints.new('Nvim-tree - Available Keymaps', {
   { key = 'h/l', desc = 'Navigate left/right (collapse/expand)' },
   { key = 'a', desc = 'Create file/directory' },
   { key = 'd', desc = 'Delete file/directory' },
-  { key = 'r', desc = 'Move file to location' },
+  { key = 'r', desc = 'Rename/move file (full path)' },
   { key = 'c', desc = 'Copy file' },
   { key = 'Y', desc = 'Copy relative path' },
   { key = 'gy', desc = 'Copy absolute path' },
@@ -131,16 +131,7 @@ local function on_attach(bufnr)
 
   vim.keymap.set('n', 'mv', api.marks.bulk.move, opts 'Move Bookmarked')
 
-  local function move_file_to()
-    local node = api.tree.get_node_under_cursor()
-    local file_src = node['absolute_path']
-    ---@diagnostic disable-next-line: redundant-parameter
-    local file_out = vim.fn.input('MOVE TO: ', file_src, 'file')
-    local dir = vim.fn.fnamemodify(file_out, ':h')
-    vim.system({ 'mkdir', '-p', dir }, { text = true }):wait()
-    vim.system({ 'mv', file_src, file_out }, { text = true }):wait()
-  end
-  vim.keymap.set('n', 'r', move_file_to, opts 'Move File To')
+  vim.keymap.set('n', 'r', api.fs.rename_full, opts 'Rename: Full Path')
 
   vim.keymap.set('n', 'Z', function()
     local node = api.tree.get_node_under_cursor()
