@@ -39,7 +39,7 @@ return function()
       jsonc = { 'prettierd' },
       less = { 'prettierd' },
       lua = { 'stylua' },
-      markdown = { 'prettier', 'cbfmt', 'injected', 'markdownlint' },
+      markdown = { 'prettierd', 'cbfmt', 'injected', 'markdownlint' },
       python = function(bufnr)
         if require('conform').get_formatter_info('ruff_format', bufnr).available then
           return { 'isort', 'ruff_format' }
