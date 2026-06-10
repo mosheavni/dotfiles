@@ -101,6 +101,26 @@ M.setup = function()
     end,
   })
 
+  vim.diagnostic.config {
+    jump = {
+      on_jump = function(_, jump_bufnr)
+        vim.diagnostic.open_float { bufnr = jump_bufnr, scope = 'cursor', focus = false }
+      end,
+    },
+    severity_sort = true,
+    signs = { text = M.diagnostic_signs },
+    virtual_text = {
+      prefix = '●',
+      source = 'if_many',
+      current_line = false,
+      severity = { min = vim.diagnostic.severity.WARN },
+    },
+    virtual_lines = { current_line = true },
+    float = { border = 'rounded', source = true },
+    update_in_insert = false,
+    underline = true,
+  }
+
   -- on attach
   local on_attach_aug = vim.api.nvim_create_augroup('UserLspAttach', { clear = true })
   vim.api.nvim_create_autocmd('LspAttach', {
@@ -162,30 +182,6 @@ M.setup = function()
             end
           end,
         })
-      end
-
-      -- Diagnostics config (once)
-      if not vim.g.diagnostics_configured then
-        vim.g.diagnostics_configured = true
-        vim.diagnostic.config {
-          jump = {
-            on_jump = function(_, jump_bufnr)
-              vim.diagnostic.open_float { bufnr = jump_bufnr, scope = 'cursor', focus = false }
-            end,
-          },
-          severity_sort = true,
-          signs = { text = M.diagnostic_signs },
-          virtual_text = {
-            prefix = '●',
-            source = 'if_many',
-            current_line = false,
-            severity = { min = vim.diagnostic.severity.WARN },
-          },
-          virtual_lines = { current_line = true },
-          float = { border = 'rounded', source = true },
-          update_in_insert = false,
-          underline = true,
-        }
       end
 
       -- for statusline
