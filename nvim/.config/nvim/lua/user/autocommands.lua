@@ -182,23 +182,24 @@ autocmd('BufWritePost', {
   desc = 'make sh file executable if a shebang is deteced',
   pattern = '*',
   callback = function(args)
-    local shebang = vim.api.nvim_buf_get_lines(0, 0, 1, true)[1]
+    local shebang = vim.api.nvim_buf_get_lines(args.buf, 0, 1, true)[1]
     if not shebang or not shebang:match '^#!.+' then
       return
     end
     local filename = vim.api.nvim_buf_get_name(args.buf)
-    ---@diagnostic disable-next-line: undefined-field
-    local fileinfo = vim.uv.fs_stat(filename)
-    ---@diagnostic disable-next-line: undefined-global
-    -- selene: allow(undefined_variable)
-    if not fileinfo or bit.band(fileinfo.mode - 32768, 0x40) ~= 0 then
+    if filename == '' then
       return
     end
-
-    vim.notify 'File made executable'
-    ---@diagnostic disable-next-line: undefined-field, undefined-global
+    ---@diagnostic disable-next-line: undefined-field
+    local fileinfo = vim.uv.fs_stat(filename)
+    if not fileinfo or vim.uv.fs_access(filename, 'X') then
+      return
+    end
+    ---@diagnostic disable-next-line: undefined-global
     -- selene: allow(undefined_variable)
-    vim.uv.fs_chmod(filename, bit.bor(fileinfo.mode, 493))
+    if vim.uv.fs_chmod(filename, bit.bor(fileinfo.mode, 493)) then
+      vim.notify 'File made executable'
+    end
   end,
   once = false,
 })
