@@ -128,6 +128,10 @@ config.keys = { -- Unmap Option+Enter
 
   -- clear terminal with cmd+shift+l (same as ctrl+l)
   { key = 'l', mods = 'CMD|SHIFT', action = act.SendKey { key = 'l', mods = 'CTRL' } },
+
+  -- scroll to last command with shift+up/down
+  { key = 'UpArrow', mods = 'SHIFT', action = act.ScrollToPrompt(-1) },
+  { key = 'DownArrow', mods = 'SHIFT', action = act.ScrollToPrompt(1) },
 }
 
 -- arrow keys keybindings
