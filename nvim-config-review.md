@@ -132,7 +132,7 @@
     catch-all demoted with `priority = -math.huge`; detection correct regardless of
     which buffer is current (case 4 returns `helm`).
 
-### B3. Deferred-setup race: initial buffer misses FileType-driven features `[ ]`
+### B3. Deferred-setup race: initial buffer misses FileType-driven features `[x]` FIXED 2026-06-10
 
 - **Files:** `nvim/.config/nvim/lua/user/pack/init.lua:37-53` (the `vim.schedule` block),
   `lua/plugins/treesitter.lua:10-44`, `lua/plugins/lint.lua` (autocmd on
@@ -147,18 +147,45 @@
   - switch.vim buffer definitions, miniindentscope disables missed
   - **LSP is NOT affected**: `vim.lsp.enable()` "Activates LSP for current and future
     buffers" (verified in nightly `lsp.txt`).
-- **Fix:** at the end of the deferred block (after `nvim_exec_autocmds('User', ...)`),
-  replay events for already-loaded normal buffers:
-  ```lua
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == '' then
-      vim.api.nvim_exec_autocmds('FileType', { buffer = buf, modeline = false })
-    end
-  end
+- **Fix applied** (`user/pack/init.lua`): moved `require 'plugins.treesitter'()` from
+  the deferred `vim.schedule` block to the **eager** section. The FileType autocmd now
+  exists before the first buffer loads.
+- **History / rejected alternative:** first attempt replayed
+  `nvim_exec_autocmds('FileType', { buffer = buf, modeline = false })` for loaded
+  buffers at the end of the deferred block. Worked (and `event.match` was verified to
+  be the *filetype*, not the buffer name), but user rejected as ugly hack → replaced
+  with eager load. Keep in mind if eager cost ever matters again.
+- **Why eager-autocmd-only wasn't enough:** `vim.treesitter.start` needs parser +
+  queries on the rtp; nvim-treesitter's `setup { install_dir = ... }` is what puts the
+  install dir on the rtp. Autocmd eager + plugin deferred = pcall fails silently for
+  the first buffer, same symptom. So the whole spec (pack.add + setup + context/
+  ts-comments/autotag) went eager.
+- **Measured cost:** `--- NVIM STARTED ---` 37ms → ~49ms. Breakdown: ~2ms actual
+  treesitter module requires; remainder is first-buffer parse/highlight/ftplugin work
+  that previously ran *after* the startuptime clock stopped — moved earlier, not added.
+- **Residual gaps (minor, still open):** other FileType-driven setup still deferred —
+  switch.vim gitrebase/markdown `b:switch_custom_definitions` and mini.indentscope
+  disables miss the startup buffer (matters for `git rebase -i` flows). nvim-lint never
+  lints the startup buffer until first write/InsertLeave (its trigger is BufReadPost,
+  also deferred) — fold into P1 lint redesign. These autocmds are plugin-independent
+  one-liners; can be registered eagerly if it ever annoys.
+- **Verified headless:** open `templates/plain.yaml`, wait 1s →
+  `ft=yaml ts_highlight=true foldexpr=v:lua.vim.lsp.foldexpr()` — treesitter active on
+  the startup buffer without `:e`; LSP fold upgrade also confirmed working.
+- **Manual test:**
+  ```sh
+  printf 'kind: Deployment\napiVersion: apps/v1\nmetadata:\n  name: x\n' > /tmp/ftest/plain.yaml
+  nvim /tmp/ftest/plain.yaml
+  # look at the buffer immediately — no :e needed
+  # optional hard proof inside nvim:
+  #   :lua print(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] ~= nil)
+  #   → true
   ```
-  (Optionally also fire the lint callback once per buffer.)
-- **Note:** verify treesitter autocmd is idempotent when FileType replays (it is —
-  `vim.treesitter.start` pcall + option sets are safe to repeat).
+  - **Status before:** file opened with plain (regex/no) highlighting; treesitter
+    highlight only appeared after `:e` re-fired FileType. Same gap: no lint on open,
+    no switch.vim/mini.indentscope ft setup for the first buffer.
+  - **Status after:** treesitter highlight active the moment the file opens (within the
+    deferred-load tick, ~a few ms); `:e` no longer needed.
 
 ### B4. Two competing yank-rings `[ ]`
 

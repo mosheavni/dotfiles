@@ -28,6 +28,7 @@ vim.api.nvim_create_autocmd('PackChanged', {
   end,
 })
 
+require 'plugins.treesitter'()
 require('plugins.look-and-feel').eager()
 require('plugins.mini').eager()
 require 'plugins.gitsigns'()
@@ -39,7 +40,6 @@ vim.schedule(function()
   require('plugins.mini').deferred()
   require('plugins.functionality').deferred()
   require 'plugins.git'()
-  require 'plugins.treesitter'()
   require 'plugins.lsp'()
   require 'plugins.fzf'()
   require 'plugins.conform'()
