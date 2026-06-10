@@ -619,6 +619,7 @@ require('user.tabular-v2').setup()
 require('user.projects').setup()
 require 'user.number-separators'
 require('user.terminal').setup()
+require('user.yank-ring').setup()
 require('user.run-buffer').setup()
 require('user.winresizer').setup()
 require('user.grep').setup()

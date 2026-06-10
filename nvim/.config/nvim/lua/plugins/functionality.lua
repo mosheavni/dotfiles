@@ -1,6 +1,5 @@
 vim.pack.add {
   'https://github.com/mrjones2014/smart-splits.nvim',
-  'https://github.com/kkharji/sqlite.lua',
   'https://github.com/yorickpeterse/nvim-pqf',
   'https://github.com/junegunn/vim-easy-align',
   'https://github.com/AndrewRadev/switch.vim',
@@ -10,7 +9,6 @@ vim.pack.add {
   'https://github.com/windwp/nvim-autopairs',
   'https://github.com/iamcco/markdown-preview.nvim',
   'https://github.com/AndrewRadev/linediff.vim',
-  'https://github.com/gbprod/yanky.nvim',
   'https://github.com/LunarVim/bigfile.nvim',
 }
 
@@ -52,25 +50,6 @@ function M.deferred()
   require('user.menu').add_actions('Markdown', {
     ['Preview in Browser'] = function()
       vim.cmd.MarkdownPreview()
-    end,
-  })
-
-  require('yanky').setup {
-    ring = {
-      history_length = 100,
-      storage = 'sqlite',
-      sync_with_numbered_registers = true,
-      cancel_event = 'update',
-    },
-  }
-  vim.keymap.set({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)', { desc = 'Paste yank after' })
-  vim.keymap.set({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)', { desc = 'Paste yank before' })
-  vim.keymap.set('n', '<c-n>', '<Plug>(YankyCycleForward)', { desc = 'Cycle yank forward' })
-  vim.keymap.set('n', '<c-m>', '<Plug>(YankyCycleBackward)', { desc = 'Cycle yank backward' })
-  vim.keymap.set('n', '<leader>y', '<Cmd>YankyRingHistory<cr>', { desc = 'Yank history' })
-  require('user.menu').add_actions('Yanky', {
-    ['Yank history'] = function()
-      vim.cmd 'YankyRingHistory'
     end,
   })
 

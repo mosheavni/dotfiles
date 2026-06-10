@@ -187,7 +187,7 @@
   - **Status after:** treesitter highlight active the moment the file opens (within the
     deferred-load tick, ~a few ms); `:e` no longer needed.
 
-### B4. Two competing yank-rings `[ ]`
+### B4. Two competing yank-rings `[x]` FIXED 2026-06-10
 
 - **Files:** `nvim/.config/nvim/lua/user/autocommands.lua:121-133` (custom register
   shifter on TextYankPost/TextPutPost) **and** `lua/plugins/functionality.lua:58-65`
@@ -196,9 +196,50 @@
   yank *and put*; yanky also syncs its ring to numbered registers. Result: double
   shifting, ring corruption, puts polluting registers. Also the custom shifter runs even
   for yanks yanky already recorded.
-- **Fix:** delete the custom autocmd block (yanky's ring + sqlite storage supersedes it).
-  If keeping the custom one instead, set `sync_with_numbered_registers = false` — but
-  pick ONE.
+- **Fix applied (direction changed by user):** first pass deleted the custom autocmd and
+  kept yanky. User then asked the opposite — **remove yanky.nvim entirely** (and its
+  sqlite.lua dependency, used by nothing else) and replace with a minimal plugin-free
+  ring. Implemented as new module **`lua/user/yank-ring.lua`** (~100 lines), setup
+  called from `keymaps.lua`:
+  - `TextYankPost` (only `operator == 'y'` AND unnamed register): shifts registers 1→9
+    via `getreginfo`/`setreg` dicts (preserves regtype). Explicit-register yanks (`"ay`,
+    `cp`→`+`) and deletes do NOT shift.
+  - `TextPutPost`: records `{ idx, buf, changedtick, regtype }`. regname `''`/`0` → idx 1,
+    `1-9` → that idx, anything else clears state.
+  - `<C-n>` / `<C-m>` → `M.cycle(-1 / 1)` (newer / older). Cycle = single
+    ``normal! `[v`]"NP`` (vmode matches regtype: v/V/ctrl-V). Key insights:
+    * changedtick guard ⇒ `` `[ ``/`` `] `` marks still frame the last put — no stored
+      coordinates needed, multibyte-safe for free;
+    * `v_P` (visual-mode P) replaces the selection **without touching any register**;
+    * that P fires `TextPutPost` with `regname = N` ⇒ state re-records itself — repeated
+      cycling needs no extra bookkeeping;
+    * after cycling, unnamed register synced to shown entry so plain `p` repeats it.
+  - `<leader>y` → `:registers 0123456789` (was YankyRingHistory).
+  - Removed from `plugins/functionality.lua`: yanky + sqlite pack entries, setup block,
+    p/P Plug maps (builtin p/P restored), menu actions.
+- **Tests:** new `lua/tests/yank-ring_spec.lua` (8 cases: shift, explicit-reg skip,
+  delete skip, cycle older/newer, registers untouched while cycling, unnamed sync,
+  stale-state no-ops, charwise). Full suite green.
+- **Disk cleanup pending:** `:lua vim.pack.del { 'yanky.nvim', 'sqlite.lua' }` to remove
+  installed plugin dirs + lockfile entries.
+- **Manual test:**
+  ```sh
+  nvim   # empty buffer, type three lines: aaa / bbb / ccc (esc)
+  # gg yy  j yy  j yy   (three linewise yanks), then:
+  :reg 0 1 2 3
+  # → 0=ccc  1=ccc  2=bbb  3=aaa
+  # G p     → puts ccc below
+  # <C-m>   → line becomes bbb (previous yank)
+  # <C-m>   → line becomes aaa (older still)
+  # <C-n>   → back to bbb (newer)
+  # :reg 1 2 3 → STILL ccc/bbb/aaa — cycling never mutates the ring
+  # p       → puts bbb again (unnamed synced to shown entry)
+  # <leader>y → :registers view of the ring
+  ```
+  - **Status before:** yanky.nvim + sqlite.lua + custom autocmd double-shifting
+    registers; puts also shifted; ring stored in sqlite database.
+  - **Status after:** zero plugins, registers 0-9 ARE the ring, `<C-n>`/`<C-m>` cycle
+    the last put in place, puts never shift, cycling never mutates registers.
 
 ### B5. LSP document-highlight detach handler race `[ ]`
 
@@ -468,7 +509,7 @@
 
 ### M7. `<c-m>` ≡ `<CR>` without extended-keys terminal `[ ]`
 
-- `plugins/functionality.lua:69` maps `<c-m>` (YankyCycleBackward). Works in wezterm
+- `user/yank-ring.lua` maps `<c-m>` (cycle to older yank; was yanky's CycleBackward before B4). Works in wezterm
   (kitty keyboard protocol); over bare ssh/tmux without extended-keys, `<c-m>` IS Enter
   → collides with `<CR>` nohlsearch map (`keymaps.lua:164`). Conscious tradeoff —
   documented here so nobody "fixes" the wrong one. Consider `<c-S-n>` or leader-based alt.

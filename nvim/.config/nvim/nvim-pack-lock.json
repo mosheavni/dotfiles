@@ -5,11 +5,11 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "30d47907079474907f24d4a546932119a8b9f641",
+      "rev": "0f3cd0e584b4ed221fc44eee5b0b6ce335f7e263",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "agentic.nvim": {
-      "rev": "bc87eab6b80ac01825ea0c316f6549b4c143504f",
+      "rev": "ca7700bdcf57f6079833574d924c99f0d3dbc4b9",
       "src": "https://github.com/carlos-algms/agentic.nvim"
     },
     "bigfile.nvim": {
@@ -58,7 +58,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "go.nvim": {
-      "rev": "5c741a26f5df77c95d42d8f48e7008aea10e5f4f",
+      "rev": "0768d79bbebdb1a112a845f9cd6293bfbd544dab",
       "src": "https://github.com/ray-x/go.nvim"
     },
     "guihua.lua": {
@@ -138,7 +138,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "229b79051b380377664edc4cbd534930154921a1",
+      "rev": "ed19590a3a9792901553c388d1aadafce012f80d",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-navic": {
@@ -197,10 +197,6 @@
       "rev": "6806149fd36d1c5e797debe3e18b2c07219b685a",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
-    "sqlite.lua": {
-      "rev": "50092d60feb242602d7578398c6eb53b4a8ffe7b",
-      "src": "https://github.com/kkharji/sqlite.lua"
-    },
     "statuscol.nvim": {
       "rev": "c46172d0911aa5d49ba5f39f4351d1bb7aa289cc",
       "src": "https://github.com/luukvbaal/statuscol.nvim"
@@ -234,16 +230,12 @@
       "src": "https://github.com/machakann/vim-swap"
     },
     "wezterm-types": {
-      "rev": "13ab56e813cb5af9a36ae6b4c987ba2558cb3fcb",
+      "rev": "58c95e0d78e24b236b2eecaa2c29ae973478f79b",
       "src": "https://github.com/DrKJeff16/wezterm-types"
     },
     "yaml-companion.nvim": {
       "rev": "15af93540ca10bb170dc20df835b76f7baf27a66",
       "src": "https://github.com/mosheavni/yaml-companion.nvim"
-    },
-    "yanky.nvim": {
-      "rev": "020c22d0cfa60358569e49d1d7b91630f175aef0",
-      "src": "https://github.com/gbprod/yanky.nvim"
     }
   }
 }
