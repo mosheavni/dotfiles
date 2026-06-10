@@ -28,7 +28,6 @@ local tools = {
   { name = 'markdownlint', binary = 'markdownlint' },
   { name = 'npm-groovy-lint', binary = 'npm-groovy-lint' },
   { name = 'prettierd', binary = 'prettierd' },
-  { name = 'proselint', binary = 'proselint' },
   { name = 'pyright', binary = 'pyright' },
   { name = 'ruff', binary = 'ruff' },
   { name = 'selene', binary = 'selene' },
@@ -42,7 +41,6 @@ local tools = {
   { name = 'vim-language-server', binary = 'vim-language-server' },
   { name = 'vint', binary = 'vint' },
   { name = 'vtsls', binary = 'vtsls' },
-  { name = 'write-good', binary = 'write-good' },
   { name = 'yaml-language-server', binary = 'yaml-language-server' },
 }
 

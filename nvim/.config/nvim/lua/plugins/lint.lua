@@ -21,7 +21,7 @@ return function()
     python = { 'ruff' },
     lua = { 'selene', 'luacheck' },
     make = { 'checkmake' },
-    markdown = { 'proselint', 'write_good', 'markdownlint' },
+    markdown = { 'markdownlint' },
     toml = { 'tombi' },
     vim = { 'vint' },
     zsh = { 'zsh' },
