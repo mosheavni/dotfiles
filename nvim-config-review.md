@@ -478,29 +478,35 @@
 > shift on `dd` (`:h quote_number`) interacting with prior spec state. Investigate
 > separately.
 
-### B13. Duplicate `<C-h/j/k/l>` window maps `[ ]`
+### B13. Duplicate `<C-h/j/k/l>` window maps `[-]` NOT A BUG (user: intended)
 
-- **Files:** `nvim/.config/nvim/lua/user/keymaps.lua:98-101` (plain `<C-w>h` style) then
-  `lua/plugins/functionality.lua:33-36` overwrites with smart-splits versions (eager, runs after).
-- **Fix:** remove keymaps.lua versions; smart-splits is the intended behavior (works
-  across wezterm panes).
+- **Files:** `nvim/.config/nvim/lua/user/keymaps.lua:98-101` then
+  `lua/plugins/functionality.lua:33-36` overwrites with smart-splits versions.
+- **User confirmed 2026-06-10: not an issue.** Deliberate layering — leave both.
 
-### B14. `:Whereami` passes unsupported `verbose` opt `[ ]`
+### B14. `:Whereami` passes unsupported `verbose` opt `[x]` FIXED 2026-06-10
 
-- **File:** `nvim/.config/nvim/lua/user/keymaps.lua:386-404`
-- Nightly `vim.net.request` opts (lua.txt:4393): `body`, `headers`, `outbuf`, `outpath`,
-  `retry`. No `verbose`. Signature is `request({method}, {url}, {opts}, {on_response})`
-  with method optional — current 3-arg call form is fine.
-- **Fix:** drop `verbose = true`. Also guard `vim.json.decode` with pcall (network body
-  may be error HTML).
+- **File:** `nvim/.config/nvim/lua/user/keymaps.lua:398-418`
+- **Problem:** nightly `vim.net.request` opts are `body`, `headers`, `outbuf`,
+  `outpath`, `retry` — no `verbose`. Also `vim.json.decode(result.body)` unguarded
+  (network body may be error HTML).
+- **Fix applied:** dropped `verbose = true` (empty opts table); wrapped decode in
+  `pcall` → notify "Failed to parse location data" on bad body.
+- **Manual test:** `:Whereami` → notification like `You're in Israel 🇮🇱`.
+- **Status before:** unsupported opt passed (silently ignored or future error);
+  non-JSON response → Lua stacktrace.
+- **Status after:** clean opts, graceful parse failure. Verified headless against
+  live endpoint — notification "You're in Israel 🇮🇱".
 
-### B15. Dead plugin spec file `[ ]`
+### B15. Dead plugin spec file `[x]` FIXED 2026-06-10
 
-- **File:** `nvim/.config/nvim/lua/plugins/databases.lua`
-- Old **lazy.nvim** spec format (`{ 'tpope/vim-dadbod', enabled = false, cmd = ..., init = ... }`),
-  never `require`d by `user/pack/init.lua`. Pure dead code since the vim.pack migration.
-- **Fix:** delete, or port to vim.pack + deferred function if dadbod still wanted
-  (note `enabled = false` — it was already off under lazy.nvim).
+- **File:** `nvim/.config/nvim/lua/plugins/databases.lua` — DELETED (git rm)
+- Old lazy.nvim spec (`enabled = false` already), never required by
+  `user/pack/init.lua`, zero references in config. Pure dead code since the
+  vim.pack migration. User chose deletion.
+- **Manual test:** `nvim` starts clean; `grep -r databases lua/` → no hits.
+- **Status before:** 60+ lines of dead lazy.nvim spec shipped in repo.
+- **Status after:** file removed.
 
 ---
 
