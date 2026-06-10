@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD013 -->
+
 # Neovim Config Review — Findings & Fix Plan
 
 > Generated 2026-06-10 by Claude Code (model: claude-fable-5) after full review of `nvim/.config/nvim`.
@@ -14,6 +16,7 @@
 > **Fix documentation convention (user requirement):** every fixed section MUST include
 > a **Manual test** block the user can run interactively to see the change with their
 > own eyes, formatted as:
+>
 > - shell commands to set up + open nvim (not headless)
 > - what to check inside nvim (e.g. `:set ft?`)
 > - `Status before:` one line describing old broken behavior
@@ -45,6 +48,7 @@
 
 - **File:** `nvim/.config/nvim/lua/user/options.lua:205-212`
 - **Code:**
+
   ```lua
   ['.*/templates/.*%.yaml'] = {
     function()
@@ -53,6 +57,7 @@
       end
     end,
   ```
+
 - **Problem:** `vim.fn.search()` returns `0` (a number) when no match. In Lua, `0` is
   truthy → the condition is **always true**. Every `*/templates/*.yaml` file is detected
   as `helm` even with zero Go-template syntax (breaks yamlls/schema validation for plain
@@ -64,17 +69,20 @@
 - **Verified:** headless nvim — `templates/plain.yaml` (kind/apiVersion only) → `yaml`;
   `templates/tpl.yaml` (with `{{ .Release.Name }}`) → `helm`. `make test` 39/39 pass.
 - **Manual test:**
+
   ```sh
   mkdir -p /tmp/ftest/templates
-  printf 'kind: Deployment\napiVersion: apps/v1\n' > /tmp/ftest/templates/plain.yaml
-  printf 'kind: Deployment\nname: {{ .Release.Name }}\n' > /tmp/ftest/templates/tpl.yaml
-  nvim /tmp/ftest/templates/plain.yaml   # then :set ft?  → expect filetype=yaml
-  nvim /tmp/ftest/templates/tpl.yaml     # then :set ft?  → expect filetype=helm
+  printf 'kind: Deployment\napiVersion: apps/v1\n' >/tmp/ftest/templates/plain.yaml
+  printf 'kind: Deployment\nname: {{ .Release.Name }}\n' >/tmp/ftest/templates/tpl.yaml
+  nvim /tmp/ftest/templates/plain.yaml # then :set ft?  → expect filetype=yaml
+  nvim /tmp/ftest/templates/tpl.yaml   # then :set ft?  → expect filetype=helm
   ```
+
   - **Status before:** both files showed `filetype=helm` — anything under a `templates/`
     dir ending in `.yaml` became helm, even plain k8s manifests (broke yamlls schemas).
   - **Status after:** `plain.yaml` → `filetype=yaml`; `tpl.yaml` (contains `{{ ... }}`)
     → `filetype=helm`.
+
 - **Bonus (still open, fold into B2):** callback receives `(path, bufnr)` — prefer
   `vim.filetype.getlines(bufnr, ...)` scan over `vim.fn.search` (operates on "current"
   buffer; see B2 rationale).
@@ -87,7 +95,7 @@
 - **Problems:**
   1. Catch-all patterns must carry negative priority per `:h vim.filetype.add()` docs
      example (`{ priority = -math.huge }`), otherwise it competes with specific patterns
-     and runs for *every* opened file.
+     and runs for _every_ opened file.
   2. `vim.fn.getline` reads the **current** buffer. Filetype detection can run for a
      non-current buffer (`vim.filetype.match { buf = ... }`, `:edit` from scripts,
      bufadd flows). Callback signature is `function(path, bufnr)` — use
@@ -105,18 +113,19 @@
 - **Gotcha (test infra):** nvim caps `+cmd`/`-c` args at 10 — verification matrix must
   use a single `+luafile` script, not per-file `+e`/`+lua` pairs.
 - **Manual test:**
+
   ```sh
   # 1. catch-all still detects extensionless k8s manifests (now from the right buffer):
-  printf 'kind: Deployment\napiVersion: apps/v1\n' > /tmp/ftest/manifest-noext
-  nvim /tmp/ftest/manifest-noext         # :set ft?  → expect filetype=yaml
+  printf 'kind: Deployment\napiVersion: apps/v1\n' >/tmp/ftest/manifest-noext
+  nvim /tmp/ftest/manifest-noext # :set ft?  → expect filetype=yaml
 
   # 2. works via stdin too (StdinReadPost runs detection; buffer has no filename,
   #    only the catch-all matches):
-  echo 'kind: Deployment' | nvim -       # :set ft?  → expect filetype=yaml
+  echo 'kind: Deployment' | nvim - # :set ft?  → expect filetype=yaml
 
   # 3. catch-all loses to every specific pattern (negative priority):
-  printf 'print("hi")\n' > /tmp/ftest/x.lua
-  nvim /tmp/ftest/x.lua                  # :set ft?  → expect filetype=lua
+  printf 'print("hi")\n' >/tmp/ftest/x.lua
+  nvim /tmp/ftest/x.lua # :set ft?  → expect filetype=lua
 
   # 4. helm callback no longer depends on the *current* buffer — detection from a
   #    different active buffer still correct:
@@ -125,8 +134,9 @@
   #    :lua local b = vim.fn.bufadd('/tmp/ftest/templates/tpl.yaml'); vim.fn.bufload(b); print(vim.filetype.match { buf = b })
   #    → expect: helm   (before the fix this inspected x.lua, the current buffer)
   ```
+
   - **Status before:** catch-all ran for every file with default priority and read lines
-    from whatever buffer was *current* (`vim.fn.getline`) — `vim.filetype.match { buf }`
+    from whatever buffer was _current_ (`vim.fn.getline`) — `vim.filetype.match { buf }`
     from another buffer gave wrong answers; helm check had the same wrong-buffer flaw.
   - **Status after:** both callbacks read the buffer being detected (`bufnr` arg);
     catch-all demoted with `priority = -math.huge`; detection correct regardless of
@@ -140,7 +150,7 @@
   (switch.vim FileType autocmds), `lua/plugins/mini.lua` (miniindentscope_disable FileType/TermOpen).
 - **Problem:** Startup order (`:h startup`): init.lua sourced → first file(s) edited
   (**BufReadPost + FileType fire here**) → VimEnter → main loop → `vim.schedule` callbacks.
-  So all autocmds registered inside the deferred block are created *after* the initial
+  So all autocmds registered inside the deferred block are created _after_ the initial
   buffer's FileType/BufReadPost already fired. Consequences for `nvim somefile.lua`:
   - no treesitter highlight/folds/indentexpr on the first buffer
   - nvim-lint doesn't lint it until next write/InsertLeave
@@ -153,7 +163,7 @@
 - **History / rejected alternative:** first attempt replayed
   `nvim_exec_autocmds('FileType', { buffer = buf, modeline = false })` for loaded
   buffers at the end of the deferred block. Worked (and `event.match` was verified to
-  be the *filetype*, not the buffer name), but user rejected as ugly hack → replaced
+  be the _filetype_, not the buffer name), but user rejected as ugly hack → replaced
   with eager load. Keep in mind if eager cost ever matters again.
 - **Why eager-autocmd-only wasn't enough:** `vim.treesitter.start` needs parser +
   queries on the rtp; nvim-treesitter's `setup { install_dir = ... }` is what puts the
@@ -162,7 +172,7 @@
   ts-comments/autotag) went eager.
 - **Measured cost:** `--- NVIM STARTED ---` 37ms → ~49ms. Breakdown: ~2ms actual
   treesitter module requires; remainder is first-buffer parse/highlight/ftplugin work
-  that previously ran *after* the startuptime clock stopped — moved earlier, not added.
+  that previously ran _after_ the startuptime clock stopped — moved earlier, not added.
 - **Residual gaps (minor, still open):** other FileType-driven setup still deferred —
   switch.vim gitrebase/markdown `b:switch_custom_definitions` and mini.indentscope
   disables miss the startup buffer (matters for `git rebase -i` flows). nvim-lint never
@@ -173,14 +183,16 @@
   `ft=yaml ts_highlight=true foldexpr=v:lua.vim.lsp.foldexpr()` — treesitter active on
   the startup buffer without `:e`; LSP fold upgrade also confirmed working.
 - **Manual test:**
+
   ```sh
-  printf 'kind: Deployment\napiVersion: apps/v1\nmetadata:\n  name: x\n' > /tmp/ftest/plain.yaml
+  printf 'kind: Deployment\napiVersion: apps/v1\nmetadata:\n  name: x\n' >/tmp/ftest/plain.yaml
   nvim /tmp/ftest/plain.yaml
   # look at the buffer immediately — no :e needed
   # optional hard proof inside nvim:
   #   :lua print(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] ~= nil)
   #   → true
   ```
+
   - **Status before:** file opened with plain (regex/no) highlighting; treesitter
     highlight only appeared after `:e` re-fired FileType. Same gap: no lint on open,
     no switch.vim/mini.indentscope ft setup for the first buffer.
@@ -193,7 +205,7 @@
   shifter on TextYankPost/TextPutPost) **and** `lua/plugins/functionality.lua:58-65`
   (yanky.nvim with `sync_with_numbered_registers = true`).
 - **Problem:** Both manipulate numbered registers. Custom autocmd shifts 0→9 on every
-  yank *and put*; yanky also syncs its ring to numbered registers. Result: double
+  yank _and put_; yanky also syncs its ring to numbered registers. Result: double
   shifting, ring corruption, puts polluting registers. Also the custom shifter runs even
   for yanks yanky already recorded.
 - **Fix applied (direction changed by user):** first pass deleted the custom autocmd and
@@ -208,12 +220,12 @@
     `1-9` → that idx, anything else clears state.
   - `<C-n>` / `<C-m>` → `M.cycle(-1 / 1)` (newer / older). Cycle = single
     ``normal! `[v`]"NP`` (vmode matches regtype: v/V/ctrl-V). Key insights:
-    * changedtick guard ⇒ `` `[ ``/`` `] `` marks still frame the last put — no stored
+    - changedtick guard ⇒ `` `[ ``/`` `] `` marks still frame the last put — no stored
       coordinates needed, multibyte-safe for free;
-    * `v_P` (visual-mode P) replaces the selection **without touching any register**;
-    * that P fires `TextPutPost` with `regname = N` ⇒ state re-records itself — repeated
+    - `v_P` (visual-mode P) replaces the selection **without touching any register**;
+    - that P fires `TextPutPost` with `regname = N` ⇒ state re-records itself — repeated
       cycling needs no extra bookkeeping;
-    * after cycling, unnamed register synced to shown entry so plain `p` repeats it.
+    - after cycling, unnamed register synced to shown entry so plain `p` repeats it.
   - `<leader>y` → `:registers 0123456789` (was YankyRingHistory).
   - Removed from `plugins/functionality.lua`: yanky + sqlite pack entries, setup block,
     p/P Plug maps (builtin p/P restored), menu actions.
@@ -223,8 +235,9 @@
 - **Disk cleanup pending:** `:lua vim.pack.del { 'yanky.nvim', 'sqlite.lua' }` to remove
   installed plugin dirs + lockfile entries.
 - **Manual test:**
+
   ```sh
-  nvim   # empty buffer, type three lines: aaa / bbb / ccc (esc)
+  nvim # empty buffer, type three lines: aaa / bbb / ccc (esc)
   # gg yy  j yy  j yy   (three linewise yanks), then:
   :reg 0 1 2 3
   # → 0=ccc  1=ccc  2=bbb  3=aaa
@@ -236,6 +249,7 @@
   # p       → puts bbb again (unnamed synced to shown entry)
   # <leader>y → :registers view of the ring
   ```
+
   - **Status before:** yanky.nvim + sqlite.lua + custom autocmd double-shifting
     registers; puts also shifted; ring stored in sqlite database.
   - **Status after:** zero plugins, registers 0-9 ARE the ring, `<C-n>`/`<C-m>` cycle
@@ -249,10 +263,10 @@
      **every** LspAttach → wiped detach handlers registered for previously attached
      buffers. With >1 buffer attached, only the last buffer had a working detach handler.
   2. The LspDetach autocmd had no `buffer =` scope → fired for ANY client detach in any
-     buffer, and called `vim.lsp.buf.clear_references()` which operates on the *current*
+     buffer, and called `vim.lsp.buf.clear_references()` which operates on the _current_
      buffer — cleared highlights in an unrelated buffer.
-  3. CursorHold/CursorMoved highlight autocmds were registered once per *attaching
-     client*; with 2+ clients supporting documentHighlight on one buffer, duplicate
+  3. CursorHold/CursorMoved highlight autocmds were registered once per _attaching
+     client_; with 2+ clients supporting documentHighlight on one buffer, duplicate
      handlers accumulated (group has `clear = false`, buffer-scoped but re-entered per
      client).
 - **Fix applied:**
@@ -261,13 +275,13 @@
   - LspDetach handler moved into the same `lsp-document-highlight` augroup,
     **buffer-scoped** (`buffer = bufnr`) — the separate `lsp-document-highlight-detach`
     augroup is gone entirely.
-  - Teardown only when the *last* documentHighlight-capable client detaches:
+  - Teardown only when the _last_ documentHighlight-capable client detaches:
     `#vim.lsp.get_clients { bufnr = ev.buf, method = 'textDocument/documentHighlight' } <= 1`.
-    LspDetach fires *just before* the client detaches (`:h LspDetach`), so the detaching
+    LspDetach fires _just before_ the client detaches (`:h LspDetach`), so the detaching
     client is still counted — `<= 1` means "no capable client will remain".
     (`method` filter verified in nightly `runtime/lua/vim/lsp.lua` get_clients.)
   - `vim.lsp.util.buf_clear_references(ev.buf)` instead of `vim.lsp.buf.clear_references()`
-    — detach can fire while a *different* buffer is current (`:bdelete` on hidden buffer,
+    — detach can fire while a _different_ buffer is current (`:bdelete` on hidden buffer,
     `vim.lsp.stop_client`), so target the detaching buffer explicitly.
   - Guard reset (`vim.b[ev.buf].lsp_dochl_configured = nil`) on teardown so a later
     re-attach re-registers cleanly.
@@ -299,16 +313,16 @@
   `runtime/autoload/` and `runtime/pack/dist/opt/`. Always grep the **entire**
   runtime tree when verifying guard names. Whole-tree verdicts:
 
-| Flag | Verdict (whole runtime tree) |
-|---|---|
-| `loaded_rplugin` | **WRONG NAME** — real guard `g:loaded_remote_plugins` (plugin/rplugin.vim). Replaced. |
-| `loaded_tutor` | **WRONG NAME** — real guard `g:loaded_tutor_mode_plugin` (plugin/tutor.vim). Replaced. |
-| `loaded_shada` | **WRONG NAME** — TWO real guards: `g:loaded_shada_plugin` (plugin/shada.lua) + `g:loaded_shada_autoload` (autoload/shada.vim). Affects *editing* `.shada` files only, not persistence. Replaced with both. |
-| `loaded_2html_plugin` | **REAL** — guards `pack/dist/opt/nvim.tohtml/plugin/tohtml.lua` (opt pack, loads only on `:packadd nvim.tohtml`). Kept. |
-| `loaded_zip` | **REAL** — guards `autoload/zip.vim` (belt-and-braces with `loaded_zipPlugin`). Kept. |
-| `loaded_tar` | **REAL** — guards `autoload/tar.vim`. Kept. |
-| `loaded_gzip`, `loaded_matchit`, `loaded_matchparen`, `loaded_netrw`, `loaded_netrwPlugin`, `loaded_spellfile_plugin`, `loaded_tarPlugin`, `loaded_zipPlugin` | correct, kept |
-| `loaded_getscript`, `loaded_getscriptPlugin`, `loaded_logipat`, `loaded_rrhelper`, `loaded_vimball`, `loaded_vimballPlugin`, `loaded_netrwFileHandlers`, `loaded_netrwSettings`, `loaded_tohtml` | dead — zero hits anywhere in runtime tree. Deleted. |
+| Flag                                                                                                                                                                                             | Verdict (whole runtime tree)                                                                                                                                                                               |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `loaded_rplugin`                                                                                                                                                                                 | **WRONG NAME** — real guard `g:loaded_remote_plugins` (plugin/rplugin.vim). Replaced.                                                                                                                      |
+| `loaded_tutor`                                                                                                                                                                                   | **WRONG NAME** — real guard `g:loaded_tutor_mode_plugin` (plugin/tutor.vim). Replaced.                                                                                                                     |
+| `loaded_shada`                                                                                                                                                                                   | **WRONG NAME** — TWO real guards: `g:loaded_shada_plugin` (plugin/shada.lua) + `g:loaded_shada_autoload` (autoload/shada.vim). Affects _editing_ `.shada` files only, not persistence. Replaced with both. |
+| `loaded_2html_plugin`                                                                                                                                                                            | **REAL** — guards `pack/dist/opt/nvim.tohtml/plugin/tohtml.lua` (opt pack, loads only on `:packadd nvim.tohtml`). Kept.                                                                                    |
+| `loaded_zip`                                                                                                                                                                                     | **REAL** — guards `autoload/zip.vim` (belt-and-braces with `loaded_zipPlugin`). Kept.                                                                                                                      |
+| `loaded_tar`                                                                                                                                                                                     | **REAL** — guards `autoload/tar.vim`. Kept.                                                                                                                                                                |
+| `loaded_gzip`, `loaded_matchit`, `loaded_matchparen`, `loaded_netrw`, `loaded_netrwPlugin`, `loaded_spellfile_plugin`, `loaded_tarPlugin`, `loaded_zipPlugin`                                    | correct, kept                                                                                                                                                                                              |
+| `loaded_getscript`, `loaded_getscriptPlugin`, `loaded_logipat`, `loaded_rrhelper`, `loaded_vimball`, `loaded_vimballPlugin`, `loaded_netrwFileHandlers`, `loaded_netrwSettings`, `loaded_tohtml` | dead — zero hits anywhere in runtime tree. Deleted.                                                                                                                                                        |
 
 - **Fix applied:** options.lua block rewritten — 18 guards, all verified real;
   9 dead flags deleted; 3 wrong names corrected (`loaded_remote_plugins`,
@@ -380,7 +394,7 @@
   2. Line `abc` then `def`: `vj$` (select both lines charwise), `<leader>64` →
      single line `YWJjCmRlZg==`. Select it (`0v$h`), `<leader>46` → back to two
      lines `abc`/`def`.
-  2b. Line `aGVsbG8= d29ybGQ=` (two tokens): `0v$h<leader>46` → error notification
+     2b. Line `aGVsbG8= d29ybGQ=` (two tokens): `0v$h<leader>46` → error notification
      "Base64 decode failed: invalid input", buffer unchanged, no stacktrace.
   3. `V<leader>64` on a line → encodes whole line (no hang waiting for motion).
   4. `mtiw` on word `name` → `"${name}"`; `mt_` → wraps whole line.
@@ -577,6 +591,7 @@
 ### M1. `CleanTitle()` vimscript → Lua `[ ]`
 
 - `options.lua:35-40`. Replace `vim.cmd[[function! CleanTitle()...]]` with:
+
   ```lua
   function _G.clean_title()
     return '💻 nvim: ' .. (vim.fn.getcwd():gsub(vim.env.HOME .. '/Repos/', ''):gsub(vim.env.HOME .. '/', ''))
@@ -632,6 +647,7 @@
   new → two "Terminal 2"-era duplicates possible. Use monotonically increasing counter.
 
 ### M10. `lua/plugins/kubectl.lua` / `ai.lua` / `tree.lua` / `mini-statusline.lua` —
+
 not deep-reviewed this pass `[ ]`
 
 - Skimmed only. Worth a follow-up pass with same lens (deferred FileType races, deprecated
