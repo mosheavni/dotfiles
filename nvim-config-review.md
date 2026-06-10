@@ -241,40 +241,55 @@
   - **Status after:** zero plugins, registers 0-9 ARE the ring, `<C-n>`/`<C-m>` cycle
     the last put in place, puts never shift, cycling never mutates registers.
 
-### B5. LSP document-highlight detach handler race `[ ]`
+### B5. LSP document-highlight detach handler race `[x]` FIXED 2026-06-10
 
-- **File:** `nvim/.config/nvim/lua/user/lsp/config.lua:139-158`
-- **Problems:**
-  1. `nvim_create_augroup('lsp-document-highlight-detach', { clear = true })` runs inside
-     **every** LspAttach → wipes detach handlers registered for previously attached
-     buffers. With >1 buffer attached, only the last buffer has a working detach handler.
-  2. The LspDetach autocmd has no `buffer =` scope → fires for ANY client detach in any
-     buffer, and calls `vim.lsp.buf.clear_references()` which operates on the *current*
-     buffer — clears highlights in an unrelated buffer.
-  3. CursorHold/CursorMoved highlight autocmds (line 141) are registered once per
-     *attaching client*; with 2+ clients supporting documentHighlight on one buffer,
-     duplicate handlers accumulate (group has `clear = false`, buffer-scoped but
-     re-entered per client).
-- **Fix:** mirror the keymap guard:
-  ```lua
-  if client:supports_method('textDocument/documentHighlight', bufnr)
-      and not vim.b[bufnr].lsp_dochl_configured then
-    vim.b[bufnr].lsp_dochl_configured = true
-    local hl_group = vim.api.nvim_create_augroup('lsp-document-highlight', { clear = false })
-    -- CursorHold/CursorMoved autocmds as today (buffer = bufnr, group = hl_group)
-    vim.api.nvim_create_autocmd('LspDetach', {
-      group = hl_group,
-      buffer = bufnr,
-      callback = function(ev)
-        if #vim.lsp.get_clients({ bufnr = ev.buf, method = 'textDocument/documentHighlight' }) <= 1 then
-          vim.lsp.buf.clear_references()
-          vim.api.nvim_clear_autocmds { group = hl_group, buffer = ev.buf }
-          vim.b[ev.buf].lsp_dochl_configured = nil
-        end
-      end,
-    })
-  end
-  ```
+- **File:** `nvim/.config/nvim/lua/user/lsp/config.lua:139-166`
+- **Problems (as found):**
+  1. `nvim_create_augroup('lsp-document-highlight-detach', { clear = true })` ran inside
+     **every** LspAttach → wiped detach handlers registered for previously attached
+     buffers. With >1 buffer attached, only the last buffer had a working detach handler.
+  2. The LspDetach autocmd had no `buffer =` scope → fired for ANY client detach in any
+     buffer, and called `vim.lsp.buf.clear_references()` which operates on the *current*
+     buffer — cleared highlights in an unrelated buffer.
+  3. CursorHold/CursorMoved highlight autocmds were registered once per *attaching
+     client*; with 2+ clients supporting documentHighlight on one buffer, duplicate
+     handlers accumulated (group has `clear = false`, buffer-scoped but re-entered per
+     client).
+- **Fix applied:**
+  - Per-buffer once-guard `vim.b[bufnr].lsp_dochl_configured` (mirrors the keymap guard)
+    → no duplicate CursorHold/CursorMoved/LspDetach handlers when multiple clients attach.
+  - LspDetach handler moved into the same `lsp-document-highlight` augroup,
+    **buffer-scoped** (`buffer = bufnr`) — the separate `lsp-document-highlight-detach`
+    augroup is gone entirely.
+  - Teardown only when the *last* documentHighlight-capable client detaches:
+    `#vim.lsp.get_clients { bufnr = ev.buf, method = 'textDocument/documentHighlight' } <= 1`.
+    LspDetach fires *just before* the client detaches (`:h LspDetach`), so the detaching
+    client is still counted — `<= 1` means "no capable client will remain".
+    (`method` filter verified in nightly `runtime/lua/vim/lsp.lua` get_clients.)
+  - `vim.lsp.util.buf_clear_references(ev.buf)` instead of `vim.lsp.buf.clear_references()`
+    — detach can fire while a *different* buffer is current (`:bdelete` on hidden buffer,
+    `vim.lsp.stop_client`), so target the detaching buffer explicitly.
+  - Guard reset (`vim.b[ev.buf].lsp_dochl_configured = nil`) on teardown so a later
+    re-attach re-registers cleanly.
+- **Manual test:**
+  1. `cd ~/.dotfiles/nvim/.config/nvim && nvim lua/user/utils.lua` — wait for lua_ls attach
+     (statusline shows it).
+  2. `:edit lua/user/git.lua` — wait for attach again.
+  3. `:autocmd lsp-document-highlight` → should list CursorHold/CursorMoved/**LspDetach**
+     entries for BOTH buffers (`<buffer=N>` scoped), exactly one set per buffer.
+  4. `:autocmd lsp-document-highlight-detach` → `E367: No such group` (old global group
+     no longer created).
+  5. Hold cursor on a symbol until references highlight, then
+     `:lua vim.lsp.stop_client(vim.lsp.get_clients())` → highlights clear in the buffer,
+     and `:autocmd lsp-document-highlight` shows no entries for it;
+     `:echo b:lsp_dochl_configured` → E121 (guard reset).
+- **Status before:** with 2+ LSP buffers open, only the last-attached buffer had a detach
+  handler (earlier ones leaked highlight autocmds on detach); any client detaching
+  anywhere cleared reference highlights in whatever buffer was current; multi-client
+  buffers stacked duplicate CursorHold highlight handlers.
+- **Status after:** each buffer has exactly one set of highlight autocmds + its own
+  buffer-scoped detach handler; teardown happens only when the last capable client
+  leaves, targets the right buffer, and re-attach works again.
 
 ### B6. Broken / dead `vim.g.loaded_*` disable guards `[ ]`
 
@@ -408,7 +423,7 @@
 ## RACE CONDITIONS (summary index)
 
 - B3 — deferred FileType/BufReadPost autocmds vs initial buffer (treesitter, lint, switch, mini).
-- B5 — LspAttach/LspDetach augroup clearing + non-buffer-scoped detach.
+- B5 — LspAttach/LspDetach augroup clearing + non-buffer-scoped detach. FIXED 2026-06-10.
 - B12 — buffer-local VimLeavePre.
 - Minor: `lua/plugins/lint.lua` autocmd callback reads `vim.bo` / buffer 0 / `nvim_buf_get_name(0)`
   instead of `args.buf` — wrong buffer if an async event lands while another buffer has

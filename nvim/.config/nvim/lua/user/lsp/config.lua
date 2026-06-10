@@ -136,7 +136,8 @@ M.setup = function()
       end
 
       -- Highlight references of symbol under cursor (semantic, complements mini.cursorword)
-      if client and client:supports_method('textDocument/documentHighlight', bufnr) then
+      if client and client:supports_method('textDocument/documentHighlight', bufnr) and not vim.b[bufnr].lsp_dochl_configured then
+        vim.b[bufnr].lsp_dochl_configured = true
         local hl_group = vim.api.nvim_create_augroup('lsp-document-highlight', { clear = false })
         vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
           buffer = bufnr,
@@ -149,10 +150,16 @@ M.setup = function()
           callback = vim.lsp.buf.clear_references,
         })
         vim.api.nvim_create_autocmd('LspDetach', {
-          group = vim.api.nvim_create_augroup('lsp-document-highlight-detach', { clear = true }),
+          group = hl_group,
+          buffer = bufnr,
           callback = function(detach_ev)
-            vim.lsp.buf.clear_references()
-            vim.api.nvim_clear_autocmds { group = 'lsp-document-highlight', buffer = detach_ev.buf }
+            -- LspDetach fires before the client is removed, so <= 1 means
+            -- the detaching client is the last one supporting documentHighlight
+            if #vim.lsp.get_clients { bufnr = detach_ev.buf, method = 'textDocument/documentHighlight' } <= 1 then
+              vim.lsp.util.buf_clear_references(detach_ev.buf)
+              vim.api.nvim_clear_autocmds { group = hl_group, buffer = detach_ev.buf }
+              vim.b[detach_ev.buf].lsp_dochl_configured = nil
+            end
           end,
         })
       end
