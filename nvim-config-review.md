@@ -599,15 +599,32 @@
   vim.o.titlestring = '%{%v:lua.clean_title()%}'
   ```
 
-### M2. `country_os_to_emoji` manual UTF-8 encoder `[ ]`
+### M2. `country_os_to_emoji` manual UTF-8 encoder `[x]` FIXED 2026-06-10
 
 - `user/utils.lua:60-85`. 25 lines of manual encoding → `vim.fn.nr2char(code_point, 1)`
   per char, concat. Has test (`utils_spec.lua`) — update expectations stay identical.
+- **Fix applied:** replaced manual UTF-8 byte assembly with
+  `vim.fn.nr2char(country_iso:byte(i) + 127397, 1)` per character, `table.concat`.
+- **Verified:** `make test` — `utils_spec.lua` country_os_to_emoji cases unchanged.
+- **Manual test:**
+  1. `nvim` → `:lua print(require('user.utils').country_os_to_emoji('IL'))` → `🇮🇱`
+  2. `:Whereami` → notification includes country flag emoji (uses same helper).
+- **Status before:** 25 lines of hand-rolled UTF-8 encoding for regional-indicator
+  code points.
+- **Status after:** 6-line loop delegating encoding to `nr2char`; same output.
 
-### M3. gitsigns deprecated API `[ ]`
+### M3. gitsigns deprecated API `[x]` FIXED 2026-06-10
 
-- `plugins/gitsigns.lua`: `gs.next_hunk()`/`gs.prev_hunk()` deprecated → `gs.nav_hunk('next'|'prev')`.
-  `toggle_deleted` still exists but check current README on next update.
+- **File:** `nvim/.config/nvim/lua/plugins/gitsigns.lua`
+- **Problem:** `gs.next_hunk()` / `gs.prev_hunk()` deprecated in favor of `gs.nav_hunk()`.
+- **Fix applied:** `]c` / `[c` maps now call `gs.nav_hunk 'next'` / `gs.nav_hunk 'prev'`.
+  `toggle_deleted` checked against installed gitsigns — not deprecated, left as-is.
+- **Manual test:**
+  1. `cd ~/.dotfiles && nvim` (open any tracked file with hunks, or make a small edit).
+  2. `]c` → cursor jumps to next hunk; `[c` → previous hunk.
+  3. In diff mode (`:diffthis`), `]c` / `[c` still return builtin `]c` / `[c` (unchanged).
+- **Status before:** `]c` / `[c` called deprecated `next_hunk` / `prev_hunk` wrappers.
+- **Status after:** same navigation behavior via `nav_hunk('next'|'prev')`.
 
 ### M4. bigfile.nvim archived `[ ]`
 
@@ -615,17 +632,44 @@
   works), or replace with `snacks.nvim` bigfile module, or ~20-line hand-rolled
   BufReadPre file-size check that disables TS/LSP/inline features.
 
-### M5. Diagnostics config gated behind first LspAttach `[ ]`
+### M5. Diagnostics config gated behind first LspAttach `[x]` FIXED 2026-06-10
 
-- `user/lsp/config.lua:161-182`. nvim-lint publishes diagnostics independent of LSP —
-  before the first LspAttach, signs/virtual-text/float styling is default-ugly.
-  Move `vim.diagnostic.config { ... }` straight into `M.setup()`; delete
-  `vim.g.diagnostics_configured` gate.
+- **File:** `nvim/.config/nvim/lua/user/lsp/config.lua`
+- **Problem:** `vim.diagnostic.config` ran only on first `LspAttach` behind
+  `vim.g.diagnostics_configured`. nvim-lint publishes diagnostics without LSP —
+  signs/virtual-text/float used Neovim defaults until something attached.
+- **Fix applied:** moved `vim.diagnostic.config { ... }` into `M.setup()` (runs when
+  deferred `plugins/lsp.lua` loads, before `plugins/lint.lua` in the same
+  `vim.schedule` block). Deleted the `vim.g.diagnostics_configured` gate.
+- **Verified headless:** after `require('user.lsp.config').setup()`, custom error
+  sign `✘` is active with zero LSP clients attached.
+- **Manual test:**
+  1. `nvim` a file nvim-lint cares about (e.g. `lua/user/utils.lua`) — wait for
+     deferred plugins (~1s).
+  2. Introduce a lint error (e.g. unused local) — gutter shows `✘` / ``, virtual
+     text uses `●` prefix, float has rounded border on `<leader>ld`.
+  3. Before LSP attaches (or with `<leader>ls` never pressed), styling should already
+     match — not plain default `E` / `W` signs.
+- **Status before:** first diagnostics (often from nvim-lint) appeared with default
+  Neovim styling until the first LSP client attached.
+- **Status after:** custom diagnostic UI active as soon as LSP module setup runs,
+  independent of `LspAttach`.
 
-### M6. `vim.lsp.semantic_tokens.enable(true)` per attach `[ ]`
+### M6. `vim.lsp.semantic_tokens.enable(true)` per attach `[x]` FIXED 2026-06-10
 
-- `user/lsp/config.lua:118-120`. Semantic tokens are on by default when server supports;
-  this call is global (not per-buffer) and redundant. Delete the block.
+- **File:** `nvim/.config/nvim/lua/user/lsp/config.lua`
+- **Problem:** `vim.lsp.semantic_tokens.enable(true)` ran on every `LspAttach` when the
+  server supported semantic tokens. Neovim enables semantic tokens by default for
+  capable servers; the call is global (not per-buffer) and redundant — re-invoked on
+  each attach for no benefit.
+- **Fix applied:** deleted the `LspAttach` semantic-tokens block entirely.
+- **Manual test:**
+  1. `nvim lua/user/utils.lua` — wait for lua_ls attach.
+  2. `:lua print(vim.lsp.semantic_tokens.is_enabled(vim.api.nvim_get_current_buf()))`
+     → `true` (default behavior, unchanged).
+  3. Semantic highlighting still visible (e.g. function vs variable colors differ).
+- **Status before:** redundant `enable(true)` on every LSP attach.
+- **Status after:** rely on Neovim default; same semantic highlighting, less attach work.
 
 ### M7. `<c-m>` ≡ `<CR>` without extended-keys terminal `[ ]`
 
@@ -634,17 +678,39 @@
   → collides with `<CR>` nohlsearch map (`keymaps.lua:164`). Conscious tradeoff —
   documented here so nobody "fixes" the wrong one. Consider `<c-S-n>` or leader-based alt.
 
-### M8. Shell-executable autocmd bit math `[ ]`
+### M8. Shell-executable autocmd bit math `[x]` FIXED 2026-06-10
 
-- `autocommands.lua:194-218`. `fileinfo.mode - 32768` assumes regular-file bit; use
-  `bit.band(fileinfo.mode, 0x49)` (any exec bit) check instead, or
-  `vim.uv.fs_access(filename, 'X')`. Works today; brittle. Also `vim.notify` fires
-  before chmod succeeds — move after.
+- **File:** `nvim/.config/nvim/lua/user/autocommands.lua` (BufWritePost shebang → chmod)
+- **Problem:** `bit.band(fileinfo.mode - 32768, 0x40)` assumed the S_IFREG bit offset to
+  test owner-execute; brittle across file types. `vim.notify` ran before `fs_chmod`.
+- **Fix applied:** skip when `vim.uv.fs_access(filename, 'X')` (already executable);
+  notify only when `vim.uv.fs_chmod(...)` returns true. Also `nvim_buf_get_lines(args.buf)`
+  and empty-filename guard.
+- **Verified headless:** non-exec shebang file → chmod + access `X`; already-exec file →
+  no-op; notify gated on chmod success.
+- **Manual test:**
+  1. `printf '#!/bin/bash\necho hi\n' >/tmp/shebang-test.sh` (mode 644).
+  2. `nvim /tmp/shebang-test.sh` → `:w` → notification "File made executable";
+     `ls -l /tmp/shebang-test.sh` → `-rwxr-xr-x` (or similar with x bits).
+  3. `:w` again → no second notification (already executable).
+- **Status before:** opaque mode-bit math; notify even if chmod failed.
+- **Status after:** `fs_access(..., 'X')` for the check; notify only after successful chmod.
 
-### M9. `next_shell_name` collisions `[ ]`
+### M9. `next_shell_name` collisions `[x]` FIXED 2026-06-10
 
-- `user/terminal.lua:76-84`. Names derived from live count — close "Terminal 1", open
-  new → two "Terminal 2"-era duplicates possible. Use monotonically increasing counter.
+- **File:** `nvim/.config/nvim/lua/user/terminal.lua`
+- **Problem:** default shell names used `count(shell-* in by_id) + 1`. Closing
+  "Terminal 1" then opening a new shell could reuse "Terminal 2" while an older
+  "Terminal 2" still existed.
+- **Fix applied:** module-level `shell_name_seq` counter incremented on each
+  `next_shell_name()` call — names never reused. Test in `terminal_spec.lua`.
+- **Manual test:**
+  1. `nvim` → `:Terminal` → `:TerminalPick` shows "Terminal 1".
+  2. `:Terminal` again → pick list has "Terminal 1" and "Terminal 2".
+  3. Close/wipe Terminal 1 (`:bw` on its buffer), `:Terminal` → new entry is
+     "Terminal 3" (not another "Terminal 2").
+- **Status before:** names recycled when terminals closed; duplicate labels in pick list.
+- **Status after:** Terminal 1, 2, 3, … always unique even after closes.
 
 ### M10. `lua/plugins/kubectl.lua` / `ai.lua` / `tree.lua` / `mini-statusline.lua` —
 
