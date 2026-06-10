@@ -291,34 +291,47 @@
   buffer-scoped detach handler; teardown happens only when the last capable client
   leaves, targets the right buffer, and re-attach works again.
 
-### B6. Broken / dead `vim.g.loaded_*` disable guards `[ ]`
+### B6. Broken / dead `vim.g.loaded_*` disable guards `[x]` FIXED 2026-06-10
 
-- **File:** `nvim/.config/nvim/lua/user/options.lua:6-28`
-- Verified against nightly `runtime/plugin/` contents
-  (`editorconfig.lua gzip.vim man.lua matchit.vim matchparen.lua net.lua netrwPlugin.vim
-  osc52.lua rplugin.vim shada.lua spellfile.lua tarPlugin.vim tutor.vim zipPlugin.vim`):
+- **File:** `nvim/.config/nvim/lua/user/options.lua:5-22`
+- **IMPORTANT — original analysis was too narrow.** First pass only checked
+  `runtime/plugin/`. User correctly pointed out guards also live in
+  `runtime/autoload/` and `runtime/pack/dist/opt/`. Always grep the **entire**
+  runtime tree when verifying guard names. Whole-tree verdicts:
 
-| Flag set in options.lua | Verdict |
+| Flag | Verdict (whole runtime tree) |
 |---|---|
-| `loaded_rplugin` | **WRONG NAME** — real guard `g:loaded_remote_plugins`. rplugin.vim currently still loads. |
-| `loaded_tutor` | **WRONG NAME** — real guard `g:loaded_tutor_mode_plugin`. |
-| `loaded_shada` | **NO-OP** — guard is `g:loaded_shada_plugin`, and that plugin only handles *editing* `.shada` files (BufReadCmd etc.), not shada persistence. Safe to delete flag. |
-| `loaded_2html_plugin` | dead — tohtml plugin no longer ships |
-| `loaded_getscript`, `loaded_getscriptPlugin` | dead |
-| `loaded_logipat` | dead |
-| `loaded_rrhelper` | dead |
-| `loaded_vimball`, `loaded_vimballPlugin` | dead |
-| `loaded_netrwFileHandlers`, `loaded_netrwSettings` | dead — only `loaded_netrw` + `loaded_netrwPlugin` checked (both already set) |
-| `loaded_tar` | dead — guard is `loaded_tarPlugin` (already set) |
-| `loaded_zip` | dead — guard is `loaded_zipPlugin` (already set) |
-| `loaded_gzip`, `loaded_matchit`, `loaded_matchparen`, `loaded_netrw`, `loaded_netrwPlugin`, `loaded_spellfile_plugin`, `loaded_tarPlugin`, `loaded_zipPlugin` | correct, keep |
+| `loaded_rplugin` | **WRONG NAME** — real guard `g:loaded_remote_plugins` (plugin/rplugin.vim). Replaced. |
+| `loaded_tutor` | **WRONG NAME** — real guard `g:loaded_tutor_mode_plugin` (plugin/tutor.vim). Replaced. |
+| `loaded_shada` | **WRONG NAME** — TWO real guards: `g:loaded_shada_plugin` (plugin/shada.lua) + `g:loaded_shada_autoload` (autoload/shada.vim). Affects *editing* `.shada` files only, not persistence. Replaced with both. |
+| `loaded_2html_plugin` | **REAL** — guards `pack/dist/opt/nvim.tohtml/plugin/tohtml.lua` (opt pack, loads only on `:packadd nvim.tohtml`). Kept. |
+| `loaded_zip` | **REAL** — guards `autoload/zip.vim` (belt-and-braces with `loaded_zipPlugin`). Kept. |
+| `loaded_tar` | **REAL** — guards `autoload/tar.vim`. Kept. |
+| `loaded_gzip`, `loaded_matchit`, `loaded_matchparen`, `loaded_netrw`, `loaded_netrwPlugin`, `loaded_spellfile_plugin`, `loaded_tarPlugin`, `loaded_zipPlugin` | correct, kept |
+| `loaded_getscript`, `loaded_getscriptPlugin`, `loaded_logipat`, `loaded_rrhelper`, `loaded_vimball`, `loaded_vimballPlugin`, `loaded_netrwFileHandlers`, `loaded_netrwSettings`, `loaded_tohtml` | dead — zero hits anywhere in runtime tree. Deleted. |
 
-- **Fix:** replace block with only the working set; add `loaded_remote_plugins = 1`,
-  `loaded_tutor_mode_plugin = 1` if those disables are desired. Candidates to also
-  consider: `loaded_man`, `loaded_nvim_net_plugin`, `editorconfig` (`vim.g.editorconfig = false`)
-  — only if genuinely unused (`vim.net` IS used by `:Whereami`, so do NOT disable net.lua... actually net.lua only defines `:Network`-style cmds; `vim.net` lua module works regardless. Still, leave it).
-- **Note:** `loaded_matchparen` set twice — options.lua:12 and functionality.lua:45
-  (deferred — too late there, harmless duplicate; remove the deferred one).
+- **Fix applied:** options.lua block rewritten — 18 guards, all verified real;
+  9 dead flags deleted; 3 wrong names corrected (`loaded_remote_plugins`,
+  `loaded_tutor_mode_plugin`, `loaded_shada_plugin` + `loaded_shada_autoload`).
+- **matchparen note (user decision):** `loaded_matchparen = 1` stays in BOTH
+  options.lua (eager — actually prevents plugin load) AND
+  `plugins/functionality.lua` deferred block, coupled with the vim-matchup setup
+  that replaces it. Do NOT remove the functionality.lua one again.
+- **Untouched on purpose:** `nvim.difftool` (packadd'd in keymaps.lua:454),
+  `:Man` (used), net.lua, editorconfig, osc52.
+- **Manual test:**
+  1. `nvim` → `:Tutor` → `E464: Ambiguous use of user-defined command`-style
+     unknown command error (plugin no longer loads).
+  2. `:UpdateRemotePlugins` → unknown command (rplugin.vim no longer loads).
+  3. `:Man man` → still works (kept).
+  4. `:packadd nvim.difftool` → no error (kept working, used by keymaps).
+  5. `:echo g:loaded_shada_plugin` → `1`.
+- **Status before:** rplugin.vim and tutor.vim loaded every startup despite the
+  "disable" flags (wrong guard names); 9 flags referenced plugins that no longer
+  exist anywhere in the runtime tree.
+- **Status after:** every flag in the block maps to a real guard in the nightly
+  runtime; rplugin + tutor actually disabled (`:Tutor`, `:UpdateRemotePlugins`
+  gone, verified headless); dead flags removed.
 
 ### B7. Operator-func helpers broken for visual / multiline `[ ]`
 
