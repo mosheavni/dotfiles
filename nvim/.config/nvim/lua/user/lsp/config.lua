@@ -134,11 +134,6 @@ M.setup = function()
         require('nvim-navic').attach(client, bufnr)
       end
 
-      -- Configure semantic token highlighting
-      if client and client.server_capabilities.semanticTokensProvider then
-        vim.lsp.semantic_tokens.enable(true)
-      end
-
       -- Mappings (per-buffer, only once)
       if not vim.b[bufnr].lsp_keymaps_configured then
         vim.b[bufnr].lsp_keymaps_configured = true
