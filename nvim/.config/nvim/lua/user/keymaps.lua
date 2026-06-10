@@ -37,20 +37,38 @@ map('x', '/', '<Esc>/\\%V', { remap = false, desc = 'Search within visual select
 -- operators
 _G.op = _G.op or {}
 
--- surround with string interpolation with motion
-function _G.op.surround_with_interpolation(motion)
-  if motion == nil or motion == 'line' then
-    vim.o.operatorfunc = 'v:lua.op.surround_with_interpolation'
-    return vim.fn.feedkeys 'g@'
-  end
+---0-indexed bounds of the last operator/motion region (`[ to `]), for nvim_buf_get_text.
+---@param motion 'char'|'line'|'block'
+---@return integer srow, integer scol, integer erow, integer ecol
+local function region_bounds(motion)
   local start = vim.api.nvim_buf_get_mark(0, '[')
   local finish = vim.api.nvim_buf_get_mark(0, ']')
-  local line = vim.api.nvim_buf_get_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, {})[1]
-  local new_text = { '"${' .. line .. '}"' }
-  vim.api.nvim_buf_set_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, new_text)
-  vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { finish[1], finish[2] })
+  if motion == 'line' then
+    return start[1] - 1, 0, finish[1] - 1, #vim.fn.getline(finish[1])
+  end
+  -- `] points at the first byte of the last character; advance by its full byte length
+  local last_char = vim.fn.strpart(vim.fn.getline(finish[1]), finish[2], 1, true)
+  return start[1] - 1, start[2], finish[1] - 1, finish[2] + #last_char
 end
-map('n', 'mt', _G.op.surround_with_interpolation, { desc = 'Surround with string interpolation' })
+
+---@param fn string operatorfunc name (v:lua....)
+local function arm(fn)
+  return function()
+    vim.o.operatorfunc = fn
+    return 'g@'
+  end
+end
+
+-- surround with string interpolation with motion
+function _G.op.surround_with_interpolation(motion)
+  local srow, scol, erow, ecol = region_bounds(motion)
+  local lines = vim.api.nvim_buf_get_text(0, srow, scol, erow, ecol, {})
+  lines[1] = '"${' .. lines[1]
+  lines[#lines] = lines[#lines] .. '}"'
+  vim.api.nvim_buf_set_text(0, srow, scol, erow, ecol, lines)
+  vim.api.nvim_win_set_cursor(0, { srow + 1, scol })
+end
+map('n', 'mt', arm 'v:lua.op.surround_with_interpolation', { expr = true, desc = 'Surround with string interpolation' })
 
 -- Indent block
 vim.cmd [[
@@ -297,41 +315,34 @@ do
 end
 
 -- Base64 dencode
-local function b64(action)
-  local start = vim.api.nvim_buf_get_mark(0, '[')
-  local finish = vim.api.nvim_buf_get_mark(0, ']')
-  local line = vim.api.nvim_buf_get_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, {})[1]
+local function b64(action, motion)
+  local srow, scol, erow, ecol = region_bounds(motion)
+  local text = table.concat(vim.api.nvim_buf_get_text(0, srow, scol, erow, ecol, {}), '\n')
   local b64_action = action == 'encode' and vim.base64.encode or vim.base64.decode
-  local result = b64_action(line)
+  local ok, result = pcall(b64_action, text)
+  if not ok then
+    vim.notify(('Base64 %s failed: invalid input'):format(action), vim.log.levels.ERROR)
+    return
+  end
 
   -- Split result by newlines to handle multi-line decoded text
   local new_text = vim.split(result, '\n', { plain = true })
 
-  vim.api.nvim_buf_set_text(0, start[1] - 1, start[2], finish[1] - 1, finish[2] + 1, new_text)
+  vim.api.nvim_buf_set_text(0, srow, scol, erow, ecol, new_text)
 
   -- Update cursor position to end of replaced text
-  local new_end_row = start[1] - 1 + #new_text - 1
+  local new_end_row = srow + #new_text - 1
   local new_end_col = #new_text[#new_text]
   vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { new_end_row + 1, new_end_col })
 end
 function _G.op.base64_encode(motion)
-  if motion == nil or motion == 'line' then
-    vim.o.operatorfunc = 'v:lua.op.base64_encode'
-    return vim.fn.feedkeys 'g@'
-  end
-  b64 'encode'
+  b64('encode', motion)
 end
 function _G.op.base64_decode(motion)
-  if motion == nil or motion == 'line' then
-    vim.o.operatorfunc = 'v:lua.op.base64_decode'
-    return vim.fn.feedkeys 'g@'
-  end
-  b64 'decode'
+  b64('decode', motion)
 end
-map('n', '<leader>64', _G.op.base64_encode, { desc = 'Base64 encode' })
-map('n', '<leader>46', _G.op.base64_decode, { desc = 'Base64 decode' })
-map('v', '<leader>64', _G.op.base64_encode, { desc = 'Base64 encode selection' })
-map('v', '<leader>46', _G.op.base64_decode, { desc = 'Base64 decode selection' })
+map({ 'n', 'x' }, '<leader>64', arm 'v:lua.op.base64_encode', { expr = true, desc = 'Base64 encode' })
+map({ 'n', 'x' }, '<leader>46', arm 'v:lua.op.base64_decode', { expr = true, desc = 'Base64 decode' })
 
 -- Close current buffer
 map('n', '<leader>bc', ':close<cr>', { silent = true, desc = 'Close this buffer' })

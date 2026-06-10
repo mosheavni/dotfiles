@@ -333,7 +333,7 @@
   runtime; rplugin + tutor actually disabled (`:Tutor`, `:UpdateRemotePlugins`
   gone, verified headless); dead flags removed.
 
-### B7. Operator-func helpers broken for visual / multiline `[ ]`
+### B7. Operator-func helpers broken for visual / multiline `[x]` FIXED 2026-06-10
 
 - **File:** `nvim/.config/nvim/lua/user/keymaps.lua`
   - `_G.op.surround_with_interpolation` (line 41), `_G.op.base64_encode/decode` (lines 317-330), visual maps at 331-334.
@@ -348,20 +348,50 @@
   3. `vim.fn.feedkeys 'g@'` → should be `vim.api.nvim_feedkeys('g@', 'n', false)` (or
      `vim.fn.feedkeys('g@', 'n')`) to bypass mappings; and for dot-repeat correctness
      prefer `expr = true` maps returning `'g@'` / `'g@_'`.
-- **Fix:** distinguish "arming call" from "execution call" by argument: operatorfunc is
-  always called with `'char'|'line'|'block'`; arming call from the keymap should pass
-  nothing. Use the standard pattern:
-  ```lua
-  map('n', '<leader>64', function()
-    vim.o.operatorfunc = 'v:lua.op.base64_encode'
-    return 'g@'
-  end, { expr = true })
-  map('x', '<leader>64', function()
-    vim.o.operatorfunc = 'v:lua.op.base64_encode'
-    return 'g@'
-  end, { expr = true })  -- g@ in visual applies operator to selection directly
-  ```
-  and make `b64()` join all lines from `nvim_buf_get_text` instead of `[1]`.
+- **Fix applied:**
+  - New shared helpers in keymaps.lua (after `_G.op` init):
+    - `region_bounds(motion)` — 0-indexed `'[`/`']` bounds for `nvim_buf_get_text`.
+      Linewise: col 0 → `#getline(end)`. Charwise: end col = `finish[2] + #last_char`
+      where `last_char = vim.fn.strpart(line, col, 1, true)` (char-wise strpart) —
+      multibyte-safe, fixes the old `finish[2] + 1` byte off-by-one.
+    - `arm(fn)` — returns expr-map callback: sets `operatorfunc = fn`, returns `'g@'`.
+  - All three ops (`surround_with_interpolation`, `base64_encode`, `base64_decode`)
+    are now pure operatorfunc bodies — no nil/'line' re-arm guard, no
+    `vim.fn.feedkeys 'g@'`.
+  - Maps: `mt` → `arm(...)` with `expr = true` (normal); `<leader>64`/`<leader>46` →
+    one `map({ 'n', 'x' }, ...)` each, `expr = true` (`g@` in visual applies the
+    operator to the selection directly; `x` instead of `v` to skip select mode).
+  - `b64()` joins ALL lines from `nvim_buf_get_text` with `\n` (multiline charwise
+    no longer truncated); `surround_with_interpolation` wraps first/last line of
+    region (`"${` … `}"`), cursor lands at region start.
+  - **Bonus:** expr-map pattern makes `.` (dot-repeat) work for all three operators.
+  - **Follow-up (user-reported):** decoding text that is not a single valid base64
+    token (e.g. selecting `aGVsbG8= d29ybGQ=` — two tokens + space) made
+    `vim.base64.decode` throw a raw Lua stacktrace. Now wrapped in `pcall`:
+    invalid input → `vim.notify` error ("Base64 decode failed: invalid input"),
+    buffer untouched. Decode each token separately (`<leader>46iw` per word).
+  - Verified headless via feedkeys end-to-end, 8/8: n-charwise, V-linewise (hung
+    before), multiline charwise visual (truncated before), decode→multiline
+    roundtrip, mt charwise, mt linewise motion (hung before), multibyte tail
+    (`héllo`), dot-repeat.
+- **Manual test:**
+  1. `nvim` scratch buffer, type `hello world`, cursor on `hello`, `<leader>64iw` →
+     `aGVsbG8= world`. Press `j` then `.` on another word → dot-repeat encodes it.
+  2. Line `abc` then `def`: `vj$` (select both lines charwise), `<leader>64` →
+     single line `YWJjCmRlZg==`. Select it (`0v$h`), `<leader>46` → back to two
+     lines `abc`/`def`.
+  2b. Line `aGVsbG8= d29ybGQ=` (two tokens): `0v$h<leader>46` → error notification
+     "Base64 decode failed: invalid input", buffer unchanged, no stacktrace.
+  3. `V<leader>64` on a line → encodes whole line (no hang waiting for motion).
+  4. `mtiw` on word `name` → `"${name}"`; `mt_` → wraps whole line.
+  5. Word `héllo`: `<leader>64iw` → decodes back to exactly `héllo` (no torn
+     UTF-8 byte).
+- **Status before:** linewise invocations (`V<leader>64`, `mt_`) re-armed
+  operatorfunc and hung waiting for a motion; multiline charwise selections
+  silently encoded only the first line; multibyte last char got truncated
+  (`finish[2] + 1` counts bytes); no dot-repeat.
+- **Status after:** all motions (char/line, single/multi-line, multibyte) work,
+  visual mode works in both directions, `.` repeats the operation.
 
 ### B8. `filter_yank` appends to register e forever `[ ]`
 
