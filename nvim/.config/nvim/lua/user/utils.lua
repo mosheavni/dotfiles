@@ -58,28 +58,10 @@ end
 ---@param country_iso string The country code in 2 uppercase letters (e.g. "US", "GB")
 ---@return string emoji The country flag emoji
 function M.country_os_to_emoji(country_iso)
-  -- Precompute byte offsets for country code conversion
   local COUNTRY_CODE_OFFSET = 127397
   local flag_icon = {}
   for i = 1, #country_iso do
-    local code_point = country_iso:byte(i) + COUNTRY_CODE_OFFSET
-    if code_point <= 0x7F then
-      table.insert(flag_icon, string.char(code_point))
-    elseif code_point <= 0x7FF then
-      table.insert(flag_icon, string.char(0xC0 + math.floor(code_point / 0x40), 0x80 + code_point % 0x40))
-    elseif code_point <= 0xFFFF then
-      table.insert(flag_icon, string.char(0xE0 + math.floor(code_point / 0x1000), 0x80 + math.floor((code_point % 0x1000) / 0x40), 0x80 + code_point % 0x40))
-    elseif code_point <= 0x10FFFF then
-      table.insert(
-        flag_icon,
-        string.char(
-          0xF0 + math.floor(code_point / 0x40000),
-          0x80 + math.floor((code_point % 0x40000) / 0x1000),
-          0x80 + math.floor((code_point % 0x1000) / 0x40),
-          0x80 + code_point % 0x40
-        )
-      )
-    end
+    table.insert(flag_icon, vim.fn.nr2char(country_iso:byte(i) + COUNTRY_CODE_OFFSET, true))
   end
   return table.concat(flag_icon)
 end
