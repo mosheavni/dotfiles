@@ -16,6 +16,7 @@ describe('user.terminal', function()
     for k in pairs(term._by_id) do
       term._by_id[k] = nil
     end
+    term._shell_name_seq.n = 0
     original_jobpid = vim.fn.jobpid
     vim.fn.jobpid = function()
       return 12345
@@ -155,6 +156,21 @@ describe('user.terminal', function()
       local list = term.list()
       eq(#list, 1)
       eq(list[1].name, 'New')
+    end)
+  end)
+
+  describe('next_shell_name', function()
+    it('uses a monotonic counter independent of live terminal count', function()
+      eq(term._next_shell_name(), 'Terminal 1')
+      eq(term._next_shell_name(), 'Terminal 2')
+      term._by_id['shell-99'] = {
+        buf = vim.api.nvim_create_buf(false, true),
+        job_id = 1,
+        cwd = '/tmp',
+        name = 'Terminal 1',
+      }
+      term._by_id['shell-99'] = nil
+      eq(term._next_shell_name(), 'Terminal 3')
     end)
   end)
 

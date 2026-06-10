@@ -73,14 +73,11 @@ local function default_cwd()
   return vim.fn.getcwd()
 end
 
+local shell_name_seq = { n = 0 }
+
 local function next_shell_name()
-  local n = 0
-  for id in pairs(by_id) do
-    if vim.startswith(id, 'shell-') then
-      n = n + 1
-    end
-  end
-  return 'Terminal ' .. (n + 1)
+  shell_name_seq.n = shell_name_seq.n + 1
+  return 'Terminal ' .. shell_name_seq.n
 end
 
 ---@param cwd string
@@ -330,5 +327,7 @@ function M.setup()
 end
 
 M._by_id = by_id
+M._shell_name_seq = shell_name_seq
+M._next_shell_name = next_shell_name
 
 return M
