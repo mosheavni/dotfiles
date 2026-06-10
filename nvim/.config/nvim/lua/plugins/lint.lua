@@ -1,7 +1,7 @@
 vim.pack.add { 'https://github.com/mfussenegger/nvim-lint' }
 
-local function find_root(markers)
-  local path = vim.api.nvim_buf_get_name(0)
+local function find_root(markers, bufnr)
+  local path = vim.api.nvim_buf_get_name(bufnr)
   local root = vim.fs.find(markers, { path = path, upward = true })[1]
   return root and vim.fs.dirname(root) or nil
 end
@@ -44,10 +44,10 @@ return function()
     luacheck = { '.luacheckrc' },
   }
 
-  local function get_linter_cwd(linter_name)
+  local function get_linter_cwd(linter_name, bufnr)
     local markers = linter_root_markers[linter_name]
     if markers then
-      return find_root(markers)
+      return find_root(markers, bufnr)
     end
     return nil
   end
@@ -57,17 +57,17 @@ return function()
     group = group,
     callback = function(args)
       local excluded_filetypes = { 'gitcommit', 'gitrebase', 'fugitive' }
-      if vim.tbl_contains(excluded_filetypes, vim.bo.filetype) or not vim.bo.modifiable then
+      if vim.tbl_contains(excluded_filetypes, vim.bo[args.buf].filetype) or not vim.bo[args.buf].modifiable then
         return
       end
-      if vim.api.nvim_buf_get_name(0):match '^%w+://' then
+      if vim.api.nvim_buf_get_name(args.buf):match '^%w+://' then
         return
       end
 
-      local linters = lint._resolve_linter_by_ft(vim.bo.filetype)
+      local linters = lint._resolve_linter_by_ft(vim.bo[args.buf].filetype)
       for _, linter_name in ipairs(linters) do
         if not lint._disabled_linters[linter_name] then
-          lint.try_lint(linter_name, { cwd = get_linter_cwd(linter_name) })
+          lint.try_lint(linter_name, { cwd = get_linter_cwd(linter_name, args.buf) })
         end
       end
 
