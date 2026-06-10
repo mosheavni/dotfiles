@@ -203,9 +203,11 @@ vim.filetype.add {
   },
   pattern = {
     ['.*/templates/.*%.yaml'] = {
-      function()
-        if vim.fn.search([[{{.\+}}]], 'nw') ~= 0 then
-          return 'helm'
+      function(_, bufnr)
+        for _, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)) do
+          if line:find '{{.+}}' then
+            return 'helm'
+          end
         end
       end,
       { priority = 200 },
@@ -213,16 +215,18 @@ vim.filetype.add {
     ['.*/.github/workflows/.*%.yml'] = 'yaml.ghaction',
     ['.*Jenkinsfile.*'] = 'groovy',
     [kube_config_pattern] = 'yaml',
-    ['.*'] = function()
-      -- loop through the first 20 lines of the file and search a line
-      -- that starts with kind: or apiVersion: to determine the filetype is yaml
-      for i = 1, 20 do
-        local line = vim.fn.getline(i)
-        if line:match '^kind:' or line:match '^apiVersion:' then
-          return 'yaml'
+    ['.*'] = {
+      function(_, bufnr)
+        -- k8s manifests without a .yaml extension: kind:/apiVersion: in the first 20 lines
+        for _, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, 20, false)) do
+          if line:match '^kind:' or line:match '^apiVersion:' then
+            return 'yaml'
+          end
         end
-      end
-    end,
+      end,
+      -- catch-all must lose to every specific pattern (:h vim.filetype.add)
+      { priority = -math.huge },
+    },
   },
 }
 

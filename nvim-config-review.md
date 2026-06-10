@@ -7,7 +7,17 @@
 > **For AI agents:** read this file before touching the nvim config. Each finding has
 > a status checkbox — mark `[x]` when fixed (with commit ref if possible). When fixing
 > Lua under `lua/user/`, follow CLAUDE.md: update/add tests in `lua/tests/`, run
-> `cd nvim/.config/nvim && make test`. Style: stylua (2 spaces, single quotes, no call parens).
+> `cd nvim/.config/nvim && make test` — but ONLY when the change touches a spec-covered
+> module; otherwise verify with targeted headless nvim runs.
+> Style: stylua (2 spaces, single quotes, no call parens).
+>
+> **Fix documentation convention (user requirement):** every fixed section MUST include
+> a **Manual test** block the user can run interactively to see the change with their
+> own eyes, formatted as:
+> - shell commands to set up + open nvim (not headless)
+> - what to check inside nvim (e.g. `:set ft?`)
+> - `Status before:` one line describing old broken behavior
+> - `Status after:` one line describing new correct behavior
 
 ## Architecture summary (context for later sessions)
 
@@ -53,11 +63,23 @@
   because the truthy-`0` bug forced helm for everything. Fixed pattern: `{{.\+}}`.
 - **Verified:** headless nvim — `templates/plain.yaml` (kind/apiVersion only) → `yaml`;
   `templates/tpl.yaml` (with `{{ .Release.Name }}`) → `helm`. `make test` 39/39 pass.
+- **Manual test:**
+  ```sh
+  mkdir -p /tmp/ftest/templates
+  printf 'kind: Deployment\napiVersion: apps/v1\n' > /tmp/ftest/templates/plain.yaml
+  printf 'kind: Deployment\nname: {{ .Release.Name }}\n' > /tmp/ftest/templates/tpl.yaml
+  nvim /tmp/ftest/templates/plain.yaml   # then :set ft?  → expect filetype=yaml
+  nvim /tmp/ftest/templates/tpl.yaml     # then :set ft?  → expect filetype=helm
+  ```
+  - **Status before:** both files showed `filetype=helm` — anything under a `templates/`
+    dir ending in `.yaml` became helm, even plain k8s manifests (broke yamlls schemas).
+  - **Status after:** `plain.yaml` → `filetype=yaml`; `tpl.yaml` (contains `{{ ... }}`)
+    → `filetype=helm`.
 - **Bonus (still open, fold into B2):** callback receives `(path, bufnr)` — prefer
   `vim.filetype.getlines(bufnr, ...)` scan over `vim.fn.search` (operates on "current"
   buffer; see B2 rationale).
 
-### B2. Catch-all `['.*']` filetype pattern — no priority, wrong buffer access `[ ]`
+### B2. Catch-all `['.*']` filetype pattern — no priority, wrong buffer access `[x]` FIXED 2026-06-10
 
 - **File:** `nvim/.config/nvim/lua/user/options.lua:216-225`
 - **Code:** pattern `['.*']` loops `vim.fn.getline(i)` for i=1..20 looking for `^kind:` /
@@ -70,19 +92,45 @@
      non-current buffer (`vim.filetype.match { buf = ... }`, `:edit` from scripts,
      bufadd flows). Callback signature is `function(path, bufnr)` — use
      `vim.filetype.getlines(bufnr, i)` or `nvim_buf_get_lines`.
-- **Fix sketch:**
-  ```lua
-  ['.*'] = {
-    function(_, bufnr)
-      for _, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, 20, false)) do
-        if line:match '^kind:' or line:match '^apiVersion:' then
-          return 'yaml'
-        end
-      end
-    end,
-    { priority = -math.huge },
-  },
+- **Fix applied:**
+  - catch-all now `{ function(_, bufnr) ... nvim_buf_get_lines(bufnr, 0, 20, false) ... end, { priority = -math.huge } }`
+  - helm callback (B1 bonus) also converted to `(path, bufnr)` form with
+    `nvim_buf_get_lines(bufnr, 0, -1, false)` + Lua pattern `line:find '{{.+}}'`
+    (in Lua patterns `+` IS a quantifier — unlike vim magic; `.-` was rejected since it
+    matches empty `{{}}`). No more current-buffer dependency.
+  - Note: `vim.filetype.getlines` is NOT public API (checked nightly lua.txt) — use
+    `nvim_buf_get_lines`.
+- **Verified headless:** `templates/plain.yaml`→yaml, `templates/tpl.yaml`→helm,
+  extensionless k8s manifest→yaml, `x.lua`→lua (catch-all loses), `.kube/config`→yaml.
+- **Gotcha (test infra):** nvim caps `+cmd`/`-c` args at 10 — verification matrix must
+  use a single `+luafile` script, not per-file `+e`/`+lua` pairs.
+- **Manual test:**
+  ```sh
+  # 1. catch-all still detects extensionless k8s manifests (now from the right buffer):
+  printf 'kind: Deployment\napiVersion: apps/v1\n' > /tmp/ftest/manifest-noext
+  nvim /tmp/ftest/manifest-noext         # :set ft?  → expect filetype=yaml
+
+  # 2. works via stdin too (StdinReadPost runs detection; buffer has no filename,
+  #    only the catch-all matches):
+  echo 'kind: Deployment' | nvim -       # :set ft?  → expect filetype=yaml
+
+  # 3. catch-all loses to every specific pattern (negative priority):
+  printf 'print("hi")\n' > /tmp/ftest/x.lua
+  nvim /tmp/ftest/x.lua                  # :set ft?  → expect filetype=lua
+
+  # 4. helm callback no longer depends on the *current* buffer — detection from a
+  #    different active buffer still correct:
+  nvim /tmp/ftest/x.lua
+  #    inside nvim:
+  #    :lua local b = vim.fn.bufadd('/tmp/ftest/templates/tpl.yaml'); vim.fn.bufload(b); print(vim.filetype.match { buf = b })
+  #    → expect: helm   (before the fix this inspected x.lua, the current buffer)
   ```
+  - **Status before:** catch-all ran for every file with default priority and read lines
+    from whatever buffer was *current* (`vim.fn.getline`) — `vim.filetype.match { buf }`
+    from another buffer gave wrong answers; helm check had the same wrong-buffer flaw.
+  - **Status after:** both callbacks read the buffer being detected (`bufnr` arg);
+    catch-all demoted with `priority = -math.huge`; detection correct regardless of
+    which buffer is current (case 4 returns `helm`).
 
 ### B3. Deferred-setup race: initial buffer misses FileType-driven features `[ ]`
 
