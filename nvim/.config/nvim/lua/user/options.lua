@@ -24,12 +24,10 @@ vim.g.loaded_zipPlugin = 1
 -- vim.g.did_load_filetypes = 0
 
 -- titlestring
-vim.cmd [[
-  function! CleanTitle()
-    return "💻 nvim: " . substitute(getcwd(), $HOME . '/\(Repos/\)\?', '', '')
-  endfunction
-]]
-vim.o.titlestring = '%{CleanTitle()}'
+function _G.clean_title()
+  return '💻 nvim: ' .. (vim.fn.getcwd():gsub(vim.env.HOME .. '/Repos/', ''):gsub(vim.env.HOME .. '/', ''))
+end
+vim.o.titlestring = '%{%v:lua.clean_title()%}'
 
 vim.o.title = true -- Changes the wezterm title
 vim.o.cursorcolumn = true
@@ -84,7 +82,7 @@ vim.opt.diffopt = {
 vim.o.splitkeep = 'screen'
 
 vim.o.number = true -- Show current line number
-vim.o.numberwidth = 4 -- set number column width to 2 {default 4}
+vim.o.numberwidth = 2 -- set number column width to 2 {default 4}
 vim.o.relativenumber = true -- Show relative line numbers
 vim.o.linebreak = true -- Avoid wrapping a line in the middle of a word.
 vim.o.wrap = true -- Wrap long lines
@@ -107,7 +105,7 @@ vim.o.pumborder = 'rounded' -- Popup border style
 vim.o.winborder = 'rounded' -- Window border style
 vim.o.pumblend = 40 -- Popup blend
 vim.o.confirm = true -- Prompt confirmation if exiting unsaved file
-vim.o.lazyredraw = true -- redraw only when we need to.
+vim.o.lazyredraw = false
 vim.o.swapfile = false
 vim.o.backup = true
 vim.o.writebackup = true
