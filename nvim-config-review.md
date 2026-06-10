@@ -31,7 +31,7 @@
 
 ## CRITICAL / CORRECTNESS BUGS
 
-### B1. Helm filetype detection always matches `[ ]`
+### B1. Helm filetype detection always matches `[x]` FIXED 2026-06-10
 
 - **File:** `nvim/.config/nvim/lua/user/options.lua:205-212`
 - **Code:**
@@ -47,9 +47,15 @@
   truthy → the condition is **always true**. Every `*/templates/*.yaml` file is detected
   as `helm` even with zero Go-template syntax (breaks yamlls/schema validation for plain
   k8s manifests in `templates/` dirs).
-- **Fix:** `if vim.fn.search('{{.+}}', 'nw') ~= 0 then`.
-- **Bonus:** the callback receives `(path, bufnr)` — prefer `vim.filetype.getlines(bufnr, ...)`
-  scan over `vim.fn.search` (operates on "current" buffer; see B2 rationale).
+- **Fix applied:** `if vim.fn.search([[{{.\+}}]], 'nw') ~= 0 then`.
+- **Second bug found during fix:** original regex `{{.+}}` never matched anything — in
+  vim magic mode `+` is a LITERAL plus sign (quantifier is `\+`). Old code only "worked"
+  because the truthy-`0` bug forced helm for everything. Fixed pattern: `{{.\+}}`.
+- **Verified:** headless nvim — `templates/plain.yaml` (kind/apiVersion only) → `yaml`;
+  `templates/tpl.yaml` (with `{{ .Release.Name }}`) → `helm`. `make test` 39/39 pass.
+- **Bonus (still open, fold into B2):** callback receives `(path, bufnr)` — prefer
+  `vim.filetype.getlines(bufnr, ...)` scan over `vim.fn.search` (operates on "current"
+  buffer; see B2 rationale).
 
 ### B2. Catch-all `['.*']` filetype pattern — no priority, wrong buffer access `[ ]`
 

@@ -204,7 +204,7 @@ vim.filetype.add {
   pattern = {
     ['.*/templates/.*%.yaml'] = {
       function()
-        if vim.fn.search('{{.+}}', 'nw') then
+        if vim.fn.search([[{{.\+}}]], 'nw') ~= 0 then
           return 'helm'
         end
       end,
