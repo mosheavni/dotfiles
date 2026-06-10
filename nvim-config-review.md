@@ -393,49 +393,90 @@
 - **Status after:** all motions (char/line, single/multi-line, multibyte) work,
   visual mode works in both directions, `.` repeats the operation.
 
-### B8. `filter_yank` appends to register e forever `[ ]`
+### B8. `filter_yank` appends to register e forever `[-]` NOT A BUG (user: intended)
 
 - **File:** `nvim/.config/nvim/lua/user/keymaps.lua:282`
-- `vim.fn.setreg('E', ...)` — uppercase register name **appends** (`:h setreg()`).
-  Every "Yank all..." invocation grows register `e` with stale content.
-- **Fix:** `vim.fn.setreg('e', ..., 'l')` (lowercase) unless append genuinely intended.
+- `vim.fn.setreg('E', ...)` — uppercase register name appends (`:h setreg()`).
+- **User confirmed 2026-06-10: append behavior is intentional.** Do not "fix".
 
-### B9. `<leader>bh` (delete hidden buffers) aborts on modified buffer `[ ]`
+### B9. `<leader>bh` (delete hidden buffers) aborts on modified buffer `[x]` FIXED 2026-06-10
 
-- **File:** `nvim/.config/nvim/lua/user/keymaps.lua:339-348`
-- `nvim_buf_delete(buf, {})` throws on modified buffers / some special buffers → loop
-  dies mid-iteration, count misleading.
-- **Fix:** skip `vim.bo[buf].modified`, wrap `pcall(vim.api.nvim_buf_delete, buf, {})`,
-  count only successes.
+- **File:** `nvim/.config/nvim/lua/user/keymaps.lua:350-360`
+- **Problem:** `nvim_buf_delete(buf, {})` throws on modified buffers / some special
+  buffers → loop died mid-iteration, count misleading.
+- **Fix applied:** skip `vim.bo[buf].modified` buffers, `pcall(nvim_buf_delete)`,
+  count only successes. Dropped redundant `nvim_buf_is_valid` (list_bufs only
+  returns valid buffers).
+- **Manual test:** open `nvim a.txt`, `:edit b.txt`, type text in b.txt WITHOUT
+  saving, `:edit c.txt`. Now a.txt + b.txt hidden, b.txt modified. `<leader>bh` →
+  notification "1 hidden buffer(s) deleted", `:ls` shows b.txt still alive
+  (changes safe), a.txt gone.
+- **Status before:** `<leader>bh` with any modified hidden buffer → E5108 error
+  mid-loop, remaining buffers not processed.
+- **Status after:** modified buffers skipped silently, rest deleted, accurate count.
+  Verified headless.
 
-### B10. `cii` (change indentation) crashes/nils options on cancel `[ ]`
+### B10. `cii` (change indentation) crashes/nils options on cancel `[x]` FIXED 2026-06-10
 
-- **File:** `nvim/.config/nvim/lua/user/keymaps.lua:409-416`
-- Cancel (`<Esc>`) → `indent_size = nil` → `tonumber(nil)` → nil → assigns nil to
-  `shiftwidth/softtabstop/tabstop` (resets local values unexpectedly). Non-numeric input
-  same path.
-- **Fix:** `local n = tonumber(indent_size); if not n then return end`.
+- **File:** `nvim/.config/nvim/lua/user/keymaps.lua:420-431`
+- **Problem:** Cancel (`<Esc>`) → `indent_size = nil` → `tonumber(nil)` → nil →
+  assigned nil to `shiftwidth/softtabstop/tabstop` (reset local values to defaults
+  unexpectedly). Non-numeric input same path.
+- **Fix applied:** `if not indent_size_normalized then return end` guard before
+  assignment.
+- **Manual test:** `:setlocal shiftwidth=2`, press `cii`, hit `<Esc>` →
+  `:set shiftwidth?` still 2. `cii` + `abc<CR>` → still 2. `cii` + `4<CR>` → 4.
+- **Status before:** cancel or garbage input silently reset local
+  shiftwidth/softtabstop/tabstop to global defaults.
+- **Status after:** cancel/garbage = no-op; numeric input applies. Verified
+  headless (vim.ui.input stubbed; real impl is the floating user/input.lua).
 
-### B11. `:Rename` sends `workspace/willRenameFiles` AFTER the rename `[ ]`
+### B11. `:Rename` sends `workspace/willRenameFiles` AFTER the rename `[x]` FIXED 2026-06-10
 
-- **File:** `nvim/.config/nvim/lua/plugins/functionality.lua:137-165`
-- LSP spec: `willRenameFiles` is a request sent **before** the file operation so the
-  server can compute edits against the old URI; `didRenameFiles` after. Current code:
-  `vim.fn.rename` → `saveas` → `notify_lsp_rename` (which does will+did together).
-  Servers that resolve the old file (import updates) may return empty/wrong edits.
-- **Fix:** split `notify_lsp_rename` into `will` (request_sync + apply edits) called
-  before `vim.fn.rename`, and `did` (notify) after `saveas`. Also `request_sync` second
-  param: pass bufnr where required (current signature
-  `client:request_sync(method, params, timeout_ms, bufnr)` — they pass 1000 as timeout, fine).
+- **File:** `nvim/.config/nvim/lua/plugins/functionality.lua` (deferred block)
+- **Problem:** LSP spec: `willRenameFiles` is a request sent **before** the file
+  operation so the server can compute edits against the old URI; `didRenameFiles`
+  after. Old code: `vim.fn.rename` → `saveas` → `notify_lsp_rename` (will+did
+  together, both post-hoc). Servers that resolve the old file (import updates)
+  could return empty/wrong edits.
+- **Fix applied:** split into `lsp_will_rename(changes)` (request_sync + apply
+  edits) and `lsp_did_rename(changes)` (notify); `:Rename` now does
+  will → `vim.fn.rename` → `keepalt saveas` → did. Shared
+  `lsp_rename_changes(old, new)` builds the URI pair once.
+  `_G._notify_lsp_rename` kept as a combined post-hoc wrapper for the nvim-tree
+  NodeRenamed subscriber (tree.lua:244) — that event fires after the rename
+  already happened, so post-hoc is the best it can do there.
+- **Manual test:** in a TS/Go project with LSP attached, open a file that other
+  files import, `:Rename` it (change basename). Importing files should get
+  updated import paths (willRenameFiles edits) — before the fix servers often
+  returned no edits because the old URI no longer existed.
+- **Status before:** willRenameFiles requested after the file was already moved →
+  cross-file import updates unreliable/no-op.
+- **Status after:** will before the move (per LSP spec), did after; `:Rename`
+  registers verified headless.
 
-### B12. `tmp_write` temp-file cleanup usually skipped `[ ]`
+### B12. `tmp_write` temp-file cleanup usually skipped `[x]` FIXED 2026-06-10
 
-- **File:** `nvim/.config/nvim/lua/user/init.lua:41-48`
-- `nvim_create_autocmd('VimLeavePre', { buffer = 0, ... })` — buffer-local autocmd for a
-  global event only fires when that buffer is **current** at exit. Temp files leak in
-  most sessions (mitigated only by OS tempdir cleanup).
-- **Fix:** global autocmd capturing `tmp` in closure (no `buffer` key); or collect paths
-  in a module-level list with a single VimLeavePre handler.
+- **File:** `nvim/.config/nvim/lua/user/init.lua:41-50`
+- **Problem:** `nvim_create_autocmd('VimLeavePre', { buffer = 0, ... })` —
+  buffer-local autocmd for a global event only fires when that buffer is
+  **current** at exit. Temp files leaked in most sessions.
+- **Fix applied:** dropped `buffer = 0`; global VimLeavePre autocmd, `tmp` path
+  captured in closure (one autocmd per temp file — sessions create few).
+- **Manual test:** `:lua print(_G.tmp_write { new = false })` (note path),
+  `:new`, `:qa!` → `ls <path>` in shell → file gone. Before: file remained
+  whenever another buffer was focused at exit.
+- **Status before:** temp files leaked unless their buffer happened to be current
+  at exit.
+- **Status after:** deleted on every exit regardless of current buffer. Verified
+  headless end-to-end.
+
+> **Open follow-up (2026-06-10):** full `make test` after B9-B12: 270 pass,
+> 1 fail — `user.yank-ring ring registers does not shift on deletes` — only when
+> run inside the full suite (passed standalone at B4 time; B9-B12 touch no
+> register code). Likely test-order/shared-state flake OR native numbered-register
+> shift on `dd` (`:h quote_number`) interacting with prior spec state. Investigate
+> separately.
 
 ### B13. Duplicate `<C-h/j/k/l>` window maps `[ ]`
 
@@ -467,7 +508,7 @@
 
 - B3 — deferred FileType/BufReadPost autocmds vs initial buffer (treesitter, lint, switch, mini).
 - B5 — LspAttach/LspDetach augroup clearing + non-buffer-scoped detach. FIXED 2026-06-10.
-- B12 — buffer-local VimLeavePre.
+- B12 — buffer-local VimLeavePre. FIXED 2026-06-10.
 - Minor: `lua/plugins/lint.lua` autocmd callback reads `vim.bo` / buffer 0 / `nvim_buf_get_name(0)`
   instead of `args.buf` — wrong buffer if an async event lands while another buffer has
   focus. Use `vim.bo[args.buf]`, `nvim_buf_get_name(args.buf)`, and pass bufnr to try_lint where possible. `[ ]`

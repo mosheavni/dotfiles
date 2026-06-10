@@ -39,8 +39,9 @@ function _G.tmp_write(opts)
   vim.cmd 'edit'
 
   if final_opts.should_delete then
+    -- global on purpose: a buffer-local autocmd for VimLeavePre only fires
+    -- when that buffer is current at exit, leaking the temp file otherwise
     vim.api.nvim_create_autocmd('VimLeavePre', {
-      buffer = 0,
       callback = function()
         vim.fn.delete(tmp)
       end,

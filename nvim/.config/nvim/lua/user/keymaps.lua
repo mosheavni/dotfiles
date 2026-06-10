@@ -350,9 +350,10 @@ map('n', '<leader>bc', ':close<cr>', { silent = true, desc = 'Close this buffer'
 map('n', '<leader>bh', function()
   local count = 0
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) and #vim.fn.win_findbuf(buf) == 0 then
-      vim.api.nvim_buf_delete(buf, {})
-      count = count + 1
+    if vim.api.nvim_buf_is_loaded(buf) and not vim.bo[buf].modified and #vim.fn.win_findbuf(buf) == 0 then
+      if pcall(vim.api.nvim_buf_delete, buf, {}) then
+        count = count + 1
+      end
     end
   end
   vim.notify(count .. ' hidden buffer(s) deleted')
@@ -420,6 +421,9 @@ end, {})
 map('n', 'cii', function()
   vim.ui.input({ prompt = 'Enter new indent❯ ' }, function(indent_size)
     local indent_size_normalized = tonumber(indent_size)
+    if not indent_size_normalized then
+      return
+    end
     vim.opt_local.shiftwidth = indent_size_normalized
     vim.opt_local.softtabstop = indent_size_normalized
     vim.opt_local.tabstop = indent_size_normalized
