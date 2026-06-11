@@ -531,7 +531,15 @@
 - B12 — buffer-local VimLeavePre. FIXED 2026-06-10.
 - Minor: `lua/plugins/lint.lua` autocmd callback reads `vim.bo` / buffer 0 / `nvim_buf_get_name(0)`
   instead of `args.buf` — wrong buffer if an async event lands while another buffer has
-  focus. Use `vim.bo[args.buf]`, `nvim_buf_get_name(args.buf)`, and pass bufnr to try_lint where possible. `[ ]`
+  focus. `[x]` FIXED 2026-06-10 (`2b80d2bd`)
+  - **Fix applied:** callback uses `vim.bo[args.buf].filetype`, `nvim_buf_get_name(args.buf)`,
+    and passes `args.buf` to `get_linter_cwd`.
+  - **Manual test:**
+    1. `nvim a.lua b.lua` — edit `b.lua`, switch focus to `a.lua`, trigger lint on `b`
+       (e.g. `:write` on `b` via `:b b | w`).
+    2. Diagnostics land on `b.lua`, not whatever buffer is current.
+  - **Status before:** async lint could read filetype/path from buffer 0 (current).
+  - **Status after:** lint always targets the buffer that fired the autocmd.
 - Minor: `user/lsp/config.lua:185` statusline `vim.b[bufnr].attached_lsp` set on attach,
   never updated on LspDetach → stale statusline after `:lsp stop`. `[ ]`
 
@@ -551,11 +559,17 @@
   - writing to `lint._disabled_linters` pokes a private-looking field on the plugin
     module — works, but keep own local table instead.
 
-### P2. `lazyredraw` left permanently on `[ ]`
+### P2. `lazyredraw` left permanently on `[x]` FIXED 2026-06-10 (`01f39c20`)
 
-- **File:** `nvim/.config/nvim/lua/user/options.lua:118`
+- **File:** `nvim/.config/nvim/lua/user/options.lua:108`
 - `:h 'lazyredraw'`: intended for temporary use inside scripts; known to cause stale/
-  flickery UI with notify/statusline/extui plugins. Remove.
+  flickery UI with notify/statusline/extui plugins.
+- **Fix applied:** `vim.o.lazyredraw = false` (explicit off; was permanently on).
+- **Manual test:**
+  1. `nvim` → `:set lazyredraw?` → `nolazyredraw`.
+  2. Trigger notify/statusline updates (e.g. `:lua vim.notify('hi')`) — UI redraws normally.
+- **Status before:** `lazyredraw` on every session → stale/flickery notify and statusline.
+- **Status after:** lazyredraw off; normal redraw behavior.
 
 ### P3. Redundant option noise (defaults in Neovim) `[ ]`
 
@@ -565,8 +579,8 @@
   `termguicolors` (auto-detected since 0.10), `showcmd`, `equalalways`, `visualbell`
   (preference, but consider `belloff=all` default already silences). `mouse` default is
   `nvi`; keep `a` only if cmdline-mode mouse wanted.
-- `vim.o.numberwidth = 4` comment says "set to 2" — default is already 4; line + comment
-  both pointless.
+- ~~`vim.o.numberwidth = 4` comment says "set to 2"~~ — resolved: `numberwidth = 2` is
+  intentional (narrow gutter for relativenumber). Rest of redundant defaults still open.
 
 ### P4. `backupdir` missing trailing `//` `[ ]`
 
@@ -576,28 +590,28 @@
 - **Fix:** `vim.o.backupdir = vim.fn.stdpath 'state' .. '/backup//'` and ensure dir
   exists: `vim.fn.mkdir(vim.fn.stdpath 'state' .. '/backup', 'p')`.
 
-### P5. Conform markdown chain `[ ]`
+### P5. Conform markdown chain `[ ]` (partial: prettierd)
 
 - **File:** `nvim/.config/nvim/lua/plugins/conform.lua`
-- `markdown = { 'prettier', 'cbfmt', 'injected', 'markdownlint' }` — four sequential
-  formatters on every save (note: plain `prettier`, not `prettierd` like everything
-  else — intentional? prettierd would be faster). Consider trimming or making some
-  on-demand only.
+- `markdown = { 'prettierd', 'cbfmt', 'injected', 'markdownlint' }` — four sequential
+  formatters on every save (`prettier` → `prettierd` fixed 2026-06-10, `cfd74d9c`).
+  Still open: consider trimming chain or making some formatters on-demand only.
 
 ---
 
 ## POLISH / MODERNIZATION
 
-### M1. `CleanTitle()` vimscript → Lua `[ ]`
+### M1. `CleanTitle()` vimscript → Lua `[x]` FIXED 2026-06-10 (`01f39c20`)
 
-- `options.lua:35-40`. Replace `vim.cmd[[function! CleanTitle()...]]` with:
-
-  ```lua
-  function _G.clean_title()
-    return '💻 nvim: ' .. (vim.fn.getcwd():gsub(vim.env.HOME .. '/Repos/', ''):gsub(vim.env.HOME .. '/', ''))
-  end
-  vim.o.titlestring = '%{%v:lua.clean_title()%}'
-  ```
+- **File:** `nvim/.config/nvim/lua/user/options.lua:27-30`
+- **Fix applied:** replaced vimscript `CleanTitle()` with Lua `_G.clean_title()` and
+  `vim.o.titlestring = '%{%v:lua.clean_title()%}'`.
+- **Manual test:**
+  1. `cd ~/Repos/some/project && nvim` (or any path under `$HOME`).
+  2. Wezterm/terminal title shows `💻 nvim: …` with `$HOME` and `~/Repos/` stripped.
+  3. `:echo v:lua.clean_title()` → same string as window title.
+- **Status before:** titlestring driven by vimscript function in `:lua`-less form.
+- **Status after:** pure Lua title helper; same display behavior.
 
 ### M2. `country_os_to_emoji` manual UTF-8 encoder `[x]` FIXED 2026-06-10
 
@@ -744,13 +758,11 @@ not deep-reviewed this pass `[ ]`
 
 ## SUGGESTED FIX BATCHES
 
-1. **Batch 1 — one-liners, zero risk:** B1, B8, B9, B10, B13, B14, M6, P2, P4.
-2. **Batch 2 — races:** B3 (FileType replay), B5 (augroup restructure), B12, lint
-   `args.buf` fix.
-3. **Batch 3 — behavior changes (need user confirmation):** B4 (delete custom yank ring),
-   B7 (operator rewrite), B11 (Rename order), B2 (filetype callback).
-4. **Batch 4 — cleanup:** B6 (guards), B15 (delete databases.lua), P3 (default options),
-   M1, M2, M3, M5.
+1. **Batch 1 — one-liners, zero risk:** ~~B1, B8, B9, B10, B13, B14, M6, P2~~ done; **P4** open.
+2. **Batch 2 — races:** ~~B5, B12, lint `args.buf`~~ done; **B3** partial (treesitter eager;
+   switch/mini/lint-on-open still deferred).
+3. **Batch 3 — behavior changes:** ~~B4, B7, B11, B2~~ done.
+4. **Batch 4 — cleanup:** ~~B6, B15, M1, M2, M3, M5~~ done; **P3** (redundant defaults) open.
 
 After each batch: `cd nvim/.config/nvim && make test`, then manual smoke:
 `nvim foo.lua` (TS highlight on first buffer — validates B3), `:checkhealth vim.lsp`,
