@@ -28,6 +28,7 @@ return function()
       astro = { 'prettierd' },
       css = { 'prettierd' },
       graphql = { 'prettierd' },
+      go = { 'gofmt' },
       groovy = { 'npm-groovy-lint' },
       handlebars = { 'prettierd' },
       hcl = { 'terragrunt_hclfmt' },
@@ -39,7 +40,7 @@ return function()
       jsonc = { 'prettierd' },
       less = { 'prettierd' },
       lua = { 'stylua' },
-      markdown = { 'prettierd', 'cbfmt', 'injected', 'markdownlint' },
+      markdown = { 'prettierd', 'injected', 'markdownlint' },
       python = function(bufnr)
         if require('conform').get_formatter_info('ruff_format', bufnr).available then
           return { 'isort', 'ruff_format' }

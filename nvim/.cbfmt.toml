@@ -1,4 +1,0 @@
-[languages]
-go = ["gofmt"]
-lua = ["stylua -s -"]
-bash = ["shfmt"]
