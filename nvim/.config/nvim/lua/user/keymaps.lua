@@ -255,6 +255,10 @@ map('n', '<PageDown>', '<c-e>', { remap = false, desc = 'Scroll one line down' }
 map('n', '<C-u>', '<C-u>zz', { remap = false, desc = 'Scroll half page up and center' })
 map('n', '<C-d>', '<C-d>zz', { remap = false, desc = 'Scroll half page down and center' })
 
+-- Center search navigation
+map('n', 'n', 'nzz', { remap = false, desc = 'Next search result, centered' })
+map('n', 'N', 'Nzz', { remap = false, desc = 'Previous search result, centered' })
+
 -- Change working directory based on open file
 map('n', '<leader>cd', ':cd %:p:h<CR>:pwd<CR>', { remap = false, silent = true, desc = 'Change directory to current file' })
 
