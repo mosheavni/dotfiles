@@ -9,8 +9,7 @@ end
 return function()
   local lint = require 'lint'
 
-  lint._disabled_linters = { trivy = true }
-  lint._global_linter_names = { 'codespell', 'gitleaks', 'trivy' }
+  local disabled_linters = { trivy = true }
 
   lint.linters_by_ft = {
     Jenkinsfile = { 'npm-groovy-lint' },
@@ -53,7 +52,7 @@ return function()
   end
 
   local group = vim.api.nvim_create_augroup('nvim-lint', { clear = true })
-  vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost', 'InsertLeave', 'TextChanged' }, {
+  vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost', 'InsertLeave' }, {
     group = group,
     callback = function(args)
       local excluded_filetypes = { 'gitcommit', 'gitrebase', 'fugitive' }
@@ -66,31 +65,33 @@ return function()
 
       local linters = lint._resolve_linter_by_ft(vim.bo[args.buf].filetype)
       for _, linter_name in ipairs(linters) do
-        if not lint._disabled_linters[linter_name] then
+        if not disabled_linters[linter_name] then
           lint.try_lint(linter_name, { cwd = get_linter_cwd(linter_name, args.buf) })
         end
       end
 
       if args.event == 'BufWritePost' then
-        if not lint._disabled_linters['gitleaks'] then
+        if not disabled_linters.gitleaks then
           lint.try_lint { 'gitleaks' }
         end
-        if not lint._disabled_linters['trivy'] then
+        if not disabled_linters.trivy then
           lint.try_lint { 'trivy' }
         end
       end
 
-      if not lint._disabled_linters['codespell'] then
-        lint.try_lint { 'codespell' }
+      if args.event == 'BufReadPost' or args.event == 'BufWritePost' then
+        if not disabled_linters.codespell then
+          lint.try_lint { 'codespell' }
+        end
       end
     end,
   })
 
   vim.api.nvim_create_user_command('TrivyLintToggle', function()
-    lint._disabled_linters['trivy'] = not lint._disabled_linters['trivy']
-    local status = lint._disabled_linters['trivy'] and 'disabled' or 'enabled'
+    disabled_linters.trivy = not disabled_linters.trivy
+    local status = disabled_linters.trivy and 'disabled' or 'enabled'
     print('Trivy linting ' .. status)
-    if not lint._disabled_linters['trivy'] then
+    if not disabled_linters.trivy then
       lint.try_lint { 'trivy' }
     else
       vim.diagnostic.reset(vim.api.nvim_create_namespace 'trivy', 0)
