@@ -1,23 +1,11 @@
--- Minimal yank ring, no plugins: registers 0-9 hold yank history,
--- <C-n>/<C-m> replace the last put with the next/previous entry.
+-- Minimal yank ring, no plugins: registers 1-9 hold yank history (1 = newest),
+-- <C-n>/<C-m> replace the last put with the previous/next entry. No wrapping.
 local M = {}
 
 local MAX = 9
 
----@class YankRingState
----@field idx integer ring register shown by the last put
----@field buf integer
----@field tick integer changedtick right after the put
----@field regtype string
-
----@type YankRingState|nil
+---@type { idx: integer, buf: integer, tick: integer, regtype: string }|nil
 local state
-
-local function shift_registers()
-  for i = MAX, 1, -1 do
-    vim.fn.setreg(tostring(i), vim.fn.getreginfo(tostring(i - 1)))
-  end
-end
 
 local function on_put()
   local e = vim.v.event
@@ -38,26 +26,15 @@ local function on_put()
   }
 end
 
----@param idx integer
----@param dir 1|-1
----@return integer|nil
-local function next_nonempty(idx, dir)
-  for _ = 1, MAX do
-    idx = ((idx - 1 + dir) % MAX) + 1
-    if vim.fn.getreg(tostring(idx)) ~= '' then
-      return idx
-    end
-  end
-end
-
----Replace the last put with another ring entry.
+---Replace the last put with the adjacent ring entry.
 ---@param dir 1|-1 1 = older yank, -1 = newer yank
 function M.cycle(dir)
   if not state or state.buf ~= vim.api.nvim_get_current_buf() or vim.api.nvim_buf_get_changedtick(0) ~= state.tick then
     return
   end
-  local idx = next_nonempty(state.idx, dir)
-  if not idx or idx == state.idx then
+  local idx = state.idx + dir
+  if idx < 1 or idx > MAX or vim.fn.getreg(tostring(idx)) == '' then
+    vim.notify(dir == 1 and 'No older yanks' or 'No newer yanks', vim.log.levels.INFO)
     return
   end
   local vmode = state.regtype == 'V' and 'V' or state.regtype:sub(1, 1) == '\22' and '\22' or 'v'
@@ -77,7 +54,9 @@ function M.setup()
     callback = function()
       local e = vim.v.event
       if e.operator == 'y' and e.regname == '' then
-        shift_registers()
+        for i = MAX, 1, -1 do
+          vim.fn.setreg(tostring(i), vim.fn.getreginfo(tostring(i - 1)))
+        end
       end
     end,
   })
@@ -86,12 +65,12 @@ function M.setup()
     desc = 'Track last put register for ring cycling',
     callback = on_put,
   })
-  vim.keymap.set('n', '<c-n>', function()
-    M.cycle(-1)
-  end, { desc = 'Replace put with next (newer) yank' })
   vim.keymap.set('n', '<c-m>', function()
+    M.cycle(-1)
+  end, { desc = 'Replace put with newer yank' })
+  vim.keymap.set('n', '<c-n>', function()
     M.cycle(1)
-  end, { desc = 'Replace put with previous (older) yank' })
+  end, { desc = 'Replace put with older yank' })
   vim.keymap.set('n', '<leader>y', '<cmd>registers 0123456789<cr>', { desc = 'Show yank ring registers' })
 end
 

@@ -33,11 +33,14 @@ describe('user.yank-ring', function()
       eq('', vim.fn.getreg '2')
     end)
 
-    it('does not shift on deletes', function()
+    it('does not double-shift on deletes (vim shifts those natively)', function()
       vim.cmd 'normal! ggyy'
       vim.cmd 'normal! jdd'
-      eq('aaa\n', vim.fn.getreg '1')
-      eq('', vim.fn.getreg '2')
+      -- vim itself moves linewise deletes into reg 1 (:h quote_number);
+      -- the module must not shift again on top of that
+      eq('bbb\n', vim.fn.getreg '1')
+      eq('aaa\n', vim.fn.getreg '2')
+      eq('', vim.fn.getreg '3')
     end)
   end)
 
@@ -74,6 +77,32 @@ describe('user.yank-ring', function()
     it('syncs unnamed register to the shown entry', function()
       ring.cycle(1)
       eq('bbb\n', vim.fn.getreg '"')
+    end)
+
+    it('stops at the oldest yank and notifies', function()
+      local notified
+      local orig_notify = vim.notify
+      vim.notify = function(msg)
+        notified = msg
+      end
+      ring.cycle(1)
+      ring.cycle(1)
+      ring.cycle(1) -- past the oldest entry
+      vim.notify = orig_notify
+      eq({ 'aaa', 'bbb', 'ccc', 'aaa' }, buf_lines())
+      eq('No older yanks', notified)
+    end)
+
+    it('stops at the newest yank and notifies', function()
+      local notified
+      local orig_notify = vim.notify
+      vim.notify = function(msg)
+        notified = msg
+      end
+      ring.cycle(-1) -- already at the newest entry
+      vim.notify = orig_notify
+      eq({ 'aaa', 'bbb', 'ccc', 'ccc' }, buf_lines())
+      eq('No newer yanks', notified)
     end)
 
     it('is a no-op after the buffer changed', function()
