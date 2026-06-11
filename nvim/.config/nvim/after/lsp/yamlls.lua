@@ -3,6 +3,8 @@ if _G.yaml_lsp_config then
   return _G.yaml_lsp_config
 end
 
+vim.pack.add { 'https://github.com/b0o/SchemaStore.nvim' }
+
 local yamlc_dev = vim.fn.expand '~/Repos/yaml-companion.nvim'
 if vim.env.YAMLC_DEV == 'true' and vim.fn.isdirectory(yamlc_dev) == 1 then
   vim.opt.runtimepath:prepend(yamlc_dev)

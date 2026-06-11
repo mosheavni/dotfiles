@@ -7,7 +7,6 @@ vim.pack.add {
   'https://github.com/phelipetls/jsonpath.nvim',
   'https://github.com/folke/lazydev.nvim',
   'https://github.com/DrKJeff16/wezterm-types',
-  'https://github.com/b0o/SchemaStore.nvim',
   'https://github.com/ray-x/go.nvim',
 }
 
