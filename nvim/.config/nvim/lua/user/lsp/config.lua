@@ -75,6 +75,13 @@ local function setup_keymaps(bufnr)
   vim.keymap.set('n', '<leader>lx', vim.lsp.codelens.run, opts 'Code lens')
 end
 
+local function refresh_attached_lsp(bufnr)
+  vim.b[bufnr].attached_lsp = vim.tbl_map(function(client_l)
+    return client_l.name
+  end, vim.lsp.get_clients { bufnr = bufnr })
+  vim.cmd 'redrawstatus'
+end
+
 M.setup = function()
   _G.start_ls = function(with_file)
     local file_name = nil
@@ -181,10 +188,17 @@ M.setup = function()
 
       -- for statusline
       vim.schedule(function()
-        vim.b[bufnr].attached_lsp = vim.tbl_map(function(client_l)
-          return client_l.name
-        end, vim.lsp.get_clients { bufnr = bufnr })
-        vim.cmd 'redrawstatus'
+        refresh_attached_lsp(bufnr)
+      end)
+    end,
+  })
+
+  vim.api.nvim_create_autocmd('LspDetach', {
+    group = on_attach_aug,
+    callback = function(ev)
+      -- After detach completes; LspDetach fires while the client is still listed.
+      vim.schedule(function()
+        refresh_attached_lsp(ev.buf)
       end)
     end,
   })
