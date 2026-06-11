@@ -76,6 +76,9 @@ local function setup_keymaps(bufnr)
 end
 
 local function refresh_attached_lsp(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
   vim.b[bufnr].attached_lsp = vim.tbl_map(function(client_l)
     return client_l.name
   end, vim.lsp.get_clients { bufnr = bufnr })
