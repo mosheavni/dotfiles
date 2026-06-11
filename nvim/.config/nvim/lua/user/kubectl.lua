@@ -39,12 +39,12 @@ end
 local prompt_sso = vim.schedule_wrap(function(cb)
   local env_vars = get_user_env_vars() or {}
   local sso_url = vim.env.SSO_APP
-  if not sso_url or sso_url == '' and env_vars.SSO_APP then
+  if (not sso_url or sso_url == '') and env_vars.SSO_APP then
     sso_url = env_vars.SSO_APP
   end
 
-  if not sso_url then
-    vim.notify('No SSO_APP URL env var is configured for the cluster: ', vim.log.levels.ERROR)
+  if not sso_url or sso_url == '' then
+    vim.notify('No SSO_APP URL env var is configured for the current cluster', vim.log.levels.ERROR)
     return
   end
   vim.schedule(function()
@@ -82,7 +82,12 @@ M.ingresses = {
         return
       end
       local data = vim.json.decode(data_raw)
-      local ingress_dns = vim.inspect(data.status.loadBalancer.ingress[1].hostname)
+      local lb_ingress = data.status and data.status.loadBalancer and data.status.loadBalancer.ingress
+      local ingress_dns = lb_ingress and lb_ingress[1] and lb_ingress[1].hostname
+      if not ingress_dns then
+        vim.notify('Ingress has no load balancer hostname yet', vim.log.levels.WARN)
+        return
+      end
       vim.schedule(function()
         local aws_profile, region = get_profile_and_region()
         local aws_cmd = {
@@ -90,24 +95,27 @@ M.ingresses = {
           'elbv2',
           'describe-load-balancers',
           '--query',
-          string.format('LoadBalancers[?DNSName==`%s`]', ingress_dns),
+          string.format("LoadBalancers[?DNSName=='%s']", ingress_dns),
           '--profile',
           aws_profile,
           '--output',
           'json',
         }
         vim.system(aws_cmd, { text = true }, function(aws_output)
-          local ok
-          ok, aws_output = pcall(vim.json.decode, aws_output.stdout)
-          if not ok then
-            vim.notify('Failed to parse AWS output\n' .. aws_output)
+          if aws_output.code ~= 0 then
+            vim.notify('AWS command failed\n' .. (aws_output.stderr or ''), vim.log.levels.ERROR)
             return
           end
-          if vim.tbl_count(aws_output) == 0 then
+          local ok, parsed = pcall(vim.json.decode, aws_output.stdout)
+          if not ok then
+            vim.notify('Failed to parse AWS output\n' .. parsed, vim.log.levels.ERROR)
+            return
+          end
+          if vim.tbl_count(parsed) == 0 then
             vim.notify('ALB not found for DNS ' .. ingress_dns)
             return
           end
-          local alb_arn = aws_output and aws_output[1].LoadBalancerArn
+          local alb_arn = parsed[1].LoadBalancerArn
           local lb_url =
             string.format('https://%s.console.aws.amazon.com/ec2/home?region=%s#LoadBalancer:loadBalancerArn=%s;tab=listenersb', region, region, alb_arn)
           prompt_sso(function()
@@ -238,12 +246,17 @@ M['scaledobjects.keda.sh'] = {
         end
         local metric_value = metrics.items[1].value
         local num_value = metric_value
-        --remove the 'm' suffix from the metric value
+        --remove the 'm' (milli) suffix from the metric value
         if metric_value:sub(-1) == 'm' then
           num_value = metric_value:sub(1, -2)
         end
-        local real_metric = tonumber(num_value) / 1000 -- Convert from milliseconds to seconds
-        vim.notify(string.format('Current metric value for %s (%s): %d real metric (%s)', name, metric_name, real_metric, metric_value))
+        local num = tonumber(num_value)
+        if not num then
+          vim.notify('Non-numeric metric value: ' .. tostring(metric_value), vim.log.levels.WARN)
+          return
+        end
+        local real_metric = num / 1000 -- 'm' suffix is milli-units; divide by 1000 to get whole units
+        vim.notify(string.format('Current metric value for %s (%s): %.3f real metric (%s)', name, metric_name, real_metric, metric_value))
       end)
     end
   end,
@@ -281,6 +294,10 @@ M['prometheuses.monitoring.coreos.com'] = {
     local prometheus = client.get_single(vim.json.encode { gvk = gvk, namespace = ns, name = name, output = 'Json' })
     local prometheus_decoded = vim.json.decode(prometheus)
     local pod_selector = prometheus_decoded.status and prometheus_decoded.status.selector
+    if not pod_selector then
+      vim.notify('Prometheus has no status.selector', vim.log.levels.WARN)
+      return
+    end
     local res = {}
     for _, lbl in ipairs(vim.split(pod_selector, ',')) do
       table.insert(res, 'metadata.labels.' .. lbl)

@@ -67,8 +67,8 @@ return function()
     pattern = 'K8sContextChanged',
     callback = function(ctx)
       vim.system({ 'kubectl', 'config', 'use-context', ctx.data.context }, { text = true }, function(results)
-        if not results then
-          vim.notify(results, vim.log.levels.INFO)
+        if results.code ~= 0 then
+          vim.notify(results.stderr, vim.log.levels.ERROR)
         end
       end)
     end,
