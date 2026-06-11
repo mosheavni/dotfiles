@@ -3,6 +3,13 @@ if _G.yaml_lsp_config then
   return _G.yaml_lsp_config
 end
 
+local yamlc_dev = vim.fn.expand '~/Repos/yaml-companion.nvim'
+if vim.env.YAMLC_DEV == 'true' and vim.fn.isdirectory(yamlc_dev) == 1 then
+  vim.opt.runtimepath:prepend(yamlc_dev)
+else
+  vim.pack.add { 'https://github.com/mosheavni/yaml-companion.nvim' }
+end
+
 local capabilities = vim.tbl_deep_extend('force', require('user.lsp.config').capabilities, {
   textDocument = {
     foldingRange = {
@@ -54,9 +61,14 @@ local yaml_cfg = require('yaml-companion').setup {
       on_attach = true,
     },
   },
+  -- Cluster CRD features
   cluster_crds = {
-    fallback = true,
+    enabled = true, -- Enable cluster CRD features
+    fallback = true, -- Auto-fallback to cluster when Datree doesn't have schema
+    auto_apply = 'modeline',
+    cache_ttl = 86400, -- Cache expiration in seconds (default: 24h, 0 = never expire)
   },
+
   builtin_matchers = {
     kubernetes = { enabled = true },
   },

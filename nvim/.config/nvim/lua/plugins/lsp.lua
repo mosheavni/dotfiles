@@ -11,13 +11,6 @@ vim.pack.add {
   'https://github.com/ray-x/go.nvim',
 }
 
-local yamlc_dev = vim.fn.expand '~/Repos/yaml-companion.nvim'
-if vim.env.YAMLC_DEV == 'true' and vim.fn.isdirectory(yamlc_dev) == 1 then
-  vim.opt.runtimepath:prepend(yamlc_dev)
-else
-  vim.pack.add { 'https://github.com/mosheavni/yaml-companion.nvim' }
-end
-
 return function()
   require('user.lsp.config').setup()
 
