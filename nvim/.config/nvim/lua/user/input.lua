@@ -87,6 +87,13 @@ function M.compute_float_width(text, min_width, max_cols, padding)
   return math.min(math.max(min_width, text_width + padding), max_content)
 end
 
+--- Whether `scope` should anchor the float near the cursor.
+---@param scope string|nil
+---@return boolean
+function M.scope_is_cursor(scope)
+  return scope == 'cursor' or scope == 'line'
+end
+
 --- Completion base at end of `text` for `getcompletion()` pattern.
 ---@param text string
 ---@param method string
@@ -176,7 +183,7 @@ local function setup_highlights()
   vim.api.nvim_set_hl(0, 'SimpleInputHint', { link = 'Comment', default = true })
 end
 
----@param opts {prompt?: string, default?: string, completion?: string, highlight?: fun(text: string): {[1]: number, [2]: number, [3]: string}[]}
+---@param opts {prompt?: string, default?: string, completion?: string, scope?: string, highlight?: fun(text: string): {[1]: number, [2]: number, [3]: string}[]}
 ---@param on_confirm fun(value?: string)
 function M.input(opts, on_confirm)
   assert(type(on_confirm) == 'function', '`on_confirm` must be a function')
@@ -213,6 +220,19 @@ function M.input(opts, on_confirm)
   local col = math.floor((win_width - width) / 2)
   local row = config.row or math.floor((win_height - height) / 2) - 2
 
+  -- Anchor near the cursor for cursor/line scopes, centered otherwise.
+  -- Anchor to a fixed buffer position in the current window (`bufpos`) so the
+  -- float stays put while typing instead of re-anchoring to its own cursor.
+  local near_cursor = M.scope_is_cursor(opts.scope)
+  local relative = near_cursor and 'win' or 'editor'
+  local anchor_win, anchor_bufpos
+  if near_cursor then
+    anchor_win = vim.api.nvim_get_current_win()
+    local cpos = vim.api.nvim_win_get_cursor(anchor_win)
+    anchor_bufpos = { cpos[1] - 1, cpos[2] }
+    row, col = 1, 0
+  end
+
   -- Create buffer
   local buf = vim.api.nvim_create_buf(false, true)
 
@@ -230,8 +250,8 @@ function M.input(opts, on_confirm)
   -- Create floating window
   local border = window_border()
 
-  local win = vim.api.nvim_open_win(buf, true, {
-    relative = 'editor',
+  local win_opts = {
+    relative = relative,
     width = width,
     height = height,
     row = row,
@@ -242,7 +262,13 @@ function M.input(opts, on_confirm)
     title_pos = config.title_pos,
     noautocmd = true,
     zindex = zindex,
-  })
+  }
+  if near_cursor then
+    win_opts.win = anchor_win
+    win_opts.bufpos = anchor_bufpos
+  end
+
+  local win = vim.api.nvim_open_win(buf, true, win_opts)
 
   -- Explicitly clear statusline for this floating window
   vim.api.nvim_set_option_value('statusline', '', { win = win })
@@ -332,17 +358,21 @@ function M.input(opts, on_confirm)
     ui = vim.api.nvim_list_uis()[1]
     win_width = ui.width
     win_height = ui.height
-    row = config.row or math.floor((win_height - height) / 2) - 2
 
     local text = vim.api.nvim_buf_get_lines(buf, 0, -1, false)[1] or ''
     local new_width = M.compute_float_width(text, config.width, win_width)
-    local new_col = math.floor((win_width - new_width) / 2)
+
+    local new_col, new_row = 0, 1
+    if not near_cursor then
+      new_col = math.floor((win_width - new_width) / 2)
+      new_row = config.row or math.floor((win_height - height) / 2) - 2
+    end
 
     local win_config = {
-      relative = 'editor',
+      relative = relative,
       width = new_width,
       height = height,
-      row = row,
+      row = new_row,
       col = new_col,
       style = 'minimal',
       border = border,
@@ -350,6 +380,10 @@ function M.input(opts, on_confirm)
       title_pos = config.title_pos,
       zindex = zindex,
     }
+    if near_cursor then
+      win_config.win = anchor_win
+      win_config.bufpos = anchor_bufpos
+    end
     local footer = completion_footer()
     if footer then
       win_config.footer = footer
