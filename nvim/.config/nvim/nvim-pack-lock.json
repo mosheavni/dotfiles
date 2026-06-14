@@ -5,11 +5,11 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "0f3cd0e584b4ed221fc44eee5b0b6ce335f7e263",
+      "rev": "e1a36239e4e36759546852dae5f4737375b388f6",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "agentic.nvim": {
-      "rev": "ca7700bdcf57f6079833574d924c99f0d3dbc4b9",
+      "rev": "a19fee663aa8be5f46f0af6fc0b46427b0e75cf2",
       "src": "https://github.com/carlos-algms/agentic.nvim"
     },
     "bigfile.nvim": {
@@ -30,7 +30,7 @@
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "copilot.lua": {
-      "rev": "0415bd625c3076a6a5ee445be484574d55b4fbfc",
+      "rev": "b54c05349d406f7af11b150824efa8e4f90015c6",
       "src": "https://github.com/zbirenbaum/copilot.lua"
     },
     "diffview.nvim": {
@@ -138,7 +138,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "ed19590a3a9792901553c388d1aadafce012f80d",
+      "rev": "a683e0ddf0cf64c6cd689e18ffb480ade3c162b7",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-navic": {
@@ -146,7 +146,7 @@
       "src": "https://github.com/SmiteshP/nvim-navic"
     },
     "nvim-pqf": {
-      "rev": "148ee2ca8b06d83fd9bf6f9b9497724ad39a07d6",
+      "rev": "0f11180718b861986ac06a2fef16c404a58b3645",
       "src": "https://github.com/yorickpeterse/nvim-pqf"
     },
     "nvim-tree.lua": {
@@ -194,7 +194,7 @@
       "src": "https://github.com/mosheavni/search-replace.nvim"
     },
     "smart-splits.nvim": {
-      "rev": "6806149fd36d1c5e797debe3e18b2c07219b685a",
+      "rev": "501ea73e433246cbd53f0b14bbd205fa44831e4d",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "statuscol.nvim": {
@@ -234,7 +234,7 @@
       "src": "https://github.com/DrKJeff16/wezterm-types"
     },
     "yaml-companion.nvim": {
-      "rev": "15af93540ca10bb170dc20df835b76f7baf27a66",
+      "rev": "5cde21cabf0f1fce380939e4cd55eb27baa9187a",
       "src": "https://github.com/mosheavni/yaml-companion.nvim"
     }
   }
