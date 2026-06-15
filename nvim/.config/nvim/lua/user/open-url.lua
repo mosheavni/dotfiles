@@ -97,4 +97,8 @@ M.open_url_under_cursor = function()
   end)
 end
 
+function M.setup()
+  vim.keymap.set('n', 'gx', M.open_url_under_cursor, { remap = false, desc = 'Open url under cursor' })
+end
+
 return M

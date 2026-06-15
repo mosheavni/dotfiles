@@ -121,20 +121,22 @@ local function disable_number_separators()
   vim.b[bufnr].number_separators_enabled = false
 end
 
-vim.api.nvim_create_user_command('NumberSeparatorsToggle', function()
-  if vim.b.number_separators_enabled then
-    disable_number_separators()
-    vim.notify 'Number separators disabled'
-  else
-    enable_number_separators()
-    vim.notify 'Number separators enabled'
-  end
-end, {})
+function M.setup()
+  vim.api.nvim_create_user_command('NumberSeparatorsToggle', function()
+    if vim.b.number_separators_enabled then
+      disable_number_separators()
+      vim.notify 'Number separators disabled'
+    else
+      enable_number_separators()
+      vim.notify 'Number separators enabled'
+    end
+  end, {})
 
-require('user.menu').add_actions('Editor', {
-  ['Toggle number separators (:NumberSeparatorsToggle)'] = function()
-    vim.cmd [[NumberSeparatorsToggle]]
-  end,
-})
+  require('user.menu').add_actions('Editor', {
+    ['Toggle number separators (:NumberSeparatorsToggle)'] = function()
+      vim.cmd [[NumberSeparatorsToggle]]
+    end,
+  })
+end
 
 return M

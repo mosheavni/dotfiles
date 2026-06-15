@@ -15,24 +15,26 @@ local function update()
   })
 end
 
-local group = vim.api.nvim_create_augroup('SearchCountVirt', { clear = true })
-vim.api.nvim_create_autocmd('CursorMoved', {
-  group = group,
-  callback = function()
-    if vim.v.hlsearch == 1 then
-      update()
-    else
-      clear()
-    end
-  end,
-})
-vim.api.nvim_create_autocmd('CmdlineLeave', {
-  group = group,
-  pattern = { '/', '?' },
-  callback = function()
-    vim.schedule(update)
-  end,
-})
-vim.api.nvim_create_autocmd('InsertEnter', { group = group, callback = clear })
+local function setup()
+  local group = vim.api.nvim_create_augroup('SearchCountVirt', { clear = true })
+  vim.api.nvim_create_autocmd('CursorMoved', {
+    group = group,
+    callback = function()
+      if vim.v.hlsearch == 1 then
+        update()
+      else
+        clear()
+      end
+    end,
+  })
+  vim.api.nvim_create_autocmd('CmdlineLeave', {
+    group = group,
+    pattern = { '/', '?' },
+    callback = function()
+      vim.schedule(update)
+    end,
+  })
+  vim.api.nvim_create_autocmd('InsertEnter', { group = group, callback = clear })
+end
 
-return { update = update, clear = clear, ns = ns }
+return { setup = setup, update = update, clear = clear, ns = ns }
