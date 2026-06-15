@@ -238,6 +238,61 @@ endfunction
 command! SortInBlock call s:SortInBlock()
 ]]
 
+-----------------------
+-- Parse Certificate --
+-----------------------
+local function parse_cert()
+  local cert = require('user.utils').get_visual_selection()
+  if not cert or vim.trim(cert) == '' then
+    vim.notify('ParseCert: No certificate selected', vim.log.levels.WARN)
+    return
+  end
+
+  -- Strip leading indentation so openssl gets a clean PEM block
+  cert = table.concat(
+    vim.tbl_map(function(line)
+      return (line:gsub('^%s+', ''))
+    end, vim.split(cert, '\n')),
+    '\n'
+  )
+
+  local result = vim.system({ 'openssl', 'x509', '-noout', '-text' }, { stdin = cert, text = true }):wait()
+  if result.code ~= 0 then
+    vim.notify('ParseCert: Failed to parse certificate\n' .. vim.trim(result.stderr or ''), vim.log.levels.ERROR)
+    return
+  end
+
+  local lines = vim.split(vim.trim(result.stdout or ''), '\n')
+  local float = require('user.float').new()
+  float.refresh(function()
+    return lines
+  end, function(buf_id)
+    local width, height = float.buffer_default_dimensions(buf_id, 0.8)
+    height = math.min(height, vim.o.lines - 4)
+    return {
+      relative = 'editor',
+      width = width,
+      height = height,
+      col = math.floor((vim.o.columns - width) / 2),
+      row = math.floor((vim.o.lines - height) / 2),
+      anchor = 'NW',
+      style = 'minimal',
+      border = 'rounded',
+      title = ' Certificate ',
+    }
+  end)
+
+  -- Focus the float so it can be scrolled and closed with q/<esc>
+  if float.is_shown() then
+    vim.api.nvim_set_current_win(float.cache.win_id)
+    for _, key in ipairs { 'q', '<esc>' } do
+      vim.keymap.set('n', key, float.close, { buffer = float.cache.buf_id, nowait = true })
+    end
+  end
+end
+
+vim.api.nvim_create_user_command('ParseCert', parse_cert, { range = true, desc = 'Parse selected certificate and show details in a float' })
+
 -------------
 -- ACTIONS --
 -------------
@@ -290,6 +345,9 @@ require('user.menu').add_actions('Misc', {
   end,
   ['Sort lines in surrounding block (:SortInBlock)'] = function()
     vim.cmd [[SortInBlock]]
+  end,
+  ['Parse selected certificate (:ParseCert)'] = function()
+    vim.cmd [['<,'>ParseCert]]
   end,
 })
 
