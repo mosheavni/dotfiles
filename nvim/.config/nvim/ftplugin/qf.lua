@@ -12,6 +12,10 @@ vim.keymap.set('n', '<C-s>', function()
   open_quickfix 'split'
 end, { buffer = true })
 
+vim.keymap.set('n', '<C-t>', function()
+  open_quickfix 'tabnew'
+end, { buffer = true, desc = 'Open quickfix item in new tab' })
+
 local function remove_qf_items(start_line, end_line)
   local qf_list = vim.fn.getqflist()
   if #qf_list == 0 then
@@ -62,3 +66,26 @@ vim.keymap.set('n', 'yy', function()
   vim.fn.setreg('"', filename)
   vim.notify('Copied ' .. filename .. ' to register')
 end, { remap = false, buffer = true })
+
+-- Toggleable keymap hints (g?)
+local Hints = require 'user.hints'
+local hints = Hints.new('Quickfix - Available Keymaps', {
+  { key = '<CR>', desc = 'Open item' },
+  { key = '<C-v>', desc = 'Open in vertical split' },
+  { key = '<C-s>', desc = 'Open in horizontal split' },
+  { key = '<C-t>', desc = 'Open in new tab' },
+  { key = 'dd', desc = 'Delete item' },
+  { key = 'd{motion}', desc = 'Delete items' },
+  { key = 'yy', desc = 'Yank file name' },
+  { key = 'q', desc = 'Close quickfix' },
+  { key = 'g?', desc = 'Toggle these hints' },
+})
+
+vim.keymap.set('n', 'g?', hints.toggle, { buffer = true, desc = 'Toggle quickfix hints' })
+
+vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
+  buffer = 0,
+  callback = function()
+    hints.close()
+  end,
+})
