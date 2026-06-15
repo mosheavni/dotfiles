@@ -59,15 +59,17 @@ function _G.tmp_write(opts)
   return tmp
 end
 
------------------
+--------------------
 -- Yaml <--> Json --
------------------
+--------------------
 vim.api.nvim_create_user_command('Yaml2Json', function()
   vim.cmd [[%!yq -ojson]]
+  vim.bo.filetype = 'json'
 end, {})
 
 vim.api.nvim_create_user_command('Json2Yaml', function()
   vim.cmd [[%!yq -P]]
+  vim.bo.filetype = 'yaml'
 end, {})
 
 -----------------
