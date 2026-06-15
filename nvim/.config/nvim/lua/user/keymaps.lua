@@ -642,7 +642,6 @@ require 'user.number-separators'
 require('user.terminal').setup()
 require('user.yank-ring').setup()
 require('user.run-buffer').setup()
-require('user.winresizer').setup()
 require('user.grep').setup()
 require('user.lister').setup()
 require('user.figlet').setup()
