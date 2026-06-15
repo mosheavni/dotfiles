@@ -16,4 +16,5 @@ prettier
 quicktype
 typescript
 vim-language-server
+vscode-langservers-extracted
 yarn
