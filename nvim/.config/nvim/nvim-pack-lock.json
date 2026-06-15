@@ -5,7 +5,7 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "e1a36239e4e36759546852dae5f4737375b388f6",
+      "rev": "3dca2d2153cfbc9aab937c1be0441e371101b0b8",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "agentic.nvim": {
@@ -150,7 +150,7 @@
       "src": "https://github.com/yorickpeterse/nvim-pqf"
     },
     "nvim-tree.lua": {
-      "rev": "82f58063d67defc620e1ef8be606fc62a7b5dc1e",
+      "rev": "fb343438d49fba8c35ecc4829d66fca7a1f0ed3d",
       "src": "https://github.com/nvim-tree/nvim-tree.lua"
     },
     "nvim-treesitter": {
@@ -234,7 +234,7 @@
       "src": "https://github.com/DrKJeff16/wezterm-types"
     },
     "yaml-companion.nvim": {
-      "rev": "5cde21cabf0f1fce380939e4cd55eb27baa9187a",
+      "rev": "c5feed97061f89ca7303a220230877b07c6b3b0f",
       "src": "https://github.com/mosheavni/yaml-companion.nvim"
     }
   }
