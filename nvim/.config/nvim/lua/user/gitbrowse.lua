@@ -229,6 +229,12 @@ end
 
 function M.setup()
   vim.keymap.set({ 'v', 'n' }, '<leader>gh', M.open, { remap = false, desc = 'Open github in browser' })
+
+  require('user.menu').add_actions('Git', {
+    ['Open file/line in browser (<leader>gh)'] = function()
+      M.open()
+    end,
+  })
 end
 
 return M

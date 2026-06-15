@@ -241,6 +241,23 @@ function M.setup()
     callback = setup_qf_keymaps,
     desc = 'Lister undo/redo in quickfix window',
   })
+
+  require('user.menu').add_actions('Quickfix', {
+    ['Narrow quickfix by message (:Qgrep)'] = function()
+      vim.ui.input({ prompt = 'Qgrep message pattern❯ ' }, function(pattern)
+        if pattern and pattern ~= '' then
+          vim.cmd('Qgrep ' .. pattern)
+        end
+      end)
+    end,
+    ['Narrow quickfix by file path (:Qfilter)'] = function()
+      vim.ui.input({ prompt = 'Qfilter file pattern❯ ' }, function(pattern)
+        if pattern and pattern ~= '' then
+          vim.cmd('Qfilter ' .. pattern)
+        end
+      end)
+    end,
+  })
 end
 
 return M

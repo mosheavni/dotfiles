@@ -72,6 +72,12 @@ function M.setup()
     M.cycle(1)
   end, { desc = 'Replace put with older yank' })
   vim.keymap.set('n', '<leader>y', '<cmd>registers 0123456789<cr>', { desc = 'Show yank ring registers' })
+
+  require('user.menu').add_actions('Yank', {
+    ['Show yank ring registers (<leader>y)'] = function()
+      vim.fn.feedkeys(vim.keycode '<leader>' .. 'y')
+    end,
+  })
 end
 
 return M

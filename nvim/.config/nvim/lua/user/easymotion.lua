@@ -105,6 +105,12 @@ end
 
 function M.setup()
   vim.keymap.set({ 'n', 'x' }, 's', M.easy_motion, { desc = 'Jump to 2 characters' })
+
+  require('user.menu').add_actions('Navigation', {
+    ['Jump to 2 characters (s)'] = function()
+      M.easy_motion()
+    end,
+  })
 end
 
 return M

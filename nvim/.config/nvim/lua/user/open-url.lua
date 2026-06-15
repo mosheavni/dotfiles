@@ -99,6 +99,12 @@ end
 
 function M.setup()
   vim.keymap.set('n', 'gx', M.open_url_under_cursor, { remap = false, desc = 'Open url under cursor' })
+
+  require('user.menu').add_actions('Misc', {
+    ['Open URL under cursor (gx)'] = function()
+      M.open_url_under_cursor()
+    end,
+  })
 end
 
 return M

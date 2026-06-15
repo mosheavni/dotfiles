@@ -116,6 +116,12 @@ function M.setup()
   vim.keymap.set('n', '<leader>pj', function()
     M.pick_project()
   end, { desc = 'Switch Project' })
+
+  require('user.menu').add_actions('Project', {
+    ['Switch project (<leader>pj)'] = function()
+      M.pick_project()
+    end,
+  })
 end
 
 return M
