@@ -19,7 +19,7 @@ alias ll='ls -lah --color=auto'
 alias dc='cd '
 alias dotfiles='cd ~/.dotfiles'
 alias dot='cd ~/.dotfiles'
-alias lazy='fdf ~/.local/share/nvim/lazy/'
+alias lazy='fdf ~/.local/share/nvim/site/pack/core/opt/'
 alias repos="~/Repos"
 
 #------------------------------------------------------------------------------
@@ -36,6 +36,7 @@ alias lvim='NVIM_APPNAME=lightvim nvim '
 #------------------------------------------------------------------------------
 # Development Tools
 #------------------------------------------------------------------------------
+alias ag='rg '
 alias tf='terraform'
 alias tg='terragrunt'
 alias update-nvim-nightly='asdf uninstall neovim nightly && asdf install neovim nightly'
