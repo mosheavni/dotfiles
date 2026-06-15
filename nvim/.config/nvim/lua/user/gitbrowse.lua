@@ -12,6 +12,17 @@ M.meta = {
 
 local uv = vim.uv or vim.loop
 
+---Build a line anchor for a file URL, or an empty string when no line is set.
+---@param fields user.gitbrowse.Fields
+---@param fmt string format string with two `%d` placeholders (start, end)
+---@return string
+local function line_anchor(fields, fmt)
+  if not fields.line_start then
+    return ''
+  end
+  return fmt:format(fields.line_start, fields.line_end or fields.line_start)
+end
+
 ---@class user.gitbrowse.Config
 ---@field url_patterns? table<string, table<string, string|fun(fields:user.gitbrowse.Fields):string>>
 local defaults = {
@@ -46,17 +57,23 @@ local defaults = {
   url_patterns = {
     ['github%.com'] = {
       branch = '/tree/{branch}',
-      file = '/blob/{branch}/{file}#L{line_start}-L{line_end}',
+      file = function(fields)
+        return ('/blob/%s/%s'):format(fields.branch, fields.file) .. line_anchor(fields, '#L%d-L%d')
+      end,
       commit = '/commit/{commit}',
     },
     ['gitlab%.com'] = {
       branch = '/-/tree/{branch}',
-      file = '/-/blob/{branch}/{file}#L{line_start}-L{line_end}',
+      file = function(fields)
+        return ('/-/blob/%s/%s'):format(fields.branch, fields.file) .. line_anchor(fields, '#L%d-L%d')
+      end,
       commit = '/-/commit/{commit}',
     },
     ['bitbucket%.org'] = {
       branch = '/src/{branch}',
-      file = '/src/{branch}/{file}#lines-{line_start}-L{line_end}',
+      file = function(fields)
+        return ('/src/%s/%s'):format(fields.branch, fields.file) .. line_anchor(fields, '#lines-%d-L%d')
+      end,
       commit = '/commits/{commit}',
     },
   },
@@ -164,11 +181,8 @@ function M._open(opts)
     end
     fields.line_start = line_start
     fields.line_end = line_end
-  else
-    fields.line_start = fields.line_start or vim.fn.line '.'
-    fields.line_end = fields.line_end or fields.line_start
+    fields.line_count = fields.line_end - fields.line_start + 1
   end
-  fields.line_count = fields.line_end - fields.line_start + 1
 
   opts.what = is_commit and 'commit' or opts.what == 'commit' and not fields.commit and 'file' or opts.what
   opts.what = not is_commit and opts.what == 'file' and not fields.file and 'branch' or opts.what

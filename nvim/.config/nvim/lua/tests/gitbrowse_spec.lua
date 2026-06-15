@@ -132,5 +132,35 @@ describe('user.gitbrowse', function()
       local url = gitbrowse.get_url(repo, fields)
       eq(url, 'https://github.com/user/repo/blob/main/test.lua#L42-L42')
     end)
+
+    it('builds GitHub file URL without line anchor when no line is set', function()
+      local repo = 'https://github.com/user/repo'
+      local fields = {
+        branch = 'main',
+        file = 'src/test.lua',
+      }
+      local url = gitbrowse.get_url(repo, fields)
+      eq(url, 'https://github.com/user/repo/blob/main/src/test.lua')
+    end)
+
+    it('builds GitLab file URL without line anchor when no line is set', function()
+      local repo = 'https://gitlab.com/user/repo'
+      local fields = {
+        branch = 'main',
+        file = 'src/test.lua',
+      }
+      local url = gitbrowse.get_url(repo, fields)
+      eq(url, 'https://gitlab.com/user/repo/-/blob/main/src/test.lua')
+    end)
+
+    it('builds Bitbucket file URL without line anchor when no line is set', function()
+      local repo = 'https://bitbucket.org/user/repo'
+      local fields = {
+        branch = 'main',
+        file = 'src/test.lua',
+      }
+      local url = gitbrowse.get_url(repo, fields)
+      eq(url, 'https://bitbucket.org/user/repo/src/main/src/test.lua')
+    end)
   end)
 end)
