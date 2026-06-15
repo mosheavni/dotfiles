@@ -57,7 +57,11 @@ export LC_ALL=en_US.UTF-8
 # ============= #
 # asdf
 source $HOME/.antidote/antidote.zsh
-antidote load
+zsh_plugins=${ZDOTDIR:-$HOME}/.zsh_plugins.zsh
+if [[ ! $zsh_plugins -nt ${ZDOTDIR:-$HOME}/.zsh_plugins.txt ]]; then
+  antidote bundle <${ZDOTDIR:-$HOME}/.zsh_plugins.txt >$zsh_plugins
+fi
+source $zsh_plugins
 
 # Defer expensive initializations for faster startup
 zsh-defer eval "$(zoxide init zsh --cmd cd)"
