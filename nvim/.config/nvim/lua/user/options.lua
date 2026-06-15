@@ -219,11 +219,3 @@ vim.filetype.add {
     },
   },
 }
-
-require('user.input').setup()
-require 'user.search-count'
-
------------
--- EXTUI --
------------
--- require('vim._extui').enable { enable = true, msg = { target = 'cmd' } }
