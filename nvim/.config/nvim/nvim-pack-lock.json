@@ -5,7 +5,7 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "3dca2d2153cfbc9aab937c1be0441e371101b0b8",
+      "rev": "304d2286752923e3b0eb1ddcb3d4002a69b855ad",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "agentic.nvim": {
@@ -194,7 +194,7 @@
       "src": "https://github.com/mosheavni/search-replace.nvim"
     },
     "smart-splits.nvim": {
-      "rev": "501ea73e433246cbd53f0b14bbd205fa44831e4d",
+      "rev": "2aad9808f289f5d65cfa77840a04b8590e5e34e9",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "statuscol.nvim": {
