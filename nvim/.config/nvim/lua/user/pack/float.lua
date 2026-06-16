@@ -269,10 +269,15 @@ local function build_content()
   end
   add(header, 'PackFloatTitle')
 
-  local help = ' [r] refresh  [u] update plugin  [U] update all  [x] clean inactive  [Enter] details  [K] open commit  [q] close'
-  local help_row = add(help)
-  for start_pos, end_pos in help:gmatch '()%b[]()' do
-    add_hl(help_row, start_pos - 1, end_pos - 1, 'PackFloatKey')
+  local help_lines = {
+    ' [r] refresh  [u] update plugin  [U] update all  [x] clean inactive',
+    ' [Enter] details  [K] open commit  [gf] open dir  [q] close',
+  }
+  for _, help in ipairs(help_lines) do
+    local help_row = add(help)
+    for start_pos, end_pos in help:gmatch '()%b[]()' do
+      add_hl(help_row, start_pos - 1, end_pos - 1, 'PackFloatKey')
+    end
   end
 
   add ''
@@ -390,7 +395,7 @@ end
 local function config_fn(_)
   local columns = vim.o.columns
   local screen_lines = vim.o.lines
-  local width = math.min(100, math.max(64, math.floor(columns * 0.82)))
+  local width = math.min(80, math.max(50, math.floor(columns * 0.6)))
   local height = math.max(24, math.floor(screen_lines * 0.80))
 
   return {
@@ -798,6 +803,30 @@ local function open_commit_in_browser()
   vim.ui.open(url)
 end
 
+local function open_plugin_dir_in_tab()
+  local name = plugin_at_cursor()
+  if not name then
+    return
+  end
+  local path
+  for _, plugin in ipairs(state.plugins) do
+    if plugin.spec.name == name then
+      path = plugin.path
+      break
+    end
+  end
+  if not path then
+    return
+  end
+  -- Open the directory alongside a spare window. A file explorer that hijacks
+  -- the only window in a tab has no target window to open files into and
+  -- bounces focus to another tab; the extra window gives it a landing spot.
+  local escaped = vim.fn.fnameescape(path)
+  vim.cmd 'tabnew'
+  vim.cmd('tcd ' .. escaped)
+  vim.cmd('vsplit ' .. escaped)
+end
+
 local function setup_keymaps(buf_id)
   local function map(lhs, rhs, desc)
     vim.keymap.set('n', lhs, rhs, { buffer = buf_id, silent = true, nowait = true, desc = desc })
@@ -813,6 +842,7 @@ local function setup_keymaps(buf_id)
   map('x', clean_current, 'Clean inactive plugin')
   map('<CR>', toggle_details, 'Toggle details')
   map('K', open_commit_in_browser, 'Open commit in browser')
+  map('gf', open_plugin_dir_in_tab, 'Open plugin directory in new tab')
   map(']]', function()
     jump(1)
   end, 'Next plugin')
