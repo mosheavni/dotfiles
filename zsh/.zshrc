@@ -63,9 +63,6 @@ if [[ ! $zsh_plugins -nt ${ZDOTDIR:-$HOME}/.zsh_plugins.txt ]]; then
 fi
 source $zsh_plugins
 
-# Defer expensive initializations for faster startup
-zsh-defer eval "$(zoxide init zsh --cmd cd)"
-
 # ================ #
 #  PS1 and Random  #
 # ================ #
