@@ -7,8 +7,18 @@ return function()
 
   local statusline = require 'mini.statusline'
 
-  -- Get rose-pine colors
-  local palette = require 'rose-pine.palette'
+  -- Shared default-theme palette (see lua/user/colorscheme.lua)
+  local p = require('user.colorscheme').palette
+  local palette = {
+    base = p.dark_grey2, -- NvimDarkGrey2 (same as Normal bg)
+    text = p.grey2, -- NvimLightGrey2
+    blue = p.blue,
+    cyan = p.cyan,
+    green = p.green,
+    magenta = p.magenta,
+    red = p.red,
+    yellow = p.yellow,
+  }
 
   ---------------------
   -- Custom Sections --
@@ -285,29 +295,28 @@ return function()
   -- Highlights --
   ----------------
   local function setup_highlights()
-    -- Customize mode colors to match lualine rose-pine theme
-    -- Text color = mode color, background = base (neutral)
-    vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { fg = palette.leaf, bg = palette.base, bold = true })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { fg = palette.pine, bg = palette.base, bold = true })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { fg = palette.foam, bg = palette.base, bold = true })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineModeReplace', { fg = palette.iris, bg = palette.base, bold = true })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineModeCommand', { fg = palette.love, bg = palette.base, bold = true })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineModeOther', { fg = palette.gold, bg = palette.base, bold = true })
+    -- Mode colors: text color = mode color, background = base (neutral)
+    vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { fg = palette.green, bg = palette.base, bold = true })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineModeInsert', { fg = palette.blue, bg = palette.base, bold = true })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineModeVisual', { fg = palette.cyan, bg = palette.base, bold = true })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineModeReplace', { fg = palette.magenta, bg = palette.base, bold = true })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineModeCommand', { fg = palette.red, bg = palette.base, bold = true })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineModeOther', { fg = palette.yellow, bg = palette.base, bold = true })
 
     -- Diff section colors
-    vim.api.nvim_set_hl(0, 'MiniStatuslineDiffAdd', { fg = palette.pine, bg = palette.base })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineDiffChange', { fg = palette.iris, bg = palette.base })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineDiffRemove', { fg = palette.love, bg = palette.base })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineDiffAdd', { fg = palette.green, bg = palette.base })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineDiffChange', { fg = palette.yellow, bg = palette.base })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineDiffRemove', { fg = palette.red, bg = palette.base })
 
     -- Customize other section colors
     vim.api.nvim_set_hl(0, 'MiniStatuslineDevinfo', { fg = palette.text, bg = palette.base })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineGit', { fg = palette.rose, bg = palette.base, bold = true })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineFilename', { fg = palette.love, bg = palette.base, bold = true })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineGit', { fg = palette.magenta, bg = palette.base, bold = true })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineFilename', { fg = palette.red, bg = palette.base, bold = true })
     vim.api.nvim_set_hl(0, 'MiniStatuslineFileinfo', { fg = palette.text, bg = palette.base })
     vim.api.nvim_set_hl(0, 'MiniStatuslineProgress', { fg = palette.text, bg = palette.base, bold = true })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineBorder', { fg = palette.foam, bg = palette.base })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineLSPIcon', { fg = palette.pine, bg = palette.base })
-    vim.api.nvim_set_hl(0, 'MiniStatuslineFormatIcon', { fg = palette.rose, bg = palette.base, bold = true })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineBorder', { fg = palette.cyan, bg = palette.base })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineLSPIcon', { fg = palette.blue, bg = palette.base })
+    vim.api.nvim_set_hl(0, 'MiniStatuslineFormatIcon', { fg = palette.magenta, bg = palette.base, bold = true })
   end
   setup_highlights()
 end

@@ -29,14 +29,13 @@ vim.api.nvim_create_autocmd('PackChanged', {
 })
 
 require 'plugins.treesitter'()
-require('plugins.look-and-feel').eager()
 require('plugins.mini').eager()
 require 'plugins.gitsigns'()
 require('plugins.functionality').eager()
 require 'plugins.kubectl'()
 
 vim.schedule(function()
-  require('plugins.look-and-feel').deferred()
+  require 'plugins.look-and-feel'()
   require('plugins.mini').deferred()
   require('plugins.functionality').deferred()
   require 'plugins.git'()

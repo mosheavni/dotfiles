@@ -1,6 +1,11 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-----------------
+-- Colorscheme --
+-----------------
+require('user.colorscheme').setup()
+
 --------------
 -- Put Text --
 --------------

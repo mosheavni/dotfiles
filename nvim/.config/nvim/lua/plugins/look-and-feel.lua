@@ -1,30 +1,11 @@
 vim.pack.add {
-  { src = 'https://github.com/rose-pine/neovim', name = 'rose-pine' },
   'https://github.com/nvim-tree/nvim-web-devicons',
   'https://github.com/eero-lehtinen/oklch-color-picker.nvim',
   'https://github.com/luukvbaal/statuscol.nvim',
   'https://github.com/MeanderingProgrammer/render-markdown.nvim',
 }
 
-local M = {}
-
-function M.eager()
-  require('rose-pine').setup {
-    variant = 'moon',
-    styles = {
-      bold = true,
-      italic = true,
-      transparency = true,
-    },
-    highlight_groups = {
-      StatusLine = { fg = 'love', bg = 'love', blend = 10 },
-      StatusLineNC = { fg = 'subtle', bg = 'surface' },
-    },
-  }
-  vim.cmd [[colorscheme rose-pine]]
-end
-
-function M.deferred()
+return function()
   require('nvim-web-devicons').setup {
     override_by_extension = {
       hcl = {
@@ -61,5 +42,3 @@ function M.deferred()
     file_types = { 'markdown', 'Avante', 'AgenticChat' },
   }
 end
-
-return M
