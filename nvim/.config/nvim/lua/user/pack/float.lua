@@ -38,6 +38,7 @@ local state = {
   pending = {},
   clean = {},
   not_loaded = {},
+  lockfile = {},
   commits = {},
   recent_commits = {},
   expanded = {},
@@ -54,6 +55,7 @@ local function setup_highlights()
     PackFloatBorder = 'FloatBorder',
     PackFloatSection = 'Label',
     PackFloatPending = 'DiagnosticWarn',
+    PackFloatDrift = 'DiagnosticInfo',
     PackFloatClean = 'NormalFloat',
     PackFloatMuted = 'Comment',
     PackFloatHash = 'Number',
@@ -99,6 +101,33 @@ end
 
 local function is_pending(plugin)
   return plugin.rev and plugin.rev_to and plugin.rev ~= plugin.rev_to
+end
+
+-- Map plugin name -> rev recorded in the lockfile, so drift (disk rev differing
+-- from the lockfile) can be detected after a fetch/refresh.
+local function load_lockfile()
+  state.lockfile = {}
+  local path = vim.fs.joinpath(vim.fn.stdpath 'config', 'nvim-pack-lock.json')
+  local read_ok, content = pcall(vim.fn.readfile, path)
+  if not read_ok or type(content) ~= 'table' then
+    return
+  end
+  local decode_ok, decoded = pcall(vim.json.decode, table.concat(content, '\n'))
+  if not decode_ok or type(decoded) ~= 'table' or type(decoded.plugins) ~= 'table' then
+    return
+  end
+  for name, data in pairs(decoded.plugins) do
+    if type(data) == 'table' and type(data.rev) == 'string' then
+      state.lockfile[name] = data.rev
+    end
+  end
+end
+
+-- Drift is only meaningful once `plugin.rev` is the actual disk revision, i.e.
+-- after a refresh fetched plugin info (vim.pack.get with info=true).
+local function has_drift(plugin)
+  local lock_rev = state.lockfile[plugin.spec.name]
+  return lock_rev ~= nil and plugin.rev ~= nil and lock_rev ~= plugin.rev
 end
 
 local function sort_by_name(items)
@@ -173,9 +202,11 @@ local function reset_data()
   state.expanded = {}
   state.line_to_name = {}
   state.name_to_line = {}
+  state.lockfile = {}
 end
 
 local function load_fast_plugin_list()
+  load_lockfile()
   local ok, plugins_or_err = pcall(vim.pack.get, nil, { info = false })
   if ok then
     set_plugins(plugins_or_err)
@@ -261,7 +292,17 @@ local function build_content()
     end
   end
 
+  local drift_count = 0
+  for _, plugin in ipairs(state.plugins) do
+    if has_drift(plugin) then
+      drift_count = drift_count + 1
+    end
+  end
+
   local header = (' vim.pack  %d plugins  %d updates'):format(#state.plugins, #state.pending)
+  if drift_count > 0 then
+    header = header .. ('  %d drift'):format(drift_count)
+  end
   if state.checking then
     header = header .. '  checking...'
   elseif state.status ~= '' then
@@ -271,6 +312,7 @@ local function build_content()
 
   local help_lines = {
     ' [r] refresh  [u] update plugin  [U] update all  [x] clean inactive',
+    ' [R] restore plugin  [gR] restore all  (to lockfile)',
     ' [Enter] details  [K] open commit  [gf] open dir  [q] close',
   }
   for _, help in ipairs(help_lines) do
@@ -294,16 +336,22 @@ local function build_content()
     local status = pending and (' +' .. commit_count) or ''
     local revs = pending and (' ' .. short_rev(plugin.rev) .. ' -> ' .. short_rev(plugin.rev_to)) or (' ' .. short_rev(plugin.rev))
     local pad = string.rep(' ', math.max(0, max_name - #name))
-    local line = ('  %s%s  %-4s %s'):format(name, pad, status, revs)
+    local base_line = ('  %s%s  %-4s %s'):format(name, pad, status, revs)
+    local drift = has_drift(plugin)
+    local drift_marker = drift and ('  drift, lock ' .. short_rev(state.lockfile[name])) or ''
+    local line = base_line .. drift_marker
 
     local row = add(line)
     mark_plugin(row, name)
 
     local name_start = 2
     add_hl(row, name_start, name_start + #name, pending and 'PackFloatPending' or 'PackFloatClean')
-    local hash_start = line:find(short_rev(plugin.rev), 1, true)
+    local hash_start = base_line:find(short_rev(plugin.rev), 1, true)
     if hash_start then
-      add_hl(row, hash_start - 1, #line, 'PackFloatHash')
+      add_hl(row, hash_start - 1, #base_line, 'PackFloatHash')
+    end
+    if drift then
+      add_hl(row, #base_line, #line, 'PackFloatDrift')
     end
 
     if state.expanded[name] then
@@ -492,6 +540,7 @@ end
 
 local function refresh_local()
   vim.schedule(function()
+    load_lockfile()
     local ok, plugins_or_err = pcall(vim.pack.get, nil, { offline = true })
     if not ok then
       state.status = tostring(plugins_or_err)
@@ -528,6 +577,7 @@ local function refresh_fetch_async()
   local failures = 0
   state.commits = {}
   state.recent_commits = {}
+  load_lockfile()
   start_check_animation()
   render()
 
@@ -674,6 +724,59 @@ local function update_all()
     end)
     :totable()
   update_plugins(names)
+end
+
+-- Restore to the revisions recorded in the lockfile (offline, no fetch).
+-- Mirrors `:packupdate ++offline ++lockfile [name]`.
+local function restore_plugins(names, label)
+  if #names == 0 then
+    vim.notify('vim.pack: no plugins to restore', vim.log.levels.INFO)
+    return
+  end
+
+  state.status = 'restoring ' .. label
+  render()
+
+  vim.schedule(function()
+    local ok, err = pcall(vim.pack.update, names, { force = true, offline = true, target = 'lockfile' })
+    if not ok then
+      vim.notify('vim.pack: ' .. tostring(err), vim.log.levels.ERROR)
+      state.status = 'restore failed'
+      render()
+      return
+    end
+    refresh(false)
+  end)
+end
+
+local function restore_current()
+  local name = plugin_at_cursor()
+  if not name then
+    return
+  end
+  local choice = vim.fn.confirm(('Restore "%s" to its lockfile revision?'):format(name), '&Yes\n&No', 2)
+  if choice ~= 1 then
+    return
+  end
+  restore_plugins({ name }, name)
+end
+
+local function restore_all()
+  local names = vim
+    .iter(state.plugins)
+    :map(function(plugin)
+      return plugin.spec.name
+    end)
+    :totable()
+  if #names == 0 then
+    vim.notify('vim.pack: no plugins to restore', vim.log.levels.INFO)
+    return
+  end
+  local choice = vim.fn.confirm(('Restore all %d plugins to lockfile revisions?'):format(#names), '&Yes\n&No', 2)
+  if choice ~= 1 then
+    return
+  end
+  restore_plugins(names, 'all plugins')
 end
 
 local function clean_current()
@@ -839,6 +942,8 @@ local function setup_keymaps(buf_id)
   end, 'Refresh updates')
   map('u', update_current, 'Update plugin')
   map('U', update_all, 'Update all pending')
+  map('R', restore_current, 'Restore plugin to lockfile')
+  map('gR', restore_all, 'Restore all to lockfile')
   map('x', clean_current, 'Clean inactive plugin')
   map('<CR>', toggle_details, 'Toggle details')
   map('K', open_commit_in_browser, 'Open commit in browser')
