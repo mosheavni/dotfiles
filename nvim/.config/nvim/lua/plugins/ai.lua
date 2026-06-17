@@ -1,3 +1,4 @@
+local node_bin = '/opt/homebrew/opt/node/bin/node'
 vim.pack.add {
   'https://github.com/zbirenbaum/copilot.lua',
   'https://github.com/ravitemer/mcphub.nvim',
@@ -9,7 +10,7 @@ local ai_keymap = '<leader>ccc'
 
 return function()
   require('copilot').setup {
-    copilot_node_command = 'node',
+    copilot_node_command = node_bin,
     filetypes = { ['*'] = true },
     panel = {
       enabled = true,
@@ -29,6 +30,8 @@ return function()
   }
 
   require('mcphub').setup {
+    cmd = node_bin,
+    cmdArgs = { '/opt/homebrew/bin/mcp-hub' },
     extensions = {
       avante = { enabled = true, make_slash_commands = true },
       copilotchat = {
