@@ -33,7 +33,6 @@ function M.setup()
         'Normal',
         'NormalNC',
         'NormalFloat',
-        'FloatBorder',
         'SignColumn',
         'EndOfBuffer',
         'MsgArea',
@@ -79,9 +78,16 @@ function M.setup()
         Operator = { fg = grey }, -- cascades to @operator
         Delimiter = { fg = grey }, -- cascades to @punctuation/@punctuation.delimiter
         Title = { fg = cyan }, -- cascades to FloatTitle/FloatFooter
+        FloatBorder = { fg = grey, bg = 'none' }, -- bg='none' preserves transparency
+        WinSeparator = { fg = grey }, -- split divider (VertSplit links here)
         Underlined = { fg = magenta, underline = true },
         ['@variable.parameter'] = { fg = magenta, italic = italic },
         ['@variable.member'] = { fg = cyan, italic = italic },
+        -- Color only method invocations. LSP semantic tokens use one group
+        -- (@lsp.type.method) for calls and definitions and outrank treesitter, so
+        -- clear it to defer to treesitter, which distinguishes call from definition.
+        ['@function.method.call'] = { fg = blue },
+        ['@lsp.type.method'] = {},
         ['@attribute'] = { fg = magenta },
         ['@string.regexp'] = { fg = magenta }, -- default links this to Special (cyan)
         FugitiveblameBoundary = { link = 'Keyword' },
