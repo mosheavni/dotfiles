@@ -56,12 +56,14 @@ local function setup_keymaps(bufnr)
       vim.notify('No diagnostics in current buffer', vim.log.levels.INFO)
       return
     end
-    local items = vim.diagnostic.toqflist(diagnostics)
-    for i, d in ipairs(diagnostics) do
-      if d.source and d.source ~= '' and items[i] then
-        items[i].text = string.format('[%s] %s', d.source, items[i].text)
+    local annotated = vim.tbl_map(function(d)
+      d = vim.deepcopy(d)
+      if d.source and d.source ~= '' then
+        d.message = string.format('[%s] %s', d.source, d.message)
       end
-    end
+      return d
+    end, diagnostics)
+    local items = vim.diagnostic.toqflist(annotated)
     vim.fn.setqflist({}, ' ', {
       title = 'Diagnostics: ' .. vim.api.nvim_buf_get_name(bufnr),
       items = items,

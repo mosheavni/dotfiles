@@ -300,4 +300,7 @@ end)
   ['[Diff] unsaved with saved file (<leader>ds)'] = function()
     vim.fn.feedkeys(leader .. 'ds')
   end,
+  ['[File] Change directory to current file (<leader>.)'] = function()
+    vim.fn.feedkeys(leader .. '.')
+  end,
 }

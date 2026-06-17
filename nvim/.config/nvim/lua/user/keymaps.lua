@@ -47,7 +47,7 @@ local function region_bounds(motion)
     return start[1] - 1, 0, finish[1] - 1, #vim.fn.getline(finish[1])
   end
   -- `] points at the first byte of the last character; advance by its full byte length
-  local last_char = vim.fn.strpart(vim.fn.getline(finish[1]), finish[2], 1, true)
+  local last_char = vim.fn.strpart(vim.fn.getline(finish[1]), finish[2], 1, 1)
   return start[1] - 1, start[2], finish[1] - 1, finish[2] + #last_char
 end
 
@@ -79,7 +79,7 @@ endfunction
 map('n', '<leader>gt', function()
   vim.go.operatorfunc = '__align_based_on_indent'
   return 'g@l'
-end, { expr = true })
+end, { expr = true, desc = 'Align based on indent' })
 
 -- Format groovy map
 vim.cmd [=[
@@ -196,6 +196,11 @@ map('n', '_', '<cmd>m-2<CR>==', { silent = true, desc = 'Move line up' })
 map('n', 'Y', '<cmd>%y+<cr>', { remap = false, silent = true, desc = 'Copy buffer content to clipboard' })
 
 -- Copy file path to clipboard
+map('n', '<leader>cfp', function()
+  local rel_path = vim.fn.expand '%'
+  vim.fn.setreg('+', rel_path)
+  print('Copied relative file path ' .. rel_path)
+end, { remap = false, silent = true, desc = 'Copy relative file path' })
 map('n', '<leader>cfa', function()
   local file_path = vim.fn.expand '%:p'
   vim.fn.setreg('+', file_path)
@@ -260,7 +265,7 @@ map('n', 'n', 'nzz', { remap = false, desc = 'Next search result, centered' })
 map('n', 'N', 'Nzz', { remap = false, desc = 'Previous search result, centered' })
 
 -- Change working directory based on open file
-map('n', '<leader>cd', ':cd %:p:h<CR>:pwd<CR>', { remap = false, silent = true, desc = 'Change directory to current file' })
+map('n', '<leader>.', ':cd %:p:h<CR>:pwd<CR>', { remap = false, silent = true, desc = 'Change directory to current file' })
 
 -- Change every " -" with " \<cr> -" to break long lines of bash
 map('n', [[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], { silent = true, desc = 'Break long command line' })
