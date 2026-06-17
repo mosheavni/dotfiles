@@ -65,7 +65,7 @@ local yaml_cfg = require('yaml-companion').setup {
   },
   -- Cluster CRD features
   cluster_crds = {
-    enabled = true, -- Enable cluster CRD features
+    enabled = false, -- Enable cluster CRD features
     fallback = true, -- Auto-fallback to cluster when Datree doesn't have schema
     auto_apply = 'modeline',
     cache_ttl = 86400, -- Cache expiration in seconds (default: 24h, 0 = never expire)
