@@ -197,9 +197,9 @@ describe('user.run-buffer', function()
   end)
 
   describe('_resolve_cmd', function()
-    it('terraform runs terragrunt plan without appending the file path', function()
+    it('terraform runs terraform plan without appending the file path', function()
       local cmd, should_break = rb._resolve_cmd('terraform', '/tmp/main.tf', '')
-      eq(cmd, 'terragrunt plan')
+      eq(cmd, 'terraform plan')
       eq(should_break, false)
     end)
 
