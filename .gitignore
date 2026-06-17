@@ -1,5 +1,5 @@
 nvim/.config/plenary.nvim/
 /.claude
 ai/.claude.json
-/graphify-out/
+graphify-out/
 .github/.act-event.json
