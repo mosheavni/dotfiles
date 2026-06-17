@@ -92,6 +92,31 @@ function M.setup()
         ['@string.regexp'] = { fg = magenta }, -- default links this to Special (cyan)
         FugitiveblameBoundary = { link = 'Keyword' },
 
+        -- Fugitive status buffer
+        fugitiveHeading = { fg = cyan, bold = true },
+        fugitiveStagedHeading = { fg = cyan, bold = true },
+        fugitiveUnstagedHeading = { fg = cyan, bold = true },
+        fugitiveUntrackedHeading = { fg = cyan, bold = true },
+        fugitiveSection = { fg = grey },
+        fugitiveStagedSection = { fg = palette.grey2 },
+        fugitiveUnstagedSection = { fg = palette.grey2 },
+        fugitiveUntrackedSection = { fg = red },
+        fugitiveHash = { fg = grey },
+        fugitiveSymbolicRef = { fg = blue },
+        fugitiveStop = { fg = blue },
+        fugitiveCount = { fg = yellow },
+        fugitiveModifier = { fg = cyan },
+        fugitiveStagedModifier = { fg = yellow },
+        fugitiveUnstagedModifier = { fg = yellow },
+        fugitiveUntrackedModifier = { fg = red },
+        fugitiveInstruction = { fg = cyan },
+        fugitivePreposition = { fg = grey },
+        fugitiveDone = { fg = grey },
+        fugitiveHunk = { fg = blue },
+        fugitiveHeader = { fg = cyan },
+        fugitiveHelpTag = { fg = cyan },
+        fugitiveHelpHeader = { fg = cyan },
+
         -- rose-pine's signature slanted text: italic comments + variables.
         Comment = { fg = grey, italic = italic }, -- cascades to @comment
         ['@variable'] = { italic = italic }, -- keeps normal fg, adds slant
