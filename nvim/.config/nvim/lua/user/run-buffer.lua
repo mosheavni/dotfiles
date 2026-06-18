@@ -2,8 +2,9 @@
 -- are registered in user.terminal so output for different files does not interleave.
 local M = {}
 
-local utils = require 'user.utils'
 local terminal = require 'user.terminal'
+local utils = require 'user.utils'
+local wezterm = require 'user.wezterm'
 
 -- Delay between sending <C-c> and the next command, so the shell has time
 -- to handle SIGINT and return to a fresh prompt before we feed it more input.
@@ -269,7 +270,7 @@ local function execute_file(where)
 
     local opts = { cwd = run_cwd(ft) }
     if where and where ~= 'terminal' then
-      utils.wezterm_spawn_and_send(cmd, opts)
+      wezterm.spawn_and_send(cmd, vim.tbl_extend('force', opts, { place_after_current = true }))
       return
     end
 

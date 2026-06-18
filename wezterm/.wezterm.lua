@@ -175,6 +175,43 @@ for i = 1, 9 do
   table.insert(config.keys, { key = tostring(i), mods = 'CMD', action = act.ActivateTab(i - 1) })
 end
 
+-- Move a freshly spawned tab right next to the tab that requested it.
+-- Triggered by nvim's :RunInTab, which emits an OSC SetUserVar from the new
+-- pane carrying the source (nvim) pane id. wezterm's CLI cannot reorder tabs,
+-- so the reordering has to happen here via the GUI MoveTab action.
+wezterm.on('user-var-changed', function(window, pane, name, value)
+  if name ~= 'runintab_after' then
+    return
+  end
+  local src_pane = tonumber(value)
+  if not src_pane then
+    return
+  end
+
+  local new_tab_id = pane:tab():tab_id()
+  local src_index, new_index
+  for _, item in ipairs(window:mux_window():tabs_with_info()) do
+    if item.tab:tab_id() == new_tab_id then
+      new_index = item.index
+    end
+    for _, p in ipairs(item.tab:panes()) do
+      if p:pane_id() == src_pane then
+        src_index = item.index
+      end
+    end
+  end
+  if not src_index or not new_index then
+    return
+  end
+
+  local target = src_index + 1
+  if new_index == target then
+    return
+  end
+  window:perform_action(act.ActivateTab(new_index), pane)
+  window:perform_action(act.MoveTab(target), pane)
+end)
+
 local smart_splits = wezterm.plugin.require 'https://github.com/mrjones2014/smart-splits.nvim'
 smart_splits.apply_to_config(config, {
   direction_keys = { 'h', 'j', 'k', 'l' },

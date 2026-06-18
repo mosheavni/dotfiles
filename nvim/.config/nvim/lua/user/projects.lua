@@ -1,4 +1,4 @@
-local utils = require 'user.utils'
+local wezterm = require 'user.wezterm'
 
 local M = {
   icon = '',
@@ -33,16 +33,6 @@ local function get_directories(paths)
   return dirs
 end
 
--- Get wezterm panes information
-local function get_wezterm_panes()
-  local output = vim.fn.system 'wezterm cli list --format json'
-  if vim.v.shell_error ~= 0 then
-    vim.notify('Failed to get wezterm panes', vim.log.levels.ERROR)
-    return {}
-  end
-  return vim.json.decode(output)
-end
-
 -- Find existing nvim project tab
 local function find_project_tab(project_name, panes)
   for _, pane in ipairs(panes) do
@@ -60,10 +50,10 @@ local function switch_to_project(project_path, panes)
 
   if existing_tab then
     -- Activate existing tab
-    vim.fn.system('wezterm cli activate-tab --tab-id ' .. existing_tab.tab_id)
-    vim.fn.system('wezterm cli activate-pane --pane-id ' .. existing_tab.pane_id)
+    wezterm.activate_tab(existing_tab.tab_id)
+    wezterm.activate_pane(existing_tab.pane_id)
   else
-    utils.wezterm_spawn_and_send('nvim' .. vim.keycode '<cr>', { cwd = vim.fn.expand(project_path) })
+    wezterm.spawn_and_send('nvim' .. vim.keycode '<cr>', { cwd = vim.fn.expand(project_path) })
   end
 end
 
@@ -78,7 +68,7 @@ function M.pick_project()
 
   -- Get active projects from wezterm
   local active_projects = {}
-  local panes = get_wezterm_panes()
+  local panes = wezterm.list()
   for _, pane in ipairs(panes) do
     local project_name = pane.title:match 'nvim: (.+)$'
     if project_name then

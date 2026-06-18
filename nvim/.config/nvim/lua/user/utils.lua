@@ -153,32 +153,6 @@ function M.random_emoji()
   return EMOJIS[math.random(#EMOJIS)]
 end
 
---- Spawn a new Wezterm pane and send text to it (sync).
----@param text string Text to send to the new pane
----@param opts? { cwd?: string }
----@return boolean ok
-function M.wezterm_spawn_and_send(text, opts)
-  if vim.fn.executable 'wezterm' ~= 1 then
-    vim.notify('wezterm not found in PATH', vim.log.levels.ERROR)
-    return false
-  end
-  opts = opts or {}
-  local cwd = opts.cwd or vim.fn.getcwd()
-  local spawn = vim.system({ 'wezterm', 'cli', 'spawn', '--cwd=' .. cwd }, { text = true }):wait()
-  local pane_id = vim.trim(spawn.stdout or '')
-  if spawn.code ~= 0 or pane_id == '' then
-    local err = vim.trim((spawn.stderr or '') .. ' ' .. (spawn.stdout or ''))
-    vim.notify('wezterm spawn failed: ' .. (err ~= '' and err or ('exit ' .. tostring(spawn.code))), vim.log.levels.ERROR)
-    return false
-  end
-  local send = vim.system({ 'wezterm', 'cli', 'send-text', '--pane-id', pane_id, text }, {}):wait()
-  if send.code ~= 0 then
-    vim.notify('Error running command in wezterm: ' .. (send.stdout or '') .. ' ' .. (send.stderr or ''), vim.log.levels.ERROR)
-    return false
-  end
-  return true
-end
-
 ---@param file_name string The filename to load
 ---@return table|nil The content of the file
 function M.read_json_file(file_name)
