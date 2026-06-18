@@ -63,11 +63,17 @@ Tests exist for: `utils`, `gitbrowse`, `git`, `hints`, `number-separators`, `ope
 
 ### Linting
 
-- Lua: `luacheck` with `.luacheckrc` config, `selene` with `nvim/selene.toml`
-- Lua formatting: `stylua` with `stylua.toml` config
+- Lua formatting: `stylua` with root `stylua.toml`. stylua does NOT search parent
+  directories, so run it from the repo root or pass `--search-parent-directories`;
+  otherwise it falls back to defaults and reports bogus diffs.
+- Lua lint (`selene`): config is `nvim/selene.toml` with std `nvim/vim.toml`. selene
+  reads `selene.toml` from the cwd only, so `cd nvim` first or you get spurious
+  `'vim' is not defined` errors.
+- Lua lint (`luacheck`): resolves `.luacheckrc` relative to each file, so `nvim/.luacheckrc`
+  is found from any cwd — no special handling.
 - Shell: `shellcheck`
 - Pre-commit: `pre-commit run --all-files`
-- CI uses [super-linter](https://github.com/super-linter/super-linter)
+- CI uses [super-linter](https://github.com/super-linter/super-linter) (luacheck only for Lua)
 
 ## Architecture
 
