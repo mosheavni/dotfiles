@@ -103,7 +103,7 @@ autocmd('BufReadPost', {
   desc = 'go to last loc when opening a buffer',
   group = buffer_settings,
   callback = function(event)
-    local exclude = { 'gitcommit' }
+    local exclude = { 'gitcommit', 'qf' }
     local buf = event.buf
     if vim.b[buf].user_last_loc then
       return
