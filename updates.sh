@@ -143,6 +143,7 @@ update_build_tools() {
 random() {
   log "random updates"
   tldr --update
+  pre-commit install
 }
 
 # ── main ─────────────────────────────────────────────────────────────────────

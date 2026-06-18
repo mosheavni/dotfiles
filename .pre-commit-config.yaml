@@ -13,3 +13,10 @@ repos:
     rev: v6.0.0
     hooks:
       - id: check-toml
+  - repo: local
+    hooks:
+      - id: luacheck
+        name: luacheck
+        language: system
+        entry: luacheck
+        types: [lua]
