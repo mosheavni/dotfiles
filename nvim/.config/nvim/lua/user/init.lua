@@ -77,6 +77,46 @@ vim.api.nvim_create_user_command('Json2Yaml', function()
   vim.bo.filetype = 'yaml'
 end, {})
 
+vim.api.nvim_create_user_command('JsonPath', function()
+  local node = vim.treesitter.get_node()
+  if not node then
+    vim.notify('No treesitter node at cursor', vim.log.levels.WARN)
+    return
+  end
+  local parts = {}
+  local cur = node
+  while cur do
+    local parent = cur:parent()
+    if not parent then break end
+    local ptype = parent:type()
+    if ptype == 'pair' then
+      local key_node = parent:child(0)
+      if key_node then
+        local key = vim.treesitter.get_node_text(key_node, 0):gsub('^"(.*)"$', '%1')
+        table.insert(parts, 1, '.' .. key)
+      end
+      cur = parent
+    elseif ptype == 'array' then
+      local idx = 0
+      for i = 0, parent:child_count() - 1 do
+        local child = parent:child(i)
+        if child == cur then break end
+        local ctype = child:type()
+        if ctype ~= ',' and ctype ~= '[' and ctype ~= ']' then
+          idx = idx + 1
+        end
+      end
+      table.insert(parts, 1, '[' .. idx .. ']')
+      cur = parent
+    else
+      cur = parent
+    end
+  end
+  local path = '$' .. table.concat(parts, '')
+  vim.fn.setreg('+', path)
+  vim.notify('Copied ' .. path .. ' to register +', vim.log.levels.INFO, { title = 'JsonPath' })
+end, { desc = 'Copy JSON path at cursor to clipboard' })
+
 -----------------
 -- Where am I? --
 -----------------
@@ -313,6 +353,9 @@ require('user.menu').add_actions('YAML', {
 require('user.menu').add_actions('JSON', {
   ['Convert buffer Json to Yaml (:Json2Yaml)'] = function()
     vim.cmd [[Json2Yaml]]
+  end,
+  ['Copy JSON path at cursor (:JsonPath)'] = function()
+    vim.cmd [[JsonPath]]
   end,
 })
 require('user.menu').add_actions('Diff', {

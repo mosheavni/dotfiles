@@ -4,7 +4,6 @@ vim.pack.add {
   'https://github.com/neovim/nvim-lspconfig',
   'https://github.com/j-hui/fidget.nvim',
   'https://github.com/SmiteshP/nvim-navic',
-  'https://github.com/phelipetls/jsonpath.nvim',
   'https://github.com/folke/lazydev.nvim',
   'https://github.com/DrKJeff16/wezterm-types',
   'https://github.com/ray-x/go.nvim',
@@ -24,18 +23,6 @@ return function()
   local navic = require 'nvim-navic'
   navic.setup { highlight = true }
   vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
-
-  vim.api.nvim_create_user_command('JsonPath', function()
-    ---@diagnostic disable-next-line: missing-parameter
-    local json_path = require('jsonpath').get()
-    vim.fn.setreg('+', json_path)
-    vim.notify('Copied ' .. json_path .. ' to register +', vim.log.levels.INFO, { title = 'JsonPath' })
-  end, {})
-  require('user.menu').add_actions('JSON', {
-    ['Copy Json Path to clipboard (:JsonPath)'] = function()
-      vim.cmd [[JsonPath]]
-    end,
-  })
 
   vim.keymap.set('n', '<leader>cs', function()
     require('yaml-companion').open_ui_select()
