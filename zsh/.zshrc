@@ -103,7 +103,7 @@ fi
 eval "$(starship init zsh)"
 
 export K8S_DEV=true
-export YAMLC_DEV=false
+export YAMLC_DEV=true
 export SAR_DEV=false
 export CMP_COMPLETION='<C-Space>'
 export PJ_DIRS='~/Repos/,~/.dotfiles,~/.config/lightvim'
