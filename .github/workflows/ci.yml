@@ -42,7 +42,7 @@ jobs:
           nvim --version
           cd nvim/.config/nvim
           make test 2>&1 | tee /tmp/test-output.txt
-          exit ${PIPESTATUS[0]}
+          exit "${PIPESTATUS[0]}"
 
       - name: Generate test summary
         if: always()
@@ -86,4 +86,4 @@ jobs:
             status = (total_f==0 && total_e==0) ? "✅" : "❌"
             print "**Total " status ":** " total_s " passed · " total_f " failed · " total_e " errors"
           }
-          ' >> $GITHUB_STEP_SUMMARY
+          ' >> "$GITHUB_STEP_SUMMARY"
