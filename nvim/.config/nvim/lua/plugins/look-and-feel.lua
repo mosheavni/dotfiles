@@ -1,6 +1,5 @@
 vim.pack.add {
   'https://github.com/nvim-tree/nvim-web-devicons',
-  'https://github.com/eero-lehtinen/oklch-color-picker.nvim',
   'https://github.com/luukvbaal/statuscol.nvim',
   'https://github.com/MeanderingProgrammer/render-markdown.nvim',
 }
@@ -16,13 +15,6 @@ return function()
     },
   }
   require('nvim-web-devicons').set_icon_by_filetype { fugitive = 'git' }
-
-  require('oklch-color-picker').setup {
-    highlight = { enabled = true },
-  }
-  vim.keymap.set('n', '<Leader>pc', function()
-    require('oklch-color-picker').pick_under_cursor()
-  end, { desc = 'Pick color under cursor' })
 
   local builtin = require 'statuscol.builtin'
   require('statuscol').setup {
