@@ -53,9 +53,11 @@ return function()
     sources = {
       default = { 'lsp', 'path', 'snippets', 'buffer' },
       per_filetype = {
-        lua = { inherit_defaults = true, 'lazydev' },
+        k8s_aliases = { 'lsp' },
         k8s_contexts = { 'lsp' },
         k8s_filter = { 'lsp', 'buffer' },
+        k8s_namespaces = { 'lsp' },
+        lua = { inherit_defaults = true, 'lazydev' },
       },
       providers = {
         lazydev = { name = 'LazyDev', module = 'lazydev.integrations.blink' },
