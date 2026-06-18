@@ -9,12 +9,8 @@ _aws_profile_load() {
 
 _aws_profile_save() {
   local profile=$1
-  if [[ $profile == default ]]; then
-    [[ -f $AWS_PROFILE_ENV ]] && rm -f $AWS_PROFILE_ENV
-  else
-    mkdir -p "${AWS_PROFILE_ENV:h}"
-    print -r -- "export AWS_PROFILE=${(q)profile}" >|$AWS_PROFILE_ENV
-  fi
+  mkdir -p "${AWS_PROFILE_ENV:h}"
+  print -r -- "export AWS_PROFILE=${(q)profile}" >|$AWS_PROFILE_ENV
 }
 
 _aws_profile_account() {
@@ -72,15 +68,9 @@ function aws-profile() {
 
   profile=${selected%%$'\t'*}
 
-  if [[ $profile == default ]]; then
-    unset AWS_PROFILE
-    _aws_profile_save default
-    echo "AWS_PROFILE unset (using default profile)"
-  else
-    export AWS_PROFILE=$profile
-    _aws_profile_save "$profile"
-    echo "AWS_PROFILE=$AWS_PROFILE"
-  fi
+  export AWS_PROFILE=$profile
+  _aws_profile_save "$profile"
+  echo "AWS_PROFILE=$AWS_PROFILE"
 }
 
 _aws_profile_load
