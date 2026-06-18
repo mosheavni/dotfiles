@@ -15,10 +15,6 @@ local function sym(name, kind, sl, sc, el, ec, children)
   }
 end
 
-local function strip_hl(s)
-  return (s:gsub('%%#[^#]+#', ''):gsub('%%*', '%%*'):gsub('%%%%*', ''))
-end
-
 describe('user.navic', function()
   describe('_render_part', function()
     it('renders function symbol with icon and name', function()
