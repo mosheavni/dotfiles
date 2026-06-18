@@ -51,8 +51,8 @@ local pending_hls = {}
 
 local function setup_highlights()
   local links = {
-    PackFloatTitle = 'Title',
     PackFloatBorder = 'FloatBorder',
+    PackFloatCount = 'Number',
     PackFloatSection = 'Label',
     PackFloatPending = 'DiagnosticWarn',
     PackFloatDrift = 'DiagnosticInfo',
@@ -77,6 +77,8 @@ local function setup_highlights()
     api.nvim_set_hl(0, group, { link = link, default = true })
   end
   api.nvim_set_hl(0, 'PackFloatCommitChore', { fg = '#ebbcba' })
+  api.nvim_set_hl(0, 'PackFloatTitle', { fg = '#c4a7e7', bold = true, default = true })
+  api.nvim_set_hl(0, 'PackFloatReady', { fg = '#9ccfa7', default = true })
 end
 
 local function plugin_at_cursor()
@@ -299,28 +301,62 @@ local function build_content()
     end
   end
 
-  local header = (' vim.pack  %d plugins  %d updates'):format(#state.plugins, #state.pending)
+  local header_segments = {}
+  local function seg(text, hl)
+    header_segments[#header_segments + 1] = { text = text, hl = hl }
+  end
+
+  seg(' vim.pack', 'PackFloatTitle')
+  seg('  ', nil)
+  seg(tostring(#state.plugins), 'PackFloatCount')
+  seg(' plugins  ', nil)
+  seg(tostring(#state.pending), 'PackFloatCount')
+  seg(' updates  ', nil)
+  seg(tostring(#state.not_loaded), 'PackFloatCount')
+  seg(' inactive', nil)
   if drift_count > 0 then
-    header = header .. ('  %d drift'):format(drift_count)
+    seg('  ', nil)
+    seg(tostring(drift_count), 'PackFloatCount')
+    seg(' drift', nil)
   end
   if state.checking then
-    header = header .. '  checking...'
+    seg('  checking...', 'PackFloatMuted')
   elseif state.status ~= '' then
-    header = header .. '  ' .. state.status
+    seg('  ', nil)
+    seg(state.status, state.status:match '^ready' and 'PackFloatReady' or 'PackFloatMuted')
   end
-  add(header, 'PackFloatTitle')
 
+  local header = ''
+  for _, s in ipairs(header_segments) do
+    header = header .. s.text
+  end
+  local header_row = add(header)
+  local header_col = 0
+  for _, s in ipairs(header_segments) do
+    if s.hl then
+      add_hl(header_row, header_col, header_col + #s.text, s.hl)
+    end
+    header_col = header_col + #s.text
+  end
+
+  local divider_width = math.min(80, math.max(50, math.floor(vim.o.columns * 0.6)))
+  local divider = string.rep('─', divider_width)
+
+  add(divider, 'PackFloatBorder')
   local help_lines = {
     ' [r] refresh  [u] update plugin  [U] update all  [x] clean inactive',
     ' [R] restore plugin  [gR] restore all  (to lockfile)',
     ' [Enter] details  [K] open commit  [gf] open dir  [q] close',
   }
   for _, help in ipairs(help_lines) do
-    local help_row = add(help)
-    for start_pos, end_pos in help:gmatch '()%b[]()' do
+    local pad = string.rep(' ', math.max(0, math.floor((divider_width - #help) / 2)))
+    local centered = pad .. help
+    local help_row = add(centered)
+    for start_pos, end_pos in centered:gmatch '()%b[]()' do
       add_hl(help_row, start_pos - 1, end_pos - 1, 'PackFloatKey')
     end
   end
+  add(divider, 'PackFloatBorder')
 
   add ''
 
