@@ -3,7 +3,6 @@ vim.pack.add {
   'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
   'https://github.com/nvim-treesitter/nvim-treesitter-context',
   'https://github.com/folke/ts-comments.nvim',
-  'https://github.com/windwp/nvim-ts-autotag',
 }
 
 return function()
@@ -109,5 +108,4 @@ return function()
 
   require('treesitter-context').setup {}
   require('ts-comments').setup {}
-  require('nvim-ts-autotag').setup {}
 end
