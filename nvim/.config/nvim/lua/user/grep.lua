@@ -13,39 +13,11 @@ local default_opts = {
   },
   -- ripgrep configuration
   rg = {
-    cmd = "rg --vimgrep --no-heading --smart-case --hidden --no-ignore-vcs --follow -g '!{%s}' $*",
+    cmd = "rg --vimgrep --no-heading --smart-case --hidden --follow -g '!{%s}' $*",
     literal_flag = '-F',
     format = '%f:%l:%c:%m,%f:%l:%m',
   },
-  -- silver searcher configuration
-  ag = {
-    cmd = 'ag --vimgrep --smart-case --hidden --skip-vcs-ignores --follow %s $*',
-    literal_flag = '-Q',
-    format = '%f:%l:%c:%m',
-  },
 }
-
--- Convert wildignore glob pattern to base name for ag
--- e.g., "**/.git/**" -> ".git", "**/node_modules/**" -> "node_modules"
-local function glob_to_ag_pattern(pattern)
-  -- Extract base name from **/.name/** patterns
-  local base = pattern:match '%*%*/(%.?[^/]+)/%*%*'
-  if base then
-    return base
-  end
-  -- Return pattern as-is for file patterns like *.pyc
-  return pattern
-end
-
--- Convert wildignore to ag --ignore flags
-local function wildignore_to_ag_ignores(wildignore)
-  local ignores = {}
-  for pattern in wildignore:gmatch '[^,]+' do
-    local ag_pattern = glob_to_ag_pattern(pattern)
-    table.insert(ignores, '--ignore ' .. vim.fn.shellescape(ag_pattern))
-  end
-  return table.concat(ignores, ' ')
-end
 
 -- Convert wildignore to grep --exclude/--exclude-dir flags
 local function wildignore_to_grep_excludes(wildignore)
@@ -71,11 +43,6 @@ local function setup_grep(opts)
     vim.o.grepprg = string.format(opts.rg.cmd, wildignore)
     vim.g.grep_literal_flag = opts.rg.literal_flag
     vim.o.grepformat = opts.rg.format
-  elseif vim.fn.executable 'ag' == 1 then
-    local ag_ignores = wildignore_to_ag_ignores(wildignore)
-    vim.o.grepprg = string.format(opts.ag.cmd, ag_ignores)
-    vim.g.grep_literal_flag = opts.ag.literal_flag
-    vim.o.grepformat = opts.ag.format
   else
     local grep_excludes = wildignore_to_grep_excludes(wildignore)
     vim.o.grepprg = string.format(opts.grep.cmd, grep_excludes)
