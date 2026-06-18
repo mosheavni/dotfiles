@@ -8,7 +8,6 @@ vim.pack.add {
   'https://github.com/windwp/nvim-autopairs',
   'https://github.com/iamcco/markdown-preview.nvim',
   'https://github.com/AndrewRadev/linediff.vim',
-  'https://github.com/LunarVim/bigfile.nvim',
 }
 
 local sar_dev = vim.fn.expand '~/Repos/search-replace.nvim'
@@ -107,8 +106,6 @@ function M.deferred()
   })
 
   vim.keymap.set({ 'v', 'n' }, 'ga', '<Plug>(EasyAlign)', { desc = 'Align by motion' })
-
-  require('bigfile').setup()
 
   local function lsp_rename_changes(old_path, new_path)
     return { { oldUri = vim.uri_from_fname(old_path), newUri = vim.uri_from_fname(new_path) } }

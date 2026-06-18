@@ -227,3 +227,30 @@ autocmd('WinLeave', {
     vim.opt_local.cursorline = false
   end,
 })
+
+-- Big file: disable heavy features above 2MB
+local bigfile_group = vim.api.nvim_create_augroup('BigFile', { clear = true })
+autocmd('BufReadPre', {
+  desc = 'Disable heavy features for large files (>2MB)',
+  group = bigfile_group,
+  callback = function(ev)
+    local ok, stat = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(ev.buf))
+    if not (ok and stat and stat.size > 2 * 1024 * 1024) then
+      return
+    end
+    vim.b[ev.buf].bigfile = true
+    vim.opt_local.swapfile = false
+    vim.opt_local.foldmethod = 'manual'
+    vim.opt_local.undolevels = -1
+    vim.opt_local.undoreload = 0
+    vim.opt_local.list = false
+    autocmd('BufReadPost', {
+      buffer = ev.buf,
+      once = true,
+      callback = function()
+        vim.opt_local.syntax = 'OFF'
+        pcall(vim.treesitter.stop, ev.buf)
+      end,
+    })
+  end,
+})
