@@ -18,11 +18,14 @@ return function()
       hidden = true,
     },
     keymap = {
-      builtin = {
-        ['<C-d>'] = 'preview-page-down',
-        ['<C-u>'] = 'preview-page-up',
+      fzf = {
+        ['ctrl-q'] = 'select-all+accept',
+        ['ctrl-d'] = 'half-page-down',
+        ['ctrl-u'] = 'half-page-up',
       },
-      fzf = { ['ctrl-q'] = 'select-all+accept' },
+      builtin = {
+        ['<C-w>'] = 'focus-preview',
+      },
     },
   }
 
