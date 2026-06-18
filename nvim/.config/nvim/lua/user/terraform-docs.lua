@@ -191,8 +191,8 @@ M.setup = function(config)
 
   local command_name = M.config.command_name
 
-  -- Register the user command, which triggers M.open_docs
-  vim.api.nvim_create_user_command(command_name, M.open_docs, { nargs = 0, desc = 'Open Terraform documentation for the resource under the cursor' })
+  -- Register the buffer-local user command, which triggers M.open_docs
+  vim.api.nvim_buf_create_user_command(0, command_name, M.open_docs, { nargs = 0, desc = 'Open Terraform documentation for the resource under the cursor' })
 
   require('user.menu').add_actions('Terraform', {
     ['Open docs for resource under cursor (:' .. command_name .. ')'] = function()

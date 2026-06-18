@@ -1,6 +1,12 @@
 -- Prompt to run `terraform init` when the file's directory has no `.terraform`
 -- directory yet. Dedup per directory so multiple .tf files don't re-prompt.
-local dir = vim.fn.expand '%:p:h'
+-- Use the real buffer name (not `%:p:h`, which falls back to cwd for nameless
+-- buffers like fzf previews) and only act on on-disk file buffers.
+require('user.terraform-docs').setup {}
+vim.bo.commentstring = '# %s'
+
+local bufname = vim.api.nvim_buf_get_name(0)
+local dir = bufname ~= '' and vim.bo.buftype == '' and vim.fn.fnamemodify(bufname, ':p:h') or ''
 
 _G.__tf_init_prompted = _G.__tf_init_prompted or {}
 local prompted = _G.__tf_init_prompted
