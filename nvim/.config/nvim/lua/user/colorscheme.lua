@@ -126,6 +126,10 @@ function M.setup()
         ['@markup.strong'] = { bold = true },
         ['@markup.strikethrough'] = { strikethrough = true },
 
+        -- Fold markers in the sign gutter (statuscol foldfunc) render dark grey by
+        -- default; brighten them to the lightest palette grey so they stand out.
+        FoldColumn = { fg = palette.grey1 },
+
         -- Gitsigns gutter: amber "changed" so it reads distinctly from green
         -- "added" (default theme makes both green/cyan, which are hard to tell apart).
         GitSignsAdd = { fg = green },
