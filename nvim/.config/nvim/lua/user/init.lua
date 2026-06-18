@@ -87,7 +87,9 @@ vim.api.nvim_create_user_command('JsonPath', function()
   local cur = node
   while cur do
     local parent = cur:parent()
-    if not parent then break end
+    if not parent then
+      break
+    end
     local ptype = parent:type()
     if ptype == 'pair' then
       local key_node = parent:child(0)
@@ -100,7 +102,9 @@ vim.api.nvim_create_user_command('JsonPath', function()
       local idx = 0
       for i = 0, parent:child_count() - 1 do
         local child = parent:child(i)
-        if child == cur then break end
+        if child == cur then
+          break
+        end
         local ctype = child:type()
         if ctype ~= ',' and ctype ~= '[' and ctype ~= ']' then
           idx = idx + 1
@@ -406,6 +410,7 @@ require('user.menu').add_actions('Misc', {
 ------------------
 -- User Modules --
 ------------------
+require('user.navic').setup()
 require('user.input').setup()
 require('user.search-count').setup()
 require('user.tabular-v2').setup()

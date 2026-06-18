@@ -141,11 +141,6 @@ M.setup = function()
       local client = vim.lsp.get_client_by_id(ev.data.client_id)
       local bufnr = ev.buf
 
-      -- navic
-      if client and client.server_capabilities.documentSymbolProvider then
-        require('nvim-navic').attach(client, bufnr)
-      end
-
       -- Mappings (per-buffer, only once)
       if not vim.b[bufnr].lsp_keymaps_configured then
         vim.b[bufnr].lsp_keymaps_configured = true
