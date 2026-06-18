@@ -20,3 +20,4 @@ repos:
         language: system
         entry: luacheck
         types: [lua]
+        files: \.lua$
