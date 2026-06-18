@@ -3,7 +3,6 @@ vim.pack.add {
   'https://github.com/yorickpeterse/nvim-pqf',
   'https://github.com/junegunn/vim-easy-align',
   'https://github.com/AndrewRadev/switch.vim',
-  'https://github.com/axelvc/template-string.nvim',
   'https://github.com/machakann/vim-swap',
   'https://github.com/andymass/vim-matchup',
   'https://github.com/windwp/nvim-autopairs',
@@ -106,8 +105,6 @@ function M.deferred()
       }
     end,
   })
-
-  require('template-string').setup {}
 
   vim.keymap.set({ 'v', 'n' }, 'ga', '<Plug>(EasyAlign)', { desc = 'Align by motion' })
 
