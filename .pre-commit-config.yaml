@@ -39,9 +39,10 @@ repos:
         language: system
         entry: shellcheck --rcfile=nvim/.shellcheckrc
         types: [shell]
+        files: \.sh$
         exclude: ^ai/\.claude/(shell-snapshots|plugins/cache)/
       - id: markdownlint
         name: markdownlint
         language: system
-        entry: markdownlint
+        entry: markdownlint --ignore-path nvim/.markdownlintignore
         types: [markdown]

@@ -8,7 +8,7 @@ local M = {}
 ---@return table Instance with show/close/toggle methods
 function M.new(title, hints_config)
   local float = require('user.float').new()
-  local ns_id = vim.api.nvim_create_namespace('hints_highlight')
+  local ns_id = vim.api.nvim_create_namespace 'hints_highlight'
 
   -- Format the hint lines for display
   ---@return string[]
@@ -39,7 +39,7 @@ function M.new(title, hints_config)
     for line_idx, line in ipairs(lines) do
       -- Skip title and empty lines
       if line_idx > 2 and line ~= '' then
-        local arrow_pos = line:find('→')
+        local arrow_pos = line:find '→'
         if arrow_pos then
           -- Highlight the key (from start to before arrow, trimmed)
           -- arrow_pos is 1-indexed, extmarks use 0-indexed columns

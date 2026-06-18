@@ -103,7 +103,7 @@ describe('user.git', function()
     end)
 
     it('defaults remote to origin', function()
-      local result = git.parse_symbolic_ref('refs/remotes/origin/main\n')
+      local result = git.parse_symbolic_ref 'refs/remotes/origin/main\n'
       eq(result, 'main')
     end)
   end)
