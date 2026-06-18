@@ -64,6 +64,27 @@ describe('user.search-count', function()
     end)
   end)
 
+  describe('hlsearch state', function()
+    it('places no extmark when search highlight is off', function()
+      vim.fn.setreg('/', 'hello')
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.v.hlsearch = 0
+      sc.update()
+      assert.are.same({}, extmarks())
+    end)
+
+    it('clears an existing extmark when highlight is turned off', function()
+      vim.fn.setreg('/', 'hello')
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.v.hlsearch = 1
+      sc.update()
+      assert.is_true(#extmarks() > 0)
+      vim.v.hlsearch = 0
+      sc.update()
+      assert.are.same({}, extmarks())
+    end)
+  end)
+
   describe('clear', function()
     it('removes all extmarks', function()
       vim.fn.setreg('/', 'hello')
@@ -72,6 +93,23 @@ describe('user.search-count', function()
       assert.is_true(#extmarks() > 0)
       sc.clear()
       assert.are.same({}, extmarks())
+    end)
+
+    it('removes a stale extmark from a previously marked buffer', function()
+      vim.fn.setreg('/', 'hello')
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.v.hlsearch = 1
+      sc.update()
+      assert.is_true(#extmarks() > 0)
+
+      local other = vim.api.nvim_create_buf(false, true)
+      vim.api.nvim_set_current_buf(other)
+      vim.api.nvim_buf_set_lines(other, 0, -1, false, { 'no match here' })
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      sc.update() -- no match in the new buffer; should clear the old buffer's mark
+
+      assert.are.same({}, extmarks()) -- original buffer no longer stale
+      vim.api.nvim_buf_delete(other, { force = true })
     end)
   end)
 end)
