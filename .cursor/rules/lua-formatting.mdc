@@ -1,0 +1,25 @@
+---
+description: How to run stylua so it finds the repo config on the first try
+globs: **/*.lua
+alwaysApply: false
+---
+
+# Running stylua
+
+`stylua.toml` lives at the **repo root**, and stylua does **not** search parent
+directories by default. Running it from a subdirectory (e.g.
+`nvim/.config/nvim`) silently falls back to stylua defaults and reports bogus
+diffs (double quotes, call parens) that contradict this repo's style.
+
+Always run stylua from the repo root, or point it at the root config. Do not
+"run, fail, hunt for the config, rerun" — use one of these the first time:
+
+```bash
+# From the repo root (preferred — config is auto-discovered):
+stylua --check path/to/file.lua
+
+# From anywhere:
+stylua --check --search-parent-directories path/to/file.lua
+```
+
+The same applies to formatting (drop `--check`). luacheck/selene are unaffected.

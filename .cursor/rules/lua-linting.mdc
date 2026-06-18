@@ -1,0 +1,31 @@
+---
+description: How to run selene and luacheck so they find their configs on the first try
+globs: **/*.lua
+alwaysApply: false
+---
+
+# Running selene and luacheck
+
+Both linter configs live under `nvim/` (`nvim/selene.toml` + its std
+`nvim/vim.toml`, and `nvim/.luacheckrc`) — not at the repo root.
+
+## selene — run from `nvim/`
+
+selene reads `selene.toml` from the **current directory only** (no parent or
+file-relative search). Running it from elsewhere produces dozens of bogus
+`error[undefined_variable]: 'vim' is not defined` errors because it can't load
+the `vim` std. Always `cd nvim` first:
+
+```bash
+cd nvim && selene .config/nvim/lua/user/wezterm.lua
+```
+
+## luacheck — works from anywhere
+
+luacheck resolves `.luacheckrc` relative to each checked file (walking up from
+the file's directory), so `nvim/.luacheckrc` is found no matter the cwd. No
+special handling needed:
+
+```bash
+luacheck nvim/.config/nvim/lua/user/wezterm.lua
+```
