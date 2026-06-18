@@ -93,6 +93,9 @@ local function update(buf)
   data.location = table.concat(parts, separator)
 end
 
+M._find_in_symbols = find_in_symbols
+M._render_part = render_part
+
 function M.get_location()
   local buf = vim.api.nvim_get_current_buf()
   local data = cache[buf]

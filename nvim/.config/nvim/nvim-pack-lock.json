@@ -12,10 +12,6 @@
       "rev": "a19fee663aa8be5f46f0af6fc0b46427b0e75cf2",
       "src": "https://github.com/carlos-algms/agentic.nvim"
     },
-    "bigfile.nvim": {
-      "rev": "33eb067e3d7029ac77e081cfe7c45361887a311a",
-      "src": "https://github.com/LunarVim/bigfile.nvim"
-    },
     "blink.cmp": {
       "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
       "src": "https://github.com/saghen/blink.cmp",
@@ -68,10 +64,6 @@
     "img-clip.nvim": {
       "rev": "b6ddfb97b5600d99afe3452d707444afda658aca",
       "src": "https://github.com/HakonHarnes/img-clip.nvim"
-    },
-    "jsonpath.nvim": {
-      "rev": "9e7a3c2aec3465a8f7c86cec6424cf98ee62ee24",
-      "src": "https://github.com/phelipetls/jsonpath.nvim"
     },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
@@ -138,12 +130,8 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "a683e0ddf0cf64c6cd689e18ffb480ade3c162b7",
+      "rev": "96f363ce07d46c1804532ca2d1eb3a157d11ee29",
       "src": "https://github.com/neovim/nvim-lspconfig"
-    },
-    "nvim-navic": {
-      "rev": "f5eba192f39b453675d115351808bd51276d9de5",
-      "src": "https://github.com/SmiteshP/nvim-navic"
     },
     "nvim-pqf": {
       "rev": "0f11180718b861986ac06a2fef16c404a58b3645",
@@ -173,16 +161,12 @@
       "rev": "dfbfaa967a6f7ec50789bead7ef87e336c1fa63c",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
-    "oklch-color-picker.nvim": {
-      "rev": "9b5db80d5f6af8fbc31bad29f69ad76f63154944",
-      "src": "https://github.com/eero-lehtinen/oklch-color-picker.nvim"
-    },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "render-markdown.nvim": {
-      "rev": "7bb5e54102cf140e12a7eb0f6ddf2f73c3b43922",
+      "rev": "f422cb5c6855f150e2ddcfaf44e7157b98b34f6a",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "search-replace.nvim": {
@@ -200,10 +184,6 @@
     "switch.vim": {
       "rev": "297346b630943ebd4ea58598dfd30bae5debc739",
       "src": "https://github.com/AndrewRadev/switch.vim"
-    },
-    "template-string.nvim": {
-      "rev": "d3a26d3c449a97c44891a31736a101b60b64cf2b",
-      "src": "https://github.com/axelvc/template-string.nvim"
     },
     "ts-comments.nvim": {
       "rev": "123a9fb12e7229342f807ec9e6de478b1102b041",
@@ -228,6 +208,10 @@
     "wezterm-types": {
       "rev": "58c95e0d78e24b236b2eecaa2c29ae973478f79b",
       "src": "https://github.com/DrKJeff16/wezterm-types"
+    },
+    "yaml-companion.nvim": {
+      "rev": "c5feed97061f89ca7303a220230877b07c6b3b0f",
+      "src": "https://github.com/mosheavni/yaml-companion.nvim"
     }
   }
 }
