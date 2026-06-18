@@ -106,11 +106,15 @@ local function spawn_shell(cwd, on_exit)
   return term_buf, job_id
 end
 
----@param opts? { cwd?: string, name?: string }
+--- Open a managed shell terminal. When opts.focus is false the terminal is
+--- shown but focus returns to the originating window (no startinsert).
+---@param opts? { cwd?: string, name?: string, focus?: boolean }
 ---@return integer|nil buf
 ---@return integer|nil job_id
 function M.open(opts)
   opts = opts or {}
+  local focus = opts.focus ~= false
+  local prev_win = vim.api.nvim_get_current_win()
   local cwd = opts.cwd or default_cwd()
   local buf, job_id = spawn_shell(cwd, function(term_buf)
     M.unregister('shell-' .. term_buf)
@@ -128,8 +132,37 @@ function M.open(opts)
     name = opts.name or next_shell_name(),
     file = nil,
   }
-  vim.cmd 'startinsert'
+  if focus then
+    vim.cmd 'startinsert'
+  elseif vim.api.nvim_win_is_valid(prev_win) then
+    vim.api.nvim_set_current_win(prev_win)
+  end
   return buf, job_id
+end
+
+--- Send a command to a managed terminal's job. Targets opts.id, then opts.buf,
+--- then the current buffer's terminal. A trailing newline is appended (so the
+--- shell runs the command) unless opts.newline is false, which just types it.
+---@param cmd string
+---@param opts? { id?: string, buf?: integer, newline?: boolean }
+---@return boolean ok
+function M.send(cmd, opts)
+  opts = opts or {}
+  local state
+  if opts.id then
+    state = M.get(opts.id)
+  else
+    state = M.entry_for_buf(opts.buf)
+  end
+  if not state then
+    vim.notify('No managed terminal to send to', vim.log.levels.ERROR)
+    return false
+  end
+  if opts.newline ~= false and not cmd:match '\n$' then
+    cmd = cmd .. '\n'
+  end
+  vim.fn.chansend(state.job_id, cmd)
+  return true
 end
 
 ---@param id string
@@ -162,6 +195,28 @@ end
 ---@param id string
 function M.unregister(id)
   by_id[id] = nil
+end
+
+--- Adopt an externally-created terminal buffer (e.g. from :terminal) so it gains
+--- cycle/pick/rename support. No-op when the buffer is already tracked or has no
+--- live terminal job. Scheduled from TermOpen so module-spawned terminals, which
+--- register synchronously after jobstart returns, are already tracked and skipped.
+---@param buf integer
+function M.adopt(buf)
+  if not vim.api.nvim_buf_is_valid(buf) or M.is_tracked_buf(buf) then
+    return
+  end
+  local job_id = vim.b[buf].terminal_job_id
+  if not M.job_alive(job_id) then
+    return
+  end
+  by_id['shell-' .. buf] = {
+    buf = buf,
+    job_id = job_id,
+    cwd = vim.fn.getcwd(),
+    name = next_shell_name(),
+    file = nil,
+  }
 end
 
 ---@param buf integer
@@ -322,6 +377,15 @@ function M.setup()
   vim.api.nvim_create_autocmd('BufWipeout', {
     callback = function(ev)
       M._clear_for_buf(ev.buf)
+    end,
+  })
+
+  vim.api.nvim_create_autocmd('TermOpen', {
+    group = vim.api.nvim_create_augroup('TerminalAdopt', { clear = true }),
+    callback = function(ev)
+      vim.schedule(function()
+        M.adopt(ev.buf)
+      end)
     end,
   })
 end

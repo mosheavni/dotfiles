@@ -217,9 +217,7 @@ local function run_in_terminal(file_name, cmd, opts)
     terminal.register_run(file_name, term_buf, job_id, opts.cwd)
 
     vim.schedule(function()
-      if terminal.job_alive(job_id) then
-        vim.fn.chansend(job_id, cmd)
-      end
+      terminal.send(cmd, { id = file_name, newline = false })
     end)
     return
   end
@@ -238,9 +236,7 @@ local function run_in_terminal(file_name, cmd, opts)
   payload = payload .. cmd
 
   vim.defer_fn(function()
-    if terminal.job_alive(job_id) then
-      vim.fn.chansend(job_id, payload)
-    end
+    terminal.send(payload, { id = file_name, newline = false })
   end, INTERRUPT_DELAY_MS)
 end
 

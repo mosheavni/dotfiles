@@ -174,6 +174,106 @@ describe('user.terminal', function()
     end)
   end)
 
+  describe('adopt', function()
+    it('registers an untracked terminal buffer with a live job', function()
+      local buf = vim.api.nvim_create_buf(false, true)
+      vim.api.nvim_buf_set_var(buf, 'terminal_job_id', 1)
+      term.adopt(buf)
+      local list = term.list()
+      eq(#list, 1)
+      eq(list[1].buf, buf)
+      eq(list[1].name, 'Terminal 1')
+    end)
+
+    it('is a no-op when the buffer is already tracked', function()
+      local buf = vim.api.nvim_create_buf(false, true)
+      term._by_id['/tmp/run.sh'] = { buf = buf, job_id = 1, cwd = '/tmp', name = 'run.sh', file = '/tmp/run.sh' }
+      vim.api.nvim_buf_set_var(buf, 'terminal_job_id', 1)
+      term.adopt(buf)
+      local list = term.list()
+      eq(#list, 1)
+      eq(list[1].id, '/tmp/run.sh')
+    end)
+
+    it('skips buffers with no live terminal job', function()
+      local buf = vim.api.nvim_create_buf(false, true)
+      term.adopt(buf)
+      eq(term.list(), {})
+    end)
+  end)
+
+  describe('send', function()
+    local original_chansend
+
+    before_each(function()
+      original_chansend = vim.fn.chansend
+    end)
+
+    after_each(function()
+      vim.fn.chansend = original_chansend
+    end)
+
+    it('sends to the current buffer terminal with a trailing newline', function()
+      local buf = vim.api.nvim_create_buf(false, true)
+      term._by_id['shell-1'] = { buf = buf, job_id = 7, cwd = '/tmp', name = 'T1' }
+      vim.api.nvim_set_current_buf(buf)
+      local sent = {}
+      vim.fn.chansend = function(job_id, data)
+        sent = { job_id = job_id, data = data }
+      end
+      assert.is_true(term.send 'ls')
+      eq(sent.job_id, 7)
+      eq(sent.data, 'ls\n')
+    end)
+
+    it('does not double up an existing trailing newline', function()
+      local buf = vim.api.nvim_create_buf(false, true)
+      term._by_id['shell-1'] = { buf = buf, job_id = 7, cwd = '/tmp', name = 'T1' }
+      vim.api.nvim_set_current_buf(buf)
+      local sent = {}
+      vim.fn.chansend = function(_, data)
+        sent.data = data
+      end
+      term.send('echo hi\n')
+      eq(sent.data, 'echo hi\n')
+    end)
+
+    it('does not append a newline when opts.newline is false', function()
+      local buf = vim.api.nvim_create_buf(false, true)
+      term._by_id['shell-1'] = { buf = buf, job_id = 7, cwd = '/tmp', name = 'T1' }
+      vim.api.nvim_set_current_buf(buf)
+      local sent = {}
+      vim.fn.chansend = function(_, data)
+        sent.data = data
+      end
+      term.send('ls', { newline = false })
+      eq(sent.data, 'ls')
+    end)
+
+    it('targets a terminal by id', function()
+      local buf = vim.api.nvim_create_buf(false, true)
+      term.register_run('/tmp/run.sh', buf, 9, '/tmp')
+      local sent = {}
+      vim.fn.chansend = function(job_id, data)
+        sent = { job_id = job_id, data = data }
+      end
+      assert.is_true(term.send('make', { id = '/tmp/run.sh' }))
+      eq(sent.job_id, 9)
+      eq(sent.data, 'make\n')
+    end)
+
+    it('returns false when there is no managed terminal', function()
+      local buf = vim.api.nvim_create_buf(false, true)
+      vim.api.nvim_set_current_buf(buf)
+      local called = false
+      vim.fn.chansend = function()
+        called = true
+      end
+      assert.is_false(term.send 'ls')
+      assert.is_false(called)
+    end)
+  end)
+
   describe('register_run', function()
     it('get returns usable entry by file id', function()
       local buf = vim.api.nvim_create_buf(false, true)
