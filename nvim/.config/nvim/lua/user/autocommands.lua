@@ -99,33 +99,6 @@ autocmd({ 'VimResized' }, {
     vim.cmd('tabnext ' .. current_tab)
   end,
 })
-autocmd('BufReadPost', {
-  desc = 'go to last loc when opening a buffer',
-  group = buffer_settings,
-  callback = function(event)
-    local exclude = { 'gitcommit', 'qf' }
-    local buf = event.buf
-    if vim.b[buf].user_last_loc then
-      return
-    end
-    vim.b[buf].user_last_loc = true
-    -- Defer so filetype detection has run before we check the exclude list;
-    -- otherwise the autocmd fires before `filetypedetect` and ft is still ''.
-    vim.schedule(function()
-      if not vim.api.nvim_buf_is_valid(buf) then
-        return
-      end
-      if vim.tbl_contains(exclude, vim.bo[buf].filetype) then
-        return
-      end
-      local mark = vim.api.nvim_buf_get_mark(buf, '"')
-      local lcount = vim.api.nvim_buf_line_count(buf)
-      if mark[1] > 0 and mark[1] <= lcount then
-        vim.npcall(vim.api.nvim_win_set_cursor, 0, mark)
-      end
-    end)
-  end,
-})
 
 -- Special filetypes
 local special_filetypes = vim.api.nvim_create_augroup('SpecialFiletypes', { clear = true })
