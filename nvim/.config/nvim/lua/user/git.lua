@@ -334,21 +334,23 @@ M.create_pull_request = function()
     local git_name, project, repo = git_remote_url:match(('^' .. prefix .. '(%w+).com.*[:/](.+)/(.+)%.git'))
 
     M.get_branch(function(branch_name)
-      local title = vim.uri_encode(M.branch_to_pr_title(branch_name))
-      if git_name == 'gitlab' then
-        local url = ('https://gitlab.com/%s/%s/-/merge_requests/new?merge_request[source_branch]=%s&merge_request[title]=%s'):format(
-          project,
-          repo,
-          branch_name,
-          title
-        )
-        return vim.ui.open(url)
-      end
-      -- GitHub: the title/body query params only stick on the compare URL form;
-      -- pull/new/<branch> redirects to compare and drops them. So build the
-      -- compare URL directly, which requires the base (default) branch.
+      -- GitHub needs the base (default) branch to build the compare URL, so fetch
+      -- it up front for both providers and resolve the final URL in one place.
       M.get_default_branch('origin', function(base)
-        local url = ('https://%s.com/%s/%s/compare/%s...%s?expand=1&title=%s'):format(git_name, project, repo, base, branch_name, title)
+        local title = vim.uri_encode(M.branch_to_pr_title(branch_name))
+        local url
+        if git_name == 'gitlab' then
+          url = ('https://gitlab.com/%s/%s/-/merge_requests/new?merge_request[source_branch]=%s&merge_request[title]=%s'):format(
+            project,
+            repo,
+            branch_name,
+            title
+          )
+        else
+          -- The title/body query params only stick on the compare URL form;
+          -- pull/new/<branch> redirects to compare and drops them.
+          url = ('https://%s.com/%s/%s/compare/%s...%s?expand=1&title=%s'):format(git_name, project, repo, base, branch_name, title)
+        end
         vim.ui.open(url)
       end)
     end)
