@@ -19,6 +19,7 @@
 - [Usage](#usage)
 - [Usage (just NVIM)](#usage-just-nvim)
 - [Additional stuff](#additional-stuff)
+- [GitHub notifications on macOS](#github-notifications-on-macos)
 - [Troubleshooting](#troubleshooting)
   - [Remove TreeSitter parsers](#remove-treesitter-parsers)
 
@@ -113,6 +114,29 @@ Claude Code skills extend the `/skill-name` slash command system. Skills live in
 ```
 
 Verify with `npx skills ls -g`.
+
+## GitHub notifications on macOS
+
+Native macOS notifications for unread GitHub notifications, polled every 60s by a `launchd` agent. Managed by the `ghnotify` stow package: a poller (`gh-notify.sh`) plus the agent plist.
+
+One-time setup on a new machine (after `./start.sh` and `./updates.sh`):
+
+```bash
+gh-notify-setup.sh
+```
+
+The script is interactive (uses [`gum`](https://github.com/charmbracelet/gum)) and idempotent — it installs any missing deps (`gh`, `terminal-notifier`, `gum`), ensures the stow symlinks, checks `gh auth` + token scope, (re)loads the `launchd` agent, and fires a test banner. Safe to re-run anytime.
+
+> If no banner appears, allow it under **System Settings ▸ Notifications ▸ terminal-notifier** (style: Alerts/Banners).
+
+Manage the agent:
+
+```bash
+launchctl bootout   gui/$(id -u)/com.mosheavni.ghnotify                                # pause
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.mosheavni.ghnotify.plist   # resume
+~/.local/bin/gh-notify.sh                                                              # run once
+tail -f ~/.cache/gh-notify/error.log                                                   # debug
+```
 
 ## Troubleshooting
 
