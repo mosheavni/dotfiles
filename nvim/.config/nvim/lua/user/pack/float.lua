@@ -139,9 +139,9 @@ local function sort_by_name(items)
 end
 
 local function conventional_commit_prefix(commit)
-  local subject = commit:match '^%x+%s+%b()%s+(.+)'
+  local subject = commit:match '^%x+%s+%d%d%d%d%-%d%d%-%d%d%s+%b()%s+(.+)'
   if not subject then
-    subject = commit:match '^%x+%s+(.+)'
+    subject = commit:match '^%x+%s+%d%d%d%d%-%d%d%-%d%d%s+(.+)'
   end
   if not subject then
     return nil, nil
@@ -283,6 +283,11 @@ local function build_content()
     local hash = commit:match '^(%x+)'
     if hash then
       add_hl(commit_row, 4, 4 + #hash, 'PackFloatHash')
+      local date = commit:match '^%x+%s+(%d%d%d%d%-%d%d%-%d%d)'
+      if date then
+        local date_start = 4 + #hash + 1
+        add_hl(commit_row, date_start, date_start + #date, 'PackFloatMuted')
+      end
       local prefix, prefix_hl = conventional_commit_prefix(commit)
       if prefix then
         local prefix_start = commit:find(prefix, #hash + 1, true)
@@ -339,7 +344,7 @@ local function build_content()
     header_col = header_col + #s.text
   end
 
-  local divider_width = math.min(80, math.max(50, math.floor(vim.o.columns * 0.6)))
+  local divider_width = math.min(110, math.max(60, math.floor(vim.o.columns * 0.7)))
   local divider = string.rep('─', divider_width)
 
   add(divider, 'PackFloatBorder')
@@ -480,7 +485,7 @@ end
 local function config_fn(_)
   local columns = vim.o.columns
   local screen_lines = vim.o.lines
-  local width = math.min(80, math.max(50, math.floor(columns * 0.6)))
+  local width = math.min(110, math.max(60, math.floor(columns * 0.7)))
   local height = math.max(24, math.floor(screen_lines * 0.80))
 
   return {
@@ -500,6 +505,10 @@ local function opts_fn()
   return {
     cursorline = true,
     wrap = true,
+    -- Inherit no global foldmethod: our indented content (hints, details) would
+    -- otherwise get auto-folded and drift out of sync on re-render. Manual means
+    -- no folds exist, so collapse-all matches the fresh-open view exactly.
+    foldmethod = 'manual',
   }
 end
 
@@ -518,7 +527,8 @@ local function load_commits(plugin, check_id)
     '-C',
     plugin.path,
     'log',
-    '--oneline',
+    '--pretty=format:%h %ad%d %s',
+    '--date=short',
     '--decorate=short',
     plugin.rev .. '..' .. plugin.rev_to,
   }, { text = true }, function(result)
@@ -540,7 +550,8 @@ local function load_recent_commits(plugin, check_id)
     '-C',
     plugin.path,
     'log',
-    '--oneline',
+    '--pretty=format:%h %ad%d %s',
+    '--date=short',
     '--decorate=short',
     '-5',
   }, { text = true }, function(result)

@@ -12,10 +12,6 @@
       "rev": "2033b42ab72fb9f27b35769f9cb7a9f4f1993db4",
       "src": "https://github.com/yetone/avante.nvim"
     },
-    "bigfile.nvim": {
-      "rev": "33eb067e3d7029ac77e081cfe7c45361887a311a",
-      "src": "https://github.com/LunarVim/bigfile.nvim"
-    },
     "blink-cmp-avante": {
       "rev": "4f494c6e124acbe31a8f5d58effa0c14aa38a6d5",
       "src": "https://github.com/Kaiser-Yang/blink-cmp-avante"
@@ -72,10 +68,6 @@
     "img-clip.nvim": {
       "rev": "b6ddfb97b5600d99afe3452d707444afda658aca",
       "src": "https://github.com/HakonHarnes/img-clip.nvim"
-    },
-    "jsonpath.nvim": {
-      "rev": "9e7a3c2aec3465a8f7c86cec6424cf98ee62ee24",
-      "src": "https://github.com/phelipetls/jsonpath.nvim"
     },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
@@ -141,10 +133,6 @@
       "rev": "bfcc0171a43f22afa61d927ffe9fcb6cb85dc99e",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
-    "nvim-navic": {
-      "rev": "f5eba192f39b453675d115351808bd51276d9de5",
-      "src": "https://github.com/SmiteshP/nvim-navic"
-    },
     "nvim-pqf": {
       "rev": "0f11180718b861986ac06a2fef16c404a58b3645",
       "src": "https://github.com/yorickpeterse/nvim-pqf"
@@ -165,17 +153,9 @@
       "rev": "851e865342e5a4cb1ae23d31caf6e991e1c99f1e",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
-    "nvim-ts-autotag": {
-      "rev": "88c1453db4ba7dd24131086fe51fdf74e587d275",
-      "src": "https://github.com/windwp/nvim-ts-autotag"
-    },
     "nvim-web-devicons": {
       "rev": "dfbfaa967a6f7ec50789bead7ef87e336c1fa63c",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
-    },
-    "oklch-color-picker.nvim": {
-      "rev": "9b5db80d5f6af8fbc31bad29f69ad76f63154944",
-      "src": "https://github.com/eero-lehtinen/oklch-color-picker.nvim"
     },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
@@ -200,10 +180,6 @@
     "switch.vim": {
       "rev": "297346b630943ebd4ea58598dfd30bae5debc739",
       "src": "https://github.com/AndrewRadev/switch.vim"
-    },
-    "template-string.nvim": {
-      "rev": "d3a26d3c449a97c44891a31736a101b60b64cf2b",
-      "src": "https://github.com/axelvc/template-string.nvim"
     },
     "ts-comments.nvim": {
       "rev": "123a9fb12e7229342f807ec9e6de478b1102b041",
