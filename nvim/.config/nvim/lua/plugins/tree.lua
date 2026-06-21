@@ -22,6 +22,7 @@ local hints = Hints.new('Nvim-tree - Available Keymaps', {
   { key = 'c', desc = 'Copy file' },
   { key = 'Y', desc = 'Copy relative path' },
   { key = 'gy', desc = 'Copy absolute path' },
+  { key = '<leader>gd', desc = 'Diff file/dir history (Diffview)' },
   { key = 'J/K', desc = 'Toggle bookmark down/up' },
   { key = 'dd', desc = 'Cut bookmarked file(s)' },
   { key = 'yy', desc = 'Copy bookmarked file(s)' },
@@ -103,6 +104,15 @@ local function on_attach(bufnr)
     end
   end
 
+  -- Diffview file history for node under cursor (file or directory)
+  local diff_file_history = function()
+    local node = api.tree.get_node_under_cursor()
+    if not node or not node.absolute_path then
+      return
+    end
+    vim.cmd('DiffviewFileHistory ' .. vim.fn.fnameescape(node.absolute_path))
+  end
+
   api.map.on_attach.default(bufnr)
   vim.keymap.set('n', 'x', api.node.navigate.parent_close, opts 'Close Directory')
   vim.keymap.set('n', 'v', api.node.open.vertical, opts 'Open: Vertical Split')
@@ -132,6 +142,8 @@ local function on_attach(bufnr)
   vim.keymap.set('n', 'mv', api.marks.bulk.move, opts 'Move Bookmarked')
 
   vim.keymap.set('n', 'r', api.fs.rename_full, opts 'Rename: Full Path')
+
+  vim.keymap.set('n', '<leader>gd', diff_file_history, opts 'Diff File History')
 
   vim.keymap.set('n', 'Z', function()
     local node = api.tree.get_node_under_cursor()
