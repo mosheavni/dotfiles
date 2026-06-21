@@ -220,23 +220,33 @@ function kibana_web() {
 }
 
 function argocd_web() {
+  argocd_svc=$(kubectl get svc -n argocd -l app.kubernetes.io/name=argocd-server --no-headers -o custom-columns=":metadata.name" | head -n1)
+  if [[ -z "$argocd_svc" ]]; then
+    echo "Could not find argocd-server service in namespace argocd" >&2
+    return 1
+  fi
   argocd_ingress=$(kubectl get ingress -n argocd --no-headers -o custom-columns=":metadata.name" | grep argocd-server)
   ingress_host=https://$(kubectl get ingress -n argocd "${argocd_ingress}" -ojson | jq -r '.spec.rules[].host')
   creds=$(kubectl get secret -n argocd argocd-initial-admin-secret -ojson | jq '.data | with_entries(.value |= @base64d)')
 
   # port forward
   if [[ -n $1 ]] && [[ $1 == "-f" ]]; then
+    ingress_host="http://localhost:8080"
+    local lsof_cmd="lsof -nP -iTCP:8080 -sTCP:LISTEN"
+    if eval "${lsof_cmd}" >/dev/null 2>&1; then
+      echo "port is still in use"
+      echo "> ${lsof_cmd}"
+      eval "${lsof_cmd}"
+      gum spin --spinner dot --title "Waiting for :8080 to free up..." -- \
+        zsh -c 'while lsof -nP -iTCP:8080 -sTCP:LISTEN >/dev/null 2>&1; do sleep 1; done'
+    fi
     [[ -n "$DEBUG" ]] && set -x
-    kubectl port-forward -n argocd svc/argocd-server 8080:443 &
+    kubectl port-forward -n argocd "svc/${argocd_svc}" 8080:443 &
     CMDPID=$!
     [[ -n "$DEBUG" ]] && set +x
-    ingress_host="http://localhost:8080"
-    echo "waiting for port-forward to start"
-    while ! lsof -nP -iTCP:8080 | grep LISTEN; do
-      echo "port 8080 is still not open"
-      sleep 1
-    done
-    echo "Port forward for svc/argocd-server started on port 8080"
+    gum spin --spinner dot --title "Waiting for port-forward on :8080..." -- \
+      zsh -c 'until lsof -nP -iTCP:8080 -sTCP:LISTEN >/dev/null 2>&1; do sleep 1; done'
+    echo "Port forward for svc/${argocd_svc} started on port 8080"
     echo "To kill, run 'kill $CMDPID' or exit the shell"
   fi
   echo "${creds}"
