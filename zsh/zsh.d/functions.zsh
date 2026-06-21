@@ -11,13 +11,29 @@ function delete-zcompdump() {
   rm -f ~/.zcompdump*
 }
 
-function say-hebrew() {
-  # check if there's params
-  if [[ -z $* ]]; then
-    dialog -t "Say in hebrew" -m "Enter a sentence in hebrew" --bannertext Say --textfield message,required 2>/dev/null | awk -F: '{print $2}' | xargs say -v 'Carmit (Enhanced)'
-  else
-    echo $* | say -v 'Carmit'
+function say() {
+  command -v gum >/dev/null || {
+    echo 'say requires gum (brew install gum)' >&2
+    return 1
+  }
+
+  local voice text
+  voice=$(command say -v '?' \
+    | sed -E 's/^(.*[^ ]) +([a-z]{2}_[A-Z]{2}) +#.*$/\1 (\2)/' \
+    | gum filter --header 'Choose a voice' --placeholder 'Type to search (e.g. he, Carmit)...') || return
+  voice=${voice% \(*}
+
+  text="$*"
+  if [[ -n $text ]]; then
+    command say -v "$voice" "$text"
+    return
   fi
+
+  while true; do
+    text=$(gum input --header 'Text to speak' --placeholder 'Enter text (Ctrl-C to quit)...') || return
+    [[ -z $text ]] && continue
+    command say -v "$voice" "$text"
+  done
 }
 
 function set-tab-title() {
