@@ -245,8 +245,11 @@ function argocd_web() {
 }
 
 function argocd_login() {
-  argocd_ingress=$(kubectl get ingress -n argocd --no-headers -o custom-columns=":metadata.name" argocd-server)
-  ingress_host=$(kubectl get ingress -n argocd "${argocd_ingress}" -ojson | jq -r '.spec.rules[].host')
+  ingress_host=$(kubectl get ingress -n argocd -l app.kubernetes.io/name=argocd-server -ojson | jq -r '.items[0].spec.rules[0].host')
+  if [[ -z "$ingress_host" || "$ingress_host" == "null" ]]; then
+    echo "Could not find argocd-server ingress host in namespace argocd" >&2
+    return 1
+  fi
   pass=$(kubectl get secret -n argocd argocd-initial-admin-secret -ojson | jq -r '.data | with_entries(.value |= @base64d) | .password')
   argocd login --grpc-web "${ingress_host}" --username admin --password "${pass}"
 }
