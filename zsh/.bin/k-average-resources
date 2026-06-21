@@ -1,0 +1,64 @@
+#!/bin/bash
+
+command -v gum >/dev/null 2>&1 || {
+  echo "gum not found (brew install gum)" >&2
+  exit 1
+}
+command -v fzf >/dev/null 2>&1 || {
+  echo "fzf not found (brew install fzf)" >&2
+  exit 1
+}
+
+all_ns=false
+args=()
+for a in "$@"; do
+  case $a in
+  -A | --all-namespaces) all_ns=true ;;
+  *) args+=("$a") ;;
+  esac
+done
+svc_name=${args[0]:-}
+
+# kubectl top pod -A prepends a NAMESPACE column, shifting cpu/memory one field right.
+top_cmd=(kubectl top pod)
+cpu_col=2 mem_col=3
+if $all_ns; then
+  top_cmd+=(-A)
+  cpu_col=3 mem_col=4
+fi
+
+top_result=$("${top_cmd[@]}" | awk -v p="$svc_name" 'NR>1 && $0 ~ p')
+
+if [[ -z $top_result ]]; then
+  echo "No pods matched '${svc_name}'" >&2
+  exit 1
+fi
+
+num_of_pods=$(awk 'END{print NR}' <<<"$top_result")
+avg_cpu=$(awk -v c="$cpu_col" '{gsub("m$","",$c);acc+=$c}END{printf "%.0f",acc/NR}' <<<"$top_result")
+avg_memory=$(awk -v m="$mem_col" '{gsub("Mi$","",$m);acc+=$m}END{printf "%.0f",acc/NR}' <<<"$top_result")
+
+cpu_pct=$(kubectl get hpa "$svc_name" -ojson 2>/dev/null | jq -r '.status.currentMetrics[].resource | select(.name=="cpu").current.averageUtilization')
+mem_pct=$(kubectl get hpa "$svc_name" -ojson 2>/dev/null | jq -r '.status.currentMetrics[].resource | select(.name=="memory").current.averageUtilization')
+[[ -z $cpu_pct || $cpu_pct == null ]] && cpu_pct="n/a" || cpu_pct="${cpu_pct}%"
+[[ -z $mem_pct || $mem_pct == null ]] && mem_pct="n/a" || mem_pct="${mem_pct}%"
+
+# Interactive, sortable pod browser. kubectl does the numeric sort (--sort-by),
+# fzf provides live re-sort via keybindings plus type-to-filter.
+top_flag=""
+$all_ns && top_flag="-A"
+kubectl top pod $top_flag --sort-by=cpu | fzf \
+  --header-lines=1 \
+  --reverse \
+  --query="$svc_name" \
+  --header='sort → alt-c: cpu · alt-m: mem · alt-n: name   (type to filter · esc to exit)' \
+  --bind="alt-c:reload(kubectl top pod $top_flag --sort-by=cpu)" \
+  --bind="alt-m:reload(kubectl top pod $top_flag --sort-by=memory)" \
+  --bind="alt-n:reload(kubectl top pod $top_flag)" \
+  >/dev/null || true
+
+gum style --bold "Average across ${num_of_pods} pods"
+gum table --print -c metric,avg,percent-of-request <<EOF
+cpu,${avg_cpu}m,${cpu_pct}
+memory,${avg_memory}Mi,${mem_pct}
+EOF
