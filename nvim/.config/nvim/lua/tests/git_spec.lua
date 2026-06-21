@@ -276,6 +276,32 @@ describe('user.git', function()
     end)
   end)
 
+  describe('git.branch_to_pr_title', function()
+    it('converts type prefix to conventional commit colon', function()
+      eq(git.branch_to_pr_title 'chore/fix-workflows-deprecations', 'chore: fix workflows deprecations')
+    end)
+
+    it('handles feat prefix', function()
+      eq(git.branch_to_pr_title 'feat/add-new-thing', 'feat: add new thing')
+    end)
+
+    it('converts underscores to spaces', function()
+      eq(git.branch_to_pr_title 'fix/some_bug_here', 'fix: some bug here')
+    end)
+
+    it('turns remaining slashes into spaces', function()
+      eq(git.branch_to_pr_title 'feature/JIRA-123/add-thing', 'feature: JIRA 123 add thing')
+    end)
+
+    it('handles branch without a type prefix', function()
+      eq(git.branch_to_pr_title 'my-feature', 'my feature')
+    end)
+
+    it('leaves a single word branch untouched', function()
+      eq(git.branch_to_pr_title 'hotfix', 'hotfix')
+    end)
+  end)
+
   describe('git.is_fugitive_status_bufname', function()
     it('matches fugitive status buffer URLs', function()
       eq(git.is_fugitive_status_bufname 'fugitive:///Users/me/project/.git//', true)

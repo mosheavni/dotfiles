@@ -332,13 +332,44 @@ M.create_pull_request = function()
     local git_remote_url = git_remotes['origin']
     local prefix = git_remote_url:match '^%w+' == 'git' and 'git@' or 'https://'
     local git_name, project, repo = git_remote_url:match(('^' .. prefix .. '(%w+).com.*[:/](.+)/(.+)%.git'))
-    local pr_link = git_name == 'gitlab' and '-/merge_requests/new?merge_request[source_branch]=' or 'pull/new/'
 
     M.get_branch(function(branch_name)
-      local url = ('https://%s.com/%s/%s/%s%s'):format(git_name, project, repo, pr_link, branch_name)
-      vim.ui.open(url)
+      -- GitHub needs the base (default) branch to build the compare URL, so fetch
+      -- it up front for both providers and resolve the final URL in one place.
+      M.get_default_branch('origin', function(base)
+        local title = vim.uri_encode(M.branch_to_pr_title(branch_name))
+        local url
+        if git_name == 'gitlab' then
+          url = ('https://gitlab.com/%s/%s/-/merge_requests/new?merge_request[source_branch]=%s&merge_request[title]=%s'):format(
+            project,
+            repo,
+            branch_name,
+            title
+          )
+        else
+          -- The title/body query params only stick on the compare URL form;
+          -- pull/new/<branch> redirects to compare and drops them.
+          url = ('https://%s.com/%s/%s/compare/%s...%s?expand=1&title=%s'):format(git_name, project, repo, base, branch_name, title)
+        end
+        vim.ui.open(url)
+      end)
     end)
   end)
+end
+
+--- Converts a git branch name into a conventional-commit-style PR title.
+--- The first path segment becomes the commit type, e.g.
+--- `chore/fix-workflows-deprecations` -> `chore: fix workflows deprecations`.
+--- Hyphens, underscores and remaining slashes become spaces. Branches without a
+--- `/` prefix just have their separators turned into spaces (no type prefix).
+---@param branch_name string
+---@return string
+M.branch_to_pr_title = function(branch_name)
+  local type_prefix, rest = branch_name:match '^([^/]+)/(.+)$'
+  if not type_prefix then
+    return (branch_name:gsub('[-_/]', ' '))
+  end
+  return type_prefix .. ': ' .. (rest:gsub('[-_/]', ' '))
 end
 
 M.create_new_branch = function(branch_opts)
