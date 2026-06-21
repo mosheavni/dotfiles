@@ -336,9 +336,30 @@ M.create_pull_request = function()
 
     M.get_branch(function(branch_name)
       local url = ('https://%s.com/%s/%s/%s%s'):format(git_name, project, repo, pr_link, branch_name)
+      local title = vim.uri_encode(M.branch_to_pr_title(branch_name))
+      if git_name == 'gitlab' then
+        url = url .. '&merge_request[title]=' .. title
+      else
+        url = url .. '?expand=1&title=' .. title
+      end
       vim.ui.open(url)
     end)
   end)
+end
+
+--- Converts a git branch name into a conventional-commit-style PR title.
+--- The first path segment becomes the commit type, e.g.
+--- `chore/fix-workflows-deprecations` -> `chore: fix workflows deprecations`.
+--- Hyphens, underscores and remaining slashes become spaces. Branches without a
+--- `/` prefix just have their separators turned into spaces (no type prefix).
+---@param branch_name string
+---@return string
+M.branch_to_pr_title = function(branch_name)
+  local type_prefix, rest = branch_name:match '^([^/]+)/(.+)$'
+  if not type_prefix then
+    return (branch_name:gsub('[-_/]', ' '))
+  end
+  return type_prefix .. ': ' .. (rest:gsub('[-_/]', ' '))
 end
 
 M.create_new_branch = function(branch_opts)
