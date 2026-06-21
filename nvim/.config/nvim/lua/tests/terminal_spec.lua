@@ -234,7 +234,7 @@ describe('user.terminal', function()
       vim.fn.chansend = function(_, data)
         sent.data = data
       end
-      term.send('echo hi\n')
+      term.send 'echo hi\n'
       eq(sent.data, 'echo hi\n')
     end)
 
@@ -278,7 +278,7 @@ describe('user.terminal', function()
     it('get returns usable entry by file id', function()
       local buf = vim.api.nvim_create_buf(false, true)
       term.register_run('/tmp/run.sh', buf, 1, '/tmp')
-      local state = term.get('/tmp/run.sh')
+      local state = term.get '/tmp/run.sh'
       assert.is_not_nil(state)
       eq(state.buf, buf)
       eq(state.name, 'run.sh')

@@ -64,7 +64,7 @@ Tests exist for: `utils`, `gitbrowse`, `git`, `hints`, `number-separators`, `ope
 ### Linting
 
 - Lua formatting: `stylua` with root `stylua.toml`. stylua does NOT search parent
-  directories, so run it from the repo root or pass `--search-parent-directories`;
+  directories, so run it from the repository root or pass `--search-parent-directories`;
   otherwise it falls back to defaults and reports bogus diffs.
 - Lua lint (`selene`): config is `nvim/selene.toml` with std `nvim/vim.toml`. selene
   reads `selene.toml` from the cwd only, so `cd nvim` first or you get spurious

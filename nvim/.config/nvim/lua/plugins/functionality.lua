@@ -3,13 +3,11 @@ vim.pack.add {
   'https://github.com/yorickpeterse/nvim-pqf',
   'https://github.com/junegunn/vim-easy-align',
   'https://github.com/AndrewRadev/switch.vim',
-  'https://github.com/axelvc/template-string.nvim',
   'https://github.com/machakann/vim-swap',
   'https://github.com/andymass/vim-matchup',
   'https://github.com/windwp/nvim-autopairs',
   'https://github.com/iamcco/markdown-preview.nvim',
   'https://github.com/AndrewRadev/linediff.vim',
-  'https://github.com/LunarVim/bigfile.nvim',
 }
 
 local sar_dev = vim.fn.expand '~/Repos/search-replace.nvim'
@@ -107,11 +105,7 @@ function M.deferred()
     end,
   })
 
-  require('template-string').setup {}
-
   vim.keymap.set({ 'v', 'n' }, 'ga', '<Plug>(EasyAlign)', { desc = 'Align by motion' })
-
-  require('bigfile').setup()
 
   local function lsp_rename_changes(old_path, new_path)
     return { { oldUri = vim.uri_from_fname(old_path), newUri = vim.uri_from_fname(new_path) } }

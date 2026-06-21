@@ -41,4 +41,49 @@ jobs:
         run: |
           nvim --version
           cd nvim/.config/nvim
-          make test
+          make test 2>&1 | tee /tmp/test-output.txt
+          exit "${PIPESTATUS[0]}"
+
+      - name: Generate test summary
+        if: always()
+        run: |
+          sed 's/\x1b\[[0-9;]*m//g' /tmp/test-output.txt | awk '
+          BEGIN {
+            print "## Test Results\n"
+            print "| File | ✅ Success | ❌ Failed | 💥 Errors | Status |"
+            print "|------|:---------:|:--------:|:--------:|--------|"
+            total_s=0; total_f=0; total_e=0
+          }
+          /^Testing:/ {
+            gsub(/\t/, "")
+            sub("Testing: *", "")
+            current = $0
+            n = split(current, parts, "/")
+            fname = parts[n]
+          }
+          /^Success:/ {
+            gsub(/\t/, "")
+            match($0, /[0-9]+/)
+            s = substr($0, RSTART, RLENGTH)+0
+            total_s += s
+          }
+          /^Failed :/ {
+            gsub(/\t/, "")
+            match($0, /[0-9]+/)
+            f = substr($0, RSTART, RLENGTH)+0
+            total_f += f
+          }
+          /^Errors :/ {
+            gsub(/\t/, "")
+            match($0, /[0-9]+/)
+            e = substr($0, RSTART, RLENGTH)+0
+            total_e += e
+            status = (f==0 && e==0) ? "✅ Pass" : "❌ **Fail**"
+            print "| `" fname "` | " s " | " f " | " e " | " status " |"
+          }
+          END {
+            print ""
+            status = (total_f==0 && total_e==0) ? "✅" : "❌"
+            print "**Total " status ":** " total_s " passed · " total_f " failed · " total_e " errors"
+          }
+          ' >> "$GITHUB_STEP_SUMMARY"

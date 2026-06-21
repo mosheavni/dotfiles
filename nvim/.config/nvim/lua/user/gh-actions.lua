@@ -28,11 +28,14 @@ function M.build_act_cmd(workflow_path)
 
   vim.fn.mkdir(vim.fn.fnamemodify(event_path, ':h'), 'p')
   local f = assert(io.open(event_path, 'w'))
-  f:write(vim.json.encode {
-    repository = repository,
-    before = before_sha ~= '' and before_sha or ZERO_SHA,
-    forced = false,
-  }, '\n')
+  f:write(
+    vim.json.encode {
+      repository = repository,
+      before = before_sha ~= '' and before_sha or ZERO_SHA,
+      forced = false,
+    },
+    '\n'
+  )
   f:close()
 
   return table.concat({

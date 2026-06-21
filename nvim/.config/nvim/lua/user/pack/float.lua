@@ -346,7 +346,8 @@ local function build_content()
   local help_lines = {
     ' [r] refresh  [u] update plugin  [U] update all  [x] clean inactive',
     ' [R] restore plugin  [gR] restore all  (to lockfile)',
-    ' [Enter] details  [K] open commit  [gf] open dir  [q] close',
+    ' [Enter] details  [zR] expand all  [zM] collapse all',
+    ' [K] open commit  [gf] open dir  [q] close',
   }
   for _, help in ipairs(help_lines) do
     local pad = string.rep(' ', math.max(0, math.floor((divider_width - #help) / 2)))
@@ -912,6 +913,19 @@ local function toggle_details()
   end
 end
 
+local function expand_all()
+  for _, plugin in ipairs(state.plugins) do
+    state.expanded[plugin.spec.name] = true
+  end
+  render()
+  load_expanded_recent_commits(state.check_id)
+end
+
+local function collapse_all()
+  state.expanded = {}
+  render()
+end
+
 local function open_commit_in_browser()
   if not float.is_shown() then
     return
@@ -982,6 +996,8 @@ local function setup_keymaps(buf_id)
   map('gR', restore_all, 'Restore all to lockfile')
   map('x', clean_current, 'Clean inactive plugin')
   map('<CR>', toggle_details, 'Toggle details')
+  map('zR', expand_all, 'Expand all details')
+  map('zM', collapse_all, 'Collapse all details')
   map('K', open_commit_in_browser, 'Open commit in browser')
   map('gf', open_plugin_dir_in_tab, 'Open plugin directory in new tab')
   map(']]', function()

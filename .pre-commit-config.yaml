@@ -13,3 +13,36 @@ repos:
     rev: v6.0.0
     hooks:
       - id: check-toml
+  - repo: local
+    hooks:
+      - id: luacheck
+        name: luacheck
+        language: system
+        entry: luacheck
+        types: [lua]
+        files: \.lua$
+      - id: selene
+        name: selene
+        language: system
+        entry: bash -c 'cd nvim && selene --config selene.toml .config/nvim/lua'
+        pass_filenames: false
+        types: [lua]
+        files: ^nvim/
+      - id: stylua
+        name: stylua
+        language: system
+        entry: stylua --check --search-parent-directories
+        types: [lua]
+        files: ^nvim/
+      - id: shellcheck
+        name: shellcheck
+        language: system
+        entry: shellcheck --rcfile=nvim/.shellcheckrc
+        types: [shell]
+        files: \.sh$
+        exclude: ^ai/\.claude/(shell-snapshots|plugins/cache)/
+      - id: markdownlint
+        name: markdownlint
+        language: system
+        entry: markdownlint --ignore-path nvim/.markdownlintignore
+        types: [markdown]

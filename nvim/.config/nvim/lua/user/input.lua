@@ -20,7 +20,7 @@ local root_context = nil
 ---@param mode string
 ---@return string `'i'`|`'n'`
 local function normalize_mode(mode)
-  if mode == 'i' or mode == 'R' or mode == 'Rv' or mode:find('^s') then
+  if mode == 'i' or mode == 'R' or mode == 'Rv' or mode:find '^s' then
     return 'i'
   end
   return 'n'
@@ -100,10 +100,7 @@ end
 ---@return string base
 ---@return number base_start byte index where `base` starts
 function M.completion_base(text, method)
-  local is_fs = method == 'file'
-    or method == 'file_in_path'
-    or method == 'dir'
-    or method == 'dir_in_path'
+  local is_fs = method == 'file' or method == 'file_in_path' or method == 'dir' or method == 'dir_in_path'
   local pattern = is_fs and '[[:fname:]]*$' or '[[:keyword:]]*$'
   local start = vim.fn.match(text, pattern)
   if start < 0 then
