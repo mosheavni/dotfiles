@@ -208,9 +208,17 @@ vim.filetype.add {
     ['.*'] = {
       function(_, bufnr)
         -- k8s manifests without a .yaml extension: kind:/apiVersion: in the first 20 lines
+        local seen_content = false
         for _, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, 20, false)) do
           if line:match '^kind:' or line:match '^apiVersion:' then
             return 'yaml'
+          end
+          -- json without a .json extension: first non-blank line opens with { or [
+          if not seen_content and line:match '%S' then
+            seen_content = true
+            if line:match '^%s*[%[{]' then
+              return 'json'
+            end
           end
         end
       end,
