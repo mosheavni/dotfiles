@@ -6,7 +6,8 @@ require('user.terraform-docs').setup {}
 vim.bo.commentstring = '# %s'
 
 local bufname = vim.api.nvim_buf_get_name(0)
-local dir = bufname ~= '' and vim.bo.buftype == '' and vim.fn.fnamemodify(bufname, ':p:h') or ''
+local is_real_file = bufname ~= '' and vim.bo.buftype == '' and vim.fn.filereadable(bufname) == 1
+local dir = is_real_file and vim.fn.fnamemodify(bufname, ':p:h') or ''
 
 _G.__tf_init_prompted = _G.__tf_init_prompted or {}
 local prompted = _G.__tf_init_prompted
