@@ -21,12 +21,13 @@ M.config = {
   provider_source_map = {
     cloudflare = 'cloudflare',
     fastly = 'fastly',
+    github = 'integrations',
     ibm = 'IBM-Cloud',
+    mongodbatlas = 'mongodb',
     newrelic = 'newrelic',
     shell = 'scottwinkler',
     spotinst = 'spotinst',
     vcd = 'vmware',
-    mongodbatlas = 'mongodb',
   },
 }
 
