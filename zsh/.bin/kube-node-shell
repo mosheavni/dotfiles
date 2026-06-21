@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # kube-node-shell: Start an ephemeral debug shell on a Kubernetes node
 # Works with kubectl >= 1.25
-# Requires: kubectl, fzf
+# Requires: kubectl, gum
 
 set -euo pipefail
 
@@ -12,20 +12,21 @@ command -v kubectl >/dev/null 2>&1 || {
   echo "kubectl not found"
   exit 1
 }
-command -v fzf >/dev/null 2>&1 || {
-  echo "fzf not found"
+command -v gum >/dev/null 2>&1 || {
+  echo "gum not found (brew install gum)"
   exit 1
 }
 
-node="$(kubectl get nodes -o name | sed 's|node/||' | fzf --prompt='Select node: ' --height=15 --border)"
+node="$(kubectl get nodes -o name | sed 's|node/||' | gum filter --header='Select node' --placeholder='Type to filter...')"
 if [[ -z "$node" ]]; then
   echo "No node selected. Aborting." >&2
   exit 1
 fi
 
-echo "🔧 Launching debug shell on node: $node"
-echo "   Using image: $IMAGE"
-echo "   Using profile: $PROFILE"
+gum style --foreground 212 --border rounded --padding "0 1" \
+  "🔧 Launching debug shell on node: $node" \
+  "   image:   $IMAGE" \
+  "   profile: $PROFILE"
 
 # Create ephemeral pod with host namespaces for direct node access
 # The container runs in host namespaces and host filesystem is mounted at /host
