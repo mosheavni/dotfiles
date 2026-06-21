@@ -116,6 +116,13 @@ function M.open(opts)
   local focus = opts.focus ~= false
   local prev_win = vim.api.nvim_get_current_win()
   local cwd = opts.cwd or default_cwd()
+  if vim.fn.isdirectory(cwd) == 0 then
+    if opts.cwd then
+      vim.notify('Terminal: invalid cwd: ' .. tostring(opts.cwd), vim.log.levels.ERROR)
+      return nil, nil
+    end
+    cwd = vim.fn.getcwd()
+  end
   local buf, job_id = spawn_shell(cwd, function(term_buf)
     M.unregister('shell-' .. term_buf)
   end)
