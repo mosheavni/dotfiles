@@ -1,9 +1,8 @@
 local node_bin = '/opt/homebrew/opt/node/bin/node'
 vim.pack.add {
   'https://github.com/zbirenbaum/copilot.lua',
-  'https://github.com/ravitemer/mcphub.nvim',
-  'https://github.com/carlos-algms/agentic.nvim',
   'https://github.com/HakonHarnes/img-clip.nvim',
+  'https://github.com/yetone/avante.nvim',
 }
 
 local ai_keymap = '<leader>ccc'
@@ -29,45 +28,44 @@ return function()
     },
   }
 
-  require('mcphub').setup {
-    cmd = node_bin,
-    cmdArgs = { '/opt/homebrew/bin/mcp-hub' },
-    extensions = {
-      avante = { enabled = true, make_slash_commands = true },
-      copilotchat = {
-        enabled = false,
-        convert_tools_to_functions = true,
-        convert_resources_to_functions = true,
-        add_mcp_prefix = true,
+  require('avante').setup {
+    provider = 'cursor',
+    mode = 'agentic',
+    acp_providers = {
+      cursor = {
+        command = os.getenv 'HOME' .. '/.local/bin/agent',
+        args = { 'acp' },
+        auth_method = 'cursor_login',
+        env = {
+          HOME = os.getenv 'HOME',
+          PATH = os.getenv 'PATH',
+        },
       },
     },
   }
 
-  require('agentic').setup {
-    provider = 'cursor-acp',
-    keymaps = { prompt = { paste_image = { { '<localleader>p', mode = { 'n' } } } } },
-  }
-
   vim.keymap.set({ 'n', 'v', 'i' }, ai_keymap, function()
-    require('agentic').toggle()
-  end, { desc = 'Toggle Agentic Chat' })
-  vim.keymap.set('n', '<leader>ccs', '<cmd>lua require("agentic").stop_generation()<cr>', { desc = 'Abort current execution' })
+    require('avante').toggle()
+  end, { desc = 'Toggle Avante' })
+  vim.keymap.set('n', '<leader>ccs', function()
+    require('avante.api').stop()
+  end, { desc = 'Abort current execution' })
   vim.keymap.set({ 'n', 'v' }, "<C-'>", function()
-    require('agentic').add_selection_or_file_to_context()
-  end, { desc = 'Add file or selection to Agentic to Context' })
+    require('avante.api').add_selected_file(vim.fn.expand '%:p')
+  end, { desc = 'Add current file to Avante context' })
   vim.keymap.set({ 'n', 'v', 'i' }, '<C-,>', function()
-    require('agentic').new_session()
-  end, { desc = 'New Agentic Session' })
+    require('avante.api').ask { new_chat = true }
+  end, { desc = 'New Avante Session' })
 
   require('user.menu').add_actions('AI', {
-    ['Toggle Agentic Chat (' .. ai_keymap .. ')'] = function()
-      require('agentic').toggle()
+    ['Toggle Avante (' .. ai_keymap .. ')'] = function()
+      require('avante').toggle()
     end,
-    ['New Agentic Session (<C-,>)'] = function()
-      require('agentic').new_session()
+    ['New Avante Session (<C-,>)'] = function()
+      require('avante.api').ask { new_chat = true }
     end,
-    ["Add file/selection to Agentic context (<C-'>)"] = function()
-      require('agentic').add_selection_or_file_to_context()
+    ["Add current file to Avante context (<C-'>)"] = function()
+      require('avante.api').add_selected_file(vim.fn.expand '%:p')
     end,
   })
 end

@@ -19,8 +19,8 @@ vim.api.nvim_create_autocmd('PackChanged', {
       vim.system({ 'make', 'install_jsregexp' }, { cwd = ev.data.path }):wait()
     elseif name == 'markdown-preview.nvim' and kind == 'install' then
       vim.system({ 'yarn', 'install' }, { cwd = ev.data.path .. '/app' }):wait()
-    elseif name == 'mcphub.nvim' and kind == 'install' then
-      vim.system({ 'npm', 'install', '-g', 'mcp-hub@latest' }):wait()
+    elseif name == 'avante.nvim' then
+      vim.system({ 'make' }, { cwd = ev.data.path }):wait()
     elseif name == 'go.nvim' and kind == 'update' then
       ensure_loaded()
       vim.cmd 'lua require("go.install").update_all_sync()'
