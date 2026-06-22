@@ -7,17 +7,15 @@ M.ft = 'yaml.ghaction'
 M.handler = {
   resolve = function(ctx)
     local cmd = require('user.gh-actions').build_act_cmd(ctx.file_name)
-    if cmd then
-      return { cmd = cmd, spawn = true }
+    if not cmd then
+      return { spawn = false }
     end
-    return { spawn = false }
-  end,
-  cwd = function()
     local root = require('user.git').get_toplevel_sync()
-    if root ~= '' then
-      return root
-    end
-    return vim.fn.expand '%:p:h'
+    return {
+      cmd = cmd,
+      spawn = true,
+      cwd = root ~= '' and root or vim.fn.expand '%:p:h',
+    }
   end,
 }
 

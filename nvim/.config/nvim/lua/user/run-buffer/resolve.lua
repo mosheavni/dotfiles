@@ -17,17 +17,6 @@ function M.register_handler_module(mod)
   handlers[mod.ft] = mod.handler
 end
 
---- Working directory for running the buffer (handler `cwd` or parent of the buffer file).
----@param ft string
----@return string
-function M.cwd(ft)
-  local h = handlers[ft]
-  if h and h.cwd then
-    return h.cwd()
-  end
-  return vim.fn.expand '%:p:h'
-end
-
 --- Resolve how to run the current buffer.
 --- Builds `RunContext` from the current buffer's first line.
 ---@param ft string

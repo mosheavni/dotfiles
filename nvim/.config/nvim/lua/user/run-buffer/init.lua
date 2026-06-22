@@ -76,7 +76,7 @@ local function execute_file(where)
     return
   end
 
-  local opts = { cwd = resolve.cwd(ft) }
+  local opts = { cwd = result.cwd or vim.fn.expand '%:p:h' }
   if where and where ~= 'terminal' then
     wezterm.spawn_and_send(result.cmd, vim.tbl_extend('force', opts, { place_after_current = true }))
     return

@@ -10,6 +10,7 @@
 ---@class RunResult
 ---@field cmd string|nil Shell command when `spawn` is true.
 ---@field spawn boolean When true, run `cmd` in terminal/wezterm; when false, stop orchestration.
+---@field cwd? string Working directory for terminal/wezterm (default: buffer directory).
 
 --- Resolve how to run a buffer synchronously.
 ---@alias RunResolve fun(ctx: RunContext): RunResult
@@ -17,7 +18,6 @@
 --- Per-filetype handler registered in the run-buffer registry.
 ---@class RunHandler
 ---@field resolve? RunResolve Build a command or run in-buffer; return the result.
----@field cwd? fun(): string Override working directory for terminal/wezterm (default: buffer directory).
 
 --- Builtin or plugin handler module shape (`require(...)` + register).
 ---@class RunHandlerModule

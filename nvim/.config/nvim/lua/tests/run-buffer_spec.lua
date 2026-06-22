@@ -172,41 +172,40 @@ describe('user.run-buffer', function()
     end)
   end)
 
-  describe('resolve.cwd', function()
+  describe('resolve result cwd', function()
     local original_git
+    local original_gh
 
     before_each(function()
       original_git = package.loaded['user.git']
+      original_gh = package.loaded['user.gh-actions']
     end)
 
     after_each(function()
       package.loaded['user.git'] = original_git
+      package.loaded['user.gh-actions'] = original_gh
     end)
 
-    it('uses git repo root for yaml.ghaction', function()
+    it('yaml.ghaction includes git repo root when spawning', function()
       package.loaded['user.git'] = {
         get_toplevel_sync = function()
           return '/repo'
         end,
       }
-      eq(resolve.cwd 'yaml.ghaction', '/repo')
-    end)
-
-    it('falls back to the buffer directory when not in a git repo', function()
-      package.loaded['user.git'] = {
-        get_toplevel_sync = function()
-          return ''
+      package.loaded['user.gh-actions'] = {
+        build_act_cmd = function()
+          return 'act -W /repo/.github/workflows/ci.yml'
         end,
       }
-      local tmp = vim.fn.tempname() .. '.yml'
-      fresh_named_buffer(tmp, 'yaml.ghaction')
-      eq(resolve.cwd 'yaml.ghaction', vim.fn.expand '%:p:h')
+      local workflow = '/repo/.github/workflows/ci.yml'
+      local result = resolve.run('yaml.ghaction', workflow)
+      eq(result.cwd, '/repo')
     end)
 
-    it('uses the buffer directory for other filetypes', function()
+    it('leaves cwd unset for default filetypes', function()
       local tmp = vim.fn.tempname() .. '.py'
-      fresh_named_buffer(tmp, 'python')
-      eq(resolve.cwd 'python', vim.fn.expand '%:p:h')
+      local result = sync_result('python', tmp, '')
+      eq(result.cwd, nil)
     end)
   end)
 
@@ -293,6 +292,7 @@ describe('user.run-buffer', function()
 
     it('yaml.ghaction uses gh-actions to build the act command', function()
       local original_gh = package.loaded['user.gh-actions']
+      local original_git = package.loaded['user.git']
       local workflow = '/repo/.github/workflows/ci.yml'
       package.loaded['user.gh-actions'] = {
         build_act_cmd = function(path)
@@ -300,12 +300,19 @@ describe('user.run-buffer', function()
           return 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json'
         end,
       }
+      package.loaded['user.git'] = {
+        get_toplevel_sync = function()
+          return '/repo'
+        end,
+      }
 
       local result = resolve.run('yaml.ghaction', workflow)
       eq(result.cmd, 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json')
       eq(result.spawn, true)
+      eq(result.cwd, '/repo')
 
       package.loaded['user.gh-actions'] = original_gh
+      package.loaded['user.git'] = original_git
     end)
 
     it('yaml.ghaction breaks when gh-actions returns nil', function()
