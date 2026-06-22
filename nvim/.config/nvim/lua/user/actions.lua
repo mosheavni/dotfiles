@@ -34,6 +34,19 @@ local function substitute_replacement(term)
   return vim.fn.escape(term, '?&/\\~')
 end
 
+---@return string dir
+---@return string file
+local function shada_location()
+  local dir = vim.fn.stdpath 'state' .. '/shada'
+  local name = 'main'
+  for token in vim.o.shada:gmatch '[^,]+' do
+    if token:sub(1, 1) == 'n' and #token > 1 then
+      name = token:sub(2)
+    end
+  end
+  return dir, dir .. '/' .. name .. '.shada'
+end
+
 local find_in_project = function(opts)
   opts = opts or {
     literal_search = true,
@@ -242,6 +255,47 @@ end)
   end,
   ['[Misc] Close all notifications (<leader>x)'] = function()
     require('notify').dismiss { pending = true, silent = true }
+  end,
+  ['[Misc] Fix corrupted ShaDa file'] = function()
+    local title = 'ShaDa'
+    local dir, shada_file = shada_location()
+
+    local removed_tmp = 0
+    for _, path in ipairs(vim.fn.glob(dir .. '/*.tmp.*', false, true)) do
+      if vim.fn.delete(path) == 0 then
+        removed_tmp = removed_tmp + 1
+      end
+    end
+
+    if vim.fn.filereadable(shada_file) ~= 1 then
+      vim.cmd 'wshada'
+      vim.notify(('Wrote new ShaDa file (none existed). Removed %d stale temp file(s).'):format(removed_tmp), vim.log.levels.INFO, { title = title })
+      return
+    end
+
+    local backup = shada_file .. '.broken.' .. os.date '%Y%m%d-%H%M%S'
+    if vim.fn.rename(shada_file, backup) ~= 0 then
+      vim.notify('Could not move corrupt ShaDa file: ' .. shada_file, vim.log.levels.ERROR, { title = title })
+      return
+    end
+
+    local ok = pcall(vim.cmd, 'silent! rshada! ' .. vim.fn.fnameescape(backup))
+    vim.cmd 'wshada'
+
+    local msg
+    if ok then
+      msg = ('Repaired ShaDa (salvaged what could be read). Backup: %s'):format(backup)
+      if removed_tmp > 0 then
+        msg = msg .. ('. Removed %d stale temp file(s).'):format(removed_tmp)
+      end
+      vim.notify(msg, vim.log.levels.INFO, { title = title })
+    else
+      msg = ('ShaDa reset (history lost). Corrupt backup: %s'):format(backup)
+      if removed_tmp > 0 then
+        msg = msg .. ('. Removed %d stale temp file(s).'):format(removed_tmp)
+      end
+      vim.notify(msg, vim.log.levels.WARN, { title = title })
+    end
   end,
   ['[Misc] Quit all (<leader>qq)'] = function()
     vim.cmd.qall()
