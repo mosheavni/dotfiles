@@ -28,21 +28,20 @@ flowchart TD
 
   gotPath --> resolve["resolve.run(sh, file_name)"]
   resolve --> buildCtx["ctx = { ft, file_name, first_line }"]
-  buildCtx --> lookup["resolve.get(ft)"]
-  lookup --> resolveH["handler.resolve(ctx, on_done)"]
-  resolveH --> handler{registered handler?}
-  handler -->|no| default["default.resolve → on_done"]
+  buildCtx --> lookup{registered handler?}
+  lookup -->|yes| resolveH["handler.resolve(ctx)"]
+  lookup -->|no| default["default_resolve(ctx)"]
   default --> cmdLookup["utils.command_for_filetype('sh') → bash"]
   cmdLookup --> shebang{first line starts with #!?}
   shebang -->|no| buildCmd["cmd = 'bash /path/to/script.sh'"]
   shebang -->|yes| shebangCmd["cmd = file path only"]
-  buildCmd --> result["{ cmd, done=false }"]
+  buildCmd --> result["{ cmd, spawn=true }"]
   shebangCmd --> result
+  resolveH --> result
 
-  result --> callback["on_done(cmd, done)"]
-  callback --> doneCheck{done or no cmd?}
-  doneCheck -->|yes| stop2[return]
-  doneCheck -->|no| cwd["buffer.run_cwd(sh) → buffer's directory"]
+  result --> spawnCheck{result.spawn?}
+  spawnCheck -->|no| stop2[return]
+  spawnCheck -->|yes| cwd["resolve.cwd(sh) → buffer's directory"]
   cwd --> where{where arg set?}
   where -->|F3: nil| terminal["run_in_terminal(file, cmd, {cwd})"]
   where -->|:RunInTab| wezterm[wezterm.spawn_and_send — not F3]
@@ -59,11 +58,12 @@ flowchart TD
 
 2. **`buffer.filename_and_ft`** — file has a path and is not dirty → returns `/path/to/script.sh`, `sh`.
 
-3. **`resolve.run`** — no `sh` handler in the registry → **`default.resolve`**:
+3. **`resolve.run`** — no `sh` handler in the registry → **`default_resolve`**:
    - `utils.command_for_filetype('sh')` → `bash`
    - no shebang → `bash /path/to/script.sh`
+   - returns `{ cmd = 'bash /path/to/script.sh', spawn = true }`
 
-4. **`buffer.run_cwd`** — no custom `cwd` handler for `sh` → parent directory of the buffer file.
+4. **`resolve.cwd`** — no custom `cwd` handler for `sh` → parent directory of the buffer file.
 
 5. **`run_in_terminal`** (first run for this file):
    - creates a terminal buffer in a split
@@ -87,8 +87,8 @@ Resolution is the same. `run_in_terminal` finds the existing terminal registered
 | Step | Module |
 | ---- | ------ |
 | Keymap / orchestration | `init.lua` |
-| Registry, default resolve, `run` | `resolve.lua` |
+| Registry, default resolve, `run`, `cwd` | `resolve.lua` |
 | Buffer path + save prompt | `buffer.lua` |
-| Builtin handlers (except make) | `handlers/init.lua` |
+| Builtin handlers | `handlers/*.lua` (one per filetype) |
 | Makefile target picker | `handlers/make.lua` |
 | Terminal split + per-file state | `user.terminal` |
