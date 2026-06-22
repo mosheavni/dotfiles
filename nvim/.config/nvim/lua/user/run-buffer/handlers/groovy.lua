@@ -5,9 +5,9 @@ M.ft = 'groovy'
 
 ---@type RunHandler
 M.handler = {
-  resolve = function(_, on_done)
+  resolve = function(_)
     require('user.jenkins-validate').validate()
-    on_done { spawn = false }
+    return { spawn = false }
   end,
 }
 

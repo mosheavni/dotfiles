@@ -27,23 +27,20 @@ local function sync_result(ft, file_name, first_line)
   if parent and parent ~= '' and vim.fn.isdirectory(parent) == 0 then
     vim.fn.mkdir(parent, 'p')
   end
-  local f = assert(io.open(file_name, 'w'))
-  f:close()
+  if vim.fn.filereadable(file_name) == 0 then
+    local f = assert(io.open(file_name, 'w'))
+    f:close()
+  end
   vim.cmd 'enew'
   vim.api.nvim_buf_set_name(0, file_name)
   vim.bo.buftype = ''
-  vim.bo.filetype = ft
   vim.bo.modified = false
   if first_line and first_line ~= '' then
     vim.api.nvim_buf_set_lines(0, 0, -1, false, { first_line })
   else
     vim.api.nvim_buf_set_lines(0, 0, -1, false, {})
   end
-  local result
-  resolve.run(ft, file_name, function(r)
-    result = r
-  end)
-  return result
+  return resolve.run(ft, file_name)
 end
 
 describe('user.run-buffer', function()
@@ -304,10 +301,7 @@ describe('user.run-buffer', function()
         end,
       }
 
-      local result
-      resolve.run('yaml.ghaction', workflow, function(r)
-        result = r
-      end)
+      local result = resolve.run('yaml.ghaction', workflow)
       eq(result.cmd, 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json')
       eq(result.spawn, true)
 
@@ -322,10 +316,7 @@ describe('user.run-buffer', function()
         end,
       }
 
-      local result
-      resolve.run('yaml.ghaction', '/repo/.github/workflows/ci.yml', function(r)
-        result = r
-      end)
+      local result = resolve.run('yaml.ghaction', '/repo/.github/workflows/ci.yml')
       eq(result.cmd, nil)
       eq(result.spawn, false)
 
@@ -338,60 +329,64 @@ describe('user.run-buffer', function()
       f:write 'all:\n\ntest:\n'
       f:close()
 
-      local original_ui_select = vim.ui.select
-      vim.ui.select = function(_items, _opts, on_select)
-        on_select('2 - test', 2)
+      local original_inputlist = vim.fn.inputlist
+      vim.fn.inputlist = function()
+        return 2
       end
 
-      local result
-      resolve.run('make', makefile_path, function(r)
-        result = r
-      end)
+      local result = sync_result('make', makefile_path, '')
       eq(result.cmd, 'make test')
       eq(result.spawn, true)
 
-      vim.ui.select = original_ui_select
+      vim.fn.inputlist = original_inputlist
       os.remove(makefile_path)
     end)
   end)
 
-  describe('make.get_make_async', function()
+  describe('make.pick_make_cmd', function()
     local makefile_path
-    local original_ui_select
+    local original_inputlist
 
     before_each(function()
       makefile_path = vim.fn.tempname()
       local f = assert(io.open(makefile_path, 'w'))
       f:write 'all:\n\ntest:\n'
       f:close()
-      original_ui_select = vim.ui.select
+      original_inputlist = vim.fn.inputlist
     end)
 
     after_each(function()
-      vim.ui.select = original_ui_select
+      vim.fn.inputlist = original_inputlist
       os.remove(makefile_path)
     end)
 
     it('returns make <target> for the selected index', function()
-      vim.ui.select = function(_items, _opts, on_select)
-        on_select('2 - test', 2)
+      vim.fn.inputlist = function()
+        return 2
       end
-      local done_cmd
-      make.get_make_async(makefile_path, function(cmd)
-        done_cmd = cmd
-      end)
-      eq(done_cmd, 'make test')
+      eq(make.pick_make_cmd(makefile_path), 'make test')
     end)
 
     it('returns nil when the picker is cancelled', function()
-      vim.ui.select = function(_items, _opts, on_select)
-        on_select(nil, nil)
+      vim.fn.inputlist = function()
+        return -1
       end
-      local done_cmd = 'pending'
-      make.get_make_async(makefile_path, function(cmd)
-        done_cmd = cmd
-      end)
-      eq(done_cmd, nil)
+      eq(make.pick_make_cmd(makefile_path), nil)
+    end)
+
+    it('skips the picker when there is only one target', function()
+      local single = vim.fn.tempname()
+      local sf = assert(io.open(single, 'w'))
+      sf:write 'all:\n'
+      sf:close()
+      local called = false
+      vim.fn.inputlist = function()
+        called = true
+        return 1
+      end
+      eq(make.pick_make_cmd(single), 'make all')
+      assert.is_false(called)
+      os.remove(single)
     end)
   end)
 

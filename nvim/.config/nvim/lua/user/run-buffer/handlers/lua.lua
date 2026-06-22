@@ -21,9 +21,9 @@ end
 
 ---@type RunHandler
 M.handler = {
-  resolve = function(ctx, on_done)
+  resolve = function(ctx)
     run_lua(ctx.file_name)
-    on_done { spawn = false }
+    return { spawn = false }
   end,
 }
 

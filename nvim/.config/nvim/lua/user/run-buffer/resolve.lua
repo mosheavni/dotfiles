@@ -11,8 +11,8 @@ local append_file = {
 
 --- Default resolve: `command_for_filetype` + file path, or shebang path only.
 ---@param ctx RunContext
----@param on_done RunOnDone
-local function default_resolve(ctx, on_done)
+---@return RunResult
+local function default_resolve(ctx)
   local cmd
   if ctx.first_line:match '^#!' then
     cmd = ctx.file_name
@@ -22,19 +22,18 @@ local function default_resolve(ctx, on_done)
       cmd = cmd .. ' ' .. ctx.file_name
     end
   end
-  on_done { cmd = cmd, spawn = true }
+  return { cmd = cmd, spawn = true }
 end
 
 --- Dispatch to a registered handler or the default builder.
 ---@param ctx RunContext
----@param on_done RunOnDone
-local function invoke_resolve(ctx, on_done)
+---@return RunResult
+local function invoke_resolve(ctx)
   local h = handlers[ctx.ft]
   if h and h.resolve then
-    h.resolve(ctx, on_done)
-    return
+    return h.resolve(ctx)
   end
-  default_resolve(ctx, on_done)
+  return default_resolve(ctx)
 end
 
 local M = {}
@@ -56,17 +55,17 @@ function M.cwd(ft)
   return vim.fn.expand '%:p:h'
 end
 
---- Resolve how to run the current buffer and invoke `on_done` with the result.
+--- Resolve how to run the current buffer.
 --- Builds `RunContext` from the current buffer's first line.
 ---@param ft string
 ---@param file_name string Absolute path to run.
----@param on_done RunOnDone
-function M.run(ft, file_name, on_done)
-  invoke_resolve({
+---@return RunResult
+function M.run(ft, file_name)
+  return invoke_resolve {
     ft = ft,
     file_name = file_name,
     first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or '',
-  }, on_done)
+  }
 end
 
 require('user.run-buffer.handlers').register_all(M)

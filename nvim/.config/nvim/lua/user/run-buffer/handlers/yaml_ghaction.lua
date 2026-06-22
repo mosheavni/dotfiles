@@ -5,13 +5,12 @@ M.ft = 'yaml.ghaction'
 
 ---@type RunHandler
 M.handler = {
-  resolve = function(ctx, on_done)
+  resolve = function(ctx)
     local cmd = require('user.gh-actions').build_act_cmd(ctx.file_name)
     if cmd then
-      on_done { cmd = cmd, spawn = true }
-    else
-      on_done { spawn = false }
+      return { cmd = cmd, spawn = true }
     end
+    return { spawn = false }
   end,
   cwd = function()
     local root = require('user.git').get_toplevel_sync()

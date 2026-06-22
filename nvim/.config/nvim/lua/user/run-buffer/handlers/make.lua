@@ -24,7 +24,7 @@ function M.makefile_target_name(line)
   return target
 end
 
---- Parse rule targets from a Makefile into vim.ui.select options.
+--- Parse rule targets from a Makefile into numbered labels for `inputlist`.
 ---@param path string Absolute path to the Makefile.
 ---@return { text: string, value: string }[] Options like `{ text = "1 - all", value = "all" }`.
 function M.get_makefile_options(path)
@@ -51,38 +51,35 @@ function M.get_makefile_options(path)
   return options
 end
 
---- Prompt for a Makefile target and invoke `on_done` with `make <target>` or nil.
+--- Prompt for a Makefile target via `inputlist`; returns `make <target>` or nil.
 ---@param file_name string Absolute path to the Makefile.
----@param on_done fun(cmd: string|nil)
-function M.get_make_async(file_name, on_done)
+---@return string|nil cmd
+function M.pick_make_cmd(file_name)
   local options = M.get_makefile_options(file_name)
   if #options == 0 then
-    on_done(nil)
-    return
+    return nil
+  end
+  if #options == 1 then
+    return 'make ' .. options[1].value
   end
   local labels = vim.tbl_map(function(option)
     return option.text
   end, options)
-  vim.ui.select(labels, { prompt = 'Select make target❯ ' }, function(_, idx)
-    if not idx then
-      on_done(nil)
-      return
-    end
-    on_done('make ' .. options[idx].value)
-  end)
+  local idx = vim.fn.inputlist(labels)
+  if idx <= 0 then
+    return nil
+  end
+  return 'make ' .. options[idx].value
 end
 
---- Run handler: interactive target picker; calls `on_done({ spawn = false })` when cancelled.
 ---@type RunHandler
 M.handler = {
-  resolve = function(ctx, on_done)
-    M.get_make_async(ctx.file_name, function(cmd)
-      if not cmd then
-        on_done { spawn = false }
-        return
-      end
-      on_done { cmd = cmd, spawn = true }
-    end)
+  resolve = function(ctx)
+    local cmd = M.pick_make_cmd(ctx.file_name)
+    if not cmd then
+      return { spawn = false }
+    end
+    return { cmd = cmd, spawn = true }
   end,
 }
 

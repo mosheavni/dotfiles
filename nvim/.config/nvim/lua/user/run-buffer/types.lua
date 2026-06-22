@@ -6,20 +6,17 @@
 ---@field file_name string Absolute path to the file on disk.
 ---@field first_line string Contents of line 1 (used for shebang detection in the default handler).
 
---- Result passed to `on_done` after command resolution.
+--- Result returned from command resolution.
 ---@class RunResult
 ---@field cmd string|nil Shell command when `spawn` is true.
 ---@field spawn boolean When true, run `cmd` in terminal/wezterm; when false, stop orchestration.
 
---- Callback invoked when command resolution finishes.
----@alias RunOnDone fun(result: RunResult)
-
---- Resolve how to run a buffer. Must always call `on_done` (immediately or after async UI).
----@alias RunResolve fun(ctx: RunContext, on_done: RunOnDone)
+--- Resolve how to run a buffer synchronously.
+---@alias RunResolve fun(ctx: RunContext): RunResult
 
 --- Per-filetype handler registered in the run-buffer registry.
 ---@class RunHandler
----@field resolve? RunResolve Build a command or run in-buffer; call `on_done` when finished.
+---@field resolve? RunResolve Build a command or run in-buffer; return the result.
 ---@field cwd? fun(): string Override working directory for terminal/wezterm (default: buffer directory).
 
 --- Builtin or plugin handler module shape (`require(...)` + register).

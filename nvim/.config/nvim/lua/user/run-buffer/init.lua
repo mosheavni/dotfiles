@@ -71,19 +71,18 @@ local function execute_file(where)
     return
   end
 
-  resolve.run(ft, file_name, function(result)
-    if not result.spawn then
-      return
-    end
+  local result = resolve.run(ft, file_name)
+  if not result.spawn then
+    return
+  end
 
-    local opts = { cwd = resolve.cwd(ft) }
-    if where and where ~= 'terminal' then
-      wezterm.spawn_and_send(result.cmd, vim.tbl_extend('force', opts, { place_after_current = true }))
-      return
-    end
+  local opts = { cwd = resolve.cwd(ft) }
+  if where and where ~= 'terminal' then
+    wezterm.spawn_and_send(result.cmd, vim.tbl_extend('force', opts, { place_after_current = true }))
+    return
+  end
 
-    run_in_terminal(file_name, result.cmd, opts)
-  end)
+  run_in_terminal(file_name, result.cmd, opts)
 end
 
 --- Install F3, `:RunInTerminal`, `:RunInTab`, and menu entries.
