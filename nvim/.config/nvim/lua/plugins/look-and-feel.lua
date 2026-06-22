@@ -2,6 +2,7 @@ vim.pack.add {
   'https://github.com/nvim-tree/nvim-web-devicons',
   'https://github.com/luukvbaal/statuscol.nvim',
   'https://github.com/MeanderingProgrammer/render-markdown.nvim',
+  'https://github.com/kevinhwang91/nvim-bqf',
 }
 
 return function()
@@ -32,5 +33,12 @@ return function()
 
   require('render-markdown').setup {
     file_types = { 'markdown', 'Avante', 'AgenticChat' },
+  }
+
+  require('bqf').setup {
+    func_map = {
+      prevhist = '<',
+      nexthist = '>',
+    },
   }
 end

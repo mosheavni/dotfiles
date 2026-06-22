@@ -8,7 +8,7 @@ end
 
 describe('user.lister', function()
   before_each(function()
-    lister.reset_history()
+    lister.reset_search_label()
     vim.fn.setqflist {}
   end)
 
@@ -65,47 +65,6 @@ describe('user.lister', function()
       }
       lister.filter('vim.pack', 'text', false)
       assert.are.same({ 'vim.pack.add {' }, qf_texts())
-    end)
-  end)
-
-  describe('history', function()
-    it('undo restores quickfix state before the last filter', function()
-      vim.fn.setqflist {
-        { filename = '/a', lnum = 1, text = 'foo bar' },
-        { filename = '/b', lnum = 2, text = 'baz qux' },
-      }
-      lister.filter('foo', 'text', false)
-      assert.are.same({ 'foo bar' }, qf_texts())
-      lister.undo()
-      assert.are.same({ 'foo bar', 'baz qux' }, qf_texts())
-    end)
-
-    it('redo restores quickfix state after undo', function()
-      vim.fn.setqflist {
-        { filename = '/a', lnum = 1, text = 'foo bar' },
-        { filename = '/b', lnum = 2, text = 'baz qux' },
-      }
-      lister.filter('foo', 'text', false)
-      lister.undo()
-      lister.redo()
-      assert.are.same({ 'foo bar' }, qf_texts())
-    end)
-
-    it('new filter after undo drops redo branch', function()
-      vim.fn.setqflist {
-        { filename = '/a', lnum = 1, text = 'foo bar' },
-        { filename = '/b', lnum = 2, text = 'baz qux' },
-        { filename = '/c', lnum = 3, text = 'foo baz' },
-      }
-      lister.filter('foo', 'text', false)
-      lister.filter('bar', 'text', false)
-      assert.are.same({ 'foo bar' }, qf_texts())
-      lister.undo()
-      assert.are.same({ 'foo bar', 'foo baz' }, qf_texts())
-      lister.filter('baz', 'text', false)
-      assert.are.same({ 'foo baz' }, qf_texts())
-      assert.is_false(lister.redo())
-      assert.are.same({ 'foo baz' }, qf_texts())
     end)
   end)
 end)
