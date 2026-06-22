@@ -23,7 +23,27 @@ local function fresh_named_buffer(path, ft)
 end
 
 local function sync_result(ft, file_name, first_line)
-  return resolve.resolve_sync { ft = ft, file_name = file_name, first_line = first_line or '' }
+  local parent = vim.fs.dirname(file_name)
+  if parent and parent ~= '' and vim.fn.isdirectory(parent) == 0 then
+    vim.fn.mkdir(parent, 'p')
+  end
+  local f = assert(io.open(file_name, 'w'))
+  f:close()
+  vim.cmd 'enew'
+  vim.api.nvim_buf_set_name(0, file_name)
+  vim.bo.buftype = ''
+  vim.bo.filetype = ft
+  vim.bo.modified = false
+  if first_line and first_line ~= '' then
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, { first_line })
+  else
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, {})
+  end
+  local result
+  resolve.run(ft, file_name, function(r)
+    result = r
+  end)
+  return result
 end
 
 describe('user.run-buffer', function()
@@ -153,10 +173,9 @@ describe('user.run-buffer', function()
       assert.is_true(notifications[1].msg:find 'start_ls' ~= nil)
       eq(notifications[1].level, vim.log.levels.ERROR)
     end)
-
   end)
 
-  describe('buffer.run_cwd', function()
+  describe('resolve.cwd', function()
     local original_git
 
     before_each(function()
@@ -173,7 +192,7 @@ describe('user.run-buffer', function()
           return '/repo'
         end,
       }
-      eq(buffer.run_cwd 'yaml.ghaction', '/repo')
+      eq(resolve.cwd 'yaml.ghaction', '/repo')
     end)
 
     it('falls back to the buffer directory when not in a git repo', function()
@@ -184,13 +203,13 @@ describe('user.run-buffer', function()
       }
       local tmp = vim.fn.tempname() .. '.yml'
       fresh_named_buffer(tmp, 'yaml.ghaction')
-      eq(buffer.run_cwd 'yaml.ghaction', vim.fn.expand '%:p:h')
+      eq(resolve.cwd 'yaml.ghaction', vim.fn.expand '%:p:h')
     end)
 
     it('uses the buffer directory for other filetypes', function()
       local tmp = vim.fn.tempname() .. '.py'
       fresh_named_buffer(tmp, 'python')
-      eq(buffer.run_cwd 'python', vim.fn.expand '%:p:h')
+      eq(resolve.cwd 'python', vim.fn.expand '%:p:h')
     end)
   end)
 
@@ -198,25 +217,25 @@ describe('user.run-buffer', function()
     it('terraform runs terraform plan without appending the file path', function()
       local result = sync_result('terraform', '/tmp/main.tf', '')
       eq(result.cmd, 'terraform plan')
-      eq(result.done, false)
+      eq(result.spawn, true)
     end)
 
     it('python appends the file path', function()
       local result = sync_result('python', '/tmp/script.py', '')
       eq(result.cmd, 'python3 /tmp/script.py')
-      eq(result.done, false)
+      eq(result.spawn, true)
     end)
 
     it('yaml uses yq', function()
       local result = sync_result('yaml', '/tmp/config.yaml', '')
       eq(result.cmd, 'yq /tmp/config.yaml')
-      eq(result.done, false)
+      eq(result.spawn, true)
     end)
 
     it('compound yaml filetypes use yq', function()
       local result = sync_result('yaml.docker-compose', '/tmp/docker-compose.yml', '')
       eq(result.cmd, 'yq /tmp/docker-compose.yml')
-      eq(result.done, false)
+      eq(result.spawn, true)
     end)
 
     it('lua reloads the buffer and does not return a shell command', function()
@@ -230,7 +249,7 @@ describe('user.run-buffer', function()
 
       local result = sync_result('lua', '/tmp/nvim/lua/user/foo.lua', '')
       eq(result.cmd, nil)
-      eq(result.done, true)
+      eq(result.spawn, false)
       eq(called, 'luafile %')
 
       vim.cmd = original_cmd
@@ -247,7 +266,7 @@ describe('user.run-buffer', function()
 
       local result = sync_result('groovy', '/tmp/Jenkinsfile', '')
       eq(result.cmd, nil)
-      eq(result.done, true)
+      eq(result.spawn, false)
       assert.is_true(called)
 
       package.loaded['user.jenkins-validate'] = original_jv
@@ -268,7 +287,7 @@ describe('user.run-buffer', function()
 
       local result = sync_result('markdown', '/tmp/readme.md', '')
       eq(result.cmd, nil)
-      eq(result.done, true)
+      eq(result.spawn, false)
       eq(received.cmd, { 'mdserve', '--open', '/tmp/readme.md' })
       eq(received.opts.detach, true)
 
@@ -285,14 +304,12 @@ describe('user.run-buffer', function()
         end,
       }
 
-      local done_cmd
-      local done_break
-      resolve.run('yaml.ghaction', workflow, function(cmd, done)
-        done_cmd = cmd
-        done_break = done
+      local result
+      resolve.run('yaml.ghaction', workflow, function(r)
+        result = r
       end)
-      eq(done_cmd, 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json')
-      eq(done_break, false)
+      eq(result.cmd, 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json')
+      eq(result.spawn, true)
 
       package.loaded['user.gh-actions'] = original_gh
     end)
@@ -305,14 +322,12 @@ describe('user.run-buffer', function()
         end,
       }
 
-      local done_cmd = 'pending'
-      local done_break = false
-      resolve.run('yaml.ghaction', '/repo/.github/workflows/ci.yml', function(cmd, done)
-        done_cmd = cmd
-        done_break = done
+      local result
+      resolve.run('yaml.ghaction', '/repo/.github/workflows/ci.yml', function(r)
+        result = r
       end)
-      eq(done_cmd, nil)
-      eq(done_break, true)
+      eq(result.cmd, nil)
+      eq(result.spawn, false)
 
       package.loaded['user.gh-actions'] = original_gh
     end)
@@ -328,12 +343,12 @@ describe('user.run-buffer', function()
         on_select('2 - test', 2)
       end
 
-      local done_cmd
-      resolve.run('make', makefile_path, function(cmd, done)
-        done_cmd = cmd
-        eq(done, false)
+      local result
+      resolve.run('make', makefile_path, function(r)
+        result = r
       end)
-      eq(done_cmd, 'make test')
+      eq(result.cmd, 'make test')
+      eq(result.spawn, true)
 
       vim.ui.select = original_ui_select
       os.remove(makefile_path)

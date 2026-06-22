@@ -23,7 +23,7 @@ end
 M.handler = {
   resolve = function(ctx, on_done)
     run_lua(ctx.file_name)
-    on_done(nil, true)
+    on_done { spawn = false }
   end,
 }
 

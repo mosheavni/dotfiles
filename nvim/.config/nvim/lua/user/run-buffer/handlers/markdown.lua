@@ -10,7 +10,7 @@ M.handler = {
     if job_id <= 0 then
       vim.notify('Failed to start mdserve', vim.log.levels.ERROR, { title = 'run-buffer' })
     end
-    on_done(nil, true)
+    on_done { spawn = false }
   end,
 }
 

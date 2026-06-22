@@ -9,11 +9,6 @@ local wezterm = require 'user.wezterm'
 
 local INTERRUPT_DELAY_MS = 50
 
---- Register a custom run handler for a filetype.
-M.register_handler = resolve.register_handler
---- Register a handler module (`{ ft, handler }`).
-M.register_handler_module = resolve.register_handler_module
-
 --- Send `cmd` to the per-file run terminal, creating or reusing the split for `file_name`.
 --- On re-run, interrupts the previous job with Ctrl-C, optionally `cd`s, then sends the command.
 ---@param file_name string Absolute buffer path (terminal registry key).
@@ -76,18 +71,18 @@ local function execute_file(where)
     return
   end
 
-  resolve.run(ft, file_name, function(cmd, done)
-    if done or not cmd then
+  resolve.run(ft, file_name, function(result)
+    if not result.spawn then
       return
     end
 
-    local opts = { cwd = buffer.run_cwd(ft) }
+    local opts = { cwd = resolve.cwd(ft) }
     if where and where ~= 'terminal' then
-      wezterm.spawn_and_send(cmd, vim.tbl_extend('force', opts, { place_after_current = true }))
+      wezterm.spawn_and_send(result.cmd, vim.tbl_extend('force', opts, { place_after_current = true }))
       return
     end
 
-    run_in_terminal(file_name, cmd, opts)
+    run_in_terminal(file_name, result.cmd, opts)
   end)
 end
 

@@ -7,7 +7,11 @@ M.ft = 'yaml.ghaction'
 M.handler = {
   resolve = function(ctx, on_done)
     local cmd = require('user.gh-actions').build_act_cmd(ctx.file_name)
-    on_done(cmd, cmd == nil)
+    if cmd then
+      on_done { cmd = cmd, spawn = true }
+    else
+      on_done { spawn = false }
+    end
   end,
   cwd = function()
     local root = require('user.git').get_toplevel_sync()

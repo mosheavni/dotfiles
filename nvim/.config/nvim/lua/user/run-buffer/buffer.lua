@@ -1,6 +1,4 @@
 -- Buffer path and working-directory helpers for run-buffer.
-local resolve = require 'user.run-buffer.resolve'
-
 local M = {}
 
 --- Ensure the current buffer has a runnable path and return it with the filetype.
@@ -33,17 +31,6 @@ function M.filename_and_ft()
     end
   end
   return file_name, ft
-end
-
---- Working directory for running the buffer (handler `cwd` or parent of the buffer file).
----@param ft string Filetype used to look up an optional `cwd` handler.
----@return string
-function M.run_cwd(ft)
-  local h = resolve.get(ft)
-  if h and h.cwd then
-    return h.cwd()
-  end
-  return vim.fn.expand '%:p:h'
 end
 
 return M

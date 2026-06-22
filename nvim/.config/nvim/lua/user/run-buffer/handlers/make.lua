@@ -72,16 +72,16 @@ function M.get_make_async(file_name, on_done)
   end)
 end
 
---- Run handler: interactive target picker; calls `on_done(nil, true)` when cancelled.
+--- Run handler: interactive target picker; calls `on_done({ spawn = false })` when cancelled.
 ---@type RunHandler
 M.handler = {
   resolve = function(ctx, on_done)
     M.get_make_async(ctx.file_name, function(cmd)
       if not cmd then
-        on_done(nil, true)
+        on_done { spawn = false }
         return
       end
-      on_done(cmd, false)
+      on_done { cmd = cmd, spawn = true }
     end)
   end,
 }

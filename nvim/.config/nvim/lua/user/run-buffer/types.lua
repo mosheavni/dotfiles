@@ -6,13 +6,13 @@
 ---@field file_name string Absolute path to the file on disk.
 ---@field first_line string Contents of line 1 (used for shebang detection in the default handler).
 
---- Result of a synchronous resolve, or the values passed to `on_done`.
+--- Result passed to `on_done` after command resolution.
 ---@class RunResult
----@field cmd string|nil Shell command to run; `nil` when the handler already executed in-buffer.
----@field done boolean When true, orchestration stops (no terminal/tab spawn).
+---@field cmd string|nil Shell command when `spawn` is true.
+---@field spawn boolean When true, run `cmd` in terminal/wezterm; when false, stop orchestration.
 
 --- Callback invoked when command resolution finishes.
----@alias RunOnDone fun(cmd: string|nil, done: boolean)
+---@alias RunOnDone fun(result: RunResult)
 
 --- Resolve how to run a buffer. Must always call `on_done` (immediately or after async UI).
 ---@alias RunResolve fun(ctx: RunContext, on_done: RunOnDone)

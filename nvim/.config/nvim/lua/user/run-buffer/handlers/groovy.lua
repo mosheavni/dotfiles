@@ -7,7 +7,7 @@ M.ft = 'groovy'
 M.handler = {
   resolve = function(_, on_done)
     require('user.jenkins-validate').validate()
-    on_done(nil, true)
+    on_done { spawn = false }
   end,
 }
 

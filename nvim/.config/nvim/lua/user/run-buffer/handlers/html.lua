@@ -7,7 +7,7 @@ M.ft = 'html'
 M.handler = {
   resolve = function(ctx, on_done)
     vim.ui.open(ctx.file_name)
-    on_done(nil, true)
+    on_done { spawn = false }
   end,
 }
 
