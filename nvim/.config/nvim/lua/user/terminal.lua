@@ -80,11 +80,12 @@ local function next_shell_name()
   return 'Terminal ' .. shell_name_seq.n
 end
 
+--- Create a buffer, show it in the bottom split, and start an interactive shell job.
 ---@param cwd string
 ---@param on_exit? fun(buf: integer)
 ---@return integer buf
 ---@return integer job_id
-local function spawn_shell(cwd, on_exit)
+function M.spawn(cwd, on_exit)
   local term_buf = vim.api.nvim_create_buf(false, true)
   M.show(term_buf)
 
@@ -123,7 +124,7 @@ function M.open(opts)
     end
     cwd = vim.fn.getcwd()
   end
-  local buf, job_id = spawn_shell(cwd, function(term_buf)
+  local buf, job_id = M.spawn(cwd, function(term_buf)
     M.unregister('shell-' .. term_buf)
   end)
 

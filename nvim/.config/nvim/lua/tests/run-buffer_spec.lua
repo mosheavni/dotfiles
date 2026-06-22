@@ -1,17 +1,9 @@
 ---@diagnostic disable: undefined-field, undefined-global, need-check-nil
 --# selene: allow(undefined_variable)
 
--- Tests for user.run-buffer.
---
--- The original regression these tests guard against: filename_and_ft used to
--- call `_G.start_ls()` without arguments. After the lsp/config.lua refactor
--- in commit 2f1fce9d (July 2025) made tempfile creation opt-in via
--- `with_file = true`, the no-arg call started silently returning nil and
--- <F3> on an unnamed buffer became a no-op. The tests below pin down both
--- the call-site (start_ls receives `true`) and the runtime contract
--- (a non-string return is reported, not swallowed).
-
-local rb = require 'user.run-buffer'
+local buffer = require 'user.run-buffer.buffer'
+local make = require 'user.run-buffer.handlers.make'
+local command = require 'user.run-buffer.command'
 local eq = assert.are.same
 
 local function fresh_unnamed_buffer()
@@ -21,8 +13,34 @@ local function fresh_unnamed_buffer()
 end
 
 local function fresh_named_buffer(path, ft)
-  vim.cmd('edit ' .. vim.fn.fnameescape(path))
+  local f = assert(io.open(path, 'w'))
+  f:close()
+  vim.cmd 'enew'
+  vim.api.nvim_buf_set_name(0, path)
+  vim.bo.buftype = ''
   vim.bo.filetype = ft or ''
+  vim.bo.modified = false
+end
+
+local function sync_result(ft, file_name, first_line)
+  local parent = vim.fs.dirname(file_name)
+  if parent and parent ~= '' and vim.fn.isdirectory(parent) == 0 then
+    vim.fn.mkdir(parent, 'p')
+  end
+  if vim.fn.filereadable(file_name) == 0 then
+    local f = assert(io.open(file_name, 'w'))
+    f:close()
+  end
+  vim.cmd 'enew'
+  vim.api.nvim_buf_set_name(0, file_name)
+  vim.bo.buftype = ''
+  vim.bo.modified = false
+  if first_line and first_line ~= '' then
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, { first_line })
+  else
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, {})
+  end
+  return command.build(ft, file_name)
 end
 
 describe('user.run-buffer', function()
@@ -45,12 +63,12 @@ describe('user.run-buffer', function()
     pcall(vim.cmd, 'bwipeout!')
   end)
 
-  describe('filename_and_ft - named buffer', function()
+  describe('buffer.filename_and_ft - named buffer', function()
     it('returns the buffer path and its filetype', function()
       local tmp = vim.fn.tempname() .. '.sh'
       fresh_named_buffer(tmp, 'sh')
 
-      local path, ft = rb._filename_and_ft()
+      local path, ft = buffer.filename_and_ft()
       eq(path, tmp)
       eq(ft, 'sh')
     end)
@@ -59,7 +77,7 @@ describe('user.run-buffer', function()
       local tmp = vim.fn.tempname() .. '.unknown'
       fresh_named_buffer(tmp, '')
 
-      local _, ft = rb._filename_and_ft()
+      local _, ft = buffer.filename_and_ft()
       eq(ft, 'sh')
     end)
 
@@ -71,26 +89,22 @@ describe('user.run-buffer', function()
       local tmp = vim.fn.tempname() .. '.sh'
       fresh_named_buffer(tmp, 'sh')
 
-      rb._filename_and_ft()
+      buffer.filename_and_ft()
       assert.is_false(called)
     end)
   end)
 
-  describe('filename_and_ft - unnamed buffer (regression guards)', function()
+  describe('buffer.filename_and_ft - unnamed buffer (regression guards)', function()
     it('calls _G.start_ls with `true` so a tempfile is written (REGRESSION GUARD)', function()
-      -- This is THE test that would have caught the original bug.
-      -- If someone removes the `true` argument again, this fails loudly.
       local received_args
       _G.start_ls = function(...)
         received_args = { ... }
-        -- Mimic the real start_ls(true) post-condition: buffer was written
-        -- to disk by tmp_write, so it's no longer modified.
         vim.bo.modified = false
         return '/tmp/run-buffer-test.sh'
       end
       fresh_unnamed_buffer()
 
-      rb._filename_and_ft()
+      buffer.filename_and_ft()
       eq(received_args, { true })
     end)
 
@@ -101,7 +115,7 @@ describe('user.run-buffer', function()
       end
       fresh_unnamed_buffer()
 
-      local path, ft = rb._filename_and_ft()
+      local path, ft = buffer.filename_and_ft()
       eq(path, '/tmp/run-buffer-test.sh')
       eq(ft, 'sh')
     end)
@@ -117,7 +131,7 @@ describe('user.run-buffer', function()
       vim.bo.buftype = ''
       vim.bo.filetype = 'python'
 
-      rb._filename_and_ft()
+      buffer.filename_and_ft()
       eq(observed_ft, 'python')
     end)
 
@@ -127,7 +141,7 @@ describe('user.run-buffer', function()
       end
       fresh_unnamed_buffer()
 
-      local path, ft = rb._filename_and_ft()
+      local path, ft = buffer.filename_and_ft()
       eq(path, nil)
       eq(ft, nil)
       assert.is_true(#notifications >= 1)
@@ -141,7 +155,7 @@ describe('user.run-buffer', function()
       end
       fresh_unnamed_buffer()
 
-      local path = rb._filename_and_ft()
+      local path = buffer.filename_and_ft()
       eq(path, nil)
       assert.is_true(#notifications >= 1)
     end)
@@ -150,143 +164,113 @@ describe('user.run-buffer', function()
       _G.start_ls = nil
       fresh_unnamed_buffer()
 
-      local path = rb._filename_and_ft()
+      local path = buffer.filename_and_ft()
       eq(path, nil)
       assert.is_true(#notifications >= 1)
       assert.is_true(notifications[1].msg:find 'start_ls' ~= nil)
       eq(notifications[1].level, vim.log.levels.ERROR)
     end)
-
-    it('uses tmp_write for unnamed markdown instead of start_ls', function()
-      local called_start_ls = false
-      _G.start_ls = function()
-        called_start_ls = true
-      end
-      local original_tmp_write = _G.tmp_write
-      _G.tmp_write = function(opts)
-        eq(opts, { should_delete = false, new = false, ft = 'markdown', reload = false })
-        return '/tmp/preview.md'
-      end
-
-      vim.cmd 'enew'
-      vim.bo.buftype = ''
-      vim.bo.filetype = 'markdown'
-
-      local path, ft = rb._filename_and_ft()
-      eq(path, '/tmp/preview.md')
-      eq(ft, 'markdown')
-      assert.is_false(called_start_ls)
-
-      _G.tmp_write = original_tmp_write
-    end)
   end)
 
-  describe('filename_and_ft - modified markdown', function()
-    local original_tmp_write
-
-    before_each(function()
-      original_tmp_write = _G.tmp_write
-    end)
-
-    after_each(function()
-      _G.tmp_write = original_tmp_write
-    end)
-
-    it('writes to a temp file instead of prompting to save', function()
-      _G.tmp_write = function(opts)
-        eq(opts, { should_delete = false, new = false, ft = 'markdown', reload = false })
-        return '/tmp/preview.md'
-      end
-      local tmp = vim.fn.tempname() .. '.md'
-      fresh_named_buffer(tmp, 'markdown')
-      vim.api.nvim_buf_set_lines(0, 0, 0, false, { '# changed' })
-
-      local path, ft = rb._filename_and_ft()
-      eq(path, '/tmp/preview.md')
-      eq(ft, 'markdown')
-    end)
-  end)
-
-  describe('_run_cwd', function()
+  describe('command.build result cwd', function()
     local original_git
+    local original_gh
 
     before_each(function()
       original_git = package.loaded['user.git']
+      original_gh = package.loaded['user.gh-actions']
     end)
 
     after_each(function()
       package.loaded['user.git'] = original_git
+      package.loaded['user.gh-actions'] = original_gh
     end)
 
-    it('uses git repo root for yaml.ghaction', function()
+    it('yaml.ghaction includes git repo root when spawning', function()
       package.loaded['user.git'] = {
         get_toplevel_sync = function()
           return '/repo'
         end,
       }
-      eq(rb._run_cwd 'yaml.ghaction', '/repo')
-    end)
-
-    it('falls back to the buffer directory when not in a git repo', function()
-      package.loaded['user.git'] = {
-        get_toplevel_sync = function()
-          return ''
+      package.loaded['user.gh-actions'] = {
+        build_act_cmd = function()
+          return 'act -W /repo/.github/workflows/ci.yml'
         end,
       }
-      local tmp = vim.fn.tempname() .. '.yml'
-      fresh_named_buffer(tmp, 'yaml.ghaction')
-      eq(rb._run_cwd 'yaml.ghaction', vim.fn.expand '%:p:h')
+      local workflow = '/repo/.github/workflows/ci.yml'
+      local result = command.build('yaml.ghaction', workflow)
+      eq(result.cwd, '/repo')
     end)
 
-    it('uses the buffer directory for other filetypes', function()
+    it('leaves cwd unset for default filetypes', function()
       local tmp = vim.fn.tempname() .. '.py'
-      fresh_named_buffer(tmp, 'python')
-      eq(rb._run_cwd 'python', vim.fn.expand '%:p:h')
+      local result = sync_result('python', tmp, '')
+      eq(result.cwd, nil)
     end)
   end)
 
-  describe('_resolve_cmd', function()
+  describe('command resolution', function()
     it('terraform runs terraform plan without appending the file path', function()
-      local cmd, should_break = rb._resolve_cmd('terraform', '/tmp/main.tf', '')
-      eq(cmd, 'terraform plan')
-      eq(should_break, false)
+      local result = sync_result('terraform', '/tmp/main.tf', '')
+      eq(result.cmd, 'terraform plan')
+      eq(result.spawn, true)
     end)
 
     it('python appends the file path', function()
-      local cmd, should_break = rb._resolve_cmd('python', '/tmp/script.py', '')
-      eq(cmd, 'python3 /tmp/script.py')
-      eq(should_break, false)
+      local result = sync_result('python', '/tmp/script.py', '')
+      eq(result.cmd, 'python3 /tmp/script.py')
+      eq(result.spawn, true)
     end)
 
     it('yaml uses yq', function()
-      local cmd, should_break = rb._resolve_cmd('yaml', '/tmp/config.yaml', '')
-      eq(cmd, 'yq /tmp/config.yaml')
-      eq(should_break, false)
+      local result = sync_result('yaml', '/tmp/config.yaml', '')
+      eq(result.cmd, 'yq /tmp/config.yaml')
+      eq(result.spawn, true)
     end)
 
     it('compound yaml filetypes use yq', function()
-      local cmd, should_break = rb._resolve_cmd('yaml.docker-compose', '/tmp/docker-compose.yml', '')
-      eq(cmd, 'yq /tmp/docker-compose.yml')
-      eq(should_break, false)
+      local result = sync_result('yaml.docker-compose', '/tmp/docker-compose.yml', '')
+      eq(result.cmd, 'yq /tmp/docker-compose.yml')
+      eq(result.spawn, true)
     end)
 
-    it('yaml.ghaction uses gh-actions to build the act command', function()
-      local original_gh = package.loaded['user.gh-actions']
-      package.loaded['user.gh-actions'] = {
-        build_act_cmd = function()
-          return 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json'
+    it('lua reloads the buffer and does not return a shell command', function()
+      local original_cmd = vim.cmd
+      local called
+      vim.cmd = setmetatable({}, {
+        __call = function(_, arg)
+          called = arg
+        end,
+      })
+
+      local result = sync_result('lua', '/tmp/nvim/lua/user/foo.lua', '')
+      eq(result.cmd, nil)
+      eq(result.spawn, false)
+      eq(called, 'luafile %')
+
+      vim.cmd = original_cmd
+    end)
+
+    it('groovy validates via jenkins-validate and does not return a shell command', function()
+      local original_jv = package.loaded['user.jenkins-validate']
+      local called = false
+      package.loaded['user.jenkins-validate'] = {
+        validate = function()
+          called = true
         end,
       }
 
-      local cmd = package.loaded['user.gh-actions'].build_act_cmd '/repo/.github/workflows/ci.yml'
-      eq(cmd, 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json')
+      local result = sync_result('groovy', '/tmp/Jenkinsfile', '')
+      eq(result.cmd, nil)
+      eq(result.spawn, false)
+      assert.is_true(called)
 
-      package.loaded['user.gh-actions'] = original_gh
+      package.loaded['user.jenkins-validate'] = original_jv
     end)
 
     it('uses the file path when the shebang is present', function()
-      local cmd = rb._resolve_cmd('sh', '/tmp/run.sh', '#!/bin/bash')
-      eq(cmd, '/tmp/run.sh')
+      local result = sync_result('sh', '/tmp/run.sh', '#!/bin/bash')
+      eq(result.cmd, '/tmp/run.sh')
     end)
 
     it('markdown starts mdserve detached and does not return a shell command', function()
@@ -297,53 +281,119 @@ describe('user.run-buffer', function()
         return 42
       end
 
-      local cmd, should_break = rb._resolve_cmd('markdown', '/tmp/readme.md', '')
-      eq(cmd, nil)
-      eq(should_break, true)
+      local result = sync_result('markdown', '/tmp/readme.md', '')
+      eq(result.cmd, nil)
+      eq(result.spawn, false)
       eq(received.cmd, { 'mdserve', '--open', '/tmp/readme.md' })
       eq(received.opts.detach, true)
 
       vim.fn.jobstart = original_jobstart
     end)
+
+    it('yaml.ghaction uses gh-actions to build the act command', function()
+      local original_gh = package.loaded['user.gh-actions']
+      local original_git = package.loaded['user.git']
+      local workflow = '/repo/.github/workflows/ci.yml'
+      package.loaded['user.gh-actions'] = {
+        build_act_cmd = function(path)
+          eq(path, workflow)
+          return 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json'
+        end,
+      }
+      package.loaded['user.git'] = {
+        get_toplevel_sync = function()
+          return '/repo'
+        end,
+      }
+
+      local result = command.build('yaml.ghaction', workflow)
+      eq(result.cmd, 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json')
+      eq(result.spawn, true)
+      eq(result.cwd, '/repo')
+
+      package.loaded['user.gh-actions'] = original_gh
+      package.loaded['user.git'] = original_git
+    end)
+
+    it('yaml.ghaction breaks when gh-actions returns nil', function()
+      local original_gh = package.loaded['user.gh-actions']
+      package.loaded['user.gh-actions'] = {
+        build_act_cmd = function()
+          return nil
+        end,
+      }
+
+      local result = command.build('yaml.ghaction', '/repo/.github/workflows/ci.yml')
+      eq(result.cmd, nil)
+      eq(result.spawn, false)
+
+      package.loaded['user.gh-actions'] = original_gh
+    end)
+
+    it('make returns the selected target command', function()
+      local makefile_path = vim.fn.tempname()
+      local f = assert(io.open(makefile_path, 'w'))
+      f:write 'all:\n\ntest:\n'
+      f:close()
+
+      local original_inputlist = vim.fn.inputlist
+      vim.fn.inputlist = function()
+        return 2
+      end
+
+      local result = sync_result('make', makefile_path, '')
+      eq(result.cmd, 'make test')
+      eq(result.spawn, true)
+
+      vim.fn.inputlist = original_inputlist
+      os.remove(makefile_path)
+    end)
   end)
 
-  describe('get_make_async', function()
+  describe('make.pick_make_cmd', function()
     local makefile_path
-    local original_ui_select
+    local original_inputlist
 
     before_each(function()
       makefile_path = vim.fn.tempname()
       local f = assert(io.open(makefile_path, 'w'))
       f:write 'all:\n\ntest:\n'
       f:close()
-      original_ui_select = vim.ui.select
+      original_inputlist = vim.fn.inputlist
     end)
 
     after_each(function()
-      vim.ui.select = original_ui_select
+      vim.fn.inputlist = original_inputlist
       os.remove(makefile_path)
     end)
 
     it('returns make <target> for the selected index', function()
-      vim.ui.select = function(_items, _opts, on_select)
-        on_select('2 - test', 2)
+      vim.fn.inputlist = function()
+        return 2
       end
-      local done_cmd
-      rb._get_make_async(makefile_path, function(cmd)
-        done_cmd = cmd
-      end)
-      eq(done_cmd, 'make test')
+      eq(make.pick_make_cmd(makefile_path), 'make test')
     end)
 
     it('returns nil when the picker is cancelled', function()
-      vim.ui.select = function(_items, _opts, on_select)
-        on_select(nil, nil)
+      vim.fn.inputlist = function()
+        return -1
       end
-      local done_cmd = 'pending'
-      rb._get_make_async(makefile_path, function(cmd)
-        done_cmd = cmd
-      end)
-      eq(done_cmd, nil)
+      eq(make.pick_make_cmd(makefile_path), nil)
+    end)
+
+    it('skips the picker when there is only one target', function()
+      local single = vim.fn.tempname()
+      local sf = assert(io.open(single, 'w'))
+      sf:write 'all:\n'
+      sf:close()
+      local called = false
+      vim.fn.inputlist = function()
+        called = true
+        return 1
+      end
+      eq(make.pick_make_cmd(single), 'make all')
+      assert.is_false(called)
+      os.remove(single)
     end)
   end)
 
@@ -368,17 +418,14 @@ clean:
 	rm -rf ../plenary.nvim
 ]]
       f:close()
-      package.loaded['user.run-buffer'] = nil
     end)
 
     after_each(function()
       os.remove(makefile_path)
-      package.loaded['user.run-buffer'] = nil
     end)
 
     it('lists only rule targets, not recipe lines with colons', function()
-      local mod = require 'user.run-buffer'
-      local options = mod._get_makefile_options(makefile_path)
+      local options = make.get_makefile_options(makefile_path)
       local values = vim.tbl_map(function(o)
         return o.value
       end, options)
@@ -386,9 +433,8 @@ clean:
     end)
 
     it('does not treat https:// in a tab-indented recipe as a target', function()
-      local mod = require 'user.run-buffer'
       local line = '\t@test -d x || git clone https://github.com/foo/bar'
-      eq(mod._makefile_target_name(line), nil)
+      eq(make.makefile_target_name(line), nil)
     end)
   end)
 end)
