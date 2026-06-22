@@ -18,19 +18,11 @@ local function run_in_terminal(file_name, cmd, opts)
   local state = terminal.get(file_name)
 
   if not state then
-    local term_buf = vim.api.nvim_create_buf(false, true)
-    terminal.show(term_buf)
-
-    local job_id = vim.fn.jobstart(vim.o.shell, {
-      term = true,
-      cwd = opts.cwd,
-      on_exit = function()
-        terminal.unregister(file_name)
-      end,
-    })
+    local term_buf, job_id = terminal.spawn(opts.cwd, function()
+      terminal.unregister(file_name)
+    end)
 
     if job_id <= 0 then
-      vim.notify('Failed to start terminal', vim.log.levels.ERROR)
       return
     end
 
