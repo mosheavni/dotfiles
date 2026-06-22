@@ -1,5 +1,21 @@
--- Builtin run-buffer handlers: one module per filetype under handlers/.
+-- Builtin run-buffer handlers and registry.
 local M = {}
+
+---@type table<string, RunHandler>
+local handlers = {}
+
+--- Register a handler from a `{ ft, handler }` module.
+---@param mod RunHandlerModule
+function M.register(mod)
+  handlers[mod.ft] = mod.handler
+end
+
+--- Lookup a registered handler by filetype.
+---@param ft string
+---@return RunHandler|nil
+function M.get(ft)
+  return handlers[ft]
+end
 
 local modules = {
   require 'user.run-buffer.handlers.make',
@@ -11,12 +27,8 @@ local modules = {
   require 'user.run-buffer.handlers.html',
 }
 
---- Register all builtin handler modules with the run-buffer registry.
----@param registry table Object with `register_handler_module(mod)`.
-function M.register_all(registry)
-  for _, mod in ipairs(modules) do
-    registry.register_handler_module(mod)
-  end
+for _, mod in ipairs(modules) do
+  M.register(mod)
 end
 
 return M
