@@ -4,11 +4,6 @@ local utils = require 'user.utils'
 ---@type table<string, RunHandler>
 local handlers = {}
 
---- Filetypes whose resolved command must not include the buffer path.
-local append_file = {
-  terraform = false,
-}
-
 local M = {}
 
 --- Register a handler from a `{ ft, handler }` module.
@@ -36,10 +31,7 @@ function M.run(ft, file_name)
   if ctx.first_line:match '^#!' then
     cmd = ctx.file_name
   else
-    cmd = utils.command_for_filetype(ctx.ft)
-    if append_file[ctx.ft] ~= false then
-      cmd = cmd .. ' ' .. ctx.file_name
-    end
+    cmd = utils.command_for_filetype(ctx.ft) .. ' ' .. ctx.file_name
   end
   return { cmd = cmd, spawn = true }
 end
