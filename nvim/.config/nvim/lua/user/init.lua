@@ -26,7 +26,7 @@ end
 -- Write to temp file --
 ------------------------
 ---Write a temporary file with specified options
----@param opts? {should_delete?: boolean, ft?: string, new?: boolean, vertical?: boolean}
+---@param opts? {should_delete?: boolean, ft?: string, new?: boolean, vertical?: boolean, reload?: boolean}
 ---@return string tmp The path to the temporary file
 function _G.tmp_write(opts)
   opts = opts or {}
@@ -35,6 +35,7 @@ function _G.tmp_write(opts)
     ft = nil,
     new = true,
     vertical = false,
+    reload = true,
   }, opts)
 
   local tmp = vim.fn.tempname()
@@ -50,7 +51,9 @@ function _G.tmp_write(opts)
   end
 
   vim.cmd('write ' .. vim.fn.fnameescape(tmp))
-  vim.cmd 'edit'
+  if final_opts.reload then
+    vim.cmd 'edit'
+  end
 
   if final_opts.should_delete then
     -- global on purpose: a buffer-local autocmd for VimLeavePre only fires

@@ -6,7 +6,6 @@ vim.pack.add {
   'https://github.com/machakann/vim-swap',
   'https://github.com/andymass/vim-matchup',
   'https://github.com/windwp/nvim-autopairs',
-  'https://github.com/iamcco/markdown-preview.nvim',
   'https://github.com/AndrewRadev/linediff.vim',
 }
 
@@ -43,13 +42,6 @@ function M.deferred()
   require('match-up').setup {}
 
   require('nvim-autopairs').setup {}
-
-  vim.g.mkdp_filetypes = { 'markdown' }
-  require('user.menu').add_actions('Markdown', {
-    ['Preview in Browser'] = function()
-      vim.cmd.MarkdownPreview()
-    end,
-  })
 
   require('search-replace').setup()
 

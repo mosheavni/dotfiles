@@ -17,8 +17,6 @@ vim.api.nvim_create_autocmd('PackChanged', {
       vim.cmd 'TSUpdate'
     elseif name == 'LuaSnip' and kind == 'install' then
       vim.system({ 'make', 'install_jsregexp' }, { cwd = ev.data.path }):wait()
-    elseif name == 'markdown-preview.nvim' and kind == 'install' then
-      vim.system({ 'yarn', 'install' }, { cwd = ev.data.path .. '/app' }):wait()
     elseif name == 'avante.nvim' then
       vim.system({ 'make' }, { cwd = ev.data.path }):wait()
     elseif name == 'go.nvim' and kind == 'update' then

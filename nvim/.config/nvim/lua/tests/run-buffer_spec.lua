@@ -156,6 +156,55 @@ describe('user.run-buffer', function()
       assert.is_true(notifications[1].msg:find 'start_ls' ~= nil)
       eq(notifications[1].level, vim.log.levels.ERROR)
     end)
+
+    it('uses tmp_write for unnamed markdown instead of start_ls', function()
+      local called_start_ls = false
+      _G.start_ls = function()
+        called_start_ls = true
+      end
+      local original_tmp_write = _G.tmp_write
+      _G.tmp_write = function(opts)
+        eq(opts, { should_delete = false, new = false, ft = 'markdown', reload = false })
+        return '/tmp/preview.md'
+      end
+
+      vim.cmd 'enew'
+      vim.bo.buftype = ''
+      vim.bo.filetype = 'markdown'
+
+      local path, ft = rb._filename_and_ft()
+      eq(path, '/tmp/preview.md')
+      eq(ft, 'markdown')
+      assert.is_false(called_start_ls)
+
+      _G.tmp_write = original_tmp_write
+    end)
+  end)
+
+  describe('filename_and_ft - modified markdown', function()
+    local original_tmp_write
+
+    before_each(function()
+      original_tmp_write = _G.tmp_write
+    end)
+
+    after_each(function()
+      _G.tmp_write = original_tmp_write
+    end)
+
+    it('writes to a temp file instead of prompting to save', function()
+      _G.tmp_write = function(opts)
+        eq(opts, { should_delete = false, new = false, ft = 'markdown', reload = false })
+        return '/tmp/preview.md'
+      end
+      local tmp = vim.fn.tempname() .. '.md'
+      fresh_named_buffer(tmp, 'markdown')
+      vim.api.nvim_buf_set_lines(0, 0, 0, false, { '# changed' })
+
+      local path, ft = rb._filename_and_ft()
+      eq(path, '/tmp/preview.md')
+      eq(ft, 'markdown')
+    end)
   end)
 
   describe('_run_cwd', function()
@@ -238,6 +287,23 @@ describe('user.run-buffer', function()
     it('uses the file path when the shebang is present', function()
       local cmd = rb._resolve_cmd('sh', '/tmp/run.sh', '#!/bin/bash')
       eq(cmd, '/tmp/run.sh')
+    end)
+
+    it('markdown starts mdserve detached and does not return a shell command', function()
+      local original_jobstart = vim.fn.jobstart
+      local received
+      vim.fn.jobstart = function(cmd, opts)
+        received = { cmd = cmd, opts = opts }
+        return 42
+      end
+
+      local cmd, should_break = rb._resolve_cmd('markdown', '/tmp/readme.md', '')
+      eq(cmd, nil)
+      eq(should_break, true)
+      eq(received.cmd, { 'mdserve', '--open', '/tmp/readme.md' })
+      eq(received.opts.detach, true)
+
+      vim.fn.jobstart = original_jobstart
     end)
   end)
 

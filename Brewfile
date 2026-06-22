@@ -57,6 +57,7 @@ brew "kube-ps1"
 brew "kubectx"
 brew "lua-language-server"
 brew "luacheck"
+brew "mdserve"
 brew "mkcert"
 brew "mongosh"
 brew "moreutils", link: false

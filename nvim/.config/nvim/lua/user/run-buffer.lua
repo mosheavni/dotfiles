@@ -127,6 +127,14 @@ function M._resolve_cmd(ft, file_name, first_line)
     return nil, true
   end
 
+  if ft == 'markdown' then
+    local job_id = vim.fn.jobstart({ 'mdserve', '--open', file_name }, { detach = true })
+    if job_id <= 0 then
+      vim.notify('Failed to start mdserve', vim.log.levels.ERROR, { title = 'run-buffer' })
+    end
+    return nil, true
+  end
+
   return cmd, false
 end
 
@@ -164,6 +172,9 @@ local function filename_and_ft()
   -- check if current buffer is a valid file
   if file_name == '' then
     vim.api.nvim_set_option_value('filetype', ft, { buf = 0 })
+    if ft == 'markdown' then
+      return _G.tmp_write { should_delete = false, new = false, ft = 'markdown', reload = false }, ft
+    end
     -- Pass `true` explicitly so _G.start_ls writes the unnamed buffer to a
     -- tempfile (named after its filetype) and returns the new path. Without
     -- it, start_ls returns nil and we'd silently no-op. See
@@ -182,6 +193,9 @@ local function filename_and_ft()
 
   -- check if file has changed and prompt the user if should save
   if vim.bo.modified then
+    if ft == 'markdown' then
+      return _G.tmp_write { should_delete = false, new = false, ft = ft, reload = false }, ft
+    end
     local save = vim.fn.confirm(('Save changes to %q before running?'):format(file_name), '&Yes\n&No\n&Cancel')
     if save == 3 then
       return
