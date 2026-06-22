@@ -3,7 +3,7 @@
 local M = {}
 
 local buffer = require 'user.run-buffer.buffer'
-local resolve = require 'user.run-buffer.resolve'
+local command = require 'user.run-buffer.command'
 local terminal = require 'user.terminal'
 local wezterm = require 'user.wezterm'
 
@@ -71,7 +71,7 @@ local function execute_file(where)
     return
   end
 
-  local result = resolve.run(ft, file_name)
+  local result = command.build(ft, file_name)
   if not result.spawn then
     return
   end

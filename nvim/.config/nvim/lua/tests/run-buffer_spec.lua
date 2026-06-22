@@ -3,7 +3,7 @@
 
 local buffer = require 'user.run-buffer.buffer'
 local make = require 'user.run-buffer.handlers.make'
-local resolve = require 'user.run-buffer.resolve'
+local command = require 'user.run-buffer.command'
 local eq = assert.are.same
 
 local function fresh_unnamed_buffer()
@@ -40,7 +40,7 @@ local function sync_result(ft, file_name, first_line)
   else
     vim.api.nvim_buf_set_lines(0, 0, -1, false, {})
   end
-  return resolve.run(ft, file_name)
+  return command.build(ft, file_name)
 end
 
 describe('user.run-buffer', function()
@@ -172,7 +172,7 @@ describe('user.run-buffer', function()
     end)
   end)
 
-  describe('resolve result cwd', function()
+  describe('command.build result cwd', function()
     local original_git
     local original_gh
 
@@ -198,7 +198,7 @@ describe('user.run-buffer', function()
         end,
       }
       local workflow = '/repo/.github/workflows/ci.yml'
-      local result = resolve.run('yaml.ghaction', workflow)
+      local result = command.build('yaml.ghaction', workflow)
       eq(result.cwd, '/repo')
     end)
 
@@ -306,7 +306,7 @@ describe('user.run-buffer', function()
         end,
       }
 
-      local result = resolve.run('yaml.ghaction', workflow)
+      local result = command.build('yaml.ghaction', workflow)
       eq(result.cmd, 'act --defaultbranch=master -W /repo/.github/workflows/ci.yml -e /tmp/event.json')
       eq(result.spawn, true)
       eq(result.cwd, '/repo')
@@ -323,7 +323,7 @@ describe('user.run-buffer', function()
         end,
       }
 
-      local result = resolve.run('yaml.ghaction', '/repo/.github/workflows/ci.yml')
+      local result = command.build('yaml.ghaction', '/repo/.github/workflows/ci.yml')
       eq(result.cmd, nil)
       eq(result.spawn, false)
 

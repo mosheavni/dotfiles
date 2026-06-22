@@ -1,15 +1,15 @@
--- Command resolution for run-buffer (handler lookup + default builder).
+-- Build how to run the current buffer (handler lookup + default command).
 local handlers = require 'user.run-buffer.handlers'
 local utils = require 'user.utils'
 
 local M = {}
 
---- Resolve how to run the current buffer.
---- Builds `RunContext` from the current buffer's first line.
+--- Build a run plan for the current buffer.
+--- Reads the buffer's first line into `RunContext` for shebang detection.
 ---@param ft string
 ---@param file_name string Absolute path to run.
 ---@return RunResult
-function M.run(ft, file_name)
+function M.build(ft, file_name)
   local ctx = {
     ft = ft,
     file_name = file_name,
