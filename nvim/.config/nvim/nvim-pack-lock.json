@@ -77,10 +77,6 @@
       "rev": "c3780609769a93f4f59421b6324355f37e0ee6c5",
       "src": "https://github.com/AndrewRadev/linediff.vim"
     },
-    "markdown-preview.nvim": {
-      "rev": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
-      "src": "https://github.com/iamcco/markdown-preview.nvim"
-    },
     "mini.ai": {
       "rev": "d73c36349aa7b0bab5f77ad71701a1d42211a1df",
       "src": "https://github.com/nvim-mini/mini.ai"
