@@ -5,11 +5,11 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "c73e2b170a4927d1dc1b48e878bba6cf0ed9b07c",
+      "rev": "e034560c0266d5a99d811f595b04ce839ab868ff",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "avante.nvim": {
-      "rev": "2033b42ab72fb9f27b35769f9cb7a9f4f1993db4",
+      "rev": "b78f4027ebec9bd1d90606acfb6545b8a7a0d2a4",
       "src": "https://github.com/yetone/avante.nvim"
     },
     "blink-cmp-avante": {
