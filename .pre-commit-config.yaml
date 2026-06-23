@@ -5,14 +5,18 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+      - id: check-toml
+      - id: check-added-large-files
+        args: [--maxkb=500]
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.30.0
     hooks:
       - id: gitleaks
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.10
     hooks:
-      - id: check-toml
+      - id: actionlint
+        files: ^\.github/workflows/.*\.ya?ml$
   - repo: local
     hooks:
       - id: luacheck
@@ -41,8 +45,15 @@ repos:
         types: [shell]
         files: \.sh$
         exclude: ^ai/\.claude/(shell-snapshots|plugins/cache)/
+      - id: zsh-syntax
+        name: zsh syntax check
+        language: system
+        entry: zsh -n
+        files: ^zsh/
       - id: markdownlint
         name: markdownlint
         language: system
         entry: markdownlint --ignore-path nvim/.markdownlintignore
         types: [markdown]
+        files: \.md$
+        exclude: ^(graphify-out/|ai/\.claude/)
