@@ -112,12 +112,12 @@ LAST_SYNC_FILE="${HOME}/last-ai-sync.txt"
 set +e
 sync_remote_file \
   "$KARPATHY_BASE/CLAUDE.md" \
-  "$SCRIPT_DIR/../cursor/AGENTS.md" \
+  "$SCRIPT_DIR/AGENTS.md" \
   "cursor/AGENTS.md"
 sync_remote_file \
   "$KARPATHY_BASE/.cursor/rules/karpathy-guidelines.mdc" \
-  "$SCRIPT_DIR/../cursor/.cursor/rules/agents.mdc" \
-  "cursor/.cursor/rules/agents.mdc"
+  "$SCRIPT_DIR/.cursor/rules/agents.mdc" \
+  "ai/.cursor/rules/agents.mdc"
 set -e
 
 date >"$LAST_SYNC_FILE"
