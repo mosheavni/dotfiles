@@ -27,6 +27,7 @@ fpath+=(
   "$HOME/.docker/completions"
   "/opt/homebrew/share/zsh/site-functions"
   "${GENCOMPL_FPATH}"
+  "${HOME}/.zfunc"
 )
 
 # Group related completions together
