@@ -5,7 +5,7 @@
 set -euo pipefail
 
 DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
-PACKAGE="ghnotify"
+PACKAGE="automations"
 LABEL="com.mosheavni.ghnotify"
 DOMAIN="gui/$(id -u)"
 SCRIPT="$HOME/.local/bin/gh-notify.sh"

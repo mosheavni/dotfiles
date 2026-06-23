@@ -117,7 +117,7 @@ Verify with `npx skills ls -g`.
 
 ## GitHub notifications on macOS
 
-Native macOS notifications for unread GitHub notifications, polled every 60s by a `launchd` agent. Managed by the `ghnotify` stow package: a poller (`gh-notify.sh`) plus the agent plist.
+Native macOS notifications for unread GitHub notifications, polled every 60s by a `launchd` agent. Lives in the `automations` stow package (`.local/bin/gh-notify.sh` plus the agent plist).
 
 One-time setup on a new machine (after `./start.sh` and `./updates.sh`):
 
