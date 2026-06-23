@@ -177,11 +177,14 @@ function M.setup()
         Reference = red,
         Null = red,
         Operator = grey,
+        Macro = cyan,
       }
       for kind, color in pairs(kind_colors) do
         vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. kind, { fg = color })
         vim.api.nvim_set_hl(0, 'NavicIcons' .. kind, { fg = color })
       end
+      vim.api.nvim_set_hl(0, 'NavicText', { fg = palette.grey2 })
+      vim.api.nvim_set_hl(0, 'NavicSeparator', { fg = palette.grey4 })
     end,
   })
 
