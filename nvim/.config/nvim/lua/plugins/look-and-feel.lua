@@ -32,7 +32,7 @@ return function()
   }
 
   require('render-markdown').setup {
-    file_types = { 'markdown', 'Avante', 'AgenticChat' },
+    file_types = { 'markdown' },
   }
 
   require('bqf').setup {

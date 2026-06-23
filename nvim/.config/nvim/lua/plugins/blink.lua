@@ -1,6 +1,5 @@
 vim.pack.add {
   'https://github.com/saghen/blink.download',
-  'https://github.com/Kaiser-Yang/blink-cmp-avante',
   { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.x' },
   'https://github.com/L3MON4D3/LuaSnip',
   'https://github.com/rafamadriz/friendly-snippets',
@@ -59,12 +58,9 @@ return function()
         k8s_filter = { 'lsp', 'buffer' },
         k8s_namespaces = { 'lsp' },
         lua = { inherit_defaults = true, 'lazydev' },
-        AvanteInput = { inherit_defaults = true, 'avante' },
-        AvantePromptInput = { inherit_defaults = true, 'avante' },
       },
       providers = {
         lazydev = { name = 'LazyDev', module = 'lazydev.integrations.blink' },
-        avante = { name = 'Avante', module = 'blink-cmp-avante' },
       },
     },
     fuzzy = { implementation = 'prefer_rust_with_warning' },

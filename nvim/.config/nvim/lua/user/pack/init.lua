@@ -17,8 +17,6 @@ vim.api.nvim_create_autocmd('PackChanged', {
       vim.cmd 'TSUpdate'
     elseif name == 'LuaSnip' and kind == 'install' then
       vim.system({ 'make', 'install_jsregexp' }, { cwd = ev.data.path }):wait()
-    elseif name == 'avante.nvim' then
-      vim.system({ 'make' }, { cwd = ev.data.path }):wait()
     elseif name == 'go.nvim' and kind == 'update' then
       ensure_loaded()
       vim.cmd 'lua require("go.install").update_all_sync()'

@@ -8,14 +8,6 @@
       "rev": "e034560c0266d5a99d811f595b04ce839ab868ff",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
-    "avante.nvim": {
-      "rev": "b78f4027ebec9bd1d90606acfb6545b8a7a0d2a4",
-      "src": "https://github.com/yetone/avante.nvim"
-    },
-    "blink-cmp-avante": {
-      "rev": "4f494c6e124acbe31a8f5d58effa0c14aa38a6d5",
-      "src": "https://github.com/Kaiser-Yang/blink-cmp-avante"
-    },
     "blink.cmp": {
       "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
       "src": "https://github.com/saghen/blink.cmp",
@@ -64,10 +56,6 @@
     "guihua.lua": {
       "rev": "f8e06bd8a26dee3377d63c2adf1e57cdb58ac474",
       "src": "https://github.com/ray-x/guihua.lua"
-    },
-    "img-clip.nvim": {
-      "rev": "b6ddfb97b5600d99afe3452d707444afda658aca",
-      "src": "https://github.com/HakonHarnes/img-clip.nvim"
     },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
@@ -202,7 +190,7 @@
       "src": "https://github.com/machakann/vim-swap"
     },
     "wezterm-types": {
-      "rev": "58c95e0d78e24b236b2eecaa2c29ae973478f79b",
+      "rev": "75f69dcddf3a718ab1834277b66cc34d1f588d15",
       "src": "https://github.com/DrKJeff16/wezterm-types"
     }
   }
