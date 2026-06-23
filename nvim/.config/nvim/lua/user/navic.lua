@@ -1,20 +1,20 @@
 local core = require 'user.navic_core'
 
 local M = {}
-local cache = {} -- [bufnr] = { symbols, location }
+local cache = {} -- [bufnr] = { tree, context, location }
 local awaiting_lsp_response = {}
 
 local function update(buf)
   local data = cache[buf]
-  if not data or not data.symbols then
+  if not data or not data.tree then
     return
   end
   local ok, cursor = pcall(vim.api.nvim_win_get_cursor, 0)
   if not ok then
     return
   end
-  local parts = core.find_in_symbols(data.symbols, cursor[1] - 1, cursor[2])
-  data.location = table.concat(parts, core.separator)
+  data.context = core.update_context(data.tree, data.context or {}, cursor)
+  data.location = table.concat(core.format_context(data.context), core.separator)
 end
 
 function M.get_location()
@@ -66,7 +66,8 @@ function M.setup()
           end
 
           cache[bufnr] = cache[bufnr] or {}
-          cache[bufnr].symbols = result or {}
+          cache[bufnr].tree = core.parse(result or {})
+          cache[bufnr].context = {}
           update(bufnr)
         end, bufnr)
       end
