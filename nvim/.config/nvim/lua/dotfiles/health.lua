@@ -51,6 +51,7 @@ local tools = {
   { name = 'vint', binary = 'vint', install = 'pip install vim-vint' },
   { name = 'vtsls', binary = 'vtsls', install = 'npm install -g @vtsls/language-server' },
   { name = 'wezterm', binary = 'wezterm', install = 'brew install --cask wezterm@nightly' },
+  { name = 'zizmor', binary = 'zizmor', install = 'brew install zizmor' },
   { name = 'xmllint', binary = 'xmllint', install = 'brew install libxml2' },
   { name = 'yaml-language-server', binary = 'yaml-language-server', install = 'brew install yaml-language-server' },
 }

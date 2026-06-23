@@ -8,6 +8,11 @@ repos:
       - id: check-toml
       - id: check-added-large-files
         args: [--maxkb=500]
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-json
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.30.0
     hooks:
@@ -37,7 +42,7 @@ repos:
         language: system
         entry: stylua --check --search-parent-directories
         types: [lua]
-        files: ^nvim/
+        files: ^(nvim|wezterm)/
       - id: shellcheck
         name: shellcheck
         language: system
@@ -50,6 +55,12 @@ repos:
         language: system
         entry: zsh -n
         files: ^zsh/
+      - id: zizmor
+        name: zizmor
+        language: system
+        entry: zizmor --config nvim/zizmor.yaml .github/workflows
+        pass_filenames: false
+        files: ^\.github/workflows/.*\.ya?ml$
       - id: markdownlint
         name: markdownlint
         language: system
