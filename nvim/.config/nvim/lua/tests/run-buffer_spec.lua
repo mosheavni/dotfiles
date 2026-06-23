@@ -2,8 +2,8 @@
 --# selene: allow(undefined_variable)
 
 local buffer = require 'user.run-buffer.buffer'
-local make = require 'user.run-buffer.handlers.make'
 local command = require 'user.run-buffer.command'
+local make = require 'user.run-buffer.handlers.make'
 local eq = assert.are.same
 
 local function fresh_unnamed_buffer()
