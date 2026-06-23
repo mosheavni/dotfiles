@@ -12,7 +12,9 @@ local dir = is_real_file and vim.fn.fnamemodify(bufname, ':p:h') or ''
 _G.__tf_init_prompted = _G.__tf_init_prompted or {}
 local prompted = _G.__tf_init_prompted
 
-if dir ~= '' and not prompted[dir] and vim.fn.isdirectory(dir .. '/.terraform') == 0 then
+local in_module_path = dir:find '/modules?/' or dir:find '/modules?$'
+
+if dir ~= '' and not in_module_path and not prompted[dir] and vim.fn.isdirectory(dir .. '/.terraform') == 0 then
   prompted[dir] = true
   vim.schedule(function()
     local select_opts = {
