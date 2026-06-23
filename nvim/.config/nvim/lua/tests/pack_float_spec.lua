@@ -189,11 +189,11 @@ describe('user.pack.float', function()
         on_exit {
           code = 0,
           stdout = table.concat({
-            'abc00005 fifth commit',
-            'abc00004 fourth commit',
-            'abc00003 third commit',
-            'abc00002 second commit',
-            'abc00001 first commit',
+            'abc00005 2024-06-05 fifth commit',
+            'abc00004 2024-06-04 fourth commit',
+            'abc00003 2024-06-03 third commit',
+            'abc00002 2024-06-02 second commit',
+            'abc00001 2024-06-01 first commit',
           }, '\n'),
         }
       elseif on_exit then
@@ -222,18 +222,27 @@ describe('user.pack.float', function()
     vim.api.nvim_win_set_cursor(0, { plugin_line, 0 })
     vim.fn.maparg('<CR>', 'n', false, true).callback()
     vim.wait(100, function()
-      return includes(vim.api.nvim_buf_get_lines(0, 0, -1, false), '    abc00001 first commit')
+      return includes(vim.api.nvim_buf_get_lines(0, 0, -1, false), '    abc00001 2024-06-01 first commit')
     end)
 
     lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
     assert.is_true(includes(lines, '    desc: Alpha plugin'))
     assert.is_true(includes(lines, '    recent commits:'))
-    assert.is_true(includes(lines, '    abc00005 fifth commit'))
-    assert.is_true(includes(lines, '    abc00004 fourth commit'))
-    assert.is_true(includes(lines, '    abc00003 third commit'))
-    assert.is_true(includes(lines, '    abc00002 second commit'))
-    assert.is_true(includes(lines, '    abc00001 first commit'))
-    eq({ 'git', '-C', '/tmp/alpha.nvim', 'log', '--oneline', '--decorate=short', '-5' }, git_log_command)
+    assert.is_true(includes(lines, '    abc00005 2024-06-05 fifth commit'))
+    assert.is_true(includes(lines, '    abc00004 2024-06-04 fourth commit'))
+    assert.is_true(includes(lines, '    abc00003 2024-06-03 third commit'))
+    assert.is_true(includes(lines, '    abc00002 2024-06-02 second commit'))
+    assert.is_true(includes(lines, '    abc00001 2024-06-01 first commit'))
+    eq({
+      'git',
+      '-C',
+      '/tmp/alpha.nvim',
+      'log',
+      '--pretty=format:%h %ad%d %s',
+      '--date=short',
+      '--decorate=short',
+      '-5',
+    }, git_log_command)
   end)
 
   it('highlights conventional commit prefixes by type', function()
@@ -258,10 +267,10 @@ describe('user.pack.float', function()
         on_exit {
           code = 0,
           stdout = table.concat({
-            'abc00004 (HEAD, origin/main, origin/HEAD, main) feat(actions): add selection',
-            'abc00003 build(ci): update workflow',
-            'abc00002 feat(parser)!: support scoped commits',
-            'abc00001 fix(ui): correct colors',
+            'abc00004 2024-06-04 (HEAD, origin/main, origin/HEAD, main) feat(actions): add selection',
+            'abc00003 2024-06-03 build(ci): update workflow',
+            'abc00002 2024-06-02 feat(parser)!: support scoped commits',
+            'abc00001 2024-06-01 fix(ui): correct colors',
           }, '\n'),
         }
       elseif on_exit then
@@ -289,7 +298,7 @@ describe('user.pack.float', function()
     vim.api.nvim_win_set_cursor(0, { plugin_line, 0 })
     vim.fn.maparg('<CR>', 'n', false, true).callback()
     assert.is_true(vim.wait(100, function()
-      return includes(vim.api.nvim_buf_get_lines(0, 0, -1, false), '    abc00001 fix(ui): correct colors')
+      return includes(vim.api.nvim_buf_get_lines(0, 0, -1, false), '    abc00001 2024-06-01 fix(ui): correct colors')
     end))
 
     lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
