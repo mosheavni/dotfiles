@@ -6,7 +6,7 @@ DOTFILES="$HOME/.dotfiles"
 # ── helpers ──────────────────────────────────────────────────────────────────
 
 log() {
-  echo ""
+  echo "============================================"
   echo "▶ $*"
 }
 
@@ -142,7 +142,9 @@ update_build_tools() {
 
 random() {
   log "random updates"
+  log "Installing teeldear database"
   tldr --update
+  log "Installing pre-commit hooks"
   pre-commit install
 }
 
