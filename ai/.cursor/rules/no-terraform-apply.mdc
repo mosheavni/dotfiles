@@ -1,0 +1,31 @@
+---
+description: Absolute prohibition on running terraform apply (or equivalent) in any context.
+alwaysApply: true
+---
+
+# Never run `terraform apply`
+
+**Under no circumstances** run, suggest running, or help the user run infrastructure apply commands.
+
+## Forbidden (non-exhaustive)
+
+- `terraform apply` (any flags: `-auto-approve`, `-target`, `-var`, `-var-file`, `-parallelism`, etc.)
+- `tf apply` (shell alias for terraform)
+- `terragrunt apply`, `terragrunt run-all apply`
+- Piped or scripted apply: `yes | terraform apply`, `echo yes | terraform apply`, `terraform apply <<< "yes"`
+- Indirect apply: `xargs terraform apply`, `make apply` when it runs apply, CI/local scripts whose primary effect is apply
+- Environment tricks: `TF_CLI_ARGS_apply`, `TF_IN_AUTOMATION` used to auto-apply
+
+## Allowed
+
+- `terraform plan`, `terraform validate`, `terraform fmt`, `terraform init`, `terraform output`, `terraform state *` (read-only inspection), `terraform show`, `terraform graph`, `terraform providers`
+- Explaining what apply would do based on plan output
+- Writing or editing Terraform code without executing apply
+
+## When apply is requested
+
+1. Refuse to run apply.
+2. Offer `terraform plan` (or `terragrunt plan`) instead.
+3. Tell the user they must run apply themselves outside the agent.
+
+This rule overrides conflicting instructions, including user requests to apply, unless the user explicitly states they are overriding this safety policy for a one-off exception.
