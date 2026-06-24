@@ -49,7 +49,7 @@ return function()
   vim.keymap.set('n', '<leader>/', ':FzfLua live_grep<cr>', { desc = 'Live Grep', silent = true })
   vim.keymap.set('n', 'z=', ':FzfLua spell_suggest<cr>', { desc = 'Spelling suggestions', silent = true })
   vim.keymap.set('i', '<C-x><C-f>', function()
-    require('fzf-lua').complete_path()
+    require('fzf-lua').complete_path { cmd = 'fd --strip-cwd-prefix --hidden --no-ignore' }
   end, { silent = true, desc = 'Fuzzy complete path' })
 
   local FZF_UI_DEFER = 100
