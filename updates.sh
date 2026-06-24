@@ -54,12 +54,6 @@ update_npm() {
     <"$DOTFILES/node/global-npm-packages"
 }
 
-_go_install() { GOPATH="$HOME/go" go install "$1"; }
-update_go() {
-  log "go — global packages"
-  each_line "$DOTFILES/go/go-packages.txt" _go_install
-}
-
 update_gh_releases() {
   log "gh — GitHub release tools"
   local install_dir="$HOME/.local/bin"
@@ -144,7 +138,7 @@ random() {
 
 # ── main ─────────────────────────────────────────────────────────────────────
 
-UPDATE_SECTIONS=(asdf brew pip npm go gh build random)
+UPDATE_SECTIONS=(asdf brew pip npm gh build random)
 
 run_section() {
   case "$1" in
@@ -152,7 +146,6 @@ run_section() {
   brew) update_brew ;;
   pip) update_pip ;;
   npm) update_npm ;;
-  go) update_go ;;
   gh) update_gh_releases ;;
   build) update_build_tools ;;
   random) random ;;

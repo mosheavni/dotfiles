@@ -1,3 +1,2 @@
 # repo binary arm64_pattern amd64_pattern
-checkmake/checkmake checkmake *darwin.arm64* *darwin.amd64*
 nektos/act act *Darwin_arm64* *Darwin_x86_64*

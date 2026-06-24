@@ -4,6 +4,7 @@ local function sort_brewfile()
   local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
   local taps = {}
   local brews = {}
+  local gos = {}
   local cargos = {}
   local casks = {}
   local others = {}
@@ -13,6 +14,8 @@ local function sort_brewfile()
       table.insert(taps, line)
     elseif line:match '^brew ' then
       table.insert(brews, line)
+    elseif line:match '^go ' then
+      table.insert(gos, line)
     elseif line:match '^cargo ' then
       table.insert(cargos, line)
     elseif line:match '^cask ' then
@@ -24,6 +27,7 @@ local function sort_brewfile()
 
   table.sort(taps)
   table.sort(brews)
+  table.sort(gos)
   table.sort(cargos)
   table.sort(casks)
 
@@ -32,6 +36,9 @@ local function sort_brewfile()
     table.insert(sorted_lines, line)
   end
   for _, line in ipairs(brews) do
+    table.insert(sorted_lines, line)
+  end
+  for _, line in ipairs(gos) do
     table.insert(sorted_lines, line)
   end
   for _, line in ipairs(cargos) do

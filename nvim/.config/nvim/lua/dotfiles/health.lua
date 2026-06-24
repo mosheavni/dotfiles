@@ -6,7 +6,7 @@ local tools = {
   { name = 'aws', binary = 'aws', install = 'asdf install awscli' },
   { name = 'bash-language-server', binary = 'bash-language-server', install = 'brew install bash-language-server' },
   { name = 'black', binary = 'black', install = 'pip install black' },
-  { name = 'checkmake', binary = 'checkmake', install = 'go install github.com/checkmake/checkmake/cmd/checkmake@latest' },
+  { name = 'checkmake', binary = 'checkmake', install = 'brew bundle --file=~/.dotfiles/Brewfile' },
   { name = 'codespell', binary = 'codespell', install = 'pip install codespell' },
   { name = 'css-lsp', binary = 'vscode-css-language-server', install = 'npm install -g vscode-langservers-extracted' },
   { name = 'cssmodules-language-server', binary = 'cssmodules-language-server', install = 'npm install -g cssmodules-language-server' },
