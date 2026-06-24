@@ -185,28 +185,32 @@ function M.setup()
       end
       vim.api.nvim_set_hl(0, 'NavicText', { fg = palette.grey2 })
       vim.api.nvim_set_hl(0, 'NavicSeparator', { fg = palette.grey4 })
+
+      -- :terminal default colors (see terminal palette below).
+      vim.api.nvim_set_hl(0, 'Term', { fg = palette.grey2, bg = palette.dark_grey2 })
     end,
   })
 
-  -- Terminal (:terminal, lazygit, etc.) palette. The default theme leaves these
-  -- unset, so built-in terminals fall back to your terminal emulator's colors;
-  -- map them to the default theme's own palette for a consistent look.
+  -- Terminal (:terminal, lazygit, etc.) palette. Indices 0–7 and 8–15 must differ:
+  -- ANSI uses the same index for fg (3x) and bg (4x), so pre-commit's green
+  -- background on "Passed" (\033[42m) needs a dark color 2 while bright green
+  -- (10) stays light for \033[32m foreground text.
   local term = {
-    [0] = palette.dark_grey4, -- black
-    [8] = palette.grey4, -- bright black
-    [1] = palette.red, -- red
+    [0] = palette.dark_grey2, -- black
+    [8] = palette.dark_grey4, -- bright black
+    [1] = '#9a5a5a', -- red (bg for \033[41m)
     [9] = palette.red,
-    [2] = palette.green, -- green
+    [2] = '#3d6b4f', -- green (bg for \033[42m)
     [10] = palette.green,
-    [3] = palette.yellow, -- yellow
+    [3] = '#8a7340', -- yellow
     [11] = palette.yellow,
-    [4] = palette.blue, -- blue
+    [4] = '#4a6f8f', -- blue
     [12] = palette.blue,
-    [5] = palette.magenta, -- magenta
+    [5] = '#8a5c8a', -- magenta
     [13] = palette.magenta,
-    [6] = palette.cyan, -- cyan
+    [6] = '#3d7a7a', -- cyan
     [14] = palette.cyan,
-    [7] = palette.grey2, -- white
+    [7] = palette.grey4, -- white
     [15] = palette.grey1, -- bright white
   }
   for i, color in pairs(term) do
