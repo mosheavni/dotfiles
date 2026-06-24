@@ -28,10 +28,13 @@ local modules = {
   require 'user.run-buffer.handlers.markdown',
   require 'user.run-buffer.handlers.html',
   require 'user.run-buffer.handlers.brewfile',
+  require 'user.run-buffer.handlers.helm',
 }
 
 for _, mod in ipairs(modules) do
   M.register(mod)
 end
+
+handlers['yaml.chart'] = M.get 'helm'
 
 return M

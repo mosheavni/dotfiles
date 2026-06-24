@@ -118,6 +118,10 @@ Plugin specs are in `lua/plugins/` - lazy.nvim auto-discovers all files in this 
 
 Custom modules in `lua/user/` include utilities (utils.lua), Git helpers, LSP configuration, and various feature modules.
 
+### Compound YAML filetypes (`yaml.*`)
+
+When adding `yaml.something` via `vim.filetype.add` in `options.lua`, follow the full checklist in `.cursor/rules/yaml-compound-filetype.mdc` (yamlls filetypes, run-buffer, lint keys, conform, hardcoded `yaml` checks, tests).
+
 ### Zsh Configuration
 
 - Main config: `zsh/.zshrc`

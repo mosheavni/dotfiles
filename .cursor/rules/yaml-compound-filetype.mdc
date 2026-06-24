@@ -1,0 +1,103 @@
+---
+description: Checklist when adding a compound YAML filetype (yaml.something)
+globs: nvim/.config/nvim/**
+alwaysApply: false
+---
+
+# Compound YAML filetypes (`yaml.*`)
+
+Use **`yaml.<purpose>`** (e.g. `yaml.chart`, `yaml.ghaction`) — not bare names like `ghaction`. The `yaml.` prefix keeps treesitter on the **yaml** parser automatically (`vim.treesitter.language.get_lang` strips after the first `.`).
+
+When you add or change a compound YAML filetype, walk this checklist. Do not stop after `options.lua` alone.
+
+## 1. Filetype detection (required)
+
+**`nvim/.config/nvim/lua/user/options.lua`** — `vim.filetype.add`:
+
+- `filename = { ... }` for fixed names (`Chart.yaml`, `.pre-commit-config.yaml`, …)
+- `pattern = { ... }` for path-based rules (`.github/workflows/`, …)
+
+Set **priority** when competing with other patterns (see `:h vim.filetype.add`).
+
+## 2. LSP + yaml-companion (usually required)
+
+**`nvim/.config/nvim/after/lsp/yamlls.lua`** — add the filetype to `yaml_lspconfig.filetypes`.
+
+Without this, buffers get **no yamlls** and **no yaml-companion** (schemas, CRD UI, modelines).
+
+Current list: `yaml`, `yaml.chart`, `yaml.docker-compose`, `yaml.ghaction`, `yaml.gitlab`, `yaml.helm-values`, `yaml.precommit`.
+
+**Not** yamlls: `helm` / `gotmpl` → `after/lsp/helm_ls.lua` (separate stack; plain YAML tooling differs).
+
+## 3. Run-buffer / F3 (if behavior differs from plain yaml)
+
+| Step | File |
+|------|------|
+| Handler | `lua/user/run-buffer/handlers/yaml_<purpose>.lua` (or extend `yaml.lua`) |
+| Register | `lua/user/run-buffer/handlers/init.lua` |
+| Default cmd map | `lua/user/utils.lua` → `filetype_to_command` (if not `yq` / yaml fallback) |
+| Tests | `lua/tests/run-buffer_spec.lua` |
+
+Plain `yaml` handler: `yq`, or `kubectl apply --dry-run=client` when `vim.b.is_kubernetes`.
+
+Specialized types today: `yaml.chart`, `yaml.precommit`, `yaml.ghaction`.
+
+## 4. Lint (if a linter applies)
+
+**`nvim/.config/nvim/lua/plugins/lint.lua`** — `linters_by_ft` key must match **`&filetype` exactly**.
+
+Verify the key matches what `options.lua` sets (e.g. `yaml.ghaction`, not `ghaction`). Fix mismatches when touching this area.
+
+## 5. Format (if not using LSP-only format)
+
+**`nvim/.config/nvim/lua/plugins/conform.lua`** — `formatters_by_ft`.
+
+Compound types may **not** inherit `yaml = { 'prettierd' }`; add an explicit entry or confirm `format_on_save` LSP fallback works.
+
+## 6. Treesitter (usually nothing)
+
+**No `language.register` needed** for `yaml.*` — Neovim maps `yaml.foo` → parser `yaml`.
+
+Register only when the first segment is **not** the parser name (see `brewfile` → `ruby` in `lua/plugins/treesitter.lua`).
+
+Parser must be in the `nvim-treesitter` `install` list (`yaml` is already there).
+
+## 7. UI / code that checks filetype
+
+Search for hardcoded `'yaml'` and decide if compounds should match:
+
+| Location | Pattern today | Compound-friendly? |
+|----------|---------------|-------------------|
+| `lua/plugins/mini-statusline.lua` | `ft:match('^yaml')` | Yes |
+| `lua/user/lsp/server/actions.lua` | `filetype ~= 'yaml'` | **No** — use `^yaml` or list types |
+| `lsp/user_lsp.lua` | includes `'yaml'` only | Extend if user-LSP actions should run |
+
+## 8. Tests & docs
+
+- **`lua/tests/utils_spec.lua`** — if `filetype_to_command` changes
+- **`lua/dotfiles/health.lua`** — if a new CLI tool is required
+- **`lua/user/run-buffer/handlers-candidates.md`** — optional; keep in sync if you use it
+
+## 9. Snippets (optional)
+
+**`nvim/.config/nvim/snippets/package.json`** — only if snippets should scope to the new filetype.
+
+## Quick verification (in Neovim)
+
+```vim
+" After opening a real file:
+:set filetype?
+:lua print(vim.treesitter.language.get_lang(vim.bo.filetype))
+:lua print(vim.inspect(vim.lsp.get_clients({bufnr=0, name='yamlls'})))
+```
+
+Expect: intended `yaml.*` ft, `get_lang` → `yaml`, yamlls client attached (unless intentionally helm-only).
+
+## Helm charts (related, not `yaml.*`)
+
+| Content | Filetype | LSP |
+|---------|----------|-----|
+| `Chart.yaml`, values (plain YAML) | `yaml` or `yaml.chart` | yamlls |
+| `templates/*.yaml` with `{{ }}` | `helm` | helm_ls |
+
+Do not set `Chart.yaml` to `helm` unless you accept helm treesitter + helm_ls instead of the yaml toolchain.

@@ -475,4 +475,88 @@ clean:
       eq(make.makefile_target_name(line), nil)
     end)
   end)
+
+  describe('helm handler', function()
+    local chart_root
+    local template_path
+
+    local function write_chart(root, opts)
+      opts = opts or {}
+      vim.fn.mkdir(root, 'p')
+      vim.fn.mkdir(vim.fs.joinpath(root, 'templates'), 'p')
+      local lines = {
+        'apiVersion: v2',
+        'name: ' .. (opts.chart_name or 'x'),
+        'version: 0.1.0',
+      }
+      if opts.dependencies then
+        table.insert(lines, 'dependencies:')
+        for _, name in ipairs(opts.dependencies) do
+          table.insert(lines, '  - name: ' .. name)
+          table.insert(lines, '    version: 1.0.0')
+        end
+      end
+      vim.fn.writefile(lines, vim.fs.joinpath(root, 'Chart.yaml'))
+      vim.fn.writefile({ 'apiVersion: v1', 'kind: ConfigMap' }, vim.fs.joinpath(root, 'templates', 'cm.yaml'))
+    end
+
+    before_each(function()
+      chart_root = vim.fn.tempname() .. '-mychart'
+      write_chart(chart_root)
+      template_path = vim.fs.joinpath(chart_root, 'templates', 'cm.yaml')
+    end)
+
+    after_each(function()
+      if chart_root then
+        vim.fn.delete(chart_root, 'rf')
+      end
+    end)
+
+    it('finds chart root upward from a nested template file', function()
+      local result = command.build('helm', template_path)
+      eq(result.cwd, vim.fs.normalize(chart_root))
+      eq(result.spawn, true)
+    end)
+
+    it('yaml.chart on Chart.yaml uses the helm handler', function()
+      local chart_yaml = vim.fs.joinpath(chart_root, 'Chart.yaml')
+      local result = command.build('yaml.chart', chart_yaml)
+      eq(result.cmd, 'helm template ' .. vim.fn.shellescape(vim.fs.basename(chart_root)) .. ' .')
+      eq(result.spawn, true)
+      eq(result.cwd, vim.fs.normalize(chart_root))
+    end)
+
+    it('templates the chart using the directory name as release name', function()
+      local result = command.build('helm', template_path)
+      eq(result.cmd, 'helm template ' .. vim.fn.shellescape(vim.fs.basename(chart_root)) .. ' .')
+      eq(result.spawn, true)
+      eq(result.cwd, vim.fs.normalize(chart_root))
+    end)
+
+    it('runs helm dependency build when dependencies are missing from charts/', function()
+      write_chart(chart_root, { dependencies = { 'nginx' } })
+      local result = command.build('helm', template_path)
+      eq(result.cmd, 'helm dependency build; helm template ' .. vim.fn.shellescape(vim.fs.basename(chart_root)) .. ' .')
+      eq(result.cwd, vim.fs.normalize(chart_root))
+    end)
+
+    it('skips helm dependency build when charts/ is populated', function()
+      write_chart(chart_root, { dependencies = { 'nginx' } })
+      local charts_dir = vim.fs.joinpath(chart_root, 'charts')
+      vim.fn.mkdir(charts_dir, 'p')
+      vim.fn.writefile({ '' }, vim.fs.joinpath(charts_dir, 'nginx-1.0.0.tgz'))
+      local result = command.build('helm', template_path)
+      eq(result.cmd, 'helm template ' .. vim.fn.shellescape(vim.fs.basename(chart_root)) .. ' .')
+    end)
+
+    it('does not spawn when no Chart.yaml exists above the file', function()
+      local orphan = vim.fn.tempname() .. '.yaml'
+      local f = assert(io.open(orphan, 'w'))
+      f:write 'kind: Pod'
+      f:close()
+      local result = command.build('helm', orphan)
+      eq(result.spawn, false)
+      os.remove(orphan)
+    end)
+  end)
 end)

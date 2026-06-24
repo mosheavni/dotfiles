@@ -30,10 +30,12 @@ local k8s_schemas = {
 local yaml_lspconfig = {
   filetypes = {
     'yaml',
+    'yaml.chart',
     'yaml.docker-compose',
+    'yaml.ghaction',
     'yaml.gitlab',
     'yaml.helm-values',
-    'yaml.ghaction',
+    'yaml.precommit',
   },
   capabilities = capabilities,
   settings = {
