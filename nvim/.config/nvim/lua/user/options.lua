@@ -188,7 +188,7 @@ local kube_config_pattern = [[.*\.kube/config]]
 vim.filetype.add {
   extension = { tfvars = 'terraform' },
   filename = {
-    Brewfile = 'ruby',
+    Brewfile = 'brewfile',
     ['docker-compose.yml'] = 'yaml.docker-compose',
   },
   pattern = {

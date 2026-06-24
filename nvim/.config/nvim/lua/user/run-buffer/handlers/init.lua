@@ -25,6 +25,7 @@ local modules = {
   require 'user.run-buffer.handlers.groovy',
   require 'user.run-buffer.handlers.markdown',
   require 'user.run-buffer.handlers.html',
+  require 'user.run-buffer.handlers.brewfile',
 }
 
 for _, mod in ipairs(modules) do

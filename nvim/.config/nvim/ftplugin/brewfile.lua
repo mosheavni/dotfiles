@@ -1,8 +1,7 @@
-local function sort_brewfile()
-  if vim.fn.expand '%:t' ~= 'Brewfile' then
-    return
-  end
+vim.bo.commentstring = '# %s'
+vim.cmd 'runtime! syntax/ruby.vim'
 
+local function sort_brewfile()
   local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
   local taps = {}
   local brews = {}
@@ -42,12 +41,8 @@ local function sort_brewfile()
   vim.api.nvim_buf_set_lines(0, 0, -1, false, sorted_lines)
 end
 
-if vim.fn.expand '%:t' == 'Brewfile' then
-  -- autocmd BufWritePre
-
-  vim.api.nvim_create_autocmd('BufWritePre', {
-    group = vim.api.nvim_create_augroup('SortBrewfile', { clear = true }),
-    pattern = 'Brewfile',
-    callback = sort_brewfile,
-  })
-end
+vim.api.nvim_create_autocmd('BufWritePre', {
+  group = vim.api.nvim_create_augroup('SortBrewfile', { clear = true }),
+  pattern = 'brewfile',
+  callback = sort_brewfile,
+})
