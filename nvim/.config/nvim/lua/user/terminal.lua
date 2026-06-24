@@ -205,26 +205,50 @@ function M.unregister(id)
   by_id[id] = nil
 end
 
+--- Plugin-owned terminal buffers (fzf-lua UI, previews) are not user shells.
+---@param buf integer
+---@return boolean
+local function adoptable(buf)
+  if vim.bo[buf].filetype == 'fzf' then
+    return false
+  end
+  local ok, fzf_win = pcall(function()
+    return require('fzf-lua').win.__SELF()
+  end)
+  if ok and fzf_win then
+    if buf == fzf_win.fzf_bufnr or buf == fzf_win._hidden_fzf_bufnr then
+      return false
+    end
+    local previewer = fzf_win._previewer
+    if previewer and buf == previewer.preview_bufnr then
+      return false
+    end
+  end
+  return true
+end
+
 --- Adopt an externally-created terminal buffer (e.g. from :terminal) so it gains
 --- cycle/pick/rename support. No-op when the buffer is already tracked or has no
 --- live terminal job. Scheduled from TermOpen so module-spawned terminals, which
 --- register synchronously after jobstart returns, are already tracked and skipped.
 ---@param buf integer
 function M.adopt(buf)
-  if not vim.api.nvim_buf_is_valid(buf) or M.is_tracked_buf(buf) then
+  if not vim.api.nvim_buf_is_valid(buf) or M.is_tracked_buf(buf) or not adoptable(buf) then
     return
   end
   local job_id = vim.b[buf].terminal_job_id
   if not M.job_alive(job_id) then
     return
   end
+  local name = next_shell_name()
   by_id['shell-' .. buf] = {
     buf = buf,
     job_id = job_id,
     cwd = vim.fn.getcwd(),
-    name = next_shell_name(),
+    name = name,
     file = nil,
   }
+  vim.notify('Terminal adopted: ' .. name, vim.log.levels.INFO)
 end
 
 ---@param buf integer
@@ -382,7 +406,10 @@ function M.setup()
     end,
   })
 
-  vim.api.nvim_create_autocmd('BufWipeout', {
+  -- TermClose: process exited (buffer may linger). BufWipeout: buffer destroyed.
+  -- Do not call job_* in this callback (E565 on TermClose).
+  vim.api.nvim_create_autocmd({ 'TermClose', 'BufWipeout' }, {
+    group = vim.api.nvim_create_augroup('TerminalCleanup', { clear = true }),
     callback = function(ev)
       M._clear_for_buf(ev.buf)
     end,
