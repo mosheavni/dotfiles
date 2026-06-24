@@ -100,14 +100,13 @@ M.linter = {
     'bundle',
     'check',
     '--verbose',
-    '--file',
+    '--file=-',
   },
-  stdin = false,
+  stdin = true,
+  append_fname = false,
   stream = 'both',
   ignore_exitcode = true,
-  parser = function(output, bufnr)
-    return M.parse_output(output, bufnr)
-  end,
+  parser = M.parse_output,
 }
 
 return M
