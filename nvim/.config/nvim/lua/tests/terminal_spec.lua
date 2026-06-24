@@ -5,6 +5,18 @@ local notify_stub = require 'tests.notify_stub'
 local term = require 'user.terminal'
 local eq = assert.are.same
 
+---@param fn fun(job_id: integer): integer
+local function set_jobpid_stub(fn)
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.fn.jobpid = fn
+end
+
+---@param fn fun(job_id: integer, data: string): integer?
+local function set_chansend_stub(fn)
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.fn.chansend = fn
+end
+
 local function fresh_named_buffer(path, ft)
   vim.cmd('edit ' .. vim.fn.fnameescape(path))
   vim.bo.filetype = ft or ''
@@ -19,9 +31,9 @@ describe('user.terminal', function()
     end
     term._shell_name_seq.n = 0
     original_jobpid = vim.fn.jobpid
-    vim.fn.jobpid = function()
+    set_jobpid_stub(function()
       return 12345
-    end
+    end)
   end)
 
   after_each(function()
@@ -43,16 +55,16 @@ describe('user.terminal', function()
     end)
 
     it('returns false when jobpid returns zero', function()
-      vim.fn.jobpid = function()
+      set_jobpid_stub(function()
         return 0
-      end
+      end)
       assert.is_false(term.job_alive(1))
     end)
 
     it('returns false when jobpid raises E900', function()
-      vim.fn.jobpid = function()
+      set_jobpid_stub(function()
         error('E900: Invalid channel id', 0)
-      end
+      end)
       assert.is_false(term.job_alive(1))
     end)
   end)
@@ -68,18 +80,18 @@ describe('user.terminal', function()
     end)
 
     it('ignores entries whose job is no longer running', function()
-      vim.fn.jobpid = function()
+      set_jobpid_stub(function()
         return 0
-      end
+      end)
       local buf = vim.api.nvim_create_buf(false, true)
       term._by_id['shell-1'] = { buf = buf, job_id = 1, cwd = '/tmp', name = 'x' }
       eq(term.list(), {})
     end)
 
     it('ignores entries whose job id is no longer valid (E900)', function()
-      vim.fn.jobpid = function()
+      set_jobpid_stub(function()
         error('E900: Invalid channel id', 0)
-      end
+      end)
       local buf = vim.api.nvim_create_buf(false, true)
       term._by_id['shell-1'] = { buf = buf, job_id = 1, cwd = '/tmp', name = 'x' }
       eq(term.list(), {})
@@ -219,9 +231,9 @@ describe('user.terminal', function()
       term._by_id['shell-1'] = { buf = buf, job_id = 7, cwd = '/tmp', name = 'T1' }
       vim.api.nvim_set_current_buf(buf)
       local sent = {}
-      vim.fn.chansend = function(job_id, data)
+      set_chansend_stub(function(job_id, data)
         sent = { job_id = job_id, data = data }
-      end
+      end)
       assert.is_true(term.send 'ls')
       eq(sent.job_id, 7)
       eq(sent.data, 'ls\n')
@@ -232,9 +244,9 @@ describe('user.terminal', function()
       term._by_id['shell-1'] = { buf = buf, job_id = 7, cwd = '/tmp', name = 'T1' }
       vim.api.nvim_set_current_buf(buf)
       local sent = {}
-      vim.fn.chansend = function(_, data)
+      set_chansend_stub(function(_, data)
         sent.data = data
-      end
+      end)
       term.send 'echo hi\n'
       eq(sent.data, 'echo hi\n')
     end)
@@ -244,9 +256,9 @@ describe('user.terminal', function()
       term._by_id['shell-1'] = { buf = buf, job_id = 7, cwd = '/tmp', name = 'T1' }
       vim.api.nvim_set_current_buf(buf)
       local sent = {}
-      vim.fn.chansend = function(_, data)
+      set_chansend_stub(function(_, data)
         sent.data = data
-      end
+      end)
       term.send('ls', { newline = false })
       eq(sent.data, 'ls')
     end)
@@ -255,9 +267,9 @@ describe('user.terminal', function()
       local buf = vim.api.nvim_create_buf(false, true)
       term.register_run('/tmp/run.sh', buf, 9, '/tmp')
       local sent = {}
-      vim.fn.chansend = function(job_id, data)
+      set_chansend_stub(function(job_id, data)
         sent = { job_id = job_id, data = data }
-      end
+      end)
       assert.is_true(term.send('make', { id = '/tmp/run.sh' }))
       eq(sent.job_id, 9)
       eq(sent.data, 'make\n')
@@ -267,9 +279,9 @@ describe('user.terminal', function()
       local buf = vim.api.nvim_create_buf(false, true)
       vim.api.nvim_set_current_buf(buf)
       local called = false
-      vim.fn.chansend = function()
+      set_chansend_stub(function()
         called = true
-      end
+      end)
       notify_stub.with(function(messages)
         assert.is_false(term.send 'ls')
         assert.is_false(called)

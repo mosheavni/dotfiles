@@ -7,6 +7,24 @@ local make = require 'user.run-buffer.handlers.make'
 local notify_stub = require 'tests.notify_stub'
 local eq = assert.are.same
 
+---@param fn (fun(...): string?|nil)?|nil
+local function set_start_ls_stub(fn)
+  ---@diagnostic disable-next-line: duplicate-set-field
+  _G.start_ls = fn
+end
+
+---@param fn fun(cmd: string|string[], opts?: table): integer
+local function set_jobstart_stub(fn)
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.fn.jobstart = fn
+end
+
+---@param fn fun(textlist: string[]): integer
+local function set_inputlist_stub(fn)
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.fn.inputlist = fn
+end
+
 local function fresh_unnamed_buffer()
   vim.cmd 'enew'
   vim.bo.filetype = ''
@@ -58,7 +76,9 @@ describe('user.run-buffer', function()
   after_each(function()
     _G.start_ls = original_start_ls
     notify_stub.restore(notify)
-    pcall(vim.cmd, 'bwipeout!')
+    pcall(function()
+      vim.cmd 'bwipeout!'
+    end)
   end)
 
   describe('buffer.filename_and_ft - named buffer', function()
@@ -81,9 +101,9 @@ describe('user.run-buffer', function()
 
     it('does not call _G.start_ls when buffer already has a name', function()
       local called = false
-      _G.start_ls = function()
+      set_start_ls_stub(function()
         called = true
-      end
+      end)
       local tmp = vim.fn.tempname() .. '.sh'
       fresh_named_buffer(tmp, 'sh')
 
@@ -95,11 +115,11 @@ describe('user.run-buffer', function()
   describe('buffer.filename_and_ft - unnamed buffer (regression guards)', function()
     it('calls _G.start_ls with `true` so a tempfile is written (REGRESSION GUARD)', function()
       local received_args
-      _G.start_ls = function(...)
+      set_start_ls_stub(function(...)
         received_args = { ... }
         vim.bo.modified = false
         return '/tmp/run-buffer-test.sh'
-      end
+      end)
       fresh_unnamed_buffer()
 
       buffer.filename_and_ft()
@@ -107,10 +127,10 @@ describe('user.run-buffer', function()
     end)
 
     it('returns the path that _G.start_ls produced', function()
-      _G.start_ls = function()
+      set_start_ls_stub(function()
         vim.bo.modified = false
         return '/tmp/run-buffer-test.sh'
-      end
+      end)
       fresh_unnamed_buffer()
 
       local path, ft = buffer.filename_and_ft()
@@ -120,11 +140,11 @@ describe('user.run-buffer', function()
 
     it('propagates the existing filetype onto the buffer before calling start_ls', function()
       local observed_ft
-      _G.start_ls = function()
+      set_start_ls_stub(function()
         observed_ft = vim.bo.filetype
         vim.bo.modified = false
         return '/tmp/run-buffer-test.py'
-      end
+      end)
       vim.cmd 'enew'
       vim.bo.buftype = ''
       vim.bo.filetype = 'python'
@@ -134,9 +154,9 @@ describe('user.run-buffer', function()
     end)
 
     it('notifies (not silently no-ops) when _G.start_ls returns nil (CONTRACT GUARD)', function()
-      _G.start_ls = function()
+      set_start_ls_stub(function()
         return nil
-      end
+      end)
       fresh_unnamed_buffer()
 
       local path, ft = buffer.filename_and_ft()
@@ -148,9 +168,9 @@ describe('user.run-buffer', function()
     end)
 
     it('notifies when _G.start_ls returns an empty string', function()
-      _G.start_ls = function()
+      set_start_ls_stub(function()
         return ''
-      end
+      end)
       fresh_unnamed_buffer()
 
       local path = buffer.filename_and_ft()
@@ -159,7 +179,7 @@ describe('user.run-buffer', function()
     end)
 
     it('notifies when _G.start_ls is not defined at all', function()
-      _G.start_ls = nil
+      set_start_ls_stub(nil)
       fresh_unnamed_buffer()
 
       local path = buffer.filename_and_ft()
@@ -297,10 +317,10 @@ describe('user.run-buffer', function()
     it('markdown starts mdserve detached and does not return a shell command', function()
       local original_jobstart = vim.fn.jobstart
       local received
-      vim.fn.jobstart = function(cmd, opts)
+      set_jobstart_stub(function(cmd, opts)
         received = { cmd = cmd, opts = opts }
         return 42
-      end
+      end)
 
       local result = sync_result('markdown', '/tmp/readme.md', '')
       eq(result.cmd, nil)
@@ -373,9 +393,9 @@ describe('user.run-buffer', function()
       f:close()
 
       local original_inputlist = vim.fn.inputlist
-      vim.fn.inputlist = function()
+      set_inputlist_stub(function()
         return 2
-      end
+      end)
 
       local result = sync_result('make', makefile_path, '')
       eq(result.cmd, 'make test')
@@ -404,16 +424,16 @@ describe('user.run-buffer', function()
     end)
 
     it('returns make <target> for the selected index', function()
-      vim.fn.inputlist = function()
+      set_inputlist_stub(function()
         return 2
-      end
+      end)
       eq(make.pick_make_cmd(makefile_path), 'make test')
     end)
 
     it('returns nil when the picker is cancelled', function()
-      vim.fn.inputlist = function()
+      set_inputlist_stub(function()
         return -1
-      end
+      end)
       eq(make.pick_make_cmd(makefile_path), nil)
     end)
 
@@ -423,10 +443,10 @@ describe('user.run-buffer', function()
       sf:write 'all:\n'
       sf:close()
       local called = false
-      vim.fn.inputlist = function()
+      set_inputlist_stub(function()
         called = true
         return 1
-      end
+      end)
       eq(make.pick_make_cmd(single), 'make all')
       assert.is_false(called)
       os.remove(single)
