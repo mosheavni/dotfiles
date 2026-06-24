@@ -7,6 +7,7 @@ local function sort_brewfile()
   local gos = {}
   local cargos = {}
   local casks = {}
+  local mass = {}
   local others = {}
 
   for _, line in ipairs(lines) do
@@ -20,6 +21,8 @@ local function sort_brewfile()
       table.insert(cargos, line)
     elseif line:match '^cask ' then
       table.insert(casks, line)
+    elseif line:match '^mas ' then
+      table.insert(mass, line)
     else
       table.insert(others, line)
     end
@@ -30,6 +33,7 @@ local function sort_brewfile()
   table.sort(gos)
   table.sort(cargos)
   table.sort(casks)
+  table.sort(mass)
 
   local sorted_lines = {}
   for _, line in ipairs(taps) do
@@ -45,6 +49,9 @@ local function sort_brewfile()
     table.insert(sorted_lines, line)
   end
   for _, line in ipairs(casks) do
+    table.insert(sorted_lines, line)
+  end
+  for _, line in ipairs(mass) do
     table.insert(sorted_lines, line)
   end
   for _, line in ipairs(others) do
