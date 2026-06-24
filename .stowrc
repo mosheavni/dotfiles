@@ -6,4 +6,6 @@
 --ignore=requirements.txt
 --ignore=snippets.xml
 --ignore=start.sh
+--ignore=install-skills.sh
+--ignore=sync-ai-config.sh
 --ignore=graphify-out

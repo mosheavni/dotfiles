@@ -16,7 +16,7 @@ local tools = {
   { name = 'figlet', binary = 'figlet', install = 'brew install figlet' },
   { name = 'gh', binary = 'gh', install = 'brew install gh' },
   { name = 'gitleaks', binary = 'gitleaks', install = 'brew install gitleaks' },
-  { name = 'gofmt', binary = 'gofmt', install = 'asdf install golang' },
+  { name = 'gofmt', binary = 'gofmt', install = 'brew install go' },
   { name = 'golangci-lint', binary = 'golangci-lint', install = 'brew install golangci-lint' },
   { name = 'golangci-lint-langserver', binary = 'golangci-lint-langserver', install = 'brew install golangci-lint-langserver' },
   { name = 'gopls', binary = 'gopls', install = 'brew install gopls' },

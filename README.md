@@ -99,11 +99,7 @@ NVIM_APPNAME=mosheavni/dotfiles/nvim/.config/nvim nvim
 
 - Change clipy (for snippets) and maccy (for clipboard) shortcuts, and load snippets
 
-- Install [magnet](https://apps.apple.com/us/app/magnet/id441258766?mt=12)
-
-- Install [OneNote](https://apps.apple.com/il/app/microsoft-onenote/id784801555?mt=12)
-
-- Install [shottr](https://shottr.cc/)
+- Mac App Store apps (Magnet, OneNote) install via `brew bundle` — sign into the App Store first
 
 ## AI / Claude Code Skills
 
