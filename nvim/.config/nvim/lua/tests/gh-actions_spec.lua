@@ -1,4 +1,5 @@
 ---@diagnostic disable: undefined-field, invisible
+local notify_stub = require 'tests.notify_stub'
 local eq = assert.are.same
 
 describe('user.gh-actions', function()
@@ -83,7 +84,10 @@ describe('user.gh-actions', function()
           return ''
         end,
       }
-      eq(require('user.gh-actions').build_act_cmd '/tmp/lint.yml', nil)
+      notify_stub.with(function(messages)
+        eq(require('user.gh-actions').build_act_cmd '/tmp/lint.yml', nil)
+        eq('gh-actions: not inside a git repository; cannot run act', messages[1].msg)
+      end)
     end)
   end)
 end)

@@ -1,4 +1,5 @@
 local lister = require 'user.lister'
+local notify_stub = require 'tests.notify_stub'
 
 local function qf_texts()
   return vim.tbl_map(function(item)
@@ -53,18 +54,23 @@ describe('user.lister', function()
     end)
 
     it('Qgrep keeps lines where text contains vim.pack but path does not', function()
-      vim.fn.setqflist {
-        { filename = '/proj/lua/plugins/foo.lua', lnum = 1, text = 'vim.pack.add {' },
-        { filename = '/proj/lua/other/bar.lua', lnum = 2, text = 'vim.cmd.colorscheme' },
-      }
-      lister.filter('vim.pack', 'file', false)
-      assert.are.same({}, qf_texts())
-      vim.fn.setqflist {
-        { filename = '/proj/lua/plugins/foo.lua', lnum = 1, text = 'vim.pack.add {' },
-        { filename = '/proj/lua/other/bar.lua', lnum = 2, text = 'vim.cmd.colorscheme' },
-      }
-      lister.filter('vim.pack', 'text', false)
-      assert.are.same({ 'vim.pack.add {' }, qf_texts())
+      notify_stub.with(function(messages)
+        vim.fn.setqflist {
+          { filename = '/proj/lua/plugins/foo.lua', lnum = 1, text = 'vim.pack.add {' },
+          { filename = '/proj/lua/other/bar.lua', lnum = 2, text = 'vim.cmd.colorscheme' },
+        }
+        lister.filter('vim.pack', 'file', false)
+        assert.are.same({}, qf_texts())
+        assert.are.same(':Qfilter matches file paths only; use :Qgrep vim.pack to match line text', messages[1].msg)
+
+        vim.fn.setqflist {
+          { filename = '/proj/lua/plugins/foo.lua', lnum = 1, text = 'vim.pack.add {' },
+          { filename = '/proj/lua/other/bar.lua', lnum = 2, text = 'vim.cmd.colorscheme' },
+        }
+        lister.filter('vim.pack', 'text', false)
+        assert.are.same({ 'vim.pack.add {' }, qf_texts())
+        assert.are.same(1, #messages)
+      end)
     end)
   end)
 end)

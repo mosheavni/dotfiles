@@ -234,8 +234,10 @@ describe('user.git', function()
       end)
 
       assert.is_true(done, 'Callback should have been called')
-      assert.is_not_nil(result_remotes.origin)
-      assert.is_true(result_remotes.origin:match 'dotfiles' ~= nil)
+      assert.is_not_nil(result_remotes)
+      local origin = result_remotes.origin
+      assert.is_not_nil(origin)
+      assert.is_true(origin:match 'dotfiles' ~= nil)
     end)
 
     it('get_branch returns current branch', function()
@@ -272,7 +274,8 @@ describe('user.git', function()
       assert.is_true(done, 'Callback should have been called')
       assert.is_not_nil(result_branches)
       assert.is_true(#result_branches > 0)
-      assert.is_true(vim.tbl_contains(result_branches, 'master'))
+      local branches = assert(result_branches)
+      assert.is_true(vim.tbl_contains(branches, 'master'))
     end)
   end)
 

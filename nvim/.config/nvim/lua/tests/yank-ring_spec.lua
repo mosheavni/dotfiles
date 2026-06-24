@@ -1,3 +1,4 @@
+local notify_stub = require 'tests.notify_stub'
 local ring = require 'user.yank-ring'
 local eq = assert.are.same
 
@@ -80,29 +81,21 @@ describe('user.yank-ring', function()
     end)
 
     it('stops at the oldest yank and notifies', function()
-      local notified
-      local orig_notify = vim.notify
-      vim.notify = function(msg)
-        notified = msg
-      end
-      ring.cycle(1)
-      ring.cycle(1)
-      ring.cycle(1) -- past the oldest entry
-      vim.notify = orig_notify
-      eq({ 'aaa', 'bbb', 'ccc', 'aaa' }, buf_lines())
-      eq('No older yanks', notified)
+      notify_stub.with(function(messages)
+        ring.cycle(1)
+        ring.cycle(1)
+        ring.cycle(1) -- past the oldest entry
+        eq({ 'aaa', 'bbb', 'ccc', 'aaa' }, buf_lines())
+        eq('No older yanks', messages[1].msg)
+      end)
     end)
 
     it('stops at the newest yank and notifies', function()
-      local notified
-      local orig_notify = vim.notify
-      vim.notify = function(msg)
-        notified = msg
-      end
-      ring.cycle(-1) -- already at the newest entry
-      vim.notify = orig_notify
-      eq({ 'aaa', 'bbb', 'ccc', 'ccc' }, buf_lines())
-      eq('No newer yanks', notified)
+      notify_stub.with(function(messages)
+        ring.cycle(-1) -- already at the newest entry
+        eq({ 'aaa', 'bbb', 'ccc', 'ccc' }, buf_lines())
+        eq('No newer yanks', messages[1].msg)
+      end)
     end)
 
     it('is a no-op after the buffer changed', function()

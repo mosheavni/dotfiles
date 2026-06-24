@@ -2,6 +2,26 @@
 --# selene: allow(undefined_variable)
 local eq = assert.are.same
 
+---@return vim.SystemCompleted
+local function system_ok(stdout)
+  return { code = 0, stdout = stdout or '', stderr = '', signal = 0 }
+end
+
+---@return vim.SystemObj
+local function system_obj(stdout)
+  return {
+    wait = function()
+      return system_ok(stdout or '2.3.1')
+    end,
+  }
+end
+
+---@param fn fun(command: string[], opts?: vim.SystemOpts, on_exit?: fun(result: vim.SystemCompleted)): vim.SystemObj
+local function set_system_stub(fn)
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.system = fn
+end
+
 local function includes(lines, expected)
   for _, line in ipairs(lines) do
     if line == expected then
@@ -21,7 +41,7 @@ local function has_highlight(lines, text, hl_group)
       start_col = start_col - 1
       for _, mark in ipairs(marks) do
         local details = mark[4]
-        if mark[2] == row - 1 and mark[3] == start_col and details.end_col == start_col + #text and details.hl_group == hl_group then
+        if details and mark[2] == row - 1 and mark[3] == start_col and details.end_col == start_col + #text and details.hl_group == hl_group then
           return true
         end
       end
@@ -88,14 +108,10 @@ describe('user.pack.float', function()
         }
       end,
     }
-    vim.system = function()
+    set_system_stub(function()
       system_calls = system_calls + 1
-      return {
-        wait = function()
-          return { code = 0, stdout = '2.3.1', stderr = '' }
-        end,
-      }
-    end
+      return system_obj()
+    end)
 
     require('user.pack.float').open()
 
@@ -133,23 +149,21 @@ describe('user.pack.float', function()
         return plugins
       end,
     }
-    vim.system = function(command, _, on_exit)
+    set_system_stub(function(command, _, on_exit)
       if command[1] == 'git' and command[4] == 'fetch' then
         active_fetches = active_fetches + 1
         max_active_fetches = math.max(max_active_fetches, active_fetches)
         fetch_callbacks[#fetch_callbacks + 1] = function()
           active_fetches = active_fetches - 1
-          on_exit { code = 0, stdout = '', stderr = '' }
+          if on_exit then
+            on_exit(system_ok())
+          end
         end
       elseif on_exit then
-        on_exit { code = 0, stdout = '2.3.1', stderr = '' }
+        on_exit(system_ok '2.3.1')
       end
-      return {
-        wait = function()
-          return { code = 0, stdout = '2.3.1', stderr = '' }
-        end,
-      }
-    end
+      return system_obj()
+    end)
 
     require('user.pack.float').open { fetch = false }
     vim.fn.maparg('r', 'n', false, true).callback()
@@ -183,28 +197,23 @@ describe('user.pack.float', function()
         return { plugin }
       end,
     }
-    vim.system = function(command, _, on_exit)
+    set_system_stub(function(command, _, on_exit)
       if command[1] == 'git' and command[3] == plugin.path then
         git_log_command = command
-        on_exit {
-          code = 0,
-          stdout = table.concat({
+        if on_exit then
+          on_exit(system_ok(table.concat({
             'abc00005 2024-06-05 fifth commit',
             'abc00004 2024-06-04 fourth commit',
             'abc00003 2024-06-03 third commit',
             'abc00002 2024-06-02 second commit',
             'abc00001 2024-06-01 first commit',
-          }, '\n'),
-        }
+          }, '\n')))
+        end
       elseif on_exit then
-        on_exit { code = 0, stdout = '2.3.1', stderr = '' }
+        on_exit(system_ok '2.3.1')
       end
-      return {
-        wait = function()
-          return { code = 0, stdout = '2.3.1', stderr = '' }
-        end,
-      }
-    end
+      return system_obj()
+    end)
 
     require('user.pack.float').open { fetch = false }
     eq(nil, git_log_command)
@@ -262,26 +271,21 @@ describe('user.pack.float', function()
         return { plugin }
       end,
     }
-    vim.system = function(command, _, on_exit)
+    set_system_stub(function(command, _, on_exit)
       if command[1] == 'git' and command[3] == plugin.path then
-        on_exit {
-          code = 0,
-          stdout = table.concat({
+        if on_exit then
+          on_exit(system_ok(table.concat({
             'abc00004 2024-06-04 (HEAD, origin/main, origin/HEAD, main) feat(actions): add selection',
             'abc00003 2024-06-03 build(ci): update workflow',
             'abc00002 2024-06-02 feat(parser)!: support scoped commits',
             'abc00001 2024-06-01 fix(ui): correct colors',
-          }, '\n'),
-        }
+          }, '\n')))
+        end
       elseif on_exit then
-        on_exit { code = 0, stdout = '2.3.1', stderr = '' }
+        on_exit(system_ok '2.3.1')
       end
-      return {
-        wait = function()
-          return { code = 0, stdout = '2.3.1', stderr = '' }
-        end,
-      }
-    end
+      return system_obj()
+    end)
 
     require('user.pack.float').open { fetch = false }
 

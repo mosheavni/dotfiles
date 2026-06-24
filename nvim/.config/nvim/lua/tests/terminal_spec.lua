@@ -1,6 +1,7 @@
 ---@diagnostic disable: undefined-field, undefined-global, need-check-nil
 --# selene: allow(undefined_variable)
 
+local notify_stub = require 'tests.notify_stub'
 local term = require 'user.terminal'
 local eq = assert.are.same
 
@@ -269,8 +270,11 @@ describe('user.terminal', function()
       vim.fn.chansend = function()
         called = true
       end
-      assert.is_false(term.send 'ls')
-      assert.is_false(called)
+      notify_stub.with(function(messages)
+        assert.is_false(term.send 'ls')
+        assert.is_false(called)
+        eq('No managed terminal to send to', messages[1].msg)
+      end)
     end)
   end)
 

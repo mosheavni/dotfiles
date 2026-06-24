@@ -4,6 +4,7 @@
 local buffer = require 'user.run-buffer.buffer'
 local command = require 'user.run-buffer.command'
 local make = require 'user.run-buffer.handlers.make'
+local notify_stub = require 'tests.notify_stub'
 local eq = assert.are.same
 
 local function fresh_unnamed_buffer()
@@ -45,21 +46,18 @@ end
 
 describe('user.run-buffer', function()
   local original_start_ls
-  local original_notify
+  local notify
   local notifications
 
   before_each(function()
     original_start_ls = _G.start_ls
-    original_notify = vim.notify
-    notifications = {}
-    vim.notify = function(msg, level, _opts)
-      table.insert(notifications, { msg = msg, level = level })
-    end
+    notify = notify_stub.install()
+    notifications = notify.messages
   end)
 
   after_each(function()
     _G.start_ls = original_start_ls
-    vim.notify = original_notify
+    notify_stub.restore(notify)
     pcall(vim.cmd, 'bwipeout!')
   end)
 
