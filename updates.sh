@@ -54,12 +54,6 @@ update_npm() {
     <"$DOTFILES/node/global-npm-packages"
 }
 
-_cargo_install() { cargo install "$1"; }
-update_cargo() {
-  log "cargo — global packages"
-  each_line "$DOTFILES/rust/cargo-packages.txt" _cargo_install
-}
-
 _go_install() { GOPATH="$HOME/go" go install "$1"; }
 update_go() {
   log "go — global packages"
@@ -150,7 +144,7 @@ random() {
 
 # ── main ─────────────────────────────────────────────────────────────────────
 
-UPDATE_SECTIONS=(asdf brew pip npm cargo go gh build random)
+UPDATE_SECTIONS=(asdf brew pip npm go gh build random)
 
 run_section() {
   case "$1" in
@@ -158,7 +152,6 @@ run_section() {
   brew) update_brew ;;
   pip) update_pip ;;
   npm) update_npm ;;
-  cargo) update_cargo ;;
   go) update_go ;;
   gh) update_gh_releases ;;
   build) update_build_tools ;;

@@ -63,7 +63,7 @@
    source ~/.zshrc
    ```
 
-5. Install and update everything (brew, asdf, pip, npm, cargo, go, etc.):
+5. Install and update everything (brew, asdf, pip, npm, go, etc.):
 
    ```bash
    ./updates.sh
@@ -142,7 +142,7 @@ tail -f ~/.cache/gh-notify/error.log                                            
 
 ### Reinstalling all packages
 
-Run `./updates.sh` — it handles brew, asdf, pip, npm, cargo, go, GitHub releases, and build-from-source tools.
+Run `./updates.sh` — it handles brew, asdf, pip, npm, go, GitHub releases, and build-from-source tools.
 
 ### Remove TreeSitter parsers
 

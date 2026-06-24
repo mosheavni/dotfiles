@@ -25,7 +25,7 @@ local tools = {
   { name = 'helm-ls', binary = 'helm_ls', install = 'brew install helm-ls' },
   { name = 'html-lsp', binary = 'vscode-html-language-server', install = 'npm install -g vscode-langservers-extracted' },
   { name = 'isort', binary = 'isort', install = 'pip install isort' },
-  { name = 'jinja-lsp', binary = 'jinja-lsp', install = 'cargo install jinja-lsp' },
+  { name = 'jinja-lsp', binary = 'jinja-lsp', install = 'brew bundle --file=~/.dotfiles/Brewfile' },
   { name = 'json-lsp', binary = 'vscode-json-language-server', install = 'npm install -g vscode-langservers-extracted' },
   { name = 'lua-language-server', binary = 'lua-language-server', install = 'brew install lua-language-server' },
   { name = 'luacheck', binary = 'luacheck', install = 'brew install luacheck' },
