@@ -235,9 +235,19 @@ describe('user.run-buffer', function()
       eq(result.spawn, true)
     end)
 
-    it('yaml uses yq', function()
+    it('yaml uses yq when vim.b.is_kubernetes is not set', function()
+      vim.b.is_kubernetes = nil
       local result = sync_result('yaml', '/tmp/config.yaml', '')
       eq(result.cmd, 'yq /tmp/config.yaml')
+      eq(result.spawn, true)
+    end)
+
+    it('yaml uses kubectl dry-run when vim.b.is_kubernetes is true', function()
+      local manifest = '/tmp/deployment.yaml'
+      fresh_named_buffer(manifest, 'yaml')
+      vim.b.is_kubernetes = true
+      local result = command.build('yaml', manifest)
+      eq(result.cmd, 'kubectl apply --dry-run=client -f ' .. vim.fn.shellescape(manifest))
       eq(result.spawn, true)
     end)
 

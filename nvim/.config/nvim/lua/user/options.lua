@@ -185,8 +185,27 @@ vim.opt.indentkeys:remove '0#'
 vim.opt.indentkeys:remove '<:>'
 
 local kube_config_pattern = [[.*\.kube/config]]
+local k8s_scan_lines = 20
+
+---@param bufnr integer
+---@return boolean
+local function mark_k8s_yaml(bufnr)
+  for _, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, k8s_scan_lines, false)) do
+    if line:match '^kind:' or line:match '^apiVersion:' then
+      vim.b[bufnr].is_kubernetes = true
+      return true
+    end
+  end
+  return false
+end
+
+local function yaml_extension(_, bufnr)
+  mark_k8s_yaml(bufnr)
+  return 'yaml'
+end
+
 vim.filetype.add {
-  extension = { tfvars = 'terraform' },
+  extension = { tfvars = 'terraform', yaml = yaml_extension, yml = yaml_extension },
   filename = {
     Brewfile = 'brewfile',
     ['.pre-commit-config.yaml'] = 'yaml.precommit',
@@ -209,19 +228,8 @@ vim.filetype.add {
     [kube_config_pattern] = 'yaml',
     ['.*'] = {
       function(_, bufnr)
-        -- k8s manifests without a .yaml extension: kind:/apiVersion: in the first 20 lines
-        local seen_content = false
-        for _, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, 20, false)) do
-          if line:match '^kind:' or line:match '^apiVersion:' then
-            return 'yaml'
-          end
-          -- json without a .json extension: first non-blank line opens with { or [
-          if not seen_content and line:match '%S' then
-            seen_content = true
-            if line:match '^%s*[%[{]' then
-              return 'json'
-            end
-          end
+        if mark_k8s_yaml(bufnr) then
+          return 'yaml'
         end
       end,
       -- catch-all must lose to every specific pattern (:h vim.filetype.add)
