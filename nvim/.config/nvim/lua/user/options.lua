@@ -189,6 +189,8 @@ vim.filetype.add {
   extension = { tfvars = 'terraform' },
   filename = {
     Brewfile = 'brewfile',
+    ['.pre-commit-config.yaml'] = 'yaml.precommit',
+    ['.pre-commit-config.yml'] = 'yaml.precommit',
     ['docker-compose.yml'] = 'yaml.docker-compose',
   },
   pattern = {

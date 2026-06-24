@@ -186,6 +186,19 @@ describe('user.run-buffer', function()
       package.loaded['user.gh-actions'] = original_gh
     end)
 
+    it('yaml.precommit runs pre-commit from git repo root', function()
+      package.loaded['user.git'] = {
+        get_toplevel_sync = function()
+          return '/repo'
+        end,
+      }
+      local config = '/repo/.pre-commit-config.yaml'
+      local result = command.build('yaml.precommit', config)
+      eq(result.cmd, 'pre-commit run --all-files')
+      eq(result.spawn, true)
+      eq(result.cwd, '/repo')
+    end)
+
     it('yaml.ghaction includes git repo root when spawning', function()
       package.loaded['user.git'] = {
         get_toplevel_sync = function()
@@ -312,6 +325,21 @@ describe('user.run-buffer', function()
       eq(result.cwd, '/repo')
 
       package.loaded['user.gh-actions'] = original_gh
+      package.loaded['user.git'] = original_git
+    end)
+
+    it('yaml.precommit breaks when not in a git repository', function()
+      local original_git = package.loaded['user.git']
+      package.loaded['user.git'] = {
+        get_toplevel_sync = function()
+          return ''
+        end,
+      }
+
+      local result = command.build('yaml.precommit', '/tmp/.pre-commit-config.yaml')
+      eq(result.cmd, nil)
+      eq(result.spawn, false)
+
       package.loaded['user.git'] = original_git
     end)
 

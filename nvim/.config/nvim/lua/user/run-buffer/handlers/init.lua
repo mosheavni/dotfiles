@@ -20,6 +20,7 @@ end
 local modules = {
   require 'user.run-buffer.handlers.make',
   require 'user.run-buffer.handlers.yaml_ghaction',
+  require 'user.run-buffer.handlers.yaml_precommit',
   require 'user.run-buffer.handlers.terraform',
   require 'user.run-buffer.handlers.lua',
   require 'user.run-buffer.handlers.groovy',
