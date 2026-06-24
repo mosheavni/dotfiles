@@ -1,5 +1,4 @@
 vim.bo.commentstring = '# %s'
-vim.cmd 'runtime! syntax/ruby.vim'
 
 local function sort_brewfile()
   local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)

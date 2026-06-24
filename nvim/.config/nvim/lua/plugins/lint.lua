@@ -8,11 +8,15 @@ end
 
 return function()
   local lint = require 'lint'
+  local brew_bundle = require 'user.lint.brew_bundle'
 
   local disabled_linters = { trivy = true }
 
+  lint.linters.brew_bundle = brew_bundle.linter
+
   lint.linters_by_ft = {
     Jenkinsfile = { 'npm-groovy-lint' },
+    brewfile = { 'brew_bundle' },
     ['docker-compose'] = { 'dclint' },
     dockerfile = { 'hadolint' },
     ghaction = { 'actionlint' },

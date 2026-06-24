@@ -6,6 +6,8 @@ vim.pack.add {
 }
 
 return function()
+  vim.treesitter.language.register('ruby', 'brewfile')
+
   vim.api.nvim_create_autocmd('FileType', {
     group = vim.api.nvim_create_augroup('myconfig.treesitter', { clear = true }),
     pattern = { '*' },
@@ -91,6 +93,7 @@ return function()
     'query',
     'regex',
     'requirements',
+    'ruby',
     'rust',
     'scss',
     'sql',
