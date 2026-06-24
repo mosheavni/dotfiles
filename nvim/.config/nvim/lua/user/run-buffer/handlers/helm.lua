@@ -17,6 +17,20 @@ local function dependency_build_prefix(chart_root)
   return ''
 end
 
+---@param chart_root string
+---@param file_name string
+---@return string Suffix for `helm template`, e.g. ` --show-only templates/foo.yaml`.
+local function show_only_suffix(chart_root, file_name)
+  if vim.fs.basename(file_name) == 'Chart.yaml' then
+    return ''
+  end
+  local rel = vim.fs.relpath(chart_root, file_name)
+  if not rel or not rel:match '^templates/' then
+    return ''
+  end
+  return ' --show-only ' .. vim.fn.shellescape(rel)
+end
+
 return {
   ft = 'helm',
   ---@type RunHandler
@@ -28,7 +42,7 @@ return {
         return { spawn = false }
       end
       local chart_name = vim.fs.basename(chart_root)
-      local template = 'helm template ' .. vim.fn.shellescape(chart_name) .. ' .'
+      local template = 'helm template ' .. vim.fn.shellescape(chart_name) .. ' .' .. show_only_suffix(chart_root, ctx.file_name)
       return {
         cmd = dependency_build_prefix(chart_root) .. template,
         spawn = true,

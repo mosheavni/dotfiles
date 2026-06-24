@@ -528,7 +528,8 @@ clean:
 
     it('templates the chart using the directory name as release name', function()
       local result = command.build('helm', template_path)
-      eq(result.cmd, 'helm template ' .. vim.fn.shellescape(vim.fs.basename(chart_root)) .. ' .')
+      local show_only = ' --show-only ' .. vim.fn.shellescape 'templates/cm.yaml'
+      eq(result.cmd, 'helm template ' .. vim.fn.shellescape(vim.fs.basename(chart_root)) .. ' .' .. show_only)
       eq(result.spawn, true)
       eq(result.cwd, vim.fs.normalize(chart_root))
     end)
@@ -536,7 +537,8 @@ clean:
     it('runs helm dependency build when dependencies are missing from charts/', function()
       write_chart(chart_root, { dependencies = { 'nginx' } })
       local result = command.build('helm', template_path)
-      eq(result.cmd, 'helm dependency build; helm template ' .. vim.fn.shellescape(vim.fs.basename(chart_root)) .. ' .')
+      local show_only = ' --show-only ' .. vim.fn.shellescape 'templates/cm.yaml'
+      eq(result.cmd, 'helm dependency build; helm template ' .. vim.fn.shellescape(vim.fs.basename(chart_root)) .. ' .' .. show_only)
       eq(result.cwd, vim.fs.normalize(chart_root))
     end)
 
@@ -546,7 +548,8 @@ clean:
       vim.fn.mkdir(charts_dir, 'p')
       vim.fn.writefile({ '' }, vim.fs.joinpath(charts_dir, 'nginx-1.0.0.tgz'))
       local result = command.build('helm', template_path)
-      eq(result.cmd, 'helm template ' .. vim.fn.shellescape(vim.fs.basename(chart_root)) .. ' .')
+      local show_only = ' --show-only ' .. vim.fn.shellescape 'templates/cm.yaml'
+      eq(result.cmd, 'helm template ' .. vim.fn.shellescape(vim.fs.basename(chart_root)) .. ' .' .. show_only)
     end)
 
     it('does not spawn when no Chart.yaml exists above the file', function()
