@@ -89,13 +89,13 @@ export KUBECTL_EXTERNAL_DIFF="kdiff"
 export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta1"}'
 
 # ==================== #
-# MCP Servers Sync     #
+# AI config sync       #
 # ==================== #
-# Sync MCP servers from mcphub to Claude (once per day, background)
+# MCP servers, agent guidelines, Cursor CLI policy (once per day, background)
 MCP_SYNC_TIMESTAMP="$HOME/last-ai-sync.txt"
 if [[ ! -f "$MCP_SYNC_TIMESTAMP" ]] || [[ "$(date +%Y%m%d)" != "$(date -r "$MCP_SYNC_TIMESTAMP" +%Y%m%d 2>/dev/null)" ]]; then
   (
-    ~/.dotfiles/ai/sync-mcp-servers.sh 2>/dev/null
+    ~/.dotfiles/ai/sync-ai-config.sh 2>/dev/null
   ) &|
 fi
 
