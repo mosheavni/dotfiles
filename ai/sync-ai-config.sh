@@ -5,6 +5,7 @@
 # - MCP servers (mcphub → Claude + Cursor)
 # - Karpathy agent guidelines (remote → AGENTS.md + agents.mdc)
 # - Cursor CLI policy (cli-config.base.json → ~/.cursor/cli-config.json)
+# - Superpowers plugin (~/.cursor/plugins/local/superpowers)
 
 set -e
 
@@ -15,6 +16,8 @@ readonly CLAUDE_MCP_TARGET="${SCRIPT_DIR}/.claude.json"
 readonly CURSOR_MCP_TARGET="${HOME}/.cursor/mcp.json"
 readonly CLI_CONFIG_BASE="${SCRIPT_DIR}/.cursor/cli-config.base.json"
 readonly CLI_CONFIG_TARGET="${HOME}/.cursor/cli-config.json"
+readonly SUPERPOWERS_REPO="${HOME}/.cursor/plugins/local/superpowers"
+readonly SUPERPOWERS_REMOTE="https://github.com/obra/superpowers.git"
 readonly KARPATHY_BASE="https://raw.githubusercontent.com/multica-ai/andrej-karpathy-skills/main"
 readonly LAST_SYNC_FILE="${HOME}/last-ai-sync.txt"
 
@@ -187,16 +190,48 @@ merge_cursor_cli_config() {
   return "$SYNC_UPDATED"
 }
 
+# --- Superpowers plugin (git pull) ---------------------------------------------
+
+sync_superpowers_plugin() {
+  if [ ! -d "$SUPERPOWERS_REPO/.git" ]; then
+    mkdir -p "$(dirname "$SUPERPOWERS_REPO")"
+    git clone "$SUPERPOWERS_REMOTE" "$SUPERPOWERS_REPO" || {
+      echo "Warning: Failed to clone superpowers to ${SUPERPOWERS_REPO}" >&2
+      return "$SYNC_ERROR"
+    }
+    echo "✓ Cloned superpowers to ${SUPERPOWERS_REPO}"
+    return "$SYNC_UPDATED"
+  fi
+
+  local before after
+  before="$(git -C "$SUPERPOWERS_REPO" rev-parse HEAD)"
+  git -C "$SUPERPOWERS_REPO" pull --ff-only -q || {
+    echo "Warning: Failed to update superpowers in ${SUPERPOWERS_REPO}" >&2
+    return "$SYNC_ERROR"
+  }
+  after="$(git -C "$SUPERPOWERS_REPO" rev-parse HEAD)"
+
+  if [ "$before" = "$after" ]; then
+    return "$SYNC_UNCHANGED"
+  fi
+
+  echo "✓ Updated superpowers (${before:0:7} → ${after:0:7})"
+  return "$SYNC_UPDATED"
+}
+
 record_last_sync() {
   date >"$LAST_SYNC_FILE"
 }
 
 main() {
-  require_commands jq curl || exit 1
+  require_commands jq curl git || exit 1
 
   sync_all_mcp_servers
   sync_karpathy_guidelines
+  set +e
   merge_cursor_cli_config
+  sync_superpowers_plugin
+  set -e
   record_last_sync
 }
 
