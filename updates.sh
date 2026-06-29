@@ -2,6 +2,7 @@
 set -euo pipefail
 
 DOTFILES="$HOME/.dotfiles"
+CORP_BREWFILE="$HOME/corp-Brewfile"
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -20,6 +21,11 @@ each_line() {
   done <"$file"
 }
 
+brew_bundle_files() {
+  printf '%s\n' "$DOTFILES/Brewfile"
+  [[ -f "$CORP_BREWFILE" ]] && printf '%s\n' "$CORP_BREWFILE"
+}
+
 # ── sections ─────────────────────────────────────────────────────────────────
 
 update_asdf() {
@@ -33,9 +39,12 @@ update_asdf() {
 
 update_brew() {
   log "brew — bundle, update, upgrade"
-  awk '/^tap /{gsub(/"/, "", $2); print $2}' "$DOTFILES/Brewfile" \
-    | xargs -I{} brew trust {}
-  brew bundle --file="$DOTFILES/Brewfile"
+  local file
+  while IFS= read -r file; do
+    awk '/^tap /{gsub(/"/, "", $2); print $2}' "$file" \
+      | xargs -I{} brew trust {}
+    brew bundle --file="$file"
+  done < <(brew_bundle_files)
   brew update
   brew upgrade
   log "fzf — shell integration"

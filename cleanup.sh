@@ -2,6 +2,7 @@
 set -euo pipefail
 
 DOTFILES="$HOME/.dotfiles"
+CORP_BREWFILE="$HOME/corp-Brewfile"
 
 # asdf shims need asdf in PATH (not sourced in non-login bash)
 # shellcheck disable=SC1091
@@ -24,16 +25,38 @@ dry_or_run() {
   fi
 }
 
+brew_bundle_files() {
+  printf '%s\n' "$DOTFILES/Brewfile"
+  [[ -f "$CORP_BREWFILE" ]] && printf '%s\n' "$CORP_BREWFILE"
+}
+
+combined_brewfile() {
+  local tmp file
+  tmp=$(mktemp)
+  while IFS= read -r file; do
+    cat "$file" >>"$tmp"
+    echo >>"$tmp"
+  done < <(brew_bundle_files)
+  echo "$tmp"
+}
+
 # ── sections ─────────────────────────────────────────────────────────────────
 
 cleanup_brew() {
-  log "brew — trust all taps in Brewfile"
-  awk '/^tap /{gsub(/"/, "", $2); print $2}' "$DOTFILES/Brewfile" \
-    | xargs -I{} brew trust {}
+  log "brew — trust all taps in Brewfile(s)"
+  local file
+  while IFS= read -r file; do
+    awk '/^tap /{gsub(/"/, "", $2); print $2}' "$file" \
+      | xargs -I{} brew trust {}
+  done < <(brew_bundle_files)
 
   log "brew — uninstall formulae from stale taps (prevents untap block)"
   local brewfile_taps installed_taps stale_taps
-  brewfile_taps=$(awk '/^tap /{gsub(/"/, "", $2); print $2}' "$DOTFILES/Brewfile" | sort)
+  brewfile_taps=$(
+    while IFS= read -r file; do
+      awk '/^tap /{gsub(/"/, "", $2); print $2}' "$file"
+    done < <(brew_bundle_files) | sort -u
+  )
   installed_taps=$(brew tap | sort)
   stale_taps=$(comm -23 <(echo "$installed_taps") <(echo "$brewfile_taps"))
 
@@ -73,13 +96,17 @@ cleanup_brew() {
     done <<< "$stale_taps"
   fi
 
-  log "brew — remove formulae/casks not in Brewfile"
+  log "brew — remove formulae/casks not in Brewfile(s)"
+  local bundle_file
+  bundle_file=$(combined_brewfile)
+  trap 'rm -f "$bundle_file"' RETURN
+
   if $DRY_RUN; then
-    brew bundle cleanup --file="$DOTFILES/Brewfile"
+    brew bundle cleanup --file="$bundle_file"
     return
   fi
 
-  brew bundle cleanup --file="$DOTFILES/Brewfile" --force
+  brew bundle cleanup --file="$bundle_file" --force
 }
 
 cleanup_asdf() {
