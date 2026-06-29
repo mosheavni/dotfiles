@@ -2,7 +2,6 @@ vim.pack.add {
   'https://github.com/nvim-lua/plenary.nvim',
   'https://github.com/tpope/vim-fugitive',
   'https://github.com/sindrets/diffview.nvim',
-  'https://github.com/akinsho/git-conflict.nvim',
 }
 
 local T = vim.keycode
@@ -214,40 +213,6 @@ end
 
 return function()
   fugitive_config()
-
-  require('git-conflict').setup { default_mappings = true }
-  require('user.menu').add_actions('GitConflict', {
-    ['Choose Ours (co)'] = function()
-      vim.cmd 'GitConflictChooseOurs'
-    end,
-    ['Choose Theirs (ct)'] = function()
-      vim.cmd 'GitConflictChooseTheirs'
-    end,
-    ['Choose Both (cb)'] = function()
-      vim.cmd 'GitConflictChooseBoth'
-    end,
-    ['Choose None (c0)'] = function()
-      vim.cmd 'GitConflictChooseNone'
-    end,
-    ['Next Conflict (]x)'] = function()
-      vim.cmd 'GitConflictNextConflict'
-    end,
-    ['Previous Conflict ([x)'] = function()
-      vim.cmd 'GitConflictPrevConflict'
-    end,
-    ['Send conflicts to Quickfix'] = function()
-      vim.cmd 'GitConflictListQf'
-    end,
-  })
-  vim.api.nvim_create_autocmd('User', {
-    pattern = 'GitConflictDetected',
-    callback = function()
-      vim.notify('Conflict detected in ' .. vim.fn.expand '<afile>')
-      vim.schedule(function()
-        vim.cmd 'GitConflictListQf'
-      end)
-    end,
-  })
 
   require 'diffview'
   vim.keymap.set('n', '<leader>gd', diff_actions['[Diffview] Diff File History'], { desc = 'Diffview files' })

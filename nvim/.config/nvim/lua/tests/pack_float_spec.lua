@@ -55,21 +55,16 @@ describe('user.pack.float', function()
   local original_pack
   local original_system
   local original_diffview
-  local original_git_conflict
   local original_user_pack
 
   before_each(function()
     original_pack = vim.pack
     original_system = vim.system
     original_diffview = package.preload.diffview
-    original_git_conflict = package.preload['git-conflict']
     original_user_pack = package.loaded['user.pack']
     package.loaded['user.pack'] = {}
     package.loaded['user.pack.float'] = nil
     package.preload.diffview = function()
-      return { setup = function() end }
-    end
-    package.preload['git-conflict'] = function()
       return { setup = function() end }
     end
     pcall(vim.api.nvim_del_user_command, 'PackFloat')
@@ -84,7 +79,6 @@ describe('user.pack.float', function()
     vim.pack = original_pack
     vim.system = original_system
     package.preload.diffview = original_diffview
-    package.preload['git-conflict'] = original_git_conflict
     package.loaded['user.pack'] = original_user_pack
     package.loaded['user.pack.float'] = nil
     pcall(vim.api.nvim_del_user_command, 'PackFloat')
