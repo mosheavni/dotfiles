@@ -46,6 +46,21 @@ autocmd('User', {
   pattern = 'DeferredPluginsLoaded',
   callback = function()
     require('user.menu').setup()
+    require('user.projects').setup()
+    require('user.navic').setup()
+    require('user.input').setup()
+    require('user.search-count').setup()
+    require('user.tabular-v2').setup()
+    require('user.number-separators').setup()
+    require('user.terminal').setup()
+    require('user.yank-ring').setup()
+    require('user.run-buffer').setup()
+    require('user.grep').setup()
+    require('user.lister').setup()
+    require('user.figlet').setup()
+    require('user.open-url').setup()
+    require('user.gitbrowse').setup()
+    require('user.easymotion').setup()
   end,
 })
 
