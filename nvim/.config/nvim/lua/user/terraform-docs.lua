@@ -30,6 +30,11 @@ M.config = {
     spotinst = 'spotinst',
     vcd = 'vmware',
   },
+  -- Registry docs slug: most providers drop the prefix (aws_instance -> instance).
+  -- Listed providers keep the full resource type name in the URL path.
+  full_resource_name_providers = {
+    confluent = true,
+  },
 }
 
 -- II. Tree-sitter Traversal and Data Extraction
@@ -150,11 +155,24 @@ local function get_resource_info()
   }
 end
 
+--- Registry docs path segment for a resource or data source type.
+---@param provider_prefix string
+---@param resource_id string
+---@param type_suffix string
+---@return string
+function M.doc_type_slug(provider_prefix, resource_id, type_suffix)
+  if M.config.full_resource_name_providers[provider_prefix] then
+    return resource_id
+  end
+  return type_suffix
+end
+
 --- Build the final documentation URL.
 ---@param info table Resource info.
 ---@return string
-local function build_url(info)
-  local url = string.format('%s%s/%s/latest/docs/%s/%s', M.config.base_url, info.source, info.provider_prefix, info.url_type, info.type_suffix)
+function M.build_url(info)
+  local type_slug = M.doc_type_slug(info.provider_prefix, info.resource_id, info.type_suffix)
+  local url = string.format('%s%s/%s/latest/docs/%s/%s', M.config.base_url, info.source, info.provider_prefix, info.url_type, type_slug)
 
   -- Handle jump anchor (Terraform docs typically normalize '_' to '-')
   if M.config.jump_anchor and info.argument_name then
@@ -176,7 +194,7 @@ M.open_docs = function()
     return
   end
 
-  local url = build_url(info)
+  local url = M.build_url(info)
 
   -- Use vim.ui.open() for non-blocking, cross-platform URL opening
   vim.ui.open(url)
