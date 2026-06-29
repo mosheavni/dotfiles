@@ -1,5 +1,4 @@
 #!/bin/zsh
-[[ -n "$LOADED_AWS_PROFILE" ]] && return
 
 : ${AWS_PROFILE_ENV:=$HOME/.aws/profile.env}
 
@@ -74,5 +73,3 @@ function aws-profile() {
 }
 
 _aws_profile_load
-
-export LOADED_AWS_PROFILE=true

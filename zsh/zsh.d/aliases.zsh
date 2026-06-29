@@ -1,6 +1,4 @@
 #!/bin/zsh
-# Guard against re-loading
-[[ -n "$LOADED_ALIASES" ]] && return
 
 #------------------------------------------------------------------------------
 # Core System Command Overrides
@@ -97,5 +95,3 @@ alias -g SRT='+short | sort'
 # Shell Processing
 alias -g dollar1='$(awk "{print \$1}"<<<"${line}")'
 alias -g dollar2='$(awk "{print \$2}"<<<"${line}")'
-
-export LOADED_ALIASES=true

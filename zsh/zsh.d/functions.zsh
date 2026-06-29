@@ -1,6 +1,4 @@
 #!/bin/zsh
-# Guard against re-loading
-[[ -n "$LOADED_FUNCTIONS" ]] && return
 
 function take() {
   [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1"
@@ -260,5 +258,3 @@ function matrix() {
     sleep 0.05
   done | awk "$awkscript"
 }
-
-export LOADED_FUNCTIONS=true
