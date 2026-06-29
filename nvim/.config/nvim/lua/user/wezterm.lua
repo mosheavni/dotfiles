@@ -45,6 +45,14 @@ function M.activate_pane(pane_id)
   cli { 'activate-pane', '--pane-id', tostring(pane_id) }
 end
 
+--- Kill a pane (closes its tab when it is the only pane).
+---@param pane_id string|number
+---@return boolean ok
+function M.kill_pane(pane_id)
+  local res = cli { 'kill-pane', '--pane-id', tostring(pane_id) }
+  return res ~= nil and res.code == 0
+end
+
 --- Spawn a new tab. Returns the new pane id, or nil on failure.
 ---@param opts? { cwd?: string }
 ---@return string|nil pane_id
