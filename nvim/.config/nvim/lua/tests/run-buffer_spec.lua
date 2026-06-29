@@ -386,6 +386,14 @@ describe('user.run-buffer', function()
       package.loaded['user.gh-actions'] = original_gh
     end)
 
+    it('requirements runs pip install -r with buffer cwd', function()
+      local req = '/tmp/project/requirements.txt'
+      local result = sync_result('requirements', req, '')
+      eq(result.cmd, 'pip install -r ' .. vim.fn.shellescape(req))
+      eq(result.spawn, true)
+      eq(result.cwd, '/tmp/project')
+    end)
+
     it('make returns the selected target command', function()
       local makefile_path = vim.fn.tempname()
       local f = assert(io.open(makefile_path, 'w'))

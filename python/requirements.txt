@@ -9,6 +9,7 @@ jedi
 jmespath
 msgpack
 neovim
+nodeenv
 pathspec
 pre-commit
 protobuf
@@ -27,6 +28,7 @@ ruff
 s3transfer
 six
 toml
+typing-extensions
 urllib3
 vim-vint
 zipp

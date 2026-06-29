@@ -28,6 +28,7 @@ local modules = {
   require 'user.run-buffer.handlers.markdown',
   require 'user.run-buffer.handlers.html',
   require 'user.run-buffer.handlers.brewfile',
+  require 'user.run-buffer.handlers.requirements',
   require 'user.run-buffer.handlers.helm',
 }
 
