@@ -33,6 +33,8 @@ update_asdf() {
 
 update_brew() {
   log "brew — bundle, update, upgrade"
+  awk '/^tap /{gsub(/"/, "", $2); print $2}' "$DOTFILES/Brewfile" \
+    | xargs -I{} brew trust {}
   brew bundle --file="$DOTFILES/Brewfile"
   brew update
   brew upgrade
@@ -44,8 +46,8 @@ update_pip() {
   log "pip — sync venv at ~/.local/share/dotfiles-python"
   uv venv --python "$(brew --prefix python3)/bin/python3" --allow-existing \
     "$HOME/.local/share/dotfiles-python"
-  uv pip install --python "$HOME/.local/share/dotfiles-python" \
-    -r "$DOTFILES/python/requirements.txt"
+  uv pip sync --python "$HOME/.local/share/dotfiles-python/bin/python" \
+    "$DOTFILES/python/requirements.txt"
 }
 
 update_npm() {
