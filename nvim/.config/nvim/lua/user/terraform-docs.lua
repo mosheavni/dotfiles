@@ -20,6 +20,7 @@ M.config = {
   default_provider_source = 'hashicorp',
   provider_source_map = {
     cloudflare = 'cloudflare',
+    confluent = 'confluentinc',
     fastly = 'fastly',
     github = 'integrations',
     ibm = 'IBM-Cloud',

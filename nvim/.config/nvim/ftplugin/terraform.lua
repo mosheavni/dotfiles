@@ -16,22 +16,29 @@ local in_module_path = dir:find '/modules?/' or dir:find '/modules?$'
 
 if dir ~= '' and not in_module_path and not prompted[dir] and vim.fn.isdirectory(dir .. '/.terraform') == 0 then
   prompted[dir] = true
+
   vim.schedule(function()
-    local select_opts = {
-      title = 'No .terraform in ' .. vim.fn.fnamemodify(dir, ':~'),
-      prompt = 'Run "terraform init"?❯ ',
-    }
-    vim.ui.select({ 'Yes', 'No' }, select_opts, function(choice)
-      if choice ~= 'Yes' then
-        return
-      end
-      local terminal = require 'user.terminal'
-      local buf, job_id = terminal.open { cwd = dir, name = 'terraform init', focus = false }
-      if job_id and buf then
-        vim.schedule(function()
-          terminal.send('terraform init', { buf = buf })
-        end)
-      end
-    end)
+    local ok, fzf_utils = pcall(require, 'fzf-lua.utils')
+    if ok then
+      fzf_utils.fzf_exit()
+    end
+    vim.defer_fn(function()
+      local select_opts = {
+        title = 'No .terraform in ' .. vim.fn.fnamemodify(dir, ':~'),
+        prompt = 'Run "terraform init"?❯ ',
+      }
+      vim.ui.select({ 'Yes', 'No' }, select_opts, function(choice)
+        if choice ~= 'Yes' then
+          return
+        end
+        local terminal = require 'user.terminal'
+        local buf, job_id = terminal.open { cwd = dir, name = 'terraform init', focus = false }
+        if job_id and buf then
+          vim.schedule(function()
+            terminal.send('terraform init', { buf = buf })
+          end)
+        end
+      end)
+    end, ok and 100 or 0)
   end)
 end
