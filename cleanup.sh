@@ -99,7 +99,9 @@ cleanup_brew() {
   log "brew — remove formulae/casks not in Brewfile(s)"
   local bundle_file
   bundle_file=$(combined_brewfile)
-  trap 'rm -f "$bundle_file"' RETURN
+  # Expand path now — RETURN trap runs after locals are unset (set -u would fail)
+  # shellcheck disable=SC2064
+  trap "rm -f $(printf '%q' "$bundle_file")" RETURN
 
   if $DRY_RUN; then
     brew bundle cleanup --file="$bundle_file"
