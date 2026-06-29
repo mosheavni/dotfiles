@@ -83,6 +83,22 @@ vim.schedule(function()
 
   vim.keymap.set('n', 'wip', git_funcs.enter_wip, { buffer = bufnr, desc = 'Enter work in progress' })
 
+  vim.keymap.set('n', '<CR>', function()
+    local esc = vim.fn['fugitive#PorcelainCfile']()
+    if esc == '' then
+      return
+    end
+    local path = esc:gsub('\\(.)', '%1')
+    if vim.fn.isdirectory(path) == 1 then
+      local ok, api = pcall(require, 'nvim-tree.api')
+      if ok then
+        api.tree.find_file { buf = path, open = true, focus = true, update_root = false }
+      end
+      return
+    end
+    vim.cmd('Gedit ' .. esc)
+  end, { buffer = bufnr, desc = 'Open file or reveal directory in NvimTree' })
+
   -- Show hints immediately
   -- hints.show()
 end)
