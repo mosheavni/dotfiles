@@ -61,6 +61,7 @@ autocmd('User', {
     require('user.open-url').setup()
     require('user.gitbrowse').setup()
     require('user.easymotion').setup()
+    require('user.conflicts').setup()
   end,
 })
 

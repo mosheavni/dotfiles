@@ -172,4 +172,32 @@ function M.read_json_file(file_name)
   return nil
 end
 
+---Debounce trailing-edge calls to fn by ms milliseconds.
+---@param ms integer
+---@param fn function
+---@return function
+function M.throttle(ms, fn)
+  local timer = nil
+  return function(...)
+    local args = { ... }
+    if timer then
+      timer:stop()
+      timer:close()
+    end
+    timer = vim.uv.new_timer()
+    timer:start(
+      ms,
+      0,
+      vim.schedule_wrap(function()
+        if timer then
+          timer:stop()
+          timer:close()
+          timer = nil
+        end
+        fn(unpack(args))
+      end)
+    )
+  end
+end
+
 return M
