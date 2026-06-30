@@ -53,6 +53,18 @@ function M.deferred()
   local fik = [=[\<\(\l\+\)\(\.\l\+\)\+\>]=]
   vim.g['switch_custom_definitions'] = {
     vim.fn['switch#NormalizedCaseWords'] { 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' },
+    vim.fn['switch#NormalizedCaseWords'] {
+      'first',
+      'second',
+      'third',
+      'fourth',
+      'fifth',
+      'sixth',
+      'seventh',
+      'eighth',
+      'ninth',
+      'tenth',
+    },
     vim.fn['switch#NormalizedCase'] { 'yes', 'no' },
     vim.fn['switch#NormalizedCase'] { 'on', 'off' },
     vim.fn['switch#NormalizedCase'] { 'left', 'right' },
