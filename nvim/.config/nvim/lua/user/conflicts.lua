@@ -350,11 +350,13 @@ local function get_unmerged_async(git_root, cb)
     return cb {}
   end
   vim.system({ 'git', unpack(unmerged_diff_args(git_root)) }, { text = true }, function(obj)
-    if obj.code ~= 0 then
-      cb {}
-    else
-      cb(M.parse_unmerged_paths(obj.stdout))
-    end
+    vim.schedule(function()
+      if obj.code ~= 0 then
+        cb {}
+      else
+        cb(M.parse_unmerged_paths(obj.stdout))
+      end
+    end)
   end)
 end
 

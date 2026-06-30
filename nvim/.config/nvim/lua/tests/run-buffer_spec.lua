@@ -314,21 +314,35 @@ describe('user.run-buffer', function()
       eq(result.cmd, '/tmp/run.sh')
     end)
 
-    it('markdown starts mdserve detached and does not return a shell command', function()
+    it('markdown starts mdserve on a free port and does not return a shell command', function()
       local original_jobstart = vim.fn.jobstart
+      local original_system = vim.fn.system
       local received
       set_jobstart_stub(function(cmd, opts)
         received = { cmd = cmd, opts = opts }
         return 42
       end)
+      vim.fn.system = function()
+        return ''
+      end
 
       local result = sync_result('markdown', '/tmp/readme.md', '')
       eq(result.cmd, nil)
       eq(result.spawn, false)
-      eq(received.cmd, { 'mdserve', '--open', '/tmp/readme.md' })
-      eq(received.opts.detach, true)
+      eq(received.cmd, {
+        'mdserve',
+        '--hostname',
+        '127.0.0.1',
+        '--port',
+        '3000',
+        '--open',
+        '/tmp/readme.md',
+      })
+      eq(received.opts.detach, nil)
+      eq(type(received.opts.on_exit), 'function')
 
       vim.fn.jobstart = original_jobstart
+      vim.fn.system = original_system
     end)
 
     it('yaml.ghaction uses gh-actions to build the act command', function()
