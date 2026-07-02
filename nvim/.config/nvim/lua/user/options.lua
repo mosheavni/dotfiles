@@ -185,12 +185,11 @@ vim.opt.indentkeys:remove '0#'
 vim.opt.indentkeys:remove '<:>'
 
 local kube_config_pattern = [[.*\.kube/config]]
-local k8s_scan_lines = 20
 
 ---@param bufnr integer
 ---@return boolean
 local function mark_k8s_yaml(bufnr)
-  for _, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, k8s_scan_lines, false)) do
+  for _, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, 20, false)) do
     if line:match '^kind:' or line:match '^apiVersion:' then
       vim.b[bufnr].is_kubernetes = true
       return true
