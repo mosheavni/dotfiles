@@ -157,10 +157,6 @@
       "rev": "0e5bc00d2a32e6c782cd279cb96ab6c7ae49cd94",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
-    "statuscol.nvim": {
-      "rev": "c46172d0911aa5d49ba5f39f4351d1bb7aa289cc",
-      "src": "https://github.com/luukvbaal/statuscol.nvim"
-    },
     "switch.vim": {
       "rev": "297346b630943ebd4ea58598dfd30bae5debc739",
       "src": "https://github.com/AndrewRadev/switch.vim"
