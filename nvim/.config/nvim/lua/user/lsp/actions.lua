@@ -40,7 +40,7 @@ M.actions = function()
     ['Rename symbol (<leader>lr)'] = function()
       vim.lsp.buf.rename()
     end,
-    ['Diagnostics quickfix list (<leader>lq)'] = function()
+    ['Diagnostics quickfix list (all open buffers)'] = function()
       vim.diagnostic.setqflist()
     end,
     ['Toggle inlay hints (<leader>lh)'] = function()
