@@ -16,8 +16,8 @@ local default_config = {
 local config = vim.deepcopy(default_config)
 
 local buffer_keymaps = {
-  { lhs = '[c', fn = 'prev_conflict', desc = 'Previous Git conflict' },
-  { lhs = ']c', fn = 'next_conflict', desc = 'Next Git conflict' },
+  { lhs = '[x', fn = 'prev_conflict', desc = 'Previous Git conflict' },
+  { lhs = ']x', fn = 'next_conflict', desc = 'Next Git conflict' },
   { lhs = '<leader>go', fn = 'take_head', desc = 'Take HEAD in conflict' },
   { lhs = '<leader>gt', fn = 'take_origin', desc = 'Take ORIGIN in conflict' },
   { lhs = '<leader>gb', fn = 'take_both', desc = 'Take BOTH in conflict' },
