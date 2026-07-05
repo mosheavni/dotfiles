@@ -9,9 +9,7 @@ romkatv/zsh-defer
 
 ohmyzsh/ohmyzsh path:lib/key-bindings.zsh
 zsh-users/zsh-history-substring-search
-peterhurford/git-it-on.zsh
 hlissner/zsh-autopair kind:defer
-agkozak/zhooks
 
 # deferred
 zsh-users/zsh-autosuggestions kind:defer

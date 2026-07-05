@@ -40,8 +40,6 @@ function pj() {
 
 ### Random functions ###
 function mwatch() {
-  # log_file=/tmp/moshe_mwatch.log
-  # [[ -f $log_file ]] && cat /dev/null > $log_file || touch $log_file
   final_alias=$(_alias_finder "$*")
   echo $final_alias
   watch "$final_alias"
@@ -79,7 +77,7 @@ function clone() {
   if [[ $REPO == git@* || $REPO == https://* ]]; then
     git clone $REPO
     CD_INTO=$(sed 's/\.git$//' <<<"$REPO" | awk -F/ '{print $NF}')
-  # check if $REPO starts with $GIT_DEFAULT_ORG/ (e.g., spotinst/repo)
+  # check if $REPO starts with $GIT_DEFAULT_ORG/ (e.g., mosheavni/repo)
   elif [[ $REPO == ${GIT_DEFAULT_ORG}/* ]]; then
     git clone git@github.com:${REPO}.git
     CD_INTO=$(awk -F'/' '{print $2}' <<<$REPO)
@@ -127,20 +125,24 @@ function docker_copy_between_regions() {
   # Function to copy Docker images between AWS ECR regions
   # Help message
   function print_help() {
-    echo "Usage: docker_copy_between_regions -n IMAGE_NAME -t IMAGE_TAG -s SRC_REGION -d DEST_REGION"
+    echo "Usage: docker_copy_between_regions -n IMAGE_NAME -t IMAGE_TAG -s SRC_REGION -d DEST_REGION [-p REPO_PREFIX]"
     echo "  -n  IMAGE_NAME   Name of the Docker image"
     echo "  -t  IMAGE_TAG    Tag of the Docker image"
     echo "  -s  SRC_REGION   Source AWS region"
     echo "  -d  DEST_REGION  Destination AWS region"
+    echo "  -p  REPO_PREFIX  ECR repo prefix (default: \$ECR_REPO_PREFIX, empty for none)"
   }
 
+  local REPO_PREFIX="${ECR_REPO_PREFIX:-}"
+
   # Parse parameters
-  while getopts "n:t:s:d:h" opt; do
+  while getopts "n:t:s:d:p:h" opt; do
     case ${opt} in
     n) IMAGE_NAME=$OPTARG ;;
     t) IMAGE_TAG=$OPTARG ;;
     s) SRC_REGION=$OPTARG ;;
     d) DEST_REGION=$OPTARG ;;
+    p) REPO_PREFIX=$OPTARG ;;
     h)
       print_help
       return
@@ -169,8 +171,8 @@ function docker_copy_between_regions() {
   ACC_ID=$(aws_account_id)
 
   # Copy Docker image between regions
-  echo "FROM $ACC_ID.dkr.ecr.${SRC_REGION}.amazonaws.com/spotinst-production/${IMAGE_NAME}:${IMAGE_TAG}" | docker_build_push \
-    -t $ACC_ID.dkr.ecr.${DEST_REGION}.amazonaws.com/spotinst-production/${IMAGE_NAME}:${IMAGE_TAG} \
+  echo "FROM $ACC_ID.dkr.ecr.${SRC_REGION}.amazonaws.com/${REPO_PREFIX:+$REPO_PREFIX/}${IMAGE_NAME}:${IMAGE_TAG}" | docker_build_push \
+    -t $ACC_ID.dkr.ecr.${DEST_REGION}.amazonaws.com/${REPO_PREFIX:+$REPO_PREFIX/}${IMAGE_NAME}:${IMAGE_TAG} \
     -f -
 }
 

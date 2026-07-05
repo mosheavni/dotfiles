@@ -25,7 +25,6 @@ alias repos="~/Repos"
 alias vim="nvim"
 alias v='nvim'
 alias vi='nvim'
-alias sudoedit="nvim"
 alias zshrc='${=EDITOR} ${ZDOTDIR:-$HOME}/.zshrc'
 alias lv='NVIM_APPNAME=lightvim nvim '
 

@@ -328,6 +328,7 @@ Severity legend:
 - **How to test:** `zsh -ic 'which vdiff'` not found; `sudoedit /etc/hosts` uses real sudoedit flow again.
 - **Risk:** `sudoedit` alias removal is the only behavior change, and it restores _correct_ behavior.
 - **Decision:** ✅ Partial — delete `vdiff` and remove the `sudoedit` alias (restore real privileged-edit semantics). Keep everything else (`matrix`, `grl`, `gitcd`, `docker_build_push`, `dc`).
+- **Status:** ✔ Executed 2026-07-05 (phase 6) — `zsh/.bin/vdiff` deleted; `sudoedit` alias removed from `aliases.zsh`. Verified: `vdiff` unresolvable, `sudoedit` no longer aliased in a fresh shell.
 
 ### 21. diffput/diffget operatorfunc indirection
 
@@ -362,6 +363,8 @@ Severity legend:
   6. Confirm `kubectx` is in the Brewfile (it ships `kubens` too, covering the `kns`/`ctx` alias deps); add it if missing.
 
   Kept as-is: redundant `.stowrc` ignores, version-pinned statusline plugin path, `gg-shield-action@master`, personal devops-scripts PATH loop.
+
+- **Status:** ✔ Executed 2026-07-05 (phase 6) — (1) `teams-call` + `teams.zsh` deleted; Alt-t unbound, widget gone. (2) `docker_copy_between_regions` takes `-p REPO_PREFIX` (default `$ECR_REPO_PREFIX`, empty = no prefix segment) — `spotinst-production` scrubbed entirely, plus a stale `spotinst/repo` comment example in `clone()`. (3) `zhooks` + `git-it-on.zsh` removed from `.zsh_plugins.txt`; neither loads in a fresh shell. (4) `ai/.claude/agents/` already gone (same post-audit cleanup as finding 8). (5) `mwatch` comment lines removed. (6) `kubectx` confirmed in Brewfile line 55 (ships `kubens`) — nothing to add. Startup 0.04s.
 
 ---
 
