@@ -34,11 +34,6 @@ function say() {
   done
 }
 
-function set-tab-title() {
-  title=$(dialog -t "Set tab title" -m "Enter the title for the tab" --bannertext Set --textfield title,required 2>/dev/null | awk -F: '{print $2}')
-  echo -e "\033]0;${title}\a"
-}
-
 function pj() {
   fdf "$(sed 's/,/ /g' <<<"${PJ_DIRS:-~/Repos/,~/.dotfiles}")"
 }
@@ -52,6 +47,10 @@ function mwatch() {
   watch "$final_alias"
 }
 
+function aws_account_id() {
+  aws sts get-caller-identity --query Account --output text
+}
+
 function ecr-login() {
   [[ -n "$DEBUG" ]] && set -x
   region=$1
@@ -61,16 +60,13 @@ function ecr-login() {
   aws ecr get-login-password \
     --region $region | docker login \
     --username AWS \
-    --password-stdin $(aws sts get-caller-identity | jq \
-      -r ".Account").dkr.ecr.${region}.amazonaws.com
+    --password-stdin $(aws_account_id).dkr.ecr.${region}.amazonaws.com
   [[ -z $1 ]] && aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
   [[ -n "$DEBUG" ]] && set +x
 }
 
 function clone() {
   [[ -n "$DEBUG" ]] && set -x
-  # Use GIT_DEFAULT_ORG environment variable
-  GIT_DEFAULT_ORG="${GIT_DEFAULT_ORG:-mosheavni}"
   cd ~/Repos
   REPO=$1
   CD_INTO=$REPO
@@ -165,7 +161,7 @@ function docker_copy_between_regions() {
   fi
 
   # Get AWS account ID
-  ACC_ID=$(aws sts get-caller-identity | jq -r ".Account")
+  ACC_ID=$(aws_account_id)
 
   # Copy Docker image between regions
   echo "FROM $ACC_ID.dkr.ecr.${SRC_REGION}.amazonaws.com/spotinst-production/${IMAGE_NAME}:${IMAGE_TAG}" | docker_build_push \

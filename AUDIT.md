@@ -91,6 +91,7 @@ Severity legend:
 
 - **Risk:** None if genuinely unused; if muscle memory exists for typing them, keep + wire instead.
 - **Decision:** ✅ Approved, expanded — delete `zsh/zsh.d/fzf.zsh` entirely (all five functions). Move the fzf loading it carries — `[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh` plus the `FZF_DEFAULT_OPTS` / `FZF_CTRL_T_*` / `FZF_CTRL_R_OPTS` exports — into `.zshrc`.
+- **Status:** ✔ Executed 2026-07-05 — file deleted, fzf block added to `.zshrc` (own section before the zsh.d loop). Verified: `fzf-man`/`fzf-rm` unresolvable, `FZF_CTRL_R_OPTS` still set, no bindkey conflicts in `zsh.d`, `~/zsh.d` is a folded stow symlink so no dangling link.
 
 ### 5. Dead nvim lua functions
 
@@ -196,6 +197,7 @@ Severity legend:
 
 - **Risk:** Only if any keg genuinely lives in Intel prefix — the `ls` check settles it.
 - **Decision:** ✅ Approved — per PATH entry: if the keg exists under `/opt/homebrew/opt/...`, switch the line to that path; if it doesn't exist there either, delete the line.
+- **Status:** ✔ Executed 2026-07-05 — curl switched to `/opt/homebrew/opt/curl/bin` (keg exists, `which curl` resolves there); ruby and postgresql@15 lines deleted (kegs absent from both prefixes; `ruby` falls back to `/usr/bin/ruby`, `psql` was already unresolvable before the change).
 
 ### 12. `set-tab-title` calls a tool that doesn't match dialog(1)
 
@@ -204,7 +206,8 @@ Severity legend:
 - **Suggested change:** Delete, or rewrite with the actual escape sequence (`printf '\e]0;%s\a'`) / wezterm CLI.
 - **How to test:** `zsh -ic 'set-tab-title test'` — currently errors; after rewrite, tab title changes.
 - **Risk:** None — currently broken anyway.
-- **Decision:** ✅ Approved — fix: rewrite with the standard escape sequence (`printf '\e]0;%s\a'`) instead of the missing `dialog` tool.
+- **Decision:** ✅ Approved (revised) — initially rewritten with `printf '\e]0;%s\a'`, but `term-support.zsh` re-sets the title via a `precmd` hook before every prompt, so any manual title is overwritten immediately (the old `dialog` version had the same flaw). Function unused → deleted instead.
+- **Status:** ✔ Executed 2026-07-05 — `set-tab-title` removed from `functions.zsh`; tab titles remain owned by `term-support.zsh` hooks.
 
 ---
 
@@ -251,6 +254,7 @@ Severity legend:
 - **How to test:** `zsh -ic 'ghc <repo>'` and `zsh -ic 'ecr-login'` behave as before.
 - **Risk:** Low.
 - **Decision:** ✅ Approved — export `GIT_DEFAULT_ORG` once in `.zshrc`; extract the `aws_account_id()` helper.
+- **Status:** ✔ Executed 2026-07-05 — `export GIT_DEFAULT_ORG=mosheavni` added to `.zshrc`; inline defaults removed from `clone()` and `ghc()`. `aws_account_id()` added to `functions.zsh` (uses `--query Account --output text`, dropping the jq dependency) and used by both `ecr-login` and `docker_copy_between_regions`.
 
 ### 16. nvim repeated patterns
 

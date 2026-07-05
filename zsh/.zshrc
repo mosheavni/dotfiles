@@ -22,8 +22,7 @@ path=(
   /opt/homebrew/sbin
   /opt/homebrew/opt/make/libexec/gnubin
   ${KREW_ROOT:-$HOME/.krew}/bin
-  /usr/local/opt/curl/bin
-  /usr/local/opt/ruby/bin
+  /opt/homebrew/opt/curl/bin
   $HOME/.bin
   $HOME/.docker/bin
   $HOME/.local/bin
@@ -31,7 +30,6 @@ path=(
   $HOME/.cargo/bin
   $HOME/go/bin
   /usr/local/sbin
-  /usr/local/opt/postgresql@15/bin
   $PNPM_HOME
   $path
 )
@@ -71,6 +69,16 @@ export AWS_PAGER=""
 export MANPAGER='nvim +Man!'
 export cdpath=(. ~ ~/Repos)
 export TMPDIR=$HOME/tmp
+export GIT_DEFAULT_ORG=mosheavni
+
+# ===== #
+#  fzf  #
+# ===== #
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS='--height=100% --layout=reverse --border --info=inline --highlight-line'
+export FZF_CTRL_T_COMMAND='rg --color=never --files --hidden --follow -g "!.git"'
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers,changes {}' --walker-skip .git,node_modules"
+export FZF_CTRL_R_OPTS="--scheme=history --ansi --color=hl:underline,hl+:underline,header:italic --header 'Press CTRL-Y to copy command into clipboard' --preview 'echo {2..} | bat --color=always -pl bash' --preview-window 'down:4:wrap' --bind 'ctrl-/:toggle-preview' --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort' --prompt='History> '"
 
 # ===================== #
 # Aliases and Functions #

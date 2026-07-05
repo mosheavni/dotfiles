@@ -5,7 +5,7 @@ function ghc() {
     return 1
   fi
 
-  local org="${1:-${GIT_DEFAULT_ORG:-mosheavni}}"
+  local org="${1:-$GIT_DEFAULT_ORG}"
 
   local selected
   selected=$(
