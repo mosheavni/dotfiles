@@ -135,8 +135,6 @@ vim.o.signcolumn = 'yes'
 vim.o.statuscolumn = [[%1C %1s %=%{v:virtnum!=0||(!&nu&&!&rnu)?'':printf('%*d',&numberwidth,&rnu?(v:relnum>0?v:relnum:(&nu?v:lnum:0)):v:lnum)} ]]
 vim.o.virtualedit = 'block' -- Allow cursor to move to the end of the line
 vim.opt.nrformats:append 'blank'
--- require 'user.winbar'
--- opt.winbar = "%{%v:lua.require'user.winbar'.eval()%}"
 -- vim.o.statuscolumn = '%=%{v:wrap?"":v:relnum?v:relnum:v:lnum} %s%C'
 
 -- Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.

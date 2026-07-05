@@ -6,7 +6,7 @@
 **Scope:** Full repository — dead code, duplication, unnecessary abstractions, performance, stale references.
 **Method:** Three exploration passes (nvim lua, zsh/shell, remaining packages) with grep-based cross-referencing. Every finding below carries its evidence; critical claims were re-verified by hand. No changes have been applied — this is a proposal document.
 
-**Decisions:** Findings 1–10 were reviewed on 2026-07-03; each carries a **Decision** line (✅ approved / ❌ won't fix / ⏸ pending). Findings 11+ await review. Nothing has been executed yet.
+**Decisions:** Findings 1–10 were reviewed on 2026-07-03, findings 8 and 11–15 on 2026-07-05; each carries a **Decision** line (✅ approved / ❌ won't fix / ⏸ pending). Findings 16+ await review. Nothing has been executed yet.
 
 Severity legend:
 
@@ -153,7 +153,8 @@ Severity legend:
   ```
 
 - **Risk:** None — worker is invoked by nothing in current settings.
-- **Decision:** ⏸ Pending — no decision yet.
+- **Decision:** ✅ Approved — delete all gsd relics (`gsd-check-update-worker.js`, `settings.json.bak`, and anything else `gsd-*` found under `ai/.claude/`). Local `rm`, no commit involved.
+- **Status:** ✔ Resolved 2026-07-05 — files already gone; `find`/`grep` for `gsd`/`*.bak` under `ai/` and `~/.claude` (symlink to it) return nothing.
 
 ### 9. Docs reference a nonexistent `cursor/` stow package
 
@@ -169,6 +170,7 @@ Severity legend:
 
 - **Risk:** None — documentation-only. Stale docs actively mislead Claude/Cursor sessions, so this is high despite zero runtime impact.
 - **Decision:** ✅ Approved — fix both docs to attribute the symlinks to `ai/`.
+- **Status:** ✔ Executed 2026-07-05 — both docs updated (merged the `cursor/` bullet into `ai/`, swapped the scope-table example to `zsh/`); verified `~/AGENTS.md → .dotfiles/ai/AGENTS.md`.
 
 ### 10. Commented-out reference to deleted `user.winbar` module
 
@@ -178,6 +180,7 @@ Severity legend:
 - **How to test:** `nvim --headless '+quitall'` starts clean; winbar still rendered by navic in a normal session.
 - **Risk:** None — comments.
 - **Decision:** ✅ Approved — delete the winbar comment lines.
+- **Status:** ✔ Executed 2026-07-05 — `options.lua:138-139` removed; `nvim --headless '+quitall'` exits 0.
 
 ### 11. Intel-Homebrew PATH entries on Apple-Silicon machine
 
@@ -192,6 +195,7 @@ Severity legend:
   ```
 
 - **Risk:** Only if any keg genuinely lives in Intel prefix — the `ls` check settles it.
+- **Decision:** ✅ Approved — per PATH entry: if the keg exists under `/opt/homebrew/opt/...`, switch the line to that path; if it doesn't exist there either, delete the line.
 
 ### 12. `set-tab-title` calls a tool that doesn't match dialog(1)
 
@@ -200,6 +204,7 @@ Severity legend:
 - **Suggested change:** Delete, or rewrite with the actual escape sequence (`printf '\e]0;%s\a'`) / wezterm CLI.
 - **How to test:** `zsh -ic 'set-tab-title test'` — currently errors; after rewrite, tab title changes.
 - **Risk:** None — currently broken anyway.
+- **Decision:** ✅ Approved — fix: rewrite with the standard escape sequence (`printf '\e]0;%s\a'`) instead of the missing `dialog` tool.
 
 ---
 
@@ -219,6 +224,7 @@ Severity legend:
   ```
 
 - **Risk:** Medium — these scripts mutate installed packages. Diff their _output_ (list phases) before/after, don't just eyeball the code.
+- **Decision:** ✅ Approved — extract the shared lib and source it from both scripts.
 
 ### 14. Alias duplicates and ohmyzsh shadowing
 
@@ -236,6 +242,7 @@ Severity legend:
   ```
 
 - **Risk:** Muscle-memory only. The `gb` decision is preference — flag, not mandate.
+- **Decision:** ✅ Approved, expanded — remove the ohmyzsh git plugin entirely (`.zsh_plugins.txt:11` `ohmyzsh/ohmyzsh path:plugins/git`) and port only the essential aliases into `aliases.zsh`: `gpom`, `gmom`, `gl`, `gp`, `gcam`, `gcmsg`, `gpsup`, plus suggested extras — `gco` (checkout), `gcb` (checkout -b), `gd` (diff), `gaa` (add --all), `gpf` (push --force-with-lease). Note: `gpsup`, `gpom`, `gmom` depend on ohmyzsh's `git_current_branch`/`git_main_branch` helper functions — port those two functions too (which also resolves the `git_current_branch` alias-shadowing item above). Then dedupe: drop the redundant `gst` question (it becomes the only definition), keep the fzf `gb` (no longer collides), keep one of each identical alias pair (`dotfiles`/`dot`, `lv`/`lvim`, `Sa`/`Srt`).
 
 ### 15. Repeated constants/lookups in zsh functions
 
@@ -243,6 +250,7 @@ Severity legend:
 - **Suggested change:** Export `GIT_DEFAULT_ORG` once (e.g. in `.zshrc` or an `env.zsh`); extract `aws_account_id()` helper.
 - **How to test:** `zsh -ic 'ghc <repo>'` and `zsh -ic 'ecr-login'` behave as before.
 - **Risk:** Low.
+- **Decision:** ✅ Approved — export `GIT_DEFAULT_ORG` once in `.zshrc`; extract the `aws_account_id()` helper.
 
 ### 16. nvim repeated patterns
 

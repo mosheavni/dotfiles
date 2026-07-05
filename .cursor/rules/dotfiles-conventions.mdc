@@ -13,6 +13,5 @@ This is a macOS dotfiles repo managed with GNU Stow. Every top-level directory (
 
 **AI config packages:**
 
-- `cursor/` → `~/AGENTS.md` (Claude + agents) and `~/.cursor/rules/agents.mdc` (Cursor global rules)
-- `ai/` → `~/.claude/` (Claude config, skills, MCP servers)
+- `ai/` → `~/.claude/` (Claude config, skills, MCP servers), `~/AGENTS.md` (Claude + agents), and `~/.cursor/rules/agents.mdc` (Cursor global rules)
 - `graphify-out/` is gitignored and excluded from stow — do not commit it
