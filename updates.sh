@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-# shellcheck source=.scripts/lib.sh
+# shellcheck disable=SC1091
 source "$HOME/.dotfiles/.scripts/lib.sh"
 
 # ── sections ─────────────────────────────────────────────────────────────────

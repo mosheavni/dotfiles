@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-# shellcheck source=.scripts/lib.sh
+# shellcheck disable=SC1091
 source "$HOME/.dotfiles/.scripts/lib.sh"
 
 # asdf shims need asdf in PATH (not sourced in non-login bash)
@@ -86,7 +86,9 @@ cleanup_brew() {
   trap "rm -f $(printf '%q' "$bundle_file")" RETURN
 
   if $DRY_RUN; then
-    brew bundle cleanup --file="$bundle_file"
+    # cleanup without --force exits 1 when it finds candidates; don't let
+    # set -e kill the remaining dry-run sections
+    brew bundle cleanup --file="$bundle_file" || true
     return
   fi
 
