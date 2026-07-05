@@ -1,5 +1,5 @@
 local dev = vim.fn.expand '~/Repos/kubectl.nvim'
-if vim.env.K8S_DEV == 'true' and vim.fn.isdirectory(dev) == 1 then
+if vim.fn.isdirectory(dev) == 1 then
   vim.opt.runtimepath:prepend(dev)
 else
   vim.pack.add {

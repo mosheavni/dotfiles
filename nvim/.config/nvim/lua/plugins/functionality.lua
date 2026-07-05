@@ -10,7 +10,7 @@ vim.pack.add {
 }
 
 local sar_dev = vim.fn.expand '~/Repos/search-replace.nvim'
-if vim.env.SAR_DEV == 'true' and vim.fn.isdirectory(sar_dev) == 1 then
+if vim.fn.isdirectory(sar_dev) == 1 then
   vim.opt.runtimepath:prepend(sar_dev)
 else
   vim.pack.add { 'https://github.com/mosheavni/search-replace.nvim' }
