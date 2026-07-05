@@ -65,6 +65,11 @@ function ecr-login() {
   [[ -n "$DEBUG" ]] && set +x
 }
 
+# Git helper (ported from the ohmyzsh git plugin, used by gpsup)
+function git_current_branch() {
+  command git branch --show-current 2>/dev/null
+}
+
 function clone() {
   [[ -n "$DEBUG" ]] && set -x
   cd ~/Repos

@@ -15,7 +15,6 @@ alias awk=gawk
 #------------------------------------------------------------------------------
 alias ll='ls -lah --color=auto'
 alias dc='cd '
-alias dotfiles='cd ~/.dotfiles'
 alias dot='cd ~/.dotfiles'
 alias lazy='fdf ~/.local/share/nvim/site/pack/core/opt/'
 alias repos="~/Repos"
@@ -29,7 +28,6 @@ alias vi='nvim'
 alias sudoedit="nvim"
 alias zshrc='${=EDITOR} ${ZDOTDIR:-$HOME}/.zshrc'
 alias lv='NVIM_APPNAME=lightvim nvim '
-alias lvim='NVIM_APPNAME=lightvim nvim '
 
 #------------------------------------------------------------------------------
 # Development Tools
@@ -40,10 +38,19 @@ alias tg='terragrunt'
 alias update-nvim-nightly='asdf uninstall neovim nightly && asdf install neovim nightly'
 
 #------------------------------------------------------------------------------
-# Git
+# Git (essentials ported from the ohmyzsh git plugin)
 #------------------------------------------------------------------------------
 alias gst='git status'
-alias git_current_branch='git branch --show-current'
+alias gl='git pull'
+alias gp='git push'
+alias gpf='git push --force-with-lease --force-if-includes'
+alias gaa='git add --all'
+alias gd='git diff'
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias gcam='git commit --all --message'
+alias gcmsg='git commit --message'
+alias gpsup='git push --set-upstream origin $(git_current_branch)'
 alias gb='git for-each-ref --sort=-committerdate --format="%(refname:short)" | grep -n . | sed "s?origin/??g" | sort -t: -k2 -u | sort -n | cut -d: -f2 | fzf | xargs git checkout'
 
 #------------------------------------------------------------------------------
@@ -81,7 +88,6 @@ alias -g NE="2> /dev/null"
 alias -g NUL="> /dev/null 2>&1"
 
 # Kubernetes Specific
-alias -g Sa='--sort-by=.metadata.creationTimestamp'
 alias -g Srt='--sort-by=.metadata.creationTimestamp'
 alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
 alias -g IMG='-oyaml | sed -n '\''s/^\s*image:\s\(.*\)/\1/gp'\'' | sort -u'

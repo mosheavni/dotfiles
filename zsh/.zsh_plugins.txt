@@ -8,7 +8,6 @@ RobSis/zsh-completion-generator kind:defer
 romkatv/zsh-defer
 
 ohmyzsh/ohmyzsh path:lib/key-bindings.zsh
-ohmyzsh/ohmyzsh path:plugins/git
 zsh-users/zsh-history-substring-search
 peterhurford/git-it-on.zsh
 hlissner/zsh-autopair kind:defer
