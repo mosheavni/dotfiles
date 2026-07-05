@@ -125,6 +125,7 @@ Severity legend:
 
 - **Risk:** If the old one has flags/behavior the ng version lacks, diff them before deleting.
 - **Decision:** ✅ Approved — delete old `kubedebug` from `kubectl.zsh`, rename `kubedebug-ng` → `kubedebug` (function and, if desired, the `kubedebug-ng.zsh` filename). `completions.zsh:19` then points at the right name automatically; verify it generates completion for the gum-based function.
+- **Status:** ✔ Executed 2026-07-05 — old function deleted from `kubectl.zsh`; file `git mv`'d to `kubedebug.zsh` with all self-references renamed. One deviation from the decision: `kubedebug` was **removed** from the completion-generator list instead of kept — the new function takes no arguments, and the generator's `kubedebug --help` probe would launch the interactive gum menu. Stale generated `~/.zsh/complete/_kubedebug` (old `-e/-p/-i/-s` flags) deleted. Remaining manual test: run `kubedebug` against a live cluster.
 
 ### 7. `morning-routine.sh` orphaned
 

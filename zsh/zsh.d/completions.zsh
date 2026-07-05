@@ -16,7 +16,7 @@ GENCOMPL_FPATH="${HOME}/.zsh/complete"
 
 # Let belak/zsh-utils (compstyle_prez_setup) handle most zstyles
 # Only keep plugin-specific configuration here
-zstyle :plugin:zsh-completion-generator programs ggrep kubedebug docker_copy_between_regions ab
+zstyle :plugin:zsh-completion-generator programs ggrep docker_copy_between_regions ab
 
 # Initialize completion system
 autoload -U +X bashcompinit && bashcompinit

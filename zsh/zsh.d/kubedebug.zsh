@@ -1,20 +1,20 @@
 # Interactive debug-pod launcher (kubectl run) built on gum + jq.
 #
-# Structure (all helpers share kubedebug-ng's state via zsh dynamic scope):
+# Structure (all helpers share kubedebug's state via zsh dynamic scope):
 #   _kdng_table        render the config table
 #   _kdng_fheight      list height that fits a header in the terminal
 #   _kdng_filter       gum filter wrapped with the config table as header
 #   _kdng_edit_*       one editor per menu field (mutate caller state)
 #   _kdng_build_*      assemble overrides / run command
 #   _kdng_launch       final confirm / copy / launch menu
-#   kubedebug-ng       entrypoint: state init + menu loop + dispatch
+#   kubedebug       entrypoint: state init + menu loop + dispatch
 #
 # To add a field: add a menu entry + a table row + a _kdng_edit_<field> function.
 
 # --- rendering helpers -------------------------------------------------------
 
 _kdng_table() {
-  gum style --foreground 212 --bold "kubedebug-ng"
+  gum style --foreground 212 --bold "kubedebug"
   gum table --print -c Field,Value -s '~' <<EOF
 Context~$ctx_display
 Namespace~$namespace
@@ -338,13 +338,13 @@ _kdng_launch() {
 
 # --- entrypoint --------------------------------------------------------------
 
-function kubedebug-ng() {
+function kubedebug() {
   command -v gum >/dev/null || {
-    echo "kubedebug-ng requires gum (brew install gum)" >&2
+    echo "kubedebug requires gum (brew install gum)" >&2
     return 1
   }
   command -v jq >/dev/null || {
-    echo "kubedebug-ng requires jq" >&2
+    echo "kubedebug requires jq" >&2
     return 1
   }
 
