@@ -6,7 +6,7 @@
 **Scope:** Full repository — dead code, duplication, unnecessary abstractions, performance, stale references.
 **Method:** Three exploration passes (nvim lua, zsh/shell, remaining packages) with grep-based cross-referencing. Every finding below carries its evidence; critical claims were re-verified by hand. No changes have been applied — this is a proposal document.
 
-**Decisions:** Findings 1–10 were reviewed on 2026-07-03, findings 8 and 11–15 on 2026-07-05; each carries a **Decision** line (✅ approved / ❌ won't fix / ⏸ pending). Findings 16+ await review. Nothing has been executed yet.
+**Decisions:** All findings reviewed — 1–10 on 2026-07-03; 8 and 11–22 on 2026-07-05. Each carries a **Decision** line (✅ approved / ❌ won't fix); executed findings also carry a **Status** line. Phases 1–5 (findings 4, 6, 8–15) were executed and committed on 2026-07-05; approved parts of 16–22 await execution.
 
 Severity legend:
 
@@ -274,6 +274,7 @@ Severity legend:
   ```
 
 - **Risk:** Low; keymaps has behavioral surface but the transforms are mechanical.
+- **Decision:** ✅ Approved — extract the q-to-close helper and table-drive the copy-path closures.
 
 ### 17. Stow-layout documentation triplicated
 
@@ -281,6 +282,7 @@ Severity legend:
 - **Suggested change:** Pick one canonical home (CLAUDE.md, since both AI tools read it); others link to it. Note: `ai/AGENTS.md` vs `ai/.cursor/rules/agents.mdc` duplication is **by design** (both written from one remote by `sync-ai-config.sh`) — leave it.
 - **How to test:** Docs-only; verify each file still parses/renders and cross-links resolve.
 - **Risk:** None.
+- **Decision:** ✅ Approved — CLAUDE.md becomes the canonical stow-layout doc; README and `.cursor/rules/dotfiles-conventions.mdc` link to it instead of restating.
 
 ---
 
@@ -298,6 +300,7 @@ Severity legend:
   ```
 
 - **Risk:** Low; if a keymap fires before deferred load, add a stub.
+- **Decision:** ✅ Approved with a hard constraint — the `k8s` zsh alias (`kubectl.zsh:189`, `nvim +"lua require(\"kubectl\").open()"`) is the primary entry point and is used more often than opening the plugin from inside nvim. `+cmd` executes **before** `vim.schedule` callbacks run, so simply moving setup into the deferred block breaks that alias. Defer only in a way that `open()` still works — e.g., lazy-init inside `open()`/`:Kubectl` (run setup on first use), or leave eager if that proves messy. Must verify the `k8s` alias end-to-end after the change.
 
 ### 19. Eager terraform/aws completion registration
 
@@ -312,6 +315,7 @@ Severity legend:
   ```
 
 - **Risk:** First-tab-press latency instead of startup cost. Fair trade.
+- **Decision:** ✅ Approved — convert terraform/terragrunt/aws to the existing lazy pattern (note: the lazy wrappers still call `complete -C`, which needs `bashcompinit` — load it lazily too or keep it if that's the simpler path); remove `ab` from the completion-generator list.
 
 ### 20. Thin wrappers and semantic hazards
 
@@ -323,6 +327,7 @@ Severity legend:
 - **Suggested change:** Keep wrappers you actually type (they're muscle memory, cost ≈ 0); delete `vdiff` and `matrix`; **remove the `sudoedit` alias** — that one changes behavior, not just spelling.
 - **How to test:** `zsh -ic 'which vdiff'` not found; `sudoedit /etc/hosts` uses real sudoedit flow again.
 - **Risk:** `sudoedit` alias removal is the only behavior change, and it restores _correct_ behavior.
+- **Decision:** ✅ Partial — delete `vdiff` and remove the `sudoedit` alias (restore real privileged-edit semantics). Keep everything else (`matrix`, `grl`, `gitcd`, `docker_build_push`, `dc`).
 
 ### 21. diffput/diffget operatorfunc indirection
 
@@ -331,6 +336,7 @@ Severity legend:
 - **Suggested change:** If dot-repeat is the point, add a comment saying so; otherwise flatten to plain `<cmd>diffput<cr>` mappings.
 - **How to test:** In a diff (`nvim -d a b`): mapping still puts/gets hunk; press `.` — if repeat worked before and matters, keep the indirection.
 - **Risk:** Losing dot-repeat if that was intentional. Check before flattening.
+- **Decision:** ✅ Keep — the indirection is deliberately there for dot-repeat, and `operatorfunc` + `g@l` is the canonical dependency-free idiom for making an ex-command mapping dot-repeatable (the only alternative is the vim-repeat plugin). Action: add a comment stating the intent so the next audit doesn't flag it.
 
 ### 22. Misc hygiene
 
@@ -347,6 +353,16 @@ Severity legend:
 | `kns`/`ctx` alias deps                   | `zsh/zsh.d/kubectl.zsh:176-177`                                                                  | Depend on `kubens`/`kubectx` binaries — confirm they're in Brewfile.                                                                                                                                                              |
 | Personal PATH                            | `zsh/.zshrc:40-44`                                                                               | `~/Repos/moshe/devops-scripts/*` loop — existence-guarded, but confirm still relevant.                                                                                                                                            |
 
+- **Decision:** ✅ Partial — six items approved, keep the rest:
+  1. `teams-call` — remove the script (`zsh/.bin/teams-call`) and its related files (`zsh/zsh.d/teams.zsh` with the Alt-t widget/binding).
+  2. `docker_copy_between_regions` — parameterize the hardcoded `spotinst-production/` ECR repo prefix.
+  3. `.zsh_plugins.txt` — remove `agkozak/zhooks` and `peterhurford/git-it-on.zsh`.
+  4. Remove the empty `ai/.claude/agents/` directory.
+  5. Remove the commented-out log lines in `mwatch` (`functions.zsh`).
+  6. Confirm `kubectx` is in the Brewfile (it ships `kubens` too, covering the `kns`/`ctx` alias deps); add it if missing.
+
+  Kept as-is: redundant `.stowrc` ignores, version-pinned statusline plugin path, `gg-shield-action@master`, personal devops-scripts PATH loop.
+
 ---
 
 ## ✅ Verified clean (skip in future audits)
@@ -357,11 +373,21 @@ Severity legend:
 - **`github-releases.txt` vs Brewfile:** no overlap (`nektos/act` intentionally GH-release-installed via `updates.sh:128`).
 - **CI workflows:** `lint.yml`, `ci.yml`, `gitguardian.yml` all wired; README badges resolve. (Only nit: the `@master` pin above, and `lint.yml` copies lint configs out of `nvim/` — coupling worth knowing, not worth changing.)
 
-## Suggested execution order
+## Execution phases
 
-1. **Critical trio** (1-3): examples/ + fzf typo-or-delete + zip-code key. Five minutes, real hazards.
-2. **High deletions** (4-12): each independent, each testable with the commands above. One commit per finding keeps reverts trivial.
-3. **Medium consolidation** (13-17): `updates.sh`/`cleanup.sh` lib extraction is the only one needing care — diff script _output_ before/after.
-4. **Low** (18-22): opportunistic, alongside other edits per the surgical-changes guideline in `ai/AGENTS.md` — don't batch-refactor.
+Executed 2026-07-05 (one commit per phase):
 
-Global regression check after any zsh batch: `zsh -n` each touched file, `time zsh -ic exit` vs baseline, `pre-commit run --all-files`. After any nvim batch: `cd nvim/.config/nvim && make test` plus `nvim --headless '+quitall'`.
+1. **Phase 1** — zero-risk deletions & docs: findings 8, 9, 10 (`d72a9465`)
+2. **Phase 2** — small zsh fixes: findings 4, 11, 12, 15 (`96102d9d`)
+3. **Phase 3** — kubedebug rename: finding 6 (`7d6683e2`) — manual live-cluster test still pending
+4. **Phase 4** — git plugin migration: finding 14 (`62ffbee8`)
+5. **Phase 5** — script lib extraction: finding 13 (`bdb44d33` + dry-run bugfix `3277b17a`)
+
+Remaining (approved, not yet executed):
+
+1. **Phase 6 — zsh/file deletions & small fixes** (20 partial + 22 partial): delete `vdiff`; remove `sudoedit` alias; remove `teams-call` + `teams.zsh`; parameterize `spotinst-production/`; drop `zhooks` + `git-it-on.zsh` plugins; remove empty `ai/.claude/agents/`; clean `mwatch` comment lines; confirm `kubectx` in Brewfile. Verify: `zsh -n` each file, fresh-shell alias/function checks, `time zsh -ic exit`.
+2. **Phase 7 — lazy completions** (19): terraform/terragrunt/aws to the lazy pattern (mind `bashcompinit` — the wrappers still need it); drop `ab` from the generator list. Verify: startup delta + first-tab completion for all three tools.
+3. **Phase 8 — nvim** (16 + 18 + 21): q-to-close helper + table-driven copy-path closures; kubectl.nvim deferral honoring the `k8s`-alias constraint (`+cmd` runs before `vim.schedule` — lazy-init inside `open()` or stay eager); dot-repeat intent comment on the diffput/diffget mappings. Verify: `make test`, `nvim --headless '+quitall'`, `k8s` alias end-to-end, manual keymap checks.
+4. **Phase 9 — docs dedup** (17): CLAUDE.md canonical; README + `.cursor/rules/dotfiles-conventions.mdc` link instead of restating. Verify: rendering + links.
+
+Global regression check after any zsh phase: `zsh -n` each touched file, `time zsh -ic exit` vs baseline, `pre-commit run --all-files`. After any nvim phase: `cd nvim/.config/nvim && make test` plus `nvim --headless '+quitall'`.
