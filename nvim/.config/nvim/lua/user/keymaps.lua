@@ -76,7 +76,7 @@ function! g:__align_based_on_indent(_)
   normal! v%koj$>
 endfunction
 ]]
-map('n', '<leader>gt', function()
+map('n', '<leader>>', function()
   vim.go.operatorfunc = '__align_based_on_indent'
   return 'g@l'
 end, { expr = true, desc = 'Align based on indent' })

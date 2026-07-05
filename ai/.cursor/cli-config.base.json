@@ -1,16 +1,16 @@
 {
   "version": 1,
   "permissions": {
-    "allow": [
-      "Shell(ls)"
-    ],
+    "allow": ["Shell(ls)"],
     "deny": [
       "Shell(terraform:apply)",
       "Shell(terraform:apply*)",
       "Shell(tf:apply)",
       "Shell(tf:apply*)",
       "Shell(terragrunt:apply)",
-      "Shell(terragrunt:apply*)"
+      "Shell(terragrunt:apply*)",
+      "Shell(gh:pr:merge)",
+      "Shell(gh:pr:merge*)"
     ]
   },
   "editor": {

@@ -38,7 +38,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "39da6060d53659acf3ec118200bc48721b29b8fd",
+      "rev": "1c91f217f394b8c5c628f9e900fc52e923c850fa",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -114,7 +114,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "292f44408498103c47996ff5c18fd366293840d8",
+      "rev": "d224a1920728ba129880efc700d4a0180ac4ecbb",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-pqf": {
@@ -154,7 +154,7 @@
       "src": "https://github.com/mosheavni/search-replace.nvim"
     },
     "smart-splits.nvim": {
-      "rev": "0e5bc00d2a32e6c782cd279cb96ab6c7ae49cd94",
+      "rev": "ebf4d8bbc16570817c0f5275468466b9d00b8d7d",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "switch.vim": {

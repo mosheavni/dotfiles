@@ -107,3 +107,7 @@ export YAMLC_DEV=true
 export SAR_DEV=false
 export CMP_COMPLETION='<C-Space>'
 export PJ_DIRS='~/Repos/,~/.dotfiles,~/.config/lightvim'
+
+# AC CLI Tools AWS Environment Variables
+export AWS_PROFILE=dev
+export AWS_DEFAULT_REGION=us-east-1
