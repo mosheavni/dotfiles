@@ -1,19 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-DOTFILES="$HOME/.dotfiles"
-CORP_BREWFILE="$HOME/corp-Brewfile"
+# shellcheck source=.scripts/lib.sh
+source "$HOME/.dotfiles/.scripts/lib.sh"
 
 # asdf shims need asdf in PATH (not sourced in non-login bash)
 # shellcheck disable=SC1091
 [[ -f "$(brew --prefix asdf)/libexec/asdf.sh" ]] && . "$(brew --prefix asdf)/libexec/asdf.sh"
 
 # ── helpers ──────────────────────────────────────────────────────────────────
-
-log() {
-  echo "============================================"
-  echo "▶ $*"
-}
 
 DRY_RUN=false
 
@@ -23,11 +18,6 @@ dry_or_run() {
   else
     "$@"
   fi
-}
-
-brew_bundle_files() {
-  printf '%s\n' "$DOTFILES/Brewfile"
-  [[ -f "$CORP_BREWFILE" ]] && printf '%s\n' "$CORP_BREWFILE"
 }
 
 combined_brewfile() {
@@ -44,21 +34,13 @@ combined_brewfile() {
 
 cleanup_brew() {
   log "brew — trust all taps in Brewfile(s)"
-  local file
-  while IFS= read -r file; do
-    awk '/^tap /{gsub(/"/, "", $2); print $2}' "$file" \
-      | xargs -I{} brew trust {}
-  done < <(brew_bundle_files)
+  trust_brewfile_taps
 
   log "brew — uninstall formulae from stale taps (prevents untap block)"
-  local brewfile_taps installed_taps stale_taps
-  brewfile_taps=$(
-    while IFS= read -r file; do
-      awk '/^tap /{gsub(/"/, "", $2); print $2}' "$file"
-    done < <(brew_bundle_files) | sort -u
-  )
+  local wanted_taps installed_taps stale_taps
+  wanted_taps=$(brewfile_taps | sort -u)
   installed_taps=$(brew tap | sort)
-  stale_taps=$(comm -23 <(echo "$installed_taps") <(echo "$brewfile_taps"))
+  stale_taps=$(comm -23 <(echo "$installed_taps") <(echo "$wanted_taps"))
 
   if [[ -n "$stale_taps" ]]; then
     local tap owner repo tap_dir formula_names installed_from_tap brew_repo

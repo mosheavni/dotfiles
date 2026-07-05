@@ -1,30 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-DOTFILES="$HOME/.dotfiles"
-CORP_BREWFILE="$HOME/corp-Brewfile"
-
-# ── helpers ──────────────────────────────────────────────────────────────────
-
-log() {
-  echo "============================================"
-  echo "▶ $*"
-}
-
-each_line() {
-  # Usage: each_line <file> <callback>
-  # Calls callback for each non-empty, non-comment line in file.
-  local file="$1" callback="$2"
-  while IFS= read -r line; do
-    [[ -z "$line" || "$line" == \#* ]] && continue
-    "$callback" "$line"
-  done <"$file"
-}
-
-brew_bundle_files() {
-  printf '%s\n' "$DOTFILES/Brewfile"
-  [[ -f "$CORP_BREWFILE" ]] && printf '%s\n' "$CORP_BREWFILE"
-}
+# shellcheck source=.scripts/lib.sh
+source "$HOME/.dotfiles/.scripts/lib.sh"
 
 # ── sections ─────────────────────────────────────────────────────────────────
 
@@ -39,10 +17,9 @@ update_asdf() {
 
 update_brew() {
   log "brew — bundle, update, upgrade"
+  trust_brewfile_taps
   local file
   while IFS= read -r file; do
-    awk '/^tap /{gsub(/"/, "", $2); print $2}' "$file" \
-      | xargs -I{} brew trust {}
     brew bundle --file="$file"
   done < <(brew_bundle_files)
   brew update

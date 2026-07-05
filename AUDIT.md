@@ -229,6 +229,7 @@ Severity legend:
 
 - **Risk:** Medium — these scripts mutate installed packages. Diff their _output_ (list phases) before/after, don't just eyeball the code.
 - **Decision:** ✅ Approved — extract the shared lib and source it from both scripts.
+- **Status:** ✔ Executed 2026-07-05 — created `.scripts/lib.sh` (dot-prefixed so `start.sh`'s `*/` glob never stows it): `DOTFILES`/`CORP_BREWFILE` defaults, `log`, `brew_bundle_files`, `brewfile_taps`, `trust_brewfile_taps`. Both scripts source it; the tap-trust awk blocks are gone from both. Also removed `each_line()` from `updates.sh` — defined but never called (audit miss). Verified: `bash -n` + `shellcheck` clean on all three; `./cleanup.sh -d` output byte-identical before/after (sole diff line was brew's JSON-API cache-refresh notice on the first run). **Pre-existing bug surfaced, not fixed here:** in dry-run mode `brew bundle cleanup` (without `--force`) exits 1 when it finds candidates, and `set -e` kills the script — so `cleanup.sh -d` never reaches the asdf/npm/gh sections. Both baseline and refactored runs behave this way.
 
 ### 14. Alias duplicates and ohmyzsh shadowing
 
