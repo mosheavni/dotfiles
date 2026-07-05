@@ -16,10 +16,7 @@ GENCOMPL_FPATH="${HOME}/.zsh/complete"
 
 # Let belak/zsh-utils (compstyle_prez_setup) handle most zstyles
 # Only keep plugin-specific configuration here
-zstyle :plugin:zsh-completion-generator programs ggrep docker_copy_between_regions ab
-
-# Initialize completion system
-autoload -U +X bashcompinit && bashcompinit
+zstyle :plugin:zsh-completion-generator programs ggrep docker_copy_between_regions
 
 # Group related paths together
 fpath+=(
@@ -30,11 +27,16 @@ fpath+=(
   "${HOME}/.zfunc"
 )
 
-# Group related completions together
-# Infrastructure tools (loaded eagerly as they're used frequently)
-complete -o nospace -C terraform terraform
-complete -o nospace -C terragrunt terragrunt
-complete -o nospace -C 'aws_completer' aws
+# Infrastructure tools use bash-style completers; defer bashcompinit and the
+# completer registration to the first TAB press instead of shell startup
+_lazy_bash_complete() {
+  local completer=$service
+  [[ $service == aws ]] && completer=aws_completer
+  autoload -U +X bashcompinit && bashcompinit
+  complete -o nospace -C "$completer" "$service" # re-register for future TABs
+  _bash_complete -C "$completer"                 # serve this TAB
+}
+compdef _lazy_bash_complete terraform terragrunt aws
 
 # Lazy load completions - only generate on first use for faster startup
 # Development tools

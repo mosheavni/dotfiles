@@ -316,6 +316,7 @@ Severity legend:
 
 - **Risk:** First-tab-press latency instead of startup cost. Fair trade.
 - **Decision:** ✅ Approved — convert terraform/terragrunt/aws to the existing lazy pattern (note: the lazy wrappers still call `complete -C`, which needs `bashcompinit` — load it lazily too or keep it if that's the simpler path); remove `ab` from the completion-generator list.
+- **Status:** ✔ Executed 2026-07-05 (phase 7) — lazy at the _completion_ layer, not the command layer: `compdef _lazy_bash_complete terraform terragrunt aws` registers a stub at startup; the first TAB loads `bashcompinit`, re-registers the real `complete -C` completer, and serves that same TAB via `_bash_complete`. (First attempt wrapped the _commands_, which only registered completion after running the tool once per session — broken UX, caught by user, rewritten.) Eager `bashcompinit` + three eager `complete` lines removed; `ab` dropped from the generator list. Verified with zpty-driven real TAB presses: terraform offers `apply/destroy/workspace/…`, `aws s` offers `s3api/sts/…`, terragrunt offers `plan`.
 
 ### 20. Thin wrappers and semantic hazards
 
