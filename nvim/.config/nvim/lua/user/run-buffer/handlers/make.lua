@@ -12,7 +12,11 @@ function M.makefile_target_name(line)
   if line:match '^\t' or line:match '^%s*#' then
     return nil
   end
-  -- Target rules start at column 0: "target:" or "target: deps" (not "VAR := value").
+  -- Assignments `VAR := value` / `VAR ::= value` are not targets.
+  if line:match '^[^:#=]+::?=' then
+    return nil
+  end
+  -- Target rules start at column 0: "target:" or "target: deps" (not "VAR = value").
   local target = line:match '^([^:#=]+):'
   if not target then
     return nil

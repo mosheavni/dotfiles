@@ -484,6 +484,8 @@ describe('user.run-buffer', function()
       f:write [[
 .PHONY: all test prepare clean
 
+NVIM_DIR := nvim/.config/nvim
+
 all: test
 
 prepare:
@@ -513,6 +515,12 @@ clean:
     it('does not treat https:// in a tab-indented recipe as a target', function()
       local line = '\t@test -d x || git clone https://github.com/foo/bar'
       eq(make.makefile_target_name(line), nil)
+    end)
+
+    it('does not treat variable assignments as targets', function()
+      eq(make.makefile_target_name 'VAR := value', nil)
+      eq(make.makefile_target_name 'VAR ::= value', nil)
+      eq(make.makefile_target_name 'VAR = value', nil)
     end)
   end)
 
