@@ -8,7 +8,17 @@ else
   }
 end
 
-return function()
+-- Full setup (plugin load, autocmds, auto_refresh) runs on first use, not at
+-- startup. Entry points that must trigger it: the :KubectlOpen command (the
+-- zsh `k8s` alias runs `nvim +KubectlOpen`, and +cmd executes before
+-- vim.schedule callbacks — so this cannot live in the deferred block) and the
+-- menu action.
+local initialized = false
+local function setup()
+  if initialized then
+    return
+  end
+  initialized = true
   ---@diagnostic disable-next-line: missing-fields
   require('kubectl').setup {
     auto_refresh = { enabled = true, interval = 300 },
@@ -93,8 +103,11 @@ return function()
       vim.notify('Kubernetes api-resources cache loaded', vim.log.levels.INFO)
     end,
   })
+end
 
+return function()
   vim.api.nvim_create_user_command('KubectlOpen', function()
+    setup()
     require('kubectl').open()
   end, {})
 

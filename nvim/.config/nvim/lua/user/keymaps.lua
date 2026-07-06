@@ -161,6 +161,8 @@ map('n', '<leader>tl', '<cmd>+tabmove<cr>', { remap = false, silent = true, desc
 map('n', '<leader>=', 'yypVr=', { remap = false, desc = 'Duplicate line with = signs' })
 
 -- Map dp and dg with leader for diffput and diffget
+-- Routed through operatorfunc + g@l (rather than plain <cmd>diffput<cr>) solely
+-- to make the mappings dot-repeatable; the callbacks ignore the motion.
 _G.op.diffput = function()
   vim.cmd [[diffput]]
 end
@@ -196,26 +198,18 @@ map('n', '_', '<cmd>m-2<CR>==', { silent = true, desc = 'Move line up' })
 map('n', 'Y', '<cmd>%y+<cr>', { remap = false, silent = true, desc = 'Copy buffer content to clipboard' })
 
 -- Copy file path to clipboard
-map('n', '<leader>cfp', function()
-  local rel_path = vim.fn.expand '%'
-  vim.fn.setreg('+', rel_path)
-  print('Copied relative file path ' .. rel_path)
-end, { remap = false, silent = true, desc = 'Copy relative file path' })
-map('n', '<leader>cfa', function()
-  local file_path = vim.fn.expand '%:p'
-  vim.fn.setreg('+', file_path)
-  print('Copied full file path  ' .. file_path)
-end, { remap = false, silent = true, desc = 'Copy absolute file path' })
-map('n', '<leader>cfd', function()
-  local dir_path = vim.fn.expand '%:p:h'
-  vim.fn.setreg('+', dir_path)
-  print('Copied file directory path ' .. dir_path)
-end, { remap = false, silent = true, desc = 'Copy file directory path' })
-map('n', '<leader>cfn', function()
-  local file_name = vim.fn.expand '%:t'
-  vim.fn.setreg('+', file_name)
-  print('Copied file name ' .. file_name)
-end, { remap = false, silent = true, desc = 'Copy file name' })
+for _, spec in ipairs {
+  { key = 'cfp', mods = '%', what = 'relative file path' },
+  { key = 'cfa', mods = '%:p', what = 'absolute file path' },
+  { key = 'cfd', mods = '%:p:h', what = 'file directory path' },
+  { key = 'cfn', mods = '%:t', what = 'file name' },
+} do
+  map('n', '<leader>' .. spec.key, function()
+    local value = vim.fn.expand(spec.mods)
+    vim.fn.setreg('+', value)
+    print('Copied ' .. spec.what .. ' ' .. value)
+  end, { remap = false, silent = true, desc = 'Copy ' .. spec.what })
+end
 
 -- Copy and paste to/from system clipboard
 map({ 'n', 'v' }, 'cp', '"+y', { desc = 'Copy to system clipboard' })

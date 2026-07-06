@@ -186,7 +186,7 @@ alias kg='kubectl get '
 alias kd='kubectl describe '
 alias ke='kubectl edit '
 alias kdelrs='kubectl delete rs '
-alias k8s='nvim +"lua require(\"kubectl\").open()"'
+alias k8s='nvim +KubectlOpen'
 
 ### Kubernetes functions ###
 function kdpw() {

@@ -275,6 +275,7 @@ Severity legend:
 
 - **Risk:** Low; keymaps has behavioral surface but the transforms are mechanical.
 - **Decision:** ✅ Approved — extract the q-to-close helper and table-drive the copy-path closures.
+- **Status:** ✔ Executed 2026-07-05 (phase 8) — copy-path closures table-driven (`cfp/cfa/cfd/cfn` from one spec loop; verified headless: all four descs present, `<leader>cfn` yanks file name to `+`). The `utils.map_q_close` helper was implemented then **reverted mid-phase on user request** — the four q-close sites differ enough (plain close vs custom callbacks) that the abstraction hid more than it saved; inline mappings stay.
 
 ### 17. Stow-layout documentation triplicated
 
@@ -301,6 +302,7 @@ Severity legend:
 
 - **Risk:** Low; if a keymap fires before deferred load, add a stub.
 - **Decision:** ✅ Approved with a hard constraint — the `k8s` zsh alias (`kubectl.zsh:189`, `nvim +"lua require(\"kubectl\").open()"`) is the primary entry point and is used more often than opening the plugin from inside nvim. `+cmd` executes **before** `vim.schedule` callbacks run, so simply moving setup into the deferred block breaks that alias. Defer only in a way that `open()` still works — e.g., lazy-init inside `open()`/`:Kubectl` (run setup on first use), or leave eager if that proves messy. Must verify the `k8s` alias end-to-end after the change.
+- **Status:** ✔ Executed 2026-07-05 (phase 8) — `plugins/kubectl.lua` now registers only `:KubectlOpen` + the menu action at startup; full `setup()` (plugin load, autocmds, auto_refresh) runs on first `:KubectlOpen`, guarded against re-entry. The `k8s` alias changed to `nvim +KubectlOpen` — the command exists before `+cmd` executes (registered in the eager block), so the alias survives the deferral. Verified headless: `exists(':KubectlOpen')` = 2 at startup; startup pays 0.09ms module load (was full setup); `:KubectlOpen` runs clean and registers the 4 `kubectl_user` autocmds. Live-cluster end-to-end `k8s` check left to manual.
 
 ### 19. Eager terraform/aws completion registration
 
@@ -339,6 +341,7 @@ Severity legend:
 - **How to test:** In a diff (`nvim -d a b`): mapping still puts/gets hunk; press `.` — if repeat worked before and matters, keep the indirection.
 - **Risk:** Losing dot-repeat if that was intentional. Check before flattening.
 - **Decision:** ✅ Keep — the indirection is deliberately there for dot-repeat, and `operatorfunc` + `g@l` is the canonical dependency-free idiom for making an ex-command mapping dot-repeatable (the only alternative is the vim-repeat plugin). Action: add a comment stating the intent so the next audit doesn't flag it.
+- **Status:** ✔ Executed 2026-07-05 (phase 8) — dot-repeat intent comment added above the diffput/diffget mappings in `keymaps.lua`.
 
 ### 22. Misc hygiene
 
