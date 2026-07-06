@@ -22,3 +22,7 @@ plans/
 projects/
 settings.json.bak
 mcp-needs-auth-cache.json
+daemon*
+jobs/
+.last-cleanup
+.caveman-mode-log.jsonl

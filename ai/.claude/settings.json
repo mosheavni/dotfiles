@@ -1,4 +1,5 @@
 {
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "SessionStart": [
       {
@@ -29,7 +30,8 @@
     "lua-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "caveman@caveman": true
+    "caveman@caveman": true,
+    "bash-language-server@claude-code-lsps": true
   },
   "extraKnownMarketplaces": {
     "claude-code-lsps": {
@@ -47,6 +49,7 @@
   },
   "alwaysThinkingEnabled": true,
   "advisorModel": "opus",
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-daltonized",
   "agentPushNotifEnabled": true,
