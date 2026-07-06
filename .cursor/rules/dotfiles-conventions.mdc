@@ -3,15 +3,8 @@ description: Dotfiles repo conventions for stow and AI config placement
 alwaysApply: true
 ---
 
-This is a macOS dotfiles repo managed with GNU Stow. Every top-level directory (without a leading dot) is a stow package that mirrors the structure of `~`.
-
-**When creating new files, decide scope first:**
-
-- Global (every machine) → put inside a stow package matching the target path under `~`
-- Repo-local Cursor config → `.cursor/rules/*.mdc` at the repo root (never stowed)
-- Generated/local output → add to both `.gitignore` and `.stowrc`
-
-**AI config packages:**
-
-- `ai/` → `~/.claude/` (Claude config, skills, MCP servers), `~/AGENTS.md` (Claude + agents), and `~/.cursor/rules/agents.mdc` (Cursor global rules)
-- `graphify-out/` is gitignored and excluded from stow — do not commit it
+This is a macOS dotfiles repo managed with GNU Stow. The canonical description of
+the repo layout — stow-package structure, where new files go (stow package vs
+`.cursor/rules/` vs gitignored output), and the AI config packages — lives in
+@CLAUDE.md under "Architecture ▸ Stow Package Structure". Read that before
+creating files; do not restate it here.

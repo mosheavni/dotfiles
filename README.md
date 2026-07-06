@@ -23,6 +23,9 @@
 - [Troubleshooting](#troubleshooting)
   - [Remove TreeSitter parsers](#remove-treesitter-parsers)
 
+> Repository layout and file-placement conventions are documented in
+> [CLAUDE.md](CLAUDE.md) (Architecture ▸ Stow Package Structure).
+
 ## Usage
 
 ### (also, how to bootstrap a brand new Mac laptop)

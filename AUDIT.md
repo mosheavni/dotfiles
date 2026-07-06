@@ -284,6 +284,7 @@ Severity legend:
 - **How to test:** Docs-only; verify each file still parses/renders and cross-links resolve.
 - **Risk:** None.
 - **Decision:** ✅ Approved — CLAUDE.md becomes the canonical stow-layout doc; README and `.cursor/rules/dotfiles-conventions.mdc` link to it instead of restating.
+- **Status:** ✔ Executed 2026-07-06 (phase 9) — CLAUDE.md untouched (already canonical: layout bullets, scope table, AI config packages). `.cursor/rules/dotfiles-conventions.mdc` reduced to a pointer (`@CLAUDE.md`, Architecture ▸ Stow Package Structure) — its unique facts (`graphify-out/`, agents.mdc mapping) were already covered by the CLAUDE.md table. README had meanwhile stopped restating the table; added a one-line link to CLAUDE.md above Usage.
 
 ---
 
