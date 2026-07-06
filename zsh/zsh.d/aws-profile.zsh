@@ -3,7 +3,8 @@
 : ${AWS_PROFILE_ENV:=$HOME/.aws/profile.env}
 
 _aws_profile_load() {
-  [[ -r $AWS_PROFILE_ENV ]] && source $AWS_PROFILE_ENV
+  [[ -r $AWS_PROFILE_ENV ]] || return 0
+  source $AWS_PROFILE_ENV
 }
 
 _aws_profile_save() {
@@ -21,7 +22,7 @@ _aws_profile_account() {
 
   role_arn=$(aws configure get role_arn --profile "$profile" 2>/dev/null)
   if [[ -n $role_arn && $role_arn != None ]]; then
-    account=${${(s.:.)role_arn}[5]}
+    account="${${(@s.:.)role_arn}[5]}"
     [[ -n $account ]] && print -r -- "$account" && return 0
   fi
 
