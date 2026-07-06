@@ -55,6 +55,12 @@ repos:
         language: system
         entry: zsh -n
         files: ^zsh/
+      - id: shellspec
+        name: shellspec
+        language: system
+        entry: shellspec
+        pass_filenames: false
+        files: ^(zsh/|\.shellspec$)
       - id: zizmor
         name: zizmor
         language: system

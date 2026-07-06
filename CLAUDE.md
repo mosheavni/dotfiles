@@ -23,13 +23,27 @@ All test commands run from the repository root via the root `Makefile`
 (stow-ignored in `.stowrc`):
 
 ```bash
-make test      # Run all tests
+make test      # Run everything (nvim + zsh)
 make test-nvim # Neovim tests (runs `make prepare` first — clones plenary.nvim)
+make test-zsh  # Zsh tests via shellspec
 ```
 
 #### Neovim
 
 Tests are in `nvim/.config/nvim/lua/tests/` and use Plenary's busted test framework.
+
+#### Zsh
+
+```bash
+shellspec zsh/spec/<name>_spec.sh  # Run a single spec file (brew install shellspec)
+```
+
+Specs live in `zsh/spec/*_spec.sh` and use the [shellspec](https://shellspec.info/) DSL,
+running under zsh (configured in `.shellspec`). `zsh/spec` is excluded from stowing via
+`.stowrc`. When changing testable functions in `zsh/zsh.d/`, update or add the matching
+spec. Mock external commands (aws, ssh, ...) by defining shell functions inside the spec;
+interactive functions (fzf/gum prompts) are not unit-tested. Specs run in pre-commit
+(shellspec hook) and CI (`zsh_tests` job in `.github/workflows/ci.yml`).
 
 ## Lua Testing Infrastructure
 
