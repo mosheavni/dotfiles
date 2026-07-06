@@ -398,4 +398,4 @@ Remaining (approved, not yet executed):
 3. **Phase 8 — nvim** (16 + 18 + 21): q-to-close helper + table-driven copy-path closures; kubectl.nvim deferral honoring the `k8s`-alias constraint (`+cmd` runs before `vim.schedule` — lazy-init inside `open()` or stay eager); dot-repeat intent comment on the diffput/diffget mappings. Verify: `make test`, `nvim --headless '+quitall'`, `k8s` alias end-to-end, manual keymap checks.
 4. **Phase 9 — docs dedup** (17): CLAUDE.md canonical; README + `.cursor/rules/dotfiles-conventions.mdc` link instead of restating. Verify: rendering + links.
 
-Global regression check after any zsh phase: `zsh -n` each touched file, `time zsh -ic exit` vs baseline, `pre-commit run --all-files`. After any nvim phase: `cd nvim/.config/nvim && make test` plus `nvim --headless '+quitall'`.
+Global regression check after any zsh phase: `zsh -n` each touched file, `time zsh -ic exit` vs baseline, `pre-commit run --all-files`. After any nvim phase: `make test-nvim` (repo root) plus `nvim --headless '+quitall'`.

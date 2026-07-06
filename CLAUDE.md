@@ -17,13 +17,17 @@ This is a macOS dotfiles repository managed with [GNU Stow](https://www.gnu.org/
 stow -Rv <package>  # Stow a single package (e.g., stow -Rv nvim)
 ```
 
-### Neovim Tests
+### Tests
+
+All test commands run from the repository root via the root `Makefile`
+(stow-ignored in `.stowrc`):
 
 ```bash
-cd nvim/.config/nvim
-make prepare # Clone plenary.nvim (required once)
-make test    # Run all tests
+make test      # Run all tests
+make test-nvim # Neovim tests (runs `make prepare` first — clones plenary.nvim)
 ```
+
+#### Neovim
 
 Tests are in `nvim/.config/nvim/lua/tests/` and use Plenary's busted test framework.
 
@@ -33,7 +37,7 @@ Tests are in `nvim/.config/nvim/lua/tests/` and use Plenary's busted test framew
 
 1. Check if there's an existing test file (`lua/tests/<module>_spec.lua`) that needs updating
 2. Add tests for new functionality
-3. Run `make test` to verify nothing breaks
+3. Run `make test-nvim` (from the repository root) to verify nothing breaks
 
 ### Test File Conventions
 

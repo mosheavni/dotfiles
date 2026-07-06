@@ -33,15 +33,12 @@ jobs:
         run: git remote set-url origin "https://github.com/${{ github.repository }}.git"
 
       - name: Prepare
-        run: |
-          cd nvim/.config/nvim
-          make prepare
+        run: make prepare
 
       - name: Run tests
         run: |
           nvim --version
-          cd nvim/.config/nvim
-          make test 2>&1 | tee /tmp/test-output.txt
+          make test-nvim 2>&1 | tee /tmp/test-output.txt
           exit "${PIPESTATUS[0]}"
 
       - name: Generate test summary
