@@ -1,20 +1,16 @@
 local commands = require 'kubectl.actions.commands'
-local utils = require 'user.utils'
-local mappings_file = vim.env.HOME .. '/.kube/mappings.json'
-local mappings = {}
 local M = {}
 
+-- exec env vars (AWS_PROFILE, SSO_APP, ...) of the current context's user in kubeconfig
 local get_user_env_vars = function()
   local state = require 'kubectl.state'
-  local context = state.context['current-context']
-  if vim.tbl_isempty(mappings) then
-    mappings = utils.read_json_file(mappings_file) or {}
+  local user = state.context.users and state.context.users[1]
+  local exec = user and user.user and user.user.exec
+  local env_vars = {}
+  for _, env in ipairs(exec and exec.env or {}) do
+    env_vars[env.name] = env.value
   end
-  if not mappings or not mappings[context] then
-    vim.notify('No mappings found for the current context: ' .. context .. ' on ' .. mappings_file, vim.log.levels.ERROR)
-    return {}
-  end
-  return mappings[context]
+  return env_vars
 end
 
 local get_profile_and_region = function()

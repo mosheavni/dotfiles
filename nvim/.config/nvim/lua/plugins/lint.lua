@@ -30,6 +30,8 @@ return function()
     zsh = { 'zsh' },
   }
 
+  lint.linters.actionlint.args = vim.list_extend({ '-ignore', 'label ".+" is unknown' }, lint.linters.actionlint.args or {})
+
   lint.linters.luacheck.args = {
     '--formatter',
     'plain',
