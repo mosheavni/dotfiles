@@ -19,18 +19,20 @@ end
 
 local get_profile_and_region = function()
   local env_vars = get_user_env_vars() or {}
-  local aws_profile = vim.env.AWS_PROFILE
+  local aws_profile = env_vars.AWS_PROFILE
   if not aws_profile or aws_profile == '' then
-    if env_vars.AWS_PROFILE then
-      aws_profile = env_vars.AWS_PROFILE
-    else
-      aws_profile = 'default'
-    end
+    aws_profile = vim.env.AWS_PROFILE
+  end
+  if not aws_profile or aws_profile == '' then
+    aws_profile = 'default'
   end
 
-  local region = vim.env.AWS_REGION
+  local region = env_vars.AWS_REGION
   if not region or region == '' then
-    region = env_vars.AWS_REGION or vim.trim(vim.system({ 'aws', 'configure', 'get', 'region', '--profile', aws_profile }, { text = true }):wait().stdout)
+    region = vim.env.AWS_REGION
+  end
+  if not region or region == '' then
+    region = vim.trim(vim.system({ 'aws', 'configure', 'get', 'region', '--profile', aws_profile }, { text = true }):wait().stdout)
   end
 
   return aws_profile, region

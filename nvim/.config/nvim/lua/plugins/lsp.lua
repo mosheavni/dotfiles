@@ -1,5 +1,4 @@
 vim.pack.add {
-  'https://github.com/MunifTanjim/nui.nvim',
   'https://github.com/ray-x/guihua.lua',
   'https://github.com/neovim/nvim-lspconfig',
   'https://github.com/j-hui/fidget.nvim',
