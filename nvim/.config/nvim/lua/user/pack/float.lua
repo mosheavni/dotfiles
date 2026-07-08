@@ -10,7 +10,6 @@ local M = {}
 local ns = api.nvim_create_namespace 'pack_float_ui'
 local max_commits = 12
 local recent_commit_count = 5
-local max_concurrent_fetches = 6
 local conventional_commit_hls = {
   feat = 'PackFloatCommitFeat',
   fix = 'PackFloatCommitFix',
@@ -44,6 +43,9 @@ local state = {
   expanded = {},
   line_to_name = {},
   name_to_line = {},
+  jump_rows = {},
+  drift_count = 0,
+  max_name = 0,
 }
 
 -- Highlights stashed by content_fn for highlights_fn to consume.
@@ -162,6 +164,8 @@ local function set_plugins(plugins)
   state.pending = {}
   state.clean = {}
   state.not_loaded = {}
+  state.drift_count = 0
+  state.max_name = 0
 
   for _, plugin in ipairs(state.plugins) do
     local pending = is_pending(plugin)
@@ -172,26 +176,16 @@ local function set_plugins(plugins)
     else
       state.not_loaded[#state.not_loaded + 1] = plugin
     end
+    state.max_name = math.max(state.max_name, #plugin.spec.name)
+    if has_drift(plugin) then
+      state.drift_count = state.drift_count + 1
+    end
   end
 
   sort_by_name(state.plugins)
   sort_by_name(state.pending)
   sort_by_name(state.clean)
   sort_by_name(state.not_loaded)
-end
-
-local function replace_plugin(plugin)
-  local name = plugin.spec.name
-  for i, existing in ipairs(state.plugins) do
-    if existing.spec.name == name then
-      state.plugins[i] = plugin
-      set_plugins(state.plugins)
-      return
-    end
-  end
-
-  state.plugins[#state.plugins + 1] = plugin
-  set_plugins(state.plugins)
 end
 
 local function reset_data()
@@ -204,6 +198,9 @@ local function reset_data()
   state.expanded = {}
   state.line_to_name = {}
   state.name_to_line = {}
+  state.jump_rows = {}
+  state.drift_count = 0
+  state.max_name = 0
   state.lockfile = {}
 end
 
@@ -253,6 +250,7 @@ local function build_content()
   local hls = {}
   local line_to_name = {}
   local name_to_line = {}
+  local jump_rows = {}
 
   local function add(text, hl)
     local row = #lines
@@ -270,6 +268,7 @@ local function build_content()
   local function mark_plugin(row, name)
     line_to_name[row + 1] = name
     name_to_line[name] = name_to_line[name] or row + 1
+    jump_rows[#jump_rows + 1] = row + 1
   end
 
   local function add_detail(text, hl, name)
@@ -299,12 +298,7 @@ local function build_content()
     end
   end
 
-  local drift_count = 0
-  for _, plugin in ipairs(state.plugins) do
-    if has_drift(plugin) then
-      drift_count = drift_count + 1
-    end
-  end
+  local drift_count = state.drift_count
 
   local header_segments = {}
   local function seg(text, hl)
@@ -366,10 +360,7 @@ local function build_content()
 
   add ''
 
-  local max_name = 0
-  for _, plugin in ipairs(state.plugins) do
-    max_name = math.max(max_name, #plugin.spec.name)
-  end
+  local max_name = state.max_name
 
   local function add_plugin(plugin, pending)
     local name = plugin.spec.name
@@ -462,6 +453,7 @@ local function build_content()
 
   state.line_to_name = line_to_name
   state.name_to_line = name_to_line
+  state.jump_rows = jump_rows
 
   return lines, hls
 end
@@ -621,7 +613,7 @@ local function refresh_local()
   end)
 end
 
-local function refresh_fetch_async()
+local function refresh_fetch_online()
   if state.checking then
     return
   end
@@ -630,92 +622,44 @@ local function refresh_fetch_async()
   state.status = 'fetching remotes'
   state.check_id = state.check_id + 1
   local check_id = state.check_id
-  local total = #state.plugins
-  local remaining = total
-  local next_plugin = 1
-  local active_fetches = 0
-  local failures = 0
   state.commits = {}
   state.recent_commits = {}
   load_lockfile()
   start_check_animation()
   render()
 
-  if total == 0 then
-    finish_refresh(check_id, failures)
-    return
-  end
-
-  local function start_next_fetches()
-    while active_fetches < max_concurrent_fetches and next_plugin <= total do
-      local plugin = state.plugins[next_plugin]
-      next_plugin = next_plugin + 1
-      if plugin then
-        active_fetches = active_fetches + 1
-
-        local name = plugin.spec.name
-        vim.system({
-          'git',
-          '-C',
-          plugin.path,
-          'fetch',
-          '--quiet',
-          '--tags',
-          '--force',
-          '--recurse-submodules=yes',
-          'origin',
-        }, {}, function(fetch_result)
-          vim.schedule(function()
-            if state.check_id ~= check_id or not float.is_shown() then
-              return
-            end
-
-            active_fetches = active_fetches - 1
-            remaining = remaining - 1
-
-            if fetch_result.code ~= 0 then
-              failures = failures + 1
-            else
-              local ok, plugin_data = pcall(vim.pack.get, { name }, { info = true, offline = true })
-              if ok and plugin_data[1] then
-                replace_plugin(plugin_data[1])
-                if state.expanded[name] then
-                  load_recent_commits(plugin_data[1], check_id)
-                end
-                if is_pending(plugin_data[1]) then
-                  load_commits(plugin_data[1], check_id)
-                end
-              else
-                failures = failures + 1
-              end
-            end
-
-            state.status = ('fetching remotes %d/%d'):format(total - remaining, total)
-            if remaining == 0 then
-              finish_refresh(check_id, failures)
-              return
-            end
-            if active_fetches == 0 or (total - remaining) % max_concurrent_fetches == 0 then
-              render()
-            end
-            start_next_fetches()
-          end)
-        end)
-      else
-        remaining = remaining - 1
-        if remaining == 0 then
-          finish_refresh(check_id, failures)
-        end
-      end
+  -- `vim.pack.get(..., { offline = false })` fetches all remotes in one call but
+  -- runs synchronously and blocks the UI. Defer one tick so the "fetching"
+  -- header paints before we block.
+  vim.defer_fn(function()
+    if state.check_id ~= check_id or not float.is_shown() then
+      return
     end
-  end
 
-  start_next_fetches()
+    local ok, plugins_or_err = pcall(vim.pack.get, nil, { info = true, offline = false })
+    if state.check_id ~= check_id or not float.is_shown() then
+      return
+    end
+
+    if not ok then
+      stop_check_animation()
+      state.checking = false
+      state.status = tostring(plugins_or_err)
+      render()
+      return
+    end
+
+    set_plugins(plugins_or_err)
+    for _, plugin in ipairs(state.pending) do
+      load_commits(plugin, check_id)
+    end
+    finish_refresh(check_id, 0)
+  end, 50)
 end
 
 local function refresh(fetch)
   if fetch then
-    refresh_fetch_async()
+    refresh_fetch_online()
   else
     refresh_local()
   end
@@ -887,8 +831,7 @@ local function jump(direction)
   end
   local win_id = float.cache.win_id or 0
   local row = api.nvim_win_get_cursor(win_id)[1]
-  local rows = vim.tbl_keys(state.line_to_name)
-  table.sort(rows)
+  local rows = state.jump_rows
   if direction > 0 then
     for _, next_row in ipairs(rows) do
       if next_row > row then

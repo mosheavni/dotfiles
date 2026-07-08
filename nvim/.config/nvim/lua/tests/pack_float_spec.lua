@@ -121,49 +121,29 @@ describe('user.pack.float', function()
     eq(0, system_calls)
   end)
 
-  it('batches fetch work after open', function()
-    local plugins = {}
-    for i = 1, 10 do
-      plugins[i] = {
-        active = true,
-        path = ('/tmp/plugin-%02d.nvim'):format(i),
-        rev = '1111111111111111111111111111111111111111',
-        spec = {
-          name = ('plugin-%02d.nvim'):format(i),
-          src = ('https://github.com/example/plugin-%02d.nvim'):format(i),
-        },
-      }
-    end
-
-    local fetch_callbacks = {}
-    local active_fetches = 0
-    local max_active_fetches = 0
+  it('fetches remotes online when refresh is triggered', function()
+    local get_calls = {}
 
     vim.pack = {
       add = function() end,
-      get = function(names)
-        if type(names) == 'table' then
-          for _, plugin in ipairs(plugins) do
-            if plugin.spec.name == names[1] then
-              return { plugin }
-            end
-          end
-        end
-        return plugins
+      get = function(_, opts)
+        get_calls[#get_calls + 1] = opts
+        return {
+          {
+            active = true,
+            path = '/tmp/alpha.nvim',
+            rev = '1111111111111111111111111111111111111111',
+            spec = {
+              name = 'alpha.nvim',
+              src = 'https://github.com/example/alpha.nvim',
+            },
+          },
+        }
       end,
     }
-    set_system_stub(function(command, _, on_exit)
-      if command[1] == 'git' and command[4] == 'fetch' then
-        active_fetches = active_fetches + 1
-        max_active_fetches = math.max(max_active_fetches, active_fetches)
-        fetch_callbacks[#fetch_callbacks + 1] = function()
-          active_fetches = active_fetches - 1
-          if on_exit then
-            on_exit(system_ok())
-          end
-        end
-      elseif on_exit then
-        on_exit(system_ok '2.3.1')
+    set_system_stub(function(_, _, on_exit)
+      if on_exit then
+        on_exit(system_ok())
       end
       return system_obj()
     end)
@@ -171,14 +151,16 @@ describe('user.pack.float', function()
     require('user.pack.float').open { fetch = false }
     vim.fn.maparg('r', 'n', false, true).callback()
 
-    eq(6, #fetch_callbacks)
-    eq(6, max_active_fetches)
-
-    fetch_callbacks[1]()
-    assert.is_true(vim.wait(200, function()
-      return #fetch_callbacks == 7
+    -- The online fetch defers the blocking vim.pack.get by one tick so the
+    -- "fetching" header can paint first.
+    assert.is_true(vim.wait(500, function()
+      for _, opts in ipairs(get_calls) do
+        if opts and opts.offline == false then
+          return true
+        end
+      end
+      return false
     end))
-    eq(6, max_active_fetches)
   end)
 
   it('shows the last five commits under the plugin description', function()
