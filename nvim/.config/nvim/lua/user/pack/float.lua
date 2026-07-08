@@ -586,19 +586,31 @@ local function finish_refresh(check_id, failures)
   render()
 end
 
+-- Recompute the plugin list from local data only (no network). Passes
+-- `info = true` so `plugin.rev` is the real on-disk revision and `rev_to` is
+-- populated from already-fetched refs, which is what pending/drift rely on.
+-- `offline = true` skips the download and requires `info = true` (per
+-- vim.pack.get, see neovim/neovim#39820).
+local function reload_local_plugins()
+  load_lockfile()
+  local ok, plugins_or_err = pcall(vim.pack.get, nil, { info = true, offline = true })
+  if not ok then
+    state.status = tostring(plugins_or_err)
+    return false
+  end
+  set_plugins(plugins_or_err)
+  return true
+end
+
 local function refresh_local()
   vim.schedule(function()
-    load_lockfile()
-    local ok, plugins_or_err = pcall(vim.pack.get, nil, { offline = true })
-    if not ok then
-      state.status = tostring(plugins_or_err)
+    if not reload_local_plugins() then
       render()
       return
     end
 
     state.commits = {}
     state.recent_commits = {}
-    set_plugins(plugins_or_err)
     state.status = 'ready'
     render()
     load_expanded_recent_commits(state.check_id)
@@ -664,7 +676,7 @@ local function refresh_fetch_async()
             if fetch_result.code ~= 0 then
               failures = failures + 1
             else
-              local ok, plugin_data = pcall(vim.pack.get, { name }, { offline = true })
+              local ok, plugin_data = pcall(vim.pack.get, { name }, { info = true, offline = true })
               if ok and plugin_data[1] then
                 replace_plugin(plugin_data[1])
                 if state.expanded[name] then
@@ -858,7 +870,10 @@ local function clean_current()
     return
   end
 
-  load_fast_plugin_list()
+  if not reload_local_plugins() then
+    render()
+    return
+  end
   state.expanded[name] = nil
   state.commits[name] = nil
   state.recent_commits[name] = nil

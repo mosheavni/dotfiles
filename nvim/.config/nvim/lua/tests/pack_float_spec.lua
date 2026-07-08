@@ -31,6 +31,15 @@ local function includes(lines, expected)
   return false
 end
 
+local function has_substr(lines, needle)
+  for _, line in ipairs(lines) do
+    if line:find(needle, 1, true) then
+      return true
+    end
+  end
+  return false
+end
+
 local function has_highlight(lines, text, hl_group)
   local ns_id = vim.api.nvim_get_namespaces().pack_float_ui
   local marks = vim.api.nvim_buf_get_extmarks(0, ns_id, 0, -1, { details = true })
@@ -304,5 +313,79 @@ describe('user.pack.float', function()
     assert.is_true(has_highlight(lines, 'feat(parser)!:', 'PackFloatCommitFeat'))
     assert.is_true(has_highlight(lines, 'fix(ui):', 'PackFloatCommitFix'))
     assert.is_true(has_highlight(lines, 'build(ci):', 'PackFloatCommitBuild'))
+  end)
+
+  it('renders a pending update when rev differs from rev_to', function()
+    vim.pack = {
+      add = function() end,
+      get = function()
+        return {
+          {
+            active = true,
+            path = '/tmp/alpha.nvim',
+            rev = '1111111111111111111111111111111111111111',
+            rev_to = '2222222222222222222222222222222222222222',
+            spec = {
+              name = 'alpha.nvim',
+              src = 'https://github.com/example/alpha.nvim',
+            },
+          },
+        }
+      end,
+    }
+    set_system_stub(function(_, _, on_exit)
+      if on_exit then
+        on_exit(system_ok())
+      end
+      return system_obj()
+    end)
+
+    require('user.pack.float').open { fetch = false }
+
+    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    assert.is_true(has_substr(lines, 'Updates'))
+    assert.is_true(has_substr(lines, '11111111 -> 22222222'))
+  end)
+
+  it('flags lockfile drift when the on-disk rev differs from the lockfile', function()
+    local original_readfile = vim.fn.readfile
+    ---@diagnostic disable-next-line: duplicate-set-field
+    vim.fn.readfile = function()
+      return { '{"plugins":{"alpha.nvim":{"rev":"1111111111111111111111111111111111111111"}}}' }
+    end
+
+    vim.pack = {
+      add = function() end,
+      get = function()
+        return {
+          {
+            active = true,
+            path = '/tmp/alpha.nvim',
+            rev = '2222222222222222222222222222222222222222',
+            spec = {
+              name = 'alpha.nvim',
+              src = 'https://github.com/example/alpha.nvim',
+            },
+          },
+        }
+      end,
+    }
+    set_system_stub(function(_, _, on_exit)
+      if on_exit then
+        on_exit(system_ok())
+      end
+      return system_obj()
+    end)
+
+    local ok, err = pcall(function()
+      require('user.pack.float').open { fetch = false }
+
+      local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+      assert.is_true(has_substr(lines, 'drift'))
+      assert.is_true(has_substr(lines, 'lock 11111111'))
+    end)
+
+    vim.fn.readfile = original_readfile
+    assert.is_true(ok, err)
   end)
 end)
