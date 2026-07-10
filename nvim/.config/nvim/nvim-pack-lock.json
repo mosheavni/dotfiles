@@ -38,7 +38,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "ed4059deb9237f7f4cc8832ffef69779ffe2e265",
+      "rev": "532d463f5c83595192fe740572d8fd6902b2217a",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -62,7 +62,7 @@
       "src": "https://github.com/AndrewRadev/linediff.vim"
     },
     "mini.ai": {
-      "rev": "2f763720771e192bdf9d2e25bfae339930ba4231",
+      "rev": "6d43e74cae75771b780a7270fec1f160613ed873",
       "src": "https://github.com/nvim-mini/mini.ai"
     },
     "mini.cursorword": {
@@ -94,7 +94,7 @@
       "src": "https://github.com/nvim-mini/mini.statusline"
     },
     "mini.surround": {
-      "rev": "19b44c1bbe4eecaf191896b8bec657d5fdd549e4",
+      "rev": "5c2a99e43b959055311a4557875985142b672af0",
       "src": "https://github.com/nvim-mini/mini.surround"
     },
     "nvim-autopairs": {
@@ -118,7 +118,7 @@
       "src": "https://github.com/yorickpeterse/nvim-pqf"
     },
     "nvim-tree.lua": {
-      "rev": "35d3511e7ad4cbfa44c78c406db663b6e2a07c0d",
+      "rev": "cf18a662cd5f200361b6fedfb794eed583e075e1",
       "src": "https://github.com/nvim-tree/nvim-tree.lua"
     },
     "nvim-treesitter": {

@@ -2,7 +2,7 @@
 
 # Maintain local AI tooling configuration.
 #
-# - MCP servers (mcphub → Claude + Cursor)
+# - MCP servers (mcphub → Claude + Cursor + Copilot)
 # - Karpathy agent guidelines (remote → AGENTS.md + agents.mdc)
 # - Cursor CLI policy (cli-config.base.json → ~/.cursor/cli-config.json)
 # - Superpowers plugin (~/.cursor/plugins/local/superpowers)
@@ -14,6 +14,7 @@ readonly SCRIPT_DIR
 readonly MCPHUB_SOURCE="${SCRIPT_DIR}/.config/mcphub/servers.json"
 readonly CLAUDE_MCP_TARGET="${SCRIPT_DIR}/.claude.json"
 readonly CURSOR_MCP_TARGET="${HOME}/.cursor/mcp.json"
+readonly COPILOT_MCP_TARGET="${HOME}/.copilot/mcp-config.json"
 readonly CLI_CONFIG_BASE="${SCRIPT_DIR}/.cursor/cli-config.base.json"
 readonly CLI_CONFIG_TARGET="${HOME}/.cursor/cli-config.json"
 readonly SUPERPOWERS_REPO="${HOME}/.cursor/plugins/local/superpowers"
@@ -78,11 +79,22 @@ sync_mcp_servers_into() {
   local target_file="$1"
   local display_name="$2"
   local create_if_missing="${3:-false}"
+  local target_format="${4:-mcphub}"
   local source_mcp current_mcp
 
   ensure_mcp_target_file "$target_file" "$create_if_missing" || return "$SYNC_ERROR"
 
   source_mcp="$(read_mcphub_servers)" || return "$SYNC_ERROR"
+
+  if [ "$target_format" = "copilot" ]; then
+    source_mcp="$(echo "$source_mcp" | jq 'map_values(
+      if .command then
+        . + { type: "stdio", tools: ["*"], deferTools: "never" }
+      else .
+      end
+    )')"
+  fi
+
   current_mcp="$(jq '.mcpServers' "$target_file")"
 
   if [ "$source_mcp" = "$current_mcp" ]; then
@@ -95,16 +107,18 @@ sync_mcp_servers_into() {
 }
 
 sync_all_mcp_servers() {
-  local claude_result cursor_result
+  local claude_result cursor_result copilot_result
 
   set +e
-  sync_mcp_servers_into "$CLAUDE_MCP_TARGET" "${HOME}/.claude.json" false
+  sync_mcp_servers_into "$CLAUDE_MCP_TARGET" "${HOME}/.claude.json" false mcphub
   claude_result=$?
-  sync_mcp_servers_into "$CURSOR_MCP_TARGET" "${HOME}/.cursor/mcp.json" true
+  sync_mcp_servers_into "$CURSOR_MCP_TARGET" "${HOME}/.cursor/mcp.json" true mcphub
   cursor_result=$?
+  sync_mcp_servers_into "$COPILOT_MCP_TARGET" "${HOME}/.copilot/mcp-config.json" true copilot
+  copilot_result=$?
   set -e
 
-  if [ "$claude_result" -eq "$SYNC_ERROR" ] && [ "$cursor_result" -eq "$SYNC_ERROR" ]; then
+  if [ "$claude_result" -eq "$SYNC_ERROR" ] && [ "$cursor_result" -eq "$SYNC_ERROR" ] && [ "$copilot_result" -eq "$SYNC_ERROR" ]; then
     return "$SYNC_ERROR"
   fi
 
