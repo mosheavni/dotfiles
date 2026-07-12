@@ -45,6 +45,19 @@
       "args": ["mcp-server-fetch"],
       "command": "uvx"
     },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem"],
+      "autoApprove": ["read_file", "list_directory", "get_file_stats"]
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git"]
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
     "kubernetes": {
       "args": ["mcp-server-kubernetes"],
       "autoApprove": [
@@ -104,28 +117,6 @@
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
       "autoApprove": ["sequentialthinking"],
       "command": "npx"
-    },
-    "coralogix-server": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://api.us2.coralogix.com/mgmt/api/v1/mcp",
-        "--header",
-        "Authorization:$CORALOGIX_API_KEY"
-      ]
-    },
-    "git": {
-      "command": "uvx",
-      "args": ["mcp-server-git"]
-    },
-    "github": {
-      "type": "http",
-      "url": "https://api.githubcopilot.com/mcp/"
-    },
-    "filesystem": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem"],
-      "autoApprove": ["read_file", "list_directory", "get_file_stats"]
     }
   },
   "nativeMCPServers": {
