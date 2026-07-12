@@ -18,6 +18,7 @@ alias dc='cd '
 alias dot='cd ~/.dotfiles'
 alias lazy='fdf ~/.local/share/nvim/site/pack/core/opt/'
 alias repos="~/Repos"
+alias dotfiles='cd ~/.dotfiles'
 
 #------------------------------------------------------------------------------
 # Editor Related
