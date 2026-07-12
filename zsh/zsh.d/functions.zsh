@@ -16,9 +16,9 @@ function say() {
   }
 
   local voice text
-  voice=$(command say -v '?' \
-    | sed -E 's/^(.*[^ ]) +([a-z]{2}_[A-Z]{2}) +#.*$/\1 (\2)/' \
-    | gum filter --header 'Choose a voice' --placeholder 'Type to search (e.g. he, Carmit)...') || return
+  voice=$(command say -v '?' |
+    sed -E 's/^(.*[^ ]) +([a-z]{2}_[A-Z]{2}) +#.*$/\1 (\2)/' |
+    gum filter --header 'Choose a voice' --placeholder 'Type to search (e.g. he, Carmit)...') || return
   voice=${voice% \(*}
 
   text="$*"
@@ -96,6 +96,17 @@ function clone() {
 
 function gitcd() {
   cd $(git rev-parse --show-toplevel)
+}
+
+function add-reviewers() {
+  if ! [[ -f ~/reviewers.txt ]]; then
+    echo "reviewers.txt file not found in home directory. Please create it with a list of reviewers." >&2
+    return 1
+  fi
+  reviewers=$(paste -sd, ~/reviewers.txt)
+  pr_url=$1
+  [[ -z $1 ]] && pr_url=$(gh pr view --json url --jq .url)
+  gh pr edit "$pr_url" --add-reviewer "$reviewers"
 }
 
 function ssh2() {
