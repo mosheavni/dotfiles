@@ -35,15 +35,6 @@ _aws_profile_account() {
 function aws-profile() {
   emulate -L zsh -o err_return -o pipefail
 
-  command -v aws >/dev/null 2>&1 || {
-    echo "aws CLI not found" >&2
-    return 1
-  }
-  command -v fzf >/dev/null 2>&1 || {
-    echo "fzf not found" >&2
-    return 1
-  }
-
   local -a profiles lines
   local profile account selected current marker line
 

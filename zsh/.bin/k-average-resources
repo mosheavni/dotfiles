@@ -1,14 +1,5 @@
 #!/bin/bash
 
-command -v gum >/dev/null 2>&1 || {
-  echo "gum not found (brew install gum)" >&2
-  exit 1
-}
-command -v fzf >/dev/null 2>&1 || {
-  echo "fzf not found (brew install fzf)" >&2
-  exit 1
-}
-
 all_ns=false
 args=()
 for a in "$@"; do

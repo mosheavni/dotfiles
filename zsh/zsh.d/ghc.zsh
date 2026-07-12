@@ -1,10 +1,4 @@
 function ghc() {
-  # Validate gh CLI is available
-  if ! command -v gh &>/dev/null; then
-    echo "Error: GitHub CLI (gh) is not installed"
-    return 1
-  fi
-
   local org="${1:-$GIT_DEFAULT_ORG}"
 
   local selected

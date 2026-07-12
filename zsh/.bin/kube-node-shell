@@ -8,15 +8,6 @@ set -euo pipefail
 IMAGE="${IMAGE:-ubuntu:24.04}"
 PROFILE="${PROFILE:-sysadmin}"
 
-command -v kubectl >/dev/null 2>&1 || {
-  echo "kubectl not found"
-  exit 1
-}
-command -v gum >/dev/null 2>&1 || {
-  echo "gum not found (brew install gum)"
-  exit 1
-}
-
 node="$(kubectl get nodes -o name | sed 's|node/||' | gum filter --header='Select node' --placeholder='Type to filter...')"
 if [[ -z "$node" ]]; then
   echo "No node selected. Aborting." >&2

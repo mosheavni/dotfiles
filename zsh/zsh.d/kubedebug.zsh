@@ -339,15 +339,6 @@ _kdng_launch() {
 # --- entrypoint --------------------------------------------------------------
 
 function kubedebug() {
-  command -v gum >/dev/null || {
-    echo "kubedebug requires gum (brew install gum)" >&2
-    return 1
-  }
-  command -v jq >/dev/null || {
-    echo "kubedebug requires jq" >&2
-    return 1
-  }
-
   local ctx namespace image docker_exe pod_name service_account choice last_choice
   local pod_name_ts=false host_network=false host_pid=false pull_policy tolerations
   local -a kubectl_args

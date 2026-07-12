@@ -10,11 +10,6 @@ function delete-zcompdump() {
 }
 
 function say() {
-  command -v gum >/dev/null || {
-    echo 'say requires gum (brew install gum)' >&2
-    return 1
-  }
-
   local voice text
   voice=$(command say -v '?' |
     sed -E 's/^(.*[^ ]) +([a-z]{2}_[A-Z]{2}) +#.*$/\1 (\2)/' |
