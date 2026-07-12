@@ -66,6 +66,7 @@ source $zsh_plugins
 # ================ #
 export EDITOR='nvim'
 export AWS_PAGER=""
+export AWS_DEFAULT_REGION=us-east-1
 export MANPAGER='nvim +Man!'
 export cdpath=(. ~ ~/Repos)
 export TMPDIR=$HOME/tmp

@@ -115,16 +115,8 @@
       ]
     },
     "git": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-git"],
-      "autoApprove": [
-        "get_repository_status",
-        "list_commits",
-        "get_commit_details",
-        "get_file_diff",
-        "list_branches",
-        "search_commits"
-      ]
+      "command": "uvx",
+      "args": ["mcp-server-git"]
     },
     "github": {
       "type": "http",
