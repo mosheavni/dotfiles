@@ -204,7 +204,6 @@ M.setup = function()
   })
 
   require('user.lsp.actions').setup()
-  require('user.lsp.inspect').setup()
 
   -- Global capabilities for all LSP servers
   vim.lsp.config('*', { capabilities = M.capabilities })
