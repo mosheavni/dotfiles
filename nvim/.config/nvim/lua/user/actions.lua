@@ -342,6 +342,62 @@ end)
   ['[JSON] Json to Yaml (:Json2Yaml)'] = function()
     vim.cmd.Json2Yaml()
   end,
+  ['[JSON] Sort keys under a path (jq)'] = function()
+    local title = 'Sort JSON'
+    if vim.fn.executable 'jq' == 0 then
+      vim.notify('jq not found in PATH.', vim.log.levels.WARN, { title = title })
+      return
+    end
+
+    local bufnr = 0
+    local src = table.concat(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false), '\n')
+    local enum = vim
+      .system({
+        'jq',
+        '-c',
+        'paths(type == "object" or type == "array") as $p | select((getpath($p) | length) > 1) | { p: $p, label: ("." + ($p | map(tostring) | join("."))) }',
+      }, { stdin = src })
+      :wait()
+    if enum.code ~= 0 then
+      vim.notify('Invalid JSON: ' .. (enum.stderr or ''), vim.log.levels.WARN, { title = title })
+      return
+    end
+
+    local candidates = {}
+    for line in vim.gsplit(enum.stdout, '\n', { trimempty = true }) do
+      table.insert(candidates, vim.json.decode(line))
+    end
+    if #candidates == 0 then
+      vim.notify('No container with multiple children to sort.', vim.log.levels.WARN, { title = title })
+      return
+    end
+
+    vim.ui.select(candidates, {
+      prompt = 'Sort under: ',
+      format_item = function(item)
+        return item.label
+      end,
+    }, function(choice)
+      if not choice then
+        return
+      end
+      local res = vim
+        .system({
+          'jq',
+          '--argjson',
+          'p',
+          vim.json.encode(choice.p),
+          'setpath($p; getpath($p) | if type == "object" then to_entries | sort_by(.key) | from_entries else sort end)',
+        }, { stdin = src })
+        :wait()
+      if res.code ~= 0 then
+        vim.notify('jq failed: ' .. (res.stderr or ''), vim.log.levels.WARN, { title = title })
+        return
+      end
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.split((res.stdout:gsub('\n$', '')), '\n'))
+      vim.notify(('Sorted %s.'):format(choice.label), vim.log.levels.INFO, { title = title })
+    end)
+  end,
   ['[Editor] Change indent size (cii)'] = function()
     vim.fn.feedkeys 'cii'
   end,
