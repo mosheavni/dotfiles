@@ -127,7 +127,7 @@ M.setup = function()
       current_line = false,
       severity = { min = vim.diagnostic.severity.WARN },
     },
-    virtual_lines = { current_line = true },
+    virtual_lines = { current_line = true, overflow = 'wrap' },
     float = { border = 'rounded', source = true },
     update_in_insert = false,
     underline = true,
