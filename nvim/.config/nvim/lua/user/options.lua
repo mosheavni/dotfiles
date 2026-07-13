@@ -39,7 +39,6 @@ vim.opt.shortmess:append {
   I = true, -- no intro
   S = true, -- no search count overflow
 }
-vim.o.switchbuf = 'useopen,split' -- When switching buffers, jump to the first open window
 vim.o.list = true -- Show some invisible characters (tabs...
 vim.opt.listchars = {
   -- trail = '·',
