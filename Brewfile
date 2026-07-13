@@ -110,3 +110,5 @@ cask "vlc"
 cask "wezterm@nightly"
 mas "Magnet", id: 441258766
 mas "Microsoft OneNote", id: 784801555
+mas "Slack for Desktop", id: 803453959
+mas "WhatsApp Messenger", id: 310633997
