@@ -19,6 +19,7 @@
 - [Usage](#usage)
 - [Usage (just NVIM)](#usage-just-nvim)
 - [Additional stuff](#additional-stuff)
+- [Vimium (Chrome)](#vimium-chrome)
 - [GitHub notifications on macOS](#github-notifications-on-macos)
 - [Troubleshooting](#troubleshooting)
   - [Remove TreeSitter parsers](#remove-treesitter-parsers)
@@ -114,6 +115,15 @@ Claude Code skills extend the `/skill-name` slash command system. Skills live in
 
 Verify with `npx skills ls -g`.
 
+## Vimium (Chrome)
+
+Vimium settings are stored in [`vimium-options.json`](vimium-options.json) (not stowed — import manually on each machine).
+
+1. Open [Vimium options](chrome-extension://dbepggeogbaibhgnhhndojpepiihcmeb/pages/options.html).
+2. **Show advanced options** → **Import** → paste the contents of `vimium-options.json`.
+
+After changing settings in the browser, export from Vimium and overwrite `vimium-options.json` in this repo.
+
 ## GitHub notifications on macOS
 
 Native macOS notifications for unread GitHub notifications, polled every 60s by a `launchd` agent. Lives in the `automations` stow package (`.local/bin/gh-notify.sh` plus the agent plist).
@@ -131,10 +141,10 @@ The script is interactive (uses [`gum`](https://github.com/charmbracelet/gum)) a
 Manage the agent:
 
 ```bash
-launchctl bootout   gui/$(id -u)/com.mosheavni.ghnotify                                # pause
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.mosheavni.ghnotify.plist   # resume
-~/.local/bin/gh-notify.sh                                                              # run once
-tail -f ~/.cache/gh-notify/error.log                                                   # debug
+launchctl bootout gui/$(id -u)/com.mosheavni.ghnotify                                # pause
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.mosheavni.ghnotify.plist # resume
+~/.local/bin/gh-notify.sh                                                            # run once
+tail -f ~/.cache/gh-notify/error.log                                                 # debug
 ```
 
 ## Troubleshooting

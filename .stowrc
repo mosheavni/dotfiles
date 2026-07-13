@@ -11,3 +11,4 @@
 --ignore=graphify-out
 --ignore=spec
 --ignore=Makefile
+--ignore=vimium-options.json
