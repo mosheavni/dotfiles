@@ -213,6 +213,9 @@ autocmd({ 'WinEnter', 'BufWinEnter' }, {
 autocmd('WinLeave', {
   group = cursorline_group,
   callback = function()
+    if vim.bo.filetype == 'qf' then
+      return
+    end
     vim.opt_local.cursorline = false
   end,
 })
