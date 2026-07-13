@@ -180,6 +180,41 @@ end
 
 config.key_tables = { copy_mode = copy_mode, search_mode = search_mode }
 
+-- QuickSelect: the closest thing wezterm has to vim-easymotion. It labels every
+-- on-screen match of the patterns below with a home-row key; typing the label
+-- copies the match (add SHIFT/`quick_select_args` to open it instead). These
+-- patterns are added on top of the built-in URL/path/email matchers.
+-- config.quick_select_alphabet = 'asdfghjklqwertyuiopzxcvbnm'
+-- NOTE: wezterm compiles every entry into one big alternation regex that relies
+-- on its own capture groups to tell which pattern matched. Any *capturing* group
+-- in a pattern shifts those indices and silently breaks matching for the
+-- patterns that follow it, so all groups here MUST be non-capturing `(?:...)`.
+config.quick_select_patterns = {
+  -- IPv4 addresses (optionally with a port)
+  '\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}(?::\\d+)?\\b',
+  -- git hashes (short or full)
+  '\\b[0-9a-f]{7,40}\\b',
+  -- UUIDs
+  '\\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\b',
+  -- hex colors
+  '#[0-9a-fA-F]{6,8}\\b',
+  -- k8s pod/replicaset-style names: 3+ hyphen-separated lowercase segments
+  -- (e.g. dashboard-gateway-59b4c4985b-mmwhh)
+  '\\b[a-z0-9]+(?:-[a-z0-9]+){2,}\\b',
+  -- absolute/relative/home file paths
+  '[.~]?/[^\\s"\'`|:]+',
+  -- single/double quoted strings (match includes the quotes)
+  '"(?:[^"]+)"',
+  "'(?:[^']+)'",
+  -- long numbers (ports, PIDs, timestamps)
+  '\\b\\d{4,}\\b',
+}
+-- easymotion-style label styling
+config.colors.quick_select_label_bg = { Color = '#eb6f92' }
+config.colors.quick_select_label_fg = { Color = '#191724' }
+config.colors.quick_select_match_bg = { Color = '#2a2837' }
+config.colors.quick_select_match_fg = { Color = '#e0def4' }
+
 -- arrow keys keybindings
 for _, direction in ipairs { 'Left', 'Right', 'Up', 'Down' } do
   -- move between panes
