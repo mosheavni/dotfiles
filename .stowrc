@@ -9,6 +9,5 @@
 --ignore=install-skills.sh
 --ignore=sync-ai-config.sh
 --ignore=graphify-out
---ignore=spec
 --ignore=Makefile
 --ignore=vimium-options.json

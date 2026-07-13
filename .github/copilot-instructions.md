@@ -7,11 +7,9 @@ This file guides Copilot sessions working in this repository. For comprehensive 
 **Build, test, and lint** all from repository root:
 
 ```bash
-make test                           # Run all tests (nvim + zsh)
-make test-nvim                      # Neovim tests only (runs make prepare first)
-make test-zsh                       # Zsh tests only
-shellspec zsh/spec/ <name >_spec.sh # Single Zsh spec file
-pre-commit run --all-files          # All linters
+make test                  # Run Neovim tests (runs make prepare first)
+make test-nvim             # Same as make test
+pre-commit run --all-files # All linters
 ```
 
 **Deployment:**
@@ -33,7 +31,7 @@ Internal file structure mirrors target paths:
 - `zsh/.zshrc` → `~/.zshrc`
 - `git/.gitconfig` → `~/.gitconfig`
 
-Files to exclude from stowing (listed in `.stowrc`): Brewfile, Makefile, README files, `.github`, specs, generated output.
+Files to exclude from stowing (listed in `.stowrc`): Brewfile, Makefile, README files, `.github`, generated output.
 
 ### Where to Place New Files
 
@@ -83,14 +81,6 @@ Files to exclude from stowing (listed in `.stowrc`): Brewfile, Makefile, README 
 - Modular config: `zsh/zsh.d/*.zsh` files
 - Custom scripts: `zsh/.bin/`
 
-**Testing:**
-
-- Specs live in `zsh/spec/*_spec.sh` (excluded from stowing)
-- Framework: [shellspec](https://shellspec.info/) DSL (configured in `.shellspec`)
-- **Before changing functions:** Update or add matching spec in `zsh/spec/`
-- Mock external commands (aws, ssh, etc.) as shell functions inside specs
-- Interactive functions (fzf/gum prompts) are not unit-tested
-
 **Linting:**
 
 - shellcheck (pre-commit hook and CI)
@@ -127,9 +117,9 @@ When adding `yaml.something` via `vim.filetype.add` in `options.lua`, follow the
 
 **Linters run via:**
 
-- `pre-commit`: `pre-commit run --all-files` (includes shellspec)
+- `pre-commit`: `pre-commit run --all-files`
 - **CI:** GitHub Actions workflows in `.github/workflows/`
-  - `ci.yml`: Runs zsh tests (Ubuntu) and Neovim tests (nightly)
+  - `ci.yml`: Runs Neovim tests (nightly)
   - `lint.yml`: Runs super-linter (luacheck for Lua, shellcheck for shell)
 
 **Super-linter:** Disabled for: Biome, JSCpd, Editorconfig, Python Ruff, shfmt (zsh compatibility)
@@ -143,12 +133,7 @@ When adding `yaml.something` via `vim.filetype.add` in `options.lua`, follow the
    - Update or add tests before changing functionality
    - Run `make test-nvim` to verify
 
-2. **Zsh changes:**
-   - Check existing specs in `zsh/spec/`
-   - Update or add specs before changing functionality
-   - Run `shellspec zsh/spec/<name>_spec.sh` or `make test-zsh`
-
-3. **All changes:**
+2. **All changes:**
    - Run `pre-commit run --all-files` before committing
    - Format Lua: `stylua --search-parent-directories .`
 
@@ -170,7 +155,6 @@ These are configured in `ai/.config/mcphub/servers.json` and `ai/.cursor/mcp.jso
 - `README.md` - Setup and usage guide
 - `Makefile` - Build, test, and prep commands
 - `.stowrc` - Stow exclusion rules
-- `.shellspec` - Zsh test configuration
-- `.pre-commit-config.yaml` - Pre-commit hooks (shellspec + linters)
+- `.pre-commit-config.yaml` - Pre-commit hooks
 - `ai/.config/mcphub/servers.json` - MCP server configurations for Claude
 - `ai/.cursor/mcp.json` - MCP server configurations for Cursor

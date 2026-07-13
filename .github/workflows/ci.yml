@@ -6,27 +6,6 @@ permissions:
   contents: read
 
 jobs:
-  zsh_tests:
-    name: zsh tests
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          persist-credentials: false
-
-      - name: Install zsh and shellspec
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y zsh
-          git clone --depth 1 --branch 0.28.1 https://github.com/shellspec/shellspec.git "$HOME/shellspec"
-          echo "$HOME/shellspec" >> "$GITHUB_PATH"
-
-      - name: Run shellspec
-        run: make test-zsh
-
   unit_tests:
     name: unit tests
     runs-on: ${{ matrix.os }}
