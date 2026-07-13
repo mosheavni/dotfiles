@@ -55,17 +55,6 @@ local actions = function()
     end,
     ['Create tag'] = git_funcs.ui_select_create_tag,
     ['Delete tag'] = git_funcs.ui_select_delete_tag,
-    ['Find in all commits'] = function()
-      local rev_list = vim.fn.FugitiveExecute({ 'rev-list', '--all' }).stdout
-      vim.ui.input({ prompt = 'Enter search term❯ ' }, function(search_term)
-        if not search_term then
-          git_funcs.prnt 'Canceled.'
-          return
-        end
-        git_funcs.prnt('Searching for ' .. search_term .. ' in all commits...')
-        vim.cmd('silent Ggrep ' .. vim.fn.fnameescape(search_term) .. ' ' .. table.concat(rev_list, ' '))
-      end)
-    end,
     ['Push (:Gp)'] = git_funcs.push,
     ['Pull (:Gl)'] = git_funcs.pull,
     ['Add (Stage) All'] = function()
@@ -75,6 +64,27 @@ local actions = function()
       vim.cmd 'Git reset'
     end,
   }
+end
+
+local function diffview_file_history_log_flag(flag, prompt_label)
+  return function()
+    vim.ui.input({ prompt = prompt_label .. '❯ ' }, function(pattern)
+      if not pattern or pattern == '' then
+        return
+      end
+      vim.ui.input({ prompt = 'File path (% = current, empty = repo top)❯ ', default = '%' }, function(file)
+        if file == nil then
+          return
+        end
+        local log_opt = '-' .. flag .. pattern
+        if file == '' then
+          vim.cmd { cmd = 'DiffviewFileHistory', args = { log_opt } }
+        else
+          vim.cmd { cmd = 'DiffviewFileHistory', args = { log_opt, file } }
+        end
+      end)
+    end)
+  end
 end
 
 local diff_actions = {
@@ -107,6 +117,8 @@ local diff_actions = {
       vim.cmd('DiffviewOpen ' .. commit_hash .. '^!')
     end)
   end,
+  ['[Diffview] History: added/removed string (-S pickaxe)'] = diffview_file_history_log_flag('S', 'String whose occurrence count changed (-S)'),
+  ['[Diffview] History: patch matches regex (-G)'] = diffview_file_history_log_flag('G', 'Regex matching added/removed lines in patch (-G)'),
 }
 
 local fugitive_config = function()
