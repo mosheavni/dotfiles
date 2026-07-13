@@ -99,6 +99,14 @@ local diff_actions = {
   ['[Diffview] stashes'] = function()
     vim.cmd 'DiffviewFileHistory -g --range=stash'
   end,
+  ['[Diffview] changes of a single commit'] = function()
+    vim.ui.input({ prompt = 'Enter commit hash❯ ' }, function(commit_hash)
+      if not commit_hash then
+        return
+      end
+      vim.cmd('DiffviewOpen ' .. commit_hash .. '^!')
+    end)
+  end,
 }
 
 local fugitive_config = function()
