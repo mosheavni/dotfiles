@@ -70,7 +70,7 @@
 5. Install and update everything (brew, asdf, pip, npm, etc.):
 
    ```bash
-   ./updates.sh
+   ./sync.sh
    ```
 
 6. Open [Wezterm](https://wezfurlong.org/wezterm/index.html) and start using a real terminal.
@@ -128,7 +128,7 @@ After changing settings in the browser, export from Vimium and overwrite `vimium
 
 Native macOS notifications for unread GitHub notifications, polled every 60s by a `launchd` agent. Lives in the `automations` stow package (`.local/bin/gh-notify.sh` plus the agent plist).
 
-One-time setup on a new machine (after `./start.sh` and `./updates.sh`):
+One-time setup on a new machine (after `./start.sh` and `./sync.sh`):
 
 ```bash
 gh-notify-setup.sh
@@ -151,7 +151,7 @@ tail -f ~/.cache/gh-notify/error.log                                            
 
 ### Reinstalling all packages
 
-Run `./updates.sh` — it handles brew, asdf, pip, npm, GitHub releases, and build-from-source tools.
+Run `./sync.sh` — it handles brew, asdf, pip, npm, GitHub releases, and build-from-source tools.
 
 ### Remove TreeSitter parsers
 

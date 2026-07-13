@@ -3,6 +3,8 @@ set -euo pipefail
 
 # shellcheck disable=SC1091
 source "$HOME/.dotfiles/.scripts/lib.sh"
+# shellcheck disable=SC1091
+source "$HOME/.dotfiles/.scripts/tools.sh"
 
 # ── sections ─────────────────────────────────────────────────────────────────
 
@@ -107,28 +109,9 @@ update_gh_releases() {
   done <"$DOTFILES/github-releases.txt"
 }
 
-update_build_tools() {
-  log "build — groovy-language-server"
-  local dir="$HOME/.local/share/groovy-language-server"
-  if [[ -d "$dir" ]]; then
-    git -C "$dir" pull
-  else
-    git clone https://github.com/GroovyLanguageServer/groovy-language-server "$dir"
-  fi
-  (cd "$dir" && ./gradlew build)
-}
-
-random() {
-  log "random updates"
-  log "Installing teeldear database"
-  tldr --update
-  log "Installing pre-commit hooks"
-  pre-commit install
-}
-
 # ── main ─────────────────────────────────────────────────────────────────────
 
-UPDATE_SECTIONS=(asdf brew pip npm gh build random)
+UPDATE_SECTIONS=(asdf brew pip npm gh tools)
 
 run_section() {
   case "$1" in
@@ -137,8 +120,7 @@ run_section() {
   pip) update_pip ;;
   npm) update_npm ;;
   gh) update_gh_releases ;;
-  build) update_build_tools ;;
-  random) random ;;
+  tools) update_tools ;;
   *)
     echo "Unknown section: $1" >&2
     return 1
@@ -155,7 +137,7 @@ interactive_select() {
   local selected
   if ! selected=$(
     gum choose --no-limit --selected='*' \
-      --header "Select updates to run (space toggle, enter confirm)" \
+      --header "Select sections to sync (space toggle, enter confirm)" \
       "${UPDATE_SECTIONS[@]}"
   ); then
     echo "Cancelled."
@@ -163,7 +145,7 @@ interactive_select() {
   fi
 
   if [[ -z "$selected" ]]; then
-    echo "No updates selected."
+    echo "No sections selected."
     exit 0
   fi
 

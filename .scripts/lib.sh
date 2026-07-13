@@ -1,5 +1,5 @@
 #!/bin/bash
-# Shared helpers for updates.sh and cleanup.sh — source, don't execute.
+# Shared helpers for sync.sh, cleanup.sh, and tools.sh — source, don't execute.
 
 DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 CORP_BREWFILE="${CORP_BREWFILE:-$HOME/corp-Brewfile}"

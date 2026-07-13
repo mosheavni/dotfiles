@@ -145,7 +145,7 @@ cleanup_npm() {
 }
 
 cleanup_pip() {
-  log "pip — skipped (updates.sh uses uv pip sync, handles cleanup)"
+  log "pip — skipped (sync.sh uses uv pip sync, handles cleanup)"
 }
 
 cleanup_gh_releases() {

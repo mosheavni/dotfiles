@@ -1,3 +1,4 @@
 # repo binary arm64_pattern amd64_pattern
-nektos/act act *Darwin_arm64* *Darwin_x86_64*
-gruntwork-io/terragrunt-ls terragrunt-ls *darwin_arm64.zip *darwin_amd64.zip
+nektos/act                 act           *Darwin_arm64*       *Darwin_x86_64*
+gruntwork-io/terragrunt-ls terragrunt-ls *darwin_arm64.zip    *darwin_amd64.zip
+github/copilot-cli         copilot       *darwin-arm64.tar.gz *darwin-x64.tar.gz
