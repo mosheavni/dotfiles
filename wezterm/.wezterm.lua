@@ -105,6 +105,7 @@ config.mouse_bindings = {
 -- keys
 config.keys = { -- Unmap Option+Enter
   { key = 'Enter', mods = 'OPT', action = act.DisableDefaultAssignment },
+  -- selene: allow(bad_string_escape)
   { key = 'Enter', mods = 'SHIFT', action = wezterm.action { SendString = '\x1b\r' } },
 
   -- split pane
@@ -116,6 +117,20 @@ config.keys = { -- Unmap Option+Enter
 
   -- activate copy mode
   { key = 'C', mods = 'CMD|SHIFT', action = act.ActivateCopyMode },
+
+  -- copy the last command's output straight to the clipboard (no selection needed)
+  {
+    key = 'O',
+    mods = 'CMD|SHIFT',
+    action = wezterm.action_callback(function(window, pane)
+      local zones = pane:get_semantic_zones 'Output'
+      if #zones == 0 then
+        return
+      end
+      local text = pane:get_text_from_semantic_zone(zones[#zones])
+      window:copy_to_clipboard(text, 'Clipboard')
+    end),
+  },
 
   -- enter full screen with cmd+enter
   { key = 'Enter', mods = 'CMD', action = act.ToggleFullScreen },
@@ -133,6 +148,37 @@ config.keys = { -- Unmap Option+Enter
   { key = 'UpArrow', mods = 'SHIFT', action = act.ScrollToPrompt(-1) },
   { key = 'DownArrow', mods = 'SHIFT', action = act.ScrollToPrompt(1) },
 }
+
+-- copy mode: extend the defaults with vim/tmux-style search and a copy that
+-- keeps you in copy mode (so you don't lose your scroll position)
+local copy_mode = wezterm.gui.default_key_tables().copy_mode
+for _, extra in ipairs {
+  -- '/' starts an incremental search, like vim/tmux
+  { key = '/', mods = 'NONE', action = act.Search 'CurrentSelectionOrEmptyString' },
+  -- jump between matches after closing the search bar with Esc
+  { key = 'n', mods = 'NONE', action = act.CopyMode 'NextMatch' },
+  { key = 'N', mods = 'NONE', action = act.CopyMode 'PriorMatch' },
+  -- Shift+Y copies but STAYS in copy mode, keeping the cursor where it is
+  -- (plain 'y' still copies and exits, like before)
+  { key = 'Y', mods = 'NONE', action = act.CopyTo 'ClipboardAndPrimarySelection' },
+} do
+  table.insert(copy_mode, extra)
+end
+
+-- search mode: make Enter accept the pattern and drop back into copy mode at the
+-- current match (default Enter just jumps to the prior match and keeps you stuck
+-- in the search bar). n/N then navigate matches; Esc bails out.
+-- NOTE: in the raw table Enter is stored as 'mapped:\r' (show-keys renders it as
+-- 'Enter'), so match both spellings.
+local search_mode = wezterm.gui.default_key_tables().search_mode
+for _, entry in ipairs(search_mode) do
+  local is_enter = entry.key == 'Enter' or entry.key == 'mapped:\r'
+  if is_enter and (entry.mods == 'NONE' or entry.mods == nil) then
+    entry.action = act.CopyMode 'AcceptPattern'
+  end
+end
+
+config.key_tables = { copy_mode = copy_mode, search_mode = search_mode }
 
 -- arrow keys keybindings
 for _, direction in ipairs { 'Left', 'Right', 'Up', 'Down' } do
