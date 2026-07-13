@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # Dotfiles Repository Audit
 
 **Date:** 2026-07-03

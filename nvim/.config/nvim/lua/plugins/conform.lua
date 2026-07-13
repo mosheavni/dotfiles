@@ -75,7 +75,6 @@ return function()
       end
       vim.b[bufnr].format_changedtick = nil
     end,
-    formatters = {},
   }
 
   vim.keymap.set('n', '<leader>lp', function()

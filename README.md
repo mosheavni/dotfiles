@@ -1,4 +1,4 @@
-<!-- markdownlint-disable MD013 MD033 -->
+<!-- markdownlint-disable MD033 -->
 
 # Moshe Avni's DotFiles
 
