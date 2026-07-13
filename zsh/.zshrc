@@ -88,6 +88,8 @@ for ZSH_FILE in "${ZDOTDIR:-$HOME}"/zsh.d/*.zsh(N); do
   source "${ZSH_FILE}"
 done
 [[ -f $HOME/corp-aliases.sh ]] && zsh-defer source $HOME/corp-aliases.sh
+# gh can block zle for hundreds of ms; defer until idle. -dmszpr silences gh and skips precmd/reset-prompt churn.
+zsh-defer -dmszpr _zsh_defer_export_github_token
 
 # ================ #
 # Kubectl Contexts #

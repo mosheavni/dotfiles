@@ -147,7 +147,7 @@ This repository includes MCP server configurations for enhanced Copilot capabili
 - **GitHub** - PR/issue management, workflows, repository operations
 - **Filesystem** - File operations and directory exploration
 
-These are configured in `ai/.config/mcphub/servers.json` and `ai/.cursor/mcp.json`. The GitHub server requires `$GITHUB_TOKEN` environment variable with appropriate scopes.
+These are configured in `ai/.config/mcphub/servers.json` and synced to `~/.cursor/mcp.json` via `ai/sync-ai-config.sh`. The GitHub server requires `$GITHUB_TOKEN` environment variable with appropriate scopes.
 
 ## Key Files
 
@@ -156,5 +156,4 @@ These are configured in `ai/.config/mcphub/servers.json` and `ai/.cursor/mcp.jso
 - `Makefile` - Build, test, and prep commands
 - `.stowrc` - Stow exclusion rules
 - `.pre-commit-config.yaml` - Pre-commit hooks
-- `ai/.config/mcphub/servers.json` - MCP server configurations for Claude
-- `ai/.cursor/mcp.json` - MCP server configurations for Cursor
+- `ai/.config/mcphub/servers.json` - Canonical MCP server configurations (synced to Claude, Cursor, and Copilot)

@@ -1,5 +1,8 @@
 {
   "mcpServers": {
+    "atlassian": {
+      "url": "https://mcp.atlassian.com/v1/mcp/authv2"
+    },
     "aws-knowledge-mcp-server": {
       "args": ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"],
       "autoApprove": [
@@ -21,6 +24,8 @@
       "command": "uvx",
       "disabled": false,
       "env": {
+        "AWS_DEFAULT_REGION": "us-east-1",
+        "AWS_REGION": "us-east-1",
         "FASTMCP_LOG_LEVEL": "ERROR"
       },
       "transportType": "stdio"
@@ -35,7 +40,17 @@
       "command": "uvx",
       "disabled": false,
       "env": {
+        "AWS_DEFAULT_REGION": "us-east-1",
+        "AWS_REGION": "us-east-1",
         "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    },
+    "coralogix-server": {
+      "type": "http",
+      "url": "https://api.us2.coralogix.com/mgmt/api/v1/mcp",
+      "headers": {
+        "Authorization": "Bearer ${CORALOGIX_API_KEY}",
+        "mcp-version": "v2"
       }
     },
     "excalidraw": {
@@ -56,7 +71,10 @@
     },
     "github": {
       "type": "http",
-      "url": "https://api.githubcopilot.com/mcp/"
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_TOKEN}"
+      }
     },
     "kubernetes": {
       "args": ["mcp-server-kubernetes"],
@@ -87,6 +105,10 @@
         "open_nodes"
       ],
       "command": "npx"
+    },
+    "mongodb": {
+      "command": "npx",
+      "args": ["-y", "mongodb-mcp-server@latest", "--readOnly"]
     },
     "puppeteer": {
       "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
