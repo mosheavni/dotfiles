@@ -82,7 +82,8 @@ update_gh_releases() {
     case "$asset" in
     *.tar.gz | *.tgz | *.tar.xz | *.tar.bz2 | *.tar)
       tar -xf "$asset" -C "$tmpdir"
-      asset=$(find "$tmpdir" -name "$binary" -type f | head -1)
+      rm -f "$asset"
+      asset=$(find "$tmpdir" -name "${binary}*" -type f | head -1)
       if [[ -z "$asset" ]]; then
         echo "Could not find $binary inside archive for $repo" >&2
         rm -rf "$tmpdir"
@@ -91,7 +92,8 @@ update_gh_releases() {
       ;;
     *.zip)
       unzip -oq "$asset" -d "$tmpdir"
-      asset=$(find "$tmpdir" -name "$binary" -type f | head -1)
+      rm -f "$asset"
+      asset=$(find "$tmpdir" -name "${binary}*" -type f | head -1)
       if [[ -z "$asset" ]]; then
         echo "Could not find $binary inside archive for $repo" >&2
         rm -rf "$tmpdir"

@@ -87,17 +87,18 @@ local function refresh_attached_lsp(bufnr)
   vim.cmd 'redrawstatus'
 end
 
-M.setup = function()
-  _G.start_ls = function(with_file)
-    local file_name = nil
-    if with_file == true then
-      local ft = vim.bo[0].filetype
-      file_name = _G.tmp_write { should_delete = false, new = false, ft = ft }
-    end
-    -- load lsp
-    require 'lspconfig'
-    return file_name
+_G.start_ls = function(with_file)
+  local file_name = nil
+  if with_file == true then
+    local ft = vim.bo[0].filetype
+    file_name = _G.tmp_write { should_delete = false, new = false, ft = ft }
   end
+  -- load lsp
+  require 'lspconfig'
+  return file_name
+end
+
+M.setup = function()
   vim.keymap.set('n', '<leader>ls', function()
     _G.start_ls(false)
   end, { desc = 'Start LSP (without file)' })
@@ -224,6 +225,7 @@ M.setup = function()
     'lua_ls',
     'pyright',
     'terraformls',
+    'terragrunt_ls',
     'user_lsp',
     'vimls',
     'vtsls',
