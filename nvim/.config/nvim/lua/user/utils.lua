@@ -200,9 +200,11 @@ function M.throttle(ms, fn)
   end
 end
 
+---@alias user.utils.PackInstallSpec string|vim.pack.Spec
+
 ---@class user.utils.LoadPluginOpts
----@field pack_spec? table|vim.pack.PluginSpec Remote install spec for the main plugin (e.g. `version`, `build`). Defaults to `plugin_name`.
----@field additional_plugins? table[] Extra specs passed to `vim.pack.add` after the main plugin when installing remotely.
+---@field pack_spec? user.utils.PackInstallSpec Remote install spec for the main plugin (e.g. `version`, `build`). Defaults to `plugin_name`.
+---@field additional_plugins? user.utils.PackInstallSpec[] Extra specs passed to `vim.pack.add` after the main plugin when installing remotely.
 
 --- Load a plugin from `~/Repos/<repo>` when present, otherwise via `vim.pack.add`.
 ---@param plugin_name string GitHub URL or path used to resolve the local dev directory and default remote install.

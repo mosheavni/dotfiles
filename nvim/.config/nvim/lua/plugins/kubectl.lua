@@ -1,4 +1,5 @@
 require('user.utils').load_plugin('https://github.com/Ramilito/kubectl.nvim', {
+  additional_plugins = { 'https://github.com/saghen/blink.download' },
   pack_spec = {
     src = 'https://github.com/Ramilito/kubectl.nvim',
     version = vim.version.range '2.x',
