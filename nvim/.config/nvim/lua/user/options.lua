@@ -208,6 +208,7 @@ vim.filetype.add {
     Brewfile = 'brewfile',
     ['corp-Brewfile'] = 'brewfile',
     ['Chart.yaml'] = 'yaml.chart',
+    ['package.json'] = 'json.package',
     ['.pre-commit-config.yaml'] = 'yaml.precommit',
     ['.pre-commit-config.yml'] = 'yaml.precommit',
     ['docker-compose.yml'] = 'yaml.docker-compose',

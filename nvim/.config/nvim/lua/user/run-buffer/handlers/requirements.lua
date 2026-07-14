@@ -7,7 +7,6 @@ return {
       return {
         cmd = 'pip install -r ' .. vim.fn.shellescape(ctx.file_name),
         spawn = true,
-        cwd = vim.fs.dirname(ctx.file_name),
       }
     end,
   },

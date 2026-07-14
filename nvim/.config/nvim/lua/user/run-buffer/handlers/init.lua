@@ -30,6 +30,7 @@ local modules = {
   require 'user.run-buffer.handlers.brewfile',
   require 'user.run-buffer.handlers.requirements',
   require 'user.run-buffer.handlers.helm',
+  require 'user.run-buffer.handlers.package_json',
 }
 
 for _, mod in ipairs(modules) do

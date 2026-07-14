@@ -5,6 +5,7 @@ local buffer = require 'user.run-buffer.buffer'
 local command = require 'user.run-buffer.command'
 local make = require 'user.run-buffer.handlers.make'
 local notify_stub = require 'tests.notify_stub'
+local package_json = require 'user.run-buffer.handlers.package_json'
 local eq = assert.are.same
 
 ---@param fn (fun(...): string?|nil)?|nil
@@ -410,12 +411,12 @@ describe('user.run-buffer', function()
       package.loaded['user.gh-actions'] = original_gh
     end)
 
-    it('requirements runs pip install -r with buffer cwd', function()
+    it('requirements runs pip install -r', function()
       local req = '/tmp/project/requirements.txt'
       local result = sync_result('requirements', req, '')
       eq(result.cmd, 'pip install -r ' .. vim.fn.shellescape(req))
       eq(result.spawn, true)
-      eq(result.cwd, '/tmp/project')
+      eq(result.cwd, nil)
     end)
 
     it('make returns the selected target command', function()
@@ -435,6 +436,28 @@ describe('user.run-buffer', function()
 
       vim.fn.inputlist = original_inputlist
       os.remove(makefile_path)
+    end)
+
+    it('json.package returns the selected npm run command', function()
+      local dir = vim.fn.tempname()
+      vim.fn.mkdir(dir, 'p')
+      local pkg_path = dir .. '/package.json'
+      local f = assert(io.open(pkg_path, 'w'))
+      f:write '{"scripts":{"build":"tsc","test":"jest"}}'
+      f:close()
+
+      local original_inputlist = vim.fn.inputlist
+      set_inputlist_stub(function()
+        return 2
+      end)
+
+      local result = sync_result('json.package', pkg_path, '')
+      eq(result.cmd, 'npm run test')
+      eq(result.spawn, true)
+      eq(result.cwd, nil)
+
+      vim.fn.inputlist = original_inputlist
+      vim.fn.delete(dir, 'rf')
     end)
   end)
 
@@ -531,6 +554,98 @@ clean:
       eq(make.makefile_target_name 'VAR := value', nil)
       eq(make.makefile_target_name 'VAR ::= value', nil)
       eq(make.makefile_target_name 'VAR = value', nil)
+    end)
+  end)
+
+  describe('package_json.pick_script_cmd', function()
+    local pkg_path
+    local original_inputlist
+
+    local function write_pkg(contents)
+      pkg_path = vim.fn.tempname()
+      local f = assert(io.open(pkg_path, 'w'))
+      f:write(contents)
+      f:close()
+    end
+
+    before_each(function()
+      original_inputlist = vim.fn.inputlist
+    end)
+
+    after_each(function()
+      vim.fn.inputlist = original_inputlist
+      if pkg_path then
+        os.remove(pkg_path)
+        pkg_path = nil
+      end
+    end)
+
+    it('returns npm run <script> for the selected index', function()
+      write_pkg '{"scripts":{"build":"tsc","test":"jest"}}'
+      set_inputlist_stub(function()
+        return 2
+      end)
+      eq(package_json.pick_script_cmd(pkg_path), 'npm run test')
+    end)
+
+    it('returns nil when the picker is cancelled', function()
+      write_pkg '{"scripts":{"build":"tsc","test":"jest"}}'
+      set_inputlist_stub(function()
+        return 0
+      end)
+      eq(package_json.pick_script_cmd(pkg_path), nil)
+    end)
+
+    it('skips the picker when there is only one script', function()
+      write_pkg '{"scripts":{"build":"tsc"}}'
+      local called = false
+      set_inputlist_stub(function()
+        called = true
+        return 1
+      end)
+      eq(package_json.pick_script_cmd(pkg_path), 'npm run build')
+      assert.is_false(called)
+    end)
+
+    it('returns nil and notifies when there are no scripts', function()
+      write_pkg '{"name":"x"}'
+      eq(package_json.pick_script_cmd(pkg_path), nil)
+      assert.is_true(#notifications > 0)
+    end)
+  end)
+
+  describe('package.json script parsing', function()
+    local pkg_path
+
+    after_each(function()
+      if pkg_path then
+        os.remove(pkg_path)
+        pkg_path = nil
+      end
+    end)
+
+    it('lists scripts sorted by name', function()
+      pkg_path = vim.fn.tempname()
+      local f = assert(io.open(pkg_path, 'w'))
+      f:write '{"scripts":{"test":"jest","build":"tsc","lint":"eslint"}}'
+      f:close()
+      local options = package_json.get_script_options(pkg_path)
+      local values = vim.tbl_map(function(o)
+        return o.value
+      end, options)
+      eq(values, { 'build', 'lint', 'test' })
+    end)
+
+    it('returns an empty list when scripts is missing', function()
+      pkg_path = vim.fn.tempname()
+      local f = assert(io.open(pkg_path, 'w'))
+      f:write '{"name":"x"}'
+      f:close()
+      eq(package_json.get_script_options(pkg_path), {})
+    end)
+
+    it('returns an empty list for unreadable files', function()
+      eq(package_json.get_script_options '/nonexistent/package.json', {})
     end)
   end)
 

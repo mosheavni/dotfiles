@@ -7,7 +7,6 @@ return {
       return {
         cmd = 'brew bundle --file=' .. vim.fn.shellescape(ctx.file_name) .. ' --no-upgrade',
         spawn = true,
-        cwd = vim.fn.fnamemodify(ctx.file_name, ':p:h'),
       }
     end,
   },
