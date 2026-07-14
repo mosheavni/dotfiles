@@ -220,12 +220,11 @@ autocmd('WinLeave', {
   end,
 })
 
--- Terminals that track cwd via OSC 7 (e.g. WezTerm CurrentPaneDomain) only
--- learn about :cd/:tcd from the shell on precmd; nvim must emit it here.
-autocmd('DirChanged', {
+local report_cwd_group = vim.api.nvim_create_augroup('ReportCwd', { clear = true })
+autocmd({ 'VimEnter', 'DirChanged' }, {
+  group = report_cwd_group,
   desc = 'Report cwd to terminal via OSC 7',
   callback = function()
-    print 'dir changed'
     io.stdout:write(string.format('\027]7;file://%s%s\027\\', vim.fn.hostname(), vim.fn.getcwd()))
     io.stdout:flush()
   end,

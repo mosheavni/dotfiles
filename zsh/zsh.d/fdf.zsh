@@ -49,7 +49,9 @@ function fdf() {
       wezterm cli activate-tab --tab-id "$tab_id"
       wezterm cli activate-pane --pane-id "$pane_id"
     else
-      cd "$full_dir" && nvim
+      cd "$full_dir" || return
+      printf '\e]7;file://%s%s\e\\' "${HOST:-$(hostname)}" "$PWD"
+      nvim
     fi
   done
 }
