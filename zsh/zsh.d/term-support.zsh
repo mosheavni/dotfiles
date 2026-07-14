@@ -1,5 +1,5 @@
 # Let wezterm.sh report cwd via OSC 7 on precmd (needed for Cmd+Shift+D splits).
-# Nvim :cd while nvim runs still needs OSC 7 from nvim (see wezterm.report_cwd).
+# Nvim :cd/:tcd emits OSC 7 on DirChanged (see nvim autocommands.lua).
 [[ -f /Applications/WezTerm.app/Contents/Resources/wezterm.sh ]] &&
   source /Applications/WezTerm.app/Contents/Resources/wezterm.sh
 
