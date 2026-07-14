@@ -53,6 +53,11 @@
       "rev": "4c513d5dac550af77034cced421967b393261509",
       "src": "https://github.com/ray-x/guihua.lua"
     },
+    "kubectl.nvim": {
+      "rev": "442aab0f28aa1860ab58925fd72d2b27e771fc2e",
+      "src": "https://github.com/Ramilito/kubectl.nvim",
+      "version": "2.0.0 - 3.0.0"
+    },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"
@@ -134,7 +139,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
     "nvim-web-devicons": {
-      "rev": "09d1324e264c6950262dbe02a9bce2933a6800db",
+      "rev": "0ca28b61a04fe7426cefbdd52c2647ef0e335b5f",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "plenary.nvim": {
@@ -144,10 +149,6 @@
     "render-markdown.nvim": {
       "rev": "f422cb5c6855f150e2ddcfaf44e7157b98b34f6a",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
-    },
-    "search-replace.nvim": {
-      "rev": "3b9adb06aa209b27fe6ae9da608dcb725e11febd",
-      "src": "https://github.com/mosheavni/search-replace.nvim"
     },
     "smart-splits.nvim": {
       "rev": "9493405fb8ee683aa6efd50c529f6296ad8f40ad",
