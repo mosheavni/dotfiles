@@ -200,4 +200,27 @@ function M.throttle(ms, fn)
   end
 end
 
+---@class user.utils.LoadPluginOpts
+---@field pack_spec? table|vim.pack.PluginSpec Remote install spec for the main plugin (e.g. `version`, `build`). Defaults to `plugin_name`.
+---@field additional_plugins? table[] Extra specs passed to `vim.pack.add` after the main plugin when installing remotely.
+
+--- Load a plugin from `~/Repos/<repo>` when present, otherwise via `vim.pack.add`.
+---@param plugin_name string GitHub URL or path used to resolve the local dev directory and default remote install.
+---@param opts? user.utils.LoadPluginOpts
+function M.load_plugin(plugin_name, opts)
+  opts = opts or {}
+  -- normalized_name is the repo name alone, without the username or URL prefix. For example, "search-replace.nvim" from "https://github.com/mosheavni/search-replace.nvim"
+  local normalized_name = plugin_name:match '([^/]+)$'
+  local plugin_dev = vim.fn.expand '~/Repos/' .. normalized_name
+  if vim.fn.isdirectory(plugin_dev) == 1 then
+    vim.opt.runtimepath:prepend(plugin_dev)
+  else
+    vim.pack.add { opts.pack_spec or plugin_name }
+    local additional_plugins = opts.additional_plugins
+    if additional_plugins and #additional_plugins > 0 then
+      vim.pack.add(additional_plugins)
+    end
+  end
+end
+
 return M

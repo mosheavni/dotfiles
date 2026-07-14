@@ -5,12 +5,7 @@ end
 
 vim.pack.add { 'https://github.com/b0o/SchemaStore.nvim' }
 
-local yamlc_dev = vim.fn.expand '~/Repos/yaml-companion.nvim'
-if vim.fn.isdirectory(yamlc_dev) == 1 then
-  vim.opt.runtimepath:prepend(yamlc_dev)
-else
-  vim.pack.add { 'https://github.com/mosheavni/yaml-companion.nvim' }
-end
+require('user.utils').load_plugin 'https://github.com/mosheavni/yaml-companion.nvim'
 
 local capabilities = vim.tbl_deep_extend('force', require('user.lsp.config').capabilities, {
   textDocument = {

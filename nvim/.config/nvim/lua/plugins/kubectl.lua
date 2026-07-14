@@ -1,12 +1,9 @@
-local dev = vim.fn.expand '~/Repos/kubectl.nvim'
-if vim.fn.isdirectory(dev) == 1 then
-  vim.opt.runtimepath:prepend(dev)
-else
-  vim.pack.add {
-    'https://github.com/saghen/blink.download',
-    { src = 'https://github.com/Ramilito/kubectl.nvim', version = vim.version.range '2.x' },
-  }
-end
+require('user.utils').load_plugin('https://github.com/Ramilito/kubectl.nvim', {
+  pack_spec = {
+    src = 'https://github.com/Ramilito/kubectl.nvim',
+    version = vim.version.range '2.x',
+  },
+})
 
 return function()
   ---@diagnostic disable-next-line: missing-fields
