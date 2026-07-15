@@ -42,7 +42,7 @@
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
-      "rev": "eb60cc7b94c46005237fd34170d76f3a089a90aa",
+      "rev": "31d6fb2d618bca1482b9f274751ead5f03461408",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "go.nvim": {
@@ -52,11 +52,6 @@
     "guihua.lua": {
       "rev": "4c513d5dac550af77034cced421967b393261509",
       "src": "https://github.com/ray-x/guihua.lua"
-    },
-    "kubectl.nvim": {
-      "rev": "442aab0f28aa1860ab58925fd72d2b27e771fc2e",
-      "src": "https://github.com/Ramilito/kubectl.nvim",
-      "version": "2.0.0 - 3.0.0"
     },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
