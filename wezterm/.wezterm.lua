@@ -293,6 +293,26 @@ wezterm.on('user-var-changed', function(window, pane, name, value)
   window:perform_action(act.MoveTab(target), pane)
 end)
 
+-- Add pane-mobility actions to the command palette (Ctrl+Shift+P).
+wezterm.on('augment-command-palette', function()
+  return {
+    {
+      brief = 'Move pane to new tab',
+      icon = 'md_tab_plus',
+      action = wezterm.action_callback(function(_, pane)
+        pane:move_to_new_tab()
+      end),
+    },
+    {
+      brief = 'Move pane to new window',
+      icon = 'md_window_restore',
+      action = wezterm.action_callback(function(_, pane)
+        pane:move_to_new_window()
+      end),
+    },
+  }
+end)
+
 local smart_splits = wezterm.plugin.require 'https://github.com/mrjones2014/smart-splits.nvim'
 smart_splits.apply_to_config(config, {
   direction_keys = { 'h', 'j', 'k', 'l' },
