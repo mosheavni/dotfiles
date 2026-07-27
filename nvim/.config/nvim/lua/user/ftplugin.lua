@@ -12,8 +12,9 @@ local function shell_setup(opts)
     vim.b[opts.buffer_flag] = 1
   end
 
+  local bufname = vim.api.nvim_buf_get_name(0)
   local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ''
-  if not first_line:match '^#!' then
+  if not first_line:match '^#!' and not bufname:match '^/private/tmp/zsh%w+%.zsh$' then
     local cursor = vim.api.nvim_win_get_cursor(0)
     vim.api.nvim_buf_set_lines(0, 0, 0, false, { opts.shebang })
     if cursor[1] > 1 then
