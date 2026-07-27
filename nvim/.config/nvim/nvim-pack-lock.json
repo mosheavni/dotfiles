@@ -53,11 +53,6 @@
       "rev": "4c513d5dac550af77034cced421967b393261509",
       "src": "https://github.com/ray-x/guihua.lua"
     },
-    "kubectl.nvim": {
-      "rev": "01fb6c5109aa2bb1f5f45206d724351c8a7c51ea",
-      "src": "https://github.com/Ramilito/kubectl.nvim",
-      "version": "2.0.0 - 3.0.0"
-    },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"
