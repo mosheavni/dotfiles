@@ -206,7 +206,7 @@ vim.api.nvim_create_user_command('DirDiff', function(opts)
   require('difftool').open(opts.fargs[1], opts.fargs[2], {
     method = 'auto',
     rename = { detect = false },
-    ignore = { '.git' },
+    ignore = { '.git', '.worktrees' },
   })
 end, { complete = 'dir', nargs = '*', bang = true, desc = 'Diff two directories (bang to not open in a new tab)' })
 
