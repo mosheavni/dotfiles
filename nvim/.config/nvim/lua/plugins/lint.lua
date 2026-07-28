@@ -17,38 +17,46 @@ local function setup()
   local brew_bundle = require 'user.lint.brew_bundle'
 
   ---@class LinterConfig
+  ---@field filetypes? string[] Filetypes this linter runs on; runs on every lint event.
+  ---@field events? vim.api.keyset.events[] Events a global linter runs on, for every buffer.
+  ---@field root_markers? string[] Files whose ancestor directory becomes the linter cwd.
   ---@field enabled? boolean
-  ---@field events? vim.api.keyset.events[]
-  ---@field root_markers? string[]
 
   ---@type table<string, LinterConfig>
-  -- Event triggers distinguish global linters from filetype-only linter configuration.
+  -- Single source of truth: `filetypes` declares filetype linters, `events` declares
+  -- global linters that run on every buffer. `lint.linters_by_ft` is derived below.
   local linters = {
-    codespell = { enabled = true, events = { 'BufReadPost', 'BufWritePost' } },
-    gitleaks = { enabled = true, events = { 'BufWritePost' } },
-    luacheck = { root_markers = { '.luacheckrc' } },
-    selene = { root_markers = { 'selene.toml' } },
+    ['npm-groovy-lint'] = { filetypes = { 'Jenkinsfile', 'groovy' } },
+    brew_bundle = { filetypes = { 'brewfile' } },
+    dclint = { filetypes = { 'docker-compose' } },
+    hadolint = { filetypes = { 'dockerfile' } },
+    actionlint = { filetypes = { 'ghaction' } },
+    ruff = { filetypes = { 'python' } },
+    selene = { filetypes = { 'lua' }, root_markers = { 'selene.toml' } },
+    luacheck = { filetypes = { 'lua' }, root_markers = { '.luacheckrc' } },
+    checkmake = { filetypes = { 'make' } },
+    markdownlint = { filetypes = { 'markdown' } },
+    tombi = { filetypes = { 'toml' } },
+    vint = { filetypes = { 'vim' } },
+    zsh = { filetypes = { 'zsh' } },
+
+    -- global
+    codespell = { events = { 'BufReadPost', 'BufWritePost' } },
+    gitleaks = { events = { 'BufWritePost' } },
     trivy = { enabled = false, events = { 'BufWritePost' } },
   }
   local excluded_filetypes = { 'gitcommit', 'gitrebase', 'fugitive' }
 
   lint.linters.brew_bundle = brew_bundle.linter
 
-  lint.linters_by_ft = {
-    Jenkinsfile = { 'npm-groovy-lint' },
-    brewfile = { 'brew_bundle' },
-    ['docker-compose'] = { 'dclint' },
-    dockerfile = { 'hadolint' },
-    ghaction = { 'actionlint' },
-    groovy = { 'npm-groovy-lint' },
-    python = { 'ruff' },
-    lua = { 'selene', 'luacheck' },
-    make = { 'checkmake' },
-    markdown = { 'markdownlint' },
-    toml = { 'tombi' },
-    vim = { 'vint' },
-    zsh = { 'zsh' },
-  }
+  lint.linters_by_ft = {}
+  for name, config in pairs(linters) do
+    for _, ft in ipairs(config.filetypes or {}) do
+      local ft_linters = lint.linters_by_ft[ft] or {}
+      table.insert(ft_linters, name)
+      lint.linters_by_ft[ft] = ft_linters
+    end
+  end
 
   lint.linters.actionlint.args = vim.list_extend({ '-ignore', 'label ".+" is unknown' }, lint.linters.actionlint.args or {})
 
@@ -70,12 +78,8 @@ local function setup()
   ---@param bufnr integer
   ---@return string|nil
   local function get_linter_cwd(linter_name, bufnr)
-    local config = linters[linter_name]
-    local markers = config and config.root_markers
-    if markers then
-      return find_root(markers, bufnr)
-    end
-    return nil
+    local markers = linters[linter_name] and linters[linter_name].root_markers
+    return markers and find_root(markers, bufnr) or nil
   end
 
   ---List global linters that declare one or more triggering events.
@@ -133,26 +137,22 @@ local function setup()
   ---@field linter string
   ---@field opts table
 
-  ---Build lint targets that apply to a buffer and autocmd event.
+  ---Build lint targets for a buffer and autocmd event: the buffer's filetype linters
+  ---plus any global linters registered for the event, minus disabled ones.
   ---@param bufnr integer
   ---@param event vim.api.keyset.events
   ---@return LintTarget[]
   local function lint_targets(bufnr, event)
-    local buffer_linter_names = lint._resolve_linter_by_ft(vim.bo[bufnr].filetype)
-    -- The registry also contains filetype-only configuration, so eligibility retains
-    -- whether each candidate came from the buffer's resolved linter list.
-    local candidate_linter_names = vim.list_extend(vim.deepcopy(buffer_linter_names), vim.tbl_keys(linters))
+    local names = vim.deepcopy(lint._resolve_linter_by_ft(vim.bo[bufnr].filetype))
+    for _, name in ipairs(global_linter_names()) do
+      if vim.tbl_contains(linters[name].events, event) then
+        table.insert(names, name)
+      end
+    end
 
     return vim
-      .iter(candidate_linter_names)
-      :unique()
-      :filter(function(linter_name)
-        local config = linters[linter_name]
-        local event_matches = config ~= nil and config.events ~= nil and vim.tbl_contains(config.events, event)
-        -- Filetype-selected linters run on every lint event; other registry entries
-        -- must explicitly opt into the current event.
-        return is_linter_enabled(linter_name) and (vim.tbl_contains(buffer_linter_names, linter_name) or event_matches)
-      end)
+      .iter(names)
+      :filter(is_linter_enabled)
       :map(function(linter_name)
         return { linter = linter_name, opts = { cwd = get_linter_cwd(linter_name, bufnr) } }
       end)
