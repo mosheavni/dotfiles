@@ -4,8 +4,25 @@ vim.pack.add {
   'https://github.com/sindrets/diffview.nvim',
 }
 
-local T = vim.keycode
 local git_funcs = require 'user.git'
+
+local function print_branch_to_line()
+  git_funcs.get_branch(function(branch)
+    vim.schedule(function()
+      local current_line = vim.api.nvim_get_current_line()
+      vim.api.nvim_set_current_line(current_line .. branch)
+    end)
+  end)
+end
+
+local function copy_branch_to_clipboard()
+  git_funcs.get_branch(function(branch)
+    vim.schedule(function()
+      vim.fn.setreg('+', branch)
+      git_funcs.prnt('Copied current branch "' .. branch .. '" to clipboard.')
+    end)
+  end)
+end
 
 local actions = function()
   return {
@@ -20,12 +37,8 @@ local actions = function()
     ['Blame'] = function()
       vim.cmd 'Git blame'
     end,
-    ['Print current branch to buffer (<leader>gb)'] = function()
-      vim.fn.feedkeys(T '<leader>' .. 'gb')
-    end,
-    ['Copy current branch to clipboard (<leader>gB)'] = function()
-      vim.fn.feedkeys(T '<leader>' .. 'gB')
-    end,
+    ['Print current branch to buffer (<leader>gb)'] = print_branch_to_line,
+    ['Copy current branch to clipboard (<leader>gB)'] = copy_branch_to_clipboard,
     ['Fetch (all remotes and tags)'] = git_funcs.fetch_all,
     ['Pull origin default branch (:Gpom)'] = function()
       git_funcs.pull_default_branch 'origin'
@@ -168,24 +181,8 @@ local fugitive_config = function()
   -- Create a new branch --
   -------------------------
   vim.api.nvim_create_user_command('Gcb', git_funcs.create_new_branch, { nargs = '?' })
-  vim.keymap.set('n', '<leader>gb', function()
-    git_funcs.get_branch(function(branch)
-      -- Set the new line
-      vim.schedule(function()
-        local current_line = vim.api.nvim_get_current_line()
-        local new_line = current_line .. branch
-        vim.api.nvim_set_current_line(new_line)
-      end)
-    end)
-  end, { desc = 'Print current branch to buffer' })
-  vim.keymap.set('n', '<leader>gB', function()
-    git_funcs.get_branch(function(branch)
-      vim.schedule(function()
-        vim.fn.setreg('+', branch)
-        git_funcs.prnt('Copied current branch "' .. branch .. '" to clipboard.')
-      end)
-    end)
-  end, { desc = 'Copy current branch to clipboard' })
+  vim.keymap.set('n', '<leader>gb', print_branch_to_line, { desc = 'Print current branch to buffer' })
+  vim.keymap.set('n', '<leader>gB', copy_branch_to_clipboard, { desc = 'Copy current branch to clipboard' })
 
   ------------------
   -- Git checkout --

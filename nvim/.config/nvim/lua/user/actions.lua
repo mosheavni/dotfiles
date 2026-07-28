@@ -194,13 +194,13 @@ end)
     vim.cmd 'luafile %'
   end,
   ['[View] Center Focus (zz)'] = function()
-    vim.fn.feedkeys 'zz'
+    vim.cmd 'normal! zz'
   end,
   ['[View] Bottom Focus (zb)'] = function()
-    vim.fn.feedkeys 'zb'
+    vim.cmd 'normal! zb'
   end,
   ['[View] Top Focus (zt)'] = function()
-    vim.fn.feedkeys 'zt'
+    vim.cmd 'normal! zt'
   end,
   ['[Macro] Record Macro (q{letter})'] = function()
     vim.ui.input({ prompt = 'Macro letter❯ ' }, function(macro_letter)
@@ -301,19 +301,21 @@ end)
     vim.cmd.qall()
   end,
   ['[Edit] Paste from clipboard (cv)'] = function()
-    vim.fn.feedkeys 'cv'
+    vim.cmd 'normal! "+p'
   end,
   ['[Edit] Copy entire file to clipboard (Y)'] = function()
-    vim.fn.feedkeys 'Y'
+    vim.cmd '%y+'
   end,
   ['[Edit] Convert \\n to new lines (<leader><cr>)'] = function()
     vim.fn.feedkeys(leader .. T '<cr>')
   end,
   ['[Edit] Move line down (-)'] = function()
-    vim.fn.feedkeys '-'
+    vim.cmd 'm+1'
+    vim.cmd '=='
   end,
   ['[Edit] Move line up (_)'] = function()
-    vim.fn.feedkeys '_'
+    vim.cmd 'm-2'
+    vim.cmd '=='
   end,
   ['[View] Toggle words wrapping (<leader>ww)'] = function()
     vim.o.wrap = not vim.o.wrap
@@ -408,9 +410,10 @@ end)
     vim.opt.expandtab = original_expandtab
   end,
   ['[Diff] unsaved with saved file (<leader>ds)'] = function()
-    vim.fn.feedkeys(leader .. 'ds')
+    vim.cmd.DiffWithSaved()
   end,
   ['[File] Change directory to current file (<leader>.)'] = function()
-    vim.fn.feedkeys(leader .. '.')
+    vim.cmd 'cd %:p:h'
+    print(vim.fn.getcwd())
   end,
 }
