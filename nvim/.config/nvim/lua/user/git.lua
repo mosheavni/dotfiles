@@ -49,6 +49,10 @@ end
 
 M.reload_fugitive_index = function()
   vim.schedule(function()
+    if vim.fn.exists '*FugitiveDidChange' == 1 then
+      pcall(vim.fn.FugitiveDidChange)
+      return
+    end
     local buf = M.get_fugitive_buffer()
     if buf and vim.api.nvim_buf_is_valid(buf) then
       vim.api.nvim_buf_call(buf, vim.cmd.edit)
