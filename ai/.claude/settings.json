@@ -1,36 +1,9 @@
 {
-  "model": "claude-fable-5[1m]",
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/mosheavni/.claude/hooks/caveman-activate.js\"",
-            "timeout": 5,
-            "statusMessage": "Loading caveman mode..."
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/Users/mosheavni/.claude/hooks/caveman-mode-tracker.js\"",
-            "timeout": 5,
-            "statusMessage": "Tracking caveman mode..."
-          }
-        ]
-      }
-    ]
-  },
+  "model": "claude-sonnet-5",
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "caveman@caveman": true,
     "bash-language-server@claude-code-lsps": true
   },
   "extraKnownMarketplaces": {
@@ -39,12 +12,6 @@
         "source": "github",
         "repo": "Piebald-AI/claude-code-lsps"
       }
-    },
-    "caveman": {
-      "source": {
-        "source": "github",
-        "repo": "JuliusBrussee/caveman"
-      }
     }
   },
   "alwaysThinkingEnabled": true,
@@ -52,9 +19,5 @@
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-daltonized",
-  "agentPushNotifEnabled": true,
-  "statusLine": {
-    "type": "command",
-    "command": "bash \"/Users/mosheavni/.dotfiles/ai/.claude/plugins/cache/caveman/caveman/ef6050c5e184/hooks/caveman-statusline.sh\""
-  }
+  "agentPushNotifEnabled": true
 }
