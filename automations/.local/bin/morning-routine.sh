@@ -50,20 +50,27 @@ aws_sso_session_valid() {
   ((now_epoch < expires_epoch - AWS_SSO_EXPIRY_BUFFER))
 }
 
-# OpenVPN Connect has no --status flag. Detect an active tunnel via utun IPv4 or routes.
+# OpenVPN Connect has no --status flag, and a utun interface with a real IPv4
+# can outlive a server-side session expiry (stale interface left behind after
+# a failed reauth) while a fresh reconnect brings up another utun alongside
+# it — so interface existence alone is not proof of a live tunnel. Instead,
+# for every candidate utun's own point-to-point/gateway address (read from
+# ifconfig, never hardcoded), ping it; connected if any one answers.
 vpn_connected() {
-  /sbin/ifconfig 2>/dev/null | /usr/bin/awk '
+  local -a targets
+  targets=("${(@f)$(/sbin/ifconfig 2>/dev/null | /usr/bin/awk '
     /^utun[0-9]+:/ { iface=$1; sub(/:$/, "", iface) }
     /^[[:space:]]+inet / && $2 !~ /^127\./ && $2 !~ /^169\.254\./ {
-      if (iface ~ /^utun/) connected=1
+      if (iface ~ /^utun/) print ($3 == "-->" ? $4 : $2)
     }
-    END { exit connected ? 0 : 1 }
-  ' && return 0
+  ')}")
 
-  usr/sbin/netstat -rn 2>/dev/null | /usr/bin/awk '
-    $NF ~ /^utun[0-9]+$/ && $1 !~ /^default$/ && $1 !~ /:/ { connected=1 }
-    END { exit connected ? 0 : 1 }
-  '
+  local target
+  for target in "${targets[@]}"; do
+    [[ -n $target ]] || continue
+    /sbin/ping -c1 -t2 "$target" &>/dev/null && return 0
+  done
+  return 1
 }
 
 # 1. AWS SSO login — only when the portal session is missing or near expiry.
