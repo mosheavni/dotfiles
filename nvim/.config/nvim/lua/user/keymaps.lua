@@ -51,7 +51,7 @@ local function region_bounds(motion)
   return start[1] - 1, start[2], finish[1] - 1, finish[2] + #last_char
 end
 
----@param fn string operatorfunc name (v:lua....)
+---@param fn fun(motion: string)
 local function arm(fn)
   return function()
     vim.o.operatorfunc = fn
@@ -68,16 +68,13 @@ function _G.op.surround_with_interpolation(motion)
   vim.api.nvim_buf_set_text(0, srow, scol, erow, ecol, lines)
   vim.api.nvim_win_set_cursor(0, { srow + 1, scol })
 end
-map('n', 'mt', arm 'v:lua.op.surround_with_interpolation', { expr = true, desc = 'Surround with string interpolation' })
+map('n', 'mt', arm(_G.op.surround_with_interpolation), { expr = true, desc = 'Surround with string interpolation' })
 
 -- Indent block
-vim.cmd [[
-function! g:__align_based_on_indent(_)
-  normal! v%koj$>
-endfunction
-]]
 map('n', '<leader>>', function()
-  vim.go.operatorfunc = '__align_based_on_indent'
+  vim.go.operatorfunc = function()
+    vim.cmd.normal { 'v%koj$>', bang = true }
+  end
   return 'g@l'
 end, { expr = true, desc = 'Align based on indent' })
 
@@ -167,14 +164,14 @@ _G.op.diffput = function()
   vim.cmd [[diffput]]
 end
 map('n', '<leader>dp', function()
-  vim.go.operatorfunc = 'v:lua.op.diffput'
+  vim.go.operatorfunc = _G.op.diffput
   return 'g@l'
 end, { expr = true, desc = 'Diff put current hunk' })
 _G.op.diffget = function()
   vim.cmd [[diffget]]
 end
 map('n', '<leader>dg', function()
-  vim.go.operatorfunc = 'v:lua.op.diffget'
+  vim.go.operatorfunc = _G.op.diffget
   return 'g@l'
 end, { expr = true, desc = 'Diff get current line' })
 map('n', '<leader>dn', '<cmd>windo diffthis<cr>', { remap = false, silent = true, desc = 'Start diff mode' })
@@ -344,8 +341,8 @@ end
 function _G.op.base64_decode(motion)
   b64('decode', motion)
 end
-map({ 'n', 'x' }, '<leader>64', arm 'v:lua.op.base64_encode', { expr = true, desc = 'Base64 encode' })
-map({ 'n', 'x' }, '<leader>46', arm 'v:lua.op.base64_decode', { expr = true, desc = 'Base64 decode' })
+map({ 'n', 'x' }, '<leader>64', arm(_G.op.base64_encode), { expr = true, desc = 'Base64 encode' })
+map({ 'n', 'x' }, '<leader>46', arm(_G.op.base64_decode), { expr = true, desc = 'Base64 decode' })
 
 -- Close current buffer
 map('n', '<leader>bc', ':close<cr>', { silent = true, desc = 'Close this buffer' })

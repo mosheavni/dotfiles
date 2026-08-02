@@ -248,11 +248,11 @@ function M.set_buf_win_options(bufnr)
     M.show_help()
   end, k_opts)
   vim.keymap.set('n', 'd', function()
-    vim.o.operatorfunc = "v:lua.require'user.tabular-v2'.delete_lines_op"
+    vim.o.operatorfunc = M.delete_lines_op
     return 'g@'
   end, { noremap = true, silent = true, buffer = bufnr, expr = true })
   vim.keymap.set('n', 'dd', function()
-    vim.o.operatorfunc = "v:lua.require'user.tabular-v2'.delete_lines_op"
+    vim.o.operatorfunc = M.delete_lines_op
     return 'g@_'
   end, { noremap = true, silent = true, buffer = bufnr, expr = true })
   vim.keymap.set('x', 'd', function()

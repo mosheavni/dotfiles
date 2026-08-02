@@ -49,7 +49,7 @@ end
 
 -- Set up the operator mapping
 vim.keymap.set('n', 'd', function()
-  vim.o.operatorfunc = 'v:lua.op.qf_delete_operator'
+  vim.o.operatorfunc = _G.op.qf_delete_operator
   return 'g@'
 end, { expr = true, buffer = true, desc = 'Delete quickfix items' })
 
