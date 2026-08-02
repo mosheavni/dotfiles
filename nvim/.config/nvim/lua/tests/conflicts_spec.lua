@@ -130,4 +130,30 @@ describe('user.conflicts', function()
       eq(conflicts.build_highlights { 'plain text' }, {})
     end)
   end)
+
+  describe('scan_buffer_content', function()
+    it('attaches keymaps from buffer text alone, without git reporting it unmerged', function()
+      local bufnr = vim.api.nvim_create_buf(false, true)
+      vim.api.nvim_buf_set_name(bufnr, vim.fn.tempname())
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, two_way_block())
+
+      conflicts.scan_buffer_content(bufnr)
+
+      eq(vim.b[bufnr].conflicts_mappings_set, true)
+
+      vim.api.nvim_buf_delete(bufnr, { force = true })
+    end)
+
+    it('does nothing for a buffer with no conflict markers', function()
+      local bufnr = vim.api.nvim_create_buf(false, true)
+      vim.api.nvim_buf_set_name(bufnr, vim.fn.tempname())
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { 'plain text' })
+
+      conflicts.scan_buffer_content(bufnr)
+
+      eq(vim.b[bufnr].conflicts_mappings_set, nil)
+
+      vim.api.nvim_buf_delete(bufnr, { force = true })
+    end)
+  end)
 end)

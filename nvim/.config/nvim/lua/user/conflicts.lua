@@ -284,6 +284,28 @@ local function parse_buffer(bufnr)
   end
 end
 
+-- Registers a buffer purely from its own text, so stale conflict markers left
+-- behind by a merge/stash-pop are still caught after git no longer considers
+-- the file unmerged (e.g. the index was resolved without removing the markers).
+function M.scan_buffer_content(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
+
+  local name = vim.api.nvim_buf_get_name(bufnr)
+  if name == '' then
+    return
+  end
+
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  if #M.find_all_conflict_blocks(lines) == 0 then
+    return
+  end
+
+  visited_buffers[name] = visited_buffers[name] or { blocks = {}, tick = -1 }
+  parse_buffer(bufnr)
+end
+
 local function process_buffer(bufnr)
   if not visited_buffers[bufnr] then
     return
@@ -579,6 +601,7 @@ function M.setup(user_config)
   vim.api.nvim_create_autocmd({ 'VimEnter', 'BufRead', 'SessionLoadPost', 'DirChanged' }, {
     group = augroup,
     callback = function(args)
+      M.scan_buffer_content(args.buf)
       on_repo_autocmd(args.buf)
     end,
   })
