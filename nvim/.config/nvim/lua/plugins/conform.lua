@@ -19,7 +19,9 @@ local function get_formatter_names(bufnr)
 end
 
 return function()
-  vim.o.formatexpr = "v:lua.require'conform'.formatexpr({lsp_format='fallback',timeout_ms=5000})"
+  vim.o.formatexpr = function()
+    return require('conform').formatexpr { lsp_format = 'fallback', timeout_ms = 5000 }
+  end
 
   require('conform').setup {
     log_level = vim.log.levels.INFO,

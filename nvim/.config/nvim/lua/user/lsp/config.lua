@@ -154,7 +154,7 @@ M.setup = function()
         local win = vim.api.nvim_get_current_win()
         if not vim.wo[win].diff then
           vim.wo[win][0].foldmethod = 'expr'
-          vim.wo[win][0].foldexpr = 'v:lua.vim.lsp.foldexpr()'
+          vim.wo[win][0].foldexpr = vim.lsp.foldexpr
         end
       end
 
