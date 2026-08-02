@@ -116,8 +116,8 @@ return {
   ['[Search] Replace word under cursor (<leader>r)'] = function()
     vim.fn.feedkeys(leader .. 'r')
   end,
-  ['[Edit] Select all (vae / <leader>sa)'] = function()
-    vim.cmd [[normal! ggVG]]
+  ['[Edit] Select all (val / <leader>sa)'] = function()
+    vim.cmd.normal { 'val', bang = true }
   end,
   ['[Edit] Indent block forward (<leader>gt)'] = function()
     vim.cmd [[normal! v%koj$>]]

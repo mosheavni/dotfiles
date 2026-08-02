@@ -115,10 +115,8 @@ map('n', '<C-j>', '<C-w>j', { remap = false, desc = 'Go to Lower Window' })
 map('n', '<C-k>', '<C-w>k', { remap = false, desc = 'Go to Upper Window' })
 map('n', '<C-l>', '<C-w>l', { remap = false, desc = 'Go to Right Window' })
 
--- entire file text-object
-map('o', 'ae', '<cmd>normal! ggVG<CR>', { remap = false, desc = 'Entire buffer text-object' })
-map('v', 'ae', '<esc>ggVG', { remap = false, desc = 'Select entire buffer' })
-map('n', '<leader>sa', 'ggVG', { remap = false, desc = 'Visually select entire buffer' })
+-- Entire buffer: builtin |v_al| / |o_al|. Inner line: |v_il| / |o_il|.
+map('n', '<leader>sa', 'val', { remap = false, desc = 'Visually select entire buffer' })
 
 -- Run and edit macros
 for _, key in pairs { 'Q', 'X' } do

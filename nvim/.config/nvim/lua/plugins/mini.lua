@@ -89,7 +89,8 @@ function M.deferred()
   local gen_spec = require('mini.ai').gen_spec
   require('mini.ai').setup {
     n_lines = 100,
-    mappings = { around_next = '', inside_next = '' },
+    -- `al`/`il` are builtin textobjects since 0.13, don't shadow them
+    mappings = { around_next = '', inside_next = '', around_last = '', inside_last = '' },
     custom_textobjects = {
       F = gen_spec.treesitter { a = '@function.outer', i = '@function.inner' },
       c = gen_spec.treesitter { a = '@comment.outer', i = '@comment.inner' },
