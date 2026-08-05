@@ -370,4 +370,39 @@ describe('user.pack.float', function()
     vim.fn.readfile = original_readfile
     assert.is_true(ok, err)
   end)
+
+  it('reads the lockfile path from the packlockfile option', function()
+    local original_packlockfile = vim.o.packlockfile
+    local original_readfile = vim.fn.readfile
+    local requested_path
+
+    vim.o.packlockfile = '/tmp/custom-pack-lock.json'
+    ---@diagnostic disable-next-line: duplicate-set-field
+    vim.fn.readfile = function(path)
+      requested_path = path
+      return { '{"plugins":{}}' }
+    end
+
+    vim.pack = {
+      add = function() end,
+      get = function()
+        return {}
+      end,
+    }
+    set_system_stub(function(_, _, on_exit)
+      if on_exit then
+        on_exit(system_ok())
+      end
+      return system_obj()
+    end)
+
+    local ok, err = pcall(function()
+      require('user.pack.float').open { fetch = false }
+      eq('/tmp/custom-pack-lock.json', requested_path)
+    end)
+
+    vim.o.packlockfile = original_packlockfile
+    vim.fn.readfile = original_readfile
+    assert.is_true(ok, err)
+  end)
 end)

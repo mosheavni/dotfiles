@@ -111,7 +111,7 @@ end
 -- from the lockfile) can be detected after a fetch/refresh.
 local function load_lockfile()
   state.lockfile = {}
-  local path = vim.fs.joinpath(vim.fn.stdpath 'config', 'nvim-pack-lock.json')
+  local path = vim.o.packlockfile
   local read_ok, content = pcall(vim.fn.readfile, path)
   if not read_ok or type(content) ~= 'table' then
     return
@@ -581,8 +581,8 @@ end
 -- Recompute the plugin list from local data only (no network). Passes
 -- `info = true` so `plugin.rev` is the real on-disk revision and `rev_to` is
 -- populated from already-fetched refs, which is what pending/drift rely on.
--- `offline = true` skips the download and requires `info = true` (per
--- vim.pack.get, see neovim/neovim#39820).
+-- `offline = true` skips the download and requires `info = true`
+-- (see |vim.pack.get()|).
 local function reload_local_plugins()
   load_lockfile()
   local ok, plugins_or_err = pcall(vim.pack.get, nil, { info = true, offline = true })
@@ -731,7 +731,10 @@ local function update_all()
 end
 
 -- Restore to the revisions recorded in the lockfile (offline, no fetch).
--- Mirrors `:packupdate ++offline ++lockfile [name]`.
+-- Equivalent to `:packupdate ++offline ++lockfile [name]` (see |:packupdate|),
+-- called directly with `force = true` instead of the ex-command: this
+-- floating UI is already the review/confirmation surface, so we
+-- intentionally skip the ex-command's own confirmation tabpage.
 local function restore_plugins(names, label)
   if #names == 0 then
     vim.notify('vim.pack: no plugins to restore', vim.log.levels.INFO)
