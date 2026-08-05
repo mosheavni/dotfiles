@@ -1,10 +1,15 @@
 {
   "model": "claude-sonnet-5",
+  "enableWorkflows": true,
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "bash-language-server@claude-code-lsps": true
+    "bash-language-server@claude-code-lsps": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "vtsls@claude-code-lsps": true,
+    "vscode-langservers@claude-code-lsps": true
   },
   "extraKnownMarketplaces": {
     "claude-code-lsps": {
@@ -19,5 +24,6 @@
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-daltonized",
+  "inputNeededNotifEnabled": false,
   "agentPushNotifEnabled": true
 }
