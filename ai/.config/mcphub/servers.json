@@ -51,13 +51,15 @@
       "headers": {
         "Authorization": "Bearer ${CORALOGIX_API_KEY}",
         "mcp-version": "v2"
-      }
+      },
+      "disabled": true
     },
     "excalidraw": {
-      "url": "https://mcp.excalidraw.com"
+      "url": "https://mcp.excalidraw.com",
+      "disabled": true
     },
     "fetch": {
-      "args": ["mcp-server-fetch"],
+      "args": ["--with", "mcp<2", "mcp-server-fetch"],
       "command": "uvx"
     },
     "filesystem": {
@@ -67,7 +69,7 @@
     },
     "git": {
       "command": "uvx",
-      "args": ["mcp-server-git"]
+      "args": ["--with", "mcp<2", "mcp-server-git"]
     },
     "github": {
       "type": "http",
@@ -108,7 +110,8 @@
     },
     "mongodb": {
       "command": "npx",
-      "args": ["-y", "mongodb-mcp-server@latest", "--readOnly"]
+      "args": ["-y", "mongodb-mcp-server@latest", "--readOnly"],
+      "disabled": true
     },
     "puppeteer": {
       "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
@@ -138,7 +141,8 @@
     "sequentialthinking": {
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
       "autoApprove": ["sequentialthinking"],
-      "command": "npx"
+      "command": "npx",
+      "disabled": true
     }
   },
   "nativeMCPServers": {

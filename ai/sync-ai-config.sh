@@ -2,7 +2,7 @@
 
 # Maintain local AI tooling configuration.
 #
-# - MCP servers (mcphub → Claude + Cursor + Copilot)
+# - MCP servers (servers.json → native per-client entries in Claude/Cursor/Copilot)
 # - Karpathy agent guidelines (remote → AGENTS.md + agents.mdc)
 # - Cursor CLI policy (cli-config.base.json → ~/.cursor/cli-config.json)
 # - Superpowers plugin (~/.cursor/plugins/local/superpowers)
@@ -12,7 +12,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly SCRIPT_DIR
 readonly MCPHUB_SOURCE="${SCRIPT_DIR}/.config/mcphub/servers.json"
-readonly CLAUDE_MCP_TARGET="${SCRIPT_DIR}/.claude.json"
+readonly CLAUDE_MCP_TARGET="${HOME}/.claude.json"
 readonly CURSOR_MCP_TARGET="${HOME}/.cursor/mcp.json"
 readonly COPILOT_MCP_TARGET="${HOME}/.copilot/mcp-config.json"
 readonly CLI_CONFIG_BASE="${SCRIPT_DIR}/.cursor/cli-config.base.json"
@@ -47,7 +47,7 @@ write_file_atomically() {
   mv "${target}.tmp" "$target"
 }
 
-# --- MCP servers (mcphub is source of truth) ---------------------------------
+# --- MCP servers (servers.json is source of truth; translated per client) -----
 
 read_mcphub_servers() {
   if [ ! -f "$MCPHUB_SOURCE" ]; then
@@ -55,7 +55,9 @@ read_mcphub_servers() {
     return 1
   fi
 
-  jq '.mcpServers' "$MCPHUB_SOURCE"
+  # Drop servers marked "disabled": true (set via mcp-manager's UI toggle)
+  # before they ever reach a client config.
+  jq '.mcpServers | to_entries | map(select(.value.disabled != true)) | from_entries' "$MCPHUB_SOURCE"
 }
 
 ensure_mcp_target_file() {
@@ -79,7 +81,7 @@ sync_mcp_servers_into() {
   local target_file="$1"
   local display_name="$2"
   local create_if_missing="${3:-false}"
-  local target_format="${4:-mcphub}"
+  local target_format="${4:-native}"
   local source_mcp current_mcp
 
   ensure_mcp_target_file "$target_file" "$create_if_missing" || return "$SYNC_ERROR"
@@ -102,7 +104,7 @@ sync_mcp_servers_into() {
   fi
 
   write_file_atomically "$target_file" "$(jq --argjson mcp "$source_mcp" '.mcpServers = $mcp' "$target_file")"
-  echo "✓ Synced MCP servers from mcphub to ${display_name}"
+  echo "✓ Synced MCP servers from servers.json to ${display_name}"
   return "$SYNC_UPDATED"
 }
 
@@ -110,9 +112,9 @@ sync_all_mcp_servers() {
   local claude_result cursor_result copilot_result
 
   set +e
-  sync_mcp_servers_into "$CLAUDE_MCP_TARGET" "${HOME}/.claude.json" false mcphub
+  sync_mcp_servers_into "$CLAUDE_MCP_TARGET" "${HOME}/.claude.json" false native
   claude_result=$?
-  sync_mcp_servers_into "$CURSOR_MCP_TARGET" "${HOME}/.cursor/mcp.json" true mcphub
+  sync_mcp_servers_into "$CURSOR_MCP_TARGET" "${HOME}/.cursor/mcp.json" true native
   cursor_result=$?
   sync_mcp_servers_into "$COPILOT_MCP_TARGET" "${HOME}/.copilot/mcp-config.json" true copilot
   copilot_result=$?
@@ -239,6 +241,12 @@ record_last_sync() {
 
 main() {
   require_commands jq curl git || exit 1
+
+  if [ "${1:-}" = "--mcp-only" ]; then
+    sync_all_mcp_servers
+    record_last_sync
+    return
+  fi
 
   sync_all_mcp_servers
   sync_karpathy_guidelines

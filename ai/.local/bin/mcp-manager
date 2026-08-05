@@ -1,0 +1,195 @@
+#!/usr/bin/env bash
+# TUI for managing ai/.config/mcphub/servers.json — list/add/edit/enable-disable
+# MCP servers with gum, edit raw server JSON in $EDITOR, and sync native
+# per-client entries to Claude Code, Cursor, and Copilot CLI after each change.
+set -euo pipefail
+
+# Resolve the real script location — invoked via the stowed symlink in
+# ~/.local/bin, and BASH_SOURCE doesn't follow symlinks on its own.
+resolve_script_dir() {
+  local src="${BASH_SOURCE[0]}"
+  while [ -h "$src" ]; do
+    local dir
+    dir="$(cd -P "$(dirname "$src")" && pwd)"
+    src="$(readlink "$src")"
+    [[ "$src" != /* ]] && src="$dir/$src"
+  done
+  cd -P "$(dirname "$src")" && pwd
+}
+
+SCRIPT_DIR="$(resolve_script_dir)"
+AI_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+SERVERS_JSON="$AI_DIR/.config/mcphub/servers.json"
+SYNC_SCRIPT="$AI_DIR/sync-ai-config.sh"
+
+require_commands() {
+  local cmd missing=0
+  for cmd in "$@"; do
+    command -v "$cmd" >/dev/null 2>&1 || {
+      echo "Missing dependency: $cmd" >&2
+      missing=1
+    }
+  done
+  return "$missing"
+}
+
+require_commands gum jq || exit 1
+: "${EDITOR:=vi}"
+
+write_atomically() {
+  printf '%s\n' "$1" >"${SERVERS_JSON}.tmp"
+  mv "${SERVERS_JSON}.tmp" "$SERVERS_JSON"
+}
+
+sync_now() {
+  # Deliberately not routed through `gum spin` — it clears its own rendered
+  # region (including anything shown via --show-output) once the wrapped
+  # command exits, so the sync output never actually stuck around long
+  # enough to read. Run it directly and print the captured output instead.
+  local output
+  output="$("$SYNC_SCRIPT" --mcp-only 2>&1)"
+  if [[ -n "$output" ]]; then
+    echo "$output"
+    echo
+    read -n 1 -s -r -p "Press any key to continue..."
+    echo
+  fi
+}
+
+kind_of() {
+  jq -r --arg n "$1" '
+    .mcpServers[$n] as $c |
+    if $c.command then "stdio"
+    elif $c.url then ($c.type // "http")
+    else "unknown" end' "$SERVERS_JSON"
+}
+
+status_of() {
+  jq -r --arg n "$1" 'if .mcpServers[$n].disabled == true then "disabled" else "enabled" end' "$SERVERS_JSON"
+}
+
+list_rows() {
+  jq -r '.mcpServers | to_entries | sort_by(.key)[] |
+    "\(.key)\t\(if .value.disabled == true then "disabled" else "enabled" end)"' "$SERVERS_JSON"
+}
+
+make_tmp_json() {
+  # macOS/BSD mktemp only substitutes trailing X's — a template with a
+  # suffix after them (e.g. "...-XXXXXX.json") isn't substituted at all,
+  # so every call returns the same literal path and collides. Create the
+  # unique file with X's at the end, then rename to add .json for $EDITOR's
+  # syntax highlighting (safe: mktemp already reserved the unique name).
+  local tmp
+  tmp="$(mktemp "${TMPDIR:-/tmp}/mcp-manager-XXXXXX")"
+  mv "$tmp" "$tmp.json"
+  echo "$tmp.json"
+}
+
+edit_json_in_editor() {
+  # Opens $2 (initial JSON content) in $EDITOR, writes the edited+validated
+  # result to $1 (a temp file path), returns 1 if the result isn't valid JSON.
+  local tmp="$1"
+  printf '%s\n' "$2" >"$tmp"
+  "$EDITOR" "$tmp"
+  jq empty "$tmp" 2>/dev/null
+}
+
+edit_server() {
+  local name="$1" tmp current
+  tmp="$(make_tmp_json)"
+  current="$(jq --arg n "$name" '.mcpServers[$n]' "$SERVERS_JSON")"
+  if edit_json_in_editor "$tmp" "$current"; then
+    local updated
+    updated="$(jq --arg n "$name" --slurpfile cfg "$tmp" '.mcpServers[$n] = $cfg[0]' "$SERVERS_JSON")"
+    write_atomically "$updated"
+    sync_now
+  else
+    gum style --foreground 196 "Invalid JSON — edit discarded."
+  fi
+  rm -f "$tmp"
+}
+
+add_server() {
+  local name tmp
+  name="$(gum input --placeholder "server name" --header "New server name")" || return 0
+  [[ -z "$name" ]] && return 0
+  if jq -e --arg n "$name" '.mcpServers | has($n)' "$SERVERS_JSON" >/dev/null; then
+    gum style --foreground 196 "\"$name\" already exists — edit it instead."
+    return 0
+  fi
+  tmp="$(make_tmp_json)"
+  local template='{
+  "command": "npx",
+  "args": ["-y", "some-mcp-server"]
+}'
+  if edit_json_in_editor "$tmp" "$template"; then
+    local updated
+    updated="$(jq --arg n "$name" --slurpfile cfg "$tmp" '.mcpServers[$n] = $cfg[0]' "$SERVERS_JSON")"
+    write_atomically "$updated"
+    sync_now
+  else
+    gum style --foreground 196 "Invalid JSON — not added."
+  fi
+  rm -f "$tmp"
+}
+
+toggle_server() {
+  local name="$1" updated
+  if [[ "$(status_of "$name")" == "disabled" ]]; then
+    updated="$(jq --arg n "$name" 'del(.mcpServers[$n].disabled)' "$SERVERS_JSON")"
+  else
+    updated="$(jq --arg n "$name" '.mcpServers[$n].disabled = true' "$SERVERS_JSON")"
+  fi
+  write_atomically "$updated"
+  sync_now
+}
+
+delete_server() {
+  local name="$1"
+  gum confirm "Delete \"$name\"?" || return 0
+  write_atomically "$(jq --arg n "$name" 'del(.mcpServers[$n])' "$SERVERS_JSON")"
+  sync_now
+}
+
+server_menu() {
+  local name="$1" choice
+  while true; do
+    choice="$(gum choose \
+      "Edit JSON" \
+      "Toggle enable/disable (currently $(status_of "$name"))" \
+      "Delete" \
+      "Back" \
+      --height 6 \
+      --header "$name  [$(kind_of "$name")]")" || return 0
+    case "$choice" in
+    "Edit JSON") edit_server "$name" ;;
+    Toggle*) toggle_server "$name" ;;
+    Delete)
+      delete_server "$name"
+      return 0
+      ;;
+    *) return 0 ;;
+    esac
+  done
+}
+
+main_menu() {
+  local rows names choice picked
+  while true; do
+    rows="$(list_rows)"
+    names="$(awk -F'\t' '{printf "%-30s %s\n", $1, $2}' <<<"$rows")"
+    choice="$(printf '%s\n+ Add server\nSync now\nQuit\n' "$names" |
+      gum choose --height 30 --header "MCP servers (ai/.config/mcphub/servers.json)")" || break
+    case "$choice" in
+    "+ Add server") add_server ;;
+    "Sync now") sync_now ;;
+    Quit | "") break ;;
+    *)
+      picked="$(awk '{print $1}' <<<"$choice")"
+      server_menu "$picked"
+      ;;
+    esac
+  done
+}
+
+main_menu
