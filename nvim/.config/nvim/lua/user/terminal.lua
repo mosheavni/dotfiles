@@ -61,6 +61,7 @@ function M.show(term_buf)
     return reuse_win
   end
   vim.cmd('botright ' .. TERMINAL_HEIGHT .. 'split')
+  vim.wo.winpinned = true
   vim.api.nvim_win_set_buf(0, term_buf)
   return vim.api.nvim_get_current_win()
 end

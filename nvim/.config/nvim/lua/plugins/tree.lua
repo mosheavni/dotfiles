@@ -173,6 +173,18 @@ local function on_attach(bufnr)
     vim.notify('Extracted: ' .. file_path)
   end, opts 'Extract File')
 
+  -- Pin the tree window so it survives `:only`/`<C-w>o`. winpinned is
+  -- window-local and nvim-tree recreates/refocuses its window after
+  -- `on_attach` runs (and doesn't fire BufWinEnter along the way), so this
+  -- rides the same BufEnter/WinEnter pair the hints toggle below relies on
+  -- to reach the window nvim-tree actually settles on.
+  vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
+    buffer = bufnr,
+    callback = function()
+      vim.wo.winpinned = true
+    end,
+  })
+
   -- Show hints when entering nvim-tree buffer/window
   vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
     buffer = bufnr,

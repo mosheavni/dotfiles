@@ -314,4 +314,20 @@ describe('user.terminal', function()
       eq(state.file, '/tmp/run.sh')
     end)
   end)
+
+  describe('show', function()
+    local win
+
+    after_each(function()
+      if win and vim.api.nvim_win_is_valid(win) then
+        vim.api.nvim_win_close(win, true)
+      end
+    end)
+
+    it('pins the terminal split so :only cannot close it', function()
+      local buf = vim.api.nvim_create_buf(false, true)
+      win = term.show(buf)
+      eq(true, vim.api.nvim_get_option_value('winpinned', { win = win }))
+    end)
+  end)
 end)
