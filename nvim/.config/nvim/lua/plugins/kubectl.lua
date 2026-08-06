@@ -57,6 +57,12 @@ return function()
         vim.fn.setreg('+', txt)
         vim.notify('Copied to clipboard: ' .. txt, vim.log.levels.INFO)
       end, vim.tbl_extend('force', opts, { desc = 'Copy resource name to clipboard' }))
+
+      -- if filetype starts with k8s_pod_logs unmap <esc> and q
+      if vim.bo.filetype:match '^k8s_pod_logs' then
+        vim.keymap.set('n', '<esc>', '<nop>', opts)
+        vim.keymap.set('n', 'q', '<nop>', opts)
+      end
     end,
   })
 
