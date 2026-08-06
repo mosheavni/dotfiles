@@ -186,8 +186,8 @@ map('n', '<leader>qq', '<cmd>qall<cr>', { remap = false, silent = true, desc = '
 map('t', '<Esc>', [[<C-\><C-n>]], { remap = false, desc = 'Exit terminal mode' })
 
 -- Map - to move a line down and _ a line up
-map('n', '-', '<cmd>m+1<CR>==', { silent = true, desc = 'Move line down' })
-map('n', '_', '<cmd>m-2<CR>==', { silent = true, desc = 'Move line up' })
+-- map('n', '-', '<cmd>m+1<CR>==', { silent = true, desc = 'Move line down' })
+-- map('n', '_', '<cmd>m-2<CR>==', { silent = true, desc = 'Move line up' })
 
 -- Copy entire file to clipboard
 map('n', '<leader>Y', '<cmd>%y+<cr>', { remap = false, silent = true, desc = 'Copy buffer content to clipboard' })
@@ -249,6 +249,18 @@ map('n', 'N', 'Nzz', { remap = false, desc = 'Previous search result, centered' 
 
 -- Change working directory based on open file
 map('n', '<leader>.', ':cd %:p:h<CR>:pwd<CR>', { remap = false, silent = true, desc = 'Change directory to current file' })
+
+-- Open the current file's directory, cursor on the file itself.
+-- Falls back to `:edit .` when the buffer has no file (e.g. unnamed buffer).
+map('n', '<leader>v', function()
+  if vim.fn.expand '%' == '' then
+    vim.cmd 'edit .'
+    return
+  end
+  local name = vim.fn.expand '%:t'
+  vim.cmd 'edit %:h'
+  vim.fn.search([[\C\m^\V]] .. vim.fn.escape(name, [[\]]) .. [[\m$]], 'cw')
+end, { silent = true, desc = "Open current file's directory, cursor on the file" })
 
 -- Change every " -" with " \<cr> -" to break long lines of bash
 map('n', [[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], { silent = true, desc = 'Break long command line' })

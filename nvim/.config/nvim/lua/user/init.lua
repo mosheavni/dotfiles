@@ -7,6 +7,11 @@ vim.g.maplocalleader = ' '
 require('user.colorscheme').setup()
 
 --------------
+-- User Dir --
+--------------
+require('user.user-dir').setup()
+
+--------------
 -- Put Text --
 --------------
 function _G.put_text(...)
