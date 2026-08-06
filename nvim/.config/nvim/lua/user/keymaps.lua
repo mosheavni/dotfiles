@@ -190,7 +190,7 @@ map('n', '-', '<cmd>m+1<CR>==', { silent = true, desc = 'Move line down' })
 map('n', '_', '<cmd>m-2<CR>==', { silent = true, desc = 'Move line up' })
 
 -- Copy entire file to clipboard
-map('n', 'Y', '<cmd>%y+<cr>', { remap = false, silent = true, desc = 'Copy buffer content to clipboard' })
+map('n', '<leader>Y', '<cmd>%y+<cr>', { remap = false, silent = true, desc = 'Copy buffer content to clipboard' })
 
 -- Copy file path to clipboard
 for _, spec in ipairs {

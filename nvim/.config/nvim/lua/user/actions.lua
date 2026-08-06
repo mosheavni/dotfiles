@@ -303,7 +303,7 @@ end)
   ['[Edit] Paste from clipboard (cv)'] = function()
     vim.cmd 'normal! "+p'
   end,
-  ['[Edit] Copy entire file to clipboard (Y)'] = function()
+  ['[Edit] Copy entire file to clipboard (<leader>Y)'] = function()
     vim.cmd '%y+'
   end,
   ['[Edit] Convert \\n to new lines (<leader><cr>)'] = function()
