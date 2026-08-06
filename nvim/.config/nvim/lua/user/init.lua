@@ -9,7 +9,7 @@ require('user.colorscheme').setup()
 --------------
 -- User Dir --
 --------------
-require('user.user-dir').setup()
+-- require('user.user-dir').setup()
 
 --------------
 -- Put Text --
