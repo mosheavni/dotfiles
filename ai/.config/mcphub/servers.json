@@ -1,6 +1,7 @@
 {
   "mcpServers": {
     "atlassian": {
+      "type": "http",
       "url": "https://mcp.atlassian.com/v1/mcp/authv2"
     },
     "aws-knowledge-mcp-server": {
@@ -55,6 +56,7 @@
       "disabled": true
     },
     "excalidraw": {
+      "type": "http",
       "url": "https://mcp.excalidraw.com",
       "disabled": true
     },
