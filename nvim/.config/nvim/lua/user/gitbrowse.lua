@@ -87,7 +87,6 @@ local defaults = {
 ---@field commit? string
 ---@field line_count? number
 
----@private
 ---@param remote string
 ---@param opts? user.gitbrowse.Config
 function M.get_repo(remote, opts)
