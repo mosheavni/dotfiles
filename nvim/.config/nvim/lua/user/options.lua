@@ -19,10 +19,6 @@ vim.g.loaded_tutor_mode_plugin = 1
 vim.g.loaded_zip = 1
 vim.g.loaded_zipPlugin = 1
 
--- disable legacy vim filetype detection in favor of new lua based from neovim
--- vim.g.do_filetype_lua = 1
--- vim.g.did_load_filetypes = 0
-
 -- titlestring
 function _G.clean_title()
   return '💻 nvim: ' .. (vim.fn.getcwd():gsub(vim.env.HOME .. '/Repos/', ''):gsub(vim.env.HOME .. '/', ''))
@@ -86,12 +82,9 @@ vim.o.numberwidth = 2 -- set number column width to 2 {default 4}
 vim.o.relativenumber = true -- Show relative line numbers
 vim.o.linebreak = true -- Avoid wrapping a line in the middle of a word.
 vim.o.wrap = true -- Wrap long lines
-vim.o.hlsearch = true -- highlight reg. ex. in @/ register
-vim.o.incsearch = true -- Search as characters are typed
 vim.o.inccommand = 'split' -- Incremental search and replace with small split window
 vim.o.ignorecase = true -- Search case insensitive...
 vim.o.smartcase = true -- ignore case if search pattern is all lowercase, case-sensitive otherwise
-vim.o.autoread = true -- Re-read file if it was changed from the outside
 vim.o.scrolloff = 4 -- When about to scroll page, see 7 lines below cursor
 vim.o.sidescrolloff = 8 -- Columns of context
 vim.o.cmdheight = 1 -- Height of the command bar
@@ -99,7 +92,6 @@ vim.o.hidden = true -- Hide buffer if abandoned
 vim.o.showmatch = true -- When closing a bracket (like {}), show the enclosing
 vim.o.splitbelow = true -- Horizontally plitted windows open below
 vim.o.splitright = true -- Vertically plitted windows open below bracket for a brief second
-vim.o.startofline = false -- Stop certain movements from always going to the first character of a line.
 vim.o.pumheight = 10 -- pop up menu height
 vim.o.pumborder = 'rounded' -- Popup border style
 vim.o.winborder = 'rounded' -- Window border style
@@ -110,26 +102,21 @@ vim.o.swapfile = false
 vim.o.backup = true
 vim.o.writebackup = true
 vim.o.backupdir = vim.fn.stdpath 'state' .. '/backup'
-vim.o.wildmenu = true -- Displays a menu on autocomplete
 vim.opt.wildoptions:append { 'fuzzy', 'pum' }
 vim.opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
 vim.opt.completeopt = 'menu,menuone,noselect,noinsert,popup'
 vim.o.previewheight = 15
 vim.o.laststatus = 3 -- Global statusline, only one for all buffers
-vim.o.showcmd = true
 vim.o.mouse = 'a'
 vim.o.undofile = true -- Enables saving undo history to a file
 vim.o.undolevels = 10000
--- opt.colorcolumn = '80' -- Mark where are 80 characters to start breaking line
 vim.o.textwidth = 80
 vim.opt.fileencodings = { 'utf-8', 'cp1251' }
-vim.o.encoding = 'utf-8'
 vim.o.visualbell = true -- Use visual bell instead of beeping
 vim.o.conceallevel = 0
 vim.o.showmode = false -- Redundant as lighline takes care of that
 vim.opt.cpoptions:append '>'
 vim.o.equalalways = true -- When splitting window, make new window same size
-vim.o.history = 10000
 vim.o.termguicolors = true
 vim.o.signcolumn = 'yes'
 vim.o.statuscolumn = [[%1C %1s %=%{v:virtnum!=0||(!&nu&&!&rnu)?'':printf('%*d',&numberwidth,&rnu?(v:relnum>0?v:relnum:(&nu?v:lnum:0)):v:lnum)} ]]
@@ -167,21 +154,19 @@ vim.opt.formatoptions:append {
   l = true,
   o = true,
   r = true,
+  t = true,
 }
 
 -- Indenting
 vim.o.breakindent = true -- Maintain indent on wrapping lines
-vim.o.autoindent = true -- always set autoindenting on
 vim.o.copyindent = true -- copy the previous indentation on autoindenting
 vim.o.smartindent = true -- Number of spaces to use for each step of (auto)indent.
 vim.o.shiftwidth = 2 -- Number of spaces for each indent
 vim.o.shiftround = true -- use multiple of shiftwidth when indenting with '<' and '>'
 vim.o.softtabstop = 2
 vim.o.tabstop = 2
-vim.o.smarttab = true -- insert tabs on the start of a line according to shiftwidth, not tabstop
 vim.o.expandtab = true -- Tab changes to spaces. Format with :retab
-vim.opt.indentkeys:remove '0#'
-vim.opt.indentkeys:remove '<:>'
+vim.opt.indentkeys:remove { '0#', '<:>' }
 
 local kube_config_pattern = [[.*\.kube/config]]
 
