@@ -92,13 +92,16 @@ return function()
     if statusline.is_truncated(160) then
       return ''
     end
-    local clients = vim.b.attached_lsp or {}
+    local clients = vim.lsp.get_clients { bufnr = 0 }
     -- Icon with green/pine highlight, then reset to fileinfo color
     local icon = string.format('%%#MiniStatuslineLSPIcon#%s%%#MiniStatuslineFileinfo# ', lsp_icon)
-    if not next(clients) then
+    if #clients == 0 then
       return icon .. 'No Active LSP'
     end
-    return icon .. 'LSP: ' .. table.concat(clients, ', ')
+    local names = vim.tbl_map(function(client)
+      return client.name
+    end, clients)
+    return icon .. 'LSP: ' .. table.concat(names, ', ')
   end
 
   -- Custom line:col section
