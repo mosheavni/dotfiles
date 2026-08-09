@@ -1,6 +1,6 @@
 @agentclientprotocol/claude-agent-acp
 @fsouza/prettierd
-@vtsls/language-server
+@typescript/native-preview
 compare-versions
 cssmodules-language-server
 dclint

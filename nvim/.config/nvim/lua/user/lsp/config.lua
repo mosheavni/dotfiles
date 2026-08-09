@@ -226,9 +226,9 @@ M.setup = function()
     'pyright',
     'terraformls',
     'terragrunt_ls',
+    'tsgo',
     'user_lsp',
     'vimls',
-    'vtsls',
     'yamlls',
   }
 end
