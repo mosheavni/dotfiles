@@ -1,6 +1,5 @@
 nvim/.config/plenary.nvim/
 /.claude
-ai/.claude.json
-ai/.cursor/mcp.json
 graphify-out/
 .github/.act-event.json
+**/boost-awareness.md*
