@@ -119,9 +119,6 @@ return {
   ['[Edit] Select all (val / <leader>sa)'] = function()
     vim.cmd.normal { 'val', bang = true }
   end,
-  ['[Edit] Indent block forward (<leader>gt)'] = function()
-    vim.cmd [[normal! v%koj$>]]
-  end,
   ['[Folds] Open all folds (<leader>fo | zR)'] = function()
     vim.cmd 'normal! zR'
   end,
