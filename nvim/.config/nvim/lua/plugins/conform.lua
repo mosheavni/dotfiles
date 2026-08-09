@@ -2,12 +2,9 @@ vim.pack.add { 'https://github.com/stevearc/conform.nvim' }
 
 local function get_lsp_formatters(bufnr)
   local formatting_clients = {}
-  for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do
-    ---@diagnostic disable-next-line: param-type-mismatch
-    if client:supports_method('textDocument/formatting', bufnr) then
-      table.insert(formatting_clients, { name = client.name, type = 'lsp' })
-    end
-  end
+  require('user.utils').for_each_client(bufnr, 'textDocument/formatting', function(client)
+    table.insert(formatting_clients, { name = client.name, type = 'lsp' })
+  end)
   return formatting_clients
 end
 

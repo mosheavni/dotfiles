@@ -30,12 +30,12 @@ return function()
         vim.treesitter.start(0, 'yaml')
       end
 
-      local opts = { buffer = event.buf, silent = true }
-      vim.keymap.set('n', '7', '<Plug>(kubectl.view_nodes)', vim.tbl_extend('force', opts, { desc = 'View nodes' }))
-      vim.keymap.set('n', '8', '<Plug>(kubectl.view_daemonsets)', vim.tbl_extend('force', opts, { desc = 'View Daemonsets' }))
-      vim.keymap.set('n', '9', '<Plug>(kubectl.view_statefulsets)', vim.tbl_extend('force', opts, { desc = 'View Statefulsets' }))
-      vim.keymap.set('n', '<C-t>', '<Plug>(kubectl.view_top)', vim.tbl_extend('force', opts, { desc = 'Top (pods/nodes)' }))
-      vim.keymap.set('n', 'Z', function()
+      local map = require('user.utils').buf_map(event.buf)
+      map('n', '7', '<Plug>(kubectl.view_nodes)', { desc = 'View nodes', silent = true })
+      map('n', '8', '<Plug>(kubectl.view_daemonsets)', { desc = 'View Daemonsets', silent = true })
+      map('n', '9', '<Plug>(kubectl.view_statefulsets)', { desc = 'View Statefulsets', silent = true })
+      map('n', '<C-t>', '<Plug>(kubectl.view_top)', { desc = 'Top (pods/nodes)', silent = true })
+      map('n', 'Z', function()
         local state = require 'kubectl.state'
         local current = state.getFilter()
         local faults_filter = '!1/1,!2/2,!3/3,!4/4,!5/5,!6/6,!7/7,!Completed,!Terminating'
@@ -45,8 +45,8 @@ return function()
           state.setFilter(faults_filter)
         end
         vim.api.nvim_input '<Plug>(kubectl.refresh)'
-      end, vim.tbl_extend('force', opts, { desc = 'Toggle faults' }))
-      vim.keymap.set('n', '<C-y>', function()
+      end, { desc = 'Toggle faults', silent = true })
+      map('n', '<C-y>', function()
         local _, buf_name = pcall(vim.api.nvim_buf_get_var, event.buf, 'buf_name')
         local view = require('kubectl.views').resource_and_definition(vim.trim(buf_name))
         if not view then
@@ -56,12 +56,12 @@ return function()
         local txt = ns and (name .. ' -n ' .. ns) or name
         vim.fn.setreg('+', txt)
         vim.notify('Copied to clipboard: ' .. txt, vim.log.levels.INFO)
-      end, vim.tbl_extend('force', opts, { desc = 'Copy resource name to clipboard' }))
+      end, { desc = 'Copy resource name to clipboard', silent = true })
 
       -- if filetype starts with k8s_pod_logs unmap <esc> and q
       if vim.bo.filetype:match '^k8s_pod_logs' then
-        vim.keymap.set('n', '<esc>', '<nop>', opts)
-        vim.keymap.set('n', 'q', '<nop>', opts)
+        map('n', '<esc>', '<nop>', { silent = true })
+        map('n', 'q', '<nop>', { silent = true })
       end
     end,
   })

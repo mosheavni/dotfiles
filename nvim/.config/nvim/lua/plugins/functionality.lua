@@ -111,23 +111,19 @@ function M.deferred()
   end
 
   local function lsp_will_rename(changes)
-    for _, client in ipairs(vim.lsp.get_clients()) do
-      if client:supports_method 'workspace/willRenameFiles' then
-        ---@diagnostic disable-next-line: param-type-mismatch
-        local resp = client:request_sync('workspace/willRenameFiles', { files = changes }, 1000)
-        if resp and resp.result then
-          vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
-        end
+    require('user.utils').for_each_client(nil, 'workspace/willRenameFiles', function(client)
+      ---@diagnostic disable-next-line: param-type-mismatch
+      local resp = client:request_sync('workspace/willRenameFiles', { files = changes }, 1000)
+      if resp and resp.result then
+        vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
       end
-    end
+    end)
   end
 
   local function lsp_did_rename(changes)
-    for _, client in ipairs(vim.lsp.get_clients()) do
-      if client:supports_method 'workspace/didRenameFiles' then
-        client:notify('workspace/didRenameFiles', { files = changes })
-      end
-    end
+    require('user.utils').for_each_client(nil, 'workspace/didRenameFiles', function(client)
+      client:notify('workspace/didRenameFiles', { files = changes })
+    end)
   end
 
   -- nvim-tree NodeRenamed fires after the rename already happened, so this
