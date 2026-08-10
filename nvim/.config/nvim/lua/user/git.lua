@@ -334,6 +334,9 @@ end
 M.create_pull_request = function()
   M.get_remotes(function(git_remotes)
     local git_remote_url = git_remotes['origin']
+    -- project/repo come from extract_owner_repo (via gitbrowse.get_repo), which splits
+    -- on the LAST slash, so nested GitLab subgroups (group/subgroup/repo) keep their
+    -- full namespace; an unparseable remote now notifies instead of erroring.
     local https_url = require('user.gitbrowse').get_repo(git_remote_url)
     local git_name = https_url:match 'https://(%w+)%.com'
     local owner_repo = M.extract_owner_repo(git_remote_url)

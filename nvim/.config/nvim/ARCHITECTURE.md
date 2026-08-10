@@ -144,7 +144,7 @@ this budget gets measured.
 | `options.lua` | `vim.o`/`vim.g` settings, provider/runtime-plugin disabling, all `vim.filetype.add` rules. |
 | `keymaps.lua` | Global key mappings. |
 | `autocommands.lua` | All global autocommands, including the `DeferredPluginsLoaded` consumer. |
-| `utils.lua` | Shared helpers: visual-selection capture, filetype→extension/command tables, `throttle`, `read_json_file`, `load_plugin` (local `~/Repos` checkout override for `vim.pack.add`), and `for_each_client(bufnr, method, fn)` — the single place LSP clients are iterated and support-checked. |
+| `utils.lua` | Shared helpers: visual-selection capture, filetype→extension/command tables, `throttle`, `read_json_file`, `load_plugin` (local `~/Repos` checkout override for `vim.pack.add`), and `for_each_client(bufnr, method, fn)` — the shared helper for iterating LSP clients by supported method (`plugins/conform.lua`; both file-rename notifications in `plugins/functionality.lua`). |
 
 ### Plugin loading
 
@@ -179,8 +179,7 @@ this budget gets measured.
 
 | Module | Purpose |
 | --- | --- |
-| `lint/init.lua` | The whole nvim-lint framework: a single declarative linter table (filetype linters vs. global event-driven linters, root markers, enable flags), `linters_by_ft` derivation, commands, and lint autocommands. |
-| `lint/brew_bundle.lua` | Custom nvim-lint linter that turns `brew bundle check --verbose` output into buffer diagnostics. |
+| `lint/brew_bundle.lua` | Custom nvim-lint linter that turns `brew bundle check --verbose` output into buffer diagnostics. Required directly by `plugins/lint.lua`, which keeps the rest of the nvim-lint framework (linter table, `linters_by_ft` derivation, commands, autocommands) inline rather than in a separate `user.*` module. |
 | `jenkins-validate.lua` | Validate the current Jenkinsfile against a Jenkins server's converter endpoint and publish diagnostics. |
 
 ### Running buffers and terminals
@@ -214,7 +213,7 @@ this budget gets measured.
 
 | Module | Purpose |
 | --- | --- |
-| `float.lua` | Generic reusable floating-window primitive (buffer/window caching, refresh/close/toggle, sizing helpers). Used by `hints`, `pack/float`, `:ParseCert`, and others. |
+| `float.lua` | Generic reusable floating-window primitive (buffer/window caching, refresh/close/toggle, sizing helpers). Used by `hints`, `pack/float`, and `:ParseCert`. |
 | `hints.lua` | Build a keymap-hints float from a `{key, desc}` list. |
 | `input.lua` | A `vim.ui.input` replacement: floating prompt with history and completion. |
 | `menu.lua` | The central action menu — collects action tables (from `user.actions` plus `add_actions()` registrations) and presents them. |
@@ -233,11 +232,13 @@ this budget gets measured.
 
 ## 5. `lua/plugins/*` inventory
 
-Each file installs its plugins with `vim.pack.add` (or `user.utils.load_plugin`)
-at the top level, and **returns a function** that performs setup. The loader
-calls it as `require 'plugins.X'()`. The two exceptions are `mini.lua` and
-`functionality.lua`, which return a table `M` with `.eager()` and `.deferred()`
-so their setup can straddle both phases.
+Each file installs its main plugin(s) with `vim.pack.add` (or
+`user.utils.load_plugin`) at the top level, and **returns a function** that
+performs setup. The loader calls it as `require 'plugins.X'()`. The two
+exceptions are `mini.lua` and `functionality.lua`, which return a table `M`
+with `.eager()` and `.deferred()` so their setup can straddle both phases.
+A few `after/lsp/*.lua` files also install plugins (see the Appendix below) —
+plugin installs aren't confined to this directory.
 
 | File | Plugins installed | Setup responsibility |
 | --- | --- | --- |
@@ -251,7 +252,7 @@ so their setup can straddle both phases.
 | `lsp.lua` | `guihua.lua`, `nvim-lspconfig`, `fidget.nvim`, `lazydev.nvim`, `wezterm-types`, `go.nvim` | Delegates the LSP setup to `user.lsp.config.setup()`; adds YAML menu actions. Deferred. |
 | `fzf.lua` | `fzf-lua` | fzf-lua setup and all picker keymaps, including the `<F4>` git-branch flow that calls into `user.git`. Deferred. |
 | `conform.lua` | `conform.nvim` | Formatter table, format-on-save, and a `<leader>lp` info mapping that lists the buffer's formatters — LSP ones resolved via `utils.for_each_client`. Deferred. |
-| `lint.lua` | `nvim-lint` | Five lines: installs the plugin and calls `require('user.lint').setup()`. Deferred. |
+| `lint.lua` | `nvim-lint` | Installs the plugin and configures the whole nvim-lint framework inline: a declarative linter table (filetype linters vs. global event-driven linters, root markers, enable flags), `linters_by_ft` derivation, `LintToggle`/`LintInfo` commands, and the lint autocommands. Deferred. |
 | `blink.lua` | `blink.download`, `blink.cmp` (1.x), `LuaSnip`, `friendly-snippets` | Completion sources, keymaps, snippet integration. Deferred. |
 | `ai.lua` | `copilot.lua` | Copilot setup (pinned node binary) and suggestion keymaps. Deferred. |
 | `tree.lua` | `nvim-tree.lua` | nvim-tree setup, `on_attach` keymaps (including sort cycling and the `Z` extract mapping), and a `user.hints` help float. Deferred. |
@@ -267,9 +268,14 @@ reusing, or unit-testing gets its own `lua/user/` module and is called from the
 spec. The most explicit examples:
 
 - `plugins/lsp.lua` → `user.lsp.config.setup()`
-- `plugins/lint.lua` → `user.lint.setup()` (the file is five lines)
 - `plugins/git.lua`, `plugins/fzf.lua` → `user.git`
 - `plugins/kubectl.lua` → `user.kubectl`
+
+`plugins/lint.lua` and `plugins/tree.lua` are deliberate exceptions: their
+setup logic (the nvim-lint framework, and `tree.lua`'s `Z` archive-extraction
+keymap) was tried as a separate `user.*` module during this cleanup pass and
+reverted at the human partner's request, so it stays inline in the plugin
+spec rather than following the convention above.
 
 The payoff is that `lua/user/*` is plugin-agnostic and directly testable: the
 Plenary specs in `lua/tests/*_spec.lua` require `user.*` modules without loading
@@ -279,9 +285,10 @@ the plugins those modules wrap (a few stub what they must — see
 Three narrower conventions fall out of the same idea:
 
 - **Shared helpers over local copies.** `user.utils.for_each_client(bufnr,
-  method, fn)` is the one place LSP clients are enumerated and support-checked
-  (`plugins/conform.lua`, and both file-rename notifications in
-  `plugins/functionality.lua`).
+  method, fn)` is the shared helper for iterating LSP clients by supported
+  method (`plugins/conform.lua`, and both file-rename notifications in
+  `plugins/functionality.lua`) — other code (`plugins/mini-statusline.lua`,
+  `user/lsp/config.lua`) enumerates clients directly for its own purposes.
   `user.utils.load_plugin` is the one place a local `~/Repos/<name>` checkout may
   shadow a remote `vim.pack` install (`plugins/functionality.lua`,
   `plugins/kubectl.lua`).
@@ -298,8 +305,8 @@ Three narrower conventions fall out of the same idea:
 | Path | Role |
 | --- | --- |
 | `ftplugin/*.lua` | Per-filetype buffer-local settings, loaded by Neovim's normal `ftplugin` mechanism. Shell filetypes delegate to `user.ftplugin`. |
-| `after/ftplugin/*.lua` | Filetype overrides that must win over plugin `ftplugin` files. |
-| `after/lsp/*.lua` | Per-server LSP overrides in the Neovim 0.11+ `vim.lsp.config` convention (`lua_ls`, `yamlls`, `jsonls`, `pyright`, `helm_ls`, `terraformls`, `terragrunt_ls`). |
+| `after/ftplugin/fugitive.lua` | The one filetype override that must win over a plugin's own `ftplugin` file. |
+| `after/lsp/*.lua` | Per-server LSP overrides in the Neovim 0.11+ `vim.lsp.config` convention (`lua_ls`, `yamlls`, `jsonls`, `pyright`, `helm_ls`, `terraformls`, `terragrunt_ls`). `jsonls.lua` and `yamlls.lua` also install plugins here (`vim.pack.add` for SchemaStore.nvim in both; `yamlls.lua` additionally `load_plugin`s yaml-companion.nvim) — LSP-config files aren't purely config, a couple of them are install sites too. |
 | `lsp/user_lsp.lua` | Config entry for the hand-rolled in-process LSP server implemented in `lua/user/lsp/server/`. |
 | `snippets/*.json` | VSCode-format snippets, loaded explicitly by `plugins/blink.lua` via `require('luasnip.loaders.from_vscode').lazy_load { paths = '~/.config/nvim/snippets' }` (alongside a bare `lazy_load()` that picks up `friendly-snippets`). |
 | `lua/dotfiles/health.lua` | `:checkhealth dotfiles` — verifies external tools (linters, formatters, language servers) are on `PATH`. |
