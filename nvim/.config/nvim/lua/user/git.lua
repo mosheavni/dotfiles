@@ -334,8 +334,16 @@ end
 M.create_pull_request = function()
   M.get_remotes(function(git_remotes)
     local git_remote_url = git_remotes['origin']
-    local prefix = git_remote_url:match '^%w+' == 'git' and 'git@' or 'https://'
-    local git_name, project, repo = git_remote_url:match(('^' .. prefix .. '(%w+).com.*[:/](.+)/(.+)%.git'))
+    local https_url = require('user.gitbrowse').get_repo(git_remote_url)
+    local git_name = https_url:match 'https://(%w+)%.com'
+    local owner_repo = M.extract_owner_repo(git_remote_url)
+    local project, repo
+    if owner_repo then
+      project, repo = owner_repo:match '(.+)/(.+)$'
+    end
+    if not (git_name and project and repo) then
+      return M.prnt('Could not parse remote URL: ' .. tostring(git_remote_url), true)
+    end
 
     M.get_branch(function(branch_name)
       -- GitHub needs the base (default) branch to build the compare URL, so fetch
