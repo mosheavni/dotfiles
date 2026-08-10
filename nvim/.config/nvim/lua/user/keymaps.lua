@@ -107,7 +107,7 @@ map('n', '<tab>', '<c-w>w', { remap = false, silent = true, desc = 'Go to next w
 map('n', '<c-w><c-c>', '<c-w>c', { remap = false, silent = true, desc = 'Close current window' })
 map('n', '<c-w>v', '<cmd>vnew<cr>', { remap = false, silent = true, desc = 'New buffer vertically split' })
 map('n', '<c-w>s', '<cmd>new<cr>', { remap = false, silent = true, desc = 'New buffer horizontally split' })
-map('n', '<c-w>e', '<cmd>enew<cr>', { remap = false, silent = true, desc = 'New empty buffer' })
+map('n', '<c-w>e', '<cmd>enew<cr>', { remap = false, silent = true, desc = 'New empty buffer' }) -- codespell:ignore enew
 
 -- Move to window using the <ctrl> hjkl keys
 map('n', '<C-h>', '<C-w>h', { remap = false, desc = 'Go to Left Window' })
@@ -172,7 +172,7 @@ map('n', '<leader>dg', function()
   vim.go.operatorfunc = _G.op.diffget
   return 'g@l'
 end, { expr = true, desc = 'Diff get current line' })
-map('n', '<leader>dn', '<cmd>windo diffthis<cr>', { remap = false, silent = true, desc = 'Start diff mode' })
+map('n', '<leader>dn', '<cmd>windo diffthis<cr>', { remap = false, silent = true, desc = 'Start diff mode' }) -- codespell:ignore windo
 map('n', '<leader>df', '<cmd>diffoff!<cr>', { remap = false, silent = true, desc = 'End diff mode' })
 
 -- Map enter to no highlight
@@ -344,6 +344,15 @@ map({ 'n', 'x' }, '<leader>46', arm(_G.op.base64_decode), { expr = true, desc = 
 
 -- Close current buffer
 map('n', '<leader>bc', ':close<cr>', { silent = true, desc = 'Close this buffer' })
+
+map('n', '<leader>bd', function()
+  local buf = vim.api.nvim_get_current_buf()
+  if vim.bo.modified then
+    vim.notify('Buffer has unsaved changes', vim.log.levels.WARN)
+    return
+  end
+  pcall(vim.api.nvim_buf_delete, buf, { force = true })
+end, { desc = 'Delete buffer' })
 
 map('n', '<leader>bh', function()
   local count = 0
