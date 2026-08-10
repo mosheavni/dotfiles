@@ -88,26 +88,45 @@ function M.find_conflict_bounds(lines, cursor_line)
   end
 end
 
-function M.parse_conflict_block(lines, start_line, end_line)
-  local head_lines, origin_lines = {}, {}
+-- Walks lines[start_line..end_line], tracking which diff3 section is active
+-- ('head' | 'base' | 'origin') as markers are crossed.
+---@param lines string[]
+---@param start_line integer
+---@param end_line integer
+---@param on_marker fun(i: integer, line: string, marker_type: 'head'|'base'|'origin'|'end') called for marker lines themselves
+---@param on_content fun(i: integer, line: string, mode: 'head'|'base'|'origin') called for any other line once inside a section
+local function walk_conflict_lines(lines, start_line, end_line, on_marker, on_content)
   local mode = nil
 
   for i = start_line, end_line do
     local line = lines[i]
     if line:match(MARKER_HEAD) then
       mode = 'head'
+      on_marker(i, line, 'head')
     elseif line:match(MARKER_BASE) then
       mode = 'base'
+      on_marker(i, line, 'base')
     elseif line:match(MARKER_SEP) then
       mode = 'origin'
-    elseif not line:match(MARKER_END) then
-      if mode == 'head' then
-        table.insert(head_lines, line)
-      elseif mode == 'origin' then
-        table.insert(origin_lines, line)
-      end
+      on_marker(i, line, 'origin')
+    elseif line:match(MARKER_END) then
+      on_marker(i, line, 'end')
+    elseif mode then
+      on_content(i, line, mode)
     end
   end
+end
+
+function M.parse_conflict_block(lines, start_line, end_line)
+  local head_lines, origin_lines = {}, {}
+
+  walk_conflict_lines(lines, start_line, end_line, function() end, function(_, line, mode)
+    if mode == 'head' then
+      table.insert(head_lines, line)
+    elseif mode == 'origin' then
+      table.insert(origin_lines, line)
+    end
+  end)
 
   return head_lines, origin_lines
 end
@@ -143,26 +162,19 @@ function M.build_highlights(lines)
     base = HL_BASE,
     origin = HL_ORIGIN,
   }
+  local marker_hl = {
+    head = HL_HEAD,
+    base = HL_BASE,
+    origin = HL_SEPARATOR,
+    ['end'] = HL_ORIGIN,
+  }
 
   for _, block in ipairs(M.find_all_conflict_blocks(lines)) do
-    local mode = nil
-    for i = block.start_line, block.end_line do
-      local line = lines[i]
-      if line:match(MARKER_HEAD) then
-        mode = 'head'
-        table.insert(highlights, { line = i, hl = HL_HEAD })
-      elseif line:match(MARKER_BASE) then
-        mode = 'base'
-        table.insert(highlights, { line = i, hl = HL_BASE })
-      elseif line:match(MARKER_SEP) then
-        mode = 'origin'
-        table.insert(highlights, { line = i, hl = HL_SEPARATOR })
-      elseif line:match(MARKER_END) then
-        table.insert(highlights, { line = i, hl = HL_ORIGIN })
-      elseif mode then
-        table.insert(highlights, { line = i, hl = section_hl[mode] })
-      end
-    end
+    walk_conflict_lines(lines, block.start_line, block.end_line, function(i, _, marker_type)
+      table.insert(highlights, { line = i, hl = marker_hl[marker_type] })
+    end, function(i, _, mode)
+      table.insert(highlights, { line = i, hl = section_hl[mode] })
+    end)
   end
 
   return highlights

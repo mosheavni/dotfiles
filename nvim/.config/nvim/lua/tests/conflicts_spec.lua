@@ -129,6 +129,34 @@ describe('user.conflicts', function()
     it('returns empty list when there are no conflicts', function()
       eq(conflicts.build_highlights { 'plain text' }, {})
     end)
+
+    it('resets section tracking between separate blocks', function()
+      local lines = {
+        '<<<<<<< HEAD',
+        'a',
+        '=======',
+        'b',
+        '>>>>>>> x',
+        'between',
+        '<<<<<<< HEAD',
+        'c',
+        '=======',
+        'd',
+        '>>>>>>> y',
+      }
+      eq(conflicts.build_highlights(lines), {
+        { line = 1, hl = 'DiffText' },
+        { line = 2, hl = 'DiffText' },
+        { line = 3, hl = 'NonText' },
+        { line = 4, hl = 'DiffAdd' },
+        { line = 5, hl = 'DiffAdd' },
+        { line = 7, hl = 'DiffText' },
+        { line = 8, hl = 'DiffText' },
+        { line = 9, hl = 'NonText' },
+        { line = 10, hl = 'DiffAdd' },
+        { line = 11, hl = 'DiffAdd' },
+      })
+    end)
   end)
 
   describe('scan_buffer_content', function()
