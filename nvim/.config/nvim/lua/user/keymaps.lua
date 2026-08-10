@@ -185,10 +185,6 @@ map('n', '<leader>qq', '<cmd>qall<cr>', { remap = false, silent = true, desc = '
 -- Terminal
 map('t', '<Esc>', [[<C-\><C-n>]], { remap = false, desc = 'Exit terminal mode' })
 
--- Map - to move a line down and _ a line up
--- map('n', '-', '<cmd>m+1<CR>==', { silent = true, desc = 'Move line down' })
--- map('n', '_', '<cmd>m-2<CR>==', { silent = true, desc = 'Move line up' })
-
 -- Copy entire file to clipboard
 map('n', '<leader>Y', '<cmd>%y+<cr>', { remap = false, silent = true, desc = 'Copy buffer content to clipboard' })
 
