@@ -209,7 +209,6 @@ this budget gets measured.
 | `figlet.lua` | Turn the current line into figlet ASCII art, with a font picker. |
 | `ftplugin.lua` | Shared `ftplugin` logic — currently `shell.setup()` (shebang insertion, `is_bash` flag, `J`-joins-continuations), used by `ftplugin/{sh,bash,zsh}.lua`. |
 | `terraform-docs.lua` | `:OpenDoc` — resolve the Terraform resource/data block under the cursor and open its registry documentation. |
-| `archive.lua` | `extract(path)` — detect an archive's mime type via `file` and extract it in place (gzip/zip/bzip2), notifying on failure. |
 
 ### UI, pickers, and navigation
 
@@ -255,7 +254,7 @@ so their setup can straddle both phases.
 | `lint.lua` | `nvim-lint` | Five lines: installs the plugin and calls `require('user.lint').setup()`. Deferred. |
 | `blink.lua` | `blink.download`, `blink.cmp` (1.x), `LuaSnip`, `friendly-snippets` | Completion sources, keymaps, snippet integration. Deferred. |
 | `ai.lua` | `copilot.lua` | Copilot setup (pinned node binary) and suggestion keymaps. Deferred. |
-| `tree.lua` | `nvim-tree.lua` | nvim-tree setup, `on_attach` keymaps (including sort cycling and the `Z` extract mapping that calls `user.archive.extract`), and a `user.hints` help float. Deferred. |
+| `tree.lua` | `nvim-tree.lua` | nvim-tree setup, `on_attach` keymaps (including sort cycling and the `Z` extract mapping), and a `user.hints` help float. Deferred. |
 | `mini-statusline.lua` | `mini.statusline` | Custom statusline sections (mode, git + diff, diagnostics, filename, quickfix search label, YAML schema, run terminals, LSP client names, filetype, progress, location), colored from `user.colorscheme.palette`. Deferred. |
 
 ## 6. Cross-module convention
@@ -269,7 +268,6 @@ spec. The most explicit examples:
 
 - `plugins/lsp.lua` → `user.lsp.config.setup()`
 - `plugins/lint.lua` → `user.lint.setup()` (the file is five lines)
-- `plugins/tree.lua` → `user.archive.extract()` for the `Z` mapping
 - `plugins/git.lua`, `plugins/fzf.lua` → `user.git`
 - `plugins/kubectl.lua` → `user.kubectl`
 

@@ -148,7 +148,29 @@ local function on_attach(bufnr)
   vim.keymap.set('n', 'Z', function()
     local node = api.tree.get_node_under_cursor()
     local file_path = node['absolute_path']
-    require('user.archive').extract(file_path)
+    local file_dir = vim.fn.fnamemodify(file_path, ':h')
+    local file_type = vim.trim(vim.system({ 'file', '--mime-type', '-b', file_path }, { text = true }):wait().stdout)
+
+    local function run(cmd)
+      local ok = vim.system(cmd, { text = true }):wait()
+      if ok.code ~= 0 then
+        vim.notify('Extraction failed: ' .. table.concat(cmd, ' '), vim.log.levels.ERROR)
+        return false
+      end
+      return true
+    end
+
+    if file_type == 'application/gzip' then
+      run { 'tar', 'xzf', file_path, '-C', file_dir }
+    elseif file_type == 'application/zip' then
+      run { 'unzip', file_path, '-d', file_dir }
+    elseif file_type == 'application/x-bzip2' then
+      run { 'tar', 'xjf', file_path, '-C', file_dir }
+    else
+      vim.notify('Unsupported file type for extraction: ' .. file_type, vim.log.levels.WARN)
+      return
+    end
+    vim.notify('Extracted: ' .. file_path)
   end, opts 'Extract File')
 
   -- Pin the tree window so it survives `:only`/`<C-w>o`. winpinned is
