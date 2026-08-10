@@ -225,22 +225,6 @@ function M.load_plugin(plugin_name, opts)
   end
 end
 
----Returns a closure that sets a buffer-local keymap, injecting `opts.buffer = bufnr`.
----@param bufnr integer
----@return fun(mode: string|string[], lhs: string, rhs: string|function, desc_or_opts?: string|table)
-function M.buf_map(bufnr)
-  return function(mode, lhs, rhs, desc_or_opts)
-    local opts = desc_or_opts
-    if type(opts) == 'string' then
-      opts = { desc = opts }
-    else
-      opts = opts or {}
-    end
-    opts.buffer = bufnr
-    vim.keymap.set(mode, lhs, rhs, opts)
-  end
-end
-
 ---Calls `fn(client)` for every LSP client that supports `method`.
 ---@param bufnr integer|nil Buffer to scope clients/support-check to, or nil for all attached clients unfiltered.
 ---@param method string LSP method name checked via `client:supports_method`.

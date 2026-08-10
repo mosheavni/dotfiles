@@ -139,41 +139,6 @@ describe('user.utils', function()
     end)
   end)
 
-  describe('buf_map', function()
-    it('sets a buffer-local keymap, injecting buffer from an opts table', function()
-      local bufnr = vim.api.nvim_create_buf(false, true)
-      local map = utils.buf_map(bufnr)
-      map('n', 'gx', function() end, { desc = 'test desc' })
-
-      local found
-      for _, km in ipairs(vim.api.nvim_buf_get_keymap(bufnr, 'n')) do
-        if km.lhs == 'gx' then
-          found = km
-        end
-      end
-      assert.is_not_nil(found)
-      eq(found.desc, 'test desc')
-      eq(found.buffer, bufnr)
-      vim.api.nvim_buf_delete(bufnr, { force = true })
-    end)
-
-    it('accepts a bare string as the desc', function()
-      local bufnr = vim.api.nvim_create_buf(false, true)
-      local map = utils.buf_map(bufnr)
-      map('n', 'gy', function() end, 'string desc')
-
-      local found
-      for _, km in ipairs(vim.api.nvim_buf_get_keymap(bufnr, 'n')) do
-        if km.lhs == 'gy' then
-          found = km
-        end
-      end
-      assert.is_not_nil(found)
-      eq(found.desc, 'string desc')
-      vim.api.nvim_buf_delete(bufnr, { force = true })
-    end)
-  end)
-
   describe('for_each_client', function()
     local orig_get_clients
 
