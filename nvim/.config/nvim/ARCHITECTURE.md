@@ -105,12 +105,12 @@ vim.api.nvim_exec_autocmds('User', { pattern = 'DeferredPluginsLoaded' })
 ```
 
 **Consumed in** `lua/user/autocommands.lua` (augroup `FirstLoad`), whose callback
-calls `.setup()` on 17 `user.*` modules:
+calls `.setup()` on 16 `user.*` modules:
 
 `user.menu`, `user.projects`, `user.navic`, `user.input`, `user.search-count`,
 `user.tabular-v2`, `user.number-separators`, `user.terminal`, `user.yank-ring`,
 `user.run-buffer`, `user.grep`, `user.lister`, `user.figlet`, `user.open-url`,
-`user.gitbrowse`, `user.easymotion`, `user.conflicts`.
+`user.gitbrowse`, `user.easymotion`.
 
 ### Why the ordering is safe
 
@@ -124,9 +124,9 @@ comfortably *before* the event is ever emitted.
 
 ### Why it exists
 
-Purely startup performance. These 17 modules are not needed to display the first
+Purely startup performance. These 16 modules are not needed to display the first
 buffer: they register commands, keymaps and autocommands for features the user
-reaches for later (pickers, terminals, the action menu, conflict navigation).
+reaches for later (pickers, terminals, the action menu, URL/repo browsing).
 Deferring their `require` keeps them — and the Lua files they pull in — off the
 critical path.
 
@@ -159,7 +159,6 @@ this budget gets measured.
 | --- | --- |
 | `git.lua` | Git primitives: async + sync branch/remote/tag/toplevel/default-branch queries, `owner/repo` extraction, fugitive index reloading, checkout and PR-creation helpers. |
 | `gitbrowse.lua` | Build and open the web URL for the current file/line/branch/commit across GitHub, GitLab, Bitbucket, etc. |
-| `conflicts.lua` | Merge-conflict tooling: marker parsing, highlighting, take-head/base/origin resolution, quickfix population, next/prev navigation. |
 | `gh-actions.lua` | Build the `act` command for a GitHub Actions workflow file, writing a minimal push event so linter actions work. |
 
 ### LSP
