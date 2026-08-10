@@ -225,4 +225,29 @@ function M.load_plugin(plugin_name, opts)
   end
 end
 
+---Calls `fn(client)` for every LSP client that supports `method`.
+---@param bufnr integer|nil Buffer to scope clients/support-check to, or nil for all attached clients unfiltered.
+---@param method string LSP method name checked via `client:supports_method`.
+---@param fn fun(client: vim.lsp.Client)
+function M.for_each_client(bufnr, method, fn)
+  local clients
+  if bufnr then
+    clients = vim.lsp.get_clients { bufnr = bufnr }
+  else
+    clients = vim.lsp.get_clients()
+  end
+  for _, client in ipairs(clients) do
+    local supports
+    if bufnr then
+      ---@diagnostic disable-next-line: param-type-mismatch
+      supports = client:supports_method(method, bufnr)
+    else
+      supports = client:supports_method(method)
+    end
+    if supports then
+      fn(client)
+    end
+  end
+end
+
 return M

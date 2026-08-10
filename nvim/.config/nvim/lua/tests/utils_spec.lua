@@ -139,6 +139,84 @@ describe('user.utils', function()
     end)
   end)
 
+  describe('for_each_client', function()
+    local orig_get_clients
+
+    before_each(function()
+      orig_get_clients = vim.lsp.get_clients
+    end)
+
+    after_each(function()
+      vim.lsp.get_clients = orig_get_clients
+    end)
+
+    ---@param supports_result boolean
+    ---@param calls table Filled with `argc`/`method` from the last `supports_method` call.
+    local function make_spy_client(supports_result, calls)
+      return {
+        name = 'spy',
+        supports_method = function(_, method, ...)
+          calls.method = method
+          calls.argc = select('#', ...)
+          return supports_result
+        end,
+      }
+    end
+
+    it('with nil bufnr: calls get_clients() unfiltered and supports_method with no bufnr arg', function()
+      local filter_arg = 'unset'
+      local calls = {}
+      local client = make_spy_client(true, calls)
+      vim.lsp.get_clients = function(filter)
+        filter_arg = filter
+        return { client }
+      end
+
+      local received = {}
+      utils.for_each_client(nil, 'textDocument/formatting', function(c)
+        table.insert(received, c)
+      end)
+
+      eq(filter_arg, nil)
+      eq(calls.argc, 0)
+      eq(#received, 1)
+    end)
+
+    it('with a bufnr: filters get_clients by bufnr and passes bufnr to supports_method', function()
+      local filter_arg
+      local calls = {}
+      local client = make_spy_client(true, calls)
+      vim.lsp.get_clients = function(filter)
+        filter_arg = filter
+        return { client }
+      end
+
+      local received = {}
+      utils.for_each_client(7, 'textDocument/formatting', function(c)
+        table.insert(received, c)
+      end)
+
+      eq(filter_arg, { bufnr = 7 })
+      eq(calls.argc, 1)
+      eq(#received, 1)
+    end)
+
+    it('excludes a client whose supports_method returns false, even with a bufnr set', function()
+      local calls = {}
+      local client = make_spy_client(false, calls)
+      vim.lsp.get_clients = function()
+        return { client }
+      end
+
+      local received = {}
+      utils.for_each_client(7, 'textDocument/formatting', function(c)
+        table.insert(received, c)
+      end)
+
+      eq(#received, 0)
+    end)
+  end)
+
   describe('command_for_filetype', function()
     it('returns the mapped command for a known filetype', function()
       eq(utils.command_for_filetype 'yaml', 'yq')

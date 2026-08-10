@@ -546,6 +546,49 @@ function M.compare_ips(ip_a, ip_b)
   return 0
 end
 
+--- Determines the "less than" result for two comparable values given a sort direction
+--- @param a any: First value
+--- @param b any: Second value
+--- @param dir integer: Sort direction (1 for ascending, -1 for descending)
+--- @return boolean
+local function dir_lt(a, b, dir)
+  if dir == 1 then
+    return a < b
+  else
+    return a > b
+  end
+end
+
+--- Determines if a string should be sorted numerically
+--- @param str string: The string to check
+--- @return boolean
+local function should_sort_numerically(str)
+  local digits = str:gsub('%D', '')
+
+  -- If no digits, definitely not numeric
+  if #digits == 0 then
+    return false
+  end
+
+  -- If mostly digits (>= 50% of string), likely numeric
+  if #digits >= #str * 0.5 then
+    return true
+  end
+
+  -- Check for common numeric patterns: number followed by unit/suffix
+  -- Examples: "1000 GiB", "5.2xlarge", "100MB", "3.5TB"
+  if str:match '^%d+%.?%d*%s*%a*$' then
+    return true
+  end
+
+  -- If digits are at the beginning and represent a significant portion, likely numeric
+  if str:match '^%d+' and #digits >= #str * 0.3 then
+    return true
+  end
+
+  return false
+end
+
 function M.sort_by_column(col_index, direction)
   local current_bufnr = vim.api.nvim_get_current_buf()
   local tab_state = M.find_tab_state_by_bufnr(current_bufnr)
@@ -583,11 +626,7 @@ function M.sort_by_column(col_index, direction)
     local size_a = M.parse_size(val_a)
     local size_b = M.parse_size(val_b)
     if size_a and size_b then
-      if tab_state.sort_direction == 1 then
-        return size_a < size_b
-      else
-        return size_a > size_b
-      end
+      return dir_lt(size_a, size_b, tab_state.sort_direction)
     end
 
     -- Try to parse as IP addresses (plain or EC2 internal names)
@@ -596,11 +635,7 @@ function M.sort_by_column(col_index, direction)
     if ip_a and ip_b then
       local cmp = M.compare_ips(ip_a, ip_b)
       if cmp ~= 0 then
-        if tab_state.sort_direction == 1 then
-          return cmp == -1
-        else
-          return cmp == 1
-        end
+        return dir_lt(cmp, 0, tab_state.sort_direction)
       end
       -- IPs are equal, fall through to string comparison
     end
@@ -611,39 +646,7 @@ function M.sort_by_column(col_index, direction)
 
     -- If both values are numbers, compare numerically
     if num_a and num_b then
-      if tab_state.sort_direction == 1 then
-        return num_a < num_b
-      else
-        return num_a > num_b
-      end
-    end
-
-    -- Helper function to determine if a string should be sorted numerically
-    local function should_sort_numerically(str)
-      local digits = str:gsub('%D', '')
-
-      -- If no digits, definitely not numeric
-      if #digits == 0 then
-        return false
-      end
-
-      -- If mostly digits (>= 50% of string), likely numeric
-      if #digits >= #str * 0.5 then
-        return true
-      end
-
-      -- Check for common numeric patterns: number followed by unit/suffix
-      -- Examples: "1000 GiB", "5.2xlarge", "100MB", "3.5TB"
-      if str:match '^%d+%.?%d*%s*%a*$' then
-        return true
-      end
-
-      -- If digits are at the beginning and represent a significant portion, likely numeric
-      if str:match '^%d+' and #digits >= #str * 0.3 then
-        return true
-      end
-
-      return false
+      return dir_lt(num_a, num_b, tab_state.sort_direction)
     end
 
     -- Check if both strings should be sorted numerically
@@ -657,20 +660,12 @@ function M.sort_by_column(col_index, direction)
       if str_num_a and str_num_b then
         str_num_a = tonumber(str_num_a)
         str_num_b = tonumber(str_num_b)
-        if tab_state.sort_direction == 1 then
-          return str_num_a < str_num_b
-        else
-          return str_num_a > str_num_b
-        end
+        return dir_lt(str_num_a, str_num_b, tab_state.sort_direction)
       end
     end
 
     -- Otherwise compare as strings
-    if tab_state.sort_direction == 1 then
-      return val_a < val_b
-    else
-      return val_a > val_b
-    end
+    return dir_lt(val_a, val_b, tab_state.sort_direction)
   end)
 
   M.display_table(tab_state.command)

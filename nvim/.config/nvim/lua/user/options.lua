@@ -37,16 +37,13 @@ vim.opt.shortmess:append {
 }
 vim.o.list = true -- Show some invisible characters (tabs...
 vim.opt.listchars = {
-  -- trail = '·',
   eol = '↲',
   extends = '',
   precedes = '',
   tab = '┆·',
   nbsp = '␣',
-  -- leadmultispace = '│ ',
 }
 
--- set lcscope=tab:┆·,trail:·,precedes:,extends:
 vim.opt.fillchars = {
   vert = '│',
   fold = '.',
@@ -59,9 +56,6 @@ vim.opt.fillchars = {
 }
 vim.o.shada = [[!,'50,s100,h]]
 vim.o.emoji = true
--- go to previous/next line with h,l,left arrow and right arrow
--- when cursor reaches end/beginning of line
--- opt.whichwrap:append '<>[]hl'
 vim.opt.diffopt = {
   'internal',
   'filler',
@@ -122,7 +116,6 @@ vim.o.signcolumn = 'yes'
 vim.o.statuscolumn = [[%1C %1s %=%{v:virtnum!=0||(!&nu&&!&rnu)?'':printf('%*d',&numberwidth,&rnu?(v:relnum>0?v:relnum:(&nu?v:lnum:0)):v:lnum)} ]]
 vim.o.virtualedit = 'block' -- Allow cursor to move to the end of the line
 vim.opt.nrformats:append 'blank'
--- vim.o.statuscolumn = '%=%{v:wrap?"":v:relnum?v:relnum:v:lnum} %s%C'
 
 -- Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
 vim.o.updatetime = 300

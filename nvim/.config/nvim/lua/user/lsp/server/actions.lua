@@ -302,10 +302,10 @@ local function library_current_branch(context)
     return {}
   end
 
-  if string.find(first_line, [[@Library%(['"]utils@]]) then
+  local function library_edit(title, new_text)
     return {
       {
-        title = 'Remove current branch from library',
+        title = title,
         kind = 'refactor.rewrite',
         edit = {
           changes = {
@@ -315,7 +315,7 @@ local function library_current_branch(context)
                   start = { line = 0, character = 0 },
                   ['end'] = { line = 1, character = 0 },
                 },
-                newText = "@Library('utils') _\n",
+                newText = new_text,
               },
             },
           },
@@ -324,26 +324,12 @@ local function library_current_branch(context)
     }
   end
 
+  if string.find(first_line, [[@Library%(['"]utils@]]) then
+    return library_edit('Remove current branch from library', "@Library('utils') _\n")
+  end
+
   local new_line = string.format("@Library('utils@%s') _ // TODO: remove library before merging\n", git.get_branch_sync())
-  return {
-    {
-      title = 'Change library to current branch',
-      kind = 'refactor.rewrite',
-      edit = {
-        changes = {
-          [context.uri] = {
-            {
-              range = {
-                start = { line = 0, character = 0 },
-                ['end'] = { line = 1, character = 0 },
-              },
-              newText = new_line,
-            },
-          },
-        },
-      },
-    },
-  }
+  return library_edit('Change library to current branch', new_line)
 end
 
 -- Groovy: npm-groovy-lint ignore diagnostics
