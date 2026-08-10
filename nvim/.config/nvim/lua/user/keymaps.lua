@@ -349,7 +349,8 @@ map('n', '<leader>bh', function()
   local count = 0
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_loaded(buf) and not vim.bo[buf].modified and #vim.fn.win_findbuf(buf) == 0 then
-      if pcall(vim.api.nvim_buf_delete, buf, {}) then
+      -- force: skip the interactive "Close term://..." prompt for hidden terminal buffers
+      if pcall(vim.api.nvim_buf_delete, buf, { force = true }) then
         count = count + 1
       end
     end
