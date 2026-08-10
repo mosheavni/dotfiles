@@ -472,4 +472,104 @@ describe('user.tabular-v2', function()
       eq(tabular.compare_ips({ 192, 168, 1, 1 }, { 10, 0, 0, 1 }), 1)
     end)
   end)
+
+  describe('sort_by_column', function()
+    local test_command = 'test-sort'
+
+    local function setup_tab_state(lines, headers)
+      local tab_state = vim.tbl_deep_extend('force', {}, tabular.default_tab_state, {
+        bufnr = vim.api.nvim_get_current_buf(),
+        command = test_command,
+        lines = lines,
+        headers = headers or { 'Name', 'Value' },
+        col_widths = { 20, 20 },
+        display_indices = {},
+      })
+      tabular.tabs_state[test_command] = tab_state
+      return tab_state
+    end
+
+    after_each(function()
+      tabular.tabs_state[test_command] = nil
+    end)
+
+    it('sorts a numeric column ascending', function()
+      local tab_state = setup_tab_state {
+        { 'C', '30' },
+        { 'A', '10' },
+        { 'B', '20' },
+      }
+      tabular.sort_by_column(2, 1)
+      eq(tab_state.lines[1][2], '10')
+      eq(tab_state.lines[2][2], '20')
+      eq(tab_state.lines[3][2], '30')
+    end)
+
+    it('sorts a numeric column descending', function()
+      local tab_state = setup_tab_state {
+        { 'C', '30' },
+        { 'A', '10' },
+        { 'B', '20' },
+      }
+      tabular.sort_by_column(2, -1)
+      eq(tab_state.lines[1][2], '30')
+      eq(tab_state.lines[2][2], '20')
+      eq(tab_state.lines[3][2], '10')
+    end)
+
+    it('sorts a string column ascending', function()
+      local tab_state = setup_tab_state {
+        { 'Charlie', '1' },
+        { 'Alice', '2' },
+        { 'Bob', '3' },
+      }
+      tabular.sort_by_column(1, 1)
+      eq(tab_state.lines[1][1], 'Alice')
+      eq(tab_state.lines[2][1], 'Bob')
+      eq(tab_state.lines[3][1], 'Charlie')
+    end)
+
+    it('sorts a string column descending', function()
+      local tab_state = setup_tab_state {
+        { 'Charlie', '1' },
+        { 'Alice', '2' },
+        { 'Bob', '3' },
+      }
+      tabular.sort_by_column(1, -1)
+      eq(tab_state.lines[1][1], 'Charlie')
+      eq(tab_state.lines[2][1], 'Bob')
+      eq(tab_state.lines[3][1], 'Alice')
+    end)
+
+    it('sorts an IP column numerically, falling back to string compare when IPs are equal', function()
+      -- row2 and row3 share the same IP (10.0.0.5) but differ in hostname text,
+      -- exercising the cmp == 0 fallthrough to string comparison. row1 has a
+      -- numerically larger IP (10.0.0.10) that would sort *before* the 10.0.0.5
+      -- rows under plain string comparison ('1' < '5'), so this also proves the
+      -- comparison is IP-numeric, not lexical.
+      local tab_state = setup_tab_state({
+        { 'row1', 'ip-10-0-0-10.ec2.internal' },
+        { 'row2', 'ip-10-0-0-5-worker.ec2.internal' },
+        { 'row3', 'ip-10-0-0-5.ec2.internal' },
+      }, { 'Name', 'Host' })
+      tabular.sort_by_column(2, 1)
+      eq(tab_state.lines[1][2], 'ip-10-0-0-5-worker.ec2.internal') -- '-' < '.' in the tie-break
+      eq(tab_state.lines[2][2], 'ip-10-0-0-5.ec2.internal')
+      eq(tab_state.lines[3][2], 'ip-10-0-0-10.ec2.internal') -- 10 > 5 numerically, despite '1' < '5' lexically
+    end)
+
+    it('sorts a numeric-string column (value+unit suffix) numerically, not lexically', function()
+      -- Plain string order would be '10xlarge' < '2xlarge' < '5.2xlarge' ('1' < '2' < '5'),
+      -- so this proves should_sort_numerically's numeric-string path is exercised.
+      local tab_state = setup_tab_state({
+        { 'row1', '10xlarge' },
+        { 'row2', '5.2xlarge' },
+        { 'row3', '2xlarge' },
+      }, { 'Name', 'Size' })
+      tabular.sort_by_column(2, 1)
+      eq(tab_state.lines[1][2], '2xlarge')
+      eq(tab_state.lines[2][2], '5.2xlarge')
+      eq(tab_state.lines[3][2], '10xlarge')
+    end)
+  end)
 end)
