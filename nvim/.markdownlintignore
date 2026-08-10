@@ -1,3 +1,6 @@
 .github/copilot-instructions.md
-ai/AGENTS.md
+AUDIT.md
+NVIM_NEWS.md
 ai/.claude/**
+ai/AGENTS.md
+nvim/.config/nvim/ARCHITECTURE.md

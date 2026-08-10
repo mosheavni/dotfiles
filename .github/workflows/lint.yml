@@ -28,7 +28,7 @@ jobs:
       - name: Copy configs to root
         run: |
           mkdir -p .github/linters
-          for file_n in .editorconfig .shellcheckrc .prettierignore zizmor.yaml selene.toml vim.toml .luacheckrc .textlintignore .markdownlintrc .markdownlintignore; do
+          for file_n in .editorconfig .shellcheckrc .prettierignore zizmor.yaml selene.toml vim.toml .luacheckrc .markdownlintrc .markdownlintignore; do
             echo "Copying $file_n"
             cp nvim/"$file_n" "$file_n"
             cp nvim/"$file_n" ".github/linters/${file_n}"
@@ -40,11 +40,12 @@ jobs:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # VALIDATE_ALL_CODEBASE: false
-          VALIDATE_BIOME_LINT: false
           VALIDATE_BIOME_FORMAT: false
-          VALIDATE_JSCPD: false
+          VALIDATE_BIOME_LINT: false
           VALIDATE_EDITORCONFIG: false
+          VALIDATE_JSCPD: false
           VALIDATE_JUPYTER_NBQA_RUFF: false
+          VALIDATE_NATURAL_LANGUAGE: false
           VALIDATE_PYTHON_RUFF: false
           VALIDATE_PYTHON_RUFF_FORMAT: false
           VALIDATE_SHELL_SHFMT: false # because zsh files fail this test.
