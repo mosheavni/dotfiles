@@ -4,6 +4,7 @@
   "enabledPlugins": {
     "bash-language-server@claude-code-lsps": true,
     "lua-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
