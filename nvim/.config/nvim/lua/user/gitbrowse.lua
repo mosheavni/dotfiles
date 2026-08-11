@@ -6,10 +6,6 @@ local M = setmetatable({}, {
   end,
 })
 
-M.meta = {
-  desc = 'Open the current file, branch, commit, or repo in a browser (e.g. GitHub, GitLab, Bitbucket)',
-}
-
 local uv = vim.uv or vim.loop
 
 ---Build a line anchor for a file URL, or an empty string when no line is set.
