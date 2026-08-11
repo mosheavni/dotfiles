@@ -21,6 +21,7 @@ return {
     'python',
     'sh',
     'terraform',
+    'text',
     'typescript',
     'vim',
     'yaml',
