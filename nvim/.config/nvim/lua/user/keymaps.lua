@@ -360,6 +360,21 @@ end, { desc = 'Delete Hidden Buffers' })
 -- Duplicate a line and comment out the first line
 map('n', 'yc', 'yygccp', { remap = true, desc = 'Duplicate and comment line' })
 
+------------------------
+-- Change indentation --
+------------------------
+vim.keymap.set('n', 'cii', function()
+  vim.ui.input({ prompt = 'Enter new indent❯ ' }, function(indent_size)
+    local indent_size_normalized = tonumber(indent_size)
+    if not indent_size_normalized then
+      return
+    end
+    vim.opt_local.shiftwidth = indent_size_normalized
+    vim.opt_local.softtabstop = indent_size_normalized
+    vim.opt_local.tabstop = indent_size_normalized
+  end)
+end, { desc = 'Change indentation size' })
+
 -- Abbreviations
 map('!a', 'dont', [[don't]], { remap = false })
 map('!a', 'ill', [[i'll]], { remap = false })
