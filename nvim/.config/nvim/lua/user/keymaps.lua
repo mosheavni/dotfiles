@@ -72,7 +72,7 @@ map('n', 'mt', arm(_G.op.surround_with_interpolation), { expr = true, desc = 'Su
 
 -- Indent block
 map('n', '<leader>>', function()
-  vim.go.operatorfunc = function()
+  vim.o.operatorfunc = function()
     vim.cmd.normal { 'v%koj$>', bang = true }
   end
   return 'g@l'
@@ -162,14 +162,14 @@ _G.op.diffput = function()
   vim.cmd [[diffput]]
 end
 map('n', '<leader>dp', function()
-  vim.go.operatorfunc = _G.op.diffput
+  vim.o.operatorfunc = _G.op.diffput
   return 'g@l'
 end, { expr = true, desc = 'Diff put current hunk' })
 _G.op.diffget = function()
   vim.cmd [[diffget]]
 end
 map('n', '<leader>dg', function()
-  vim.go.operatorfunc = _G.op.diffget
+  vim.o.operatorfunc = _G.op.diffget
   return 'g@l'
 end, { expr = true, desc = 'Diff get current line' })
 map('n', '<leader>dn', '<cmd>windo diffthis<cr>', { remap = false, silent = true, desc = 'Start diff mode' }) -- codespell:ignore windo
