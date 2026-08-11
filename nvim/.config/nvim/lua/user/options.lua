@@ -1,27 +1,3 @@
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-
-vim.g.loaded_perl_provider = 0
-vim.g.loaded_ruby_provider = 0
-vim.g.python3_host_prog = vim.fn.expand '~/.local/share/dotfiles-python/bin/python3'
-
--- Disable bundled runtime plugins we never use (reduces startup work).
-vim.g.loaded_2html_plugin = 1
-vim.g.loaded_gzip = 1
-vim.g.loaded_matchit = 1
-vim.g.loaded_matchparen = 1
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-vim.g.loaded_remote_plugins = 1
-vim.g.loaded_shada_autoload = 1
-vim.g.loaded_shada_plugin = 1
-vim.g.loaded_spellfile_plugin = 1
-vim.g.loaded_tar = 1
-vim.g.loaded_tarPlugin = 1
-vim.g.loaded_tutor_mode_plugin = 1
-vim.g.loaded_zip = 1
-vim.g.loaded_zipPlugin = 1
-
 -- titlestring
 function _G.clean_title()
   return '💻 nvim: ' .. (vim.fn.getcwd():gsub(vim.env.HOME .. '/Repos/', ''):gsub(vim.env.HOME .. '/', ''))
