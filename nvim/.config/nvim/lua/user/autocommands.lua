@@ -51,7 +51,6 @@ autocmd('User', {
     require('user.input').setup()
     require('user.search-count').setup()
     require('user.tabular-v2').setup()
-    require('user.number-separators').setup()
     require('user.terminal').setup()
     require('user.yank-ring').setup()
     require('user.run-buffer').setup()
