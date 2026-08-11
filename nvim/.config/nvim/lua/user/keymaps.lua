@@ -72,7 +72,7 @@ map('n', 'mt', arm(_G.op.surround_with_interpolation), { expr = true, desc = 'Su
 
 -- Indent block
 map('n', '<leader>>', function()
-  vim.go.operatorfunc = function()
+  vim.o.operatorfunc = function()
     vim.cmd.normal { 'v%koj$>', bang = true }
   end
   return 'g@l'
@@ -162,14 +162,14 @@ _G.op.diffput = function()
   vim.cmd [[diffput]]
 end
 map('n', '<leader>dp', function()
-  vim.go.operatorfunc = _G.op.diffput
+  vim.o.operatorfunc = _G.op.diffput
   return 'g@l'
 end, { expr = true, desc = 'Diff put current hunk' })
 _G.op.diffget = function()
   vim.cmd [[diffget]]
 end
 map('n', '<leader>dg', function()
-  vim.go.operatorfunc = _G.op.diffget
+  vim.o.operatorfunc = _G.op.diffget
   return 'g@l'
 end, { expr = true, desc = 'Diff get current line' })
 map('n', '<leader>dn', '<cmd>windo diffthis<cr>', { remap = false, silent = true, desc = 'Start diff mode' }) -- codespell:ignore windo
@@ -245,16 +245,6 @@ map('n', 'N', 'Nzz', { remap = false, desc = 'Previous search result, centered' 
 
 -- Change working directory based on open file
 map('n', '<leader>.', ':cd %:p:h<CR>:pwd<CR>', { remap = false, silent = true, desc = 'Change directory to current file' })
-
--- Open the current file's directory in the sidebar (see user.user-dir),
--- cursor on the file itself. Falls back to `:edit .` when the buffer has no
--- file.
-map('n', '<leader>v', function()
-  local unnamed = vim.fn.expand '%' == ''
-  local dir = unnamed and '.' or vim.fn.expand '%:h'
-  local name = not unnamed and vim.fn.expand '%:t' or nil
-  require('user.user-dir').open_sidebar(dir, name)
-end, { silent = true, desc = "Open current file's directory in a left sidebar, cursor on the file" })
 
 -- Change every " -" with " \<cr> -" to break long lines of bash
 map('n', [[<leader>\]], [[:.s/ -/ \\\r  -/g<cr>:noh<cr>]], { silent = true, desc = 'Break long command line' })
@@ -369,6 +359,21 @@ end, { desc = 'Delete Hidden Buffers' })
 
 -- Duplicate a line and comment out the first line
 map('n', 'yc', 'yygccp', { remap = true, desc = 'Duplicate and comment line' })
+
+------------------------
+-- Change indentation --
+------------------------
+vim.keymap.set('n', 'cii', function()
+  vim.ui.input({ prompt = 'Enter new indent❯ ' }, function(indent_size)
+    local indent_size_normalized = tonumber(indent_size)
+    if not indent_size_normalized then
+      return
+    end
+    vim.opt_local.shiftwidth = indent_size_normalized
+    vim.opt_local.softtabstop = indent_size_normalized
+    vim.opt_local.tabstop = indent_size_normalized
+  end)
+end, { desc = 'Change indentation size' })
 
 -- Abbreviations
 map('!a', 'dont', [[don't]], { remap = false })

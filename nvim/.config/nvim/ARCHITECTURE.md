@@ -60,8 +60,7 @@ The file does four things, in this order:
 
 1. Registers a **`PackChanged` autocmd** *before* the first `vim.pack.add()`
    call. This is what runs post-install/update hooks: `:TSUpdate` for
-   `nvim-treesitter`, `make install_jsregexp` for `LuaSnip`, and
-   `require('go.install').update_all_sync()` for `go.nvim`.
+   `nvim-treesitter` and `make install_jsregexp` for `LuaSnip`.
 2. Runs the **eager batch** synchronously:
 
    ```lua
@@ -105,12 +104,12 @@ vim.api.nvim_exec_autocmds('User', { pattern = 'DeferredPluginsLoaded' })
 ```
 
 **Consumed in** `lua/user/autocommands.lua` (augroup `FirstLoad`), whose callback
-calls `.setup()` on 16 `user.*` modules:
+calls `.setup()` on 15 `user.*` modules:
 
 `user.menu`, `user.projects`, `user.navic`, `user.input`, `user.search-count`,
-`user.tabular-v2`, `user.number-separators`, `user.terminal`, `user.yank-ring`,
-`user.run-buffer`, `user.grep`, `user.lister`, `user.figlet`, `user.open-url`,
-`user.gitbrowse`, `user.easymotion`.
+`user.tabular-v2`, `user.terminal`, `user.yank-ring`, `user.run-buffer`,
+`user.grep`, `user.lister`, `user.figlet`, `user.open-url`, `user.gitbrowse`,
+`user.easymotion`.
 
 ### Why the ordering is safe
 
@@ -124,7 +123,7 @@ comfortably *before* the event is ever emitted.
 
 ### Why it exists
 
-Purely startup performance. These 16 modules are not needed to display the first
+Purely startup performance. These 15 modules are not needed to display the first
 buffer: they register commands, keymaps and autocommands for features the user
 reaches for later (pickers, terminals, the action menu, URL/repo browsing).
 Deferring their `require` keeps them — and the Lua files they pull in — off the
@@ -144,7 +143,7 @@ this budget gets measured.
 | `options.lua` | `vim.o`/`vim.g` settings, provider/runtime-plugin disabling, all `vim.filetype.add` rules. |
 | `keymaps.lua` | Global key mappings. |
 | `autocommands.lua` | All global autocommands, including the `DeferredPluginsLoaded` consumer. |
-| `utils.lua` | Shared helpers: visual-selection capture, filetype→extension/command tables, `throttle`, `read_json_file`, `load_plugin` (local `~/Repos` checkout override for `vim.pack.add`), and `for_each_client(bufnr, method, fn)` — the shared helper for iterating LSP clients by supported method (`plugins/conform.lua`; both file-rename notifications in `plugins/functionality.lua`). |
+| `utils.lua` | Shared helpers: visual-selection capture, filetype→extension/command tables, `read_json_file`, `load_plugin` (local `~/Repos` checkout override for `vim.pack.add`), and `for_each_client(bufnr, method, fn)` — the shared helper for iterating LSP clients by supported method (`plugins/conform.lua`; both file-rename notifications in `plugins/functionality.lua`). |
 
 ### Plugin loading
 
@@ -169,7 +168,7 @@ this budget gets measured.
 | `lsp/actions.lua` | LSP entries for the action menu (code actions, definition, references, rename, ...). |
 | `lsp/server/init.lua` | The hand-rolled **in-process LSP server** (`create_server()`, commands, config) surfaced through `lsp/user_lsp.lua`. |
 | `lsp/server/actions.lua` | Custom code actions served by that server (ported from the old null-ls setup). |
-| `lsp/server/hover.lua` | Custom hover providers for that server. |
+| `lsp/server/hover.lua` | Custom hover providers for that server: comma-separated long numbers, `$ENV` values and `tldr` pages in shell files. |
 | `lsp/server/shellcheck.lua` | ShellCheck `# shellcheck disable=` code actions (adapted from none-ls-shellcheck). |
 | `navic.lua` | Breadcrumb context tracking driven by LSP `documentSymbol`; caches per buffer and renders into `vim.o.winbar` (not the statusline). |
 | `navic_core.lua` | Pure symbol-tree parsing, context diffing and rendering used by `navic.lua` (kept separate so it is unit-testable). |
@@ -199,7 +198,6 @@ this budget gets measured.
 | Module | Purpose |
 | --- | --- |
 | `tabular-v2.lua` | Live tabular buffers for command output: column alignment, sorting, filtering, timed refresh. |
-| `number-separators.lua` | Virtual-text comma separators on long numbers. |
 | `yank-ring.lua` | Minimal yank ring over registers 1-9; `<C-n>`/`<C-m>` cycle the last put. |
 | `easymotion.lua` | Two-character jump-to-location with overlay labels. |
 | `search-count.lua` | End-of-line virtual text showing `current/total` search matches while `hlsearch` is on. |
@@ -223,12 +221,6 @@ this budget gets measured.
 | `colorscheme.lua` | Colorscheme setup plus a shared `palette` table of resolved Nvim default-theme colors, reused by the statusline. |
 | `kubectl.lua` | Extra kubectl.nvim resource views and actions (ALB console links, ServiceAccount secrets, StorageClass PVs, ArgoCD, ExternalSecrets, cert-manager), with AWS SSO prompting. |
 
-### Present but disabled
-
-| Module | Status |
-| --- | --- |
-| `user-dir.lua` | Present in the tree but **not active**. Both of its call sites are commented out: `require('user.user-dir').setup()` in `lua/user/init.lua` (line 12) and `require('user.user-dir').setup_icons()` in `lua/user/autocommands.lua` (line 65). It implements icons and ex-command prefill mappings for Neovim's native `nvim.dir` listing. |
-
 ## 5. `lua/plugins/*` inventory
 
 Each file installs its main plugin(s) with `vim.pack.add` (or
@@ -248,7 +240,7 @@ plugin installs aren't confined to this directory.
 | `kubectl.lua` | `kubectl.nvim` (2.x, via `load_plugin`, with `blink.download`) | kubectl.nvim setup; hooks in the extra views from `user.kubectl`; Kubernetes menu actions. Eager. |
 | `look-and-feel.lua` | `nvim-web-devicons`, `render-markdown.nvim`, `nvim-bqf` | Icon, markdown-rendering and better-quickfix setup. Deferred. |
 | `git.lua` | `plenary.nvim`, `vim-fugitive`, `diffview.nvim` | Fugitive/diffview keymaps and commands; registers the Git action menu from `user.git`. Deferred. |
-| `lsp.lua` | `guihua.lua`, `nvim-lspconfig`, `fidget.nvim`, `lazydev.nvim`, `wezterm-types`, `go.nvim` | Delegates the LSP setup to `user.lsp.config.setup()`; adds YAML menu actions. Deferred. |
+| `lsp.lua` | `nvim-lspconfig`, `fidget.nvim`, `lazydev.nvim`, `wezterm-types` | Delegates the LSP setup to `user.lsp.config.setup()`; adds YAML menu actions. Deferred. |
 | `fzf.lua` | `fzf-lua` | fzf-lua setup and all picker keymaps, including the `<F4>` git-branch flow that calls into `user.git`. Deferred. |
 | `conform.lua` | `conform.nvim` | Formatter table, format-on-save, and a `<leader>lp` info mapping that lists the buffer's formatters — LSP ones resolved via `utils.for_each_client`. Deferred. |
 | `lint.lua` | `nvim-lint` | Installs the plugin and configures the whole nvim-lint framework inline: a declarative linter table (filetype linters vs. global event-driven linters, root markers, enable flags), `linters_by_ft` derivation, `LintToggle`/`LintInfo` commands, and the lint autocommands. Deferred. |

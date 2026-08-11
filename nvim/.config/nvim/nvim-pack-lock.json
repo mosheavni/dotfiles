@@ -45,14 +45,6 @@
       "rev": "31d6fb2d618bca1482b9f274751ead5f03461408",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
-    "go.nvim": {
-      "rev": "0768d79bbebdb1a112a845f9cd6293bfbd544dab",
-      "src": "https://github.com/ray-x/go.nvim"
-    },
-    "guihua.lua": {
-      "rev": "4c513d5dac550af77034cced421967b393261509",
-      "src": "https://github.com/ray-x/guihua.lua"
-    },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"
@@ -110,7 +102,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "43ed3797b266e1ee8d222e491379ad471c9d3146",
+      "rev": "c98cc837b959a64a48b918103ebc62fd818768d3",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-pqf": {

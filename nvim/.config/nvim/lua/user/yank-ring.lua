@@ -9,11 +9,12 @@ local state
 
 local function on_put()
   local e = vim.v.event
+  ---@type integer
   local idx
   if e.regname == '' or e.regname == '0' then
     idx = 1
   elseif e.regname:match '^[1-9]$' then
-    idx = tonumber(e.regname)
+    idx = tonumber(e.regname) --[[@as integer]]
   else
     state = nil
     return

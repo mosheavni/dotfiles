@@ -1,10 +1,8 @@
 vim.pack.add {
-  'https://github.com/ray-x/guihua.lua',
   'https://github.com/neovim/nvim-lspconfig',
   'https://github.com/j-hui/fidget.nvim',
   'https://github.com/folke/lazydev.nvim',
   'https://github.com/DrKJeff16/wezterm-types',
-  'https://github.com/ray-x/go.nvim',
 }
 
 return function()
@@ -46,19 +44,4 @@ return function()
       { path = '${3rd}/luassert/library', words = { 'assert' } },
     },
   }
-
-  require('go').setup {
-    lsp_cfg = true,
-    lsp_gofumpt = true,
-    lsp_inlay_hints = { enable = false },
-    dap_vt = true,
-  }
-  local format_sync_grp = vim.api.nvim_create_augroup('GoFormat', {})
-  vim.api.nvim_create_autocmd('BufWritePre', {
-    pattern = '*.go',
-    callback = function()
-      require('go.format').goimports()
-    end,
-    group = format_sync_grp,
-  })
 end

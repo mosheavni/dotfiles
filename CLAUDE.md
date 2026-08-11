@@ -61,7 +61,8 @@ end)
 
 ### Existing Test Coverage
 
-Tests exist for: `utils`, `gitbrowse`, `git`, `hints`, `number-separators`, `open-url`, `present`, `tabular-v2`
+Run `ls nvim/.config/nvim/lua/tests/*_spec.lua` for the current list rather than trusting a
+hardcoded one here. Each `<module>_spec.lua` covers `lua/user/<module>.lua`.
 
 ### Linting
 
@@ -107,15 +108,21 @@ The `.stowrc` file excludes non-stowable files (Brewfile, readme, etc.) from dep
 
 Entry point: `nvim/.config/nvim/init.lua`
 
-Load order:
+Load order (see `init.lua`):
 
-1. `user/init.lua` - Global functions and leader key setup
-2. `user/options.lua` - Vim options
+1. `user/options.lua` - Vim options
+2. `user/init.lua` - Global functions and leader key setup
 3. `user/keymaps.lua` - Key mappings
-4. `user/lazy.lua` - Plugin manager (lazy.nvim) setup
+4. `user/pack/init.lua` - Plugin loading via Neovim's native `vim.pack`
 5. `user/autocommands.lua` - Autocommands
 
-Plugin specs are in `lua/plugins/` - lazy.nvim auto-discovers all files in this directory.
+There is no `lazy.nvim`. Plugins are declared with `vim.pack.add` inside `lua/plugins/*.lua`,
+and `lua/user/pack/init.lua` `require`s those modules **explicitly** - there is no
+auto-discovery, so a new file in `lua/plugins/` does nothing until it is added there. It loads
+one eager batch, then the rest inside a `vim.schedule` callback which fires the
+`DeferredPluginsLoaded` User autocmd. Versions are pinned in `nvim-pack-lock.json`.
+
+`lua/.../ARCHITECTURE.md` is the detailed per-module reference for this config.
 
 Custom modules in `lua/user/` include utilities (utils.lua), Git helpers, LSP configuration, and various feature modules.
 

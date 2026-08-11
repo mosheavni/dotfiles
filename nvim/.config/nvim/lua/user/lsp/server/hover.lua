@@ -44,9 +44,28 @@ local function is_shell_filetype(filetype)
   return filetype == 'sh' or filetype == 'bash' or filetype == 'zsh'
 end
 
+-- Number separator hover: show a long number with thousands separators.
+-- Deliberately naive: `foo1234` matches, and so does the `-` of a subtraction.
+local function number_hover(context, _)
+  local pos = context.position
+  local text = vim.api.nvim_buf_get_lines(context.bufnr, pos.line, pos.line + 1, false)[1] or ''
+  local col = pos.character + 1 -- Convert to 1-indexed
+
+  for start, sign, int_part, frac in text:gmatch '()(%-?)(%d+)(%.?%d*)' do
+    if col >= start and col < start + #sign + #int_part + #frac then
+      if #int_part <= 3 then
+        return nil -- Grouping would not change anything
+      end
+      local grouped = int_part:reverse():gsub('(%d%d%d)', '%1,'):reverse():gsub('^,', '')
+      -- `frac` is a bare dot when the number ends a sentence: "we saw 1234."
+      return { contents = { kind = 'markdown', value = sign .. grouped .. (frac == '.' and '' or frac) } }
+    end
+  end
+end
+
 -- TLDR hover: show tldr documentation for commands
 local function tldr_hover(context, word)
-  if not is_shell_filetype(context.filetype) then
+  if word == '' or not is_shell_filetype(context.filetype) then
     return nil
   end
 
@@ -72,7 +91,7 @@ end
 
 -- Printenv hover: show environment variable value
 local function printenv_hover(context, word)
-  if not is_shell_filetype(context.filetype) then
+  if word == '' or not is_shell_filetype(context.filetype) then
     return nil
   end
 
@@ -91,23 +110,37 @@ end
 
 -- List of hover providers (order matters - first match wins)
 local hover_providers = {
+  number_hover,
   printenv_hover,
   tldr_hover,
 }
+
+--- Resolve an LSP document URI back to a buffer.
+--- An unnamed buffer's URI is the empty `file://`, and `vim.uri_to_bufnr` does
+--- not round-trip that — it hands back a fresh empty buffer. Hover is always
+--- about the current buffer, so prefer it whenever its URI matches.
+---@param uri string
+---@return number
+local function resolve_bufnr(uri)
+  local cur = vim.api.nvim_get_current_buf()
+  if vim.uri_from_bufnr(cur) == uri then
+    return cur
+  end
+  return vim.uri_to_bufnr(uri)
+end
 
 --- Get hover information for the given LSP params
 ---@param params table LSP hover params
 ---@return table|nil hover response
 function M.get_hover(params)
-  local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
+  local bufnr = resolve_bufnr(params.textDocument.uri)
   local line = params.position.line
   local character = params.position.character
   local filetype = vim.bo[bufnr].filetype
 
+  -- An empty word is not a short circuit: position-based providers (numbers)
+  -- still run. Word-based providers guard on it themselves.
   local word = get_word_at_position(bufnr, line, character)
-  if word == '' then
-    return nil
-  end
 
   local context = {
     bufnr = bufnr,

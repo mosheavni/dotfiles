@@ -192,6 +192,7 @@ M.setup = function()
     'docker_compose_language_service',
     'dockerls',
     'golangci_lint_ls',
+    'gopls',
     'groovyls',
     'helm_ls',
     'html',

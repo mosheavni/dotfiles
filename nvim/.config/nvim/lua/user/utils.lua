@@ -31,19 +31,6 @@ function! ReplaceMotion(motion, text)
 endfunction
 ]]
 
----Returns the current visual selection without leaving visual mode
----@return string[] lines Array of selected lines
-function M.get_visual_selection_stay_in_visual()
-  local mode = vim.api.nvim_get_mode().mode
-  local vstart = vim.fn.getpos 'v'
-  local vend = vim.fn.getpos '.'
-  -- \22 is an escaped version of <c-v>
-  if mode == 'v' or mode == 'V' or mode == '\22' then
-    return vim.fn.getregion(vstart, vend, { type = mode })
-  end
-  return vim.fn.getregion(vstart, vend)
-end
-
 ---Returns the current visual selection and exits visual mode
 ---@return string text The selected text
 function M.get_visual_selection()
@@ -170,34 +157,6 @@ function M.read_json_file(file_name)
     return decoded
   end
   return nil
-end
-
----Debounce trailing-edge calls to fn by ms milliseconds.
----@param ms integer
----@param fn function
----@return function
-function M.throttle(ms, fn)
-  local timer = nil
-  return function(...)
-    local args = { ... }
-    if timer then
-      timer:stop()
-      timer:close()
-    end
-    timer = vim.uv.new_timer()
-    timer:start(
-      ms,
-      0,
-      vim.schedule_wrap(function()
-        if timer then
-          timer:stop()
-          timer:close()
-          timer = nil
-        end
-        fn(unpack(args))
-      end)
-    )
-  end
 end
 
 ---@alias user.utils.PackInstallSpec string|vim.pack.Spec

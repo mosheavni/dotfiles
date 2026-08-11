@@ -363,7 +363,7 @@ function M.delete_displayed_lines(bufnr, start_line, end_line)
 end
 
 --- Operatorfunc for d{motion} in tabular buffers
-function M.delete_lines_op(_type)
+function M.delete_lines_op(_)
   local bufnr = vim.api.nvim_get_current_buf()
   local start_line = vim.api.nvim_buf_get_mark(bufnr, '[')[1]
   local end_line = vim.api.nvim_buf_get_mark(bufnr, ']')[1]
