@@ -102,7 +102,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "43ed3797b266e1ee8d222e491379ad471c9d3146",
+      "rev": "c98cc837b959a64a48b918103ebc62fd818768d3",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-pqf": {
