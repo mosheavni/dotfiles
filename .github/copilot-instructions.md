@@ -92,13 +92,14 @@ Files to exclude from stowing (listed in `.stowrc`): Brewfile, Makefile, README 
 
 **Load order:**
 
-1. `user/init.lua` - Global functions and leader key setup
-2. `user/options.lua` - Vim options
+1. `user/options.lua` - Vim options
+2. `user/init.lua` - Global functions and leader key setup
 3. `user/keymaps.lua` - Key mappings
-4. `user/lazy.lua` - Plugin manager (lazy.nvim) setup
+4. `user/pack/init.lua` - Plugin loading via Neovim's native `vim.pack`
 5. `user/autocommands.lua` - Autocommands
 
-**Plugin specs:** Auto-discovered from `lua/plugins/` directory
+**Plugin specs:** Declared with `vim.pack.add` in `lua/plugins/*.lua`. No lazy.nvim, and no
+auto-discovery - `lua/user/pack/init.lua` `require`s each module explicitly.
 
 **Custom modules:** Utilities (utils.lua), Git helpers, LSP config, feature modules all in `lua/user/`
 

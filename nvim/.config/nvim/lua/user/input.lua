@@ -1,9 +1,6 @@
 ---@class SimpleInput
 local M = {}
 
--- Store the original vim.ui.input
-local original_input = vim.ui.input
-
 -- Input history
 local history = {}
 local history_index = 0
@@ -589,11 +586,6 @@ end
 function M.enable()
   setup_highlights()
   vim.ui.input = M.input
-end
-
--- Disable and restore original input
-function M.disable()
-  vim.ui.input = original_input
 end
 
 -- Setup function
