@@ -22,10 +22,11 @@ vim.g.loaded_tutor_mode_plugin = 1
 vim.g.loaded_zip = 1
 vim.g.loaded_zipPlugin = 1
 
------------------
--- Colorscheme --
------------------
+-------------
+-- modules --
+-------------
 require('user.colorscheme').setup()
+require 'user.commands'
 
 --------------
 -- Put Text --
@@ -88,4 +89,61 @@ function _G.tmp_write(opts)
   return tmp
 end
 
-require 'user.commands'
+---------------
+-- Filetypes --
+---------------
+local kube_config_pattern = [[.*\.kube/config]]
+
+---@param bufnr integer
+---@return boolean
+local function mark_k8s_yaml(bufnr)
+  for _, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, 20, false)) do
+    if line:match '^kind:' or line:match '^apiVersion:' then
+      vim.b[bufnr].is_kubernetes = true
+      return true
+    end
+  end
+  return false
+end
+
+local function yaml_extension(_, bufnr)
+  mark_k8s_yaml(bufnr)
+  return 'yaml'
+end
+
+vim.filetype.add {
+  extension = { tfvars = 'terraform', yaml = yaml_extension, yml = yaml_extension },
+  filename = {
+    Brewfile = 'brewfile',
+    ['corp-Brewfile'] = 'brewfile',
+    ['Chart.yaml'] = 'yaml.chart',
+    ['package.json'] = 'json.package',
+    ['.pre-commit-config.yaml'] = 'yaml.precommit',
+    ['.pre-commit-config.yml'] = 'yaml.precommit',
+    ['docker-compose.yml'] = 'yaml.docker-compose',
+  },
+  pattern = {
+    ['.*/templates/.*%.yaml'] = {
+      function(_, bufnr)
+        for _, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)) do
+          if line:find '{{.+}}' then
+            return 'helm'
+          end
+        end
+      end,
+      { priority = 200 },
+    },
+    ['.*/.github/workflows/.*%.yml'] = 'yaml.ghaction',
+    ['.*Jenkinsfile.*'] = 'groovy',
+    [kube_config_pattern] = 'yaml',
+    ['.*'] = {
+      function(_, bufnr)
+        if mark_k8s_yaml(bufnr) then
+          return 'yaml'
+        end
+      end,
+      -- catch-all must lose to every specific pattern (:h vim.filetype.add)
+      { priority = -math.huge },
+    },
+  },
+}
