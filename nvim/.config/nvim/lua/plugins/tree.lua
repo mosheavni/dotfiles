@@ -8,32 +8,6 @@ local SORT_METHODS = {
   'extension',
 }
 
--- Create hints instance
-local Hints = require 'user.hints'
-local hints = Hints.new('Nvim-tree - Available Keymaps', {
-  { key = '<CR>', desc = 'Open file/directory' },
-  { key = 'v', desc = 'Open in vertical split' },
-  { key = 'i', desc = 'Open in horizontal split' },
-  { key = 'x', desc = 'Close directory' },
-  { key = 'h/l', desc = 'Navigate left/right (collapse/expand)' },
-  { key = 'a', desc = 'Create file/directory' },
-  { key = 'd', desc = 'Delete file/directory' },
-  { key = 'r', desc = 'Rename/move file (full path)' },
-  { key = 'c', desc = 'Copy file' },
-  { key = 'Y', desc = 'Copy relative path' },
-  { key = 'gy', desc = 'Copy absolute path' },
-  { key = '<leader>gd', desc = 'Diff file/dir history (Diffview)' },
-  { key = 'J/K', desc = 'Toggle bookmark down/up' },
-  { key = 'dd', desc = 'Cut bookmarked file(s)' },
-  { key = 'yy', desc = 'Copy bookmarked file(s)' },
-  { key = 'p', desc = 'Paste' },
-  { key = 'mv', desc = 'Move bookmarked files' },
-  { key = 'cd', desc = 'Change root to node' },
-  { key = 'T', desc = 'Cycle sort method' },
-  { key = 'Z', desc = 'Extract archive' },
-  { key = 'g?', desc = 'Show help' },
-})
-
 local function on_attach(bufnr)
   local api = require 'nvim-tree.api'
 
@@ -176,28 +150,12 @@ local function on_attach(bufnr)
   -- Pin the tree window so it survives `:only`/`<C-w>o`. winpinned is
   -- window-local and nvim-tree recreates/refocuses its window after
   -- `on_attach` runs (and doesn't fire BufWinEnter along the way), so this
-  -- rides the same BufEnter/WinEnter pair the hints toggle below relies on
-  -- to reach the window nvim-tree actually settles on.
+  -- uses the same BufEnter/WinEnter pair to reach the window nvim-tree
+  -- actually settles on.
   vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
     buffer = bufnr,
     callback = function()
       vim.wo.winpinned = true
-    end,
-  })
-
-  -- Show hints when entering nvim-tree buffer/window
-  vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
-    buffer = bufnr,
-    callback = function()
-      hints.show()
-    end,
-  })
-
-  -- Hide hints when leaving nvim-tree buffer/window
-  vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
-    buffer = bufnr,
-    callback = function()
-      hints.close()
     end,
   })
 end

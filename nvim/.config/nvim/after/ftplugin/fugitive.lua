@@ -1,6 +1,5 @@
 local git_funcs = require 'user.git'
 
--- Create hints instance
 local function porcelain_path()
   local esc = vim.fn['fugitive#PorcelainCfile']()
   if esc == '' then
@@ -34,63 +33,6 @@ local function open_fugitive(mode)
     vim.cmd(('G%s %s'):format(mode, esc))
   end
 end
-
-local Hints = require 'user.hints'
-local hints = Hints.new('Fugitive - Available Keymaps', {
-  { key = '<CR>', desc = 'Open file or reveal directory in NvimTree' },
-  { key = '<C-v>', desc = 'Open in vertical split' },
-  { key = '<C-s>', desc = 'Open in horizontal split' },
-  { key = '<C-t>', desc = 'Open in new tab' },
-  { key = '-', desc = 'Stage/unstage file' },
-  { key = 'X', desc = 'Discard changes' },
-  { key = '=', desc = 'Toggle Inline Diff' },
-  { key = 'cc', desc = 'Commit' },
-  { key = 'dv', desc = 'Vertical diff' },
-  { key = 'gl', desc = 'Pull' },
-  { key = 'gp', desc = 'Push' },
-  { key = 'gf', desc = 'Fetch all' },
-  { key = 'czz', desc = 'Push Stash' },
-  { key = 'cza', desc = 'Apply Stash' },
-  { key = 'pr', desc = 'Pull request' },
-  { key = 'fc', desc = 'First commit' },
-  { key = 'wip', desc = 'Work in progress' },
-  { key = 'R', desc = 'Reload' },
-  { key = '<leader>t', desc = 'Open terminal' },
-  { key = '<leader>h', desc = 'Toggle Hints' },
-})
-
-vim.g.fugitive_hints = false
-
--- Toggle hints on fugitive
-vim.keymap.set('n', '<leader>h', function()
-  if vim.bo.filetype ~= 'fugitive' then
-    return
-  end
-  vim.g.fugitive_hints = not vim.g.fugitive_hints
-  if vim.g.fugitive_hints then
-    hints.show()
-  else
-    hints.close()
-  end
-end, { desc = 'Toggle Fugitive hints (only in fugitive buffers)' })
-
--- Show hints when entering fugitive buffer
-vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
-  buffer = 0,
-  callback = function()
-    if vim.g.fugitive_hints and vim.bo.filetype == 'fugitive' then
-      hints.show()
-    end
-  end,
-})
-
--- Hide hints when leaving fugitive buffer
-vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
-  buffer = 0,
-  callback = function()
-    hints.close()
-  end,
-})
 
 local bufnr = vim.api.nvim_get_current_buf()
 vim.schedule(function()
@@ -136,7 +78,4 @@ vim.schedule(function()
   vim.keymap.set('n', '<C-t>', function()
     open_fugitive 'tabedit'
   end, { buffer = bufnr, desc = 'Open in new tab' })
-
-  -- Show hints immediately
-  -- hints.show()
 end)

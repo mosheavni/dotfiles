@@ -4,30 +4,6 @@ local function get_commit_hash()
   return string.sub(line, 1, 7)
 end
 
--- Create hints instance
-local Hints = require 'user.hints'
-local hints = Hints.new('Git Blame - Available Keymaps', {
-  { key = '<CR>', desc = 'Open commit in Diffview' },
-  { key = 'yy', desc = 'Copy commit hash to clipboard' },
-  { key = '<leader>gh', desc = 'Open commit in GitHub' },
-})
-
--- Show hints when entering blame buffer
-vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
-  buffer = 0,
-  callback = function()
-    hints.show()
-  end,
-})
-
--- Hide hints when leaving blame buffer
-vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
-  buffer = 0,
-  callback = function()
-    hints.close()
-  end,
-})
-
 local bufnr = vim.api.nvim_get_current_buf()
 vim.schedule(function()
   if not vim.api.nvim_buf_is_valid(bufnr) then
@@ -55,7 +31,4 @@ vim.schedule(function()
       commit = commit_hash,
     }
   end, { buffer = bufnr, desc = 'Open commit hash in browser' })
-
-  -- Show hints immediately
-  hints.show()
 end)
