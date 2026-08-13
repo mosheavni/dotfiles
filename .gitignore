@@ -1,5 +1,7 @@
 nvim/.config/plenary.nvim/
 /.claude
 graphify-out/
+.tokei-trend/data.json
+.tokei-trend/report.html
 .github/.act-event.json
 **/boost-awareness.md*

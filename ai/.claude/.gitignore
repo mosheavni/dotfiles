@@ -27,3 +27,4 @@ jobs/
 .last-cleanup
 .caveman-mode-log.jsonl
 image-cache/
+stats-cache.json
