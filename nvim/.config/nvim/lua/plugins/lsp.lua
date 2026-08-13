@@ -16,25 +16,6 @@ return function()
     },
   }
 
-  vim.keymap.set('n', '<leader>cs', function()
-    require('yaml-companion').open_ui_select()
-  end, { remap = false, silent = true })
-  vim.api.nvim_create_user_command('YamlYankKey', function()
-    local info = require('yaml-companion').get_key_at_cursor()
-    if info and info.key then
-      vim.fn.setreg('+', info.key)
-      vim.notify('Copied: ' .. info.key)
-    end
-  end, {})
-  require('user.menu').add_actions('YAML', {
-    ['Change Schema'] = function()
-      require('yaml-companion').open_ui_select()
-    end,
-    ['Copy Yaml Key at Cursor to clipboard (:YamlYankKey)'] = function()
-      vim.cmd [[YamlYankKey]]
-    end,
-  })
-
   require('lazydev').setup {
     library = {
       { path = 'wezterm-types', mods = { 'wezterm' } },

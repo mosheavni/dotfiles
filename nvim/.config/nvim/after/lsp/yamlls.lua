@@ -78,10 +78,29 @@ local yaml_cfg = require('yaml-companion').setup {
 -- Cache for helm_ls.lua
 _G.yaml_lsp_config = yaml_cfg
 
--- Menu actions
+----------
+-- Keys --
+----------
+vim.api.nvim_create_user_command('YamlYankKey', function()
+  local info = require('yaml-companion').get_key_at_cursor()
+  if info and info.key then
+    vim.fn.setreg('+', info.key)
+    vim.notify('Copied: ' .. info.key)
+  end
+end, {})
+
+------------------
+-- Menu actions --
+------------------
 require('user.menu').add_actions('YAML', {
   ['Auto add CRD schema modelines'] = function()
     require('yaml-companion').add_crd_modelines()
+  end,
+  ['Add YAML Schema Modeline from Datree'] = function()
+    require('yaml-companion').open_datree_crd_select()
+  end,
+  ['Change Schema'] = function()
+    require('yaml-companion').open_ui_select()
   end,
 })
 
