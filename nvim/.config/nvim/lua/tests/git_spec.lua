@@ -200,6 +200,13 @@ describe('user.git', function()
       assert.is_true(hash:match '^%x+$' ~= nil, 'Should be hex characters')
       assert.is_true(#hash >= 7, 'Should be at least 7 chars')
     end)
+
+    it('run_git_sync honors opts.cwd override', function()
+      local toplevel = git.get_toplevel_sync()
+      local obj = git.run_git_sync({ 'rev-parse', '--show-toplevel' }, nil, { cwd = toplevel })
+      assert.are.same(obj.code, 0)
+      assert.are.same(vim.trim(obj.stdout), toplevel)
+    end)
   end)
 
   describe('integration: async functions', function()

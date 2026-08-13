@@ -75,11 +75,15 @@ local function with_ui_select(items, opts, cb, auto_select)
   end)
 end
 
-local function run_git(args, msg, cb)
+---@param args string[]
+---@param msg string|nil
+---@param cb fun(stdout: string, code: integer)|nil
+---@param opts table|nil vim.system opts override, e.g. { cwd = ... }
+M.run_git = function(args, msg, cb, opts)
   if msg then
     M.prnt(msg)
   end
-  vim.system({ 'git', unpack(args) }, { text = true }, function(obj)
+  vim.system({ 'git', unpack(args) }, vim.tbl_extend('force', { text = true }, opts or {}), function(obj)
     local code, stdout, stderr = obj.code, vim.trim(obj.stdout or ''), vim.trim(obj.stderr or '')
     if code ~= 0 then
       M.prnt(('Error!\n%s%s'):format(stderr and stderr .. '\n' or '', stdout or ''), true)
@@ -87,17 +91,20 @@ local function run_git(args, msg, cb)
       M.prnt(('Success!\n%s%s'):format(stderr and stderr .. '\n' or '', stdout or ''))
     end
     if cb and type(cb) == 'function' then
-      cb(stdout)
+      cb(stdout, code)
     end
     M.reload_fugitive_index()
   end)
 end
 
-local function run_git_sync(args, msg)
+---@param args string[]
+---@param msg string|nil
+---@param opts table|nil vim.system opts override, e.g. { cwd = ... }
+M.run_git_sync = function(args, msg, opts)
   if msg then
     M.prnt(msg)
   end
-  return vim.system({ 'git', unpack(args) }, { text = true }):wait()
+  return vim.system({ 'git', unpack(args) }, vim.tbl_extend('force', { text = true }, opts or {})):wait()
 end
 
 -------------------
@@ -120,7 +127,7 @@ end
 -------------------
 
 M.get_branch = function(cb)
-  run_git({ 'branch', '--show-current' }, nil, function(branch)
+  M.run_git({ 'branch', '--show-current' }, nil, function(branch)
     branch = vim.trim(branch)
     if branch == '' then
       M.get_short_commit(function(commit_hash)
@@ -134,7 +141,7 @@ M.get_branch = function(cb)
 end
 
 M.get_branch_sync = function()
-  local branch = vim.trim(run_git_sync({ 'branch', '--show-current' }, nil).stdout)
+  local branch = vim.trim(M.run_git_sync({ 'branch', '--show-current' }, nil).stdout)
   if branch == '' then
     return M.get_short_commit_sync()
   else
@@ -143,17 +150,17 @@ M.get_branch_sync = function()
 end
 
 M.get_short_commit = function(cb)
-  run_git({ 'rev-parse', '--short', 'HEAD' }, nil, function(commit_hash)
+  M.run_git({ 'rev-parse', '--short', 'HEAD' }, nil, function(commit_hash)
     cb(vim.trim(commit_hash))
   end)
 end
 
 M.get_short_commit_sync = function()
-  return vim.trim(run_git_sync({ 'rev-parse', '--short', 'HEAD' }, nil).stdout)
+  return vim.trim(M.run_git_sync({ 'rev-parse', '--short', 'HEAD' }, nil).stdout)
 end
 
 M.get_remotes = function(cb)
-  run_git({ 'remote', '-v' }, nil, function(obj)
+  M.run_git({ 'remote', '-v' }, nil, function(obj)
     local remotes = {}
     for _, v in ipairs(vim.split(obj, '\n')) do
       local l = v:match '(.-)%s+%(fetch%)'
@@ -167,13 +174,13 @@ M.get_remotes = function(cb)
 end
 
 M.get_tags = function(cb)
-  run_git({ 'tag' }, nil, function(tags)
+  M.run_git({ 'tag' }, nil, function(tags)
     cb(vim.split(tags, '\n'))
   end)
 end
 
 M.get_branches = function(remote_name, cb)
-  run_git({ 'ls-remote', '--heads', remote_name or 'origin' }, nil, function(obj)
+  M.run_git({ 'ls-remote', '--heads', remote_name or 'origin' }, nil, function(obj)
     local branches = {}
     for _, line in ipairs(vim.split(obj, '\n')) do
       table.insert(branches, string.match(line, 'refs/heads/(.*)$'))
@@ -232,7 +239,7 @@ M.get_default_branch = function(remote, cb)
 end
 
 M.get_branches_sync = function(remote_name)
-  local obj = run_git_sync { 'ls-remote', '--heads', remote_name or 'origin' }
+  local obj = M.run_git_sync { 'ls-remote', '--heads', remote_name or 'origin' }
   local branches = {}
   for _, line in ipairs(vim.split(obj.stdout, '\n')) do
     table.insert(branches, string.match(line, 'refs/heads/(.*)$'))
@@ -241,7 +248,7 @@ M.get_branches_sync = function(remote_name)
 end
 
 M.get_toplevel_sync = function()
-  local toplevel = run_git_sync({ 'rev-parse', '--show-toplevel' }, nil).stdout or ''
+  local toplevel = M.run_git_sync({ 'rev-parse', '--show-toplevel' }, nil).stdout or ''
   return vim.trim(toplevel)
 end
 
@@ -250,7 +257,7 @@ end
 ---@return string
 M.get_default_branch_sync = function(remote)
   remote = remote or 'origin'
-  local obj = run_git_sync({ 'symbolic-ref', 'refs/remotes/' .. remote .. '/HEAD' }, nil)
+  local obj = M.run_git_sync({ 'symbolic-ref', 'refs/remotes/' .. remote .. '/HEAD' }, nil)
   if obj.code == 0 and obj.stdout then
     local branch = M.parse_symbolic_ref(obj.stdout, remote)
     if branch then
@@ -268,7 +275,7 @@ end
 ---@return string|nil owner/repo slug for GitHub-style remotes
 M.get_owner_repo_sync = function(remote)
   remote = remote or 'origin'
-  local obj = run_git_sync({ 'remote', 'get-url', remote }, nil)
+  local obj = M.run_git_sync({ 'remote', 'get-url', remote }, nil)
   if obj.code ~= 0 or not obj.stdout or vim.trim(obj.stdout) == '' then
     return nil
   end
@@ -276,27 +283,27 @@ M.get_owner_repo_sync = function(remote)
 end
 
 M.checkout = function(branch_name)
-  run_git({ 'checkout', branch_name }, 'Checking out ' .. branch_name)
+  M.run_git({ 'checkout', branch_name }, 'Checking out ' .. branch_name)
 end
 
 M.push = function(cb)
   M.get_branch(function(branch)
-    run_git({ 'push', '-u', 'origin', branch }, 'Pushing to ' .. branch .. '...', cb)
+    M.run_git({ 'push', '-u', 'origin', branch }, 'Pushing to ' .. branch .. '...', cb)
   end)
 end
 
 M.pull = function(cb)
   M.get_branch(function(branch)
-    run_git({ 'pull' }, 'Pulling from ' .. branch .. '...', cb)
+    M.run_git({ 'pull' }, 'Pulling from ' .. branch .. '...', cb)
   end)
 end
 
 M.pull_remote_branch = function(remote_name, branch_name)
-  run_git({ 'pull', remote_name, branch_name }, 'Pulling ' .. remote_name .. '/' .. branch_name)
+  M.run_git({ 'pull', remote_name, branch_name }, 'Pulling ' .. remote_name .. '/' .. branch_name)
 end
 
 M.merge_remote_branch = function(remote_name, branch_name)
-  run_git({ 'merge', remote_name .. '/' .. branch_name }, 'Merging ' .. remote_name .. '/' .. branch_name)
+  M.run_git({ 'merge', remote_name .. '/' .. branch_name }, 'Merging ' .. remote_name .. '/' .. branch_name)
 end
 
 M.pull_default_branch = function(remote)
@@ -383,7 +390,7 @@ end
 
 M.create_new_branch = function(branch_opts)
   if branch_opts.args ~= '' then
-    return run_git({ 'checkout', '-b', branch_opts.args }, 'Creating new branch ' .. branch_opts.args)
+    return M.run_git({ 'checkout', '-b', branch_opts.args }, 'Creating new branch ' .. branch_opts.args)
   end
   vim.ui.input({ prompt = 'Enter new branch name❯ ' }, function(input)
     if not input then
@@ -392,22 +399,22 @@ M.create_new_branch = function(branch_opts)
     if not input:match '^[a-zA-Z0-9_-]+$' then
       return M.prnt('Invalid branch name', vim.log.levels.ERROR)
     end
-    run_git({ 'checkout', '-b', input }, 'Creating new branch: ' .. input)
+    M.run_git({ 'checkout', '-b', input }, 'Creating new branch: ' .. input)
   end)
 end
 
 M.fetch_all = function()
-  run_git({ 'fetch', '--all', '--tags' }, 'Fetching all remotes and tags')
+  M.run_git({ 'fetch', '--all', '--tags' }, 'Fetching all remotes and tags')
 end
 
 M.soft_revert = function(marker)
-  run_git({ 'reset', '--soft', marker or 'HEAD^' }, 'Soft reverting to ' .. (marker or 'HEAD^'))
+  M.run_git({ 'reset', '--soft', marker or 'HEAD^' }, 'Soft reverting to ' .. (marker or 'HEAD^'))
 end
 
 M.set_upstream_head = function()
   M.ui_select_remotes(function(remote_name)
     M.get_branch(function(branch_name)
-      run_git({
+      M.run_git({
         'branch',
         '--set-upstream-to',
         remote_name .. '/' .. branch_name,
@@ -418,15 +425,15 @@ end
 
 M.first_commit = function()
   M.get_branch(function(branch)
-    run_git({ 'commit', '--quiet', '-m', branch }, 'Committing: ' .. branch, function()
-      run_git({ 'push', '-u', 'origin', branch }, 'Pushing: ' .. branch, M.create_pull_request)
+    M.run_git({ 'commit', '--quiet', '-m', branch }, 'Committing: ' .. branch, function()
+      M.run_git({ 'push', '-u', 'origin', branch }, 'Pushing: ' .. branch, M.create_pull_request)
     end)
   end)
 end
 
 M.enter_wip = function()
   local msg = string.format('%s work in progress %s', utils.random_emoji(), vim.fn.strftime '%c')
-  run_git({ 'commit', '--quiet', '-m', msg }, 'Committing: ' .. msg, M.push)
+  M.run_git({ 'commit', '--quiet', '-m', msg }, 'Committing: ' .. msg, M.push)
 end
 
 ---------------
@@ -472,11 +479,11 @@ M.ui_select_create_tag = function()
     if not tag_name then
       return M.prnt 'Canceled.'
     end
-    run_git({ 'tag', tag_name }, 'Creating tag: ' .. tag_name, function()
+    M.run_git({ 'tag', tag_name }, 'Creating tag: ' .. tag_name, function()
       with_ui_select({ 'Yes', 'No' }, { prompt = 'Push❯ ' }, function(choice)
         if choice == 'Yes' then
           M.prnt('Pushing tag ' .. tag_name .. '...')
-          run_git({ 'push', '--tags' }, nil, function()
+          M.run_git({ 'push', '--tags' }, nil, function()
             M.prnt('Tag ' .. tag_name .. ' created and pushed.')
           end)
         else
@@ -490,12 +497,12 @@ end
 M.ui_select_delete_tag = function()
   M.ui_select_tags(function(tag)
     M.prnt('Deleting tag ' .. tag .. ' locally...')
-    run_git({ 'tag', '-d', tag }, nil, function()
+    M.run_git({ 'tag', '-d', tag }, nil, function()
       with_ui_select({ 'Yes', 'No' }, { prompt = 'Delete tag ' .. tag .. ' from remote❯ ' }, function(choice)
         if choice == 'Yes' then
           M.ui_select_remotes(function(remote)
             M.prnt('Deleting tag ' .. tag .. ' from remote ' .. remote .. '...')
-            run_git({ 'push', remote, ':refs/tags/' .. tag }, nil, function()
+            M.run_git({ 'push', remote, ':refs/tags/' .. tag }, nil, function()
               M.prnt('Tag ' .. tag .. ' deleted from local and remote.')
             end)
           end)
