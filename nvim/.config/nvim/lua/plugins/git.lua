@@ -26,20 +26,14 @@ end
 
 local actions = function()
   return {
-    ['Change branch (F4)'] = function()
-      vim.fn.feedkeys(vim.keycode '<F4>')
-    end,
-    ['Create Pull Request (pr in git buffer)'] = git_funcs.create_pull_request,
+    ['Create Pull Request'] = git_funcs.create_pull_request,
     ['Checkout new branch (:Gcb {new_branch})'] = function()
       git_funcs.create_new_branch { args = '' }
     end,
     ['Set upstream to HEAD'] = git_funcs.set_upstream_head,
-    ['Blame'] = function()
-      vim.cmd 'Git blame'
-    end,
     ['Print current branch to buffer (<leader>gb)'] = print_branch_to_line,
     ['Copy current branch to clipboard (<leader>gB)'] = copy_branch_to_clipboard,
-    ['Fetch (all remotes and tags)'] = git_funcs.fetch_all,
+    ['Fetch all remotes and tags'] = git_funcs.fetch_all,
     ['Pull origin default branch (:Gpom)'] = function()
       git_funcs.pull_default_branch 'origin'
     end,
@@ -50,9 +44,6 @@ local actions = function()
     ['Merge {remote} default branch'] = git_funcs.ui_select_merge_default_branch,
     ['Merge origin default branch (:Gmom)'] = function()
       git_funcs.merge_default_branch 'origin'
-    end,
-    ['Open Status / Menu (<leader>gg / :Git)'] = function()
-      vim.cmd 'Git'
     end,
     ['Open GitHub on this line (<leader>gh or :ToGithub)'] = function()
       vim.cmd 'ToGithub'

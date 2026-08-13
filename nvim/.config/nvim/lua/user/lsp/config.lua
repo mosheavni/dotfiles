@@ -95,14 +95,7 @@ M.setup = function()
   vim.keymap.set('n', '<leader>lS', function()
     _G.start_ls(true)
   end, { desc = 'Start LSP (with file)' })
-  require('user.menu').add_actions('LSP', {
-    ['Start LSP without file (<leader>ls)'] = function()
-      _G.start_ls()
-    end,
-    ['Start LSP with file (<leader>lS)'] = function()
-      _G.start_ls(true)
-    end,
-  })
+  require 'user.lsp.rename'
 
   vim.diagnostic.config {
     jump = {

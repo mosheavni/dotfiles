@@ -1,39 +1,3 @@
-local T = vim.keycode
-local leader = T '<leader>'
-
---- Search term for project-wide substitute (blank input = same term RipGrep used).
----@param term string|nil
----@return string|nil
-local function effective_search_term(term)
-  if term == nil then
-    return nil
-  end
-  if term ~= '' then
-    return term
-  end
-  local qf_term = vim.g.qf_search_term
-  if type(qf_term) == 'string' and qf_term ~= '' then
-    return vim.trim(qf_term)
-  end
-  return vim.fn.expand '<cword>'
-end
-
----@param term string
----@param literal boolean
----@return string
-local function substitute_pattern(term, literal)
-  if literal then
-    return '\\V' .. vim.fn.escape(term, '\\')
-  end
-  return vim.fn.escape(term, '?&/\\')
-end
-
----@param term string
----@return string
-local function substitute_replacement(term)
-  return vim.fn.escape(term, '?&/\\~')
-end
-
 ---@return string dir
 ---@return string file
 local function shada_location()
@@ -47,90 +11,7 @@ local function shada_location()
   return dir, dir .. '/' .. name .. '.shada'
 end
 
-local find_in_project = function(opts)
-  opts = opts or {
-    literal_search = true,
-    callback = function() end,
-    noautocmd = false,
-  }
-  local bang = opts.literal_search and '' or '!'
-  local noautocmd_str = opts.noautocmd and 'noautocmd ' or ''
-  vim.ui.input({ prompt = 'Enter search term (blank for word under cursor)? ' }, function(search_term)
-    if search_term == nil then
-      return
-    end
-    local original_search_term = search_term
-    local grep_arg = search_term ~= '' and (' ' .. search_term) or ''
-
-    vim.cmd(noautocmd_str .. 'RipGrepCWORD' .. bang .. grep_arg)
-    opts.callback(original_search_term)
-  end)
-end
-
-local search_and_replace = function(literal_search)
-  find_in_project {
-    literal_search = literal_search,
-    callback = function(search_term)
-      search_term = effective_search_term(search_term)
-      if not search_term or search_term == '' then
-        vim.notify('No search term.', vim.log.levels.WARN, { title = 'Search and Replace' })
-        return
-      end
-
-      vim.ui.input({ prompt = 'Enter Replace term? ' }, function(replace_term)
-        if replace_term == nil then
-          vim.notify('Canceled.', vim.log.levels.INFO, { title = 'Search and Replace' })
-          return
-        end
-        vim.ui.input({
-          prompt = 'Enter flags (g=global, c=confirm, i=case insensitive, e=ignore errors, n=only count)? ',
-          default = 'gce',
-        }, function(flags)
-          if flags == nil then
-            vim.notify('Canceled.', vim.log.levels.INFO, { title = 'Search and Replace' })
-            return
-          end
-          local pattern = substitute_pattern(search_term, literal_search)
-          local replacement = substitute_replacement(replace_term)
-          vim.cmd(string.format('silent noautocmd cdo %%s?%s?%s?%s', pattern, replacement, flags))
-        end)
-      end)
-    end,
-    noautocmd = true,
-  }
-end
-
 return {
-  ['[Search] Find in pwd (literal search) (<C-f>)'] = function()
-    find_in_project { literal_search = true }
-  end,
-  ['[Search] Find in pwd (regex search) (<C-f>)'] = function()
-    find_in_project { literal_search = false }
-  end,
-  ['[Search] Search and Replace in cwd (literal search)'] = function()
-    search_and_replace(true)
-  end,
-  ['[Search] Search and Replace in cwd (regex search)'] = function()
-    search_and_replace(false)
-  end,
-  ['[Search] Replace word under cursor (<leader>r)'] = function()
-    vim.fn.feedkeys(leader .. 'r')
-  end,
-  ['[Edit] Select all (val / <leader>sa)'] = function()
-    vim.cmd.normal { 'val', bang = true }
-  end,
-  ['[Folds] Open all folds (<leader>fo | zR)'] = function()
-    vim.cmd 'normal! zR'
-  end,
-  ['[Folds] Open fold (<leader>ff | za)'] = function()
-    vim.cmd 'normal! za'
-  end,
-  ['[Folds] Open all folds folds under the cursor (level fold) (<leader>fl | zazczA)'] = function()
-    vim.cmd 'normal! zazczA'
-  end,
-  ['[Folds] Close all folds (<leader>fc | zM)'] = function()
-    vim.cmd 'normal! zM'
-  end,
   ['[Terraform] Remove terragrunt files'] = function()
     local scan_dir = require 'plenary.scandir'
     local terraform_repo = require('user.git').get_toplevel_sync()
@@ -155,12 +36,6 @@ return {
     -- set q register to -target
     vim.fn.setreg('q', [[yss'I-target=A \j]])
     vim.notify('Macro q set to -target', vim.log.levels.INFO, { title = 'Terraform' })
-  end,
-  ['[Format] Basic groovy format'] = function()
-    vim.cmd.BasicGroovyFormat()
-  end,
-  ['[Misc] Where am I?'] = function()
-    vim.cmd.Whereami()
   end,
   ['[Lua] Autocommand to reload the lua file nvim'] = function()
     if vim.api.nvim_get_option_value('filetype', { buf = 0 }) ~= 'lua' then
@@ -190,38 +65,6 @@ end)
     vim.cmd.write()
     vim.cmd 'luafile %'
   end,
-  ['[View] Center Focus (zz)'] = function()
-    vim.cmd 'normal! zz'
-  end,
-  ['[View] Bottom Focus (zb)'] = function()
-    vim.cmd 'normal! zb'
-  end,
-  ['[View] Top Focus (zt)'] = function()
-    vim.cmd 'normal! zt'
-  end,
-  ['[Macro] Record Macro (q{letter})'] = function()
-    vim.ui.input({ prompt = 'Macro letter❯ ' }, function(macro_letter)
-      if not macro_letter then
-        macro_letter = 'q'
-      end
-      vim.fn.feedkeys('q' .. macro_letter)
-      vim.notify('Recording macro ' .. macro_letter .. ' (hit q when finished)', vim.log.levels.INFO, { title = 'Macro' })
-      vim.notify('You can repeat this macro with @' .. macro_letter, vim.log.levels.INFO, { title = 'Macro' })
-    end)
-  end,
-  ['[Macro] Repeat Macro (@{letter} / Q)'] = function()
-    vim.ui.input({ prompt = 'Macro letter❯ ' }, function(macro_letter)
-      if not macro_letter then
-        macro_letter = 'q'
-      end
-      vim.ui.input({ prompt = 'Enter how many times (leave blank for once)❯ ' }, function(macro_times)
-        if not macro_times then
-          macro_times = ''
-        end
-        vim.fn.feedkeys(macro_times .. '@' .. macro_letter)
-      end)
-    end)
-  end,
   ['[File] Save current buffer as temp'] = function()
     local ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
     if ft == '' then
@@ -239,19 +82,6 @@ end)
       vim.cmd('write ' .. vim.fn.tempname() .. '.' .. ft)
       vim.cmd 'edit'
     end
-  end,
-  ['[Search] Find files (<C-p>)'] = function()
-    vim.cmd 'FzfLua files'
-  end,
-  ['[Search] Find buffers (<C-b>)'] = function()
-    vim.cmd 'FzfLua buffers'
-  end,
-  ['[File] Open Nvim Tree File Browser (<leader>o)'] = function()
-    local api = require 'nvim-tree.api'
-    api.tree.toggle()
-  end,
-  ['[Misc] Close all notifications (<leader>x)'] = function()
-    require('notify').dismiss { pending = true, silent = true }
   end,
   ['[Misc] Fix corrupted ShaDa file'] = function()
     local title = 'ShaDa'
@@ -294,51 +124,7 @@ end)
       vim.notify(msg, vim.log.levels.WARN, { title = title })
     end
   end,
-  ['[Misc] Quit all (<leader>qq)'] = function()
-    vim.cmd.qall()
-  end,
-  ['[Edit] Paste from clipboard (cv)'] = function()
-    vim.cmd 'normal! "+p'
-  end,
-  ['[Edit] Copy entire file to clipboard (<leader>Y)'] = function()
-    vim.cmd '%y+'
-  end,
-  ['[Edit] Convert \\n to new lines (<leader><cr>)'] = function()
-    vim.fn.feedkeys(leader .. T '<cr>')
-  end,
-  ['[Edit] Move line down (-)'] = function()
-    vim.cmd 'm+1'
-    vim.cmd '=='
-  end,
-  ['[Edit] Move line up (_)'] = function()
-    vim.cmd 'm-2'
-    vim.cmd '=='
-  end,
-  ['[View] Toggle words wrapping (<leader>ww)'] = function()
-    vim.o.wrap = not vim.o.wrap
-  end,
-  ['[File] Copy full file path to clipboard (<leader>cfa)'] = function()
-    vim.fn.feedkeys(leader .. 'cfa')
-  end,
-  ['[File] Copy relative file path to clipboard (<leader>cfp)'] = function()
-    vim.fn.feedkeys(leader .. 'cfp')
-  end,
-  ['[File] Copy directory path to clipboard (<leader>cfd)'] = function()
-    vim.fn.feedkeys(leader .. 'cfd')
-  end,
-  ['[File] Copy file name to clipboard (<leader>cfn)'] = function()
-    vim.fn.feedkeys(leader .. 'cfn')
-  end,
-  ['[Edit] Split long bash line (<leader>\\'] = function()
-    vim.fn.feedkeys(leader .. [[\]])
-  end,
-  ['[YAML] Yaml to Json (:Yaml2Json)'] = function()
-    vim.cmd.Yaml2Json()
-  end,
-  ['[JSON] Json to Yaml (:Json2Yaml)'] = function()
-    vim.cmd.Json2Yaml()
-  end,
-  ['[JSON] Sort keys under a path (jq)'] = function()
+  ['[JSON] Sort keys under a path with jq'] = function()
     local title = 'Sort JSON'
     if vim.fn.executable 'jq' == 0 then
       vim.notify('jq not found in PATH.', vim.log.levels.WARN, { title = title })
@@ -393,21 +179,5 @@ end)
       vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, vim.split((res.stdout:gsub('\n$', '')), '\n'))
       vim.notify(('Sorted %s.'):format(choice.label), vim.log.levels.INFO, { title = title })
     end)
-  end,
-  ['[Editor] Change indent size (cii)'] = function()
-    vim.fn.feedkeys 'cii'
-  end,
-  ['[Editor] Convert tabs to spaces (<leader>ct<SPC>)'] = function()
-    local original_expandtab = vim.opt_global.expandtab:get()
-    vim.opt.expandtab = true
-    vim.cmd.retab()
-    vim.opt.expandtab = original_expandtab
-  end,
-  ['[Diff] unsaved with saved file (<leader>ds)'] = function()
-    vim.cmd.DiffWithSaved()
-  end,
-  ['[File] Change directory to current file (<leader>.)'] = function()
-    vim.cmd 'cd %:p:h'
-    print(vim.fn.getcwd())
   end,
 }
