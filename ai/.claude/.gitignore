@@ -19,7 +19,10 @@ paste-cache/
 file-history/
 shell-snapshots/
 plans/
-projects/
+projects/*
+!projects/-Users-mosheavni--dotfiles/
+projects/-Users-mosheavni--dotfiles/*
+!projects/-Users-mosheavni--dotfiles/memory/
 settings.json.bak
 mcp-needs-auth-cache.json
 daemon*
