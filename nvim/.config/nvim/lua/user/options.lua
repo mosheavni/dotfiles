@@ -129,7 +129,19 @@ vim.o.timeoutlen = 400
 
 -- Ignore node_modules and other dirs
 vim.opt.wildignore:append { '**/node_modules/**', '**/.hg/**', '**/.git/**', '**/.svn/**', '*.DS_Store', '*.pyc' }
-vim.opt.path:append { '**' }
+vim.opt.path:append '**'
+
+_G.__native_find_cache = { text = nil, result = {} }
+
+vim.o.findfunc = function(text, _)
+  local files = vim.fn.systemlist { 'fd', '--type', 'f', '--hidden', '--strip-cwd-prefix' }
+  if vim.v.shell_error ~= 0 then
+    return {}
+  end
+  local result = text == '' and files or vim.fn.matchfuzzy(files, text)
+  _G.__native_find_cache = { text = text, result = result }
+  return result
+end
 
 -- Folding
 -- Default to indent so non-treesitter, non-LSP buffers still get folds.
