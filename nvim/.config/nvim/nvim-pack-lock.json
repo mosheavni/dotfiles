@@ -5,7 +5,7 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "6bcdcb22f02b43b990b650b3ab40c65aa193c3f8",
+      "rev": "73e89eb3e536a4dd8f991c963bd37189520c9919",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "blink.cmp": {
@@ -74,7 +74,7 @@
       "src": "https://github.com/nvim-mini/mini.notify"
     },
     "mini.operators": {
-      "rev": "f94f9184155c7f7f9a8fb069be2a97ce8a48c97f",
+      "rev": "9e0aa164b097c6cb45e59b9371c9347ac06eb822",
       "src": "https://github.com/nvim-mini/mini.operators"
     },
     "mini.splitjoin": {
@@ -90,7 +90,7 @@
       "src": "https://github.com/nvim-mini/mini.surround"
     },
     "nvim-autopairs": {
-      "rev": "7b9923abad60b903ece7c52940e1321d39eccc79",
+      "rev": "430522f95fe4fb7c511ec64f8c1a90cc6a66c05c",
       "src": "https://github.com/windwp/nvim-autopairs"
     },
     "nvim-bqf": {
@@ -98,11 +98,11 @@
       "src": "https://github.com/kevinhwang91/nvim-bqf"
     },
     "nvim-lint": {
-      "rev": "9b99aad869102ac01775187abd8d49017b148612",
+      "rev": "0370fe965697aa8f04252a1562441bdc13723cd1",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "d2011e1dd0c27569c551f16b688d86029ae015c9",
+      "rev": "221c43884319e791519f0d6c94a7f2fbcd653278",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-pqf": {
@@ -114,7 +114,7 @@
       "src": "https://github.com/nvim-tree/nvim-tree.lua"
     },
     "nvim-treesitter": {
-      "rev": "a1bcffc8095c142ad1f7a9671a4ae180333f9209",
+      "rev": "e82ef6ae2c3eeb96c6916b29917f96bf630b2cdb",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {
@@ -142,7 +142,7 @@
       "src": "https://github.com/mosheavni/search-replace.nvim"
     },
     "smart-splits.nvim": {
-      "rev": "0fe3bbd99d48458ad188c4c262c31049fa9b018c",
+      "rev": "5e92431aa7f5e618c2f6825f682df6d94f6e0a02",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "switch.vim": {
@@ -170,7 +170,7 @@
       "src": "https://github.com/machakann/vim-swap"
     },
     "wezterm-types": {
-      "rev": "851470ad5d2dfb56bda936e6aeef2f3a45e7f199",
+      "rev": "2b7b940c4db654c518708dac02d4f0d4bec99057",
       "src": "https://github.com/DrKJeff16/wezterm-types"
     }
   }
