@@ -118,17 +118,8 @@ map('n', '<C-l>', '<C-w>l', { remap = false, desc = 'Go to Right Window' })
 -- Entire buffer: builtin |v_al| / |o_al|. Inner line: |v_il| / |o_il|.
 map('n', '<leader>sa', 'val', { remap = false, desc = 'Visually select entire buffer' })
 
--- Run and edit macros
-for _, key in pairs { 'Q', 'X' } do
-  ---@diagnostic disable-next-line: undefined-field
-  map('n', key, '@' .. key:lower(), { remap = false, desc = 'Run macro ' .. key:lower() })
-  map(
-    'n',
-    '<leader>' .. key,
-    ":<c-u><c-r><c-r>='let @" .. key:lower() .. " = '. string(getreg('" .. key:lower() .. "'))<cr><c-f><left>",
-    { remap = false, desc = 'Edit macro ' .. key:lower() }
-  )
-end
+-- edit q macro
+map('n', '<leader>Q', ":<c-u><c-r><c-r>='let @q = '. string(getreg('q'))<cr><c-f><left>", { remap = false, desc = 'Edit macro q' })
 
 -- tabs (on managed terminals, ]t/[t cycle terminals instead)
 map('n', ']t', function()
