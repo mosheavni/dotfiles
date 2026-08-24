@@ -1020,20 +1020,23 @@ function M.open(opts)
   refresh_after_open(opts.fetch ~= false, state.check_id)
 end
 
-api.nvim_create_user_command('PackFloat', function(command)
-  M.open { fetch = not command.bang }
-end, {
-  bang = true,
-  desc = 'Open lazy-style vim.pack UI',
-})
+function M.setup()
+  api.nvim_create_user_command('PackFloat', function(command)
+    M.open { fetch = not command.bang }
+  end, {
+    bang = true,
+    desc = 'Open lazy-style vim.pack UI',
+  })
 
-require('user.menu').add_actions('Plugins', {
-  ['Open vim.pack UI (:PackFloat)'] = function()
-    vim.cmd [[PackFloat]]
-  end,
-  ['Open vim.pack UI without fetch (:PackFloat!)'] = function()
-    vim.cmd [[PackFloat!]]
-  end,
-})
+  require('user.menu').add_actions('Plugins', {
+    ['Open vim.pack UI (:PackFloat)'] = function()
+      vim.cmd [[PackFloat]]
+    end,
+    ['Open vim.pack UI without fetch (:PackFloat!)'] = function()
+      vim.cmd [[PackFloat!]]
+    end,
+  })
+  vim.keymap.set('n', '<leader>z', '<cmd>PackFloat<cr>', { silent = true, desc = 'Update plugins' })
+end
 
 return M

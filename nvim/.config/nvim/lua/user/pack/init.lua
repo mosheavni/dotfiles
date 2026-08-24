@@ -42,6 +42,3 @@ vim.schedule(function()
 
   vim.api.nvim_exec_autocmds('User', { pattern = 'DeferredPluginsLoaded' })
 end)
-
-require 'user.pack.float'
-vim.keymap.set('n', '<leader>z', '<cmd>PackFloat<cr>', { silent = true, desc = 'Update plugins' })
