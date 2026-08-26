@@ -10,7 +10,9 @@
     "typescript-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
     "vscode-langservers@claude-code-lsps": true,
-    "vtsls@claude-code-lsps": true
+    "vtsls@claude-code-lsps": true,
+    "claude-mem@thedotmack": true,
+    "claude-code-setup@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-code-lsps": {
@@ -26,5 +28,38 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-daltonized",
   "inputNeededNotifEnabled": false,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "autoMode": {
+    "soft_deny": [
+      "$defaults",
+      "Bash(vercel deploy --prod:*) — production deploy via vercel CLI, scoped to this project",
+      "Bash(gh api repos/mosheavni/iron-log/*:-X DELETE) — destructive gh API calls against this repo"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: Supabase (Postgres + PostgREST) — project at onooyzpwhxamqchegeda.supabase.co",
+      "**Repository visibility**: private (mosheavni/iron-log, confirmed via gh)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured — Supabase access controlled via Row Level Security, not secret env vars (VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY are intentionally client-exposed per CLAUDE.md/README)",
+      "**Default / protected branches**: default branch unknown (origin/HEAD unset); no protected branches listed; rulesets not queryable here — treat master/main as sensitive by default",
+      "**CI/CD deploy targets**: Vercel (vercel CLI used 10× in this project's transcripts) — no GitHub Actions configured",
+      "**Network posture**: None configured",
+      "**Source control**: mosheavni/iron-log on github.com only (no additional orgs configured)",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: onooyzpwhxamqchegeda.supabase.co (this project's Supabase REST endpoint)",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: .env, .env.local, .env.example, and any other .env* files (Supabase project URL/publishable key plus any future secrets); personal bodyweight/training data stored in Supabase — share only with the repo owner",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries prod or production as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries prod or production as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development (personal/hobby project — single-user gym tracker)",
+      "**Trusted repo**: mosheavni/iron-log (github.com:mosheavni/iron-log.git), private — confidential material (e.g. this user's own training/bodyweight data) is fine here; content ported from other repos or sessions is not this repo's own work",
+      "**Org-specific CLIs**: gh (GitHub issues workflow for mosheavni/iron-log, per .claude/skills/github-issues), vercel (deploy)",
+      "routine under mosheavni/iron-log prefix: gh issue/pr operations scoped to mosheavni/iron-log"
+    ]
+  }
 }

@@ -2,10 +2,15 @@
   "mcpServers": {
     "atlassian": {
       "type": "http",
-      "url": "https://mcp.atlassian.com/v1/mcp/authv2"
+      "url": "https://mcp.atlassian.com/v1/mcp/authv2",
+      "disabled": true
     },
     "aws-knowledge-mcp-server": {
-      "args": ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"],
+      "args": [
+        "fastmcp",
+        "run",
+        "https://knowledge-mcp.global.api.aws"
+      ],
       "autoApprove": [
         "aws___get_regional_availability",
         "aws___list_regions",
@@ -16,11 +21,15 @@
       "command": "uvx"
     },
     "awslabs.aws-api-mcp-server": {
-      "args": ["awslabs.aws-api-mcp-server@latest"],
+      "args": [
+        "awslabs.aws-api-mcp-server@latest"
+      ],
       "command": "uvx"
     },
     "awslabs.cloudwatch-mcp-server": {
-      "args": ["awslabs.cloudwatch-mcp-server@latest"],
+      "args": [
+        "awslabs.cloudwatch-mcp-server@latest"
+      ],
       "autoApprove": [],
       "command": "uvx",
       "disabled": false,
@@ -61,17 +70,32 @@
       "disabled": true
     },
     "fetch": {
-      "args": ["--with", "mcp<2", "mcp-server-fetch"],
+      "args": [
+        "--with",
+        "mcp<2",
+        "mcp-server-fetch"
+      ],
       "command": "uvx"
     },
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem"],
-      "autoApprove": ["read_file", "list_directory", "get_file_stats"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem"
+      ],
+      "autoApprove": [
+        "read_file",
+        "list_directory",
+        "get_file_stats"
+      ]
     },
     "git": {
       "command": "uvx",
-      "args": ["--with", "mcp<2", "mcp-server-git"]
+      "args": [
+        "--with",
+        "mcp<2",
+        "mcp-server-git"
+      ]
     },
     "github": {
       "type": "http",
@@ -81,7 +105,9 @@
       }
     },
     "kubernetes": {
-      "args": ["mcp-server-kubernetes"],
+      "args": [
+        "mcp-server-kubernetes"
+      ],
       "autoApprove": [
         "explain_resource",
         "kubectl_describe",
@@ -93,10 +119,14 @@
       "command": "npx",
       "env": {
         "ALLOW_ONLY_NON_DESTRUCTIVE_TOOLS": "true"
-      }
+      },
+      "disabled": true
     },
     "memory": {
-      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
       "autoApprove": [
         "create_entities",
         "create_relations",
@@ -112,15 +142,25 @@
     },
     "mongodb": {
       "command": "npx",
-      "args": ["-y", "mongodb-mcp-server@latest", "--readOnly"],
+      "args": [
+        "-y",
+        "mongodb-mcp-server@latest",
+        "--readOnly"
+      ],
       "disabled": true
     },
     "puppeteer": {
-      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ],
       "command": "npx"
     },
     "selenium": {
-      "args": ["-y", "@angiejones/mcp-selenium"],
+      "args": [
+        "-y",
+        "@angiejones/mcp-selenium"
+      ],
       "autoApprove": [
         "take_screenshot",
         "start_browser",
@@ -141,10 +181,25 @@
       "disabled_tools": []
     },
     "sequentialthinking": {
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
-      "autoApprove": ["sequentialthinking"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "autoApprove": [
+        "sequentialthinking"
+      ],
       "command": "npx",
       "disabled": true
+    },
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
     }
   },
   "nativeMCPServers": {
