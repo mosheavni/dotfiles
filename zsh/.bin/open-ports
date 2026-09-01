@@ -1,0 +1,40 @@
+#!/usr/bin/env zsh
+#
+# open-ports - list open TCP/UDP ports and the process listening on each.
+#
+# Usage:
+#   open-ports            # all listening ports
+#   open-ports 8080       # only rows matching port 8080
+#   open-ports node       # only rows matching process name "node"
+
+set -euo pipefail
+
+filter="${1:-}"
+
+base_rows=$(
+  lsof -nP +c0 -iTCP -sTCP:LISTEN -iUDP 2>/dev/null | awk 'NR>1 && $9 !~ /:\*$/ {
+    split($9, addr, ":")
+    port = addr[length(addr)]
+    printf "%s\t%s\t%s\t%s\t%s\n", $8, port, $2, $1, $3
+  }' | sort -t $'\t' -k2,2n -u
+)
+
+if [[ -n $filter ]]; then
+  base_rows=$(echo "$base_rows" | grep -i -- "$filter")
+fi
+
+typeset -A cwd_of args_of
+
+{
+  printf "PROTO\tPORT\tPID\tPROCESS\tUSER\tCWD\tCOMMAND\n"
+  echo "$base_rows" | while IFS=$'\t' read -r proto port pid process user; do
+    [[ -z $pid ]] && continue
+    if [[ -z ${cwd_of[$pid]:-} ]]; then
+      cwd_of[$pid]=$(lsof -a -p "$pid" -d cwd -Fn 2>/dev/null | awk '/^n/{print substr($0,2); exit}')
+      cwd_of[$pid]="${cwd_of[$pid]:--}"
+      args_of[$pid]=$(ps -o args= -p "$pid" 2>/dev/null)
+      args_of[$pid]="${args_of[$pid]:--}"
+    fi
+    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "$proto" "$port" "$pid" "$process" "$user" "${cwd_of[$pid]}" "${args_of[$pid]}"
+  done
+} | column -t -s $'\t'

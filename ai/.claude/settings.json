@@ -12,7 +12,8 @@
     "vscode-langservers@claude-code-lsps": true,
     "vtsls@claude-code-lsps": true,
     "claude-mem@thedotmack": true,
-    "claude-code-setup@claude-plugins-official": true
+    "claude-code-setup@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-code-lsps": {
