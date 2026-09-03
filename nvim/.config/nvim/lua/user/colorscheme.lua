@@ -80,6 +80,11 @@ function M.setup()
         Title = { fg = cyan }, -- cascades to FloatTitle/FloatFooter
         FloatBorder = { fg = grey, bg = 'none' }, -- bg='none' preserves transparency
         WinSeparator = { fg = grey }, -- split divider (VertSplit links here)
+        -- Secondary (multicursor, 'Q') cursors are highlighted cells that link to
+        -- 'Cursor' by default, but 'Cursor' has no real color attrs in terminal Nvim
+        -- (the primary cursor is the terminal's hardware cursor) — so they're invisible
+        -- unless given explicit colors here.
+        MCursor = { fg = palette.dark_grey2, bg = palette.grey1 },
         Underlined = { fg = magenta, underline = true },
         ['@variable.parameter'] = { fg = magenta, italic = italic },
         ['@variable.member'] = { fg = cyan, italic = italic },

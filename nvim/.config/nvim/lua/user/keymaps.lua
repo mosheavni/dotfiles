@@ -115,6 +115,16 @@ map('n', '<C-j>', '<C-w>j', { remap = false, desc = 'Go to Lower Window' })
 map('n', '<C-k>', '<C-w>k', { remap = false, desc = 'Go to Upper Window' })
 map('n', '<C-l>', '<C-w>l', { remap = false, desc = 'Go to Right Window' })
 
+-- <C-l> is remapped above, so it no longer runs the builtin CTRL-L-default
+-- (nohlsearch/diffupdate/clear-multicursors/redraw, see $VIMRUNTIME/lua/vim/_core/defaults.lua).
+-- Restore multicursor-clearing (added by Neovim's builtin 'Q' multicursor feature) on its own key.
+map('n', '<leader>mc', function()
+  vim.cmd.nohlsearch()
+  vim.cmd.diffupdate()
+  vim.api.nvim_buf_clear_namespace(0, vim.api.nvim_create_namespace 'nvim.multicursor', 0, -1)
+  vim.cmd.normal { '\12', bang = true } -- <C-l>: redraw
+end, { remap = false, silent = true, desc = 'Clear multicursors (+ nohlsearch/redraw)' })
+
 -- Entire buffer: builtin |v_al| / |o_al|. Inner line: |v_il| / |o_il|.
 map('n', '<leader>sa', 'val', { remap = false, desc = 'Visually select entire buffer' })
 
