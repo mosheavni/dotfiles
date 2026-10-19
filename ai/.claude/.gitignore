@@ -19,10 +19,14 @@ paste-cache/
 file-history/
 shell-snapshots/
 plans/
+security/
 projects/*
 !projects/-Users-mosheavni--dotfiles/
 projects/-Users-mosheavni--dotfiles/*
 !projects/-Users-mosheavni--dotfiles/memory/
+!projects/-Users-Moshe-a--dotfiles/
+projects/-Users-Moshe-a--dotfiles/*
+!projects/-Users-Moshe-a--dotfiles/memory/
 settings.json.bak
 mcp-needs-auth-cache.json
 daemon*
@@ -31,3 +35,9 @@ jobs/
 .caveman-mode-log.jsonl
 image-cache/
 stats-cache.json
+
+# org/remote-managed state (pulled from server, machine-local)
+policy-limits.json
+policy-limits.json.stamp.json
+remote-settings.json
+remote-settings-consent.json

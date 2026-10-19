@@ -1,0 +1,7 @@
+# ~/.cursor is folded into this directory by stow, so anything Cursor
+# itself writes here lands in the repo. Allowlist only what's intentionally
+# tracked; everything else (generated/synced/cached state) stays untracked.
+/*
+!/.gitignore
+!/cli-config.base.json
+!/rules/

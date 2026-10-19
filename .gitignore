@@ -3,3 +3,4 @@ nvim/.config/plenary.nvim/
 graphify-out/
 .github/.act-event.json
 **/boost-awareness.md*
+__pycache__/
