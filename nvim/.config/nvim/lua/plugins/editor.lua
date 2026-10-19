@@ -46,6 +46,7 @@ function M.deferred()
 
   require('render-markdown').setup {
     file_types = { 'markdown' },
+    latex = { enabled = false },
   }
 
   require('bqf').setup {
