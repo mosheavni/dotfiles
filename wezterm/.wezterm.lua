@@ -313,7 +313,7 @@ wezterm.on('augment-command-palette', function()
   }
 end)
 
-local smart_splits = wezterm.plugin.require 'https://github.com/mrjones2014/smart-splits.nvim'
+local smart_splits = wezterm.plugin.require 'https://github.com/smart-splits-nvim/backend-wezterm'
 smart_splits.apply_to_config(config, {
   direction_keys = { 'h', 'j', 'k', 'l' },
   modifiers = {

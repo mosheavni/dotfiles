@@ -1,5 +1,4 @@
 vim.pack.add {
-  'https://github.com/mrjones2014/smart-splits.nvim',
   'https://github.com/yorickpeterse/nvim-pqf',
   'https://github.com/junegunn/vim-easy-align',
   'https://github.com/AndrewRadev/switch.vim',
@@ -12,13 +11,17 @@ vim.pack.add {
   'https://github.com/kevinhwang91/nvim-bqf',
 }
 
+vim.pack.add { {
+  src = 'https://github.com/smart-splits-nvim/smart-splits.nvim',
+  version = 'v3',
+}, 'https://github.com/smart-splits-nvim/backend-wezterm' }
 require('user.utils').load_plugin 'https://github.com/mosheavni/search-replace.nvim'
 
 local M = {}
 
 function M.eager()
   ---@diagnostic disable-next-line: missing-fields
-  require('smart-splits').setup {}
+  require('smart-splits').setup { mux = { backend = 'smart-splits-backend-wezterm' } }
   vim.keymap.set('n', '<A-h>', require('smart-splits').resize_left, { desc = 'Resize split left' })
   vim.keymap.set('n', '<A-j>', require('smart-splits').resize_down, { desc = 'Resize split down' })
   vim.keymap.set('n', '<A-k>', require('smart-splits').resize_up, { desc = 'Resize split up' })
