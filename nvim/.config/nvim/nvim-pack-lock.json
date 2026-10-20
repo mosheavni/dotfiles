@@ -5,7 +5,7 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "7fca30f2890a6acf9d21d194876c6ac960d92070",
+      "rev": "82037f0534e303c3bb39472340fd23b9c46ab528",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "backend-wezterm": {
@@ -42,7 +42,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "c67fadd9a24230417267e4f9068227e093c0be2b",
+      "rev": "348df165f1773dd08c5d710add3fd0db6d421e6a",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -119,7 +119,7 @@
       "src": "https://github.com/yorickpeterse/nvim-pqf"
     },
     "nvim-tree.lua": {
-      "rev": "0142ac30ba84fa6ebf7818b097b2addffed78668",
+      "rev": "e2f08a1cdbe5a37ad4d7691ea7918e91e4b5b89f",
       "src": "https://github.com/nvim-tree/nvim-tree.lua"
     },
     "nvim-treesitter": {
