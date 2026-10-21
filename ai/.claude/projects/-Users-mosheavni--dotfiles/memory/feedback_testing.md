@@ -7,7 +7,7 @@ metadata:
   originSessionId: 8595f7bc-6127-4556-a2cf-b97f8a8c7cc4
 ---
 
-Don't run `make test` (nvim Plenary suite) after every Lua change — only when the change touches a module with a corresponding spec in `lua/tests/` (utils, gitbrowse, git, hints, number-separators, open-url, present, tabular-v2, run-buffer, input, gh-actions, lister, pack_float, search-count, terminal).
+Don't run `make test` (nvim Plenary suite) after every Lua change — only when the change touches a module with a corresponding spec in `lua/tests/` (utils, gitbrowse, git, hints, number-separators, open-url, present, run-buffer, input, gh-actions, lister, pack_float, terminal).
 
 **Why:** user rejected a test run after an `options.lua` filetype change with "nothing related to tests was changed so let's skip it for now" (2026-06-10). Suite takes time; headless `nvim --headless` behavior checks are the preferred verification for untested config files.
 
