@@ -152,8 +152,8 @@
     },
     "smart-splits.nvim": {
       "rev": "ea553356370ea76dce189fb36947a424f124c04b",
-      "src": "https://github.com/mrjones2014/smart-splits.nvim",
-      "version": "'v3'"
+      "src": "https://github.com/smart-splits-nvim/smart-splits.nvim",
+      "version": "3.0.0 - 4.0.0"
     },
     "switch.vim": {
       "rev": "70ad8c66c694c60e9d13342493f51d5b7dddc42d",
