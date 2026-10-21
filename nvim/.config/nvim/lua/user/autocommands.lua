@@ -57,7 +57,6 @@ autocmd('User', {
     require('user.figlet').setup()
     require('user.gitbrowse').setup()
     require('user.easymotion').setup()
-    require('user.pack.float').setup()
   end,
 })
 

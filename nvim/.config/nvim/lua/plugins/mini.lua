@@ -33,7 +33,7 @@ function M.deferred()
       'input',
       'mason',
       'notify',
-      'pack-float',
+      'nvim-pack',
       'trouble',
     },
     callback = function()

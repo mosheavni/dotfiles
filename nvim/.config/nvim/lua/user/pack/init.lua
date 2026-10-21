@@ -42,3 +42,29 @@ vim.schedule(function()
 
   vim.api.nvim_exec_autocmds('User', { pattern = 'DeferredPluginsLoaded' })
 end)
+
+-- Plugin updates via the native vim.pack confirmation buffer (:h vim.pack.update()).
+vim.keymap.set('n', '<leader>z', function()
+  vim.pack.update()
+end, { desc = 'Update plugins (vim.pack)' })
+
+vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Key hints for the vim.pack update confirmation buffer',
+  group = vim.api.nvim_create_augroup('PackUpdateHints', { clear = true }),
+  pattern = 'nvim-pack',
+  callback = function(ev)
+    local hints = table.concat({
+      ':w     apply updates',
+      ':q     discard',
+      ']] [[  next/prev plugin',
+      'K      details for change at cursor',
+      'gx     open commit/repo in browser',
+      'gra    plugin actions (update/skip/delete)',
+      'gO     buffer outline',
+    }, '\n')
+    vim.keymap.set('n', 'g?', function()
+      vim.notify(hints, vim.log.levels.INFO, { title = 'vim.pack update keys' })
+    end, { buffer = ev.buf, desc = 'Show update-buffer keys' })
+    vim.notify('g? for keys · :w apply · :q discard', vim.log.levels.INFO, { title = 'vim.pack' })
+  end,
+})

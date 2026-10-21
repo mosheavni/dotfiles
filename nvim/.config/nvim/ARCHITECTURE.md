@@ -19,8 +19,9 @@ Startup cost is managed by hand rather than by a lazy-loading framework:
   behind a `User DeferredPluginsLoaded` autocmd (see section 3).
 
 Installed plugin versions are pinned in `nvim-pack-lock.json` (managed by
-`vim.pack`). `<leader>z` opens `:PackFloat`, a custom update UI implemented in
-`lua/user/pack/float.lua`.
+`vim.pack`). `<leader>z` runs `vim.pack.update()`, which opens the native
+confirmation buffer (`:h vim.pack.update()`); `g?` in that buffer shows its keys
+(hint autocmd in `lua/user/pack/init.lua`).
 
 ## 2. Bootstrap / load order
 
@@ -75,7 +76,8 @@ The file does four things, in this order:
    `look-and-feel`, `mini.deferred()`, `functionality.deferred()`, `git`, `lsp`,
    `fzf`, `conform`, `lint`, `blink`, `ai`, `tree`, `mini-statusline` — then
    fires `User DeferredPluginsLoaded`.
-4. Requires `user.pack.float` and maps `<leader>z` to `:PackFloat`.
+4. Maps `<leader>z` to `vim.pack.update()` and registers a `FileType nvim-pack`
+   autocmd that adds a `g?` key-hints mapping to the confirmation buffer.
 
 ### Eager vs. deferred, precisely
 
@@ -149,8 +151,7 @@ this budget gets measured.
 
 | Module           | Purpose                                                                                                               |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `pack/init.lua`  | `PackChanged` install/update hooks, eager plugin batch, `vim.schedule` deferred batch, fires `DeferredPluginsLoaded`. |
-| `pack/float.lua` | `:PackFloat` — a floating UI over `vim.pack` for reviewing and applying plugin updates, with commit-log previews.     |
+| `pack/init.lua`  | `PackChanged` install/update hooks, eager plugin batch, `vim.schedule` deferred batch, fires `DeferredPluginsLoaded`; `<leader>z` update keymap and `nvim-pack` buffer key hints. |
 
 ### Git tooling
 
@@ -207,7 +208,6 @@ this budget gets measured.
 
 | Module            | Purpose                                                                                                                                                                     |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `float.lua`       | Generic reusable floating-window primitive (buffer/window caching, refresh/close/toggle, sizing helpers). Used by `pack/float` and `:ParseCert`.                            |
 | `input.lua`       | A `vim.ui.input` replacement: floating prompt with history and completion.                                                                                                  |
 | `menu.lua`        | The central action menu — collects action tables (from `user.actions` plus `add_actions()` registrations) and presents them.                                                |
 | `actions.lua`     | The large static table of general-purpose menu actions (search/replace, folds, macros, clipboard, terraform, view, ...).                                                    |
@@ -283,8 +283,8 @@ method, fn)` is the shared helper for iterating LSP clients by supported
   menu with `require('user.menu').add_actions('<Prefix>', { ... })` — done by
   `plugins/git.lua`, `plugins/gitsigns.lua`, `plugins/kubectl.lua`,
   `plugins/lsp.lua`, `plugins/functionality.lua`, and `lua/user/init.lua`.
-- **Shared UI primitives.** Floats go through `user.float`; statusline colors
-  come from `user.colorscheme.palette`.
+- **Shared UI primitives.** Statusline colors come from
+  `user.colorscheme.palette`.
 
 ## Appendix: other runtime directories
 

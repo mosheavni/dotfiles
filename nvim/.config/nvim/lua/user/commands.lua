@@ -296,31 +296,31 @@ local function parse_cert()
   end
 
   local lines = vim.split(vim.trim(result.stdout or ''), '\n')
-  local float = require('user.float').new()
-  float.refresh(function()
-    return lines
-  end, function(buf_id)
-    local width, height = float.buffer_default_dimensions(buf_id, 0.8)
-    height = math.min(height, vim.o.lines - 4)
-    return {
-      relative = 'editor',
-      width = width,
-      height = height,
-      col = math.floor((vim.o.columns - width) / 2),
-      row = math.floor((vim.o.lines - height) / 2),
-      anchor = 'NW',
-      style = 'minimal',
-      border = 'rounded',
-      title = ' Certificate ',
-    }
-  end)
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  vim.bo[buf].modifiable = false
+  vim.bo[buf].bufhidden = 'wipe'
 
-  -- Focus the float so it can be scrolled and closed with q/<esc>
-  if float.is_shown() then
-    vim.api.nvim_set_current_win(float.cache.win_id)
-    for _, key in ipairs { 'q', '<esc>' } do
-      vim.keymap.set('n', key, float.close, { buffer = float.cache.buf_id, nowait = true })
-    end
+  local width = 0
+  for _, line in ipairs(lines) do
+    width = math.max(width, vim.fn.strdisplaywidth(line))
+  end
+  width = math.min(width, math.floor(vim.o.columns * 0.8))
+  local height = math.min(#lines, vim.o.lines - 4)
+
+  -- Focused so it can be scrolled and closed with q/<esc>
+  vim.api.nvim_open_win(buf, true, {
+    relative = 'editor',
+    width = width,
+    height = height,
+    col = math.floor((vim.o.columns - width) / 2),
+    row = math.floor((vim.o.lines - height) / 2),
+    style = 'minimal',
+    border = 'rounded',
+    title = ' Certificate ',
+  })
+  for _, key in ipairs { 'q', '<esc>' } do
+    vim.keymap.set('n', key, '<cmd>close<cr>', { buffer = buf, nowait = true })
   end
 end
 
