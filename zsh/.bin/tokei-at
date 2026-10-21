@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# tokei-at [rev|range]... — tokei code count at commits, without checking them out.
+# Examples: tokei-at            (HEAD)
+#           tokei-at v1.0 master~5
+#           tokei-at HEAD~20..HEAD
+set -euo pipefail
+
+shas=()
+for rev in "${@:-HEAD}"; do
+  if [[ $rev == *..* ]]; then
+    while IFS= read -r sha; do shas+=("$sha"); done < <(git rev-list --reverse "$rev")
+  else
+    shas+=("$(git rev-parse --verify "$rev^{commit}")")
+  fi
+done
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+for sha in "${shas[@]}"; do
+  find "$tmp" -mindepth 1 -delete
+  git archive "$sha" | tar -x -C "$tmp"
+  printf '%s %7s  %s\n' "$(git show -s --format='%h %as' "$sha")" \
+    "$(tokei "$tmp" --hidden --no-ignore --output json | jq '.Total.code')" \
+    "$(git show -s --format=%s "$sha")"
+done

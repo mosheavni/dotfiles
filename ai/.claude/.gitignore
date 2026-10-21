@@ -39,5 +39,9 @@ stats-cache.json
 # org/remote-managed state (pulled from server, machine-local)
 policy-limits.json
 policy-limits.json.stamp.json
+policy-limits.json.signature*.json
 remote-settings.json
 remote-settings-consent.json
+remote-settings.json.signature*.json
+remote-settings.json.synced-at
+state/
