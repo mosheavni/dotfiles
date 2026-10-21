@@ -6,7 +6,7 @@ local M = setmetatable({}, {
   end,
 })
 
-local uv = vim.uv or vim.loop
+local uv = vim.uv
 
 ---Build a line anchor for a file URL, or an empty string when no line is set.
 ---@param fields user.gitbrowse.Fields
