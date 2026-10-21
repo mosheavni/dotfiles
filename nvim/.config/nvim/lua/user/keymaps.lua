@@ -376,6 +376,33 @@ vim.keymap.set('n', 'cii', function()
   end)
 end, { desc = 'Change indentation size' })
 
+-- Open URL under cursor, or pick from all URLs in the buffer
+map('n', 'gx', function()
+  local cfile = vim.fn.expand '<cfile>'
+  if cfile:match '^https?://' then
+    return vim.ui.open(cfile)
+  end
+  local links = {}
+  for i, line in ipairs(vim.api.nvim_buf_get_lines(0, 0, -1, false)) do
+    for link in line:gmatch '(https?://[%w%.%-_/]+)' do
+      table.insert(links, { line = i, link = link })
+    end
+  end
+  if #links == 0 then
+    return vim.notify('No links found in the file', vim.log.levels.WARN)
+  end
+  vim.ui.select(links, {
+    prompt = 'Select a link to open❯ ',
+    format_item = function(item)
+      return item.line .. ':🔗 ' .. item.link
+    end,
+  }, function(selected)
+    if selected then
+      vim.ui.open(selected.link)
+    end
+  end)
+end, { remap = false, desc = 'Open url under cursor' })
+
 -- Abbreviations
 map('!a', 'dont', [[don't]], { remap = false })
 map('!a', 'ill', [[i'll]], { remap = false })
