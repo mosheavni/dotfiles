@@ -30,6 +30,40 @@ update_brew() {
   "$(brew --prefix)/opt/fzf/install" --all --no-update-rc
 }
 
+update_figlet_fonts() {
+  log "figlet — download missing fonts"
+  if ! command -v figlet >/dev/null; then
+    echo "figlet not installed, skipping" >&2
+    return 0
+  fi
+  local font_dir repo_url="https://raw.githubusercontent.com/xero/figlet-fonts/master"
+  font_dir=$(figlet -I2)
+
+  local font ext found
+  while IFS= read -r font; do
+    [[ -z "$font" ]] && continue
+    found=false
+    for ext in flf flc tlf; do
+      [[ -f "$font_dir/$font.$ext" ]] && found=true && break
+    done
+    "$found" && continue
+
+    for ext in flf flc tlf; do
+      if curl -fsSL -o "$font_dir/$font.$ext" "$repo_url/${font// /%20}.$ext" 2>/dev/null; then
+        echo "Downloaded figlet font: $font"
+        found=true
+        break
+      fi
+      rm -f "$font_dir/$font.$ext"
+    done
+    "$found" || echo "Could not download figlet font: $font" >&2
+  done < <(
+    # Font list lives in the nvim figlet module; extract the quoted names.
+    sed -n "/^local fonts = {/,/^}/s/^  '\(.*\)',$/\1/p" \
+      "$DOTFILES/nvim/.config/nvim/lua/user/figlet.lua"
+  )
+}
+
 update_pip() {
   log "pip — sync venv at ~/.local/share/dotfiles-python"
   uv venv --python "$(brew --prefix python3)/bin/python3" --allow-existing \
@@ -111,12 +145,13 @@ update_gh_releases() {
 
 # ── main ─────────────────────────────────────────────────────────────────────
 
-UPDATE_SECTIONS=(asdf brew pip npm gh tools)
+UPDATE_SECTIONS=(asdf brew figlet pip npm gh tools)
 
 run_section() {
   case "$1" in
   asdf) update_asdf ;;
   brew) update_brew ;;
+  figlet) update_figlet_fonts ;;
   pip) update_pip ;;
   npm) update_npm ;;
   gh) update_gh_releases ;;
