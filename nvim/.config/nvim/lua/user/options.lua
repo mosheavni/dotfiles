@@ -101,8 +101,7 @@ vim.o.lazyredraw = false
 vim.o.swapfile = false
 vim.o.backup = true
 vim.o.writebackup = true
-vim.o.backupdir = vim.fn.stdpath 'state' .. '/backup'
-vim.opt.wildoptions:append { 'fuzzy', 'pum' }
+vim.opt.wildoptions = { 'fuzzy', 'pum', 'tagfile' }
 vim.opt.wildmode = { 'longest:full', 'full' } -- Command-line completion mode
 vim.opt.completeopt = 'menu,menuone,noselect,noinsert,popup'
 vim.o.previewheight = 15
