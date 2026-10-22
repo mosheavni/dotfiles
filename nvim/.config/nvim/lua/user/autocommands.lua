@@ -60,17 +60,8 @@ autocmd('FileType', {
     'PlenaryTestPopup',
     'checkhealth',
     'help',
-    'lspinfo',
     'man',
-    'neotest-output',
-    'neotest-output-panel',
-    'neotest-summary',
-    'netrw',
-    'notify',
     'qf',
-    'spectre_panel',
-    'startuptime',
-    'tsplayground',
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
