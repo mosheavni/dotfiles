@@ -35,7 +35,6 @@ map('i', '<C-b>', '<C-o>db', { remap = false, desc = 'Delete word before cursor'
 map('x', '/', '<Esc>/\\%V', { remap = false, desc = 'Search within visual selection' })
 
 -- operators
-_G.op = _G.op or {}
 
 ---0-indexed bounds of the last operator/motion region (`[ to `]), for nvim_buf_get_text.
 ---@param motion 'char'|'line'|'block'
@@ -60,7 +59,7 @@ local function arm(fn)
 end
 
 -- surround with string interpolation with motion
-function _G.op.surround_with_interpolation(motion)
+local function surround_with_interpolation(motion)
   local srow, scol, erow, ecol = region_bounds(motion)
   local lines = vim.api.nvim_buf_get_text(0, srow, scol, erow, ecol, {})
   lines[1] = '"${' .. lines[1]
@@ -68,7 +67,7 @@ function _G.op.surround_with_interpolation(motion)
   vim.api.nvim_buf_set_text(0, srow, scol, erow, ecol, lines)
   vim.api.nvim_win_set_cursor(0, { srow + 1, scol })
 end
-map('n', 'mt', arm(_G.op.surround_with_interpolation), { expr = true, desc = 'Surround with string interpolation' })
+map('n', 'mt', arm(surround_with_interpolation), { expr = true, desc = 'Surround with string interpolation' })
 
 -- Indent block
 map('n', '<leader>>', function()
@@ -159,18 +158,18 @@ map('n', '<leader>=', 'yypVr=', { remap = false, desc = 'Duplicate line with = s
 -- Map dp and dg with leader for diffput and diffget
 -- Routed through operatorfunc + g@l (rather than plain <cmd>diffput<cr>) solely
 -- to make the mappings dot-repeatable; the callbacks ignore the motion.
-_G.op.diffput = function()
+local function diffput()
   vim.cmd [[diffput]]
 end
 map('n', '<leader>dp', function()
-  vim.o.operatorfunc = _G.op.diffput
+  vim.o.operatorfunc = diffput
   return 'g@l'
 end, { expr = true, desc = 'Diff put current hunk' })
-_G.op.diffget = function()
+local function diffget()
   vim.cmd [[diffget]]
 end
 map('n', '<leader>dg', function()
-  vim.o.operatorfunc = _G.op.diffget
+  vim.o.operatorfunc = diffget
   return 'g@l'
 end, { expr = true, desc = 'Diff get current line' })
 map('n', '<leader>dn', '<cmd>windo diffthis<cr>', { remap = false, silent = true, desc = 'Start diff mode' }) -- codespell:ignore windo
@@ -324,14 +323,14 @@ local function b64(action, motion)
   local new_end_col = #new_text[#new_text]
   vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { new_end_row + 1, new_end_col })
 end
-function _G.op.base64_encode(motion)
+local function base64_encode(motion)
   b64('encode', motion)
 end
-function _G.op.base64_decode(motion)
+local function base64_decode(motion)
   b64('decode', motion)
 end
-map({ 'n', 'x' }, '<leader>64', arm(_G.op.base64_encode), { expr = true, desc = 'Base64 encode' })
-map({ 'n', 'x' }, '<leader>46', arm(_G.op.base64_decode), { expr = true, desc = 'Base64 decode' })
+map({ 'n', 'x' }, '<leader>64', arm(base64_encode), { expr = true, desc = 'Base64 encode' })
+map({ 'n', 'x' }, '<leader>46', arm(base64_decode), { expr = true, desc = 'Base64 decode' })
 
 -- Close current buffer
 map('n', '<leader>bc', ':close<cr>', { silent = true, desc = 'Close this buffer' })
