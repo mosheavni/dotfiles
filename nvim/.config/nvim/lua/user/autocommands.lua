@@ -113,10 +113,6 @@ autocmd({ 'FileType' }, {
   callback = function()
     vim.opt_local.spell = true
     vim.opt_local.spelllang = { 'en' }
-    vim.api.nvim_set_hl(0, 'SpellBad', {
-      undercurl = true,
-      sp = '#ff5555', -- curl color
-    })
   end,
 })
 

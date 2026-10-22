@@ -140,6 +140,9 @@ function M.setup()
         GitSignsAdd = { fg = green },
         GitSignsChange = { fg = yellow },
         GitSignsDelete = { fg = red },
+
+        -- red undercurl instead of the default theme's plain undercurl color.
+        SpellBad = { undercurl = true, sp = '#ff5555' },
       }
       for group, opts in pairs(groups) do
         vim.api.nvim_set_hl(0, group, opts)
