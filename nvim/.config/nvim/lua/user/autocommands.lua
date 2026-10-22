@@ -1,16 +1,7 @@
 local autocmd = vim.api.nvim_create_autocmd
 
--- Check if we need to reload the file when it changed
+-- Nvim 0.13's runtime plugin/autoread.lua watches files and runs :checktime itself
 local reload_file_group = vim.api.nvim_create_augroup('ReloadFile', { clear = true })
-autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
-  group = reload_file_group,
-  callback = function()
-    if vim.o.buftype ~= 'nofile' then
-      vim.cmd 'checktime'
-    end
-  end,
-})
-
 autocmd('FileChangedShellPost', {
   desc = 'Reload when the file is changed outside of Neovim',
   group = reload_file_group,
@@ -86,13 +77,6 @@ autocmd('FileType', {
     vim.keymap.set('n', 'q', '<cmd>close<cr>', { buffer = event.buf, silent = true })
   end,
 })
-autocmd('FileType', {
-  pattern = 'cmp_docs',
-  group = buffer_settings,
-  callback = function()
-    vim.treesitter.start(0, 'markdown')
-  end,
-})
 autocmd({ 'TextYankPost', 'TextPutPost' }, {
   desc = 'Highlight on yank/put',
   group = buffer_settings,
@@ -113,11 +97,6 @@ autocmd({ 'VimResized' }, {
 
 -- Special filetypes
 local special_filetypes = vim.api.nvim_create_augroup('SpecialFiletypes', { clear = true })
-autocmd({ 'FileType' }, {
-  group = special_filetypes,
-  pattern = 'json',
-  command = 'syntax match Comment +\\/\\/.\\+$+',
-})
 autocmd({ 'FileType' }, {
   group = special_filetypes,
   pattern = 'javascript',
@@ -162,8 +141,6 @@ autocmd({ 'TermOpen' }, {
   group = term_au,
   pattern = '*',
   callback = function()
-    vim.opt_local.number = false
-    vim.opt_local.relativenumber = false
     vim.cmd.startinsert()
   end,
 })
