@@ -21,9 +21,6 @@ shell-snapshots/
 plans/
 security/
 projects/*
-!projects/-Users-mosheavni--dotfiles/
-projects/-Users-mosheavni--dotfiles/*
-!projects/-Users-mosheavni--dotfiles/memory/
 !projects/-Users-Moshe-a--dotfiles/
 projects/-Users-Moshe-a--dotfiles/*
 !projects/-Users-Moshe-a--dotfiles/memory/

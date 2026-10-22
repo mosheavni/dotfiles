@@ -4,3 +4,4 @@ graphify-out/
 .github/.act-event.json
 **/boost-awareness.md*
 __pycache__/
+Brewfile.lock.json

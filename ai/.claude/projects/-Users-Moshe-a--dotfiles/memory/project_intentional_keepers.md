@@ -7,7 +7,7 @@ metadata:
   originSessionId: 31583fab-540a-4029-aea5-c7a2ea787682
 ---
 
-Confirmed by user on 2026-07-03 during repo audit (see AUDIT.md decisions):
+Confirmed by user on 2026-07-03 during repo audit (AUDIT.md, deleted 2026-10-22 after full execution — see git history):
 
 - `automations/.local/bin/morning-routine.sh` — invoked by a macOS Shortcut, an external reference repo greps cannot see. Not orphaned.
 - `zsh/zsh.d/functions.zsh` `zip-code` — embedded `ocp-apim-subscription-key` is a public website's key, deliberately kept (`#gitleaks:allow`). Not a secret.
