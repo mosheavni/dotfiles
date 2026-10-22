@@ -14,7 +14,7 @@ update_asdf() {
     asdf plugin add "$plugin" 2>/dev/null || true
   done <"$DOTFILES/asdf/.tool-versions"
   asdf install
-  asdf plugin update --all
+  asdf plugin update --all &
 }
 
 update_brew() {
@@ -68,8 +68,14 @@ update_pip() {
   log "pip — sync venv at ~/.local/share/dotfiles-python"
   uv venv --python "$(brew --prefix python3)/bin/python3" --allow-existing \
     "$HOME/.local/share/dotfiles-python"
-  uv pip sync --python "$HOME/.local/share/dotfiles-python/bin/python" \
-    "$DOTFILES/python/requirements.txt"
+  # requirements.txt lists top-level tools only; `uv pip sync` expects a fully
+  # resolved lockfile, so compile the transitive closure first.
+  local compiled
+  compiled=$(mktemp)
+  # shellcheck disable=SC2064
+  trap "rm -f $(printf '%q' "$compiled")" RETURN
+  uv pip compile --quiet -o "$compiled" "$DOTFILES/python/requirements.txt"
+  uv pip sync --python "$HOME/.local/share/dotfiles-python/bin/python" "$compiled"
 }
 
 update_npm() {

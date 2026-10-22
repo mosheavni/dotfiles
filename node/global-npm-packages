@@ -8,7 +8,6 @@ dockerfile-language-server-nodejs
 eslint
 eslint-config-react-app
 markdownlint-cli
-mcp-hub@latest
 neovim
 npm
 npm-groovy-lint
