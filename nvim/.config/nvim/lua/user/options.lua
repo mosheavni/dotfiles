@@ -35,12 +35,11 @@ vim.o.title = true -- Changes the wezterm title
 vim.o.cursorcolumn = true
 vim.o.cursorline = true -- Add highlight behind current line
 vim.o.jumpoptions = 'stack'
-vim.opt.shortmess:append {
-  c = true, -- no completion messages
-  C = true, -- no ins-completion-menu messages
-  I = true, -- no intro
-  S = true, -- no search count overflow
-}
+-- c = no completion messages
+-- C = no ins-completion-menu messages
+-- I = no intro
+-- S = no search count overflow
+vim.opt.shortmess:append 'cCIS'
 vim.o.list = true -- Show some invisible characters (tabs...
 vim.opt.listchars = {
   eol = '↲',
@@ -127,8 +126,8 @@ vim.o.updatetime = 300
 vim.o.timeoutlen = 400
 
 -- Ignore node_modules and other dirs
-vim.opt.wildignore:append { '**/node_modules/**', '**/.hg/**', '**/.git/**', '**/.svn/**', '*.DS_Store', '*.pyc' }
-vim.opt.path:append { '**' }
+vim.opt.wildignore:append '**/node_modules/**,**/.hg/**,**/.git/**,**/.svn/**,*.DS_Store,*.pyc'
+vim.opt.path:append '**'
 
 -- Folding
 -- Default to indent so non-treesitter, non-LSP buffers still get folds.
@@ -146,14 +145,7 @@ vim.o.foldtext = ''
 -- r = auto insert comment leader after <Enter> (insert mode)
 -- o = auto insert comment leader after o (normal mode)
 -- l = don't break long lines
-vim.opt.formatoptions:append {
-  c = true,
-  j = true,
-  l = true,
-  o = true,
-  r = true,
-  t = true,
-}
+vim.opt.formatoptions:append 'cjlort'
 
 -- Indenting
 vim.o.breakindent = true -- Maintain indent on wrapping lines
@@ -164,7 +156,8 @@ vim.o.shiftround = true -- use multiple of shiftwidth when indenting with '<' an
 vim.o.softtabstop = 2
 vim.o.tabstop = 2
 vim.o.expandtab = true -- Tab changes to spaces. Format with :retab
-vim.opt.indentkeys:remove { '0#', '<:>' }
+vim.opt.indentkeys:remove '0#'
+vim.opt.indentkeys:remove '<:>'
 
 ---------------
 -- Filetypes --
