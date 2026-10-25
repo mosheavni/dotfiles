@@ -78,7 +78,7 @@
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/",
       "headers": {
-        "Authorization": "Bearer ${GITHUB_TOKEN}"
+        "Authorization": "Bearer ${cmd: gh auth token --user mosheavni}"
       }
     },
     "kubernetes": {
