@@ -66,5 +66,8 @@ vim.api.nvim_create_autocmd('FileType', {
       vim.notify(hints, vim.log.levels.INFO, { title = 'vim.pack update keys' })
     end, { buffer = ev.buf, desc = 'Show update-buffer keys' })
     vim.notify('g? for keys · :w apply · :q discard', vim.log.levels.INFO, { title = 'vim.pack' })
+    vim.schedule(function()
+      pcall(vim.cmd.packdel, '++all')
+    end)
   end,
 })
