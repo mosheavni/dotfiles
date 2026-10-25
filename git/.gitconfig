@@ -124,6 +124,10 @@
   status      = true
   ui          = true
 
+# Personal repos always go over SSH, even when given as https URLs or user/repo shorthand.
+[url "git@github.com:mosheavni/"]
+  insteadOf = https://github.com/mosheavni/
+
 # Machine-local overrides (not committed). Last include wins.
 [include]
   path = ~/.gitconfig.local
