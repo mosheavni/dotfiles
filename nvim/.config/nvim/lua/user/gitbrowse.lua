@@ -119,10 +119,21 @@ end
 local function system(cmd, err)
   local proc = vim.fn.system(cmd)
   if vim.v.shell_error ~= 0 then
-    vim.notify { err, proc }
-    error '__ignore__'
+    vim.notify(('%s: %s'):format(err, vim.trim(proc)), vim.log.levels.ERROR)
+    error('__ignore__', 0) -- level 0: no position prefix, so M.open can match it
   end
   return vim.split(vim.trim(proc), '\n')
+end
+
+---Extract the 7-char commit hash from a `fugitiveblame` line.
+---@param line string
+---@return string? hash nil when the line has no hash or is not committed yet (all zeros)
+function M.blame_hash(line)
+  local hash = line:match '^%^?(%x%x%x%x%x%x%x)' -- boundary commits are prefixed with `^`
+  if not hash or hash:match '^0+$' then
+    return nil
+  end
+  return hash
 end
 
 ---@param hash string

@@ -163,4 +163,47 @@ describe('user.gitbrowse', function()
       eq(url, 'https://bitbucket.org/user/repo/src/main/src/test.lua')
     end)
   end)
+
+  describe('blame_hash', function()
+    it('extracts the 7-char hash from a blame line', function()
+      eq(gitbrowse.blame_hash 'd4d38871   3 (Moshe Avni 2026-03-29 13:05:49 +0300   1) # CLAUDE.md', 'd4d3887')
+    end)
+
+    it('strips the boundary commit prefix', function()
+      eq(gitbrowse.blame_hash '^d4d3887 (Moshe Avni 2026-03-29 13:05:49 +0300 1) # CLAUDE.md', 'd4d3887')
+    end)
+
+    it('returns nil for uncommitted lines', function()
+      assert.is_nil(gitbrowse.blame_hash '00000000 zsh/.zshrc (Not Committed Yet 2026-10-25 12:43:11 +0200 117) foo')
+    end)
+
+    it('returns nil when the line has no hash', function()
+      assert.is_nil(gitbrowse.blame_hash '')
+      assert.is_nil(gitbrowse.blame_hash '# not a hash')
+    end)
+  end)
+
+  describe('open', function()
+    local orig_notify
+
+    before_each(function()
+      orig_notify = vim.notify
+    end)
+
+    after_each(function()
+      vim.notify = orig_notify
+    end)
+
+    it('notifies a string and does not raise when the commit is invalid', function()
+      local msgs = {}
+      vim.notify = function(msg)
+        msgs[#msgs + 1] = msg
+      end
+      local ok, err = pcall(gitbrowse.open, { what = 'commit', commit = '0000000', notify = false, open = function() end })
+      eq(ok, true, err)
+      eq(#msgs, 1)
+      eq(type(msgs[1]), 'string')
+      assert.is_truthy(msgs[1]:find('Invalid commit hash', 1, true))
+    end)
+  end)
 end)

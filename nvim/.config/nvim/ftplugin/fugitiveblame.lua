@@ -23,10 +23,13 @@ vim.schedule(function()
   end, { buffer = bufnr, desc = 'Copy commit hash' })
 
   vim.keymap.set('n', '<leader>gh', function()
-    local commit_hash = get_commit_hash()
+    local gitbrowse = require 'user.gitbrowse'
+    local commit_hash = gitbrowse.blame_hash(vim.api.nvim_get_current_line())
+    if not commit_hash then
+      return vim.notify('Line is not committed yet', vim.log.levels.WARN)
+    end
     vim.cmd 'wincmd p'
-    -- selene: allow(undefined_variable)
-    require('user.gitbrowse').open {
+    gitbrowse.open {
       what = 'commit',
       commit = commit_hash,
     }
