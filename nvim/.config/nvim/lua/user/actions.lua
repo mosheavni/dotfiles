@@ -12,6 +12,27 @@ local function shada_location()
 end
 
 return {
+  ['[File] Diff against backup'] = function()
+    local title = 'Backup diff'
+    local file = vim.api.nvim_buf_get_name(0)
+    if file == '' or vim.bo.buftype ~= '' then
+      vim.notify('Buffer has no file.', vim.log.levels.WARN, { title = title })
+      return
+    end
+
+    -- 'backupdir' is a single entry ending in `//`: backups are named after the full resolved path with `%` separators
+    local backup = vim.fn.expand(vim.o.backupdir) .. vim.fn.resolve(vim.fn.fnamemodify(file, ':p')):gsub('/', '%%') .. vim.o.backupext
+    if vim.fn.filereadable(backup) == 0 then
+      vim.notify('No backup found for ' .. vim.fn.fnamemodify(file, ':~:.'), vim.log.levels.WARN, { title = title })
+      return
+    end
+
+    vim.cmd.diffoff { bang = true }
+    vim.cmd('leftabove vertical diffsplit ' .. vim.fn.fnameescape(backup))
+    vim.bo.bufhidden = 'wipe'
+    vim.bo.modifiable = false
+    vim.notify('Left: backup (' .. os.date('%Y-%m-%d %H:%M:%S', vim.fn.getftime(backup)) .. ')', vim.log.levels.INFO, { title = title })
+  end,
   ['[Terraform] Remove terragrunt files'] = function()
     local scan_dir = require 'plenary.scandir'
     local terraform_repo = require('user.git').get_toplevel_sync()
