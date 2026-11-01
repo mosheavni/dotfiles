@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # TUI for managing ai/.config/mcphub/servers.json — list/add/edit/enable-disable
 # MCP servers with gum, edit raw server JSON in $EDITOR, and sync native
-# per-client entries to Claude Code, Cursor, and Copilot CLI after each change.
+# per-client entries to Claude Code and Copilot CLI after each change.
 set -euo pipefail
 
 # Resolve the real script location — invoked via the stowed symlink in

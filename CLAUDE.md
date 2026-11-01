@@ -92,17 +92,15 @@ The `.stowrc` file excludes non-stowable files (Brewfile, readme, etc.) from dep
 
 **When creating new files, decide scope first:**
 
-| Where to put it                                      | When                                          |
-| ---------------------------------------------------- | --------------------------------------------- |
-| Inside a stow package (e.g. `zsh/`, `ai/`)           | Config you want on every machine (global)     |
-| `.cursor/rules/*.mdc` at repository root             | Cursor rules scoped to this repository only   |
-| Repository root with a leading dot (e.g. `.cursor/`) | Repository-local tooling config, never stowed |
-| Gitignored + excluded in `.stowrc`                   | Generated/local output (e.g. `graphify-out/`) |
+| Where to put it                                | When                                          |
+| ---------------------------------------------- | --------------------------------------------- |
+| Inside a stow package (e.g. `zsh/`, `ai/`)     | Config you want on every machine (global)     |
+| Repository root with a leading dot             | Repository-local tooling config, never stowed |
+| Gitignored + excluded in `.stowrc`             | Generated/local output (e.g. `graphify-out/`) |
 
 **AI config packages:**
 
-- `ai/` → stows `~/.claude/` (Claude config, skills, MCP servers), `~/AGENTS.md` (Claude + agents), and `~/.cursor/rules/agents.mdc` (Cursor global rules)
-- `.cursor/rules/` (repository root, NOT a stow package) → Cursor rules that only apply when working in this repository
+- `ai/` → stows `~/.claude/` (Claude config, skills, MCP servers) and `~/AGENTS.md` (Claude + agents)
 
 ### Neovim Configuration
 
@@ -128,7 +126,7 @@ Custom modules in `lua/user/` include utilities (utils.lua), Git helpers, LSP co
 
 ### Compound YAML filetypes (`yaml.*`)
 
-When adding `yaml.something` via `vim.filetype.add` in `options.lua`, follow the full checklist in `.cursor/rules/yaml-compound-filetype.mdc` (yamlls filetypes, run-buffer, lint keys, conform, hardcoded `yaml` checks, tests).
+When adding `yaml.something` via `vim.filetype.add` in `options.lua`, follow the full checklist in `nvim/.config/nvim/YAML_FILETYPES.md` (yamlls filetypes, run-buffer, lint keys, conform, hardcoded `yaml` checks, tests).
 
 ### Zsh Configuration
 

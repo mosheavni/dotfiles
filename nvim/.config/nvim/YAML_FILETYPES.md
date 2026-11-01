@@ -1,9 +1,3 @@
----
-description: Checklist when adding a compound YAML filetype (yaml.something)
-globs: nvim/.config/nvim/**
-alwaysApply: false
----
-
 # Compound YAML filetypes (`yaml.*`)
 
 Use **`yaml.<purpose>`** (e.g. `yaml.chart`, `yaml.ghaction`) — not bare names like `ghaction`. The `yaml.` prefix keeps treesitter on the **yaml** parser automatically (`vim.treesitter.language.get_lang` strips after the first `.`).
@@ -31,12 +25,12 @@ Current list: `yaml`, `yaml.chart`, `yaml.docker-compose`, `yaml.ghaction`, `yam
 
 ## 3. Run-buffer / F3 (if behavior differs from plain yaml)
 
-| Step | File |
-|------|------|
-| Handler | `lua/user/run-buffer/handlers/yaml_<purpose>.lua` (or extend `yaml.lua`) |
-| Register | `lua/user/run-buffer/handlers/init.lua` |
+| Step            | File                                                                       |
+| --------------- | -------------------------------------------------------------------------- |
+| Handler         | `lua/user/run-buffer/handlers/yaml_<purpose>.lua` (or extend `yaml.lua`)   |
+| Register        | `lua/user/run-buffer/handlers/init.lua`                                    |
 | Default cmd map | `lua/user/utils.lua` → `filetype_to_command` (if not `yq` / yaml fallback) |
-| Tests | `lua/tests/run-buffer_spec.lua` |
+| Tests           | `lua/tests/run-buffer_spec.lua`                                            |
 
 Plain `yaml` handler: `yq`, or `kubectl apply --dry-run=client` when `vim.b.is_kubernetes`.
 
@@ -66,11 +60,11 @@ Parser must be in the `nvim-treesitter` `install` list (`yaml` is already there)
 
 Search for hardcoded `'yaml'` and decide if compounds should match:
 
-| Location | Pattern today | Compound-friendly? |
-|----------|---------------|-------------------|
-| `lua/plugins/mini-statusline.lua` | `ft:match('^yaml')` | Yes |
-| `lua/user/lsp/server/actions.lua` | `filetype ~= 'yaml'` | **No** — use `^yaml` or list types |
-| `lsp/user_lsp.lua` | includes `'yaml'` only | Extend if user-LSP actions should run |
+| Location                          | Pattern today          | Compound-friendly?                    |
+| --------------------------------- | ---------------------- | ------------------------------------- |
+| `lua/plugins/mini-statusline.lua` | `ft:match('^yaml')`    | Yes                                   |
+| `lua/user/lsp/server/actions.lua` | `filetype ~= 'yaml'`   | **No** — use `^yaml` or list types    |
+| `lsp/user_lsp.lua`                | includes `'yaml'` only | Extend if user-LSP actions should run |
 
 ## 8. Tests & docs
 
@@ -95,9 +89,9 @@ Expect: intended `yaml.*` ft, `get_lang` → `yaml`, yamlls client attached (unl
 
 ## Helm charts (related, not `yaml.*`)
 
-| Content | Filetype | LSP |
-|---------|----------|-----|
-| `Chart.yaml`, values (plain YAML) | `yaml` or `yaml.chart` | yamlls |
-| `templates/*.yaml` with `{{ }}` | `helm` | helm_ls |
+| Content                           | Filetype               | LSP     |
+| --------------------------------- | ---------------------- | ------- |
+| `Chart.yaml`, values (plain YAML) | `yaml` or `yaml.chart` | yamlls  |
+| `templates/*.yaml` with `{{ }}`   | `helm`                 | helm_ls |
 
 Do not set `Chart.yaml` to `helm` unless you accept helm treesitter + helm_ls instead of the yaml toolchain.

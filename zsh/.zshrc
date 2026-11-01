@@ -101,7 +101,7 @@ export KUBERNETES_EXEC_INFO='{"apiVersion": "client.authentication.k8s.io/v1beta
 # ==================== #
 # AI config sync       #
 # ==================== #
-# MCP servers, agent guidelines, Cursor CLI policy (once per day, background)
+# MCP servers and agent guidelines (once per day, background)
 MCP_SYNC_TIMESTAMP="$HOME/last-ai-sync.txt"
 if [[ ! -f "$MCP_SYNC_TIMESTAMP" ]] || [[ "$(date +%Y%m%d)" != "$(date -r "$MCP_SYNC_TIMESTAMP" +%Y%m%d 2>/dev/null)" ]]; then
   (

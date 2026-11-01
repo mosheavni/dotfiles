@@ -1,5 +1,5 @@
 {
-  "model": "claude-sonnet-5",
+  "model": "sonnet",
   "enableWorkflows": true,
   "enabledPlugins": {
     "bash-language-server@claude-code-lsps": true,
@@ -24,9 +24,30 @@
     }
   },
   "alwaysThinkingEnabled": true,
+  "modelSettings": {
+    "claude-sonnet-5-5": {
+      "effortLevel": "high"
+    }
+  },
   "advisorModel": "opus",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
+  "permissions": {
+    "deny": [
+      "Bash(terraform apply)",
+      "Bash(terraform apply *)",
+      "Bash(terraform -chdir=* apply)",
+      "Bash(terraform -chdir=* apply *)",
+      "Bash(tf apply)",
+      "Bash(tf apply *)",
+      "Bash(terragrunt apply)",
+      "Bash(terragrunt apply *)",
+      "Bash(terragrunt run-all apply)",
+      "Bash(terragrunt run-all apply *)",
+      "Bash(gh pr merge)",
+      "Bash(gh pr merge *)"
+    ]
+  },
   "theme": "dark-daltonized",
   "inputNeededNotifEnabled": false,
   "agentPushNotifEnabled": true,

@@ -2,10 +2,8 @@
 
 # Maintain local AI tooling configuration.
 #
-# - MCP servers (servers.json → native per-client entries in Claude/Cursor/Copilot)
-# - Karpathy agent guidelines (remote → AGENTS.md + agents.mdc)
-# - Cursor CLI policy (cli-config.base.json → ~/.cursor/cli-config.json)
-# - Superpowers plugin (~/.cursor/plugins/local/superpowers)
+# - MCP servers (servers.json → native per-client entries in Claude/Copilot)
+# - Karpathy agent guidelines (remote → AGENTS.md)
 
 set -e
 
@@ -13,12 +11,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly SCRIPT_DIR
 readonly MCPHUB_SOURCE="${SCRIPT_DIR}/.config/mcphub/servers.json"
 readonly CLAUDE_MCP_TARGET="${HOME}/.claude.json"
-readonly CURSOR_MCP_TARGET="${HOME}/.cursor/mcp.json"
 readonly COPILOT_MCP_TARGET="${HOME}/.copilot/mcp-config.json"
-readonly CLI_CONFIG_BASE="${SCRIPT_DIR}/.cursor/cli-config.base.json"
-readonly CLI_CONFIG_TARGET="${HOME}/.cursor/cli-config.json"
-readonly SUPERPOWERS_REPO="${HOME}/.cursor/plugins/local/superpowers"
-readonly SUPERPOWERS_REMOTE="https://github.com/obra/superpowers.git"
 readonly KARPATHY_BASE="https://raw.githubusercontent.com/multica-ai/andrej-karpathy-skills/main"
 readonly LAST_SYNC_FILE="${HOME}/last-ai-sync.txt"
 
@@ -109,18 +102,16 @@ sync_mcp_servers_into() {
 }
 
 sync_all_mcp_servers() {
-  local claude_result cursor_result copilot_result
+  local claude_result copilot_result
 
   set +e
   sync_mcp_servers_into "$CLAUDE_MCP_TARGET" "${HOME}/.claude.json" false native
   claude_result=$?
-  sync_mcp_servers_into "$CURSOR_MCP_TARGET" "${HOME}/.cursor/mcp.json" true native
-  cursor_result=$?
   sync_mcp_servers_into "$COPILOT_MCP_TARGET" "${HOME}/.copilot/mcp-config.json" true copilot
   copilot_result=$?
   set -e
 
-  if [ "$claude_result" -eq "$SYNC_ERROR" ] && [ "$cursor_result" -eq "$SYNC_ERROR" ] && [ "$copilot_result" -eq "$SYNC_ERROR" ]; then
+  if [ "$claude_result" -eq "$SYNC_ERROR" ] && [ "$copilot_result" -eq "$SYNC_ERROR" ]; then
     return "$SYNC_ERROR"
   fi
 
@@ -155,84 +146,7 @@ sync_karpathy_guidelines() {
     "${KARPATHY_BASE}/CLAUDE.md" \
     "${SCRIPT_DIR}/AGENTS.md" \
     "ai/AGENTS.md"
-  sync_remote_file \
-    "${KARPATHY_BASE}/.cursor/rules/karpathy-guidelines.mdc" \
-    "${SCRIPT_DIR}/.cursor/rules/agents.mdc" \
-    "ai/.cursor/rules/agents.mdc"
   set -e
-}
-
-# --- Cursor CLI config (base → live, preserve machine-local cache) ---------------
-
-merge_cursor_cli_config() {
-  local merged
-
-  if [ ! -f "$CLI_CONFIG_BASE" ]; then
-    echo "Warning: ${CLI_CONFIG_BASE} not found" >&2
-    return "$SYNC_ERROR"
-  fi
-
-  mkdir -p "$(dirname "$CLI_CONFIG_TARGET")"
-
-  if [ ! -f "$CLI_CONFIG_TARGET" ]; then
-    cp "$CLI_CONFIG_BASE" "$CLI_CONFIG_TARGET"
-    echo "✓ Created ${CLI_CONFIG_TARGET} from cli-config.base.json"
-    return "$SYNC_UPDATED"
-  fi
-
-  merged="$(
-    jq --slurpfile base "$CLI_CONFIG_BASE" '
-      .permissions = $base[0].permissions |
-      .editor = $base[0].editor |
-      .display = $base[0].display |
-      .notifications = $base[0].notifications |
-      .hints = $base[0].hints |
-      .rewind = $base[0].rewind |
-      .suggestNextPrompt = $base[0].suggestNextPrompt |
-      .network = $base[0].network |
-      .approvalMode = $base[0].approvalMode |
-      .sandbox = $base[0].sandbox |
-      .attribution = $base[0].attribution |
-      .version = $base[0].version
-    ' "$CLI_CONFIG_TARGET"
-  )" || return "$SYNC_ERROR"
-
-  if [ "$(cat "$CLI_CONFIG_TARGET")" = "$merged" ]; then
-    return "$SYNC_UNCHANGED"
-  fi
-
-  write_file_atomically "$CLI_CONFIG_TARGET" "$merged"
-  echo "✓ Merged dotfiles policy into ${CLI_CONFIG_TARGET}"
-  return "$SYNC_UPDATED"
-}
-
-# --- Superpowers plugin (git pull) ---------------------------------------------
-
-sync_superpowers_plugin() {
-  if [ ! -d "$SUPERPOWERS_REPO/.git" ]; then
-    mkdir -p "$(dirname "$SUPERPOWERS_REPO")"
-    git clone "$SUPERPOWERS_REMOTE" "$SUPERPOWERS_REPO" || {
-      echo "Warning: Failed to clone superpowers to ${SUPERPOWERS_REPO}" >&2
-      return "$SYNC_ERROR"
-    }
-    echo "✓ Cloned superpowers to ${SUPERPOWERS_REPO}"
-    return "$SYNC_UPDATED"
-  fi
-
-  local before after
-  before="$(git -C "$SUPERPOWERS_REPO" rev-parse HEAD)"
-  git -C "$SUPERPOWERS_REPO" pull --ff-only -q || {
-    echo "Warning: Failed to update superpowers in ${SUPERPOWERS_REPO}" >&2
-    return "$SYNC_ERROR"
-  }
-  after="$(git -C "$SUPERPOWERS_REPO" rev-parse HEAD)"
-
-  if [ "$before" = "$after" ]; then
-    return "$SYNC_UNCHANGED"
-  fi
-
-  echo "✓ Updated superpowers (${before:0:7} → ${after:0:7})"
-  return "$SYNC_UPDATED"
 }
 
 record_last_sync() {
@@ -240,7 +154,7 @@ record_last_sync() {
 }
 
 main() {
-  require_commands jq curl git || exit 1
+  require_commands jq curl || exit 1
 
   if [ "${1:-}" = "--mcp-only" ]; then
     sync_all_mcp_servers
@@ -250,10 +164,6 @@ main() {
 
   sync_all_mcp_servers
   sync_karpathy_guidelines
-  set +e
-  merge_cursor_cli_config
-  sync_superpowers_plugin
-  set -e
   record_last_sync
 }
 
