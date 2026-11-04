@@ -83,5 +83,6 @@
       "**Org-specific CLIs**: gh (GitHub issues workflow for mosheavni/iron-log, per .claude/skills/github-issues), vercel (deploy)",
       "routine under mosheavni/iron-log prefix: gh issue/pr operations scoped to mosheavni/iron-log"
     ]
-  }
+  },
+  "outputStyle": "Concise"
 }
