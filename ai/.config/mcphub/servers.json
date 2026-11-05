@@ -46,15 +46,6 @@
         "FASTMCP_LOG_LEVEL": "ERROR"
       }
     },
-    "coralogix-server": {
-      "type": "http",
-      "url": "https://api.us2.coralogix.com/mgmt/api/v1/mcp",
-      "headers": {
-        "Authorization": "Bearer ${CORALOGIX_API_KEY}",
-        "mcp-version": "v2"
-      },
-      "disabled": true
-    },
     "excalidraw": {
       "type": "http",
       "url": "https://mcp.excalidraw.com",

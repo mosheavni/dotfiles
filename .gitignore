@@ -5,3 +5,7 @@ graphify-out/
 **/boost-awareness.md*
 __pycache__/
 Brewfile.lock.json
+# company-internal launchd agents (internal hostnames)
+automations/Library/LaunchAgents/com.securithings.*
+# company/machine-local MCP servers (merged in by ai/sync-ai-config.sh)
+ai/.config/mcphub/servers.local.json

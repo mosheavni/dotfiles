@@ -1,5 +1,4 @@
 {
-  "model": "sonnet",
   "enableWorkflows": true,
   "enabledPlugins": {
     "bash-language-server@claude-code-lsps": true,
@@ -24,12 +23,6 @@
     }
   },
   "alwaysThinkingEnabled": true,
-  "modelSettings": {
-    "claude-sonnet-5-5": {
-      "effortLevel": "high"
-    }
-  },
-  "advisorModel": "opus",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "permissions": {
@@ -52,9 +45,7 @@
   "inputNeededNotifEnabled": false,
   "agentPushNotifEnabled": true,
   "autoMode": {
-    "soft_deny": [
-      "$defaults"
-    ],
+    "soft_deny": ["$defaults"],
     "environment": [
       "### Org-wide",
       "**Organization**: employer's private organization; DevOps engineer. Repos are checked out under ~/Repos.",
