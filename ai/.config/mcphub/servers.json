@@ -39,7 +39,7 @@
       ],
       "autoApprove": [],
       "command": "uvx",
-      "disabled": false,
+      "disabled": true,
       "env": {
         "AWS_DEFAULT_REGION": "us-east-1",
         "AWS_REGION": "us-east-1",
@@ -48,8 +48,7 @@
     },
     "excalidraw": {
       "type": "http",
-      "url": "https://mcp.excalidraw.com",
-      "disabled": true
+      "url": "https://mcp.excalidraw.com"
     },
     "fetch": {
       "args": ["--with", "mcp<2", "mcp-server-fetch"],
@@ -108,7 +107,8 @@
     },
     "puppeteer": {
       "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
-      "command": "npx"
+      "command": "npx",
+      "disabled": true
     },
     "selenium": {
       "args": ["-y", "@angiejones/mcp-selenium"],
@@ -129,6 +129,7 @@
         "upload_file"
       ],
       "command": "npx",
+      "disabled": true,
       "disabled_tools": []
     },
     "sequentialthinking": {
