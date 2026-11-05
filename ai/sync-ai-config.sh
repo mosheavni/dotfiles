@@ -2,7 +2,10 @@
 
 # Maintain local AI tooling configuration.
 #
-# - MCP servers (servers.json → native per-client entries in Claude/Copilot)
+# - MCP servers (servers.json + gitignored servers.local.json → native
+#   per-client entries in Claude/Copilot)
+# - Claude settings (settings.shared.json merged into the untracked
+#   ~/.claude/settings.json, which keeps company/machine-local entries)
 # - Karpathy agent guidelines (remote → AGENTS.md)
 
 set -e
@@ -10,6 +13,9 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly SCRIPT_DIR
 readonly MCPHUB_SOURCE="${SCRIPT_DIR}/.config/mcphub/servers.json"
+readonly MCPHUB_LOCAL_SOURCE="${SCRIPT_DIR}/.config/mcphub/servers.local.json"
+readonly CLAUDE_SETTINGS_SHARED="${SCRIPT_DIR}/.claude/settings.shared.json"
+readonly CLAUDE_SETTINGS_TARGET="${HOME}/.claude/settings.json"
 readonly CLAUDE_MCP_TARGET="${HOME}/.claude.json"
 readonly COPILOT_MCP_TARGET="${HOME}/.copilot/mcp-config.json"
 readonly KARPATHY_BASE="https://raw.githubusercontent.com/multica-ai/andrej-karpathy-skills/main"
@@ -48,9 +54,13 @@ read_mcphub_servers() {
     return 1
   fi
 
-  # Drop servers marked "disabled": true (set via mcp-manager's UI toggle)
-  # before they ever reach a client config.
-  jq '.mcpServers | to_entries | map(select(.value.disabled != true)) | from_entries' "$MCPHUB_SOURCE"
+  # servers.local.json (gitignored, company/machine-local servers) is layered
+  # on top; it wins on a name clash. Drop servers marked "disabled": true
+  # (set via mcp-manager's UI toggle) before they ever reach a client config.
+  local sources=("$MCPHUB_SOURCE")
+  [ -f "$MCPHUB_LOCAL_SOURCE" ] && sources+=("$MCPHUB_LOCAL_SOURCE")
+
+  jq -s '[.[] | .mcpServers // {}] | add | to_entries | map(select(.value.disabled != true)) | from_entries' "${sources[@]}"
 }
 
 ensure_mcp_target_file() {
@@ -118,6 +128,56 @@ sync_all_mcp_servers() {
   return "$SYNC_UPDATED"
 }
 
+# --- Claude settings (shared file merged into the untracked live file) ---------
+#
+# Only keys present in settings.shared.json are touched: objects merge
+# recursively, shared scalars win, and arrays are unioned (shared entries first,
+# then live-only ones) so local additions survive. Entries removed from the
+# shared file therefore have to be removed from the live file by hand.
+
+sync_settings_into() {
+  local current merged
+
+  if [ ! -f "$CLAUDE_SETTINGS_SHARED" ]; then
+    echo "Warning: Source file ${CLAUDE_SETTINGS_SHARED} not found" >&2
+    return "$SYNC_ERROR"
+  fi
+
+  if [ ! -f "$CLAUDE_SETTINGS_TARGET" ]; then
+    write_file_atomically "$CLAUDE_SETTINGS_TARGET" "$(cat "$CLAUDE_SETTINGS_SHARED")"
+    echo "✓ Created ${CLAUDE_SETTINGS_TARGET} from settings.shared.json"
+    return "$SYNC_UPDATED"
+  fi
+
+  current="$(jq . "$CLAUDE_SETTINGS_TARGET")" || return "$SYNC_ERROR"
+  merged="$(jq -n --slurpfile live "$CLAUDE_SETTINGS_TARGET" --slurpfile shared "$CLAUDE_SETTINGS_SHARED" '
+    def uniq: reduce .[] as $x ([]; if index([$x]) then . else . + [$x] end);
+    def merge($l; $s):
+      if ($l | type) == "object" and ($s | type) == "object" then
+        reduce ((($l | keys_unsorted) + ($s | keys_unsorted)) | uniq)[] as $k ({};
+          .[$k] = if ($l | has($k)) and ($s | has($k)) then merge($l[$k]; $s[$k])
+                  elif ($s | has($k)) then $s[$k]
+                  else $l[$k] end)
+      elif ($l | type) == "array" and ($s | type) == "array" then ($s + $l) | uniq
+      else $s end;
+    merge($live[0]; $shared[0])')" || return "$SYNC_ERROR"
+
+  if [ "$merged" = "$current" ]; then
+    return "$SYNC_UNCHANGED"
+  fi
+
+  cp "$CLAUDE_SETTINGS_TARGET" "${CLAUDE_SETTINGS_TARGET}.bak"
+  write_file_atomically "$CLAUDE_SETTINGS_TARGET" "$merged"
+  echo "✓ Merged settings.shared.json into ${CLAUDE_SETTINGS_TARGET} (previous copy: settings.json.bak)"
+  return "$SYNC_UPDATED"
+}
+
+sync_claude_settings() {
+  set +e
+  sync_settings_into
+  set -e
+}
+
 # --- Remote assets -------------------------------------------------------------
 
 sync_remote_file() {
@@ -163,6 +223,7 @@ main() {
   fi
 
   sync_all_mcp_servers
+  sync_claude_settings
   sync_karpathy_guidelines
   record_last_sync
 }

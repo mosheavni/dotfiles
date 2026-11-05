@@ -1,0 +1,83 @@
+{
+  "model": "sonnet",
+  "enableWorkflows": true,
+  "enabledPlugins": {
+    "bash-language-server@claude-code-lsps": true,
+    "lua-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "vercel@claude-plugins-official": true,
+    "vscode-langservers@claude-code-lsps": true,
+    "vtsls@claude-code-lsps": true,
+    "claude-mem@thedotmack": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-code-lsps": {
+      "source": {
+        "source": "github",
+        "repo": "Piebald-AI/claude-code-lsps"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": true,
+  "modelSettings": {
+    "claude-sonnet-5-5": {
+      "effortLevel": "high"
+    }
+  },
+  "advisorModel": "opus",
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true,
+  "permissions": {
+    "deny": [
+      "Bash(terraform apply)",
+      "Bash(terraform apply *)",
+      "Bash(terraform -chdir=* apply)",
+      "Bash(terraform -chdir=* apply *)",
+      "Bash(tf apply)",
+      "Bash(tf apply *)",
+      "Bash(terragrunt apply)",
+      "Bash(terragrunt apply *)",
+      "Bash(terragrunt run-all apply)",
+      "Bash(terragrunt run-all apply *)",
+      "Bash(gh pr merge)",
+      "Bash(gh pr merge *)"
+    ]
+  },
+  "theme": "dark-daltonized",
+  "inputNeededNotifEnabled": false,
+  "agentPushNotifEnabled": true,
+  "autoMode": {
+    "soft_deny": [
+      "$defaults"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: employer's private organization; DevOps engineer. Repos are checked out under ~/Repos.",
+      "**Cloud provider(s)**: Kubernetes clusters and cloud infrastructure on Azure and AWS",
+      "**Repository visibility**: employer repos are private",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: secrets live outside the repos; never print or copy credential files, kubeconfig credentials, or tokens",
+      "**Default / protected branches**: main/master are protected by convention — changes go through PRs, and merging is done by the user",
+      "**CI/CD deploy targets**: GitOps and CI pipelines deploy to the clusters",
+      "**Network posture**: some internal services are reached through local tunnels on localhost; treat localhost endpoints as trusted",
+      "**Source control**: the employer's private repos; the user's personal repos are not part of this work",
+      "**Trusted cloud buckets**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: kubeconfig (~/.kube), credential files, cloud credentials, Kubernetes Secrets, customer data — share only with the user",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any kube context, namespace, host, or container whose name carries prod, production, or dr as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: prod and DR environments; fall back to the Sensitive remote targets heuristic elsewhere",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; Terraform state and anything whose name or tag carries prod or production as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: DevOps work — Kubernetes, Terraform/Terragrunt, CI/CD pipelines, RBAC changes, and incident support",
+      "**Operating rules**: prefer read-only investigation; developer operational actions go through narrowly scoped GitOps permissions rather than direct kubectl; terraform apply and gh pr merge are done by the user, not Claude",
+      "**Org-specific CLIs**: kubectl, helm, terraform, terragrunt, aws, az, gh"
+    ]
+  },
+  "outputStyle": "Concise"
+}

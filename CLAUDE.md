@@ -101,6 +101,10 @@ The `.stowrc` file excludes non-stowable files (Brewfile, readme, etc.) from dep
 **AI config packages:**
 
 - `ai/` → stows `~/.claude/` (Claude config, skills, MCP servers) and `~/AGENTS.md` (Claude + agents)
+- This repo is public: company-specific detail never goes in a tracked file. `ai/sync-ai-config.sh` merges tracked shared files into untracked local ones:
+  - `ai/.claude/settings.shared.json` → `~/.claude/settings.json` (gitignored; holds the company entries, e.g. in `autoMode.environment`). Shared scalars win, arrays are unioned, other keys are left alone. Edit portable settings in the shared file; entries removed from it must also be removed from the live file by hand.
+  - `ai/.config/mcphub/servers.json` + gitignored `servers.local.json` → MCP servers in `~/.claude.json` and Copilot.
+  - Fresh machine: run `ai/sync-ai-config.sh`, then re-add the company entries to `~/.claude/settings.json` and `servers.local.json`.
 
 ### Neovim Configuration
 

@@ -42,3 +42,12 @@ remote-settings-consent.json
 remote-settings.json.signature*.json
 remote-settings.json.synced-at
 state/
+
+# machine-local / company-specific (public repo: never track)
+settings.local.json
+feedback/
+scheduled-tasks/
+telemetry/
+
+# live settings are untracked: ai/sync-ai-config.sh merges settings.shared.json into them
+settings.json
