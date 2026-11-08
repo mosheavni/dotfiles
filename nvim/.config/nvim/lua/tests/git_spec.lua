@@ -172,6 +172,29 @@ describe('user.git', function()
     end)
   end)
 
+  describe('git.build_pull_request_url', function()
+    it('uses the GitHub compare URL for github hosts', function()
+      eq(
+        git.build_pull_request_url('github.com', 'user', 'repo', 'feat/x', 'main'),
+        'https://github.com/user/repo/compare/main...feat/x?expand=1&title=feat:%20x'
+      )
+    end)
+
+    it('uses a merge request URL on a self-hosted GitLab host', function()
+      local host = 'logan-01.securithings.com'
+      eq(
+        git.build_pull_request_url(host, 'devops', 'status_quorium_fish', 'feat/x', 'master'),
+        'https://logan-01.securithings.com/devops/status_quorium_fish/-/merge_requests/new?merge_request[source_branch]=feat/x&merge_request[title]=feat:%20x'
+      )
+    end)
+
+    it('resolves host/project/repo from an ssh:// remote with a port', function()
+      local url = 'ssh://git@logan-01.securithings.com:2224/devops/status_quorium_fish.git'
+      eq(require('user.gitbrowse').get_repo(url):match 'https://([^/]+)', 'logan-01.securithings.com')
+      eq(git.extract_owner_repo(url), 'devops/status_quorium_fish')
+    end)
+  end)
+
   -- Integration tests (run against this repo)
   describe('integration: sync functions', function()
     it('get_branch_sync returns current branch', function()

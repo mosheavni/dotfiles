@@ -332,20 +332,39 @@ M.ui_select_merge_default_branch = function()
   end)
 end
 
+--- Builds the "new PR/MR" URL for a remote host. Hosts containing `github` get a
+--- GitHub compare URL; every other host (gitlab.com or self-hosted GitLab, whose
+--- hostname need not contain "gitlab") gets a GitLab new-merge-request URL.
+---@param host string e.g. `github.com`, `logan-01.example.com`
+---@param project string namespace, e.g. `group/subgroup`
+---@param repo string
+---@param branch_name string
+---@param base string|nil default branch (only used for GitHub)
+---@return string
+M.build_pull_request_url = function(host, project, repo, branch_name, base)
+  local title = vim.uri_encode(M.branch_to_pr_title(branch_name))
+  if host:lower():find('github', 1, true) then
+    -- The title/body query params only stick on the compare URL form;
+    -- pull/new/<branch> redirects to compare and drops them.
+    return ('https://%s/%s/%s/compare/%s...%s?expand=1&title=%s'):format(host, project, repo, base, branch_name, title)
+  end
+  return ('https://%s/%s/%s/-/merge_requests/new?merge_request[source_branch]=%s&merge_request[title]=%s'):format(host, project, repo, branch_name, title)
+end
+
 M.create_pull_request = function()
   M.get_remotes(function(git_remotes)
     local git_remote_url = git_remotes['origin']
     -- project/repo come from extract_owner_repo (via gitbrowse.get_repo), which splits
     -- on the LAST slash, so nested GitLab subgroups (group/subgroup/repo) keep their
-    -- full namespace; an unparseable remote now notifies instead of erroring.
+    -- full namespace; an unparseable remote notifies instead of erroring.
     local https_url = require('user.gitbrowse').get_repo(git_remote_url)
-    local git_name = https_url:match 'https://(%w+)%.com'
+    local host = https_url:match 'https://([^/]+)'
     local owner_repo = M.extract_owner_repo(git_remote_url)
     local project, repo
     if owner_repo then
       project, repo = owner_repo:match '(.+)/(.+)$'
     end
-    if not (git_name and project and repo) then
+    if not (host and project and repo) then
       return M.prnt('Could not parse remote URL: ' .. tostring(git_remote_url), true)
     end
 
@@ -353,21 +372,7 @@ M.create_pull_request = function()
       -- GitHub needs the base (default) branch to build the compare URL, so fetch
       -- it up front for both providers and resolve the final URL in one place.
       M.get_default_branch('origin', function(base)
-        local title = vim.uri_encode(M.branch_to_pr_title(branch_name))
-        local url
-        if git_name == 'gitlab' then
-          url = ('https://gitlab.com/%s/%s/-/merge_requests/new?merge_request[source_branch]=%s&merge_request[title]=%s'):format(
-            project,
-            repo,
-            branch_name,
-            title
-          )
-        else
-          -- The title/body query params only stick on the compare URL form;
-          -- pull/new/<branch> redirects to compare and drops them.
-          url = ('https://%s.com/%s/%s/compare/%s...%s?expand=1&title=%s'):format(git_name, project, repo, base, branch_name, title)
-        end
-        vim.ui.open(url)
+        vim.ui.open(M.build_pull_request_url(host, project, repo, branch_name, base))
       end)
     end)
   end)
