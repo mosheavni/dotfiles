@@ -186,7 +186,7 @@ map('n', '<leader>qq', '<cmd>qall<cr>', { remap = false, silent = true, desc = '
 map('t', '<Esc>', [[<C-\><C-n>]], { remap = false, desc = 'Exit terminal mode' })
 
 -- Copy entire file to clipboard
-map('n', '<leader>Y', '<cmd>%y+<cr>', { remap = false, silent = true, desc = 'Copy buffer content to clipboard' })
+map('n', 'Y', '<cmd>%y+<cr>', { remap = false, silent = true, desc = 'Copy buffer content to clipboard' })
 
 -- Copy file path to clipboard
 for _, spec in ipairs {

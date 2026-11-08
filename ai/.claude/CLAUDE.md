@@ -15,3 +15,10 @@
 - `~/.dotfiles` (git repo, GNU Stow) holds every config that should persist across machines. Each top-level dir is a stow package whose inner layout mirrors `~` (e.g. `zsh/.zshrc` → `~/.zshrc`, `ai/.claude/` → `~/.claude/`, `nvim/.config/nvim/` → `~/.config/nvim/`). This file itself lives there (`~/.claude` is a symlink into `ai/`).
 - Whenever you change configuration (shell, git, nvim, wezterm, starship, Claude settings/skills/commands/MCP servers, Brewfile, launchd agents, tool configs, etc.), ask yourself: should this persist? If yes, make the change inside the dotfiles repo (right stow package, then `stow -Rv <package>` if it's a new file) rather than only in `~`; if it's machine-local, secret, or generated, leave it out (gitignore it) and say so. Never put tokens/credentials in the repo.
 - Read `~/.dotfiles/CLAUDE.md` (Architecture ▸ Stow Package Structure) before adding new files there. Don't commit or push the repo unless asked; do mention when a persistent change is left uncommitted.
+
+# response style
+
+- Keep responses short and direct. Lead with the result or answer; no preamble ("Let me...", "Now I'll...") and no closing recap.
+- Don't narrate steps or restate the request. Report outcomes, decisions, and anything I must act on.
+- Default to 1-3 sentences of plain prose. Use headers/tables/bullets only when they carry real structure.
+- Give full detail only when I ask for it. Never cut error output, test failures, or security/destructive-action warnings for brevity.

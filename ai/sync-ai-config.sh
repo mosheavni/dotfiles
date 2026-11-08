@@ -100,6 +100,21 @@ sync_mcp_servers_into() {
     )')"
   fi
 
+  if [ "$target_format" = "native" ]; then
+    # servers.json uses mcphub's `Bearer ${cmd: <command>}` syntax, which Claude
+    # Code does not expand (it would send the literal text as the token).
+    # Translate it to Claude's headersHelper, which runs the command at connect time.
+    # (No `?`/try inside map_values: jq 1.6 drops the entry when it fires.)
+    source_mcp="$(echo "$source_mcp" | jq 'map_values(
+      if ((.headers.Authorization // "") | test("^Bearer \\$\\{cmd:\\s*.+\\}$")) then
+        (.headers.Authorization | capture("^Bearer \\$\\{cmd:\\s*(?<c>.+)\\}$").c) as $c
+        | del(.headers.Authorization)
+        | (if (.headers | length) == 0 then del(.headers) else . end)
+        | . + { headersHelper: ("printf '"'"'{\"Authorization\": \"Bearer %s\"}\\n'"'"' \"$(" + $c + ")\"") }
+      else . end
+    )')"
+  fi
+
   current_mcp="$(jq '.mcpServers' "$target_file")"
 
   if [ "$source_mcp" = "$current_mcp" ]; then

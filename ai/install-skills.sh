@@ -15,7 +15,7 @@ skills=(
   "nextlevelbuilder/ui-ux-pro-max-skill:ui-ux-pro-max"
   "rebelytics/one-skill-to-rule-them-all:task-observer"
   "sickn33/antigravity-awesome-skills:clean-code"
-  "vercel-labs/skills:find-skills"
+  # "vercel-labs/skills:find-skills"
 )
 
 for entry in "${skills[@]}"; do

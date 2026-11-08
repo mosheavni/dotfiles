@@ -15,9 +15,21 @@
       "type": "http",
       "url": "https://knowledge-mcp.global.api.aws"
     },
+    "aws-mcp": {
+      "args": [
+        "mcp-proxy-for-aws@1.6.3",
+        "https://aws-mcp.us-east-1.api.aws/mcp",
+        "--metadata",
+        "AWS_REGION=us-east-1",
+        "--read-only",
+        "--disable-telemetry"
+      ],
+      "command": "uvx"
+    },
     "awslabs.aws-api-mcp-server": {
       "args": ["awslabs.aws-api-mcp-server@latest"],
-      "command": "uvx"
+      "command": "uvx",
+      "disabled": true
     },
     "awslabs.cloudwatch-mcp-server": {
       "args": ["awslabs.cloudwatch-mcp-server@latest"],
@@ -45,6 +57,10 @@
         "AWS_REGION": "us-east-1",
         "FASTMCP_LOG_LEVEL": "ERROR"
       }
+    },
+    "cloudflare-api": {
+      "type": "http",
+      "url": "https://mcp.cloudflare.com/mcp"
     },
     "excalidraw": {
       "type": "http",
