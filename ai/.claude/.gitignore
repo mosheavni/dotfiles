@@ -3,7 +3,9 @@ agents/
 hooks/
 package.json
 plugins/
-skills/
+skills/*
+!skills/todo-sheet/
+!skills/teach/
 tasks/
 
 # runtime files
