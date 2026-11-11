@@ -16,9 +16,14 @@
 - Whenever you change configuration (shell, git, nvim, wezterm, starship, Claude settings/skills/commands/MCP servers, Brewfile, launchd agents, tool configs, etc.), ask yourself: should this persist? If yes, make the change inside the dotfiles repo (right stow package, then `stow -Rv <package>` if it's a new file) rather than only in `~`; if it's machine-local, secret, or generated, leave it out (gitignore it) and say so. Never put tokens/credentials in the repo.
 - Read `~/.dotfiles/CLAUDE.md` (Architecture ▸ Stow Package Structure) before adding new files there. Don't commit or push the repo unless asked; do mention when a persistent change is left uncommitted.
 
+# shell
+
+- `sed` is aliased to GNU sed. Use `sed -i 's/a/b/' file`, never the BSD form `sed -i '' ...` (it treats `''` as the script and breaks the command).
+
 # response style
 
 - Keep responses short and direct. Lead with the result or answer; no preamble ("Let me...", "Now I'll...") and no closing recap.
 - Don't narrate steps or restate the request. Report outcomes, decisions, and anything I must act on.
 - Default to 1-3 sentences of plain prose. Use headers/tables/bullets only when they carry real structure.
 - Give full detail only when I ask for it. Never cut error output, test failures, or security/destructive-action warnings for brevity.
+- This also applies to everything written for other people (Confluence, Jira, PR descriptions, runbooks, Slack drafts): must-haves only. No background, no explanations of obvious things, no extra sections. When unsure whether a line is needed, cut it. People don't read long text.
