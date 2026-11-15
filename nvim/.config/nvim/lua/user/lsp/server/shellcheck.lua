@@ -125,7 +125,7 @@ local function build_disable_edit(uri, existing_directive, default_line, code, i
 end
 
 local function generate_file_disable_action(bufnr, code)
-  local uri = vim.uri_from_bufnr(bufnr)
+  local uri = vim.uri.from_buf(bufnr)
   local existing_directive = get_file_directive(bufnr)
   local default_line = get_first_non_shebang_row(bufnr) + 1
 
@@ -149,7 +149,7 @@ local function generate_line_disable_action(bufnr, row, code)
   row = match_row + 1
   local line = api.nvim_buf_get_lines(bufnr, row - 1, row, false)[1]
   local indentation = line:match '^%s+' or ''
-  local uri = vim.uri_from_bufnr(bufnr)
+  local uri = vim.uri.from_buf(bufnr)
   local existing_directive = get_line_directive(bufnr, row)
 
   return {

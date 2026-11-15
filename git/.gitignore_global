@@ -5,3 +5,5 @@ pyrightconfig.json
 .DS_Store
 .claude/settings.local.json
 .act-event.json
+
+**/.claude/settings.local.json

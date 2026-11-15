@@ -156,13 +156,13 @@ end
 ---@param params table LSP codeAction params
 ---@return table context
 local function build_context(params)
-  local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
+  local bufnr = vim.uri.to_buf(params.textDocument.uri)
   local content = api.nvim_buf_get_lines(bufnr, 0, -1, false)
   local row = params.range.start.line + 1 -- Convert 0-indexed to 1-indexed
 
   return {
     bufnr = bufnr,
-    uri = vim.uri_from_bufnr(bufnr),
+    uri = vim.uri.from_buf(bufnr),
     content = content,
     range = {
       row = row,

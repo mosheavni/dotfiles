@@ -1,5 +1,5 @@
 local function lsp_rename_changes(old_path, new_path)
-  return { { oldUri = vim.uri_from_fname(old_path), newUri = vim.uri_from_fname(new_path) } }
+  return { { oldUri = vim.uri.from_fname(old_path), newUri = vim.uri.from_fname(new_path) } }
 end
 
 local function lsp_will_rename(changes)

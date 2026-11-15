@@ -342,7 +342,7 @@ end
 ---@param base string|nil default branch (only used for GitHub)
 ---@return string
 M.build_pull_request_url = function(host, project, repo, branch_name, base)
-  local title = vim.uri_encode(M.branch_to_pr_title(branch_name))
+  local title = vim.uri.encode(M.branch_to_pr_title(branch_name))
   if host:lower():find('github', 1, true) then
     -- The title/body query params only stick on the compare URL form;
     -- pull/new/<branch> redirects to compare and drops them.

@@ -142,7 +142,8 @@ describe('lint plugin', function()
 
     for _, call in ipairs(lint.calls) do
       if call.name == 'luacheck' then
-        eq(call.opts.cwd, test_dir)
+        -- macOS tempdirs live under the /var -> /private/var symlink, so compare resolved paths.
+        eq(vim.uv.fs_realpath(call.opts.cwd), vim.uv.fs_realpath(test_dir))
         return
       end
     end

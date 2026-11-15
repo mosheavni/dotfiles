@@ -116,17 +116,17 @@ local hover_providers = {
 }
 
 --- Resolve an LSP document URI back to a buffer.
---- An unnamed buffer's URI is the empty `file://`, and `vim.uri_to_bufnr` does
+--- An unnamed buffer's URI is the empty `file://`, and `vim.uri.to_buf` does
 --- not round-trip that — it hands back a fresh empty buffer. Hover is always
 --- about the current buffer, so prefer it whenever its URI matches.
 ---@param uri string
 ---@return number
 local function resolve_bufnr(uri)
   local cur = vim.api.nvim_get_current_buf()
-  if vim.uri_from_bufnr(cur) == uri then
+  if vim.uri.from_buf(cur) == uri then
     return cur
   end
-  return vim.uri_to_bufnr(uri)
+  return vim.uri.to_buf(uri)
 end
 
 --- Get hover information for the given LSP params
