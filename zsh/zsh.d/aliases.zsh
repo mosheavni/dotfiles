@@ -90,6 +90,7 @@ alias -g NUL="> /dev/null 2>&1"
 # Kubernetes Specific
 alias -g Srt='--sort-by=.metadata.creationTimestamp'
 alias -g SECRET='-ojson | jq ".data | with_entries(.value |= @base64d)"'
+alias -g CERT='-o jsonpath="{.data.tls\.crt}" | base64 -d | openssl x509 -noout -subject -issuer -dates -ext basicConstraints'
 alias -g IMG='-oyaml | sed -n '\''s/^\s*image:\s\(.*\)/\1/gp'\'' | sort -u'
 alias -g YML='-oyaml | vim -c "set filetype=yaml | nnoremap <buffer> q :qall<cr>"'
 alias -g NM=' --no-headers -o custom-columns=":metadata.name"'
