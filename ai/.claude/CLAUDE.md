@@ -20,6 +20,10 @@
 
 - `sed` is aliased to GNU sed. Use `sed -i 's/a/b/' file`, never the BSD form `sed -i '' ...` (it treats `''` as the script and breaks the command).
 
+# kubectl / argocd diff
+
+- Before every `kubectl diff` or `argocd ... diff` (e.g. `argocd app diff`), run `unset KUBECTL_EXTERNAL_DIFF` in the same command (`unset KUBECTL_EXTERNAL_DIFF; kubectl diff ...`). My `KUBECTL_EXTERNAL_DIFF` is interactive neovim, which hangs/breaks Claude's non-interactive terminal. Shell state doesn't persist between calls, so repeat it every time.
+
 # response style
 
 - Keep responses short and direct. Lead with the result or answer; no preamble ("Let me...", "Now I'll...") and no closing recap.
