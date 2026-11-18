@@ -32,6 +32,7 @@ daemon*
 jobs/
 .last-cleanup
 .caveman-mode-log.jsonl
+work-triage/
 image-cache/
 stats-cache.json
 
