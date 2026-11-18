@@ -252,6 +252,16 @@ M.get_toplevel_sync = function()
   return vim.trim(toplevel)
 end
 
+--- Paths of all worktrees of the current repo (main worktree first).
+---@return string[]
+M.get_worktrees_sync = function()
+  local paths = {}
+  for path in (M.run_git_sync({ 'worktree', 'list', '--porcelain' }, nil).stdout or ''):gmatch 'worktree ([^\n]+)' do
+    paths[#paths + 1] = path
+  end
+  return paths
+end
+
 --- Default branch for local tooling (act, etc.). Offline; no UI prompts.
 ---@param remote? string
 ---@return string

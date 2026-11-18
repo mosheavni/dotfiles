@@ -30,7 +30,35 @@ local function active_projects(panes)
   return active
 end
 
-function M.pick_project()
+---@return string[]
+local function scan_project_dirs()
+  local all_dirs = {}
+  for _, path in ipairs(vim.split(vim.env.PJ_DIRS or DEFAULT_PJ_DIRS, ',', { trimempty = true })) do
+    local expanded = vim.fn.expand(path)
+    if expanded:match '/$' then
+      expanded = expanded:gsub('/$', '')
+      local handle = vim.uv.fs_scandir(expanded)
+      if handle then
+        while true do
+          local name, typ = vim.uv.fs_scandir_next(handle)
+          if not name then
+            break
+          end
+          if typ == 'directory' then
+            all_dirs[#all_dirs + 1] = expanded .. '/' .. name
+          end
+        end
+      end
+    else
+      all_dirs[#all_dirs + 1] = expanded
+    end
+  end
+  return all_dirs
+end
+
+---@param opts? { dirs?: string[], prompt?: string } dirs overrides the PJ_DIRS scan
+function M.pick_project(opts)
+  opts = opts or {}
   local fzf = require 'fzf-lua'
   local display_to_path = {}
 
@@ -40,27 +68,7 @@ function M.pick_project()
     end
 
     local active = active_projects(wezterm.list())
-    local all_dirs = {}
-    for _, path in ipairs(vim.split(vim.env.PJ_DIRS or DEFAULT_PJ_DIRS, ',', { trimempty = true })) do
-      local expanded = vim.fn.expand(path)
-      if expanded:match '/$' then
-        expanded = expanded:gsub('/$', '')
-        local handle = vim.uv.fs_scandir(expanded)
-        if handle then
-          while true do
-            local name, typ = vim.uv.fs_scandir_next(handle)
-            if not name then
-              break
-            end
-            if typ == 'directory' then
-              all_dirs[#all_dirs + 1] = expanded .. '/' .. name
-            end
-          end
-        end
-      else
-        all_dirs[#all_dirs + 1] = expanded
-      end
-    end
+    local all_dirs = opts.dirs or scan_project_dirs()
 
     for _, dir in ipairs(all_dirs) do
       local name = vim.fn.fnamemodify(dir, ':t')
@@ -70,7 +78,7 @@ function M.pick_project()
     end
     cb()
   end, {
-    prompt = 'Projects❯ ',
+    prompt = opts.prompt or 'Projects❯ ',
     previewer = 'builtin',
     _fmt = {
       from = function(entry)

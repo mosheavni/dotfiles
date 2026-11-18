@@ -14,11 +14,25 @@ print_remote_or_local() {
       print -P "%F{red}  ${branch_name}%f"
     fi
   else
-    print "  $branch_name"
+    local wt=${worktrees[$branch_name]}
+    if [[ -n $wt ]]; then
+      print -r -- "  $branch_name  "$'\e[90m'"($wt)"$'\e[m'
+    else
+      print "  $branch_name"
+    fi
   fi
 }
 
-all_branches=("${(@f)$(git branch --all --sort=-committerdate | grep -v "^\*\|HEAD" | tr -d " ")}")
+typeset -A worktrees
+wt_path=
+for line in "${(@f)$(git worktree list --porcelain)}"; do
+  case $line in
+    "worktree "*) wt_path=${line#worktree } ;;
+    "branch refs/heads/"*) worktrees[${line#branch refs/heads/}]=$wt_path ;;
+  esac
+done
+
+all_branches=("${(@f)$(git branch --all --sort=-committerdate | grep -v "^\*\|HEAD" | sed 's/^+ //' | tr -d " ")}")
 local_branches=("${(@f)$(git branch --format="%(refname:short)")}")
 
 print_remote_or_local $all_branches[1]

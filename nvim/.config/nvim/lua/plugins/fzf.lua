@@ -64,6 +64,11 @@ return function()
     vim.defer_fn(fn, FZF_UI_DEFER)
   end
 
+  -- picker lines look like "  name  (worktree path)" or "* name"
+  local function branch_name(line)
+    return line:match '^%s*[%*%+]?%s*(%S+)'
+  end
+
   vim.keymap.set('n', '<F4>', function()
     local actions = require 'fzf-lua.actions'
     local git = require 'user.git'
@@ -80,14 +85,14 @@ return function()
         },
         ['ctrl-s'] = {
           fn = function(selected)
-            git.checkout(vim.trim(selected[1]))
+            git.checkout(branch_name(selected[1]))
           end,
           reload = true,
           header = 'checkout',
         },
         ['ctrl-y'] = {
           fn = function(selected)
-            local branch = vim.trim(selected[1])
+            local branch = branch_name(selected[1])
             vim.fn.setreg('+', branch)
             git.prnt('Yanked branch name ' .. branch)
           end,
@@ -96,7 +101,7 @@ return function()
         },
         ['ctrl-r'] = {
           fn = function(selected)
-            local branch = vim.trim(selected[1])
+            local branch = branch_name(selected[1])
             fzf_exit_then(function()
               vim.ui.input({ prompt = 'Rename branch❯ ', default = branch }, function(new_name)
                 if not new_name or new_name == '' then
@@ -115,7 +120,7 @@ return function()
         },
         ['ctrl-x'] = {
           fn = function(selected)
-            local branch = vim.trim(selected[1])
+            local branch = branch_name(selected[1])
             fzf_exit_then(function()
               vim.ui.select({ 'Yes', 'No' }, { prompt = 'Are you sure you want to delete the branch ' .. branch .. '? ' }, function(yes_or_no)
                 if not yes_or_no or yes_or_no == 'No' then

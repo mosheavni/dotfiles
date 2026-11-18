@@ -154,6 +154,24 @@ describe('user.projects', function()
       eq('Projects❯ ', captured.opts.prompt)
     end)
 
+    it('uses opts.dirs and opts.prompt instead of scanning PJ_DIRS', function()
+      make_repo_tree(tmp_root, { 'ignored' })
+      local wt = tmp_root .. '/wt-one'
+      vim.fn.mkdir(wt, 'p')
+      wezterm_panes = {
+        { title = 'nvim: wt-one', tab_id = 5, pane_id = 6 },
+      }
+      local projects = load_projects()
+
+      projects.pick_project { dirs = { wt }, prompt = 'Worktrees❯ ' }
+
+      local captured = require_fzf_captured()
+      eq({ projects.icon .. ' wt-one' }, captured.items)
+      eq('Worktrees❯ ', captured.opts.prompt)
+      run_action(captured.opts.actions.default, { captured.items[1] })
+      eq({ 5 }, wezterm_calls.activate_tab)
+    end)
+
     it('lists a single directory when PJ_DIRS path has no trailing /', function()
       local only = tmp_root .. '/solo'
       vim.fn.mkdir(only, 'p')
