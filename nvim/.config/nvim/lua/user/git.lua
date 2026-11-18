@@ -262,6 +262,25 @@ M.get_worktrees_sync = function()
   return paths
 end
 
+--- `git worktree remove` a linked worktree (closing its wezterm pane if open).
+--- Never forces: dirty/locked worktrees are reported, not deleted. Refuses the main and current worktree.
+---@param dir string
+---@param pane? table open wezterm pane for `dir`
+M.remove_worktree = function(dir, pane)
+  local main = M.get_worktrees_sync()[1]
+  if dir == main or dir == vim.fn.getcwd() then
+    return vim.notify('Cannot remove the main/current worktree: ' .. dir, vim.log.levels.WARN)
+  end
+  if pane then
+    require('user.wezterm').kill_pane(pane.pane_id)
+  end
+  local res = M.run_git_sync({ 'worktree', 'remove', dir }, nil, { cwd = main })
+  if res.code ~= 0 then
+    return vim.notify(vim.trim(res.stderr or ''), vim.log.levels.ERROR)
+  end
+  M.prnt('Removed worktree ' .. dir)
+end
+
 --- Default branch for local tooling (act, etc.). Offline; no UI prompts.
 ---@param remote? string
 ---@return string

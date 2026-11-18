@@ -354,5 +354,16 @@ describe('user.git', function()
       assert.is_true(#paths >= 1)
       eq(vim.fn.isdirectory(paths[1]), 1)
     end)
+
+    it('remove_worktree refuses the main worktree', function()
+      local notified
+      local orig = vim.notify
+      vim.notify = function(msg)
+        notified = msg
+      end
+      git.remove_worktree(git.get_worktrees_sync()[1])
+      vim.notify = orig
+      assert.is_truthy(notified and notified:match 'Cannot remove')
+    end)
   end)
 end)

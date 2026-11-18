@@ -28,7 +28,13 @@ local actions = function()
   return {
     ['Create Pull Request'] = git_funcs.create_pull_request,
     ['List worktrees'] = function()
-      require('user.projects').pick_project { dirs = git_funcs.get_worktrees_sync(), prompt = 'Worktrees❯ ' }
+      require('user.projects').pick_project {
+        dirs = git_funcs.get_worktrees_sync,
+        prompt = 'Worktrees❯ ',
+        actions = {
+          ['ctrl-x'] = { fn = git_funcs.remove_worktree, reload = true, header = 'delete worktree' },
+        },
+      }
     end,
     ['Checkout new branch (:Gcb {new_branch})'] = function()
       git_funcs.create_new_branch { args = '' }

@@ -172,6 +172,38 @@ describe('user.projects', function()
       eq({ 5 }, wezterm_calls.activate_tab)
     end)
 
+    it('calls extra actions with the selected dir and its open pane, and accepts dirs as a function', function()
+      local wt = tmp_root .. '/wt-two'
+      vim.fn.mkdir(wt, 'p')
+      wezterm_panes = {
+        { title = 'nvim: wt-two', tab_id = 7, pane_id = 8 },
+      }
+      local got
+      local projects = load_projects()
+
+      projects.pick_project {
+        dirs = function()
+          return { wt }
+        end,
+        actions = {
+          ['ctrl-d'] = {
+            fn = function(dir, pane)
+              got = { dir = dir, pane = pane }
+            end,
+            reload = true,
+          },
+        },
+      }
+
+      local captured = require_fzf_captured()
+      eq({ projects.icon .. ' wt-two' }, captured.items)
+      eq(true, captured.opts.actions['ctrl-d'].reload)
+      run_action(captured.opts.actions['ctrl-d'], { captured.items[1] })
+      eq(wt, got.dir)
+      eq(8, got.pane.pane_id)
+      assert.is_not_nil(captured.opts.actions['ctrl-x'])
+    end)
+
     it('lists a single directory when PJ_DIRS path has no trailing /', function()
       local only = tmp_root .. '/solo'
       vim.fn.mkdir(only, 'p')

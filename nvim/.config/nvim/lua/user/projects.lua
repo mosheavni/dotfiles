@@ -56,11 +56,27 @@ local function scan_project_dirs()
   return all_dirs
 end
 
----@param opts? { dirs?: string[], prompt?: string } dirs overrides the PJ_DIRS scan
+---@param opts? { dirs?: string[]|fun(): string[], prompt?: string, actions?: table<string, { fn: fun(dir: string, pane: table|nil), header?: string, reload?: boolean }> }
+---  dirs overrides the PJ_DIRS scan; actions are extra/overriding fzf actions receiving the selected dir and its open wezterm pane
 function M.pick_project(opts)
   opts = opts or {}
   local fzf = require 'fzf-lua'
   local display_to_path = {}
+
+  local function extra_actions()
+    local wrapped = {}
+    for key, action in pairs(opts.actions or {}) do
+      wrapped[key] = vim.tbl_extend('force', action, {
+        fn = function(selected)
+          local dir = selected and display_to_path[selected[1]]
+          if dir then
+            action.fn(dir, active_projects(wezterm.list())[vim.fn.fnamemodify(dir, ':t')])
+          end
+        end,
+      })
+    end
+    return wrapped
+  end
 
   fzf.fzf_exec(function(cb)
     for key in pairs(display_to_path) do
@@ -68,7 +84,7 @@ function M.pick_project(opts)
     end
 
     local active = active_projects(wezterm.list())
-    local all_dirs = opts.dirs or scan_project_dirs()
+    local all_dirs = type(opts.dirs) == 'function' and opts.dirs() or opts.dirs or scan_project_dirs()
 
     for _, dir in ipairs(all_dirs) do
       local name = vim.fn.fnamemodify(dir, ':t')
@@ -93,7 +109,7 @@ function M.pick_project(opts)
         return empty_preview_path()
       end,
     },
-    actions = {
+    actions = vim.tbl_extend('force', {
       ['default'] = {
         fn = function(selected)
           local display = selected and selected[1]
@@ -133,7 +149,7 @@ function M.pick_project(opts)
         reload = true,
         header = 'kill pane',
       },
-    },
+    }, extra_actions()),
   })
 end
 
