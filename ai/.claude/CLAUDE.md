@@ -20,9 +20,19 @@
 
 - `sed` is aliased to GNU sed. Use `sed -i 's/a/b/' file`, never the BSD form `sed -i '' ...` (it treats `''` as the script and breaks the command).
 
+# argocd cli
+
+- Always run the `argocd` CLI in core mode with an explicit context: `argocd --core --kube-context <context> ...`. No `argocd login`, no API server/port-forward. Core mode requires the kube context's namespace to be `argocd` (it looks for Argo CD's resources in the context's namespace); all my contexts are already set that way, so don't change it.
+
 # kubectl / argocd diff
 
 - Before every `kubectl diff` or `argocd ... diff` (e.g. `argocd app diff`), run `unset KUBECTL_EXTERNAL_DIFF` in the same command (`unset KUBECTL_EXTERNAL_DIFF; kubectl diff ...`). My `KUBECTL_EXTERNAL_DIFF` is interactive neovim, which hangs/breaks Claude's non-interactive terminal. Shell state doesn't persist between calls, so repeat it every time.
+
+# commands for me to run (one at a time)
+
+- When I run commands myself (cluster syncs, applies, logins, rollouts, anything stateful or sequential), give exactly ONE command per message, in its own fenced `bash` block, then stop and wait for me to run it and paste the output. Never a list, a script, or "next, run...". Analyze the output, then give the next single command.
+- Say in one short line what the expected output is, so I can see whether it matched. Wrap noisy output in a filter (`grep`/`awk`) instead of making me read all of it.
+- Applies in every repo and every session. I'm the one clicking Run in the terminal pane; several commands in one message hide failures and break the check-after-each-step flow.
 
 # response style
 
