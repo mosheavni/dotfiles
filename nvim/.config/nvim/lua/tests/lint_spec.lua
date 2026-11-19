@@ -19,6 +19,7 @@ describe('lint plugin', function()
     lint = {
       linters = {
         actionlint = {},
+        codespell = { args = { '--stdin-single-line', '-' } },
         luacheck = {},
       },
       try_lint = function(name, opts)
@@ -53,6 +54,12 @@ describe('lint plugin', function()
     package.loaded.lint = nil
     package.loaded['user.lint.brew_bundle'] = original_brew_bundle
     package.loaded['user.menu'] = original_menu
+  end)
+
+  it('points codespell at the stowed global config', function()
+    local config = vim.fs.joinpath(vim.fn.stdpath 'config', '.codespellrc')
+    eq(lint.linters.codespell.args, { '--config', config, '--stdin-single-line', '-' })
+    eq(vim.uv.fs_stat(config) ~= nil, true)
   end)
 
   it('completes linters configured for the current buffer and global linters', function()
