@@ -1,0 +1,3 @@
+[codespell]
+ignore-words-list = enew,windo,AKS
+skip = nvim-pack-lock.json,*.lock
