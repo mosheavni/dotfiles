@@ -86,11 +86,11 @@ function M.setup(opts)
   -- Create user commands
   vim.api.nvim_create_user_command('RipGrepCWORD', function(cmd_opts)
     rip_grep_cword(cmd_opts.bang, false, cmd_opts.args)
-  end, { bang = true, range = true, nargs = '?', complete = 'file_in_path' })
+  end, { bang = true, range = true, nargs = '?' })
 
   vim.api.nvim_create_user_command('RipGrepCWORDVisual', function(cmd_opts)
     rip_grep_cword(cmd_opts.bang, true, cmd_opts.args)
-  end, { bang = true, range = true, nargs = '?', complete = 'file_in_path' })
+  end, { bang = true, range = true, nargs = '?' })
 
   -- Map keys
   vim.keymap.set({ 'n', 'v' }, opts.keymap.search, function()
