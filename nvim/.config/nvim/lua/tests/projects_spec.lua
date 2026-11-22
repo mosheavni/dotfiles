@@ -204,6 +204,27 @@ describe('user.projects', function()
       assert.is_not_nil(captured.opts.actions['ctrl-x'])
     end)
 
+    it('appends opts.label to the entry and ctrl-x still finds the pane', function()
+      local wt = tmp_root .. '/wt-three'
+      vim.fn.mkdir(wt, 'p')
+      wezterm_panes = {
+        { title = 'nvim: wt-three', tab_id = 1, pane_id = 33 },
+      }
+      local projects = load_projects()
+
+      projects.pick_project {
+        dirs = { wt },
+        label = function()
+          return 'feat/x'
+        end,
+      }
+
+      local captured = require_fzf_captured()
+      eq({ projects.icon .. ' wt-three  [feat/x]' }, captured.items)
+      run_action(captured.opts.actions['ctrl-x'], { captured.items[1] })
+      eq({ 33 }, wezterm_calls.kill_pane)
+    end)
+
     it('lists a single directory when PJ_DIRS path has no trailing /', function()
       local only = tmp_root .. '/solo'
       vim.fn.mkdir(only, 'p')

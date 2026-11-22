@@ -348,11 +348,47 @@ describe('user.git', function()
     end)
   end)
 
+  describe('git.read_head_branch', function()
+    local tmp
+    before_each(function()
+      tmp = vim.fn.tempname()
+      vim.fn.mkdir(tmp .. '/repo/.git', 'p')
+      vim.fn.mkdir(tmp .. '/gitdirs/wt', 'p')
+      vim.fn.mkdir(tmp .. '/wt', 'p')
+    end)
+    after_each(function()
+      vim.fn.delete(tmp, 'rf')
+    end)
+
+    it('reads the branch from .git/HEAD', function()
+      vim.fn.writefile({ 'ref: refs/heads/feat/x' }, tmp .. '/repo/.git/HEAD')
+      eq('feat/x', git.read_head_branch(tmp .. '/repo'))
+    end)
+
+    it('follows a linked worktree .git file', function()
+      vim.fn.writefile({ 'gitdir: ' .. tmp .. '/gitdirs/wt' }, tmp .. '/wt/.git')
+      vim.fn.writefile({ 'ref: refs/heads/wt-branch' }, tmp .. '/gitdirs/wt/HEAD')
+      eq('wt-branch', git.read_head_branch(tmp .. '/wt'))
+    end)
+
+    it('reports detached HEAD and nil for non-git dirs', function()
+      vim.fn.writefile({ 'a1b2c3d4' }, tmp .. '/repo/.git/HEAD')
+      eq('detached', git.read_head_branch(tmp .. '/repo'))
+      eq(nil, git.read_head_branch(tmp .. '/gitdirs'))
+    end)
+  end)
+
   describe('git.get_worktrees_sync', function()
     it('lists worktree paths of the current repo', function()
       local paths = git.get_worktrees_sync()
       assert.is_true(#paths >= 1)
       eq(vim.fn.isdirectory(paths[1]), 1)
+    end)
+
+    it('maps each worktree path to its branch', function()
+      local branches = git.get_worktree_branches_sync()
+      local main = git.get_worktrees_sync()[1]
+      assert.is_string(branches[main])
     end)
 
     it('remove_worktree refuses the main worktree', function()

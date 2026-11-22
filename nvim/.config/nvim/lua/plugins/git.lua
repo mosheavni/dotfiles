@@ -28,8 +28,15 @@ local actions = function()
   return {
     ['Create Pull Request'] = git_funcs.create_pull_request,
     ['List worktrees'] = function()
+      local branches = {}
       require('user.projects').pick_project {
-        dirs = git_funcs.get_worktrees_sync,
+        dirs = function()
+          branches = git_funcs.get_worktree_branches_sync()
+          return git_funcs.get_worktrees_sync()
+        end,
+        label = function(dir)
+          return branches[dir]
+        end,
         prompt = 'Worktrees❯ ',
         actions = {
           ['ctrl-x'] = { fn = git_funcs.remove_worktree, reload = true, header = 'delete worktree' },

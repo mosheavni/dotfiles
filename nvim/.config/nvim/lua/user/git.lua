@@ -262,6 +262,38 @@ M.get_worktrees_sync = function()
   return paths
 end
 
+--- Checked-out branch of each worktree of the current repo (detached HEAD shows as 'detached').
+---@return table<string, string> path -> branch
+M.get_worktree_branches_sync = function()
+  local branches = {}
+  for block in ((M.run_git_sync({ 'worktree', 'list', '--porcelain' }, nil).stdout or '') .. '\n'):gmatch '(.-)\n\n' do
+    local path = block:match 'worktree ([^\n]+)'
+    if path then
+      branches[path] = block:match 'branch refs/heads/([^\n]+)' or (block:find 'detached' and 'detached') or nil
+    end
+  end
+  return branches
+end
+
+--- Current branch of a directory read straight from .git/HEAD (no git process). Handles linked worktrees (.git file).
+---@param dir string
+---@return string? branch branch name, 'detached', or nil when dir is not a git checkout
+M.read_head_branch = function(dir)
+  local gitdir = dir .. '/.git'
+  if vim.fn.filereadable(gitdir) == 1 then
+    local target = (vim.fn.readfile(gitdir, '', 1)[1] or ''):match '^gitdir: (.+)$'
+    if not target then
+      return nil
+    end
+    gitdir = target:sub(1, 1) == '/' and target or (dir .. '/' .. target)
+  end
+  local head = vim.fn.filereadable(gitdir .. '/HEAD') == 1 and vim.fn.readfile(gitdir .. '/HEAD', '', 1)[1] or nil
+  if not head then
+    return nil
+  end
+  return head:match '^ref: refs/heads/(.+)$' or 'detached'
+end
+
 --- `git worktree remove` a linked worktree (closing its wezterm pane if open).
 --- Never forces: dirty/locked worktrees are reported, not deleted. Refuses the main and current worktree.
 ---@param dir string

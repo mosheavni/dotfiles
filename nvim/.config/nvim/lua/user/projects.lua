@@ -56,8 +56,8 @@ local function scan_project_dirs()
   return all_dirs
 end
 
----@param opts? { dirs?: string[]|fun(): string[], prompt?: string, actions?: table<string, { fn: fun(dir: string, pane: table|nil), header?: string, reload?: boolean }> }
----  dirs overrides the PJ_DIRS scan; actions are extra/overriding fzf actions receiving the selected dir and its open wezterm pane
+---@param opts? { dirs?: string[]|fun(): string[], label?: fun(dir: string): string?, prompt?: string, actions?: table<string, { fn: fun(dir: string, pane: table|nil), header?: string, reload?: boolean }> }
+---  dirs overrides the PJ_DIRS scan; label returns a suffix shown after the name (default: the checked-out branch); actions are extra/overriding fzf actions receiving the selected dir and its open wezterm pane
 function M.pick_project(opts)
   opts = opts or {}
   local fzf = require 'fzf-lua'
@@ -88,7 +88,8 @@ function M.pick_project(opts)
 
     for _, dir in ipairs(all_dirs) do
       local name = vim.fn.fnamemodify(dir, ':t')
-      local display_name = (active[name] and M.icon or ' ') .. ' ' .. name
+      local label = (opts.label or require('user.git').read_head_branch)(dir)
+      local display_name = (active[name] and M.icon or ' ') .. ' ' .. name .. (label and ('  [' .. label .. ']') or '')
       cb(display_name)
       display_to_path[display_name] = dir
     end
@@ -133,7 +134,8 @@ function M.pick_project(opts)
           if not display then
             return
           end
-          local project_name = display:match '%s+(.*)$'
+          local dir = display_to_path[display]
+          local project_name = dir and vim.fn.fnamemodify(dir, ':t')
           if not project_name then
             return
           end
