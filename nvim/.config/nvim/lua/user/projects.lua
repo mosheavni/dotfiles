@@ -56,6 +56,18 @@ local function scan_project_dirs()
   return all_dirs
 end
 
+--- Focus the wezterm pane of a project, or spawn nvim in a new one (what <enter> does in the project picker).
+---@param dir string
+function M.open_project(dir)
+  local pane = active_projects(wezterm.list())[vim.fn.fnamemodify(dir, ':t')]
+  if pane then
+    wezterm.activate_tab(pane.tab_id)
+    wezterm.activate_pane(pane.pane_id)
+  else
+    wezterm.spawn_and_send('nvim' .. vim.keycode '<cr>', { cwd = vim.fn.expand(dir) })
+  end
+end
+
 ---@param opts? { dirs?: string[]|fun(): string[], label?: fun(dir: string): string?, prompt?: string, actions?: table<string, { fn: fun(dir: string, pane: table|nil), header?: string, reload?: boolean }> }
 ---  dirs overrides the PJ_DIRS scan; label returns a suffix shown after the name (default: the checked-out branch); actions are extra/overriding fzf actions receiving the selected dir and its open wezterm pane
 function M.pick_project(opts)
@@ -115,15 +127,8 @@ function M.pick_project(opts)
         fn = function(selected)
           local display = selected and selected[1]
           local dir = display and display_to_path[display]
-          if not dir then
-            return
-          end
-          local pane = active_projects(wezterm.list())[vim.fn.fnamemodify(dir, ':t')]
-          if pane then
-            wezterm.activate_tab(pane.tab_id)
-            wezterm.activate_pane(pane.pane_id)
-          else
-            wezterm.spawn_and_send('nvim' .. vim.keycode '<cr>', { cwd = vim.fn.expand(dir) })
+          if dir then
+            M.open_project(dir)
           end
         end,
         header = 'switch',

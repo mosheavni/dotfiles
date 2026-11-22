@@ -313,6 +313,33 @@ M.remove_worktree = function(dir, pane)
   M.prnt('Removed worktree ' .. dir)
 end
 
+--- `git worktree add` a linked worktree for `branch` at `dir`. Existing local/remote branches are checked out, otherwise a new branch is created.
+---@param dir string target path (~ and relative paths are expanded)
+---@param branch string
+---@return string? path absolute path of the new worktree, nil on failure
+M.add_worktree = function(dir, branch)
+  dir = vim.fn.fnamemodify(vim.fn.expand(dir), ':p'):gsub('/+$', '')
+  local main = M.get_worktrees_sync()[1]
+  if dir == '' or branch == '' then
+    M.prnt('Worktree path and branch are required', true)
+    return nil
+  end
+  local refs = M.run_git_sync({ 'for-each-ref', '--format=%(refname)', 'refs/heads/' .. branch, 'refs/remotes/*/' .. branch }, nil, { cwd = main })
+  local args = { 'worktree', 'add' }
+  if vim.trim(refs.stdout or '') == '' then
+    vim.list_extend(args, { '-b', branch, dir })
+  else
+    vim.list_extend(args, { dir, branch })
+  end
+  local res = M.run_git_sync(args, nil, { cwd = main })
+  if res.code ~= 0 then
+    M.prnt(vim.trim(res.stderr or ''), true)
+    return nil
+  end
+  M.prnt('Created worktree ' .. dir .. ' [' .. branch .. ']')
+  return dir
+end
+
 --- Default branch for local tooling (act, etc.). Offline; no UI prompts.
 ---@param remote? string
 ---@return string

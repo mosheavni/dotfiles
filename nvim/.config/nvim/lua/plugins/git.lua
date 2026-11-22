@@ -43,6 +43,32 @@ local actions = function()
         },
       }
     end,
+    ['Create worktree'] = function()
+      local main = git_funcs.get_worktrees_sync()[1]
+      if not main then
+        return git_funcs.prnt('Not in a git repository', true)
+      end
+      vim.ui.input({ prompt = 'Worktree directory❯ ', default = main, completion = 'dir' }, function(dir)
+        if not dir or vim.trim(dir) == '' then
+          return
+        end
+        vim.ui.input({ prompt = 'Branch❯ ' }, function(branch)
+          branch = vim.trim(branch or '')
+          if branch == '' then
+            return
+          end
+          local created = git_funcs.add_worktree(vim.trim(dir), branch)
+          if not created then
+            return
+          end
+          vim.ui.select({ 'Yes', 'No' }, { prompt = 'Go to the new worktree?❯ ' }, function(choice)
+            if choice == 'Yes' then
+              require('user.projects').open_project(created)
+            end
+          end)
+        end)
+      end)
+    end,
     ['Checkout new branch (:Gcb {new_branch})'] = function()
       git_funcs.create_new_branch { args = '' }
     end,

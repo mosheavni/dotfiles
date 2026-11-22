@@ -402,4 +402,38 @@ describe('user.git', function()
       assert.is_truthy(notified and notified:match 'Cannot remove')
     end)
   end)
+
+  describe('git.add_worktree', function()
+    local tmp, orig_cwd
+    local function sh(args)
+      return vim.system(args, { cwd = tmp .. '/repo', text = true }):wait()
+    end
+    before_each(function()
+      orig_cwd = vim.fn.getcwd()
+      tmp = vim.fn.resolve(vim.fn.tempname())
+      vim.fn.mkdir(tmp .. '/repo', 'p')
+      sh { 'git', 'init', '-q', '-b', 'main' }
+      sh { 'git', '-c', 'user.name=t', '-c', 'user.email=t@t', 'commit', '-q', '--allow-empty', '-m', 'init' }
+      vim.cmd('cd ' .. tmp .. '/repo')
+    end)
+    after_each(function()
+      vim.cmd('cd ' .. orig_cwd)
+      vim.fn.delete(tmp, 'rf')
+    end)
+
+    it('creates a new branch worktree at the given path', function()
+      eq(tmp .. '/wt-new', git.add_worktree(tmp .. '/wt-new', 'feat/new'))
+      eq('feat/new', git.read_head_branch(tmp .. '/wt-new'))
+    end)
+
+    it('checks out an existing local branch', function()
+      sh { 'git', 'branch', 'existing' }
+      eq(tmp .. '/wt-old', git.add_worktree(tmp .. '/wt-old/', 'existing'))
+      eq('existing', git.read_head_branch(tmp .. '/wt-old'))
+    end)
+
+    it('returns nil when the branch is already checked out', function()
+      assert.is_nil(git.add_worktree(tmp .. '/wt-dup', 'main'))
+    end)
+  end)
 end)
