@@ -23,6 +23,7 @@
 # argocd cli
 
 - Always run the `argocd` CLI in core mode with an explicit context: `argocd --core --kube-context <context> ...`. No `argocd login`, no API server/port-forward. Core mode requires the kube context's namespace to be `argocd` (it looks for Argo CD's resources in the context's namespace); all my contexts are already set that way, so don't change it.
+- Also point `KUBECONFIG` at that context's own file: `KUBECONFIG=~/.kube/clusters/<context>.yaml argocd --core --kube-context <context> ...`. Core mode resolves `https://kubernetes.default.svc` from `$KUBECONFIG`'s current-context and ignores `--kube-context`, so server-side diffs otherwise run against whatever cluster is current. The files are machine-local (credentials, not in dotfiles); after `az aks get-credentials` regenerate one with `kubectl config view --minify --raw --context <context> > ~/.kube/clusters/<context>.yaml`.
 
 # kubectl / argocd diff
 
