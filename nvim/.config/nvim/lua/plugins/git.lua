@@ -52,18 +52,30 @@ local actions = function()
         if not dir or vim.trim(dir) == '' then
           return
         end
-        vim.ui.input({ prompt = 'Branch❯ ' }, function(branch)
-          branch = vim.trim(branch or '')
-          if branch == '' then
+        local NEW_BRANCH = '[New branch]'
+        local choices = vim.list_extend({ NEW_BRANCH }, git_funcs.get_free_branches_sync())
+        vim.ui.select(choices, { title = 'Worktree branch', prompt = 'Branch❯ ' }, function(choice)
+          if not choice then
             return
           end
-          local created = git_funcs.add_worktree(vim.trim(dir), branch)
-          if not created then
-            return
+          local function create(branch)
+            local created = git_funcs.add_worktree(vim.trim(dir), branch)
+            if not created then
+              return
+            end
+            vim.ui.select({ 'Yes', 'No' }, { prompt = 'Go to the new worktree?❯ ' }, function(go)
+              if go == 'Yes' then
+                require('user.projects').open_project(created)
+              end
+            end)
           end
-          vim.ui.select({ 'Yes', 'No' }, { prompt = 'Go to the new worktree?❯ ' }, function(choice)
-            if choice == 'Yes' then
-              require('user.projects').open_project(created)
+          if choice ~= NEW_BRANCH then
+            return create(choice)
+          end
+          vim.ui.input({ prompt = 'New branch name❯ ' }, function(branch)
+            branch = vim.trim(branch or '')
+            if branch ~= '' then
+              create(branch)
             end
           end)
         end)

@@ -432,6 +432,13 @@ describe('user.git', function()
       eq('existing', git.read_head_branch(tmp .. '/wt-old'))
     end)
 
+    it('lists branches not checked out in any worktree', function()
+      sh { 'git', 'branch', 'free-one' }
+      sh { 'git', 'branch', 'busy' }
+      git.add_worktree(tmp .. '/wt-busy', 'busy')
+      eq({ 'free-one' }, git.get_free_branches_sync())
+    end)
+
     it('returns nil when the branch is already checked out', function()
       assert.is_nil(git.add_worktree(tmp .. '/wt-dup', 'main'))
     end)

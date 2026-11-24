@@ -313,6 +313,26 @@ M.remove_worktree = function(dir, pane)
   M.prnt('Removed worktree ' .. dir)
 end
 
+--- Local and remote-tracking branch names (deduplicated, no remote prefix, no HEAD) that are not checked out in any worktree.
+---@return string[]
+M.get_free_branches_sync = function()
+  local taken = {}
+  for _, branch in pairs(M.get_worktree_branches_sync()) do
+    taken[branch] = true
+  end
+  local out = M.run_git_sync({ 'for-each-ref', '--format=%(refname)', 'refs/heads', 'refs/remotes' }, nil, { cwd = M.get_worktrees_sync()[1] }).stdout or ''
+  local seen, branches = {}, {}
+  for ref in out:gmatch '[^\n]+' do
+    local name = ref:match '^refs/heads/(.+)$' or ref:match '^refs/remotes/[^/]+/(.+)$'
+    if name and name ~= 'HEAD' and not taken[name] and not seen[name] then
+      seen[name] = true
+      branches[#branches + 1] = name
+    end
+  end
+  table.sort(branches)
+  return branches
+end
+
 --- `git worktree add` a linked worktree for `branch` at `dir`. Existing local/remote branches are checked out, otherwise a new branch is created.
 ---@param dir string target path (~ and relative paths are expanded)
 ---@param branch string
