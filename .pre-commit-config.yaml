@@ -67,4 +67,4 @@ repos:
         entry: markdownlint --ignore-path nvim/.markdownlintignore
         types: [markdown]
         files: \.md$
-        exclude: ^(graphify-out/|ai/\.claude/)
+        exclude: ^ai/\.claude/

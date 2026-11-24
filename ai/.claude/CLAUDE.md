@@ -1,8 +1,3 @@
-# graphify
-
-- **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
-  When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
-
 # git worktree cleanup
 
 - When work done in a git worktree (native `EnterWorktree` or manual `git worktree add`) ends with its PR merged, delete the worktree locally right after confirming the merge — don't wait to be asked.

@@ -1,6 +1,5 @@
 nvim/.config/plenary.nvim/
 /.claude
-graphify-out/
 .github/.act-event.json
 **/boost-awareness.md*
 __pycache__/

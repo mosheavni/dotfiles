@@ -96,7 +96,7 @@ The `.stowrc` file excludes non-stowable files (Brewfile, readme, etc.) from dep
 | ---------------------------------------------- | --------------------------------------------- |
 | Inside a stow package (e.g. `zsh/`, `ai/`)     | Config you want on every machine (global)     |
 | Repository root with a leading dot             | Repository-local tooling config, never stowed |
-| Gitignored + excluded in `.stowrc`             | Generated/local output (e.g. `graphify-out/`) |
+| Gitignored + excluded in `.stowrc`             | Generated/local output                        |
 
 **AI config packages:**
 
