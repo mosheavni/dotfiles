@@ -34,7 +34,7 @@ return function()
     if statusline.is_truncated(150) then
       return ''
     end
-    local diff = vim.b.gitsigns_status_dict
+    local diff = vim.bo.filetype == 'fugitive' and vim.b.staged_diff_stats or vim.b.gitsigns_status_dict
 
     if not diff then
       return ''
@@ -49,6 +49,19 @@ return function()
 
     return table.concat({ added, changed, removed }, '') .. end_hl
   end
+
+  -- Fugitive status buffer: show staged-changes totals (see user.git.refresh_staged_stats)
+  local function refresh_fugitive_stats()
+    local git = require 'user.git'
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      if vim.bo[buf].filetype == 'fugitive' then
+        git.refresh_staged_stats(buf)
+      end
+    end
+  end
+  local group = vim.api.nvim_create_augroup('StatuslineStagedDiff', { clear = true })
+  vim.api.nvim_create_autocmd('User', { group = group, pattern = 'FugitiveChanged', callback = refresh_fugitive_stats })
+  vim.api.nvim_create_autocmd('FileType', { group = group, pattern = 'fugitive', callback = refresh_fugitive_stats })
 
   -- Custom diagnostics section with per-severity coloring
   local function section_diagnostics_colored()

@@ -18,6 +18,24 @@ M.is_fugitive_status_bufname = function(bufname)
   return vim.startswith(bufname, 'fugitive://') and vim.endswith(bufname, '//')
 end
 
+---Refresh `vim.b[buf].staged_diff_stats` (staged +/- line totals) for a fugitive status buffer.
+---@param buf integer
+M.refresh_staged_stats = function(buf)
+  local worktree = vim.api.nvim_buf_call(buf, vim.fn.FugitiveWorkTree)
+  vim.system({ 'git', '-C', worktree, 'diff', '--cached', '--numstat' }, { text = true }, function(res)
+    local stats = { added = 0, removed = 0 }
+    for add, del in res.stdout:gmatch '(%d+)\t(%d+)\t' do
+      stats.added, stats.removed = stats.added + add, stats.removed + del
+    end
+    vim.schedule(function()
+      if vim.api.nvim_buf_is_valid(buf) then
+        vim.b[buf].staged_diff_stats = stats
+        vim.cmd.redrawstatus { bang = true }
+      end
+    end)
+  end)
+end
+
 M.get_fugitive_buffer = function()
   local candidates = {}
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
