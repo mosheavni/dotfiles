@@ -5,7 +5,7 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "SchemaStore.nvim": {
-      "rev": "ffbe34a31de0cf696f688e7d9e226dc5b86b4323",
+      "rev": "6ea42941864e28f59368480e071a84b16ae95bb4",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "backend-wezterm": {
@@ -26,7 +26,7 @@
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "copilot.lua": {
-      "rev": "ba6c1c7e7b2b6b0a93838097bd09c7c83afa30d3",
+      "rev": "d1570ddc00fc4fc4caf7422803805ee22cca14ff",
       "src": "https://github.com/zbirenbaum/copilot.lua"
     },
     "diffview.nvim": {
@@ -42,7 +42,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "a8312697c30b4d3b110fa3dc56e3699107aed9a0",
+      "rev": "a3b5e6bebcc604d0286fffa1c4eb05b066a2a198",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -106,7 +106,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "4648fd8ba5c678d7e2db75ae44ffac269bb589d8",
+      "rev": "7d22e678970d95d8d18494ec389c52b07111c53a",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-pqf": {
@@ -175,7 +175,7 @@
       "src": "https://github.com/machakann/vim-swap"
     },
     "wezterm-types": {
-      "rev": "1e6a0b7ac2206b197c741240743e981af37ce292",
+      "rev": "230ad1fa651e0459c9a16fc59c328855604cc4e0",
       "src": "https://github.com/DrKJeff16/wezterm-types"
     }
   }

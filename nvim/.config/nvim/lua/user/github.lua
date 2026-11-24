@@ -9,6 +9,7 @@ M.diff_pr = function(url)
   if not repo or vim.fn.isdirectory(main) == 0 then
     return git.prnt('Not a PR URL of a repo under ~/Repos: ' .. url, true)
   end
+  git.prnt('Opening PR diff: ' .. url)
   vim.system({ 'gh', 'pr', 'view', url, '--json', 'headRefName,baseRefName', '-q', '.headRefName + " " + .baseRefName' }, { text = true }, function(res)
     vim.schedule(function()
       local branch, base = vim.trim(res.stdout or ''):match '^(%S+) (%S+)$'
