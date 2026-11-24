@@ -58,7 +58,7 @@ local function setup()
     end
   end
 
-  -- lint.linters.codespell.args = vim.list_extend({ '--config', vim.fs.joinpath(vim.fn.stdpath 'config', '.codespellrc') }, lint.linters.codespell.args or {})
+  lint.linters.codespell.args = vim.list_extend({ '--config', vim.fs.joinpath(vim.fn.stdpath 'config', '.codespellrc') }, lint.linters.codespell.args or {})
 
   lint.linters.actionlint.args = vim.list_extend({ '-ignore', 'label ".+" is unknown' }, lint.linters.actionlint.args or {})
 

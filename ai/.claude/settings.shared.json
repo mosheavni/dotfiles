@@ -1,5 +1,8 @@
 {
   "enableWorkflows": true,
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-haiku-5-5"
+  },
   "enabledPlugins": {
     "bash-language-server@claude-code-lsps": true,
     "lua-lsp@claude-plugins-official": true,
@@ -9,8 +12,6 @@
     "typescript-lsp@claude-plugins-official": true,
     "vercel@claude-plugins-official": false,
     "vscode-langservers@claude-code-lsps": true,
-    "vtsls@claude-code-lsps": true,
-    "claude-mem@thedotmack": true,
     "claude-code-setup@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true
   },

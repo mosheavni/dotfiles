@@ -10,6 +10,7 @@ skills=(
   "ComposioHQ/awesome-claude-skills:image-enhancer"
   "ComposioHQ/awesome-claude-skills:skill-creator"
   "ComposioHQ/awesome-claude-skills:youtube-downloader"
+  "DietrichGebert/ponytail:ponytail" # plugin (always-on hooks) is blocked by org marketplace policy; skill only
   "anthropics/skills:pdf"
   "mattpocock/skills:grill-me"
   "nextlevelbuilder/ui-ux-pro-max-skill:ui-ux-pro-max"

@@ -1,146 +1,49 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## Overview
-
-This is a macOS dotfiles repository managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level directory (nvim, Zsh, Git, etc.) is a "stow package" that gets symlinked to the home directory when deployed.
+macOS dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level directory is a stow package that mirrors `~` (`nvim/.config/nvim/` → `~/.config/nvim/`, `zsh/.zshrc` → `~/.zshrc`). `.stowrc` excludes non-stowable files.
 
 ## Commands
 
-### Deployment
-
 ```bash
-./start.sh          # Stow all packages to home directory
-stow -Rv <package>  # Stow a single package (e.g., stow -Rv nvim)
+./start.sh          # Stow all packages
+stow -Rv <package>  # Stow one package
+make test-nvim      # Neovim tests (Plenary busted, from the repository root)
+pre-commit run --all-files
 ```
 
-### Tests
+## Lua tests
 
-All test commands run from the repository root via the root `Makefile`
-(stow-ignored in `.stowrc`):
+When changing Lua in `lua/user/`, update or add `nvim/.config/nvim/lua/tests/<module>_spec.lua` and run `make test-nvim`.
 
-```bash
-make test      # Run Neovim tests (runs `make prepare` first — clones plenary.nvim)
-make test-nvim # Same as make test
-```
+## Linting gotchas
 
-#### Neovim
+- `stylua` doesn't search parent directories: run it from the repository root or pass `--search-parent-directories`.
+- `selene` reads `selene.toml` from the cwd only: `cd nvim` first.
+- CI uses super-linter (luacheck only for Lua). Shell: `shellcheck`.
 
-Tests are in `nvim/.config/nvim/lua/tests/` and use Plenary's busted test framework.
+## Where new files go
 
-## Lua Testing Infrastructure
+| Where to put it                            | When                                          |
+| ------------------------------------------ | --------------------------------------------- |
+| Inside a stow package (e.g. `zsh/`, `ai/`) | Config you want on every machine (global)     |
+| Repository root with a leading dot         | Repository-local tooling config, never stowed |
+| Gitignored + excluded in `.stowrc`         | Generated/local output                        |
 
-**When making any changes to Lua code in `lua/user/`, always:**
+## AI config (`ai/` → `~/.claude/`, `~/AGENTS.md`)
 
-1. Check if there's an existing test file (`lua/tests/<module>_spec.lua`) that needs updating
-2. Add tests for new functionality
-3. Run `make test-nvim` (from the repository root) to verify nothing breaks
-
-### Test File Conventions
-
-- Test files live in `nvim/.config/nvim/lua/tests/`
-- Naming: `<module>_spec.lua` corresponds to `lua/user/<module>.lua`
-- Uses Plenary busted syntax: `describe()`, `it()`, `before_each()`, `after_each()`
-- Common assertions: `assert.are.same()`, `assert.is_true()`, `assert.is_nil()`, `assert.is_not_nil()`
-
-### Example Test Structure
-
-```lua
-local module = require 'user.module'
-local eq = assert.are.same
-
-describe('user.module', function()
-  describe('function_name', function()
-    it('does something expected', function()
-      eq(module.function_name 'input', 'expected_output')
-    end)
-  end)
-end)
-```
-
-### Existing Test Coverage
-
-Run `ls nvim/.config/nvim/lua/tests/*_spec.lua` for the current list rather than trusting a
-hardcoded one here. Each `<module>_spec.lua` covers `lua/user/<module>.lua`.
-
-### Linting
-
-- Lua formatting: `stylua` with root `stylua.toml`. stylua does NOT search parent
-  directories, so run it from the repository root or pass `--search-parent-directories`;
-  otherwise it falls back to defaults and reports bogus diffs.
-- Lua lint (`selene`): config is `nvim/selene.toml` with std `nvim/vim.toml`. selene
-  reads `selene.toml` from the cwd only, so `cd nvim` first or you get spurious
-  `'vim' is not defined` errors.
-- Lua lint (`luacheck`): resolves `.luacheckrc` relative to each file, so `nvim/.luacheckrc`
-  is found from any cwd — no special handling.
-- Shell: `shellcheck`
-- Pre-commit: `pre-commit run --all-files`
-- CI uses [super-linter](https://github.com/super-linter/super-linter) (luacheck only for Lua)
-
-## Architecture
-
-### Stow Package Structure
-
-Each directory at the root is a stow package. The internal structure mirrors where files should land relative to `~`:
-
-- `nvim/.config/nvim/` → `~/.config/nvim/`
-- `zsh/.zshrc` → `~/.zshrc`
-- `git/.gitconfig` → `~/.gitconfig`
-
-The `.stowrc` file excludes non-stowable files (Brewfile, readme, etc.) from deployment.
-
-**When creating new files, decide scope first:**
-
-| Where to put it                                | When                                          |
-| ---------------------------------------------- | --------------------------------------------- |
-| Inside a stow package (e.g. `zsh/`, `ai/`)     | Config you want on every machine (global)     |
-| Repository root with a leading dot             | Repository-local tooling config, never stowed |
-| Gitignored + excluded in `.stowrc`             | Generated/local output                        |
-
-**AI config packages:**
-
-- `ai/` → stows `~/.claude/` (Claude config, skills, MCP servers) and `~/AGENTS.md` (Claude + agents)
-- This repo is public: company-specific detail never goes in a tracked file. `ai/sync-ai-config.sh` merges tracked shared files into untracked local ones:
-  - `ai/.claude/settings.shared.json` → `~/.claude/settings.json` (gitignored; holds the company entries, e.g. in `autoMode.environment`). Shared scalars win, arrays are unioned, other keys are left alone. Edit portable settings in the shared file; entries removed from it must also be removed from the live file by hand.
+- This repo is public: company-specific detail never goes in a tracked file (use gitignored `ai/.claude/rules/*.local.md`, `servers.local.json`, or the live `settings.json`).
+- `ai/sync-ai-config.sh` merges tracked shared files into untracked local ones:
+  - `ai/.claude/settings.shared.json` → `~/.claude/settings.json` (gitignored, holds company entries). Objects merge recursively, shared scalars win, arrays are unioned. Entries removed from the shared file must also be removed from the live file by hand.
   - `ai/.config/mcphub/servers.json` + gitignored `servers.local.json` → MCP servers in `~/.claude.json` and Copilot.
-  - Fresh machine: run `ai/sync-ai-config.sh`, then re-add the company entries to `~/.claude/settings.json` and `servers.local.json`.
+  - Fresh machine: run it, then re-add the company entries.
+- Skills from external repos are installed by `ai/install-skills.sh` (`npx skills`); add new ones there.
 
-### Neovim Configuration
+## Neovim
 
-Entry point: `nvim/.config/nvim/init.lua`
+- No `lazy.nvim`. Plugins are declared with `vim.pack.add` in `lua/plugins/*.lua` and `require`d **explicitly** from `lua/user/pack/init.lua`; a new plugin file does nothing until added there. Versions are pinned in `nvim-pack-lock.json`.
+- `lua/.../ARCHITECTURE.md` is the per-module reference.
+- Adding a `yaml.*` filetype: follow `nvim/.config/nvim/YAML_FILETYPES.md`.
 
-Load order (see `init.lua`):
+## Zsh
 
-1. `user/options.lua` - Vim options
-2. `user/init.lua` - Global functions and leader key setup
-3. `user/keymaps.lua` - Key mappings
-4. `user/pack/init.lua` - Plugin loading via Neovim's native `vim.pack`
-5. `user/autocommands.lua` - Autocommands
-
-There is no `lazy.nvim`. Plugins are declared with `vim.pack.add` inside `lua/plugins/*.lua`,
-and `lua/user/pack/init.lua` `require`s those modules **explicitly** - there is no
-auto-discovery, so a new file in `lua/plugins/` does nothing until it is added there. It loads
-one eager batch, then the rest inside a `vim.schedule` callback which fires the
-`DeferredPluginsLoaded` User autocmd. Versions are pinned in `nvim-pack-lock.json`.
-
-`lua/.../ARCHITECTURE.md` is the detailed per-module reference for this config.
-
-Custom modules in `lua/user/` include utilities (utils.lua), Git helpers, LSP configuration, and various feature modules.
-
-### Compound YAML filetypes (`yaml.*`)
-
-When adding `yaml.something` via `vim.filetype.add` in `options.lua`, follow the full checklist in `nvim/.config/nvim/YAML_FILETYPES.md` (yamlls filetypes, run-buffer, lint keys, conform, hardcoded `yaml` checks, tests).
-
-### Zsh Configuration
-
-- Main config: `zsh/.zshrc`
-- Plugin manager: [antidote](https://antidote.sh/) with plugins defined in `.zsh_plugins.txt`
-- Modular configs: `zsh/zsh.d/*.zsh` (aliases, functions, kubectl, fzf, etc.)
-- Custom scripts: `zsh/.bin/`
-
-### Code Style
-
-- Lua: 2 spaces, 160 char line width, single quotes preferred, no call parentheses (see `stylua.toml`)
-- Groovy/Python: 4 spaces
-- Unix line endings throughout
+antidote plugins in `.zsh_plugins.txt`; modular configs in `zsh/zsh.d/*.zsh`; scripts in `zsh/.bin/`.

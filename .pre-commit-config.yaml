@@ -55,6 +55,7 @@ repos:
         language: system
         entry: zsh -n
         files: ^zsh/
+        exclude_types: [python]
       - id: zizmor
         name: zizmor
         language: system
