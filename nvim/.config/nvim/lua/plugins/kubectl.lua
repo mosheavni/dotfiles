@@ -54,6 +54,10 @@ return function()
         end
         local name, ns = view.getCurrentSelection()
         local txt = ns and (name .. ' -n ' .. ns) or name
+        local context = require('kubectl.state').getContext()['current-context']
+        if context and context ~= '' then
+          txt = txt .. ' --context ' .. context
+        end
         vim.fn.setreg('+', txt)
         vim.notify('Copied to clipboard: ' .. txt, vim.log.levels.INFO)
       end, vim.tbl_extend('force', opts, { desc = 'Copy resource name to clipboard' }))
