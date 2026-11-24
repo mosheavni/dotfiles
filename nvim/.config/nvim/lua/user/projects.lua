@@ -58,13 +58,18 @@ end
 
 --- Focus the wezterm pane of a project, or spawn nvim in a new one (what <enter> does in the project picker).
 ---@param dir string
-function M.open_project(dir)
+---@param ex_cmd? string Ex command to run in that nvim (typed into an existing pane, or run once plugins load in a new one)
+function M.open_project(dir, ex_cmd)
   local pane = active_projects(wezterm.list())[vim.fn.fnamemodify(dir, ':t')]
   if pane then
     wezterm.activate_tab(pane.tab_id)
     wezterm.activate_pane(pane.pane_id)
+    if ex_cmd then
+      wezterm.send_text(pane.pane_id, vim.keycode '<esc>' .. ':' .. ex_cmd .. vim.keycode '<cr>', { no_paste = true })
+    end
   else
-    wezterm.spawn_and_send('nvim' .. vim.keycode '<cr>', { cwd = vim.fn.expand(dir) })
+    local arg = ex_cmd and ' ' .. vim.fn.shellescape('+autocmd User DeferredPluginsLoaded ++once ' .. ex_cmd) or ''
+    wezterm.spawn_and_send('nvim' .. arg .. vim.keycode '<cr>', { cwd = vim.fn.expand(dir) })
   end
 end
 

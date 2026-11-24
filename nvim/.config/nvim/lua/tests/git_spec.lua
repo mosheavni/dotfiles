@@ -439,6 +439,13 @@ describe('user.git', function()
       eq({ 'free-one' }, git.get_free_branches_sync())
     end)
 
+    it('reads worktree branches of another repo via cwd', function()
+      local other = vim.fn.resolve(vim.fn.tempname())
+      vim.fn.mkdir(other, 'p')
+      vim.cmd('cd ' .. other)
+      eq({ [tmp .. '/repo'] = 'main' }, git.get_worktree_branches_sync(tmp .. '/repo'))
+    end)
+
     it('returns nil when the branch is already checked out', function()
       assert.is_nil(git.add_worktree(tmp .. '/wt-dup', 'main'))
     end)

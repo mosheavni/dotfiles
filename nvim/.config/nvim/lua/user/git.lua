@@ -263,10 +263,11 @@ M.get_worktrees_sync = function()
 end
 
 --- Checked-out branch of each worktree of the current repo (detached HEAD shows as 'detached').
+---@param cwd? string repo to inspect (default: current directory)
 ---@return table<string, string> path -> branch
-M.get_worktree_branches_sync = function()
+M.get_worktree_branches_sync = function(cwd)
   local branches = {}
-  for block in ((M.run_git_sync({ 'worktree', 'list', '--porcelain' }, nil).stdout or '') .. '\n'):gmatch '(.-)\n\n' do
+  for block in ((M.run_git_sync({ 'worktree', 'list', '--porcelain' }, nil, { cwd = cwd }).stdout or '') .. '\n'):gmatch '(.-)\n\n' do
     local path = block:match 'worktree ([^\n]+)'
     if path then
       branches[path] = block:match 'branch refs/heads/([^\n]+)' or (block:find 'detached' and 'detached') or nil

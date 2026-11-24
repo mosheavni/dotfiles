@@ -145,7 +145,20 @@ local function diffview_file_history_log_flag(flag, prompt_label)
   end
 end
 
+--- :DiffPR [url] — PR "Files changed" in Diffview (prompts, prefilled from the clipboard, when no url given).
+local function diff_pr(opts)
+  if opts and opts.args ~= '' then
+    return require('user.github').diff_pr(opts.args)
+  end
+  vim.ui.input({ prompt = 'GitHub PR URL❯ ', default = vim.fn.getreg '+' }, function(url)
+    if url and vim.trim(url) ~= '' then
+      require('user.github').diff_pr(vim.trim(url))
+    end
+  end)
+end
+
 local diff_actions = {
+  ['[Diffview] PR files changed (:DiffPR)'] = diff_pr,
   ['[Diffview] Diff File History'] = function()
     vim.ui.input({ prompt = 'Enter file path (empty for all files, % for current)❯ ' }, function(file_to_check)
       if not file_to_check then
@@ -254,6 +267,7 @@ local fugitive_config = function()
   -- Create Pull Request --
   -------------------------
   vim.api.nvim_create_user_command('Cpr', git_funcs.create_pull_request, {})
+  vim.api.nvim_create_user_command('DiffPR', diff_pr, { nargs = '?' })
 
   ----------------------
   -- Git actions menu --
