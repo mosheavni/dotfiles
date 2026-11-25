@@ -15,6 +15,7 @@
 
 - Run argocd only in core mode with an explicit context and that context's own kubeconfig: `KUBECONFIG=~/.kube/clusters/<ctx>.yaml argocd --core --kube-context <ctx> ...` (core mode takes the cluster from `$KUBECONFIG`'s current-context, not `--kube-context`). No `argocd login` or port-forward. Contexts already use namespace `argocd`; don't change it. After `az aks get-credentials`, regenerate the file: `kubectl config view --minify --raw --context <ctx> > ~/.kube/clusters/<ctx>.yaml` (machine-local, never in dotfiles).
 - Prefix every `kubectl diff` / `argocd ... diff` with `unset KUBECTL_EXTERNAL_DIFF;` in the same command (it's interactive nvim and hangs).
+- ALWAYS diff right before every Argo CD sync, even a single resource, and check the diff is exactly what you expect before giving the sync command. Never rely on an earlier diff or render. If `argocd app diff` fails (e.g. kubelogin workload identity only works in the Argo pod), run `kubectl --context <target> diff --server-side --force-conflicts -f <manifests from origin/main>` instead. Argo's OutOfSync list (`.status.resources`) is not a diff.
 
 # commands I run myself
 

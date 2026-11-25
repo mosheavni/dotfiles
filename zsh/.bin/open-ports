@@ -34,7 +34,11 @@ typeset -A cwd_of args_of
       cwd_of[$pid]="${cwd_of[$pid]:--}"
       args_of[$pid]=$(ps -o args= -p "$pid" 2>/dev/null)
       args_of[$pid]="${args_of[$pid]:--}"
+      args_of[$pid]="${args_of[$pid]//$'\t'/ }"
+      args_of[$pid]="${args_of[$pid]:0:200}"
+      cwd_of[$pid]="${cwd_of[$pid]/#$HOME/~}"
+      (( ${#cwd_of[$pid]} > 40 )) && cwd_of[$pid]="…${cwd_of[$pid]: -39}"
     fi
     printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "$proto" "$port" "$pid" "$process" "$user" "${cwd_of[$pid]}" "${args_of[$pid]}"
   done
-} | column -t -s $'\t'
+} | column -t -s $'\t' | if [[ -t 1 ]]; then cut -c1-"${COLUMNS:-$(tput cols)}"; else cat; fi
