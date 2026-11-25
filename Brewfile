@@ -108,6 +108,7 @@ cask "maccy"
 cask "shottr"
 cask "vlc"
 cask "wezterm@nightly"
+mas "GIPHY CAPTURE. The GIF Maker", id: 668208984
 mas "Magnet", id: 441258766
 mas "Microsoft OneNote", id: 784801555
 mas "Slack for Desktop", id: 803453959
