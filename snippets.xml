@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <folders>
 	<folder>
+		<title>AI</title>
+		<snippets>
+			<snippet>
+				<title>Ask me 5 questions</title>
+				<content>please ask me 5 questions regarding the implementation you&apos;re planning to do before doing anything. I will answer and based on those answers, you can start implementing</content>
+			</snippet>
+			<snippet>
+				<title>commit push</title>
+				<content>Please update the docs accordingly, commit and push on a side branch. if the checks are green and all of the workflows succeeded, squash and merge</content>
+			</snippet>
+			<snippet>
+				<title>Just run the command</title>
+				<content>Run it yourself, not in a box with the Run button (overrides &quot;commands I run myself&quot;).</content>
+			</snippet>
+		</snippets>
+	</folder>
+	<folder>
 		<title>Jenkins</title>
 		<snippets>
 			<snippet>
@@ -346,19 +363,6 @@
 			<snippet>
 				<title>query</title>
 				<content>SELECT count(*), client_ip FROM &quot;alb_db_access_logs_test&quot;.&quot;mcs_ocean_rightsizing_2025_04_22_auto&quot;&#10;WHERE day in (&apos;2025/05/22&apos;)&#10;AND domain_name = &apos;mcs-ocean-rightsizing.internal.spot.io&apos;&#10;AND client_ip not in (&apos;10.11.2.73&apos;, &apos;10.11.1.214&apos;, &apos;10.11.132.229&apos;, &apos;10.11.253.206&apos;)&#10;AND time &gt; concat(date_format(current_date, &apos;%Y-%m-%d&apos;), &apos;T10:00:00.000000Z&apos;)&#10;GROUP BY 2&#10;ORDER BY 1 DESC</content>
-			</snippet>
-		</snippets>
-	</folder>
-	<folder>
-		<title>AI</title>
-		<snippets>
-			<snippet>
-				<title>Ask me 5 questions</title>
-				<content>please ask me 5 questions regarding the implementation you&apos;re planning to do before doing anything. I will answer and based on those answers, you can start implementing</content>
-			</snippet>
-			<snippet>
-				<title>commit push</title>
-				<content>Please update the docs accordingly, commit and push on a side branch. if the checks are green and all of the workflows succeeded, squash and merge</content>
 			</snippet>
 		</snippets>
 	</folder>
